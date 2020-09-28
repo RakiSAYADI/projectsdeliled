@@ -20,6 +20,20 @@ class Device {
     void checkConnectionState() {
       device.state.listen((state) {
         _connectionState = state.index;
+        switch (state) {
+          case BluetoothDeviceState.connected:
+            print('connected');
+            break;
+          case BluetoothDeviceState.disconnected:
+            print('disconnected');
+            break;
+          case BluetoothDeviceState.connecting:
+            print('connecting');
+            break;
+          case BluetoothDeviceState.disconnecting:
+            print('disconnecting');
+            break;
+        }
       });
     }
 
@@ -47,6 +61,14 @@ class Device {
     });
   }
 
+  bool getConnectionState() {
+    if (_connectionState == BluetoothDeviceState.connected.index) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   void disconnect() {
     // disconnect
     device.disconnect();
@@ -58,8 +80,7 @@ class Device {
     return this._readCharMessage;
   }
 
-  Future<int> writeCharacteristic(
-      int servicePosition, int charPosition, String data) async {
+  Future<int> writeCharacteristic(int servicePosition, int charPosition, String data) async {
     // Not available for reading
     _readIsReady = false;
     // checking Connection
@@ -74,11 +95,7 @@ class Device {
       // writing characteristic after 1 second
       await Future.delayed(const Duration(seconds: 1), () async {
         List<int> messageToBytes = data.codeUnits;
-        await _services
-            .elementAt(servicePosition)
-            .characteristics
-            .elementAt(charPosition)
-            .write(messageToBytes);
+        await _services.elementAt(servicePosition).characteristics.elementAt(charPosition).write(messageToBytes);
         // available for reading
         _readIsReady = true;
       });
@@ -103,11 +120,7 @@ class Device {
         // reading characteristic after 1 second
         await Future.delayed(const Duration(seconds: 1), () async {
           List<int> messageToBytes;
-          messageToBytes = await _services
-              .elementAt(servicePosition)
-              .characteristics
-              .elementAt(charPosition)
-              .read();
+          messageToBytes = await _services.elementAt(servicePosition).characteristics.elementAt(charPosition).read();
           _readCharMessage = String.fromCharCodes(messageToBytes);
         });
         return 0;
