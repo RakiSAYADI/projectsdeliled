@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutteruvcapp/services/bleDeviceClass.dart';
 import 'package:flutteruvcapp/services/uvcClass.dart';
+import 'package:flutteruvcapp/services/uvcToast.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -14,6 +15,8 @@ class _SettingsState extends State<Settings> {
   Device myDevice;
 
   UvcLight myUvcLight;
+
+  ToastyMessage myUvcToast;
 
   String myExtinctionTimeMinuteData = ' 30 sec';
   String myActivationTimeMinuteData = ' 10 sec';
@@ -182,7 +185,16 @@ class _SettingsState extends State<Settings> {
                   SizedBox(height: screenHeight * 0.04),
                   FlatButton(
                     onPressed: () {
-                      alertSecurity(context);
+                      if (myDevice.getConnectionState()) {
+                        alertSecurity(context);
+                      } else {
+                        myUvcToast = ToastyMessage(toastContext: context);
+                        myUvcToast.setToastDuration(5);
+                        myUvcToast.setToastMessage('Connexion perdue avec le robot !');
+                        myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+                        myDevice.disconnect();
+                        Navigator.pushNamedAndRemoveUntil(context, "/bluetooth_activation", (r) => false);
+                      }
                     },
                     child: Text(
                       'DÉMARRER',

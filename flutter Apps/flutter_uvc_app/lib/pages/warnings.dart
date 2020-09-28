@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutteruvcapp/services/bleDeviceClass.dart';
 import 'package:flutteruvcapp/services/uvcClass.dart';
+import 'package:flutteruvcapp/services/uvcToast.dart';
 
 class Warnings extends StatefulWidget {
   @override
@@ -12,6 +13,8 @@ class _WarningsState extends State<Warnings> {
 
   Device myDevice;
   UvcLight myUvcLight;
+
+  ToastyMessage myUvcToast;
 
   @override
   Widget build(BuildContext context) {
@@ -183,7 +186,16 @@ class _WarningsState extends State<Warnings> {
                     children: [
                       FlatButton(
                         onPressed: () {
-                          startScan(context);
+                          if (myDevice.getConnectionState()) {
+                            startScan(context);
+                          } else {
+                            myUvcToast = ToastyMessage(toastContext: context);
+                            myUvcToast.setToastDuration(5);
+                            myUvcToast.setToastMessage('Connexion perdue avec le robot !');
+                            myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+                            myDevice.disconnect();
+                            Navigator.pushNamedAndRemoveUntil(context, "/bluetooth_activation", (r) => false);
+                          }
                         },
                         child: Text(
                           'SUIVANT',

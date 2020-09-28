@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutteruvcapp/services/bleDeviceClass.dart';
 import 'package:flutteruvcapp/services/uvcClass.dart';
+import 'package:flutteruvcapp/services/uvcToast.dart';
 
 class Profiles extends StatefulWidget {
   @override
@@ -11,6 +12,8 @@ class Profiles extends StatefulWidget {
 
 class _ProfilesState extends State<Profiles> {
   UvcLight myUvcLight;
+
+  ToastyMessage myUvcToast;
 
   final myCompany = TextEditingController();
   final myName = TextEditingController();
@@ -213,18 +216,27 @@ class _ProfilesState extends State<Profiles> {
                     SizedBox(height: screenHeight * 0.04),
                     FlatButton(
                       onPressed: () {
-                        myUvcLight = UvcLight(
-                            machineName: myDevice.device.name,
-                            machineMac: myDevice.device.id.toString(),
-                            company: myCompany.text,
-                            operatorName: myName.text,
-                            roomName: myRoomName.text);
-                        Navigator.pushNamed(context, '/settings', arguments: {
-                          'myDevice': myDevice,
-                          'myUvcLight': myUvcLight,
-                          'disinfectionTime': myExtinctionTimeMinutePosition,
-                          'activationTime': myActivationTimeMinutePosition,
-                        });
+                        if (myDevice.getConnectionState()) {
+                          myUvcLight = UvcLight(
+                              machineName: myDevice.device.name,
+                              machineMac: myDevice.device.id.toString(),
+                              company: myCompany.text,
+                              operatorName: myName.text,
+                              roomName: myRoomName.text);
+                          Navigator.pushNamed(context, '/settings', arguments: {
+                            'myDevice': myDevice,
+                            'myUvcLight': myUvcLight,
+                            'disinfectionTime': myExtinctionTimeMinutePosition,
+                            'activationTime': myActivationTimeMinutePosition,
+                          });
+                        }else{
+                          myUvcToast = ToastyMessage(toastContext: context);
+                          myUvcToast.setToastDuration(5);
+                          myUvcToast.setToastMessage('Connexion perdue avec le robot !');
+                          myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+                          myDevice.disconnect();
+                          Navigator.pushNamedAndRemoveUntil(context, "/bluetooth_activation", (r) => false);
+                        }
                         //alertSecurity(context);
                       },
                       child: Text(

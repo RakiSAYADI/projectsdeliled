@@ -152,16 +152,24 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           if (data.contains(uvcSecurityWebPage) && !(qrCodeValidOrNot)) {
             qrCodeValidOrNot = true;
             _controller.pause();
-            String message = 'UVCTreatement : ON';
-            if (Platform.isIOS) {
-              await myDevice.writeCharacteristic(0, 0, message);
+            if (myDevice.getConnectionState()) {
+              String message = 'UVCTreatement : ON';
+              if (Platform.isIOS) {
+                await myDevice.writeCharacteristic(0, 0, message);
+              } else {
+                await myDevice.writeCharacteristic(2, 0, message);
+              }
+              Navigator.pushNamed(context, '/uvc', arguments: {
+                'uvclight': myUvcLight,
+                'myDevice': myDevice,
+              });
             } else {
-              await myDevice.writeCharacteristic(2, 0, message);
+              myUvcToast.setToastDuration(5);
+              myUvcToast.setToastMessage('Connexion perdue avec le robot !');
+              myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+              myDevice.disconnect();
+              Navigator.pushNamedAndRemoveUntil(context, "/bluetooth_activation", (r) => false);
             }
-            Navigator.pushNamed(context, '/uvc', arguments: {
-              'uvclight': myUvcLight,
-              'myDevice': myDevice,
-            });
           }
         }
       });
