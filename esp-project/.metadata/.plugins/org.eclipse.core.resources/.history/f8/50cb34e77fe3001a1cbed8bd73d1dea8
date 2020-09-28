@@ -1,0 +1,243 @@
+#include "string.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "driver/gpio.h"
+#include "driver/ledc.h"
+#include "sdkconfig.h"
+#include "cJSON.h"
+#include "esp_system.h"
+#include "esp_event.h"
+#include "esp_event_loop.h"
+#include "nvs_flash.h"
+#include "freertos/portmacro.h"
+#include "freertos/event_groups.h"
+#include "esp_log.h"
+
+#include "main.h"
+
+int cntrl_pins[4] = { 27, 26, 25, 33 };
+
+#define delay(ms) (vTaskDelay(ms/portTICK_RATE_MS))
+
+#define PIR_GPIO  16
+
+char *json_unformatted;
+
+char* GPIO_TAG = "app_gpio";
+
+int set_relay_state(int relay, uint32_t level) {
+	if ((relay >= 0) && (relay < 4)) {
+		gpio_set_level(cntrl_pins[relay], level);
+		cntrl_states[relay] = level;
+	} else {
+
+		return 0;
+	}
+	return 1;
+}
+
+void generate_json() {
+	int i;
+	char buf[4];
+	cJSON *root, *info, *relays;
+	root = cJSON_CreateObject();
+	struct timeval now;
+	gettimeofday(&now, NULL);
+
+	cJSON_AddItemToObject(root, "info", info = cJSON_CreateObject());
+	cJSON_AddItemToObject(root, "relays", relays = cJSON_CreateObject());
+
+	cJSON_AddStringToObject(info, "ssid", "dummy");
+	cJSON_AddNumberToObject(info, "heap", esp_get_free_heap_size());
+	cJSON_AddStringToObject(info, "sdk", esp_get_idf_version());
+	cJSON_AddNumberToObject(info, "time", (now.tv_sec * 1000000 + now.tv_usec));
+
+	for (i = 0; i < 4; i++) {
+		sprintf(buf, "RELAY%d", i); // Relay name.
+		cJSON_AddNumberToObject(relays, buf, cntrl_states[i]);
+	}
+
+	while (1) {
+		cJSON_ReplaceItemInObject(info, "heap",
+				cJSON_CreateNumber(esp_get_free_heap_size()));
+		cJSON_ReplaceItemInObject(info, "time",
+				cJSON_CreateNumber((now.tv_sec * 1000000 + now.tv_usec)));
+		cJSON_ReplaceItemInObject(info, "sdk",
+				cJSON_CreateString(esp_get_idf_version()));
+
+		for (i = 0; i < 4; i++) {
+			sprintf(buf, "RELAY%d", i); // Relay name.
+			cJSON_ReplaceItemInObject(relays, buf,
+					cJSON_CreateNumber(cntrl_states[i]));
+		}
+
+		json_unformatted = cJSON_PrintUnformatted(root);
+		printf("[len = %d]	", strlen(json_unformatted));
+
+		for (int var = 0; var < strlen(json_unformatted); ++var) {
+			putc(json_unformatted[var], stdout);
+		}
+
+		printf("\n");
+		fflush(stdout);
+		delay(2000);
+		free(json_unformatted);
+	}
+}
+
+void UVCRelay() {
+	ESP_LOGI(GPIO_TAG, "SETTING UVC !");
+	while (1) {
+		if (uvcRelayOnOrOff) {
+			set_relay_state(0, 1);
+		} else {
+			set_relay_state(0, 0);
+		}
+		delay(50);
+	}
+	vTaskDelete(NULL);
+}
+
+void redRelayAlert() {
+	ESP_LOGI(GPIO_TAG, "SETTING THE RED LIGHT !");
+	while (1) {
+		if (redRelayOnOrOff) {
+			set_relay_state(1, 1);
+			delay(500);
+			set_relay_state(1, 0);
+			delay(500);
+		} else {
+			if (warningOnOrOff) {
+				set_relay_state(1, 1);
+				delay(200);
+			} else {
+				set_relay_state(1, 0);
+				delay(200);
+			}
+
+		}
+	}
+	vTaskDelete(NULL);
+}
+
+void buzzerRelayAlert() {
+	ESP_LOGI(GPIO_TAG, "MAKING WARNING NOISE !");
+	while (1) {
+		if (buzzerRelayOnOrOff) {
+			set_relay_state(3, 1);
+			delay(500);
+			set_relay_state(3, 0);
+			delay(2000);
+		} else {
+			set_relay_state(3, 0);
+			delay(200);
+		}
+	}
+	vTaskDelete(NULL);
+}
+
+void greenRelay() {
+	ESP_LOGI(GPIO_TAG, "MAKING GREEN LIGHT !");
+	while (1) {
+		if (greenRelayOnOrOff) {
+			set_relay_state(2, 1);
+		} else {
+			set_relay_state(2, 0);
+		}
+		delay(100);
+	}
+	vTaskDelete(NULL);
+}
+
+uint8_t strContains(char* string, char* toFind) {
+	uint8_t slen = strlen(string);
+	uint8_t tFlen = strlen(toFind);
+	uint8_t found = 0;
+
+	if (slen >= tFlen) {
+		for (uint8_t s = 0, t = 0; s < slen; s++) {
+			do {
+
+				if (string[s] == toFind[t]) {
+					if (++found == tFlen)
+						return 1;
+					s++;
+					t++;
+				} else {
+					s -= found;
+					found = 0;
+					t = 0;
+				}
+
+			} while (found);
+		}
+		return 0;
+	} else
+		return -1;
+}
+
+void LedStatusTask() {
+
+	redRelayOnOrOff = false;
+	buzzerRelayOnOrOff = false;
+	uvcRelayOnOrOff = false;
+	greenRelayOnOrOff = false;
+	warningOnOrOff = false;
+
+	xTaskCreate(&greenRelay, "greenRelay", 2048, NULL, 5,
+	NULL);
+	xTaskCreate(&UVCRelay, "UVCRelay", 2048, NULL, 5,
+	NULL);
+	xTaskCreate(&redRelayAlert, "redRelayAlert", 2048, NULL, 5,
+	NULL);
+	xTaskCreate(&buzzerRelayAlert, "buzzerRelayAlert", 2048, NULL, 5,
+	NULL);
+
+	// initialize the gpio
+	int i;
+	for (i = 0; i < 4; i++) {
+		gpio_pad_select_gpio(cntrl_pins[i]);
+		gpio_set_direction(cntrl_pins[i], GPIO_MODE_OUTPUT);
+		// setting all relay OFF
+		gpio_set_level(cntrl_pins[i], 0);
+		cntrl_states[i] = 0;
+	}
+
+	gpio_pad_select_gpio(PIR_GPIO);
+	gpio_set_direction(PIR_GPIO, GPIO_MODE_INPUT);
+
+	int detectionCounter = 0;
+
+	while (1) {
+		if ((gpio_get_level(GPIO_NUM_16) == 1) && (uvcRelayOnOrOff)) {
+			redRelayOnOrOff = true;
+			buzzerRelayOnOrOff = true;
+			uvcRelayOnOrOff = false;
+			greenRelayOnOrOff = false;
+			detectionCounter = 1;
+			ESP_LOGI(GPIO_TAG, "STOP UVC, WE HAVE DETECTION !");
+		}
+
+		if (detectionCounter > 0) {
+			detectionCounter++;
+			if (detectionCounter == 50) {
+				ESP_LOGI(GPIO_TAG, "STOP ALERT SOUND !");
+				redRelayOnOrOff = false;
+				buzzerRelayOnOrOff = false;
+				warningOnOrOff = true;
+				detectionCounter = 0;
+			}
+		}
+
+		delay(100);
+	}
+}
+
+void LedStatInit() {
+	//generate json string
+	xTaskCreate(&generate_json, "json", 2048, NULL, 5, NULL);
+	//Led and relay task
+	xTaskCreate(&LedStatusTask, "LedStatusTask",
+	configMINIMAL_STACK_SIZE * 3, NULL, 1, NULL);
+}
+

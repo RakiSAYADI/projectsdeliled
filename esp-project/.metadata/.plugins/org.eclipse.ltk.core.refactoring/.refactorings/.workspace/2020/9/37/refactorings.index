@@ -1,0 +1,4 @@
+1599462004707	Rename resource 'UVC-Deliled'
+1599462326091	Delete resource 'UVC-Deliled-Slave/main/http_server.c'
+1599462332692	Delete resource 'UVC-Deliled-Slave/main/bluetooth.c'
+1599462452562	Delete resource 'UVC-Deliled-Master/main/http_client.c'

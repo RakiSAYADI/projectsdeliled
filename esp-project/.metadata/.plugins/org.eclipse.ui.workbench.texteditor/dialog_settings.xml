@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item key="selection" value="esp_efuse_mac"/>
+		<item key="wrap" value="true"/>
+		<item key="casesensitive" value="false"/>
+		<item key="wholeword" value="false"/>
+		<item key="incremental" value="false"/>
+		<item key="isRegEx" value="false"/>
+		<list key="findhistory">
+			<item value="esp_efuse_mac"/>
+			<item value="UVTreatementIsOn"/>
+			<item value="sockaddr_in6"/>
+			<item value="TaskHandle_t"/>
+			<item value="STOP is Pressed !"/>
+			<item value="detectionTriggered"/>
+			<item value="UVTaskIsOn"/>
+			<item value="Waiting for data"/>
+			<item value="stopIsPressed"/>
+			<item value="uvcTreatementIsON"/>
+			<item value="timeout"/>
+			<item value="ECONNREFUSED"/>
+			<item value="flags"/>
+			<item value="sizeof"/>
+			<item value="fork"/>
+		</list>
+		<list key="replacehistory">
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item key="DIALOG_X_ORIGIN" value="1441"/>
+		<item key="DIALOG_Y_ORIGIN" value="263"/>
+		<item key="DIALOG_WIDTH" value="348"/>
+		<item key="DIALOG_HEIGHT" value="440"/>
+		<item key="DIALOG_FONT_NAME" value="1|Ubuntu|11.0|0|GTK|1|"/>
+	</section>
+</section>

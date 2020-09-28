@@ -1,0 +1,7 @@
+11:21:56 **** Build of configuration Default for project deliled_310319 ****
+make all 
+make: *** Aucune règle pour fabriquer la cible « all ». Arrêt.
+"make all" terminated with exit code 2. Build might be incomplete.
+
+11:21:57 Build Failed. 1 errors, 0 warnings. (took 1s.906ms)
+

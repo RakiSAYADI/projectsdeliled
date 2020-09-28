@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;UVC-Deliled-Master/main/http_server.c&apos; to &apos;tcp_server.c&apos;" description="Rename resource &apos;http_server.c&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="main/http_server.c" name="tcp_server.c" stamp="1599469975867" updateReferences="true"/>
+</session>

@@ -1,0 +1,177 @@
+12:04:35 **** Build of configuration Default for project UVC-Deliled ****
+make all 
+Toolchain path: /home/raki/esp/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+Toolchain version: crosstool-ng-1.22.0-80-g6c4433a
+Compiler version: 5.2.0
+Python requirements from /home/raki/esp/esp-idf/requirements.txt are satisfied.
+
+Project is not inside a git repository, will not use 'git describe' to determine PROJECT_VER.
+App "app-template" version: 1
+CC /home/raki/esp-project/UVC-Deliled/build/main/http_request.o
+/home/raki/esp-project/UVC-Deliled/main/http_request.c:17:38: fatal error: protocol_examples_common.h: No such file or directory
+/home/raki/esp/esp-idf/make/component_wrapper.mk:289: recipe for target 'http_request.o' failed
+/home/raki/esp/esp-idf/make/project.mk:582: recipe for target 'component-main-build' failed
+compilation terminated.
+make[1]: *** [http_request.o] Error 1
+make: *** [component-main-build] Error 2
+"make all" terminated with exit code 2. Build might be incomplete.
+
+12:04:41 Build Failed. 5 errors, 0 warnings. (took 6s.159ms)
+
+12:55:09 **** Incremental Build of configuration Default for project UVC-Deliled ****
+make all 
+Toolchain path: /home/raki/esp/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+Toolchain version: crosstool-ng-1.22.0-80-g6c4433a
+Compiler version: 5.2.0
+Python requirements from /home/raki/esp/esp-idf/requirements.txt are satisfied.
+
+Project is not inside a git repository, will not use 'git describe' to determine PROJECT_VER.
+App "app-template" version: 1
+CC /home/raki/esp-project/UVC-Deliled/build/main/http_client.o
+AR /home/raki/esp-project/UVC-Deliled/build/main/libmain.a
+Generating esp32.project.ld
+LD /home/raki/esp-project/UVC-Deliled/build/app-template.elf
+esptool.py v2.7-dev
+To flash all build output, run 'make flash' or:
+python2.7 /home/raki/esp/esp-idf/components/esptool_py/esptool/esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0x1000 /home/raki/esp-project/UVC-Deliled/build/bootloader/bootloader.bin 0x10000 /home/raki/esp-project/UVC-Deliled/build/app-template.bin 0x8000 /home/raki/esp-project/UVC-Deliled/build/partitions_singleapp.bin
+12:55:23 **** Build of configuration Default for project deliled ****
+make all 
+Toolchain path: /home/raki/esp/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+Toolchain version: crosstool-ng-1.22.0-80-g6c4433a
+Compiler version: 5.2.0
+Python requirements from /home/raki/esp/esp-idf/requirements.txt are satisfied.
+
+App "deliled_bin" version: 01.01.00
+CC /home/raki/esp-project/deliled/build/main/gatt_server.o
+CC /home/raki/esp-project/deliled/build/main/sntp_client.o
+CC /home/raki/esp-project/deliled/build/main/adc.o
+AR /home/raki/esp-project/deliled/build/main/libmain.a
+Generating esp32.project.ld
+LD /home/raki/esp-project/deliled/build/deliled_bin.elf
+esptool.py v2.7-dev
+To flash all build output, run 'make flash' or:
+python /home/raki/esp/esp-idf/components/esptool_py/esptool/esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0xf000 /home/raki/esp-project/deliled/build/ota_data_initial.bin 0x1000 /home/raki/esp-project/deliled/build/bootloader/bootloader.bin 0x20000 /home/raki/esp-project/deliled/build/deliled_bin.bin 0x8000 /home/raki/esp-project/deliled/build/partitions.bin
+10:54:07 **** Incremental Build of configuration Default for project UVC-Deliled ****
+make all 
+Toolchain path: /home/raki/esp/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+Toolchain version: crosstool-ng-1.22.0-80-g6c4433a
+Compiler version: 5.2.0
+Python requirements from /home/raki/esp/esp-idf/requirements.txt are satisfied.
+
+Project is not inside a git repository, will not use 'git describe' to determine PROJECT_VER.
+App "app-template" version: 1
+CC /home/raki/esp-project/UVC-Deliled/build/main/http_server.o
+AR /home/raki/esp-project/UVC-Deliled/build/main/libmain.a
+Generating esp32.project.ld
+LD /home/raki/esp-project/UVC-Deliled/build/app-template.elf
+esptool.py v2.7-dev
+To flash all build output, run 'make flash' or:
+python2.7 /home/raki/esp/esp-idf/components/esptool_py/esptool/esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0x1000 /home/raki/esp-project/UVC-Deliled/build/bootloader/bootloader.bin 0x10000 /home/raki/esp-project/UVC-Deliled/build/app-template.bin 0x8000 /home/raki/esp-project/UVC-Deliled/build/partitions_singleapp.bin
+10:54:28 **** Incremental Build of configuration Default for project deliled ****
+make all 
+Toolchain path: /home/raki/esp/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+Toolchain version: crosstool-ng-1.22.0-80-g6c4433a
+Compiler version: 5.2.0
+Python requirements from /home/raki/esp/esp-idf/requirements.txt are satisfied.
+
+App "deliled_bin" version: 01.01.00
+To flash all build output, run 'make flash' or:
+python /home/raki/esp/esp-idf/components/esptool_py/esptool/esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0xf000 /home/raki/esp-project/deliled/build/ota_data_initial.bin 0x1000 /home/raki/esp-project/deliled/build/bootloader/bootloader.bin 0x20000 /home/raki/esp-project/deliled/build/deliled_bin.bin 0x8000 /home/raki/esp-project/deliled/build/partitions.bin
+10:41:03 **** Incremental Build of configuration Default for project UVC-Deliled ****
+make all 
+Toolchain path: /home/raki/esp/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+Toolchain version: crosstool-ng-1.22.0-80-g6c4433a
+Compiler version: 5.2.0
+Python requirements from /home/raki/esp/esp-idf/requirements.txt are satisfied.
+
+Project is not inside a git repository, will not use 'git describe' to determine PROJECT_VER.
+App "app-template" version: 1
+To flash all build output, run 'make flash' or:
+python2.7 /home/raki/esp/esp-idf/components/esptool_py/esptool/esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0x1000 /home/raki/esp-project/UVC-Deliled/build/bootloader/bootloader.bin 0x10000 /home/raki/esp-project/UVC-Deliled/build/app-template.bin 0x8000 /home/raki/esp-project/UVC-Deliled/build/partitions_singleapp.bin
+10:41:10 **** Incremental Build of configuration Default for project deliled ****
+make all 
+Toolchain path: /home/raki/esp/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+Toolchain version: crosstool-ng-1.22.0-80-g6c4433a
+Compiler version: 5.2.0
+Python requirements from /home/raki/esp/esp-idf/requirements.txt are satisfied.
+
+App "deliled_bin" version: 01.01.00
+To flash all build output, run 'make flash' or:
+python /home/raki/esp/esp-idf/components/esptool_py/esptool/esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0xf000 /home/raki/esp-project/deliled/build/ota_data_initial.bin 0x1000 /home/raki/esp-project/deliled/build/bootloader/bootloader.bin 0x20000 /home/raki/esp-project/deliled/build/deliled_bin.bin 0x8000 /home/raki/esp-project/deliled/build/partitions.bin
+10:41:18 **** Build of configuration Default for project pwm_capture ****
+make all 
+Toolchain path: /home/raki/esp/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+Toolchain version: crosstool-ng-1.22.0-80-g6c4433a
+Compiler version: 5.2.0
+Python requirements from /home/raki/esp/esp-idf/requirements.txt are satisfied.
+
+Project is not inside a git repository, will not use 'git describe' to determine PROJECT_VER.
+App "ledc" version: 1
+To flash all build output, run 'make flash' or:
+python /home/raki/esp/esp-idf/components/esptool_py/esptool/esptool.py --chip esp32 --port /dev/ttyUSB1 --baud 115200 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0x1000 /home/raki/esp-project/pwm_capture/build/bootloader/bootloader.bin 0x10000 /home/raki/esp-project/pwm_capture/build/ledc.bin 0x8000 /home/raki/esp-project/pwm_capture/build/partitions_singleapp.bin
+15:30:14 **** Build of configuration Default for project UVC-Deliled-Master ****
+make all 
+Toolchain path: /home/raki/esp/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+Toolchain version: crosstool-ng-1.22.0-80-g6c4433a
+Compiler version: 5.2.0
+Python requirements from /home/raki/esp/esp-idf/requirements.txt are satisfied.
+
+Project is not inside a git repository, will not use 'git describe' to determine PROJECT_VER.
+App "app-template" version: 1
+CC /home/raki/esp-project/UVC-Deliled-Master/build/main/base_mac_address_example_main.o
+CC /home/raki/esp-project/UVC-Deliled-Master/build/main/unitcfg.o
+CC /home/raki/esp-project/UVC-Deliled-Master/build/main/main.o
+/home/raki/esp-project/UVC-Deliled-Master/main/main.c: In function 'app_main':
+/home/raki/esp-project/UVC-Deliled-Master/main/main.c:29:2: error: too few arguments to function 'esp_base_mac_addr_set'
+/home/raki/esp/esp-idf/make/component_wrapper.mk:289: recipe for target 'main.o' failed
+  esp_base_mac_addr_set();
+  ^
+In file included from /home/raki/esp/esp-idf/components/freertos/include/freertos/portable.h:126:0,
+                 from /home/raki/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h:105,
+                 from /home/raki/esp-project/UVC-Deliled-Master/main/main.c:7:
+/home/raki/esp/esp-idf/components/esp_common/include/esp_system.h:211:11: note: declared here
+/home/raki/esp/esp-idf/make/project.mk:582: recipe for target 'component-main-build' failed
+ esp_err_t esp_base_mac_addr_set(uint8_t *mac);
+           ^
+/home/raki/esp-project/UVC-Deliled-Master/main/main.c: At top level:
+cc1: warning: unrecognized command line option '-Wno-frame-address'
+make[1]: *** [main.o] Error 1
+make: *** [component-main-build] Error 2
+"make all" terminated with exit code 2. Build might be incomplete.
+15:30:28 **** Build of configuration Default for project UVC-Deliled-Slave ****
+make all 
+Toolchain path: /home/raki/esp/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+Toolchain version: crosstool-ng-1.22.0-80-g6c4433a
+Compiler version: 5.2.0
+Python requirements from /home/raki/esp/esp-idf/requirements.txt are satisfied.
+
+Project is not inside a git repository, will not use 'git describe' to determine PROJECT_VER.
+App "app-template" version: 1
+CC /home/raki/esp-project/UVC-Deliled-Slave/build/main/tcp_client.o
+AR /home/raki/esp-project/UVC-Deliled-Slave/build/main/libmain.a
+Generating esp32.project.ld
+LD /home/raki/esp-project/UVC-Deliled-Slave/build/app-template.elf
+esptool.py v2.7-dev
+To flash all build output, run 'make flash' or:
+python2.7 /home/raki/esp/esp-idf/components/esptool_py/esptool/esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0x1000 /home/raki/esp-project/UVC-Deliled-Slave/build/bootloader/bootloader.bin 0x10000 /home/raki/esp-project/UVC-Deliled-Slave/build/app-template.bin 0x8000 /home/raki/esp-project/UVC-Deliled-Slave/build/partitions_singleapp.bin
+15:30:45 **** Build of configuration Default for project deliled ****
+make all 
+Toolchain path: /home/raki/esp/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+Toolchain version: crosstool-ng-1.22.0-80-g6c4433a
+Compiler version: 5.2.0
+Python requirements from /home/raki/esp/esp-idf/requirements.txt are satisfied.
+
+App "deliled_bin" version: 01.02.00
+To flash all build output, run 'make flash' or:
+python /home/raki/esp/esp-idf/components/esptool_py/esptool/esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0xf000 /home/raki/esp-project/deliled/build/ota_data_initial.bin 0x1000 /home/raki/esp-project/deliled/build/bootloader/bootloader.bin 0x20000 /home/raki/esp-project/deliled/build/deliled_bin.bin 0x8000 /home/raki/esp-project/deliled/build/partitions.bin
+15:30:53 **** Build of configuration Default for project pwm_capture ****
+make all 
+Toolchain path: /home/raki/esp/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+Toolchain version: crosstool-ng-1.22.0-80-g6c4433a
+Compiler version: 5.2.0
+Python requirements from /home/raki/esp/esp-idf/requirements.txt are satisfied.
+
+Project is not inside a git repository, will not use 'git describe' to determine PROJECT_VER.
+App "ledc" version: 1
+To flash all build output, run 'make flash' or:
+python /home/raki/esp/esp-idf/components/esptool_py/esptool/esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 115200 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0x1000 /home/raki/esp-project/pwm_capture/build/bootloader/bootloader.bin 0x10000 /home/raki/esp-project/pwm_capture/build/ledc.bin 0x8000 /home/raki/esp-project/pwm_capture/build/partitions_singleapp.bin

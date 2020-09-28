@@ -1,0 +1,32 @@
+15:30:14 **** Build of configuration Default for project UVC-Deliled-Master ****
+make all 
+Toolchain path: /home/raki/esp/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+Toolchain version: crosstool-ng-1.22.0-80-g6c4433a
+Compiler version: 5.2.0
+Python requirements from /home/raki/esp/esp-idf/requirements.txt are satisfied.
+
+Project is not inside a git repository, will not use 'git describe' to determine PROJECT_VER.
+App "app-template" version: 1
+CC /home/raki/esp-project/UVC-Deliled-Master/build/main/base_mac_address_example_main.o
+CC /home/raki/esp-project/UVC-Deliled-Master/build/main/unitcfg.o
+CC /home/raki/esp-project/UVC-Deliled-Master/build/main/main.o
+/home/raki/esp-project/UVC-Deliled-Master/main/main.c: In function 'app_main':
+/home/raki/esp-project/UVC-Deliled-Master/main/main.c:29:2: error: too few arguments to function 'esp_base_mac_addr_set'
+/home/raki/esp/esp-idf/make/component_wrapper.mk:289: recipe for target 'main.o' failed
+  esp_base_mac_addr_set();
+  ^
+In file included from /home/raki/esp/esp-idf/components/freertos/include/freertos/portable.h:126:0,
+                 from /home/raki/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h:105,
+                 from /home/raki/esp-project/UVC-Deliled-Master/main/main.c:7:
+/home/raki/esp/esp-idf/components/esp_common/include/esp_system.h:211:11: note: declared here
+/home/raki/esp/esp-idf/make/project.mk:582: recipe for target 'component-main-build' failed
+ esp_err_t esp_base_mac_addr_set(uint8_t *mac);
+           ^
+/home/raki/esp-project/UVC-Deliled-Master/main/main.c: At top level:
+cc1: warning: unrecognized command line option '-Wno-frame-address'
+make[1]: *** [main.o] Error 1
+make: *** [component-main-build] Error 2
+"make all" terminated with exit code 2. Build might be incomplete.
+
+15:30:26 Build Failed. 5 errors, 0 warnings. (took 12s.149ms)
+
