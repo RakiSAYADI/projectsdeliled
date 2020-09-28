@@ -6,6 +6,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutteruvcapp/services/bleDeviceClass.dart';
 import 'package:flutteruvcapp/services/custum_timer_painter.dart';
 import 'package:flutteruvcapp/services/uvcClass.dart';
+import 'package:flutteruvcapp/services/uvcToast.dart';
 import 'package:slide_countdown_clock/slide_countdown_clock.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -25,6 +26,8 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
 
   Map uvcClassData = {};
   UvcLight myUvcLight;
+
+  ToastyMessage myUvcToast;
 
   Device myDevice;
 
@@ -79,22 +82,14 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     Map<String, dynamic> dataRead;
     int detectionResult = 0;
     do {
-/*      myDevice.device.state.listen((event) {
-        switch (event) {
-          case BluetoothDeviceState.connected:
-            print('connected');
-            break;
-          case BluetoothDeviceState.disconnected:
-            print('disconnected');
-            break;
-          case BluetoothDeviceState.connecting:
-            print('connecting');
-            break;
-          case BluetoothDeviceState.disconnecting:
-            print('disconnecting');
-            break;
-        }
-      });*/
+      if (!myDevice.getConnectionState()) {
+        myUvcToast = ToastyMessage(toastContext: context);
+        myUvcToast.setToastDuration(5);
+        myUvcToast.setToastMessage('Connexion perdue avec le robot !');
+        myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+        myDevice.disconnect();
+        Navigator.pushNamedAndRemoveUntil(context, "/bluetooth_activation", (r) => false);
+      }
       if (treatmentIsOnProgress) {
         if (Platform.isIOS) {
           await myDevice.readCharacteristic(0, 0);
@@ -126,10 +121,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    uvcClassData = uvcClassData.isNotEmpty ? uvcClassData : ModalRoute
-        .of(context)
-        .settings
-        .arguments;
+    uvcClassData = uvcClassData.isNotEmpty ? uvcClassData : ModalRoute.of(context).settings.arguments;
     myUvcLight = uvcClassData['uvclight'];
     myDevice = uvcClassData['myDevice'];
 
@@ -149,14 +141,8 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
       controllerAnimationTimeBackground.reverse(from: controllerAnimationTimeBackground.value == 0.0 ? 1.0 : controllerAnimationTimeBackground.value);
     }
 
-    double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
 
     return WillPopScope(
       child: Scaffold(
@@ -367,37 +353,36 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
   Future<void> stopSecurity(BuildContext context) {
     return showDialog<bool>(
       context: context,
-      builder: (c) =>
-          AlertDialog(
-            title: Text('Attention'),
-            content: Text('Voulez-vous vraiment annuler le traitement UVC ?'),
-            actions: [
-              FlatButton(
-                child: Text('Oui'),
-                onPressed: () async {
-                  //Stop UVC processing
-                  treatmentIsStopped = true;
-                  treatmentIsOnProgress = false;
-                  treatmentIsSuccessful = false;
-                  String message = 'STOP : ON';
-                  if (Platform.isIOS) {
-                    await myDevice.writeCharacteristic(0, 0, message);
-                  } else {
-                    await myDevice.writeCharacteristic(2, 0, message);
-                  }
-                  Navigator.pop(c, true);
-                  Navigator.pushNamed(context, '/end_uvc', arguments: {
-                    'myDevice': myDevice,
-                    'treatmentCompleted': treatmentIsSuccessful,
-                  });
-                },
-              ),
-              FlatButton(
-                child: Text('Non'),
-                onPressed: () => Navigator.pop(c, false),
-              ),
-            ],
+      builder: (c) => AlertDialog(
+        title: Text('Attention'),
+        content: Text('Voulez-vous vraiment annuler le traitement UVC ?'),
+        actions: [
+          FlatButton(
+            child: Text('Oui'),
+            onPressed: () async {
+              //Stop UVC processing
+              treatmentIsStopped = true;
+              treatmentIsOnProgress = false;
+              treatmentIsSuccessful = false;
+              String message = 'STOP : ON';
+              if (Platform.isIOS) {
+                await myDevice.writeCharacteristic(0, 0, message);
+              } else {
+                await myDevice.writeCharacteristic(2, 0, message);
+              }
+              Navigator.pop(c, true);
+              Navigator.pushNamed(context, '/end_uvc', arguments: {
+                'myDevice': myDevice,
+                'treatmentCompleted': treatmentIsSuccessful,
+              });
+            },
           ),
+          FlatButton(
+            child: Text('Non'),
+            onPressed: () => Navigator.pop(c, false),
+          ),
+        ],
+      ),
     );
   }
 
