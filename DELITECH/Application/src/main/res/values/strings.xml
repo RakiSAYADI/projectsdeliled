@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="temp">Température : </string>
+    <string name="lum">Luminosité : </string>
+    <string name="hum">Humidité : </string>
+    <string name="co2">Niveau de CO2 : </string>
+    <string name="wifi">Connexion à un réseau WiFi</string>
+    <string name="bk">Back</string>
+    <string name="list">Sélectionner votre point d’accès </string>
+    <string name="val">Valider</string>
+    <string name="changer">Changer</string>
+    <string name="butt">MAESTRO</string>
+    <string name="load">Loading</string>
+    <string name="plus">V+</string>
+    <string name="moins">V-</string>
+    <string name="rena_zone">Renommer</string>
+    <string name="active">Activé  </string>
+    <string name="descative">Désactivé  </string>
+    <string name="choisir_allumage">Choissisez les zones à réguler :</string>
+    <string name="allumage_debut">Heure de Phase 1 :</string>
+    <string name="add_scene">Ajouter une phase</string>
+    <string name="checkbox_infiniti">Faire une boucle : Quand la dernière phase est terminée, recommencer à partir de la première.</string>
+    <string name="heureDebut">Heure de départ</string>
+    <string name="heureFin">Heure de fin</string>
+    <string name="allumage_intensite">Intensité de chaque zone :</string>
+    <string name="allumage_debut_2">Heure Phase 2 :</string>
+    <string name="allumage_fin">Heure de Phase 3 :</string>
+    <string name="allumage_fin_2">Heure de Phase 4 :</string>
+    <string name="namedevice">Renommer ce boîtier HuBBox :</string>
+    <string name="password">Mot de pass d\'association BLE : </string>
+    <string name="nameprofile">Sélection du profil : </string>
+    <string name="customs">Custom</string>
+    <string name="encloche">Politique d enclenchement :</string>
+    <string name="decloche">Politique declenchement : </string>
+    <string name="avance">Paramètres du Cloud</string>
+    <string name="exp">\n Mode \n Expert</string>
+    <string name="heure">Heure : </string>
+    <string name="detecte">Détection : </string>
+    <string name="tvoc">TVOC : </string>
+    <string name="pon">P on : </string>
+    <string name="test_text_cc">Simulation rapide : </string>
+    <string name="impair">Dissocier</string>
+    <string name="bien">Bienvenue sur</string>
+    <string name="maestro">Maestro™ - Lumi\'Air V3.0</string>
+    <string name="wait">Veuillez patienter, nous communiquons avec votre Lumi\'Air</string>
+    <string name="lux">Lux</string>
+    <string name="expli">Ce mode permet d’ajuster automatiquement votre luminosité ambiante en fonction de la valeur de lux mentionnée au dessous (±5%) ainsi votre luminosité ne pourra pas descendre plus bas.</string>
+    <string name="expli_twenty">Le(s) luminaire(s) ne descendront pas en dessous de 20% de leur luminosité. Le nombre de Lux est définit ci-dessus peut alors être dépassé.</string>
+    <string name="percent">%</string>
+    <string name="p1">P1 \t H </string>
+    <string name="p2">P2 \t H </string>
+    <string name="p3">P3 \t H </string>
+    <string name="icone">Indice ICONE : </string>
+    <string name="pmin">P min : </string>
+    <string name="co2notify">Notifications &amp; Alerte C02 </string>
+    <string name="auto">Auto :</string>
+    <string name="fixe">Fixe : </string>
+    <string name="temperature_col">Temp</string>
+    <string name="cycle">Cycle Circadien </string>
+    <string name="modes">Modes</string>
+    <string name="ref">Scanner les réseaux </string>
+    <string name="ESP32">Etat de ESP32 : </string>
+    <string name="etatwifi">Etat connection WIFI :</string>
+    <string name="red">RED</string>
+    <string name="capteurs">Etat du Capteurs :</string>
+    <string name="ch1">Zone 1</string>
+    <string name="ch2">Zone 2</string>
+    <string name="ch3">Zone 3</string>
+    <string name="ch4">Zone 4</string>
+    <string name="volt">0/10V</string>
+    <string name="ch5">Chambre 5</string>
+
+    <string-array name="profile">
+        <item>Bureau</item><item>Circulation</item><item>Custom</item>
+    </string-array>
+
+    <string-array name="ftp_time">
+        <item>1 Minute </item><item>2 Minutes</item><item>5 Minutes</item>
+        <item>10 Minutes </item><item>15 Minutes </item><item>30 Minutes</item>
+        <item>1 Heure </item><item>2 Heures </item><item>4 Heures </item>
+        <item>6 Heures </item><item>12 Heures </item>
+    </string-array>
+
+    <string-array name="minute">
+        <item>00</item><item>01</item><item>02</item><item>03</item><item>04</item><item>05</item><item>06</item><item>07</item><item>08</item><item>09</item>
+        <item>10</item><item>11</item><item>12</item><item>13</item><item>14</item><item>15</item><item>16</item><item>17</item><item>18</item><item>19</item>
+        <item>20</item><item>21</item><item>22</item><item>23</item><item>24</item><item>25</item><item>26</item><item>27</item><item>28</item><item>29</item>
+        <item>30</item><item>31</item><item>32</item><item>33</item><item>34</item><item>35</item><item>36</item><item>37</item><item>38</item><item>39</item>
+        <item>40</item><item>41</item><item>42</item><item>43</item><item>44</item><item>45</item><item>46</item><item>47</item><item>48</item><item>49</item>
+        <item>50</item><item>51</item><item>52</item><item>53</item><item>54</item><item>55</item><item>56</item><item>57</item><item>58</item><item>59</item>
+    </string-array>
+
+    <string-array name="mqtt_second">
+        <item>01</item><item>02</item><item>03</item><item>04</item><item>05</item><item>06</item><item>07</item><item>08</item><item>09</item>
+        <item>10</item><item>11</item><item>12</item><item>13</item><item>14</item><item>15</item><item>16</item><item>17</item><item>18</item><item>19</item>
+        <item>20</item><item>21</item><item>22</item><item>23</item><item>24</item><item>25</item><item>26</item><item>27</item><item>28</item><item>29</item>
+        <item>30</item><item>31</item><item>32</item><item>33</item><item>34</item><item>35</item><item>36</item><item>37</item><item>38</item><item>39</item>
+        <item>40</item><item>41</item><item>42</item><item>43</item><item>44</item><item>45</item><item>46</item><item>47</item><item>48</item><item>49</item>
+        <item>50</item><item>51</item><item>52</item><item>53</item><item>54</item><item>55</item><item>56</item><item>57</item><item>58</item><item>59</item>
+    </string-array>
+
+    <string-array name="lum_level">
+        <item>00</item>
+        <item>01</item><item>02</item><item>03</item><item>04</item><item>05</item><item>06</item><item>07</item><item>08</item><item>09</item>
+        <item>10</item><item>11</item><item>12</item><item>13</item><item>14</item><item>15</item><item>16</item><item>17</item><item>18</item><item>19</item>
+        <item>20</item><item>21</item><item>22</item><item>23</item><item>24</item><item>25</item><item>26</item><item>27</item><item>28</item><item>29</item>
+        <item>30</item><item>31</item><item>32</item><item>33</item><item>34</item><item>35</item><item>36</item><item>37</item><item>38</item><item>39</item>
+        <item>40</item><item>41</item><item>42</item><item>43</item><item>44</item><item>45</item><item>46</item><item>47</item><item>48</item><item>49</item>
+        <item>50</item><item>51</item><item>52</item><item>53</item><item>54</item><item>55</item><item>56</item><item>57</item><item>58</item><item>59</item>
+        <item>60</item><item>61</item><item>62</item><item>63</item><item>64</item><item>65</item><item>66</item><item>67</item><item>68</item><item>69</item>
+        <item>70</item><item>71</item><item>72</item><item>73</item><item>74</item><item>75</item><item>76</item><item>77</item><item>78</item><item>79</item>
+        <item>80</item><item>81</item><item>82</item><item>83</item><item>84</item><item>85</item><item>86</item><item>87</item><item>88</item><item>89</item>
+        <item>90</item><item>91</item><item>92</item><item>93</item><item>94</item><item>95</item><item>96</item><item>97</item><item>98</item><item>99</item>
+        <item>100</item>
+    </string-array>
+
+    <string-array name="duree_amb">
+        <item>1 min</item><item>2 min</item><item>3 min</item><item>5 min</item><item>10 min</item><item>15 min</item><item>20 min</item><item>25 min</item><item>30 min</item>
+        <item>35 min</item><item>40 min</item><item>45 min</item><item>50 min</item><item>55 min</item><item>60 min</item>
+    </string-array>
+
+    <string-array name="transition_amb">
+        <item>1 sec</item><item>2 sec</item><item>3 sec</item><item>5 sec</item><item>10 sec</item><item>15 sec</item><item>20 sec</item><item>25 sec</item><item>30 sec</item>
+        <item>35 sec</item><item>40 sec</item><item>45 sec</item><item>50 sec</item><item>55 sec</item><item>60 sec</item>
+    </string-array>
+
+    <string-array name="sous_topic">
+        <item>Toutes les données</item><item>Temperature (temp)</item><item>Humidité (humid)</item><item>Luxmètre (lux)</item><item>CO2 (co2)</item><item>TVOC (tvoc)</item>
+    </string-array>
+
+    <string-array name="heure">
+        <item>00</item><item>01</item><item>02</item><item>03</item><item>04</item><item>05</item><item>06</item><item>07</item>
+        <item>08</item><item>09</item><item>10</item><item>11</item><item>12</item><item>13</item><item>14</item><item>15</item>
+        <item>16</item><item>17</item><item>18</item><item>19</item><item>20</item><item>21</item><item>22</item><item>23</item>
+    </string-array>
+
+    <string name="create_floating_widget">Create Floating Widget</string>
+    <string name="floating_widget_label">Floating Widget Label</string>
+    <string name="floating_widget_details">Floating Widget Details</string>
+    <string name="draw_other_app_permission_denied">Draw over other app permission not available. App won\'t work without permission. Please try again.</string>
+
+
+
+    <string name="activ_co2">Activer l’heure d’été </string>
+    <string name="sens_pir">Sensivité PIR : </string>
+    <string name="samples">Samples : </string>
+    <string name="time">Fuseau horaire : </string>
+    <string name="logftp">Activer Log FTP</string>
+    <string name="serv">Serveur FTP : </string>
+    <string name="addrudp">Serveur UDP : </string>
+    <string name="ok">Sauvegarder</string>
+    <string name="veille">Veille</string>
+    <string name="prea">Préavis</string>
+    <string name="userftp">User FTP : </string>
+    <string name="passu">Password FTP : </string>
+    <string name="servmqtt">Activer Serveur MQTT </string>
+    <string name="servudp">Activer Serveur UDP </string>
+    <string name="brok">Broker : </string>
+    <string name="port">Port : </string>
+    <string name="user">User : </string>
+    <string name="pass">Password : </string>
+    <string name="topic">Topic : </string>
+    <string name="sos_topic">Sous Topic : </string>
+    <string name="tem_topic">Temp d\'envoie (en sec) : </string>
+    <string name="confirm">Confirmer</string>
+
+    <string name="intensity">Choose your intensity :</string>
+    <string name="coleurs">Choose your color :</string>
+    <string name="presence">Detection :</string>
+    <string name="rooms">Choisissez la zone à contrôler:</string>
+    <string name="pwd">Mot de passe</string>
+    <string name="wf">Vérifiez le WIFI : </string>
+    <string name="defaut">Config. par défaut</string>
+    <string name="restart">Redémarrer</string>
+    <string name="mise">Mise à jour HuBBox</string>
+    <string name="sys">Système</string>
+    <string name="pair">Associer</string>
+
+    <string name="time_help">:</string>
+    <string name="init">0%</string>
+    <string name="chars">UUID CHARC</string>
+    <string name="yallow">YELLOW</string>
+    <string name="white">Blanche</string>
+    <string name="power">ON/OFF</string>
+    <string name="orange">ORANGE</string>
+    <string name="cyan">CYAN</string>
+    <string name="purple">PURPLE</string>
+    <string name="blue">BLUE</string>
+    <string name="green">GREEN</string>
+    <string name="ble_not_supported">BLE is not supported</string>
+    <string name="label_data">Data:</string>
+    <string name="label_device_address">Device address:</string>
+    <string name="label_state">State:</string>
+    <string name="no_data">No data</string>
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="title_devices">Liste des HuBBox :</string>
+    <string name="error_bluetooth_not_supported">Bluetooth not supported.</string>
+
+    <color name="colorPrimary">#00796b</color>
+    <color name="colorPrimaryDark">#00665a</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="light_green">#b2d7d2</color>
+    <color name="Orange_deliled">#F6A656</color>
+    <color name="Blue_f_deliled">#294D99</color>
+    <color name="Blue_c_deliled">#76C6D9</color>
+
+    <string name="unknown_device">Unknown device</string>
+    <string name="unknown_characteristic">Unknown characteristic</string>
+    <string name="unknown_service">Unknown service</string>
+    <string name="connect">Se connecter</string>
+
+    <!-- Menu items -->
+    <string name="menu_connect">Connect</string>
+    <string name="menu_disconnect">Déconnecter</string>
+    <string name="menu_scan">Scan</string>
+    <string name="menu_stop">Stop</string>
+</resources>

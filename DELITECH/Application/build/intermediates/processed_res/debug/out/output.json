@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "applicationId": "deliled.Applications.android.Maestro",
+  "variantType": "BASE_APK",
+  "elements": [
+    {
+      "outputType": {
+        "type": "PROCESSED_RES"
+      },
+      "apkData": {
+        "type": "MAIN",
+        "splits": [],
+        "versionCode": 16,
+        "versionName": "6.0",
+        "outputFile": "Application-debug.apk",
+        "fullName": "debug",
+        "baseName": "debug",
+        "dirName": ""
+      },
+      "path": "resources-debug.ap_",
+      "properties": {
+        "packageId": "deliled.Applications.android.Maestro",
+        "split": "",
+        "minSdkVersion": "23"
+      }
+    }
+  ]
+}

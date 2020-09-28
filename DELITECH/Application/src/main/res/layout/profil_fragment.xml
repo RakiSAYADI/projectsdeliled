@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/maestrobackgroundapplication"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="104dp"
+                android:layout_height="37dp"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                android:layout_toStartOf="@+id/spinnerprofile"
+                android:gravity="center"
+                android:text="Profil : "
+                android:textColor="@color/White"
+                android:textSize="16sp" />
+
+            <Spinner
+                android:id="@+id/spinnerprofile"
+                style="@android:style/Widget.Holo.Spinner"
+                android:layout_width="151dp"
+                android:layout_height="37dp"
+                android:visibility="invisible"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:entries="@array/profile"
+                android:textColor="@color/White" />
+
+            <ImageButton
+                android:id="@+id/imagemodif"
+                android:layout_width="42dp"
+                android:layout_height="35dp"
+                android:visibility="invisible"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@id/spinnerprofile"
+                android:background="@color/fbutton_color_transparent"
+                android:contentDescription="@string/power"
+                android:src="@drawable/edit" />
+
+            <View
+                android:id="@+id/spview"
+                style="@style/dividerHorizontal"
+                android:layout_width="350dp"
+                android:layout_height="5dp"
+                android:layout_below="@+id/spinnerprofile"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:background="@color/Orange_deliled" />
+
+            <TextView
+                android:id="@+id/ajustment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/spview"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Ajustement de la luminosité"
+                android:textColor="@color/White"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Automatique"
+                android:layout_marginTop="26dp"
+                android:id="@+id/automatique"
+                android:textColor="@color/White"
+                android:layout_marginStart="10dp"
+                android:layout_below="@+id/ajustment"
+                android:textSize="12sp" />
+
+            <Switch
+                android:id="@+id/switch_ajust"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ajustment"
+                android:textColor="@color/White"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@+id/automatique"
+                android:layout_marginTop="21dp" />
+
+            <Button
+                android:id="@+id/switch_expert"
+                android:layout_width="115dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ajustment"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/spinnerprofile"
+                android:background="@drawable/buttonshape"
+                android:text="Config"
+                android:textColor="@color/White" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/switch_expert"
+                android:layout_marginStart="10dp"
+                android:id="@+id/manuel"
+                android:layout_marginTop="25dp"
+                android:text="Manuel"
+                android:textColor="@color/White"
+                android:textSize="12sp" />
+
+            <Switch
+                android:id="@+id/switch_ajust_manu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/switch_expert"
+                android:textColor="@color/White"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@+id/automatique"
+                android:layout_marginTop="20dp" />
+
+            <Button
+                android:id="@+id/switch_expert_manu"
+                android:layout_width="115dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/switch_expert"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/spinnerprofile"
+                android:background="@drawable/buttonshape"
+                android:text="Config"
+                android:textColor="@color/White" />
+
+            <View
+                android:id="@+id/ajview"
+                android:layout_width="350dp"
+                android:layout_height="5dp"
+                android:layout_below="@+id/switch_expert_manu"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:background="@color/Orange_deliled" />
+
+            <TextView
+                android:id="@+id/veille"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_below="@+id/airview"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Allumage/Extinction automatique"
+                android:textColor="@color/White"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Switch
+                android:id="@+id/switchveille"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/veille"
+                android:layout_toEndOf="@+id/manuel"
+                android:layout_marginTop="20dp" />
+
+            <Button
+                android:id="@+id/veille_expert"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/veille"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/spinnerprofile"
+                android:background="@drawable/buttonshape"
+                android:text="Config"
+                android:textColor="@color/White" />
+
+
+            <View
+                android:id="@+id/co2view"
+                android:layout_width="350dp"
+                android:layout_height="5dp"
+                android:layout_below="@+id/veille_expert"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:background="@color/Gold" />
+
+            <TextView
+                android:id="@+id/co2text"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_below="@+id/co2view"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="@string/co2notify"
+                android:textColor="@color/White"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Switch
+                android:id="@+id/switchco2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/co2text"
+                android:layout_toEndOf="@+id/manuel"
+                android:layout_marginTop="20dp" />
+
+            <Button
+                android:id="@+id/co2_experting"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/co2text"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/spinnerprofile"
+                android:background="@drawable/buttonshape"
+                android:text="Config"
+                android:textColor="@color/White" />
+
+            <View
+                android:id="@+id/cycview"
+                style="@style/dividerHorizontal"
+                android:layout_width="350dp"
+                android:layout_height="5dp"
+                android:layout_below="@+id/veille_expert"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:background="@color/Orange_deliled" />
+
+            <View
+                android:id="@+id/cco2view"
+                style="@style/dividerHorizontal"
+                android:layout_width="350dp"
+                android:layout_height="5dp"
+                android:layout_below="@+id/co2_experting"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:background="@color/Orange_deliled" />
+
+            <TextView
+                android:id="@+id/cycle"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_below="@+id/ajview"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Cycle circadien"
+                android:textColor="@color/White"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Switch
+                android:id="@+id/switchcyc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cycle"
+                android:layout_toEndOf="@+id/manuel"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/White" />
+
+            <Button
+                android:id="@+id/cyc_expert"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cycle"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/spinnerprofile"
+                android:background="@drawable/buttonshape"
+                android:text="Config"
+                android:textColor="@color/White" />
+
+            <View
+                android:id="@+id/airview"
+                style="@style/dividerHorizontal"
+                android:layout_width="350dp"
+                android:layout_height="5dp"
+                android:layout_below="@+id/cyc_expert"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:background="@color/Orange_deliled" />
+
+            <Button
+                android:id="@+id/restart_values"
+                android:layout_width="257dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cco2view"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/buttonshapebig"
+                android:text="Supprimer tous les réglages"
+                android:textColor="@color/White" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@+id/restart_values" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

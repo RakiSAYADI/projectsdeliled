@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/maestrobackgroundapplication"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+<TextView
+    android:id="@+id/select_zone"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textColor="@color/White"
+    android:textSize="24sp"
+    android:text="Sélectionner une/des zones(s) :"
+    android:layout_centerHorizontal="true" />
+    <ToggleButton
+        android:id="@+id/zone1_cyc"
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/select_zone"
+        android:background="@drawable/togglebutton"
+        android:layout_toStartOf="@+id/zone2_cyc"
+        android:textOn="Zone 1"
+        android:textOff="Zone 1"
+        android:layout_height="wrap_content" />
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:id="@+id/zone2_cyc"
+        android:textOn="Zone 2"
+        android:layout_below="@+id/select_zone"
+        android:layout_toStartOf="@+id/zero_cyc"
+        android:layout_marginStart="10dp"
+        android:textOff="Zone 2"
+        android:background="@drawable/togglebutton"
+        android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/zero_cyc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_below="@+id/select_zone"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp" />
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:id="@+id/zone3_cyc"
+        android:textOn="Zone 3"
+        android:layout_below="@+id/select_zone"
+        android:layout_marginStart="5dp"
+        android:background="@drawable/togglebutton"
+        android:layout_toEndOf="@+id/zero_cyc"
+        android:textOff="Zone 3"
+        android:layout_height="wrap_content" />
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:id="@+id/zone4_cyc"
+        android:textOn="Zone 4"
+        android:background="@drawable/togglebutton"
+        android:layout_below="@+id/select_zone"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/zone3_cyc"
+        android:textOff="Zone 4"
+        android:layout_height="wrap_content" />
+    <View
+        android:id="@+id/horaireview_0"
+        style="@style/dividerHorizontal"
+        android:layout_width="350dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/Orange_deliled"
+        android:layout_below="@+id/zone1_cyc"
+        android:layout_centerHorizontal="true"
+        android:layout_height="5dp" />
+
+            <Switch
+                android:id="@+id/PH1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/horaireview_0"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center|start"
+                android:text="Phase 1"
+                android:textColor="@color/White"
+                android:textSize="24sp" />
+    <TextView
+        android:id="@+id/haraire1"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/PH1"
+        android:textColor="@color/White"
+        android:layout_height="35dp"
+        android:gravity="center"
+        android:layout_toStartOf="@+id/horaire_heure_1"
+        android:text="Horaire Phase 1 :  "
+        android:textSize="24sp" />
+
+            <Spinner
+                android:id="@+id/horaire_heure_1"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_below="@+id/PH1"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                style="@android:style/Widget.Holo.Spinner"
+                android:textColor="@color/White"
+                android:entries="@array/heure" />
+
+    <TextView
+        android:id="@+id/texte3"
+        android:layout_width="22dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/White"
+        android:layout_height="33dp"
+        android:layout_below="@+id/PH1"
+        android:layout_toEndOf="@+id/horaire_heure_1"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:text=":" />
+
+            <Spinner
+                android:id="@+id/horaire_minute_1"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_below="@+id/PH1"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/texte3"
+                style="@android:style/Widget.Holo.Spinner"
+                android:textColor="@color/White"
+                android:entries="@array/minute" />
+
+    <TextView
+        android:id="@+id/froid1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/White"
+        android:layout_below="@+id/horaire_heure_1"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="1dp"
+        android:layout_toStartOf="@+id/horaire_white_1"
+        android:gravity="center"
+        android:text="0%"
+        android:textSize="16sp" />
+
+    <SeekBar
+        android:id="@+id/horaire_white_1"
+        android:layout_below="@+id/horaire_heure_1"
+        android:layout_width="258dp"
+        android:layout_height="26dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:progressDrawable="@drawable/blancs"
+        android:thumb="@drawable/wheel" />
+
+    <TextView
+        android:id="@+id/chaud1"
+        android:layout_width="53dp"
+        android:layout_height="31dp"
+        android:layout_below="@+id/horaire_heure_1"
+        android:textColor="@color/White"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/horaire_white_1"
+        android:gravity="center"
+        android:text="100%"
+        android:textSize="16sp" />
+    <View
+        android:id="@+id/horaireview"
+        android:layout_below="@+id/chaud1"
+        style="@style/dividerHorizontal"
+        android:layout_width="350dp"
+        android:background="@color/Orange_deliled"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_height="5dp" />
+            <Switch
+                android:id="@+id/PH2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/horaireview"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center|start"
+                android:text="Phase 2"
+                android:textColor="@color/White"
+                android:textSize="24sp" />
+    <TextView
+        android:id="@+id/haraire2"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_height="35dp"
+        android:layout_below="@+id/PH2"
+        android:textColor="@color/White"
+        android:gravity="center"
+        android:layout_toStartOf="@+id/horaire_heure_2"
+        android:text="Horaire Phase 2  :"
+        android:textSize="24sp" />
+
+            <Spinner
+                android:id="@+id/horaire_heure_2"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_below="@+id/PH2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                style="@android:style/Widget.Holo.Spinner"
+                android:textColor="@color/White"
+                android:entries="@array/heure" />
+
+    <TextView
+        android:id="@+id/texte4"
+        android:layout_width="22dp"
+        android:layout_marginTop="10dp"
+        android:layout_height="33dp"
+        android:layout_below="@+id/PH2"
+        android:layout_toEndOf="@+id/horaire_heure_2"
+        android:textColor="@color/White"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:text=":" />
+
+            <Spinner
+                android:id="@+id/horaire_minute_2"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_below="@+id/PH2"
+                android:layout_marginStart="-1dp"
+                android:layout_marginTop="11dp"
+                android:layout_toEndOf="@+id/texte4"
+                style="@android:style/Widget.Holo.Spinner"
+                android:textColor="@color/White"
+                android:entries="@array/minute" />
+
+    <TextView
+        android:id="@+id/froid2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/horaire_heure_2"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="1dp"
+        android:textColor="@color/White"
+        android:layout_toStartOf="@+id/horaire_white_2"
+        android:gravity="center"
+        android:text="0%"
+        android:textSize="16sp" />
+
+    <SeekBar
+        android:id="@+id/horaire_white_2"
+        android:layout_below="@+id/horaire_heure_2"
+        android:layout_width="258dp"
+        android:layout_height="26dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:progressDrawable="@drawable/blancs"
+        android:thumb="@drawable/wheel" />
+
+    <TextView
+        android:id="@+id/chaud2"
+        android:layout_width="53dp"
+        android:layout_height="31dp"
+        android:layout_below="@+id/horaire_heure_2"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/White"
+        android:layout_toEndOf="@+id/horaire_white_2"
+        android:gravity="center"
+        android:text="100%"
+        android:textSize="16sp" />
+    <View
+        android:id="@+id/horaireview_1"
+        android:layout_below="@+id/chaud2"
+        style="@style/dividerHorizontal"
+        android:layout_width="350dp"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:background="@color/Orange_deliled"
+        android:layout_height="5dp" />
+            <Switch
+                android:id="@+id/PH3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/horaireview_1"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center|start"
+                android:text="Phase 3"
+                android:textColor="@color/White"
+                android:textSize="24sp" />
+    <TextView
+        android:id="@+id/haraire3"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/White"
+        android:layout_height="35dp"
+        android:layout_below="@+id/PH3"
+        android:gravity="center"
+        android:layout_toStartOf="@+id/horaire_heure_3"
+        android:text="Horaire Phase 3  :"
+        android:textSize="24sp" />
+
+            <Spinner
+                android:id="@+id/horaire_heure_3"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_below="@+id/PH3"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                style="@android:style/Widget.Holo.Spinner"
+                android:textColor="@color/White"
+                android:entries="@array/heure" />
+
+    <TextView
+        android:id="@+id/texte5"
+        android:layout_width="22dp"
+        android:layout_marginTop="10dp"
+        android:layout_height="33dp"
+        android:textColor="@color/White"
+        android:layout_below="@+id/PH3"
+        android:layout_toEndOf="@+id/horaire_heure_3"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:text=":" />
+
+            <Spinner
+                android:id="@+id/horaire_minute_3"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_below="@+id/PH3"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/texte5"
+                style="@android:style/Widget.Holo.Spinner"
+                android:textColor="@color/White"
+                android:entries="@array/minute" />
+
+    <TextView
+        android:id="@+id/froid3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/horaire_heure_3"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="1dp"
+        android:textColor="@color/White"
+        android:layout_toStartOf="@+id/horaire_white_3"
+        android:gravity="center"
+        android:text="0%"
+        android:textSize="16sp" />
+
+    <SeekBar
+        android:id="@+id/horaire_white_3"
+        android:layout_below="@+id/horaire_heure_3"
+        android:layout_width="258dp"
+        android:layout_height="26dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:progressDrawable="@drawable/blancs"
+        android:thumb="@drawable/wheel" />
+
+    <TextView
+        android:id="@+id/chaud3"
+        android:layout_width="53dp"
+        android:layout_height="31dp"
+        android:layout_below="@+id/horaire_heure_3"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/White"
+        android:layout_toEndOf="@+id/horaire_white_3"
+        android:gravity="center"
+        android:text="100%"
+        android:textSize="16sp" />
+            <View
+                android:id="@+id/horaireview_2"
+                android:layout_below="@+id/chaud3"
+                style="@style/dividerHorizontal"
+                android:layout_width="350dp"
+                android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true"
+                android:background="@color/Orange_deliled"
+                android:layout_height="5dp" />
+            <Switch
+                android:id="@+id/PH4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/horaireview_2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center|start"
+                android:text="Phase 4"
+                android:textColor="@color/White"
+                android:textSize="24sp" />
+            <TextView
+                android:id="@+id/haraire4"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/White"
+                android:layout_height="35dp"
+                android:layout_below="@+id/PH4"
+                android:gravity="center"
+                android:layout_toStartOf="@+id/horaire_heure_4"
+                android:text="Horaire Phase 4  :"
+                android:textSize="24sp" />
+
+            <Spinner
+                android:id="@+id/horaire_heure_4"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_below="@+id/PH4"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                style="@android:style/Widget.Holo.Spinner"
+                android:textColor="@color/White"
+                android:entries="@array/heure" />
+
+            <TextView
+                android:id="@+id/texte6"
+                android:layout_width="22dp"
+                android:layout_marginTop="10dp"
+                android:layout_height="33dp"
+                android:textColor="@color/White"
+                android:layout_below="@+id/PH4"
+                android:layout_toEndOf="@+id/horaire_heure_4"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:text=":" />
+
+            <Spinner
+                android:id="@+id/horaire_minute_4"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_below="@+id/PH4"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/texte5"
+                style="@android:style/Widget.Holo.Spinner"
+                android:textColor="@color/White"
+                android:entries="@array/minute" />
+
+            <TextView
+                android:id="@+id/froid4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/horaire_heure_4"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="1dp"
+                android:textColor="@color/White"
+                android:layout_toStartOf="@+id/horaire_white_4"
+                android:gravity="center"
+                android:text="0%"
+                android:textSize="16sp" />
+
+            <SeekBar
+                android:id="@+id/horaire_white_4"
+                android:layout_below="@+id/horaire_heure_4"
+                android:layout_width="258dp"
+                android:layout_height="26dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:progressDrawable="@drawable/blancs"
+                android:thumb="@drawable/wheel" />
+
+            <TextView
+                android:id="@+id/chaud4"
+                android:layout_width="53dp"
+                android:layout_height="31dp"
+                android:layout_below="@+id/horaire_heure_4"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/White"
+                android:layout_toEndOf="@+id/horaire_white_4"
+                android:gravity="center"
+                android:text="100%"
+                android:textSize="16sp" />
+    <View
+        android:id="@+id/horaireview_3"
+        android:layout_below="@+id/chaud4"
+        style="@style/dividerHorizontal"
+        android:layout_width="350dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/Orange_deliled"
+        android:layout_centerHorizontal="true"
+        android:layout_height="5dp" />
+
+            <Switch
+                android:id="@+id/between_phases"
+                android:layout_width="460dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/horaireview_3"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center|start"
+                android:text="Faire une transition entre la derniére Phase et la première Phase"
+                android:textColor="@color/White"
+                android:textSize="24sp" />
+            <View
+                android:id="@+id/horaireview_4"
+                android:layout_below="@+id/between_phases"
+                style="@style/dividerHorizontal"
+                android:layout_width="350dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/Orange_deliled"
+                android:layout_centerHorizontal="true"
+                android:layout_height="5dp" />
+            <TextView
+                android:id="@+id/test_cc_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/horaireview_4"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="@string/test_text_cc"
+                android:textColor="@color/White"
+                android:textSize="24sp"
+                />
+            <SeekBar
+                android:id="@+id/test_express"
+                android:layout_width="284dp"
+                android:layout_height="44dp"
+                android:layout_below="@+id/test_cc_text"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/buttonshapebig"
+                android:thumb="@drawable/chronometer" />
+            <TextView
+                android:id="@+id/test_cc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/test_express"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="00:00:00"
+                android:textColor="@color/White"
+                android:textSize="24sp"
+                />
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

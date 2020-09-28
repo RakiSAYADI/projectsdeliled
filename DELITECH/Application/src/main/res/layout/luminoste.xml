@@ -1,0 +1,785 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:background="@drawable/maestrobackgroundapplication"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/lum_auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/lux"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_below="@+id/lux_exp"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="Vous avez actuellement :"
+                android:textColor="@color/White"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/lux_auto"
+                android:layout_width="84dp"
+                android:layout_height="36dp"
+                android:layout_below="@+id/lux"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:textColor="@color/White"
+                android:backgroundTint="@android:color/white"
+                android:textSize="15sp" />
+            <!--
+            android:layout_below="@+id/lumu_1"
+            -->
+            <TextView
+                android:id="@+id/lux_exp"
+                android:layout_width="313dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="@string/expli"
+                android:textColor="@color/White"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/luxi"
+                android:layout_width="wrap_content"
+                android:layout_height="37dp"
+                android:layout_below="@+id/lux"
+                android:layout_toEndOf="@+id/lux_auto"
+                android:text="@string/lux"
+                android:textColor="@color/White"
+                android:textSize="20sp" />
+
+            <View
+                android:id="@+id/sauve_2"
+                style="@style/dividerHorizontal"
+                android:layout_width="300dp"
+                android:layout_height="5dp"
+                android:background="@color/Orange_deliled"
+                android:layout_below="@+id/lux_auto"
+                android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:id="@+id/ajustment_manu"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_below="@+id/sauve_2"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="Choissisez les zones à réguler :"
+                android:textColor="@color/White"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/linearzones"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/ajustment_manu"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="75dp"
+                    android:layout_height="350dp"
+                    android:id="@+id/linearzone1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ToggleButton
+                        android:id="@+id/lum_zone1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/togglebutton"
+                        android:text="Zone 1"
+                        android:gravity="center"
+                        android:textColor="@color/White"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+                    <SeekBar
+                        android:id="@+id/lum_bar_zone1"
+                        android:layout_width="258dp"
+                        android:layout_height="26dp"
+                        android:progressDrawable="@drawable/luminosite"
+                        android:rotation="270"
+                        android:layout_marginTop="110dp"
+                        android:thumb="@drawable/circadiens" />
+                    <TextView
+                        android:id="@+id/lum_zone1_val"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="130dp"
+                        android:text="0%"
+                        android:textColor="@color/White"
+                        android:textSize="16sp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="75dp"
+                    android:layout_height="350dp"
+                    android:id="@+id/linearzone2"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <ToggleButton
+                        android:id="@+id/lum_zone2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Zone 2"
+                        android:background="@drawable/togglebutton"
+                        android:gravity="center"
+                        android:textColor="@color/White"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <SeekBar
+                        android:id="@+id/lum_bar_zone2"
+                        android:layout_width="258dp"
+                        android:layout_height="26dp"
+                        android:progressDrawable="@drawable/luminosite"
+                        android:rotation="270"
+                        android:layout_marginTop="110dp"
+                        android:thumb="@drawable/circadiens" />
+                    <TextView
+                        android:id="@+id/lum_zone2_val"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="0%"
+                        android:textColor="@color/White"
+                        android:layout_marginTop="130dp"
+                        android:textSize="16sp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="75dp"
+                    android:layout_height="350dp"
+                    android:id="@+id/linearzone3"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <ToggleButton
+                        android:id="@+id/lum_zone3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Zone 3"
+                        android:gravity="center"
+                        android:textColor="@color/White"
+                        android:textSize="16sp"
+                        android:background="@drawable/togglebutton"
+                        android:textStyle="bold" />
+                    <SeekBar
+                        android:id="@+id/lum_bar_zone3"
+                        android:layout_width="258dp"
+                        android:layout_height="26dp"
+                        android:progressDrawable="@drawable/luminosite"
+                        android:layout_marginTop="110dp"
+                        android:rotation="270"
+                        android:thumb="@drawable/circadiens" />
+                    <TextView
+                        android:id="@+id/lum_zone3_val"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="130dp"
+                        android:gravity="center"
+                        android:text="0%"
+                        android:textColor="@color/White"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="75dp"
+                    android:layout_height="350dp"
+                    android:id="@+id/linearzone4"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <ToggleButton
+                        android:id="@+id/lum_zone4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/togglebutton"
+                        android:text="Zone 4"
+                        android:gravity="center"
+                        android:textColor="@color/White"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                    <SeekBar
+                        android:id="@+id/lum_bar_zone4"
+                        android:layout_width="258dp"
+                        android:layout_marginTop="110dp"
+                        android:layout_height="26dp"
+                        android:progressDrawable="@drawable/luminosite"
+                        android:rotation="270"
+                        android:thumb="@drawable/circadiens" />
+                    <TextView
+                        android:id="@+id/lum_zone4_val"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="130dp"
+                        android:text="0%"
+                        android:textColor="@color/White"
+                        android:textSize="16sp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="75dp"
+                    android:layout_height="350dp"
+                    android:id="@+id/linearzone010v"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <ToggleButton
+                        android:id="@+id/volt_zone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0/10V"
+                        android:textOn="0/10V"
+                        android:textOff="0/10V"
+                        android:gravity="center"
+                        android:background="@drawable/togglebutton"
+                        android:textColor="@color/White"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <SeekBar
+                        android:id="@+id/lum_bar_volt_zone"
+                        android:layout_width="258dp"
+                        android:layout_marginTop="110dp"
+                        android:layout_height="26dp"
+                        android:progressDrawable="@drawable/luminosite"
+                        android:rotation="270"
+                        android:thumb="@drawable/circadiens" />
+                    <TextView
+                        android:id="@+id/lum_bar_volt_zone_value"
+                        android:layout_width="wrap_content"
+                        android:layout_marginTop="130dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="0%"
+                        android:textColor="@color/White"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/twenty_percent"
+                android:layout_width="264dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/test_lumi"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:button="@drawable/checkbox_selector"
+                android:gravity="center"
+                android:text="Activer le seuil minimum d'éclairage de sécurité (20%)"
+                android:textColor="@color/White"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tewenty_exp"
+                android:layout_width="313dp"
+                android:layout_height="70dp"
+                android:layout_below="@+id/twenty_percent"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="@string/expli_twenty"
+                android:textColor="@color/White"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/test_lumi"
+                android:layout_width="201dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/linearzones"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/buttonshapemeduim"
+                android:text="Stabiliser la luminosité"
+                android:textColor="@color/White" />
+        </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/linear_manuelle"
+                android:gravity="center"
+                android:orientation="vertical">
+                <View
+                    style="@style/dividerHorizontal"
+                    android:layout_width="300dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="5dp"
+                    android:background="@color/Orange_deliled" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:gravity="center"
+                    android:text="@string/choisir_allumage"
+                    android:textColor="@color/White"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <ToggleButton
+                        android:id="@+id/lum_zone_start_manu_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/togglebutton"
+                        android:text="Zone 1"
+                        android:textOn="Zone 1"
+                        android:textOff="Zone 1"
+                        android:gravity="center"
+                        android:textColor="@color/White"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+                    <ToggleButton
+                        android:id="@+id/lum_zone_start_manu_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/togglebutton"
+                        android:text="Zone 2"
+                        android:textOn="Zone 2"
+                        android:textOff="Zone 2"
+                        android:gravity="center"
+                        android:textColor="@color/White"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+                    <ToggleButton
+                        android:id="@+id/lum_zone_start_manu_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/togglebutton"
+                        android:text="Zone 3"
+                        android:textOn="Zone 3"
+                        android:textOff="Zone 3"
+                        android:gravity="center"
+                        android:textColor="@color/White"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+                    <ToggleButton
+                        android:id="@+id/lum_zone_start_manu_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/togglebutton"
+                        android:text="Zone 4"
+                        android:textOn="Zone 4"
+                        android:textOff="Zone 4"
+                        android:gravity="center"
+                        android:textColor="@color/White"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+                    <ToggleButton
+                        android:id="@+id/lum_zone_start_manu_volt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/togglebutton"
+                        android:text="0/10V"
+                        android:textOn="0/10V"
+                        android:textOff="0/10V"
+                        android:gravity="center"
+                        android:textColor="@color/White"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+                <View
+                    android:id="@+id/sauve_3"
+                    style="@style/dividerHorizontal"
+                    android:layout_width="300dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_height="5dp"
+                    android:background="@color/Orange_deliled" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:gravity="center"
+                    android:text="@string/allumage_debut"
+                    android:textColor="@color/White"
+                    android:layout_marginTop="5dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <Spinner
+                    android:id="@+id/lum_heure_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    style="@android:style/Widget.Holo.Spinner"
+                    android:textColor="@color/White"
+                    android:entries="@array/heure" />
+
+                <TextView
+                    android:layout_width="22dp"
+                    android:textColor="@color/White"
+                    android:layout_height="33dp"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:text=":" />
+
+                <Spinner
+                    android:id="@+id/lum_minute_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    style="@android:style/Widget.Holo.Spinner"
+                    android:textColor="@color/White"
+                    android:entries="@array/minute" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:gravity="center"
+                    android:text="@string/allumage_intensite"
+                    android:textColor="@color/White"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <Spinner
+                        android:id="@+id/lum_start_manu_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/lum_level" />
+
+                    <Spinner
+                        android:id="@+id/lum_start_manu_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/lum_level" />
+                    <Spinner
+                        android:id="@+id/lum_start_manu_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/lum_level" />
+
+                    <Spinner
+                        android:id="@+id/lum_start_manu_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/lum_level" />
+                    <Spinner
+                        android:id="@+id/lum_start_manu_volt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/lum_level" />
+                </LinearLayout>
+                <View
+                    android:id="@+id/sauve_4"
+                    style="@style/dividerHorizontal"
+                    android:layout_width="300dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_height="5dp"
+                    android:background="@color/Orange_deliled" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/allumage_debut_2"
+                    android:textColor="@color/White"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <Spinner
+                        android:id="@+id/lum_heure_mid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/heure" />
+
+                    <TextView
+                        android:layout_width="22dp"
+                        android:textColor="@color/White"
+                        android:layout_height="33dp"
+                        android:gravity="center"
+                        android:textSize="16sp"
+                        android:text=":" />
+
+                    <Spinner
+                        android:id="@+id/lum_minute_mid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/minute" />
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:gravity="center"
+                    android:text="@string/allumage_intensite"
+                    android:textColor="@color/White"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <Spinner
+                        android:id="@+id/lum_mid_manu_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/lum_level" />
+
+                    <Spinner
+                        android:id="@+id/lum_mid_manu_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/lum_level" />
+                    <Spinner
+                        android:id="@+id/lum_mid_manu_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/lum_level" />
+
+                    <Spinner
+                        android:id="@+id/lum_mid_manu_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/lum_level" />
+                    <Spinner
+                        android:id="@+id/lum_mid_manu_volt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/lum_level" />
+                </LinearLayout>
+                <View
+                    android:id="@+id/sauve_5"
+                    style="@style/dividerHorizontal"
+                    android:layout_width="300dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_height="5dp"
+                    android:background="@color/Orange_deliled" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/allumage_fin"
+                    android:textColor="@color/White"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <Spinner
+                        android:id="@+id/lum_heure_end"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/heure" />
+
+                    <TextView
+                        android:layout_width="22dp"
+                        android:textColor="@color/White"
+                        android:layout_height="33dp"
+                        android:gravity="center"
+                        android:textSize="16sp"
+                        android:text=":" />
+
+                    <Spinner
+                        android:id="@+id/lum_minute_end"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/minute" />
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:gravity="center"
+                    android:text="@string/allumage_intensite"
+                    android:textColor="@color/White"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <Spinner
+                        android:id="@+id/lum_end_manu_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/lum_level" />
+
+                    <Spinner
+                        android:id="@+id/lum_end_manu_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/lum_level" />
+                    <Spinner
+                        android:id="@+id/lum_end_manu_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/lum_level" />
+
+                    <Spinner
+                        android:id="@+id/lum_end_manu_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/lum_level" />
+                    <Spinner
+                        android:id="@+id/lum_end_manu_volt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/lum_level" />
+                </LinearLayout>
+                <View
+                    android:id="@+id/sauve_6"
+                    style="@style/dividerHorizontal"
+                    android:layout_width="300dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_height="5dp"
+                    android:background="@color/Orange_deliled" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/allumage_fin_2"
+                    android:textColor="@color/White"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <Spinner
+                        android:id="@+id/lum_heure_end_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/heure" />
+
+                    <TextView
+                        android:layout_width="22dp"
+                        android:textColor="@color/White"
+                        android:layout_height="33dp"
+                        android:gravity="center"
+                        android:textSize="16sp"
+                        android:text=":" />
+
+                    <Spinner
+                        android:id="@+id/lum_minute_end_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/minute" />
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:gravity="center"
+                    android:text="@string/allumage_intensite"
+                    android:textColor="@color/White"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <Spinner
+                        android:id="@+id/lum_end_manu_1_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/lum_level" />
+
+                    <Spinner
+                        android:id="@+id/lum_end_manu_2_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/lum_level" />
+                    <Spinner
+                        android:id="@+id/lum_end_manu_3_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/lum_level" />
+
+                    <Spinner
+                        android:id="@+id/lum_end_manu_4_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/lum_level" />
+                    <Spinner
+                        android:id="@+id/lum_end_manu_volt_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        style="@android:style/Widget.Holo.Spinner"
+                        android:textColor="@color/White"
+                        android:entries="@array/lum_level" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <style name="MySwitch" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">@color/Green</item>
+
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">@color/DarkRed</item>
+
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">@color/Red</item>
+    </style>
+    <style name="SampleTheme" parent="Theme.AppCompat">
+        <item name="colorAccent">@color/Green</item>
+        <item name="android:textColorSecondary">@color/Red</item>
+    </style>
+    <style name="GenericProgressBackground" parent="android:Theme">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:background">#DD111111</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="MyCheckbox" parent="@style/Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:colorControlNormal">#ffd600</item>
+        <item name="android:colorControlActivated">#0091ea</item>
+        <item name="android:colorControlHighlight">#c51162</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
+    </style>
+    <style name="GenericProgressIndicator" parent="@android:style/Widget.ProgressBar.Small">
+            <item name="colorAccent">#0091ea</item>
+    </style>
+    <style name="SCBSwitch" parent="Theme.AppCompat.Light">
+    <!-- active thumb & track color (30% transparency) -->
+    <item name="colorControlActivated">#46bdbf</item>
+    <item name="colorControlNormal">#DC143C</item>
+    </style>
+
+    <!-- Activity themes -->
+    <style name="Theme.Base" parent="android:Theme.Material.Light">
+    </style>
+    <style name="dividerBase">
+        <item name="android:background">?android:attr/listDivider</item> //you can give your color here. that will change all divider color in your app.
+    </style>
+    <style name="PrimaryFlatButton" parent="Theme.AppCompat.Light">
+        <item name="android:buttonStyle">@style/Widget.AppCompat.Button.Borderless.Colored</item>
+        <item name="colorControlHighlight">@color/abc_btn_colored_text_material</item>
+        <item name="colorAccent">@color/primary_dark_material_dark</item>
+    </style>
+    <style name="dividerHorizontal" parent="dividerBase">
+        <item name="android:layout_width">match_parent</item>
+        <item name="colorPrimary">@color/Blue_c_deliled</item>
+        <item name="android:layout_height">1dp</item> // You can change thickness here.
+    </style>
+    <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
+    </style>
+
+    <style name="MyTheme.ActionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/Black_deliled</item>
+        <!-- <item name="android:textColorSecondary">@color/White</item> -->
+        <item name="android:actionMenuTextColor">@android:color/white</item>
+        <item name="android:itemTextAppearance">@style/myCustomMenuTextAppearance</item>
+        <item name="android:titleTextStyle">@style/MyTheme.ActionBar.TitleTextStyle</item>
+    </style>
+
+    <style name="MyTheme" parent="android:style/Theme.Holo.Light">
+        <item name="android:actionOverflowButtonStyle">@style/MyActionButtonOverflow</item>
+        <item name="android:actionBarStyle">@style/MyTheme.ActionBarStyle</item>
+        <item name="android:homeAsUpIndicator">@drawable/goback</item>
+    </style>
+
+    <style name="MyTheme_appcompat" parent="Theme.AppCompat">
+
+        <item name="android:buttonStyle">@android:style/Widget.Holo.Light.Button</item>
+
+        <item name="seekBarStyle">@android:style/Widget.Holo.Light.SeekBar</item>
+
+        <item name="android:spinnerStyle">@android:style/Widget.Holo.Light.Spinner</item>
+
+        <item name="android:buttonStyleToggle">@android:style/Widget.Holo.Light.Button.Toggle</item>
+
+        <item name="actionOverflowButtonStyle">@style/MyActionButtonOverflow</item>
+
+        <item name="actionBarTabBarStyle">@android:style/Widget.Holo.Light.ActionBar.TabBar</item>
+
+        <item name="actionButtonStyle">@android:style/Widget.Holo.Light.ActionButton</item>
+        <item name="actionOverflowMenuStyle">?attr/popupMenuStyle</item>
+        <item name="actionBarTabTextStyle">@android:style/Widget.Holo.Light.ActionBar.TabText</item>
+        <item name="actionModeStyle">@android:style/Widget.Holo.Light.ActionMode</item>
+        <item name="actionModeCloseButtonStyle">@android:style/Widget.Holo.Light.ActionButton.CloseMode</item>
+        <item name="actionBarWidgetTheme">@android:style/Theme.Holo</item>
+
+        <item name="android:actionBarStyle">@style/MyTheme.ActionBarStyle</item>
+
+        <item name="actionBarSize">48dip</item>
+        <item name="actionBarPopupTheme">?attr/popupTheme</item>
+        <item name="actionBarTheme">@null</item>
+
+        <item name="android:homeAsUpIndicator">@drawable/goback</item>
+
+    </style>
+    <style name="MyActionButtonOverflow" parent="android:style/Widget.Holo.ActionButton.Overflow">
+        <item name="android:src">@drawable/menudots</item>
+    </style>
+
+    <style name="myCustomMenuTextAppearance" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+    <style name="MyTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/White</item>
+    </style>
+    <style name="AppFullScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+</resources>

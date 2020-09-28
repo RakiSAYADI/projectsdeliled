@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+        <!-- Like in themes_base.xml, the namespace "*.AppCompat.Base" is used to
+         define base styles for the platform version. The "*.AppCompat"
+         variants are for direct use or use as parent styles by the app. -->
+        <eat-comment/>
+    <!-- Activity themes -->
+    <style name="Theme.Base" parent="android:Theme.Holo.Light" />
+
+
+
+</resources>

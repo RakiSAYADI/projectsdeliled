@@ -1,0 +1,1266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/maestrobackgroundapplication"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:id="@+id/allumage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/switch_encloche_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:layout_marginStart="25dp"
+                    android:text="Activer l'allumage 1 automatique: "
+                    android:textColor="@color/White"
+                    android:layout_marginTop="20dp" />
+                <Switch
+                    android:id="@+id/switch_encloche"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:textColor="@color/White"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/switch_encloche_text"
+                    android:layout_marginTop="5dp" />
+                <TextView
+                    android:id="@+id/heuredebut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/switch_encloche"
+                    android:layout_toStartOf="@+id/spinnermindebut"
+                    android:gravity="center"
+                    android:text="Heure d'allumage :   "
+                    android:textColor="@color/White"
+                    android:textSize="16sp" />
+
+                <Spinner
+                    android:id="@+id/spinnermindebut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/switch_encloche"
+                    style="@android:style/Widget.Holo.Spinner"
+                    android:textColor="@color/White"
+                    android:entries="@array/heure"
+                    />
+
+                <TextView
+                    android:id="@+id/text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/spinnermindebut"
+                    android:layout_below="@+id/switch_encloche"
+                    android:gravity="center"
+                    android:text="   :   "
+                    android:textColor="@color/White"
+                    android:textSize="19sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerheuredebut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/text"
+                    android:layout_below="@+id/switch_encloche"
+                    style="@android:style/Widget.Holo.Spinner"
+                    android:textColor="@color/White"
+                    android:entries="@array/minute" />
+                <TextView
+                    android:id="@+id/jours_enc"
+                    android:layout_width="176dp"
+                    android:layout_height="34dp"
+                    android:textColor="@color/White"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/spinnerheuredebut"
+                    android:gravity="center"
+                    android:text="Jour(s) de la semaine :"
+                    android:textSize="16sp" />
+
+                <ToggleButton
+                    android:id="@+id/lundi_enc"
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/jours_enc"
+                    android:text="@color/White"
+                    android:textOn="L."
+                    android:textOff="L."
+                    android:layout_marginTop="10dp"
+                    android:layout_toStartOf="@+id/mardi_enc" />
+
+                <ToggleButton
+                    android:id="@+id/mardi_enc"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:text="@color/White"
+                    android:layout_below="@+id/jours_enc"
+                    android:layout_marginTop="10dp"
+                    android:textOn="Ma."
+                    android:textOff="Ma."
+                    android:layout_toStartOf="@+id/mercredi_enc" />
+
+                <ToggleButton
+                    android:id="@+id/mercredi_enc"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/jours_enc"
+                    android:text="@color/White"
+                    android:layout_marginTop="10dp"
+                    android:textOn="Me."
+                    android:textOff="Me."
+                    android:layout_toStartOf="@+id/jeudi_enc"/>
+                <ToggleButton
+                    android:id="@+id/jeudi_enc"
+                    android:layout_width="50dp"
+                    android:text="@color/White"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/jours_enc"
+                    android:textOn="J."
+                    android:textOff="J."
+                    android:layout_marginTop="10dp"/>
+                <ToggleButton
+                    android:id="@+id/vendredi_enc"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="@color/White"
+                    android:layout_below="@+id/jours_enc"
+                    android:layout_toEndOf="@+id/jeudi_enc"
+                    android:textOn="V."
+                    android:textOff="V."
+                    android:layout_marginTop="10dp"/>
+                <ToggleButton
+                    android:id="@+id/samedi_enc"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="@color/White"
+                    android:layout_below="@+id/jours_enc"
+                    android:layout_toEndOf="@+id/vendredi_enc"
+                    android:textOn="S."
+                    android:textOff="S."
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"/>
+                <ToggleButton
+                    android:id="@+id/dimanche_enc"
+                    android:layout_width="50dp"
+                    android:text="@color/White"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/jours_enc"
+                    android:layout_toEndOf="@+id/samedi_enc"
+                    android:textOn="D."
+                    android:textOff="D."
+                    android:layout_marginTop="10dp"/>
+                <TextView
+                    android:id="@+id/lum_expl_enc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:layout_below="@+id/dimanche_enc"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:text=" Sélectionner une/des zones(s)"
+                    android:textColor="@color/White"
+                    android:textSize="16sp" />
+
+                <ToggleButton
+                    android:id="@+id/detect_veille_zone1_enc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lum_expl_enc"
+                    android:background="@drawable/togglebutton"
+                    android:layout_marginTop="10dp"
+                    android:layout_toStartOf="@+id/detect_veille_zone2_enc"
+                    android:text="@color/White"
+                    android:textOff="Zone 1"
+                    android:textOn="Zone 1"
+                    android:visibility="visible" />
+
+                <ToggleButton
+                    android:id="@+id/detect_veille_zone2_enc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lum_expl_enc"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/togglebutton"
+                    android:layout_marginTop="10dp"
+                    android:layout_toStartOf="@+id/detect_veille_zone3_enc"
+                    android:text="@color/White"
+                    android:textOff="Zone 2"
+                    android:textOn="Zone 2"
+                    android:visibility="visible" />
+
+                <ToggleButton
+                    android:id="@+id/detect_veille_zone3_enc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lum_expl_enc"
+                    android:layout_marginStart="5dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/togglebutton"
+                    android:layout_marginTop="10dp"
+                    android:text="@color/White"
+                    android:textOff="Zone 3"
+                    android:textOn="Zone 3"
+                    android:visibility="visible" />
+
+                <ToggleButton
+                    android:id="@+id/detect_veille_zone4_enc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lum_expl_enc"
+                    android:background="@drawable/togglebutton"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/detect_veille_zone3_enc"
+                    android:text="@color/White"
+                    android:textOff="Zone 4"
+                    android:textOn="Zone 4"
+                    android:visibility="visible" />
+
+                <ToggleButton
+                    android:id="@+id/detect_veille_volt_zone_enc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lum_expl_enc"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/togglebutton"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/detect_veille_zone4_enc"
+                    android:text="@color/White"
+                    android:textOff="0-10V"
+                    android:textOn="0-10V"
+                    android:visibility="visible" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/jrview_enc"
+                android:layout_below="@+id/allumage"
+                android:background="@color/Orange_deliled"
+                style="@style/dividerHorizontal"
+                android:layout_width="300dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="25dp"
+                android:layout_height="5dp" />
+            <RelativeLayout
+                android:id="@+id/allumage_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/jrview_enc"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/switch_encloche_text_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:layout_marginStart="25dp"
+                    android:text="Activer l'allumage 2 automatique: "
+                    android:textColor="@color/White"
+                    android:layout_marginTop="20dp" />
+                <Switch
+                    android:id="@+id/switch_encloche_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:textColor="@color/White"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/switch_encloche_text_2"
+                    android:layout_marginTop="5dp" />
+                <TextView
+                    android:id="@+id/heuredebut_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/switch_encloche_2"
+                    android:layout_toStartOf="@+id/spinnermindebut_2"
+                    android:gravity="center"
+                    android:text="Heure d'allumage :   "
+                    android:textColor="@color/White"
+                    android:textSize="16sp" />
+
+                <Spinner
+                    android:id="@+id/spinnermindebut_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/switch_encloche_2"
+                    style="@android:style/Widget.Holo.Spinner"
+                    android:textColor="@color/White"
+                    android:entries="@array/heure"
+                    />
+
+                <TextView
+                    android:id="@+id/text_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/spinnermindebut_2"
+                    android:layout_below="@+id/switch_encloche_2"
+                    android:gravity="center"
+                    android:text="   :   "
+                    android:textColor="@color/White"
+                    android:textSize="19sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerheuredebut_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/text_2"
+                    android:layout_below="@+id/switch_encloche_2"
+                    style="@android:style/Widget.Holo.Spinner"
+                    android:textColor="@color/White"
+                    android:entries="@array/minute" />
+                <TextView
+                    android:id="@+id/jours_enc_2"
+                    android:layout_width="176dp"
+                    android:layout_height="34dp"
+                    android:textColor="@color/White"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/spinnerheuredebut_2"
+                    android:gravity="center"
+                    android:text="Jour(s) de la semaine :"
+                    android:textSize="16sp" />
+
+                <ToggleButton
+                    android:id="@+id/lundi_2_enc"
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/jours_enc_2"
+                    android:text="@color/White"
+                    android:textOn="L."
+                    android:textOff="L."
+                    android:layout_marginTop="10dp"
+                    android:layout_toStartOf="@+id/mardi_2_enc" />
+
+                <ToggleButton
+                    android:id="@+id/mardi_2_enc"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:text="@color/White"
+                    android:layout_below="@+id/jours_enc_2"
+                    android:layout_marginTop="10dp"
+                    android:textOn="Ma."
+                    android:textOff="Ma."
+                    android:layout_toStartOf="@+id/mercredi_2_enc" />
+
+                <ToggleButton
+                    android:id="@+id/mercredi_2_enc"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/jours_enc_2"
+                    android:text="@color/White"
+                    android:layout_marginTop="10dp"
+                    android:textOn="Me."
+                    android:textOff="Me."
+                    android:layout_toStartOf="@+id/jeudi_2_enc"/>
+                <ToggleButton
+                    android:id="@+id/jeudi_2_enc"
+                    android:layout_width="50dp"
+                    android:text="@color/White"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/jours_enc_2"
+                    android:textOn="J."
+                    android:textOff="J."
+                    android:layout_marginTop="10dp"/>
+                <ToggleButton
+                    android:id="@+id/vendredi_2_enc"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="@color/White"
+                    android:layout_below="@+id/jours_enc_2"
+                    android:layout_toEndOf="@+id/jeudi_2_enc"
+                    android:textOn="V."
+                    android:textOff="V."
+                    android:layout_marginTop="10dp"/>
+                <ToggleButton
+                    android:id="@+id/samedi_2_enc"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="@color/White"
+                    android:layout_below="@+id/jours_enc_2"
+                    android:layout_toEndOf="@+id/vendredi_2_enc"
+                    android:textOn="S."
+                    android:textOff="S."
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"/>
+                <ToggleButton
+                    android:id="@+id/dimanche_2_enc"
+                    android:layout_width="50dp"
+                    android:text="@color/White"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/jours_enc_2"
+                    android:layout_toEndOf="@+id/samedi_2_enc"
+                    android:textOn="D."
+                    android:textOff="D."
+                    android:layout_marginTop="10dp"/>
+                <TextView
+                    android:id="@+id/lum_expl_enc_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:layout_below="@+id/dimanche_2_enc"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:text=" Sélectionner une/des zones(s)"
+                    android:textColor="@color/White"
+                    android:textSize="16sp" />
+
+                <ToggleButton
+                    android:id="@+id/detect_veille_zone1_2_enc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lum_expl_enc_2"
+                    android:background="@drawable/togglebutton"
+                    android:layout_marginTop="10dp"
+                    android:layout_toStartOf="@+id/detect_veille_zone2_2_enc"
+                    android:text="@color/White"
+                    android:textOff="Zone 1"
+                    android:textOn="Zone 1"
+                    android:visibility="visible" />
+
+                <ToggleButton
+                    android:id="@+id/detect_veille_zone2_2_enc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lum_expl_enc_2"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/togglebutton"
+                    android:layout_marginTop="10dp"
+                    android:layout_toStartOf="@+id/detect_veille_zone3_2_enc"
+                    android:text="@color/White"
+                    android:textOff="Zone 2"
+                    android:textOn="Zone 2"
+                    android:visibility="visible" />
+
+                <ToggleButton
+                    android:id="@+id/detect_veille_zone3_2_enc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lum_expl_enc_2"
+                    android:layout_marginStart="5dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/togglebutton"
+                    android:layout_marginTop="10dp"
+                    android:text="@color/White"
+                    android:textOff="Zone 3"
+                    android:textOn="Zone 3"
+                    android:visibility="visible" />
+
+                <ToggleButton
+                    android:id="@+id/detect_veille_zone4_2_enc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lum_expl_enc_2"
+                    android:background="@drawable/togglebutton"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/detect_veille_zone3_2_enc"
+                    android:text="@color/White"
+                    android:textOff="Zone 4"
+                    android:textOn="Zone 4"
+                    android:visibility="visible" />
+
+                <ToggleButton
+                    android:id="@+id/detect_veille_volt_zone_2_enc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lum_expl_enc_2"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/togglebutton"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/detect_veille_zone4_2_enc"
+                    android:text="@color/White"
+                    android:textOff="0-10V"
+                    android:textOn="0-10V"
+                    android:visibility="visible" />
+            </RelativeLayout>
+            <View
+                android:id="@+id/jrview_enc_2"
+                android:layout_below="@+id/allumage_2"
+                android:background="@color/Orange_deliled"
+                style="@style/dividerHorizontal"
+                android:layout_width="300dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="25dp"
+                android:layout_height="5dp" />
+        <RelativeLayout
+            android:id="@+id/extinct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/jrview_enc_2"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/switch_decloche_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:text="Activer l'extinction 1 automatique: "
+                android:textSize="16sp"
+                android:textColor="@color/White"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:layout_marginTop="20dp" />
+            <Switch
+                android:id="@+id/switch_decloche"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/switch_decloche_text"
+                android:layout_marginStart="25dp"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/White"
+                android:layout_marginTop="5dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_toStartOf="@+id/spinnerminfin"
+                android:layout_below="@+id/switch_decloche"
+                android:gravity="center"
+                android:text="Heure d'extinction :   "
+                android:textColor="@color/White"
+                android:textSize="16sp" />
+
+            <Spinner
+                android:id="@+id/spinnerminfin"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true"
+                style="@android:style/Widget.Holo.Spinner"
+                android:layout_below="@+id/switch_decloche"
+                android:textColor="@color/White"
+                android:entries="@array/heure"
+                />
+
+            <TextView
+                android:id="@+id/text1"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:textColor="@color/White"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/spinnerminfin"
+                android:layout_below="@+id/switch_decloche"
+                android:gravity="center"
+                android:text="   :   "
+                android:textSize="19sp" />
+
+            <Spinner
+                android:id="@+id/spinnerheurefin"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/text1"
+                style="@android:style/Widget.Holo.Spinner"
+                android:layout_below="@+id/switch_decloche"
+                android:textColor="@color/White"
+                android:entries="@array/minute" />
+
+            <TextView
+                android:id="@+id/jours"
+                android:layout_width="176dp"
+                android:layout_height="34dp"
+                android:textColor="@color/White"
+                android:layout_marginStart="10dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/spinnerheurefin"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Jour(s) de la semaine :"
+                android:textSize="16sp" />
+
+            <ToggleButton
+                android:id="@+id/lundi"
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/jours"
+                android:text="@color/White"
+                android:layout_marginStart="10dp"
+                android:textOn="L."
+                android:layout_toStartOf="@+id/mardi"
+                android:textOff="L."
+                android:layout_marginTop="10dp" />
+
+            <ToggleButton
+                android:id="@+id/mardi"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:text="@color/White"
+                android:layout_below="@+id/jours"
+                android:layout_marginTop="10dp"
+                android:textOn="Ma."
+                android:textOff="Ma."
+                android:layout_toStartOf="@+id/mercredi" />
+
+            <ToggleButton
+                android:id="@+id/mercredi"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/jours"
+                android:text="@color/White"
+                android:layout_marginTop="10dp"
+                android:textOn="Me."
+                android:textOff="Me."
+                android:layout_toStartOf="@+id/jeudi"/>
+            <ToggleButton
+                android:id="@+id/jeudi"
+                android:layout_width="50dp"
+                android:text="@color/White"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/jours"
+                android:layout_centerHorizontal="true"
+                android:textOn="J."
+                android:textOff="J."
+                android:layout_marginTop="10dp"/>
+            <ToggleButton
+                android:id="@+id/vendredi"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:text="@color/White"
+                android:layout_below="@+id/jours"
+                android:layout_toEndOf="@+id/jeudi"
+                android:textOn="V."
+                android:textOff="V."
+                android:layout_marginTop="10dp"/>
+            <ToggleButton
+                android:id="@+id/samedi"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:text="@color/White"
+                android:layout_below="@+id/jours"
+                android:layout_toEndOf="@+id/vendredi"
+                android:textOn="S."
+                android:textOff="S."
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"/>
+            <ToggleButton
+                android:id="@+id/dimanche"
+                android:layout_width="50dp"
+                android:text="@color/White"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/jours"
+                android:layout_toEndOf="@+id/samedi"
+                android:textOn="D."
+                android:textOff="D."
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:id="@+id/lum_expl"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_below="@+id/dimanche"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Sélectionner une/des zones(s) "
+                android:textColor="@color/White"
+                android:textSize="16sp" />
+
+            <ToggleButton
+                android:id="@+id/detect_veille_zone1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lum_expl"
+                android:background="@drawable/togglebutton"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_toStartOf="@+id/detect_veille_zone2"
+                android:text="@color/White"
+                android:textOff="Zone 1"
+                android:textOn="Zone 1"
+                android:visibility="visible" />
+
+            <ToggleButton
+                android:id="@+id/detect_veille_zone2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lum_expl"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/togglebutton"
+                android:layout_marginTop="10dp"
+                android:layout_toStartOf="@+id/detect_veille_zone3"
+                android:text="@color/White"
+                android:textOff="Zone 2"
+                android:textOn="Zone 2"
+                android:visibility="visible" />
+
+            <ToggleButton
+                android:id="@+id/detect_veille_zone3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lum_expl"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/togglebutton"
+                android:layout_centerHorizontal="true"
+                android:text="@color/White"
+                android:textOff="Zone 3"
+                android:textOn="Zone 3"
+                android:visibility="visible" />
+
+            <ToggleButton
+                android:id="@+id/detect_veille_zone4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lum_expl"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/detect_veille_zone3"
+                android:background="@drawable/togglebutton"
+                android:text="@color/White"
+                android:textOff="Zone 4"
+                android:textOn="Zone 4"
+                android:visibility="visible" />
+
+            <ToggleButton
+                android:id="@+id/detect_veille_volt_zone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lum_expl"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/togglebutton"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/detect_veille_zone4"
+                android:text="@color/White"
+                android:textOff="0-10V"
+                android:textOn="0-10V"
+                android:visibility="visible" />
+        </RelativeLayout>
+            <View
+                android:id="@+id/jrview_dec_2"
+                android:layout_below="@+id/extinct"
+                android:background="@color/Orange_deliled"
+                style="@style/dividerHorizontal"
+                android:layout_width="300dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="25dp"
+                android:layout_height="5dp" />
+            <RelativeLayout
+                android:id="@+id/extinct_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/jrview_dec_2"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/switch_decloche_text_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:text="Activer l'extinction 2 automatique: "
+                    android:textSize="16sp"
+                    android:textColor="@color/White"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:layout_marginTop="20dp" />
+                <Switch
+                    android:id="@+id/switch_decloche_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/switch_decloche_text_2"
+                    android:layout_marginStart="25dp"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/White"
+                    android:layout_marginTop="5dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_toStartOf="@+id/spinnerminfin_2"
+                    android:layout_below="@+id/switch_decloche_2"
+                    android:gravity="center"
+                    android:text="Heure d'extinction :   "
+                    android:textColor="@color/White"
+                    android:textSize="16sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerminfin_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_centerHorizontal="true"
+                    style="@android:style/Widget.Holo.Spinner"
+                    android:layout_below="@+id/switch_decloche_2"
+                    android:textColor="@color/White"
+                    android:entries="@array/heure"
+                    />
+
+                <TextView
+                    android:id="@+id/text1_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:textColor="@color/White"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/spinnerminfin_2"
+                    android:layout_below="@+id/switch_decloche_2"
+                    android:gravity="center"
+                    android:text="   :   "
+                    android:textSize="19sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerheurefin_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/text1_2"
+                    style="@android:style/Widget.Holo.Spinner"
+                    android:layout_below="@+id/switch_decloche_2"
+                    android:textColor="@color/White"
+                    android:entries="@array/minute" />
+
+                <TextView
+                    android:id="@+id/jours_2"
+                    android:layout_width="176dp"
+                    android:layout_height="34dp"
+                    android:textColor="@color/White"
+                    android:layout_marginStart="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/spinnerheurefin_2"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="Jour(s) de la semaine :"
+                    android:textSize="16sp" />
+
+                <ToggleButton
+                    android:id="@+id/lundi_2"
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/jours_2"
+                    android:text="@color/White"
+                    android:layout_marginStart="10dp"
+                    android:textOn="L."
+                    android:layout_toStartOf="@+id/mardi_2"
+                    android:textOff="L."
+                    android:layout_marginTop="10dp" />
+
+                <ToggleButton
+                    android:id="@+id/mardi_2"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:text="@color/White"
+                    android:layout_below="@+id/jours_2"
+                    android:layout_marginTop="10dp"
+                    android:textOn="Ma."
+                    android:textOff="Ma."
+                    android:layout_toStartOf="@+id/mercredi_2" />
+
+                <ToggleButton
+                    android:id="@+id/mercredi_2"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/jours_2"
+                    android:text="@color/White"
+                    android:layout_marginTop="10dp"
+                    android:textOn="Me."
+                    android:textOff="Me."
+                    android:layout_toStartOf="@+id/jeudi_2"/>
+                <ToggleButton
+                    android:id="@+id/jeudi_2"
+                    android:layout_width="50dp"
+                    android:text="@color/White"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/jours_2"
+                    android:layout_centerHorizontal="true"
+                    android:textOn="J."
+                    android:textOff="J."
+                    android:layout_marginTop="10dp"/>
+                <ToggleButton
+                    android:id="@+id/vendredi_2"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="@color/White"
+                    android:layout_below="@+id/jours_2"
+                    android:layout_toEndOf="@+id/jeudi_2"
+                    android:textOn="V."
+                    android:textOff="V."
+                    android:layout_marginTop="10dp"/>
+                <ToggleButton
+                    android:id="@+id/samedi_2"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="@color/White"
+                    android:layout_below="@+id/jours_2"
+                    android:layout_toEndOf="@+id/vendredi_2"
+                    android:textOn="S."
+                    android:textOff="S."
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"/>
+                <ToggleButton
+                    android:id="@+id/dimanche_2"
+                    android:layout_width="50dp"
+                    android:text="@color/White"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/jours_2"
+                    android:layout_toEndOf="@+id/samedi_2"
+                    android:textOn="D."
+                    android:textOff="D."
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:id="@+id/lum_expl_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:layout_below="@+id/dimanche_2"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="Sélectionner une/des zones(s) "
+                    android:textColor="@color/White"
+                    android:textSize="16sp" />
+
+                <ToggleButton
+                    android:id="@+id/detect_veille_2_zone1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lum_expl_2"
+                    android:background="@drawable/togglebutton"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toStartOf="@+id/detect_veille_2_zone2"
+                    android:text="@color/White"
+                    android:textOff="Zone 1"
+                    android:textOn="Zone 1"
+                    android:visibility="visible" />
+
+                <ToggleButton
+                    android:id="@+id/detect_veille_2_zone2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lum_expl_2"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/togglebutton"
+                    android:layout_marginTop="10dp"
+                    android:layout_toStartOf="@+id/detect_veille_2_zone3"
+                    android:text="@color/White"
+                    android:textOff="Zone 2"
+                    android:textOn="Zone 2"
+                    android:visibility="visible" />
+
+                <ToggleButton
+                    android:id="@+id/detect_veille_2_zone3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lum_expl_2"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/togglebutton"
+                    android:layout_centerHorizontal="true"
+                    android:text="@color/White"
+                    android:textOff="Zone 3"
+                    android:textOn="Zone 3"
+                    android:visibility="visible" />
+
+                <ToggleButton
+                    android:id="@+id/detect_veille_2_zone4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lum_expl_2"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/detect_veille_2_zone3"
+                    android:background="@drawable/togglebutton"
+                    android:text="@color/White"
+                    android:textOff="Zone 4"
+                    android:textOn="Zone 4"
+                    android:visibility="visible" />
+
+                <ToggleButton
+                    android:id="@+id/detect_veille_volt_2_zone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lum_expl_2"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/togglebutton"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/detect_veille_2_zone4"
+                    android:text="@color/White"
+                    android:textOff="0-10V"
+                    android:textOn="0-10V"
+                    android:visibility="visible" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/sauve_l"
+                style="@style/dividerHorizontal"
+                android:layout_width="300dp"
+                android:layout_centerHorizontal="true"
+                android:layout_height="5dp"
+                android:layout_below="@+id/extinct_2"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/Orange_deliled"
+                android:visibility="visible" />
+            <TextView
+                android:id="@+id/switch_pir_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/sauve_l"
+                android:layout_marginStart="25dp"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:text="Activer la détection de mouvement : "
+                android:textColor="@color/White"
+                android:layout_marginTop="20dp" />
+            <Switch
+                android:id="@+id/switch_pir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/switch_pir_text"
+                android:layout_marginStart="25dp"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/White"
+                android:layout_marginTop="5dp" />
+            <TextView
+                android:id="@+id/passage"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/White"
+                android:layout_marginStart="25dp"
+                android:layout_below="@+id/switch_pir"
+                android:gravity="center"
+                android:text="Extinction automatique après :"
+                android:textSize="16sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_below="@+id/passage"
+                android:layout_marginStart="20dp"
+                android:textColor="@color/White"
+                android:gravity="center"
+                android:layout_marginTop="-10dp"
+                android:textSize="12sp"
+                android:text="(Si 0 = aucune extenction)" />
+
+            <Spinner
+                android:id="@+id/detection_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_below="@+id/switch_pir"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/passage"
+                style="@android:style/Widget.Holo.Spinner"
+                android:textColor="@color/White"
+                android:entries="@array/minute" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/switch_pir"
+                android:textColor="@color/White"
+                android:layout_toEndOf="@+id/detection_spinner"
+                android:gravity="center"
+                android:text="min."
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/jours_pir"
+                android:layout_width="176dp"
+                android:layout_height="34dp"
+                android:textColor="@color/White"
+                android:layout_marginStart="10dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/detection_spinner"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Jour(s) de la semaine :"
+                android:textSize="16sp" />
+
+            <ToggleButton
+                android:id="@+id/lundi_pir"
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/jours_pir"
+                android:text="@color/White"
+                android:layout_marginStart="10dp"
+                android:textOn="L."
+                android:textOff="L."
+                android:layout_toStartOf="@+id/mardi_pir"
+                android:layout_marginTop="10dp" />
+
+            <ToggleButton
+                android:id="@+id/mardi_pir"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:text="@color/White"
+                android:layout_below="@+id/jours_pir"
+                android:layout_marginTop="10dp"
+                android:textOn="Ma."
+                android:textOff="Ma."
+                android:layout_toStartOf="@+id/mercredi_pir" />
+
+            <ToggleButton
+                android:id="@+id/mercredi_pir"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/jours_pir"
+                android:text="@color/White"
+                android:layout_marginTop="10dp"
+                android:textOn="Me."
+                android:textOff="Me."
+                android:layout_toStartOf="@+id/jeudi_pir"/>
+            <ToggleButton
+                android:id="@+id/jeudi_pir"
+                android:layout_width="50dp"
+                android:text="@color/White"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/jours_pir"
+                android:textOn="J."
+                android:textOff="J."
+                android:layout_marginTop="10dp"/>
+            <ToggleButton
+                android:id="@+id/vendredi_pir"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:text="@color/White"
+                android:layout_below="@+id/jours_pir"
+                android:layout_toEndOf="@+id/jeudi_pir"
+                android:textOn="V."
+                android:textOff="V."
+                android:layout_marginTop="10dp"/>
+            <ToggleButton
+                android:id="@+id/samedi_pir"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:text="@color/White"
+                android:layout_below="@+id/jours_pir"
+                android:layout_toEndOf="@+id/vendredi_pir"
+                android:textOn="S."
+                android:textOff="S."
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"/>
+            <ToggleButton
+                android:id="@+id/dimanche_pir"
+                android:layout_width="50dp"
+                android:text="@color/White"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/jours_pir"
+                android:layout_toEndOf="@+id/samedi_pir"
+                android:textOn="D."
+                android:textOff="D."
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:id="@+id/lum_expl_pir"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_below="@+id/dimanche_pir"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:text="Sélectionner une/des zones(s)"
+                android:textColor="@color/White"
+                android:textSize="16sp" />
+
+            <ToggleButton
+                android:id="@+id/detect_pir_zone1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lum_expl_pir"
+                android:background="@drawable/togglebutton"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_toStartOf="@+id/detect_pir_zone2"
+                android:text="@color/White"
+                android:textOff="Zone 1"
+                android:textOn="Zone 1"
+                android:visibility="visible" />
+
+            <ToggleButton
+                android:id="@+id/detect_pir_zone2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lum_expl_pir"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/togglebutton"
+                android:layout_toStartOf="@+id/detect_pir_zone3"
+                android:text="@color/White"
+                android:textOff="Zone 2"
+                android:textOn="Zone 2"
+                android:visibility="visible" />
+
+            <ToggleButton
+                android:id="@+id/detect_pir_zone3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/togglebutton"
+                android:layout_below="@+id/lum_expl_pir"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true"
+                android:text="@color/White"
+                android:textOff="Zone 3"
+                android:textOn="Zone 3"
+                android:visibility="visible" />
+
+            <ToggleButton
+                android:id="@+id/detect_pir_zone4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lum_expl_pir"
+                android:background="@drawable/togglebutton"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/detect_pir_zone3"
+                android:text="@color/White"
+                android:textOff="Zone 4"
+                android:textOn="Zone 4"
+                android:visibility="visible" />
+
+            <ToggleButton
+                android:id="@+id/detect_pir_volt_zone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/togglebutton"
+                android:layout_below="@+id/lum_expl_pir"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/detect_pir_zone4"
+                android:text="@color/White"
+                android:textOff="0-10V"
+                android:textOn="0-10V"
+                android:visibility="visible" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/detect_pir_volt_zone"
+                />
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

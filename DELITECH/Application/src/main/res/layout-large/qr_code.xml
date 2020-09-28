@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <SurfaceView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/camerapreview"
+        android:layout_marginTop="10dp"
+        android:layout_above="@id/tewext"
+        android:layout_below="@+id/tewextqr" />
+    <TextView
+        android:id="@+id/tewextqr"
+        android:layout_width="match_parent"
+        android:textSize="18sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:text="Merci de scanner le QR-CODE pour vous connecter au boitier"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tewext"
+        android:layout_width="match_parent"
+        android:textSize="18sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:text="QR code"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/checking"
+        android:orderInCategory="100"
+        android:title=""
+        app:actionLayout="@layout/actionbar_switcher"
+        app:showAsAction="always"/>
+    <item android:id="@+id/menu_connect"
+          android:title="@string/menu_connect"
+          android:orderInCategory="101"
+          app:showAsAction="ifRoom|withText"/>
+    <item android:id="@+id/menu_disconnect"
+          android:title="@string/menu_disconnect"
+          android:orderInCategory="102"
+          app:showAsAction="ifRoom|withText"/>
+</menu>

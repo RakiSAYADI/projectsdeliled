@@ -1,0 +1,705 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/maestrobackgroundapplication"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <CheckBox
+                android:id="@+id/Summer"
+                android:layout_width="170dp"
+                android:button="@drawable/checkbox_selector"
+                android:layout_marginStart="10dp"
+                android:gravity="center"
+                android:layout_height="53dp"
+                android:layout_below="@+id/spinnertime"
+                android:text="@string/activ_co2"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/sensPIR"
+                android:layout_width="wrap_content"
+                android:layout_height="39dp"
+                android:gravity="center|start"
+                android:layout_marginStart="15dp"
+                android:text="@string/sens_pir"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/PIR"
+                android:layout_width="293dp"
+                android:layout_height="40dp"
+                android:layout_toEndOf="@+id/ftp4"
+                android:textColor="@color/White"
+                android:backgroundTint="@android:color/white"
+                android:inputType="number"
+                android:maxLines="1"
+                 />
+
+            <View
+                android:id="@+id/view"
+                style="@style/dividerHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/Orange_deliled"
+                android:layout_below="@+id/PIR" />
+
+            <TextView
+                android:id="@+id/timezone"
+                android:layout_width="wrap_content"
+                android:layout_height="31dp"
+                android:layout_below="@+id/view"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="15dp"
+                android:gravity="center"
+                android:text="@string/time"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <Spinner
+                android:id="@+id/spinnertime"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                style="@android:style/Widget.Holo.Spinner"
+                android:textColor="@color/Black"
+                android:layout_below="@+id/view"
+                android:layout_toEndOf="@+id/ftp4">
+
+            </Spinner>
+
+            <View
+                android:id="@+id/view2"
+                style="@style/dividerHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/Orange_deliled"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/Summer" />
+
+            <CheckBox
+                android:id="@+id/ip"
+                android:layout_width="239dp"
+                android:layout_height="53dp"
+                android:layout_below="@+id/view2"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="15dp"
+                android:button="@drawable/checkbox_selector"
+                android:gravity="center"
+                android:text="Utiliser une adresse IP fixe "
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/ip_text"
+                android:layout_width="103dp"
+                android:layout_height="36dp"
+                android:layout_below="@+id/ip"
+                android:gravity="center|start"
+                android:layout_marginStart="15dp"
+                android:text="IP :"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/IP_ADDRESS"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:textColor="@color/White"
+                android:backgroundTint="@android:color/white"
+                android:layout_below="@+id/ip"
+                android:layout_toEndOf="@+id/ftp4"
+                android:inputType="number"
+                android:digits="0123456789."
+                android:maxLength="32"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/mask_text"
+                android:layout_width="101dp"
+                android:layout_height="35dp"
+                android:layout_below="@+id/IP_ADDRESS"
+                android:layout_marginStart="15dp"
+                android:gravity="center|start"
+                android:layout_marginTop="15dp"
+                android:text="MASK :"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/MASK"
+                android:layout_width="match_parent"
+                android:layout_height="33dp"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/White"
+                android:backgroundTint="@android:color/white"
+                android:layout_below="@+id/IP_ADDRESS"
+                android:layout_toEndOf="@+id/ftp4"
+                android:inputType="number"
+                android:digits="0123456789."
+                android:maxLength="32"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/Gate_text"
+                android:layout_width="102dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/MASK"
+                android:layout_marginStart="15dp"
+                android:gravity="center|start"
+                android:layout_marginTop="15dp"
+                android:text="GATEWAY :"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/GATEWAY"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@+id/MASK"
+                android:textColor="@color/White"
+                android:backgroundTint="@android:color/white"
+                android:layout_toEndOf="@+id/ftp4"
+                android:layout_marginTop="15dp"
+                android:inputType="number"
+                android:digits="0123456789."
+                android:maxLength="32"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/DNS_text"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_below="@+id/GATEWAY"
+                android:layout_marginStart="15dp"
+                android:gravity="center|start"
+                android:layout_marginTop="15dp"
+                android:text="DNS :"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/DNS"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:textColor="@color/White"
+                android:backgroundTint="@android:color/white"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/GATEWAY"
+                android:layout_toEndOf="@+id/ftp4"
+                android:inputType="number"
+                android:digits="0123456789."
+                android:maxLength="32"
+                android:maxLines="1" />
+
+            <View
+                android:id="@+id/view4"
+                style="@style/dividerHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/Orange_deliled"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/DNS" />
+
+            <CheckBox
+                android:id="@+id/log"
+                android:layout_width="170dp"
+                android:layout_height="53dp"
+                android:gravity="center"
+                android:layout_below="@+id/view4"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="10dp"
+                android:button="@drawable/checkbox_selector"
+                android:text="@string/logftp"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/ftp1"
+                android:layout_width="103dp"
+                android:layout_height="36dp"
+                android:layout_below="@+id/log"
+                android:gravity="center|start"
+                android:layout_marginStart="15dp"
+                android:text="@string/serv"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/ftpedit"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:textColor="@color/White"
+                android:backgroundTint="@android:color/white"
+                android:layout_below="@+id/log"
+                android:layout_toEndOf="@+id/ftp4"
+                android:inputType="text"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&amp;'()*+,;="
+                android:maxLength="64"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/ftp2"
+                android:layout_width="101dp"
+                android:layout_height="35dp"
+                android:layout_below="@+id/ftpedit"
+                android:layout_marginStart="15dp"
+                android:gravity="center|start"
+                android:layout_marginTop="15dp"
+                android:text="@string/port"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/ftpedit2"
+                android:layout_width="match_parent"
+                android:layout_height="33dp"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/White"
+                android:backgroundTint="@android:color/white"
+                android:layout_below="@+id/ftpedit"
+                android:layout_toEndOf="@+id/ftp4"
+                android:inputType="number"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/ftp3"
+                android:layout_width="102dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/ftpedit2"
+                android:layout_marginStart="15dp"
+                android:gravity="center|start"
+                android:layout_marginTop="15dp"
+                android:text="@string/userftp"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/ftpedit3"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@+id/ftpedit2"
+                android:textColor="@color/White"
+                android:backgroundTint="@android:color/white"
+                android:layout_toEndOf="@+id/ftp4"
+                android:inputType="text"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&amp;'()*+,;="
+                android:layout_marginTop="15dp"
+                android:maxLength="64"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/ftp4"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_below="@+id/ftpedit3"
+                android:layout_marginStart="15dp"
+                android:gravity="center|start"
+                android:layout_marginTop="15dp"
+                android:text="@string/passu"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/ftpedit4"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:textColor="@color/White"
+                android:backgroundTint="@android:color/white"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/ftpedit3"
+                android:layout_toEndOf="@+id/ftp4"
+                android:inputType="textPassword"
+                android:maxLength="64"
+                android:maxLines="1" />
+            <TextView
+                android:id="@+id/ftp5"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_below="@+id/ftpedit4"
+                android:layout_marginStart="15dp"
+                android:gravity="center|start"
+                android:layout_marginTop="15dp"
+                android:text="Client ID :"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/ftpedit5"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:textColor="@color/White"
+                android:backgroundTint="@android:color/white"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/ftpedit4"
+                android:layout_toEndOf="@+id/ftp4"
+                android:maxLength="64"
+                android:maxLines="1" />
+            <Switch
+                android:id="@+id/ftp9"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_below="@+id/ftpedit5"
+                android:layout_marginStart="15dp"
+                android:textOn="Durée"
+                android:textOff="Chaque Jour"
+                android:gravity="center|start"
+                android:layout_marginTop="15dp"
+                android:text="Envoi :            "
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/ftp6"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_below="@+id/ftp9"
+                android:layout_marginStart="15dp"
+                android:gravity="center|start"
+                android:layout_marginTop="15dp"
+                android:text="tous les :"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <Spinner
+                android:id="@+id/ftpedit6"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:textColor="@color/White"
+                android:backgroundTint="@android:color/white"
+                android:layout_marginTop="15dp"
+                android:entries="@array/ftp_time"
+                android:layout_below="@+id/ftp9"
+                android:layout_toEndOf="@+id/ftp4" />
+            <TextView
+                android:id="@+id/ftp7"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_below="@+id/ftpedit6"
+                android:layout_marginStart="15dp"
+                android:gravity="center|start"
+                android:layout_marginTop="15dp"
+                android:text="À :"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <Spinner
+                android:id="@+id/ftpedit7"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:textColor="@color/White"
+                android:backgroundTint="@android:color/white"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/ftpedit6"
+                android:entries="@array/heure"
+                android:layout_toEndOf="@+id/ftp4" />
+            <TextView
+                android:id="@+id/ftp8"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_below="@+id/ftpedit6"
+                android:layout_toEndOf="@+id/ftpedit7"
+                android:layout_marginStart="15dp"
+                android:gravity="center|start"
+                android:layout_marginTop="15dp"
+                android:text=" : "
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+            <Spinner
+                android:id="@+id/ftpedit8"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:textColor="@color/White"
+                android:layout_marginStart="15dp"
+                android:backgroundTint="@android:color/white"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/ftpedit6"
+                android:entries="@array/minute"
+                android:layout_toEndOf="@+id/ftp8" />
+
+            <View
+                android:id="@+id/view3"
+                style="@style/dividerHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/Orange_deliled"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/ftpedit7" />
+
+            <CheckBox
+                android:id="@+id/mqtt"
+                android:layout_width="211dp"
+                android:layout_height="53dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="10dp"
+                android:gravity="center"
+                android:layout_below="@+id/view3"
+                android:button="@drawable/checkbox_selector"
+                android:text="@string/servmqtt"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/mqtt1"
+                android:layout_width="101dp"
+                android:layout_height="41dp"
+                android:layout_below="@+id/mqtt"
+                android:gravity="center|start"
+                android:layout_marginStart="15dp"
+                android:text="@string/brok"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/mqttedit"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:textColor="@color/White"
+                android:backgroundTint="@android:color/white"
+                android:layout_below="@+id/mqtt"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&amp;'()*+,;="
+                android:layout_toEndOf="@+id/ftp4"
+                android:inputType="text"
+                android:maxLength="64"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/mqtt2"
+                android:layout_width="103dp"
+                android:layout_height="38dp"
+                android:layout_below="@+id/mqttedit"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center|start"
+                android:text="@string/port"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/mqttedit2"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:layout_below="@+id/mqttedit"
+                android:layout_toEndOf="@+id/ftp4"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/White"
+                android:backgroundTint="@android:color/white"
+                android:inputType="number"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/mqtt3"
+                android:layout_width="99dp"
+                android:layout_height="36dp"
+                android:layout_below="@+id/mqttedit2"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center|start"
+                android:text="@string/user"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/mqttedit3"
+                android:layout_width="match_parent"
+                android:layout_height="37dp"
+                android:layout_below="@+id/mqttedit2"
+                android:layout_toEndOf="@+id/ftp4"
+                android:layout_marginTop="15dp"
+                android:inputType="text"
+                android:textColor="@color/White"
+                android:backgroundTint="@android:color/white"
+                android:maxLength="64"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/mqtt4"
+                android:layout_width="101dp"
+                android:layout_height="43dp"
+                android:layout_below="@+id/mqttedit3"
+                android:gravity="center|start"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/pass"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/mqttedit4"
+                android:layout_width="match_parent"
+                android:layout_height="41dp"
+                android:layout_below="@+id/mqttedit3"
+                android:layout_toEndOf="@+id/ftp4"
+                android:textColor="@color/White"
+                android:backgroundTint="@android:color/white"
+                android:layout_marginTop="15dp"
+                android:inputType="textPassword"
+                android:maxLength="64"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/mqtt5"
+                android:layout_width="97dp"
+                android:layout_height="37dp"
+                android:gravity="center|start"
+                android:layout_below="@+id/mqttedit4"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/topic"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/mqttedit5"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_below="@+id/mqttedit4"
+                android:textColor="@color/White"
+                android:backgroundTint="@android:color/white"
+                android:layout_marginTop="15dp"
+                android:layout_toEndOf="@+id/ftp4"
+                android:inputType="text"
+                android:maxLength="64"
+                android:maxLines="1" />
+            <TextView
+                android:id="@+id/mqtt6"
+                android:layout_width="97dp"
+                android:layout_height="37dp"
+                android:gravity="center|start"
+                android:layout_below="@+id/mqttedit5"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/sos_topic"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <Spinner
+                android:id="@+id/mqttedit6"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:textColor="@color/Black"
+                style="@android:style/Widget.Holo.Spinner"
+                android:layout_below="@+id/mqttedit5"
+                android:layout_marginTop="15dp"
+                android:entries="@array/sous_topic"
+                android:layout_toEndOf="@+id/ftp4">
+            </Spinner>
+
+            <TextView
+                android:id="@+id/mqtt7"
+                android:layout_width="97dp"
+                android:layout_height="37dp"
+                android:gravity="center|start"
+                android:layout_below="@+id/mqttedit6"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/tem_topic"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <Spinner
+                android:id="@+id/mqttedit7"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:textColor="@color/Black"
+                style="@android:style/Widget.Holo.Spinner"
+                android:layout_below="@+id/mqttedit6"
+                android:layout_marginTop="15dp"
+                android:entries="@array/mqtt_second"
+                android:layout_toEndOf="@+id/ftp4">
+            </Spinner>
+            <View
+                android:id="@+id/view5"
+                style="@style/dividerHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/Orange_deliled"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/mqttedit7" />
+            <CheckBox
+                android:id="@+id/udp"
+                android:layout_width="211dp"
+                android:layout_height="53dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="10dp"
+                android:gravity="center"
+                android:layout_below="@+id/view5"
+                android:button="@drawable/checkbox_selector"
+                android:text="@string/servudp"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <Switch
+                android:id="@+id/udp1"
+                android:layout_width="wrap_content"
+                android:layout_height="49dp"
+                android:layout_below="@+id/udp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center|start"
+                android:text="IPV4 ou IPV6 :"
+                android:textColor="@color/White"
+                android:textOff="IPV4"
+                android:textOn="IPV6"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/udp2"
+                android:layout_width="103dp"
+                android:layout_height="36dp"
+                android:layout_below="@+id/udp1"
+                android:gravity="center|start"
+                android:layout_marginStart="15dp"
+                android:text="@string/addrudp"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+            <EditText
+                android:id="@+id/udpedit"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:textColor="@color/White"
+                android:backgroundTint="@android:color/white"
+                android:layout_below="@+id/udp1"
+                android:layout_toEndOf="@+id/udp2"
+                android:inputType="text"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&amp;'()*+,;="
+                android:maxLength="64"
+                android:maxLines="1" />
+            <TextView
+                android:id="@+id/udp3"
+                android:layout_width="103dp"
+                android:layout_height="38dp"
+                android:layout_below="@+id/udpedit"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center|start"
+                android:text="@string/port"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/udpedit2"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:layout_below="@+id/udpedit"
+                android:layout_toEndOf="@+id/udp3"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/White"
+                android:backgroundTint="@android:color/white"
+                android:inputType="number"
+                android:maxLines="1" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/udpedit2"
+                />
+        </RelativeLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

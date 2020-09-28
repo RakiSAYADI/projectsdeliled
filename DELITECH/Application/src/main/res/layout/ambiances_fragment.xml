@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/maestrobackgroundapplication"
+    android:gravity="center"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="visible"
+        android:orientation="vertical">
+        <View
+            android:id="@+id/view_ambiance"
+            android:layout_width="350dp"
+            android:layout_height="20dp" />
+
+        <RelativeLayout
+            android:id="@+id/expert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/fav1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center">
+
+                <ToggleButton
+                    android:id="@+id/Fav1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ch1"
+                    android:background="@drawable/togglebutton"
+                    android:textColor="@color/Black" />
+
+                <ToggleButton
+                    android:id="@+id/Fav2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/togglebutton"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/ch2"
+                    android:textColor="@color/Black" />
+                <ToggleButton
+                    android:id="@+id/Fav3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/ch1"
+                    android:background="@drawable/togglebutton"
+                    android:textColor="@color/Black" />
+
+                <ToggleButton
+                    android:id="@+id/Fav4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/togglebutton"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/ch2"
+                    android:textColor="@color/Black" />
+
+            </LinearLayout>
+
+
+            <View
+                android:id="@+id/view3"
+                style="@style/dividerHorizontal"
+                android:layout_width="match_parent"
+                android:background="@color/White"
+                android:layout_height="2dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/fav1" />
+            <LinearLayout
+                android:id="@+id/linera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view3"
+                android:layout_marginTop="10dp"
+                android:gravity="center">
+                <ToggleButton
+                    android:id="@+id/ZONE1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/togglebutton"
+                    android:text="@string/ch1"
+                    android:textColor="@color/White" />
+
+                <ToggleButton
+                    android:id="@+id/ZONE2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/togglebutton"
+                    android:text="@string/ch2"
+                    android:textColor="@color/White" />
+
+                <ToggleButton
+                    android:id="@+id/ZONE3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/togglebutton"
+                    android:text="@string/ch3"
+                    android:textColor="@color/White" />
+
+                <ToggleButton
+                    android:id="@+id/ZONE4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/togglebutton"
+                    android:text="@string/ch4"
+                    android:textColor="@color/White" />
+            </LinearLayout>
+            <View
+                android:id="@+id/view4"
+                style="@style/dividerHorizontal"
+                android:layout_width="match_parent"
+                android:background="@color/White"
+                android:layout_height="2dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/linera" />
+
+            <View
+                android:id="@+id/views1"
+                style="@style/dividerHorizontal"
+                android:layout_width="2dp"
+                android:background="@color/White"
+                android:layout_height="282dp"
+                android:layout_above="@id/view7"
+                android:layout_below="@+id/view3" />
+
+            <View
+                android:id="@+id/views2"
+                style="@style/dividerHorizontal"
+                android:background="@color/White"
+                android:layout_width="2dp"
+                android:layout_above="@id/view7"
+                android:layout_below="@+id/view3"
+                android:layout_alignEnd="@id/view3" />
+
+            <View
+                android:id="@+id/view5"
+                style="@style/dividerHorizontal"
+                android:background="@color/White"
+                android:layout_width="match_parent"
+                android:visibility="invisible"
+                android:layout_height="2dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/textview2" />
+            <SeekBar
+                android:id="@+id/blanchefav"
+                android:layout_width="258dp"
+                android:layout_marginTop="10dp"
+                android:layout_height="26dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/view5"
+                android:progressDrawable="@drawable/blancs"
+                android:thumb="@drawable/wheel" />
+
+            <View
+                android:id="@+id/view2"
+                style="@style/dividerHorizontal"
+                android:background="@color/White"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/blanchefav" />
+            <SeekBar
+                android:id="@+id/luminositefav"
+                android:layout_width="258dp"
+                android:layout_marginTop="10dp"
+                android:layout_height="26dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/view2"
+                android:progressDrawable="@drawable/luminosite"
+                android:thumb="@drawable/wheel" />
+            <View
+                android:id="@+id/view6"
+                style="@style/dividerHorizontal"
+                android:background="@color/White"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:thumb="@drawable/wheel"
+                android:layout_height="2dp"
+                android:layout_below="@+id/luminositefav" />
+
+            <SeekBar
+                android:id="@+id/stabilisationfav"
+                android:layout_width="258dp"
+                android:layout_marginTop="10dp"
+                android:layout_height="26dp"
+                android:layout_marginBottom="10dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/view6"
+                android:progressDrawable="@drawable/saturation"
+                android:thumb="@drawable/wheel" />
+            <View
+                android:id="@+id/view7"
+                style="@style/dividerHorizontal"
+                android:background="@color/White"
+                android:layout_width="match_parent"
+                android:thumb="@drawable/wheel"
+                android:layout_height="2dp"
+                android:layout_below="@+id/stabilisationfav" />
+
+            <TextView
+                android:id="@+id/textrouge"
+                android:layout_width="wrap_content"
+                android:textColor="@color/White"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/GREEN"
+                android:layout_below="@+id/view4"
+                android:layout_marginEnd="32dp"
+                android:text="B"
+                android:textSize="20sp" />
+
+            <SeekBar
+                android:id="@+id/RED"
+                android:layout_width="131dp"
+                android:layout_height="18dp"
+                android:layout_marginTop="50dp"
+                android:layout_below="@+id/textrouge"
+                android:layout_toEndOf="@id/GREEN"
+                android:layout_marginStart="-28dp"
+                android:progressDrawable="@drawable/couleurrouge"
+                android:rotation="270"
+                android:thumb="@drawable/wheel" />
+
+            <TextView
+                android:id="@+id/textevert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view4"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/White"
+                android:text="V"
+                android:textSize="20sp" />
+
+            <SeekBar
+                android:id="@+id/GREEN"
+                android:layout_width="131dp"
+                android:layout_height="18dp"
+                android:layout_below="@+id/textevert"
+                android:layout_marginTop="50dp"
+                android:layout_centerHorizontal="true"
+                android:progressDrawable="@drawable/couleurverte"
+                android:rotation="270"
+                android:thumb="@drawable/wheel" />
+
+            <TextView
+                android:id="@+id/textbleu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view4"
+                android:textColor="@color/White"
+                android:layout_toEndOf="@id/GREEN"
+                android:layout_marginStart="30dp"
+                android:text="R"
+                android:textSize="20sp" />
+
+            <SeekBar
+                android:id="@+id/BLEU"
+                android:layout_width="131dp"
+                android:layout_height="18dp"
+                android:layout_below="@+id/textbleu"
+                android:layout_marginTop="50dp"
+                android:layout_toStartOf="@id/GREEN"
+                android:layout_marginEnd="-28dp"
+                android:progressDrawable="@drawable/couleurbleue"
+                android:rotation="270"
+                android:thumb="@drawable/wheel" />
+
+            <TextView
+                android:id="@+id/textview3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/White"
+                android:layout_below="@+id/BLEU"
+                android:layout_toStartOf="@id/GREEN"
+                android:layout_marginEnd="25dp"
+                android:layout_marginTop="70dp"
+                android:text="0%"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/textview2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/RED"
+                android:textColor="@color/White"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="70dp"
+                android:text="0%"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/RED"
+                android:textColor="@color/White"
+                android:layout_toEndOf="@id/GREEN"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="70dp"
+                android:text="0%"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/sauveguarde"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/White"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/view7"
+                android:layout_toStartOf="@id/renommer"
+                android:background="@drawable/buttonshape"
+                android:layout_marginEnd="5dp"
+                android:text="Sauvegarder"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+            <Button
+                android:id="@+id/renommer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/White"
+                android:layout_below="@+id/view7"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/buttonshape"
+                android:text="Renommer"
+                android:textSize="12sp"
+                android:textStyle="bold"/>
+
+            <Button
+                android:id="@+id/supprimmer"
+                android:layout_width="137dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view7"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@id/renommer"
+                android:background="@drawable/buttonshape"
+                android:text="Supprimer les réglages"
+                android:textColor="@color/White"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+    </LinearLayout>
+    </ScrollView>
+</LinearLayout>

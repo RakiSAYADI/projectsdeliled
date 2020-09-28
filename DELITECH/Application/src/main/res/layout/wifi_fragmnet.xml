@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/wifi"
+    android:layout_width="match_parent"
+    android:background="@drawable/maestrobackgroundapplication"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/pair_or_unpair"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/White"
+                    android:textStyle="bold"
+                    android:text="Sélectionner une zone pour l'associer / dissocier :"
+                    android:textSize="15sp" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ToggleButton
+                    android:id="@+id/ZONE_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/togglebutton"
+                    android:layout_marginTop="1dp"
+                    android:text="@string/ch1"
+                    android:textColor="@color/White" />
+
+                <ToggleButton
+                    android:id="@+id/ZONE_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/togglebutton"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/ch2"
+                    android:textColor="@color/White" />
+
+                <ToggleButton
+                    android:id="@+id/ZONE_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/togglebutton"
+                    android:text="@string/ch3"
+                    android:textColor="@color/White" />
+
+                <ToggleButton
+                    android:id="@+id/ZONE_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/togglebutton"
+                    android:text="@string/ch4"
+                    android:textColor="@color/White" />
+            </LinearLayout>
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="1dp"
+                    android:layout_height="10dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginTop="1dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/pairbt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/buttonshape"
+                        android:text="@string/pair"
+                        android:textColor="@color/White" />
+
+                    <Button
+                        android:id="@+id/unpair"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:background="@drawable/buttonshape"
+                        android:text="@string/impair"
+                        android:textColor="@color/White" />
+
+                    <Button
+                        android:id="@+id/Rename_zone"
+                        android:layout_width="115dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:background="@drawable/buttonshape"
+                        android:text="@string/rena_zone"
+                        android:textColor="@color/White" />
+                </LinearLayout>
+
+            </LinearLayout>
+            <View
+                android:id="@+id/viewing"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/Orange_deliled"
+                android:layout_below="@+id/pair_or_unpair"
+                style="@style/dividerHorizontal" />
+            <TextView
+                android:id="@+id/name_device"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/viewing"
+                android:textColor="@color/White"
+                android:layout_marginTop="10dp"
+                android:text="@string/namedevice"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/nameofdevice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/name_device"
+                android:textColor="@color/White"
+                android:maxLength="16"
+                android:gravity="center"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&amp;'()*+,;="
+                android:backgroundTint="@android:color/white"
+                android:layout_centerHorizontal="true"
+                android:maxLines="1"/>
+
+            <Button
+                android:id="@+id/OK"
+                android:layout_width="116dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nameofdevice"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/buttonshape"
+                android:text="@string/ok"
+                android:textColor="@color/White" />
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/Orange_deliled"
+                android:layout_below="@+id/OK"
+                style="@style/dividerHorizontal" />
+            <TextView
+                android:id="@+id/pass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/White"
+                android:layout_marginTop="10dp"
+                android:text="@string/password"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+            <Button
+                android:id="@+id/pW_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/buttonshape"
+                android:textColor="@color/White"
+                android:layout_below="@+id/pass"
+                android:layout_centerHorizontal="true"
+                android:text="@string/changer"/>
+
+            <TextView
+                android:id="@+id/SSID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/wifi_connect"
+                android:textColor="@color/White"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/Orange_deliled"
+                android:layout_below="@+id/pW_confirm"
+                style="@style/dividerHorizontal" />
+            <TextView
+                android:id="@+id/time_esp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view4"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/White"
+                android:layout_marginTop="10dp"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+            <Button
+                android:id="@+id/change_time_esp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/buttonshape"
+                android:textColor="@color/White"
+                android:layout_below="@+id/time_esp"
+                android:layout_centerHorizontal="true"
+                android:text="@string/changer"/>
+            <View
+                android:id="@+id/view5"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/Orange_deliled"
+                android:layout_below="@+id/change_time_esp"
+                style="@style/dividerHorizontal" />
+
+            <TextView
+                android:id="@+id/wifi_connect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/view5"
+                android:textColor="@color/White"
+                android:text="@string/wifi"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/refres"
+                android:textColor="@color/White"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="361dp"
+                android:text="@string/list" />
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="224dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView4"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="-361dp"
+                style="@android:style/Widget.Holo.Spinner"
+                android:textColor="@color/White" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:textColor="@color/White"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/spinner"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="26dp"
+                android:text="@string/pwd" />
+
+            <EditText
+                android:id="@+id/Password"
+                android:layout_width="228dp"
+                android:layout_height="46dp"
+                android:layout_below="@+id/textView"
+                android:layout_centerInParent="true"
+                android:ems="10"
+                android:textColor="@color/White"
+                android:backgroundTint="@android:color/white"
+                android:inputType="textPassword" />
+
+
+            <Button
+                android:id="@+id/refres"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/SSID"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/buttonshape"
+                android:text="@string/ref"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/Connect"
+                android:layout_width="114dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/Password"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/buttonshape"
+                android:text="@string/connect"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/paramavance"
+                android:layout_width="263dp"
+                android:layout_height="69dp"
+                android:layout_below="@+id/restart"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/buttonshapemeduim"
+                android:text="@string/avance"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/Orange_deliled"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/Connect"
+                style="@style/dividerHorizontal" />
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view2"
+                android:textColor="@color/White"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="26dp"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:text="@string/sys" />
+
+            <Button
+                android:id="@+id/defaut"
+                android:layout_width="137dp"
+                android:layout_height="59dp"
+                android:layout_below="@+id/textView1"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="-17dp"
+                android:textColor="@color/White"
+                android:layout_toStartOf="@+id/textView1"
+                android:background="@drawable/buttonshape"
+                android:text="@string/defaut"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/restart"
+                android:layout_width="107dp"
+                android:textColor="@color/White"
+                android:layout_height="59dp"
+                android:layout_below="@+id/textView1"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/textView1"
+                android:background="@drawable/buttonshape"
+                android:text="@string/restart"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/mise_a_jour"
+                android:layout_width="264dp"
+                android:layout_height="69dp"
+                android:layout_below="@+id/paramavance"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/buttonshapemeduim"
+                android:text="@string/mise"
+                android:textColor="@color/White"
+                android:textSize="15sp" />
+            <Space
+                android:layout_below="@+id/mise_a_jour"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

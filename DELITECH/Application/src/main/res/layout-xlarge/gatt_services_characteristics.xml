@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/maestrobackgroundapplication"
+    android:orientation="horizontal"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/lumiair"
+        android:layout_width="426dp"
+        android:layout_height="135dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:contentDescription="@string/maestro"
+        android:src="@drawable/texteapplication" />
+
+    <ImageView
+        android:id="@+id/maestros"
+        android:layout_width="537dp"
+        android:layout_height="461dp"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="20dp"
+        android:contentDescription="@string/maestro"
+        android:src="@drawable/logomaestros" />
+
+    <ImageView
+        android:id="@+id/logodeli"
+        android:layout_width="363dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/maestros"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:contentDescription="@string/maestro"
+        android:src="@drawable/logodelitechblanc" />
+    <TextView
+        android:id="@+id/bienvenue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/White"
+        android:layout_below="@+id/logodeli"
+        android:textSize="34sp" />
+
+    <ProgressBar
+        android:id="@+id/progress_wait"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="227dp"
+        android:layout_height="160dp"
+        android:layout_below="@id/lumiair"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/Orange_deliled"
+        android:indeterminateTintMode="src_atop" />
+</RelativeLayout>

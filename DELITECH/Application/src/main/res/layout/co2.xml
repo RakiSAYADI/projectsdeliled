@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/maestrobackgroundapplication"
+    android:orientation="vertical">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/valyues_exp"
+                android:layout_width="249dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:textAlignment="center"
+                android:text="Valeur de CO2 à partir de laquelle vous voulez définir vos alertes : "
+                android:textColor="@color/White"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/valyues"
+                android:layout_width="225dp"
+                android:layout_height="35dp"
+                android:textColor="@color/White"
+                android:maxLength="16"
+                android:layout_below="@+id/valyues_exp"
+                android:textAlignment="center"
+                android:layout_marginTop="20dp"
+                android:textColorHint="@color/White"
+                android:hint="exp : 1000"
+                android:inputType="numberDecimal"
+                android:backgroundTint="@android:color/white"
+                android:layout_centerHorizontal="true"
+                android:maxLines="1"/>
+
+            <View
+                android:id="@+id/aemailview"
+                android:layout_width="350dp"
+                android:layout_height="5dp"
+                android:layout_below="@+id/valyues"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:background="@color/Orange_deliled" />
+
+            <Switch
+                android:id="@+id/switch_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/aemailview"
+                android:layout_centerHorizontal="true"
+                android:text="Alerte email        "
+                android:textColor="@color/White"
+                android:layout_marginTop="20dp" />
+            <TextView
+                android:id="@+id/email_exp"
+                android:layout_width="249dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/switch_email"
+                android:layout_marginTop="20dp"
+                android:textAlignment="center"
+                android:text="Renseignez une adresse email :"
+                android:textColor="@color/White"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/emails"
+                android:layout_width="225dp"
+                android:layout_height="35dp"
+                android:layout_below="@+id/email_exp"
+                android:textColor="@color/White"
+                android:maxLength="64"
+                android:layout_marginTop="20dp"
+                android:textAlignment="center"
+                android:inputType="textEmailAddress"
+                android:hint="email@exemple.fr "
+                android:textColorHint="@color/White"
+                android:backgroundTint="@android:color/white"
+                android:layout_centerHorizontal="true"
+                android:maxLines="1"/>
+
+            <Button
+                android:id="@+id/emails_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/emails"
+                android:textColor="@color/White"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/buttonshape"
+                android:textAlignment="center"
+                android:text=" Test Email "
+                android:layout_centerHorizontal="true" />
+
+            <View
+                android:id="@+id/etelview"
+                android:layout_width="350dp"
+                android:layout_height="5dp"
+                android:layout_below="@+id/emails_button"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:background="@color/Orange_deliled" />
+            <Switch
+                android:id="@+id/switch_tele"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etelview"
+                android:layout_centerHorizontal="true"
+                android:text="Alerte téléphone"
+                android:textColor="@color/White"
+                android:layout_marginTop="20dp" />
+            <TextView
+                android:id="@+id/tele_exp"
+                android:layout_width="249dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/switch_tele"
+                android:layout_marginTop="20dp"
+                android:textAlignment="center"
+                android:text="Envoyer une notification sur votre téléphone si le taux de CO2 est trop élevé"
+                android:textColor="@color/White"
+                android:textSize="16sp" />
+            <View
+                android:id="@+id/zoneview"
+                android:layout_width="350dp"
+                android:layout_height="5dp"
+                android:layout_below="@+id/tele_exp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:background="@color/Orange_deliled" />
+
+            <Switch
+                android:id="@+id/switch_zone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/zoneview"
+                android:layout_centerHorizontal="true"
+                android:text="Alerte par zone  "
+                android:textColor="@color/White"
+                android:layout_marginTop="20dp" />
+
+            <TextView
+                android:id="@+id/select_zone"
+                android:layout_width="249dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/switch_zone"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:textAlignment="center"
+                android:text="Si le taux de CO2 est dépassé, les zones sélectionnées s’allumeront en rouge "
+                android:textColor="@color/White"
+                android:textSize="16sp" />
+
+            <ToggleButton
+                android:id="@+id/zone1_co2"
+                android:layout_width="wrap_content"
+                android:layout_below="@+id/select_zone"
+                android:textOn="Zone 1"
+                android:textOff="Zone 1"
+                android:background="@drawable/togglebutton"
+                android:layout_toStartOf="@+id/zone2_co2"
+                android:layout_height="wrap_content" />
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:id="@+id/zone2_co2"
+                android:textOn="Zone 2"
+                android:layout_below="@+id/select_zone"
+                android:layout_toStartOf="@+id/zero"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/togglebutton"
+                android:textOff="Zone 2"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/zero"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_below="@+id/select_zone"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp" />
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:id="@+id/zone3_co2"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/togglebutton"
+                android:textOn="Zone 3"
+                android:layout_below="@+id/select_zone"
+                android:layout_toEndOf="@+id/zero"
+                android:textOff="Zone 3"
+                android:layout_height="wrap_content" />
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:id="@+id/zone4_co2"
+                android:textOn="Zone 4"
+                android:layout_below="@+id/select_zone"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/togglebutton"
+                android:layout_toEndOf="@+id/zone3_co2"
+                android:textOff="Zone 4"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

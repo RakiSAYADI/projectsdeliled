@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <View
+                android:layout_width="match_parent"
+                android:background="@color/White"
+                android:layout_height="5dp"/>
+            <CheckBox
+                android:id="@+id/Scene_infinti"
+                android:layout_width="match_parent"
+                android:button="@drawable/checkbox_selector"
+                android:textColor="@color/White"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="@string/checkbox_infiniti"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/add_Amb"
+                android:layout_width="match_parent"
+                android:text="@string/add_scene"
+                android:textColor="@color/White"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+</LinearLayout>

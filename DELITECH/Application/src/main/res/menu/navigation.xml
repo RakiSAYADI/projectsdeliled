@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/home"
+        android:title="Accuiel" />
+
+    <item
+        android:id="@+id/navigation_edit"
+        android:icon="@drawable/edit_main"
+        android:title="Fonctions" />
+
+    <item
+        android:id="@+id/navigation_paint"
+        android:icon="@drawable/paint"
+        android:title="Ambiances" />
+
+    <item
+        android:id="@+id/navigation_movie"
+        android:icon="@drawable/movie"
+        android:title="Scènes" />
+    <item
+        android:id="@+id/navigation_gear"
+        android:icon="@drawable/gear"
+        android:title="Règlages" />
+
+</menu>

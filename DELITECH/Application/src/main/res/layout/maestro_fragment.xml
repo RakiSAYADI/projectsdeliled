@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="@drawable/maestrobackgroundapplication"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/capteurs"
+        android:layout_width="match_parent"
+        android:layout_height="173dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/popup1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="15dp"
+            android:background="@android:color/transparent"
+            android:drawableTop="@drawable/information"
+            android:text="info."
+            android:textColor="@color/White" />
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="22dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:contentDescription="@string/temp"
+            android:src="@drawable/temperature" />
+
+        <TextView
+            android:id="@+id/Temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/temp"
+            android:textColor="@color/White"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tempvalue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="170dp"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/White"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="17dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="28dp"
+            android:contentDescription="@string/lum"
+            android:src="@drawable/circadiens"
+            android:textColor="@color/White" />
+
+        <TextView
+            android:id="@+id/lum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="28dp"
+            android:text="@string/lum"
+            android:textColor="@color/White"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/lumvalue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="170dp"
+            android:layout_marginTop="28dp"
+            android:textColor="@color/White"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="48dp"
+            android:contentDescription="@string/hum"
+            android:src="@drawable/humidite" />
+
+        <TextView
+            android:id="@+id/hum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="48dp"
+            android:text="@string/hum"
+            android:textColor="@color/White"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/humvalue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="170dp"
+            android:layout_marginTop="48dp"
+            android:textColor="@color/White"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="21dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="70dp"
+            android:contentDescription="@string/co2"
+            android:src="@drawable/co2" />
+
+        <TextView
+            android:id="@+id/co2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="70dp"
+            android:text="@string/co2"
+            android:textColor="@color/White"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/co2value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="170dp"
+            android:layout_marginTop="70dp"
+            android:textColor="@color/White"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/tvocs"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="90dp"
+            android:contentDescription="@string/tvoc"
+            android:src="@drawable/vocs" />
+
+        <TextView
+            android:id="@+id/tvoc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="90dp"
+            android:text="@string/tvoc"
+            android:textColor="@color/White"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/TVOC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="170dp"
+            android:layout_marginTop="90dp"
+            android:textColor="@color/White"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="113dp"
+            android:contentDescription="@string/presence"
+            android:src="@drawable/presence" />
+
+        <TextView
+            android:id="@+id/presece"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="113dp"
+            android:text="@string/detecte"
+            android:textColor="@color/White"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/detection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="170dp"
+            android:layout_marginTop="113dp"
+            android:textColor="@color/White"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="138dp"
+            android:contentDescription="@string/icone"
+            android:src="@drawable/house" />
+
+        <TextView
+            android:id="@+id/icone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="138dp"
+            android:text="@string/icone"
+            android:textColor="@color/White"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/indice_icone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="170dp"
+            android:layout_marginTop="138dp"
+            android:textColor="@color/White"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+    <View
+    android:id="@+id/view"
+    android:layout_width="350dp"
+    android:layout_height="20dp" />
+
+    <LinearLayout
+        android:id="@+id/pair"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ToggleButton
+                android:id="@+id/Chambre1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:background="@drawable/togglebutton"
+                android:text="@string/ch1"
+                android:textColor="@color/White"
+                android:textSize="12sp" />
+
+            <ToggleButton
+                android:id="@+id/Chambre2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:textSize="12sp"
+                android:background="@drawable/togglebutton"
+                android:text="@string/ch2"
+                android:textColor="@color/White" />
+
+            <ToggleButton
+                android:id="@+id/Chambre3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/togglebutton"
+                android:text="@string/ch3"
+                android:textColor="@color/White" />
+
+            <ToggleButton
+                android:id="@+id/Chambre4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/togglebutton"
+                android:text="@string/ch4"
+                android:textColor="@color/White" />
+
+            <ToggleButton
+                android:id="@+id/volt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/togglebutton"
+                android:text="@string/ch4"
+                android:textColor="@color/White" />
+        </LinearLayout>
+
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:visibility="gone"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <Button
+                        android:id="@+id/couleur_fav1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="top|center"
+                        android:background="@drawable/buttonshape"
+                        android:textColor="@color/White" />
+
+                    <TextView
+                        android:id="@+id/couleur_fav1_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-45dp"
+                        android:gravity="center"
+                        android:textSize="16sp"
+                        android:text="Couleur1"
+                        android:textColor="@color/White" />
+
+                    <View
+                        android:id="@+id/couleurfav1_view"
+                        android:layout_width="70dp"
+                        android:layout_height="20dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <Button
+                        android:id="@+id/couleur_fav2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/buttonshape"
+                        android:gravity="bottom|center"
+                        android:textColor="@color/White" />
+                    <TextView
+                        android:id="@+id/couleur_fav2_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-28dp"
+                        android:gravity="center"
+                        android:textSize="16sp"
+                        android:text="Couleur2"
+                        android:textColor="@color/White" />
+
+                    <View
+                        android:id="@+id/couleurfav2_view"
+                        android:layout_width="70dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="-43dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <com.skydoves.colorpickerview.ColorPickerView
+                android:id="@+id/colorPickerView"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:rotation="180"
+                app:palette="@drawable/palette"
+                app:selector="@drawable/wheel" />
+
+            <Button
+                android:id="@+id/modeexpert"
+                android:layout_width="83dp"
+                android:layout_height="151dp"
+                android:layout_marginStart="12dp"
+                android:visibility="gone"
+                android:background="@drawable/buttonshapeconnect"
+                android:gravity="center_horizontal"
+                android:text="@string/exp"
+                android:textColor="@color/White" />
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="258dp"
+            android:layout_height="26dp"
+            android:layout_marginTop="10dp"
+            android:progressDrawable="@drawable/luminosite"
+            android:thumb="@null" />
+
+        <SeekBar
+            android:id="@+id/saturation"
+            android:layout_width="258dp"
+            android:layout_height="26dp"
+            android:layout_marginTop="10dp"
+            android:progressDrawable="@drawable/saturation"
+            android:thumb="@null" />
+
+        <SeekBar
+            android:id="@+id/white"
+            android:layout_width="258dp"
+            android:layout_height="26dp"
+            android:layout_marginTop="10dp"
+            android:progressDrawable="@drawable/blancs"
+            android:thumb="@null" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/wifi"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:background="@color/fbutton_color_transparent"
+                android:drawableStart="@drawable/setting"
+                android:text=" Réglages"
+                android:textColor="@color/White" />
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="39dp"
+                android:layout_height="37dp"
+                android:layout_marginStart="12dp"
+                android:background="@color/fbutton_color_transparent"
+                android:contentDescription="@string/power"
+                android:src="@drawable/onoff" />
+
+            <ImageButton
+                android:id="@+id/imageButton_off"
+                android:layout_width="39dp"
+                android:layout_marginStart="12dp"
+                android:layout_height="37dp"
+                android:background="@color/fbutton_color_transparent"
+                android:contentDescription="@string/power"
+                android:src="@drawable/close" />
+
+
+            <Button
+                android:id="@+id/profils"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginStart="12dp"
+                android:background="@color/fbutton_color_transparent"
+                android:drawableEnd="@drawable/edit"
+                android:gravity="center"
+                android:text="Fonctions "
+                android:textColor="@color/White" />
+        </LinearLayout>
+
+
+
+        <Button
+            android:id="@+id/Vmoins"
+            android:layout_width="wrap_content"
+            android:layout_height="47dp"
+            android:layout_marginStart="-120dp"
+            android:background="@drawable/buttonshape"
+            android:text="@string/moins"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/Modes"
+            android:layout_width="wrap_content"
+            android:layout_height="49dp"
+            android:layout_marginTop="-49dp"
+            android:background="@drawable/buttonshape"
+            android:visibility="gone"
+            android:text="@string/modes" />
+
+
+        <Button
+            android:id="@+id/Vplus"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:layout_marginStart="120dp"
+            android:layout_marginTop="-46dp"
+            android:background="@drawable/buttonshape"
+            android:text="@string/plus"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</LinearLayout>

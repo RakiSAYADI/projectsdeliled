@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="deliled.Applications.android.Maestro"
+    android:versionCode="16"
+    android:versionName="6.0"
+    tools:ignore="LockedOrientationActivity">
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <application
+        android:allowBackup="true"
+        android:fullBackupContent="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Holo.Light">
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyTheme_appcompat" />
+        <activity
+            android:name="deliled.Applications.android.Maestro.welcome"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppFullScreenTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="deliled.Applications.android.Maestro.cycle_circa"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyTheme" />
+        <activity
+            android:name="deliled.Applications.android.Maestro.veille_detections"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyTheme" />
+        <activity
+            android:name="deliled.Applications.android.Maestro.ajustement_luminosite"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyTheme" />
+        <activity
+            android:name="deliled.Applications.android.Maestro.DeviceScanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="deliled.Applications.android.Maestro.serveur_access"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyTheme" />
+        <activity
+            android:name="deliled.Applications.android.Maestro.QR_CODE"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyTheme" />
+        <activity
+            android:name="deliled.Applications.android.Maestro.co2"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyTheme" />
+
+        <service
+            android:name="deliled.Applications.android.Maestro.BluetoothLeService"
+            android:enabled="true" />
+        <service
+            android:name="deliled.Applications.android.Maestro.FloatingWidgetService"
+            android:enabled="true"
+            android:exported="false" />
+    </application>
+</manifest>

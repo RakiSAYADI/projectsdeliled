@@ -1,0 +1,12 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:minWidth="56dp">
+    <Switch
+        android:id="@+id/manorauto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOn="AUTO"
+        android:textOff="MANU"
+        android:layout_gravity="center"/>
+</LinearLayout>

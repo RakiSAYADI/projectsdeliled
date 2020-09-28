@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.hassanusman:CircularDialogs:1.2@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/38bcce610c2aaa397b0f3f6d7ae26fb2/jetified-CircularDialogs-1.2/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/38bcce610c2aaa397b0f3f6d7ae26fb2/jetified-CircularDialogs-1.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/38bcce610c2aaa397b0f3f6d7ae26fb2/jetified-CircularDialogs-1.2/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
