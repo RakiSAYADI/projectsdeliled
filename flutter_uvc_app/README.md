@@ -1,6 +1,6 @@
 # flutterdmxapp
 
-A new Flutter application.
+A Flutter Application to control the UVC Robot.
 
 ## Getting Started
 
