@@ -1,0 +1,13 @@
+15:30:45 **** Build of configuration Default for project deliled ****
+make all 
+Toolchain path: /home/raki/esp/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+Toolchain version: crosstool-ng-1.22.0-80-g6c4433a
+Compiler version: 5.2.0
+Python requirements from /home/raki/esp/esp-idf/requirements.txt are satisfied.
+
+App "deliled_bin" version: 01.02.00
+To flash all build output, run 'make flash' or:
+python /home/raki/esp/esp-idf/components/esptool_py/esptool/esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0xf000 /home/raki/esp-project/deliled/build/ota_data_initial.bin 0x1000 /home/raki/esp-project/deliled/build/bootloader/bootloader.bin 0x20000 /home/raki/esp-project/deliled/build/deliled_bin.bin 0x8000 /home/raki/esp-project/deliled/build/partitions.bin
+
+15:30:52 Build Finished. 0 errors, 0 warnings. (took 7s.546ms)
+

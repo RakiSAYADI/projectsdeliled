@@ -1,0 +1,17 @@
+09:36:24 **** Build of configuration Default for project get-started ****
+make all 
+mconf-idf is not required on this platform
+mconf-idf is not required on this platform
+The following Python requirements are not satisfied:
+gdbgui>=0.13.2.0
+Please follow the instructions found in the "Set up the tools" section of ESP-IDF Getting Started Guide
+Diagnostic information:
+    IDF_PYTHON_ENV_PATH: (not set)
+    Python interpreter used: /usr/bin/python
+    Warning: python interpreter not running from IDF_PYTHON_ENV_PATH
+    PATH: /home/raki/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/raki/esp/xtensa-esp32-elf/bin
+make: ***  Aucune règle pour fabriquer la cible « check_python_dependencies », nécessaire pour « all ». Arrêt.
+"make all" terminated with exit code 2. Build might be incomplete.
+
+09:36:28 Build Failed. 1 errors, 1 warnings. (took 4s.241ms)
+

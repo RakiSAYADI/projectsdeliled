@@ -1,0 +1,52 @@
+/*
+ * main.c
+ *
+ *  Created on: 19 août 2020
+ *      Author: raki
+ */
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "esp_system.h"
+#include "esp_log.h"
+#include "driver/uart.h"
+#include "string.h"
+#include <stdio.h>
+#include <esp_log.h>
+#include <nvs.h>
+#include <nvs_flash.h>
+#include "sdkconfig.h"
+#include <stdlib.h>
+#include "stdbool.h"
+
+#include "main.h"
+
+char* TAG = "app_main";
+
+int app_main(void) {
+
+    ESP_ERROR_CHECK(nvs_flash_init());
+
+	// Initialize GPIOs.
+	LedStatInit();
+
+	// Initialize and restore the storage data
+	if (InitLoadCfg() != 0) {
+		return -1;
+	}
+
+	ESP_LOGI(TAG, "Error starting server!");
+
+//	// test raki
+//
+//	UnitCfg.DisinfictionTime = 0;
+//	UnitCfg.ActivationTime = 0;
+//
+//	xTaskCreate(&UVCTreatement, "UVCTreatement",
+//			configMINIMAL_STACK_SIZE * 3, NULL, 1,
+//			NULL);
+
+	// Initiate Bluetooth services.
+	bt_main();
+
+	return 0;
+}

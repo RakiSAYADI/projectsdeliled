@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item key="LastUsedHeaderTemplate" value="Default C header template"/>
+	<section name="completion_proposal_size">
+	</section>
+	<section name="org.eclipse.cdt.ui.text.hover.CMacroExpansionExploration">
+	</section>
+	<section name="OptionalMessageDialog.hide.">
+		<item key="askReindex" value="true"/>
+		<item key="askReindex.detail" value="0"/>
+		<item key="FormatAll" value="true"/>
+	</section>
+	<section name="PDOMSearchPage">
+		<item key="caseSensitive" value="false"/>
+		<item key="searchFlags" value="227191"/>
+		<list key="previousPatterns">
+			<item value="xTaskCreatePinnedToCore"/>
+			<item value="ADC1_GPIO32_CHANNEL"/>
+			<item value="summer_count"/>
+			<item value="PirDetectionOverride"/>
+			<item value="LastDetTime"/>
+			<item value="AutoTrigTimeEnb"/>
+			<item value="InitLoadCfg"/>
+			<item value="DacLightStatOn"/>
+		</list>
+	</section>
+	<section name="org.eclipse.cdt.ui.OPEN_ACTION_SELECTION_DIALOG_SECTION">
+		<item key="DIALOG_X_ORIGIN" value="704"/>
+		<item key="DIALOG_Y_ORIGIN" value="137"/>
+		<item key="DIALOG_WIDTH" value="450"/>
+		<item key="DIALOG_HEIGHT" value="488"/>
+		<item key="DIALOG_FONT_NAME" value="1|Ubuntu|11.0|0|GTK|1|"/>
+	</section>
+	<section name="org.eclipse.cdt.ui.text.hover.CMacroExpansionExploration.internal">
+		<item key="size.width" value="806"/>
+		<item key="size.height" value="222"/>
+	</section>
+	<section name="CResourceRenameRefactoringInputPage">
+		<item key="updateReferences" value="true"/>
+	</section>
+</section>

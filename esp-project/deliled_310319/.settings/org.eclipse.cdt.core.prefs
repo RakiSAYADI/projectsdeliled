@@ -1,0 +1,17 @@
+eclipse.preferences.version=1
+environment/project/0.1839031703/IDF_PATH/delimiter=\:
+environment/project/0.1839031703/IDF_PATH/operation=append
+environment/project/0.1839031703/IDF_PATH/value=/home/raki/esp/esp-idf
+environment/project/0.1839031703/PATH/delimiter=\:
+environment/project/0.1839031703/PATH/operation=append
+environment/project/0.1839031703/PATH/value=/home/raki/.local/bin\:/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/usr/games\:/usr/local/games\:/snap/bin\:/home/raki/esp/xtensa-esp32-elf/bin
+environment/project/0.1839031703/append=true
+environment/project/0.1839031703/appendContributed=true
+environment/project/cdt.managedbuild.toolchain.gnu.cross.base.681782911/IDF_PATH/delimiter=\:
+environment/project/cdt.managedbuild.toolchain.gnu.cross.base.681782911/IDF_PATH/operation=append
+environment/project/cdt.managedbuild.toolchain.gnu.cross.base.681782911/IDF_PATH/value=/home/raki/esp32/esp-idf
+environment/project/cdt.managedbuild.toolchain.gnu.cross.base.681782911/PATH/delimiter=\:
+environment/project/cdt.managedbuild.toolchain.gnu.cross.base.681782911/PATH/operation=replace
+environment/project/cdt.managedbuild.toolchain.gnu.cross.base.681782911/PATH/value=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/usr/games\:/usr/local/games\:/snap/bin\:/home/raki/esp32/xtensa-esp32-elf/bin
+environment/project/cdt.managedbuild.toolchain.gnu.cross.base.681782911/append=true
+environment/project/cdt.managedbuild.toolchain.gnu.cross.base.681782911/appendContributed=true

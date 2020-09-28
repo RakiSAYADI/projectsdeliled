@@ -1,0 +1,19 @@
+15:30:28 **** Build of configuration Default for project UVC-Deliled-Slave ****
+make all 
+Toolchain path: /home/raki/esp/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+Toolchain version: crosstool-ng-1.22.0-80-g6c4433a
+Compiler version: 5.2.0
+Python requirements from /home/raki/esp/esp-idf/requirements.txt are satisfied.
+
+Project is not inside a git repository, will not use 'git describe' to determine PROJECT_VER.
+App "app-template" version: 1
+CC /home/raki/esp-project/UVC-Deliled-Slave/build/main/tcp_client.o
+AR /home/raki/esp-project/UVC-Deliled-Slave/build/main/libmain.a
+Generating esp32.project.ld
+LD /home/raki/esp-project/UVC-Deliled-Slave/build/app-template.elf
+esptool.py v2.7-dev
+To flash all build output, run 'make flash' or:
+python2.7 /home/raki/esp/esp-idf/components/esptool_py/esptool/esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0x1000 /home/raki/esp-project/UVC-Deliled-Slave/build/bootloader/bootloader.bin 0x10000 /home/raki/esp-project/UVC-Deliled-Slave/build/app-template.bin 0x8000 /home/raki/esp-project/UVC-Deliled-Slave/build/partitions_singleapp.bin
+
+15:30:44 Build Finished. 0 errors, 0 warnings. (took 16s.614ms)
+

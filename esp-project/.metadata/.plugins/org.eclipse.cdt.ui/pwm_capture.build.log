@@ -1,0 +1,14 @@
+15:30:53 **** Build of configuration Default for project pwm_capture ****
+make all 
+Toolchain path: /home/raki/esp/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+Toolchain version: crosstool-ng-1.22.0-80-g6c4433a
+Compiler version: 5.2.0
+Python requirements from /home/raki/esp/esp-idf/requirements.txt are satisfied.
+
+Project is not inside a git repository, will not use 'git describe' to determine PROJECT_VER.
+App "ledc" version: 1
+To flash all build output, run 'make flash' or:
+python /home/raki/esp/esp-idf/components/esptool_py/esptool/esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 115200 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0x1000 /home/raki/esp-project/pwm_capture/build/bootloader/bootloader.bin 0x10000 /home/raki/esp-project/pwm_capture/build/ledc.bin 0x8000 /home/raki/esp-project/pwm_capture/build/partitions_singleapp.bin
+
+15:30:59 Build Finished. 0 errors, 0 warnings. (took 6s.650ms)
+

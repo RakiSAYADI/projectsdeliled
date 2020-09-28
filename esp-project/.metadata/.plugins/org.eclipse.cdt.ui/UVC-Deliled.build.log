@@ -1,0 +1,14 @@
+10:41:03 **** Incremental Build of configuration Default for project UVC-Deliled ****
+make all 
+Toolchain path: /home/raki/esp/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+Toolchain version: crosstool-ng-1.22.0-80-g6c4433a
+Compiler version: 5.2.0
+Python requirements from /home/raki/esp/esp-idf/requirements.txt are satisfied.
+
+Project is not inside a git repository, will not use 'git describe' to determine PROJECT_VER.
+App "app-template" version: 1
+To flash all build output, run 'make flash' or:
+python2.7 /home/raki/esp/esp-idf/components/esptool_py/esptool/esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0x1000 /home/raki/esp-project/UVC-Deliled/build/bootloader/bootloader.bin 0x10000 /home/raki/esp-project/UVC-Deliled/build/app-template.bin 0x8000 /home/raki/esp-project/UVC-Deliled/build/partitions_singleapp.bin
+
+10:41:10 Build Finished. 0 errors, 0 warnings. (took 6s.401ms)
+

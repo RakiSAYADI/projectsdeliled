@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="0.1247348598">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="0.1247348598" moduleId="org.eclipse.cdt.core.settings" name="Default">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.VCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactName="${ProjName}" buildProperties="" description="" id="0.1247348598" name="Default" optionalBuildProperties="" parent="org.eclipse.cdt.build.core.prefbase.cfg">
+					<folderInfo id="0.1247348598." name="/" resourcePath="">
+						<toolChain id="org.eclipse.cdt.build.core.prefbase.toolchain.1093612979" name="No ToolChain" resourceTypeBasedDiscovery="false" superClass="org.eclipse.cdt.build.core.prefbase.toolchain">
+							<targetPlatform id="org.eclipse.cdt.build.core.prefbase.toolchain.1093612979.847670189" name=""/>
+							<builder id="org.eclipse.cdt.build.core.settings.default.builder.459435663" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
+							<tool id="org.eclipse.cdt.build.core.settings.holder.libs.373732632" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs"/>
+							<tool id="org.eclipse.cdt.build.core.settings.holder.562331695" name="Assembly" superClass="org.eclipse.cdt.build.core.settings.holder">
+								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.688455221" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+							</tool>
+							<tool id="org.eclipse.cdt.build.core.settings.holder.299526883" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">
+								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.2072370550" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+							</tool>
+							<tool id="org.eclipse.cdt.build.core.settings.holder.726193290" name="GNU C" superClass="org.eclipse.cdt.build.core.settings.holder">
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="org.eclipse.cdt.build.core.settings.holder.incpaths.1130513020" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/esp_common/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/esp_wifi/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/log/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/freertos/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/driver/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/soc/esp32/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/nvs_flash/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/newlib/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/esp_event/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/lwip/lwip/src/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/tcpip_adapter/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/esp_adc_cal/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/bt/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/bt/bluedroid/api/include/api&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/esp-tls&quot;"/>
+									<listOptionValue builtIn="false" value="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/json/cJSON&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/esp_http_server/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/mbedtls/mbedtls/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/mqtt/esp-mqtt/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/esp_http_client/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/app_update/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/spi_flash/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/esp_https_ota/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/bootloader_support/include&quot;"/>
+								</option>
+								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1017848473" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="deliled.null.2071286363" name="deliled"/>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="0.438829681">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="0.642547470">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="0.1247348598">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+</cproject>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;UVC-Deliled-Master/main/base_mac_address_example_main.c&apos; to &apos;base_mac_address.c&apos;" description="Rename resource &apos;base_mac_address_example_main.c&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="main/base_mac_address_example_main.c" name="base_mac_address.c" stamp="1600958767433" updateReferences="true"/>
+</session>
