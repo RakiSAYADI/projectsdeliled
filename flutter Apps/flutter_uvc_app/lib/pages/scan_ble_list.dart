@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutteruvcapp/services/bleDeviceClass.dart';
@@ -174,6 +176,12 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                       Future.delayed(const Duration(seconds: 2), () async {
                         // clear the remaining toast message
                         myUvcToast.clearAllToast();
+                        String message = 'STOP : ON';
+                        if (Platform.isIOS) {
+                          await myDevice.writeCharacteristic(0, 0, message);
+                        } else {
+                          await myDevice.writeCharacteristic(2, 0, message);
+                        }
                         await myDevice.readCharacteristic(0, 0);
                         flutterBlue.stopScan();
                         startScan(context);
