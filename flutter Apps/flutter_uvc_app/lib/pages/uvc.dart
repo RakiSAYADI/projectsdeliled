@@ -238,8 +238,6 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                                   circleColor = Colors.green;
                                                   controllerAnimationTimeBackground.duration =
                                                       Duration(seconds: (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds));
-                                                  print(durationOfActivate.inSeconds);
-                                                  print(myUvcLight.getInfectionTime());
                                                   controllerAnimationTimeBackground.reverse(
                                                       from: controllerAnimationTimeBackground.value == 0.0
                                                           ? 1.0
