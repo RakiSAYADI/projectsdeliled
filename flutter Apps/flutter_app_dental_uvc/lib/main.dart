@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutterappdentaluvc/pages/end_uvc.dart';
 import 'package:flutterappdentaluvc/pages/pin_access.dart';
+import 'package:flutterappdentaluvc/pages/pin_settings.dart';
 import 'package:flutterappdentaluvc/pages/profils.dart';
 import 'package:flutterappdentaluvc/pages/settings.dart';
 import 'package:flutterappdentaluvc/pages/uvc.dart';
@@ -77,6 +78,7 @@ void main() async {
     routes: {
       '/': (context) => Welcome(),
       '/pin_access' : (context) => AccessPin(),
+      '/pin_settings' : (context) => PinSettings(),
       '/profiles': (context) => Profiles(),
       '/settings': (context) => Settings(),
       '/warnings': (context) => Warnings(),

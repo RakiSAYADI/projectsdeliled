@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:2:1-79:12
-INJECTED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:2:1-79:12
-INJECTED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:2:1-79:12
-INJECTED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:2:1-79:12
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:2:1-79:12
+INJECTED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:2:1-79:12
+INJECTED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:2:1-79:12
+INJECTED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:2:1-79:12
 MERGED from [com.github.skydoves:colorpickerview:2.0.2] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\af9647f25a446eb77983ffb1e7bc4d94\jetified-colorpickerview-2.0.2\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\86e1e5d883ec66c1063a0d9a82a27792\constraintlayout-2.0.1\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.legacy:legacy-support-v13:1.0.0] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\d00e1e2c380de7064effa95a9535b0b7\legacy-support-v13-1.0.0\AndroidManifest.xml:17:1-22:12
@@ -58,73 +58,73 @@ MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\Utilisateur\.
 MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\7282e00d74c6a6acf53f4bfd68421266\lifecycle-livedata-core-2.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\73114719268a97e9fd391905563b2ee9\core-runtime-2.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.annotation:annotation-experimental:1.0.0] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\1e0614212b25f4ae67724a3587ed8129\jetified-annotation-experimental-1.0.0\AndroidManifest.xml:17:1-24:12
-INJECTED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:2:1-79:12
-INJECTED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:2:1-79:12
-INJECTED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:2:1-79:12
+INJECTED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:2:1-79:12
+INJECTED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:2:1-79:12
+INJECTED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:2:1-79:12
 	package
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:4:5-51
-		INJECTED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:4:5-51
+		INJECTED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml
 	android:versionName
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:6:5-30
-		INJECTED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:6:5-30
+		INJECTED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml
 	xmlns:tools
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:3:5-51
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:3:5-51
 	xmlns:android
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:2:11-69
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:2:11-69
 	tools:ignore
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:7:5-45
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:7:5-45
 	android:versionCode
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:5:5-29
-		INJECTED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:5:5-29
+		INJECTED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml
 uses-permission#android.permission.BLUETOOTH
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:9:5-68
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:9:5-68
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:9:22-65
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:9:22-65
 uses-permission#android.permission.BLUETOOTH_ADMIN
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:10:5-74
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:10:5-74
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:10:22-71
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:10:22-71
 uses-permission#android.permission.ACCESS_WIFI_STATE
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:11:5-76
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:11:5-76
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:11:22-73
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:11:22-73
 uses-permission#android.permission.ACCESS_COARSE_LOCATION
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:12:5-81
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:12:5-81
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:12:22-78
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:12:22-78
 uses-permission#android.permission.ACCESS_FINE_LOCATION
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:13:5-79
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:13:5-79
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:13:22-76
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:13:22-76
 uses-permission#android.permission.CHANGE_WIFI_STATE
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:14:5-76
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:14:5-76
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:14:22-73
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:14:22-73
 uses-permission#android.permission.VIBRATE
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:15:5-66
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:15:5-66
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:15:22-63
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:15:22-63
 uses-permission#android.permission.CAMERA
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:16:5-65
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:16:5-65
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:16:22-62
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:16:22-62
 uses-permission#android.permission.INTERNET
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:17:5-67
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:17:5-67
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:17:22-64
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:17:22-64
 uses-permission#android.permission.ACCESS_NETWORK_STATE
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:18:5-79
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:18:5-79
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:18:22-76
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:18:22-76
 uses-permission#android.permission.SYSTEM_ALERT_WINDOW
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:19:5-78
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:19:5-78
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:19:22-75
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:19:22-75
 application
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:21:5-78:19
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:21:5-78:19
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\86e1e5d883ec66c1063a0d9a82a27792\constraintlayout-2.0.1\AndroidManifest.xml:9:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\86e1e5d883ec66c1063a0d9a82a27792\constraintlayout-2.0.1\AndroidManifest.xml:9:5-20
 MERGED from [com.github.andremion:counterfab:1.0.1] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\62cbeb1ceb80d52c27db03a31a94d7e5\jetified-counterfab-1.0.1\AndroidManifest.xml:12:5-20
@@ -160,117 +160,117 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] C:\Users\Ut
 	android:supportsRtl
 		ADDED from [com.github.rtugeek:colorseekbar:1.7.3] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\fcf125695a0cfb20918b035f502db17b\jetified-colorseekbar-1.7.3\AndroidManifest.xml:14:9-35
 	android:label
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:25:9-41
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:25:9-41
 	android:fullBackupContent
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:23:9-41
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:23:9-41
 	android:icon
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:24:9-45
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:24:9-45
 	android:allowBackup
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:22:9-35
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:22:9-35
 	android:theme
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:26:9-56
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:26:9-56
 activity#deliled.Applications.android.Maestro.MainActivity
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:27:9-30:56
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:27:9-30:56
 	android:screenOrientation
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:29:13-49
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:29:13-49
 	android:theme
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:30:13-53
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:30:13-53
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:28:13-41
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:28:13-41
 activity#deliled.Applications.android.Maestro.welcome
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:31:9-41:20
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:31:9-41:20
 	android:screenOrientation
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:34:13-49
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:34:13-49
 	android:label
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:33:13-45
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:33:13-45
 	android:theme
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:35:13-54
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:35:13-54
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:32:13-72
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:32:13-72
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:36:13-40:29
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:36:13-40:29
 action#android.intent.action.MAIN
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:37:17-69
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:37:17-69
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:37:25-66
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:37:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:39:17-77
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:39:17-77
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:39:27-74
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:39:27-74
 activity#deliled.Applications.android.Maestro.cycle_circa
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:42:9-45:46
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:42:9-45:46
 	android:screenOrientation
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:44:13-49
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:44:13-49
 	android:theme
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:45:13-43
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:45:13-43
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:43:13-76
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:43:13-76
 activity#deliled.Applications.android.Maestro.veille_detections
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:46:9-49:46
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:46:9-49:46
 	android:screenOrientation
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:48:13-49
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:48:13-49
 	android:theme
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:49:13-43
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:49:13-43
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:47:13-82
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:47:13-82
 activity#deliled.Applications.android.Maestro.ajustement_luminosite
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:50:9-53:46
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:50:9-53:46
 	android:screenOrientation
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:52:13-49
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:52:13-49
 	android:theme
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:53:13-43
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:53:13-43
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:51:13-86
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:51:13-86
 activity#deliled.Applications.android.Maestro.DeviceScanActivity
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:54:9-56:52
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:54:9-56:52
 	android:screenOrientation
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:56:13-49
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:56:13-49
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:55:13-83
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:55:13-83
 activity#deliled.Applications.android.Maestro.serveur_access
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:57:9-60:46
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:57:9-60:46
 	android:screenOrientation
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:59:13-49
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:59:13-49
 	android:theme
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:60:13-43
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:60:13-43
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:58:13-79
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:58:13-79
 activity#deliled.Applications.android.Maestro.QR_CODE
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:61:9-64:46
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:61:9-64:46
 	android:screenOrientation
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:63:13-49
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:63:13-49
 	android:theme
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:64:13-43
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:64:13-43
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:62:13-72
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:62:13-72
 activity#deliled.Applications.android.Maestro.co2
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:65:9-69:46
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:65:9-69:46
 	android:screenOrientation
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:68:13-49
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:68:13-49
 	android:configChanges
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:67:13-48
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:67:13-48
 	android:theme
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:69:13-43
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:69:13-43
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:66:13-68
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:66:13-68
 service#deliled.Applications.android.Maestro.BluetoothLeService
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:71:9-73:38
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:71:9-73:38
 	android:enabled
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:73:13-35
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:73:13-35
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:72:13-83
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:72:13-83
 service#deliled.Applications.android.Maestro.FloatingWidgetService
-ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:74:9-77:40
+ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:74:9-77:40
 	android:enabled
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:76:13-35
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:76:13-35
 	android:exported
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:77:13-37
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:77:13-37
 	android:name
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:75:13-86
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:75:13-86
 uses-sdk
-INJECTED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml
-INJECTED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml
+INJECTED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml
+INJECTED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml
 MERGED from [com.github.skydoves:colorpickerview:2.0.2] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\af9647f25a446eb77983ffb1e7bc4d94\jetified-colorpickerview-2.0.2\AndroidManifest.xml:7:5-9:41
 MERGED from [com.github.skydoves:colorpickerview:2.0.2] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\af9647f25a446eb77983ffb1e7bc4d94\jetified-colorpickerview-2.0.2\AndroidManifest.xml:7:5-9:41
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\86e1e5d883ec66c1063a0d9a82a27792\constraintlayout-2.0.1\AndroidManifest.xml:5:5-7:41
@@ -379,16 +379,16 @@ MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\Utilisateur\.gradle
 MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\73114719268a97e9fd391905563b2ee9\core-runtime-2.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.annotation:annotation-experimental:1.0.0] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\1e0614212b25f4ae67724a3587ed8129\jetified-annotation-experimental-1.0.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.annotation:annotation-experimental:1.0.0] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\1e0614212b25f4ae67724a3587ed8129\jetified-annotation-experimental-1.0.0\AndroidManifest.xml:20:5-22:41
-INJECTED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml
-INJECTED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml
+INJECTED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml
+INJECTED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml
-		ADDED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml
 activity#com.google.android.gms.common.api.GoogleApiActivity
 ADDED from [com.google.android.gms:play-services-base:17.0.0] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\a1794986c7a3c4986f9feb2359005476\jetified-play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
 	android:exported

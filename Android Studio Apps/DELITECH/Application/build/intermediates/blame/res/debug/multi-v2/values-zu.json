@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Utilisateur\\Desktop\\DELITECH\\Application\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zu\\values-zu.xml",
+            "outputFile": "C:\\Users\\Utilisateur\\Documents\\GitHub\\projectsdeliled\\Android Studio Apps\\DELITECH\\Application\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zu\\values-zu.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Utilisateur\\.gradle\\caches\\transforms-2\\files-2.1\\a1794986c7a3c4986f9feb2359005476\\jetified-play-services-base-17.0.0\\res\\values-zu\\values.xml",

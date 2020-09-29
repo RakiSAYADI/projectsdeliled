@@ -9,13 +9,15 @@
     </shared>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5ee4e1b8-c737-4975-a0d5-815f1ccc2e3f" name="Default Changelist" comment="" />
+    <list default="true" id="5ee4e1b8-c737-4975-a0d5-815f1ccc2e3f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/lib/pages/pin_access.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/lib/pages/pin_access.dart" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="QDG9X18811W04464" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="XUL2E3XF82" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -64,7 +66,7 @@
     <option name="REMEMBER_PASSWORDS" value="true" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="ProjectId" id="1YI4h0lT2ONEALZ33E17vGRkOui" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />

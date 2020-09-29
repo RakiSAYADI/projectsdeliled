@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AES Cryptage"
+        android:textSize="18sp"
+        />
+
+    <EditText
+        android:id="@+id/message_here"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:gravity="center"
+        android:hint="entrer votre code" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cle de message"
+        android:textSize="18sp"
+        />
+
+    <EditText
+        android:id="@+id/key_here"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:maxLines="1"
+        android:hint="entrer votre mot cle" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="IV"
+        android:textSize="18sp"
+        />
+
+    <EditText
+        android:id="@+id/vector_init"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:maxLines="1"
+        android:maxLength="16"
+        android:hint="entrer votre vector d'init (16 char max)" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Ton code generé :"
+        android:textSize="18sp"
+        />
+    <EditText
+        android:id="@+id/message_giving"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        />
+    <Button
+        android:id="@+id/crypt_me"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Generer"
+        android:textSize="18sp"
+        />
+
+</LinearLayout>

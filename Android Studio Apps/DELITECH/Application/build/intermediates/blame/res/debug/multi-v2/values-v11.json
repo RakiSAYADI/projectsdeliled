@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Utilisateur\\Desktop\\DELITECH\\Application\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v11\\values-v11.xml",
+            "outputFile": "C:\\Users\\Utilisateur\\Documents\\GitHub\\projectsdeliled\\Android Studio Apps\\DELITECH\\Application\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v11\\values-v11.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Utilisateur\\Desktop\\DELITECH\\Application\\src\\main\\res\\values-v11\\template-styles.xml",
+                    "source": "C:\\Users\\Utilisateur\\Documents\\GitHub\\projectsdeliled\\Android Studio Apps\\DELITECH\\Application\\src\\main\\res\\values-v11\\template-styles.xml",
                     "from": {
                         "startLines": "9",
                         "startColumns": "4",
