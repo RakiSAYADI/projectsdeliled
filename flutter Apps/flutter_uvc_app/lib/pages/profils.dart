@@ -82,18 +82,11 @@ class _ProfilesState extends State<Profiles> {
     profilesClassData = profilesClassData.isNotEmpty ? profilesClassData : ModalRoute.of(context).settings.arguments;
     myDevice = profilesClassData['myDevice'];
     dataRobotUVC = profilesClassData['dataRead'];
-    print(dataRobotUVC);
     if (dataRobotUVC == null) {
       dataRobotUVC = '{\"Company\":\"Votre entreprise\",\"UserName\":\"Utilisateur\",\"Detection\":0,\"RoomName\":\"Chambre 1\",\"TimeData\":[0,0]}';
     }
 
     Map<String, dynamic> user = jsonDecode(dataRobotUVC);
-
-    print('company : ${user['Company']}!');
-    print('username : ${user['UserName']}!');
-    print('detection : ${user['Detection']}!');
-    print('roomname : ${user['RoomName']}!');
-    print('timedata : ${user['TimeData']}!');
 
     String timeDataList = user['TimeData'].toString();
 
