@@ -170,6 +170,7 @@ class _SettingsState extends State<Settings> {
                         setState(() {
                           myExtinctionTimeMinuteData = data;
                           myExtinctionTimeMinutePosition = myExtinctionTimeMinute.indexOf(data);
+                          print(myExtinctionTimeMinutePosition);
                         });
                       },
                       items: myExtinctionTimeMinute.map<DropdownMenuItem<String>>((String value) {
@@ -215,6 +216,7 @@ class _SettingsState extends State<Settings> {
   Future<void> alertSecurity(BuildContext context) async {
     myUvcLight.setInfectionTime(myExtinctionTimeMinuteData);
     myUvcLight.setActivationTime(myActivationTimeMinuteData);
+    print('{\"data\":[\"${myUvcLight.getCompanyName()}\",\"${myUvcLight.getOperatorName()}\",\"${myUvcLight.getRoomName()}\",$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition]}');
     if (Platform.isIOS) {
       await myDevice.writeCharacteristic(0, 0,
           '{\"data\":[\"${myUvcLight.getCompanyName()}\",\"${myUvcLight.getOperatorName()}\",\"${myUvcLight.getRoomName()}\",$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition]}');
