@@ -315,12 +315,14 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                 // stop scanning and start connecting
                 await myDevice.connect(false);
                 Future.delayed(const Duration(seconds: 2), () async {
-                  // clear the remaining toast message
-                  myUvcToast.clearAllToast();
+                  // Stop uvc treatment if it's on
                   String message = 'STOP : ON';
                   await myDevice.writeCharacteristic(2, 0, message);
+                  // Read data from robot
                   await myDevice.readCharacteristic(2, 0);
+                  // clear the remaining toast message
                   Navigator.of(context).pop();
+                  myUvcToast.clearAllToast();
                   Navigator.pushNamed(context, '/profiles', arguments: {
                     'myDevice': myDevice,
                     'dataRead': myDevice.getReadCharMessage(),

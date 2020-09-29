@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutteruvcapp/services/bleDeviceClass.dart';
@@ -174,11 +172,13 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                       // stop scanning and start connecting
                       await myDevice.connect(false);
                       Future.delayed(const Duration(seconds: 2), () async {
-                        // clear the remaining toast message
-                        myUvcToast.clearAllToast();
+                        // Stop uvc treatment if it's on
                         String message = 'STOP : ON';
                         await myDevice.writeCharacteristic(0, 0, message);
+                        // Read data from robot
                         await myDevice.readCharacteristic(0, 0);
+                        // clear the remaining toast message
+                        myUvcToast.clearAllToast();
                         flutterBlue.stopScan();
                         startScan(context);
                       });
