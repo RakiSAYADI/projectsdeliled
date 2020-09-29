@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
@@ -222,119 +221,6 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
       },
     );
   }
-
-/*  Future<void> settingsWidget(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-
-    final myOldPinCode = TextEditingController();
-    final myNewPinCode = TextEditingController();
-
-    return showDialog<bool>(
-      barrierDismissible: false,
-      context: context,
-      builder: (c) => AlertDialog(
-        title: Text(
-          'Paramètres',
-          style: TextStyle(fontSize: (MediaQuery.of(context).size.width * 0.02)),
-        ),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Entrer l\'ancien code de sécurité: ',
-                    style: TextStyle(fontSize: (MediaQuery.of(context).size.width * 0.02)),
-                  ),
-                  SizedBox(height: screenHeight * 0.005),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: (MediaQuery.of(context).size.width * 0.02)),
-                    child: TextField(
-                      textAlign: TextAlign.center,
-                      controller: myOldPinCode,
-                      maxLines: 1,
-                      maxLength: 4,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                      ],
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          hintText: '',
-                          hintStyle: TextStyle(
-                            color: Colors.grey,
-                          )),
-                    ),
-                  ),
-                  SizedBox(height: screenHeight * 0.05),
-                  Text(
-                    'Entrer le nouveau code de sécurité : ',
-                    style: TextStyle(fontSize: (MediaQuery.of(context).size.width * 0.02)),
-                  ),
-                  SizedBox(height: screenHeight * 0.005),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: (MediaQuery.of(context).size.width * 0.02)),
-                    child: TextField(
-                      textAlign: TextAlign.center,
-                      controller: myNewPinCode,
-                      maxLines: 1,
-                      maxLength: 4,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                      ],
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          hintText: '',
-                          hintStyle: TextStyle(
-                            color: Colors.grey,
-                          )),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          FlatButton(
-            child: Text('Changer'),
-            onPressed: () async {
-              if ((myOldPinCode.text.length == 0 || myOldPinCode.text.length < 4) ||
-                  ((myNewPinCode.text.length == 0 || myNewPinCode.text.length < 4))) {
-                myUvcToast.setToastDuration(2);
-                myUvcToast.setToastMessage('Veuillez remplir les champs ci-dessus !');
-                myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-              } else {
-                if (myOldPinCode.text == pinCodeAccess) {
-                  _saveToFile(myNewPinCode.text);
-                  myUvcToast.setToastDuration(2);
-                  myUvcToast.setToastMessage('Code de sécurité modifié !');
-                  myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
-                  myOldPinCode.text = '';
-                  myNewPinCode.text = '';
-                  Navigator.pop(c, true);
-                } else {
-                  myUvcToast.setToastDuration(2);
-                  myUvcToast.setToastMessage('L\'ancien code de sécurité ne correspond pas !');
-                  myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-                }
-              }
-            },
-          ),
-          FlatButton(
-            child: Text('Annuler'),
-            onPressed: () {
-              myOldPinCode.text = '';
-              myNewPinCode.text = '';
-              Navigator.pop(c, false);
-            },
-          ),
-        ],
-      ),
-    );
-  }*/
 
   FlatButton buttonNumbers(String number, BuildContext context) {
     return FlatButton(

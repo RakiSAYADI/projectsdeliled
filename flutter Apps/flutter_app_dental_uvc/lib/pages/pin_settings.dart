@@ -28,6 +28,14 @@ class _PinSettingsState extends State<PinSettings> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    myOldPinCode.dispose();
+    myNewPinCode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     pinSettingsData = pinSettingsData.isNotEmpty ? pinSettingsData : ModalRoute.of(context).settings.arguments;
     pinCodeAccess = pinSettingsData['pinCodeAccess'];
