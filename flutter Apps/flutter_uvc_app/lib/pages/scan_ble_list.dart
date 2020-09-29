@@ -177,11 +177,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                         // clear the remaining toast message
                         myUvcToast.clearAllToast();
                         String message = 'STOP : ON';
-                        if (Platform.isIOS) {
-                          await myDevice.writeCharacteristic(0, 0, message);
-                        } else {
-                          await myDevice.writeCharacteristic(2, 0, message);
-                        }
+                        await myDevice.writeCharacteristic(0, 0, message);
                         await myDevice.readCharacteristic(0, 0);
                         flutterBlue.stopScan();
                         startScan(context);

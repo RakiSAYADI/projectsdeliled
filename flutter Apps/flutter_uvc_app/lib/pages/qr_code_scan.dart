@@ -318,11 +318,8 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                   // clear the remaining toast message
                   myUvcToast.clearAllToast();
                   String message = 'STOP : ON';
-                  if (Platform.isIOS) {
-                    await myDevice.writeCharacteristic(0, 0, message);
-                  } else {
-                    await myDevice.writeCharacteristic(2, 0, message);
-                  }
+                  await myDevice.writeCharacteristic(2, 0, message);
+                  await myDevice.readCharacteristic(2, 0);
                   Navigator.of(context).pop();
                   Navigator.pushNamed(context, '/profiles', arguments: {
                     'myDevice': myDevice,
