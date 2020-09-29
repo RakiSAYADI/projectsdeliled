@@ -1,4 +1,4 @@
-# flutterdmxapp
+# flutter_uvc_app
 
 A Flutter Application to control the UVC Robot.
 

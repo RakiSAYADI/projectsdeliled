@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Utilisateur\\Desktop\\DELITECH\\Application\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+            "outputFile": "C:\\Users\\Utilisateur\\Documents\\GitHub\\projectsdeliled\\Android Studio Apps\\DELITECH\\Application\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-sw600dp-v13\\values-sw600dp-v13.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Utilisateur\\.gradle\\caches\\transforms-2\\files-2.1\\d776e52f087aabc381b0b4907fc988e8\\material-1.2.0\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
@@ -33,7 +33,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Utilisateur\\Desktop\\DELITECH\\Application\\src\\main\\res\\values-sw600dp\\template-styles.xml",
+                    "source": "C:\\Users\\Utilisateur\\Documents\\GitHub\\projectsdeliled\\Android Studio Apps\\DELITECH\\Application\\src\\main\\res\\values-sw600dp\\template-styles.xml",
                     "from": {
                         "startLines": "3",
                         "startColumns": "4",
@@ -52,7 +52,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Utilisateur\\Desktop\\DELITECH\\Application\\src\\main\\res\\values-sw600dp\\template-dimens.xml",
+                    "source": "C:\\Users\\Utilisateur\\Documents\\GitHub\\projectsdeliled\\Android Studio Apps\\DELITECH\\Application\\src\\main\\res\\values-sw600dp\\template-dimens.xml",
                     "from": {
                         "startLines": "5,6",
                         "startColumns": "4,4",

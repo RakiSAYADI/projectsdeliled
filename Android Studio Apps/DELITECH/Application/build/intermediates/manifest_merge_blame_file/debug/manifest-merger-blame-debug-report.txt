@@ -6,179 +6,178 @@
 6
 7    <uses-sdk
 8        android:minSdkVersion="23"
-8-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml
+8-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml
 9        android:targetSdkVersion="30" />
-9-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml
+9-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml
 10
 11    <uses-permission android:name="android.permission.BLUETOOTH" />
-11-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:9:5-68
-11-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:9:22-65
+11-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:9:5-68
+11-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:9:22-65
 12    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-12-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:10:5-74
-12-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:10:22-71
+12-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:10:5-74
+12-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:10:22-71
 13    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-13-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:11:5-76
-13-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:11:22-73
+13-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:11:5-76
+13-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:11:22-73
 14    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-14-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:12:5-81
-14-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:12:22-78
+14-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:12:5-81
+14-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:12:22-78
 15    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-15-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:13:5-79
-15-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:13:22-76
+15-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:13:5-79
+15-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:13:22-76
 16    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-16-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:14:5-76
-16-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:14:22-73
+16-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:14:5-76
+16-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:14:22-73
 17    <uses-permission android:name="android.permission.VIBRATE" />
-17-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:15:5-66
-17-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:15:22-63
+17-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:15:5-66
+17-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:15:22-63
 18    <uses-permission android:name="android.permission.CAMERA" />
-18-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:16:5-65
-18-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:16:22-62
+18-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:16:5-65
+18-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:16:22-62
 19    <uses-permission android:name="android.permission.INTERNET" />
-19-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:17:5-67
-19-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:17:22-64
+19-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:17:5-67
+19-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:17:22-64
 20    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-20-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:18:5-79
-20-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:18:22-76
+20-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:18:5-79
+20-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:18:22-76
 21    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-21-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:19:5-78
-21-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:19:22-75
+21-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:19:5-78
+21-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:19:22-75
 22
 23    <application
-23-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:21:5-78:19
+23-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:21:5-78:19
 24        android:allowBackup="true"
-24-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:22:9-35
+24-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:22:9-35
 25        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 25-->[androidx.core:core:1.3.1] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\ae3468b444d41a56f261ecbb8448fe17\core-1.3.1\AndroidManifest.xml:24:18-86
 26        android:debuggable="true"
 27        android:extractNativeLibs="false"
 28        android:fullBackupContent="true"
-28-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:23:9-41
+28-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:23:9-41
 29        android:icon="@drawable/ic_launcher"
-29-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:24:9-45
+29-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:24:9-45
 30        android:label="@string/app_name"
-30-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:25:9-41
+30-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:25:9-41
 31        android:supportsRtl="true"
 31-->[com.github.rtugeek:colorseekbar:1.7.3] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\fcf125695a0cfb20918b035f502db17b\jetified-colorseekbar-1.7.3\AndroidManifest.xml:14:9-35
-32        android:testOnly="true"
-33        android:theme="@android:style/Theme.Holo.Light" >
-33-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:26:9-56
-34        <activity
-34-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:27:9-30:56
-35            android:name="deliled.Applications.android.Maestro.MainActivity"
-35-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:28:13-41
-36            android:screenOrientation="portrait"
-36-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:29:13-49
-37            android:theme="@style/MyTheme_appcompat" />
-37-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:30:13-53
-38        <activity
-38-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:31:9-41:20
-39            android:name="deliled.Applications.android.Maestro.welcome"
-39-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:32:13-72
-40            android:label="@string/app_name"
-40-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:33:13-45
-41            android:screenOrientation="portrait"
-41-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:34:13-49
-42            android:theme="@style/AppFullScreenTheme" >
-42-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:35:13-54
-43            <intent-filter>
-43-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:36:13-40:29
-44                <action android:name="android.intent.action.MAIN" />
-44-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:37:17-69
-44-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:37:25-66
-45
-46                <category android:name="android.intent.category.LAUNCHER" />
-46-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:39:17-77
-46-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:39:27-74
-47            </intent-filter>
-48        </activity>
-49        <activity
-49-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:42:9-45:46
-50            android:name="deliled.Applications.android.Maestro.cycle_circa"
-50-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:43:13-76
-51            android:screenOrientation="portrait"
-51-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:44:13-49
-52            android:theme="@style/MyTheme" />
-52-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:45:13-43
-53        <activity
-53-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:46:9-49:46
-54            android:name="deliled.Applications.android.Maestro.veille_detections"
-54-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:47:13-82
-55            android:screenOrientation="portrait"
-55-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:48:13-49
-56            android:theme="@style/MyTheme" />
-56-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:49:13-43
-57        <activity
-57-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:50:9-53:46
-58            android:name="deliled.Applications.android.Maestro.ajustement_luminosite"
-58-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:51:13-86
-59            android:screenOrientation="portrait"
-59-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:52:13-49
-60            android:theme="@style/MyTheme" />
-60-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:53:13-43
-61        <activity
-61-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:54:9-56:52
-62            android:name="deliled.Applications.android.Maestro.DeviceScanActivity"
-62-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:55:13-83
-63            android:screenOrientation="portrait" />
-63-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:56:13-49
-64        <activity
-64-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:57:9-60:46
-65            android:name="deliled.Applications.android.Maestro.serveur_access"
-65-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:58:13-79
-66            android:screenOrientation="portrait"
-66-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:59:13-49
-67            android:theme="@style/MyTheme" />
-67-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:60:13-43
-68        <activity
-68-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:61:9-64:46
-69            android:name="deliled.Applications.android.Maestro.QR_CODE"
-69-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:62:13-72
-70            android:screenOrientation="portrait"
-70-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:63:13-49
-71            android:theme="@style/MyTheme" />
-71-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:64:13-43
-72        <activity
-72-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:65:9-69:46
-73            android:name="deliled.Applications.android.Maestro.co2"
-73-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:66:13-68
-74            android:configChanges="orientation"
-74-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:67:13-48
-75            android:screenOrientation="portrait"
-75-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:68:13-49
-76            android:theme="@style/MyTheme" />
-76-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:69:13-43
-77
-78        <service
-78-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:71:9-73:38
-79            android:name="deliled.Applications.android.Maestro.BluetoothLeService"
-79-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:72:13-83
-80            android:enabled="true" />
-80-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:73:13-35
-81        <service
-81-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:74:9-77:40
-82            android:name="deliled.Applications.android.Maestro.FloatingWidgetService"
-82-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:75:13-86
-83            android:enabled="true"
-83-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:76:13-35
-84            android:exported="false" />
-84-->C:\Users\Utilisateur\Desktop\DELITECH\Application\src\main\AndroidManifest.xml:77:13-37
-85
-86        <activity
-86-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\a1794986c7a3c4986f9feb2359005476\jetified-play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
-87            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-87-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\a1794986c7a3c4986f9feb2359005476\jetified-play-services-base-17.0.0\AndroidManifest.xml:24:13-79
-88            android:exported="false"
-88-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\a1794986c7a3c4986f9feb2359005476\jetified-play-services-base-17.0.0\AndroidManifest.xml:25:13-37
-89            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-89-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\a1794986c7a3c4986f9feb2359005476\jetified-play-services-base-17.0.0\AndroidManifest.xml:26:13-72
-90
-91        <meta-data
-91-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\294cc5ecc9001f3e94c034cd71f64fdf\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
-92            android:name="com.google.android.gms.version"
-92-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\294cc5ecc9001f3e94c034cd71f64fdf\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
-93            android:value="@integer/google_play_services_version" />
-93-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\294cc5ecc9001f3e94c034cd71f64fdf\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
-94    </application>
-95
-96</manifest>
+32        android:theme="@android:style/Theme.Holo.Light" >
+32-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:26:9-56
+33        <activity
+33-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:27:9-30:56
+34            android:name="deliled.Applications.android.Maestro.MainActivity"
+34-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:28:13-41
+35            android:screenOrientation="portrait"
+35-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:29:13-49
+36            android:theme="@style/MyTheme_appcompat" />
+36-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:30:13-53
+37        <activity
+37-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:31:9-41:20
+38            android:name="deliled.Applications.android.Maestro.welcome"
+38-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:32:13-72
+39            android:label="@string/app_name"
+39-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:33:13-45
+40            android:screenOrientation="portrait"
+40-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:34:13-49
+41            android:theme="@style/AppFullScreenTheme" >
+41-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:35:13-54
+42            <intent-filter>
+42-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:36:13-40:29
+43                <action android:name="android.intent.action.MAIN" />
+43-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:37:17-69
+43-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:37:25-66
+44
+45                <category android:name="android.intent.category.LAUNCHER" />
+45-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:39:17-77
+45-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:39:27-74
+46            </intent-filter>
+47        </activity>
+48        <activity
+48-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:42:9-45:46
+49            android:name="deliled.Applications.android.Maestro.cycle_circa"
+49-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:43:13-76
+50            android:screenOrientation="portrait"
+50-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:44:13-49
+51            android:theme="@style/MyTheme" />
+51-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:45:13-43
+52        <activity
+52-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:46:9-49:46
+53            android:name="deliled.Applications.android.Maestro.veille_detections"
+53-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:47:13-82
+54            android:screenOrientation="portrait"
+54-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:48:13-49
+55            android:theme="@style/MyTheme" />
+55-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:49:13-43
+56        <activity
+56-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:50:9-53:46
+57            android:name="deliled.Applications.android.Maestro.ajustement_luminosite"
+57-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:51:13-86
+58            android:screenOrientation="portrait"
+58-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:52:13-49
+59            android:theme="@style/MyTheme" />
+59-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:53:13-43
+60        <activity
+60-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:54:9-56:52
+61            android:name="deliled.Applications.android.Maestro.DeviceScanActivity"
+61-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:55:13-83
+62            android:screenOrientation="portrait" />
+62-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:56:13-49
+63        <activity
+63-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:57:9-60:46
+64            android:name="deliled.Applications.android.Maestro.serveur_access"
+64-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:58:13-79
+65            android:screenOrientation="portrait"
+65-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:59:13-49
+66            android:theme="@style/MyTheme" />
+66-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:60:13-43
+67        <activity
+67-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:61:9-64:46
+68            android:name="deliled.Applications.android.Maestro.QR_CODE"
+68-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:62:13-72
+69            android:screenOrientation="portrait"
+69-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:63:13-49
+70            android:theme="@style/MyTheme" />
+70-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:64:13-43
+71        <activity
+71-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:65:9-69:46
+72            android:name="deliled.Applications.android.Maestro.co2"
+72-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:66:13-68
+73            android:configChanges="orientation"
+73-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:67:13-48
+74            android:screenOrientation="portrait"
+74-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:68:13-49
+75            android:theme="@style/MyTheme" />
+75-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:69:13-43
+76
+77        <service
+77-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:71:9-73:38
+78            android:name="deliled.Applications.android.Maestro.BluetoothLeService"
+78-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:72:13-83
+79            android:enabled="true" />
+79-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:73:13-35
+80        <service
+80-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:74:9-77:40
+81            android:name="deliled.Applications.android.Maestro.FloatingWidgetService"
+81-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:75:13-86
+82            android:enabled="true"
+82-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:76:13-35
+83            android:exported="false" />
+83-->C:\Users\Utilisateur\Documents\GitHub\projectsdeliled\Android Studio Apps\DELITECH\Application\src\main\AndroidManifest.xml:77:13-37
+84
+85        <activity
+85-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\a1794986c7a3c4986f9feb2359005476\jetified-play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
+86            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+86-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\a1794986c7a3c4986f9feb2359005476\jetified-play-services-base-17.0.0\AndroidManifest.xml:24:13-79
+87            android:exported="false"
+87-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\a1794986c7a3c4986f9feb2359005476\jetified-play-services-base-17.0.0\AndroidManifest.xml:25:13-37
+88            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+88-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\a1794986c7a3c4986f9feb2359005476\jetified-play-services-base-17.0.0\AndroidManifest.xml:26:13-72
+89
+90        <meta-data
+90-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\294cc5ecc9001f3e94c034cd71f64fdf\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
+91            android:name="com.google.android.gms.version"
+91-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\294cc5ecc9001f3e94c034cd71f64fdf\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
+92            android:value="@integer/google_play_services_version" />
+92-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Utilisateur\.gradle\caches\transforms-2\files-2.1\294cc5ecc9001f3e94c034cd71f64fdf\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
+93    </application>
+94
+95</manifest>
