@@ -11,8 +11,6 @@
   <component name="ChangeListManager">
     <list default="true" id="5ee4e1b8-c737-4975-a0d5-815f1ccc2e3f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/lib/pages/pin_access.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/lib/pages/pin_access.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
