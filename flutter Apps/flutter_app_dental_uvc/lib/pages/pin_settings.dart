@@ -156,6 +156,7 @@ class _PinSettingsState extends State<PinSettings> {
       ),
     );
   }
+  
   _saveToFile(String pinCode) async {
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/my_pin_code.txt');
