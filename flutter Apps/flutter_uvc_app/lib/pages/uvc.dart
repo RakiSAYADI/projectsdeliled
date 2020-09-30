@@ -89,6 +89,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
         myDevice.disconnect();
         Navigator.pushNamedAndRemoveUntil(context, "/bluetooth_activation", (r) => false);
+        break;
       }
       if (treatmentIsOnProgress) {
         if (Platform.isIOS) {
@@ -125,8 +126,6 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     myUvcLight = uvcClassData['uvclight'];
     myDevice = uvcClassData['myDevice'];
 
-    readingCharacteristic();
-
     durationOfDisinfect = Duration(seconds: myUvcLight.getActivationTime());
     if (myUvcLight.infectionTime.contains('sec')) {
       durationOfActivate = Duration(seconds: myUvcLight.getActivationTime() + myUvcLight.getInfectionTime());
@@ -139,6 +138,8 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
       controllerAnimationTimeBackground.duration = Duration(seconds: myUvcLight.getActivationTime());
 
       controllerAnimationTimeBackground.reverse(from: controllerAnimationTimeBackground.value == 0.0 ? 1.0 : controllerAnimationTimeBackground.value);
+
+      readingCharacteristic();
     }
 
     double screenWidth = MediaQuery.of(context).size.width;

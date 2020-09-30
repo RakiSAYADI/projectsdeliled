@@ -1,0 +1,59 @@
+<resources>
+    <string name="app_name">DeepLight</string>
+    <string name="code_security">Entrer le code de sécurité :</string>
+    <string name="info_1">Merci de scanner le QR-CODE pour vous connecter au boitier</string>
+    <string name="qr_code">QR code</string>
+    <string name="pin_button">OK</string>
+    <string name="validate">Valider</string>
+    <string name="decline">Annuler</string>
+    <string name="etablissement">Établissement : </string>
+    <string name="operatername">Nom de l\'opérateur : </string>
+    <string name="chambrename">Nom de la pièce : </string>
+    <string name="disinfectiontime">Temps de désinfection : </string>
+    <string name="delayactivation">Délais d\'activation : </string>
+    <string name="attention_1">Attention seul un opérateur agréé et habilité peut utiliser ce dispositif </string>
+    <string name="information_1">La désinfection débute dans :</string>
+    <string name="information_2">La désinfection finira dans :</string>
+    <string name="seconds">Secondes</string>
+    <string name="minutes">Minutes</string>
+    <string-array name="disinfectiontimeminutes">
+        <item>5 min</item>
+        <item>10 min</item>
+        <item>15 min</item>
+        <item>20 min</item>
+        <item>25 min</item>
+        <item>30 min</item>
+        <item>35 min</item>
+        <item>40 min</item>
+        <item>45 min</item>
+        <item>50 min</item>
+        <item>55 min</item>
+        <item>60 min</item>
+        <item>65 min</item>
+        <item>70 min</item>
+        <item>75 min</item>
+        <item>80 min</item>
+        <item>85 min</item>
+        <item>90 min</item>
+        <item>95 min</item>
+        <item>100 min</item>
+        <item>105 min</item>
+        <item>110 min</item>
+        <item>115 min</item>
+        <item>120 min</item>
+    </string-array>
+    <string-array name="delayactivationsecondes">
+        <item>10 sec</item>
+        <item>20 sec</item>
+        <item>30 sec</item>
+        <item>40 sec</item>
+        <item>50 sec</item>
+        <item>60 sec</item>
+        <item>70 sec</item>
+        <item>80 sec</item>
+        <item>90 sec</item>
+        <item>100 sec</item>
+        <item>110 sec</item>
+        <item>120 sec</item>
+    </string-array>
+</resources>

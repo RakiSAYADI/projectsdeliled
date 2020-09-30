@@ -111,7 +111,7 @@ class _ProfilesState extends State<Profiles> {
           title: const Text('Profil'),
           centerTitle: true,
           actions: [
-            settingsControl(context),
+            //settingsControl(context),
           ],
         ),
         body: Container(
