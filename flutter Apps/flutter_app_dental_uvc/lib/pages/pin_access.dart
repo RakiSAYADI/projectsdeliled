@@ -66,7 +66,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     myUvcToast = ToastyMessage(toastContext: context);
     //checks bluetooth current state
     Future.delayed(const Duration(seconds: 1), () async {
-      pinCodeAccess = await _readFromFile();
+      pinCodeAccess = await _readPINFile();
       flutterBlue.state.listen((state) {
         if (state == BluetoothState.off) {
           //Alert user to turn on bluetooth.
@@ -250,7 +250,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     );
   }
 
-  Future<String> _readFromFile() async {
+  Future<String> _readPINFile() async {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final file = File('${directory.path}/my_pin_code.txt');
@@ -259,12 +259,12 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
       return text;
     } catch (e) {
       print("Couldn't read file");
-      _saveToFile('1234');
+      _savePINFile('1234');
       return '1234';
     }
   }
 
-  _saveToFile(String pinCode) async {
+  _savePINFile(String pinCode) async {
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/my_pin_code.txt');
     await file.writeAsString(pinCode);
@@ -279,7 +279,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   }
 
   void _showSnackBar(String pin, BuildContext context) async {
-    pinCodeAccess = await _readFromFile();
+    pinCodeAccess = await _readPINFile();
     String messagePin;
     Color messageColor;
     if (pin == pinCodeAccess && pin.isNotEmpty) {
