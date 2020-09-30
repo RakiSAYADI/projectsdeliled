@@ -26,6 +26,9 @@ int app_main(void) {
 
 	ESP_ERROR_CHECK(nvs_flash_init());
 
+	// Initialize Base Mac Address.
+	//BaseMacInit();
+
 	// Initialize GPIOs.
 	LedStatInit();
 
@@ -34,15 +37,8 @@ int app_main(void) {
 		return -1;
 	}
 
-	//Intialize WIFI NETWORK for the server
-	//wifiConnectionServer();
-
 	//Intialize WIFI NETWORK for the client
 	wifiConnectionClient();
-
-
-	// Initiate Bluetooth services (only for SERVER).
-	//bt_main();
 
 	return 0;
 }

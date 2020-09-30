@@ -7,11 +7,13 @@
 
 void LedStatInit();
 void wifiConnectionClient();
+void BaseMacInit();
 
-int set_relay_state(int relay, uint32_t level);
 int cntrl_states[4];
-void generate_json();
 char *json_unformatted;
+void generate_json();
+void CheckingPressence(void *pvParameters);
+int set_relay_state(int relay, uint32_t level);
 
 #define delay(ms) (vTaskDelay(ms/portTICK_RATE_MS))
 

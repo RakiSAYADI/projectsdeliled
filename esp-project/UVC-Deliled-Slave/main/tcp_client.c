@@ -79,7 +79,6 @@ esp_err_t event_handler_client(void *ctx, system_event_t *event) {
 
 		break;
 	case SYSTEM_EVENT_STA_DISCONNECTED: {
-		esp_wifi_connect();
 		xEventGroupClearBits(wifi_event_group_client, CONNECTED_BIT_CLIENT);
 		ESP_LOGI(TCP_CLIENT_TAG, "retry to connect to the AP");
 
@@ -89,7 +88,7 @@ esp_err_t event_handler_client(void *ctx, system_event_t *event) {
 
 		vTaskDelete(xSlaveTask);
 
-		//
+		esp_wifi_connect();
 
 		if (UVTreatementIsOn) {
 			stopIsPressed = true;
@@ -104,16 +103,50 @@ esp_err_t event_handler_client(void *ctx, system_event_t *event) {
 
 #include "driver/gpio.h"
 
+struct sockaddr_in dest_addr;
+
 char addr_str[128];
 int addr_family;
 int ip_protocol;
 int sock;
 
+void CheckingPressence(void *pvParameters) {
+	while (1) {
+		if (UVTreatementIsOn) {
+
+			if (detectionTriggered) {
+				char* UVDetection;
+
+				UVDetection = malloc(50);
+
+				memset(UVDetection, 0, 50);
+
+				sprintf(UVDetection, "Detection : 1");
+
+				int err = sendto(sock, UVDetection, strlen(UVDetection), 0,
+						(struct sockaddr * )&dest_addr, sizeof(dest_addr));
+				if (err < 0) {
+					ESP_LOGE(TCP_CLIENT_TAG,
+							"Error occurred during sending: errno %d", errno);
+					free(UVDetection);
+					break;
+				}
+				ESP_LOGI(TCP_CLIENT_TAG, "Sending Successful");
+				free(UVDetection);
+				break;
+			}
+		}else{
+			break;
+		}
+		delay(100);
+	}
+	vTaskDelete(NULL);
+}
+
 void udp_client_task(void *pvParameters) {
 
 	while (1) {
 
-		struct sockaddr_in dest_addr;
 		dest_addr.sin_addr.s_addr = inet_addr(TCP_SERVER);
 		dest_addr.sin_family = AF_INET;
 		dest_addr.sin_port = htons(TCP_PORT);
@@ -130,17 +163,17 @@ void udp_client_task(void *pvParameters) {
 		ESP_LOGI(TCP_CLIENT_TAG, "Socket created, sending to %s:%d", TCP_SERVER,
 				TCP_PORT);
 
-		struct timeval receiving_timeout;
-		receiving_timeout.tv_sec = 1;
-		receiving_timeout.tv_usec = 0;
-		if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &receiving_timeout,
-				sizeof(receiving_timeout)) < 0) {
-			ESP_LOGE(TCP_CLIENT_TAG,
-					"... failed to set socket receiving timeout");
-			goto OUT;
-		}
-
-		ESP_LOGI(TCP_CLIENT_TAG, "Timeout Successful");
+//		struct timeval receiving_timeout;
+//		receiving_timeout.tv_sec = 1;
+//		receiving_timeout.tv_usec = 0;
+//		if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &receiving_timeout,
+//				sizeof(receiving_timeout)) < 0) {
+//			ESP_LOGE(TCP_CLIENT_TAG,
+//					"... failed to set socket receiving timeout");
+//			goto OUT;
+//		}
+//
+//		ESP_LOGI(TCP_CLIENT_TAG, "Timeout Successful");
 
 		char rx_buffer[128];
 
@@ -185,7 +218,6 @@ void udp_client_task(void *pvParameters) {
 						xTaskCreate(&UVCTreatement, "UVCTreatement",
 						configMINIMAL_STACK_SIZE * 3, NULL, 5,
 						NULL);
-
 					}
 					if (strContains(rx_buffer, "DisinfictionTime") == 1) {
 						cJSON *messageJson, *DisinfictionTimeData,
@@ -203,30 +235,6 @@ void udp_client_task(void *pvParameters) {
 					if (strContains(rx_buffer, "STOP UVC") == 1) {
 						stopIsPressed = true;
 					}
-				}
-
-				if (UVTreatementIsOn) {
-
-					char* UVDetection;
-
-					UVDetection = malloc(50);
-
-					memset(UVDetection, 0, 50);
-
-					sprintf(UVDetection, "Detection : %d",
-							gpio_get_level(GPIO_NUM_16));
-
-					int err = sendto(sock, UVDetection, strlen(UVDetection), 0,
-							(struct sockaddr * )&dest_addr, sizeof(dest_addr));
-					if (err < 0) {
-						ESP_LOGE(TCP_CLIENT_TAG,
-								"Error occurred during sending: errno %d",
-								errno);
-						free(UVDetection);
-						goto Exit;
-					}
-					ESP_LOGI(TCP_CLIENT_TAG, "Sending Successful");
-					free(UVDetection);
 				}
 
 				Exit:

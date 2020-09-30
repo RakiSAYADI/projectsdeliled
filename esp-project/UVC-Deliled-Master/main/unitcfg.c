@@ -143,7 +143,7 @@ void Default_saving() {
 //
 //	sprintf(UnitCfg.UnitName, "UVCROBOT-%02X:%02X:%02X", mac[3], mac[4],
 //			mac[5]);
-	sprintf(UnitCfg.UnitName, "DEEPLIGHT-A021");
+	sprintf(UnitCfg.UnitName, "DEEPLIGHT-C004");
 	sprintf(UnitCfg.Company, "Deliled");
 	sprintf(UnitCfg.OperatorName, "ROBOT-D001");
 	sprintf(UnitCfg.RoomName, "Room 1");

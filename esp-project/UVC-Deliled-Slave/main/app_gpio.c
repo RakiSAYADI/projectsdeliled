@@ -252,7 +252,6 @@ void StopUVTreatement() {
 	phaseTime *= 1000;
 	set_relay_state(UVRelay, RelayStateOFF);
 	set_relay_state(GreenLightRelay, RelayStateOFF);
-	UVTreatementIsOn = false;
 	while (phaseTime > 0) {
 		redLightEnable = true;
 		buzzerEnable = true;
@@ -264,8 +263,8 @@ void StopUVTreatement() {
 	buzzerEnable = false;
 	stopIsPressed = false;
 	delay(500);
+	UVTreatementIsOn = false;
 	set_relay_state(RedLightRelay, RelayStateON);
-	UVTaskIsOn = false;
 
 }
 
@@ -294,12 +293,14 @@ void UVCTreatement() {
 		set_relay_state(UVRelay, RelayStateOFF);
 		delay(100);
 		set_relay_state(RedLightRelay, RelayStateON);
-		UVTaskIsOn = false;
 		vTaskDelete(NULL);
 	}
 	UVTreatementIsOn = true;
 	ESP_LOGI(GPIO_TAG, "CHECKING the PIR Sensor !");
 	delay(100);
+	xTaskCreate(&CheckingPressence, "CheckingPressence",
+	configMINIMAL_STACK_SIZE * 3, NULL, 5,
+	NULL);
 	if (detectionTriggered) {
 		StopUVTreatement();
 		vTaskDelete(NULL);
@@ -327,14 +328,12 @@ void UVCTreatement() {
 				set_relay_state(GreenLightRelay, RelayStateOFF);
 				delay(100);
 				set_relay_state(RedLightRelay, RelayStateON);
-				UVTaskIsOn = false;
 				break;
 			}
 		}
 	}
 	set_relay_state(UVRelay, RelayStateOFF);
 	UVTreatementIsOn = false;
-	UVTaskIsOn = false;
 	vTaskDelete(NULL);
 }
 
@@ -366,9 +365,6 @@ uint8_t strContains(char* string, char* toFind) {
 }
 
 void LedStatusTask() {
-
-	UVTaskIsOn = false;
-	stopEventTrigerred = false;
 
 	detectionTriggered = false;
 	stopIsPressed = false;

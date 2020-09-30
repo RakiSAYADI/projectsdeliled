@@ -75,7 +75,7 @@ esp_err_t event_handler_server(void *ctx, system_event_t *event) {
 
 struct sockaddr_in6 source_addr; // Large enough for both IPv4 or IPv6
 bool DetectionOnSlave = false;
-int slave_number = 0;
+int slave_number = 1;
 
 void SlaveTask(void *pvParameters) {
 	const int sock = (int) pvParameters;
@@ -91,7 +91,9 @@ void SlaveTask(void *pvParameters) {
 
 			stopIsPressed = false;
 
-			delay(1000);
+			delay(slaveid * 100);
+
+			ESP_LOGI(TCP_SERVER_TAG, "UVC order to %d", slaveid);
 
 			UVCData = malloc(100);
 
@@ -130,31 +132,44 @@ void SlaveTask(void *pvParameters) {
 		}
 
 		if (DetectionOnSlave) {
-
-			DetectionOnSlave = false;
-
 			stopIsPressed = true;
-
+			delay(slaveid * 100);
+			DetectionOnSlave = false;
 			detectionTriggered = true;
-
-			delay(1000);
-
+//			ESP_LOGI(TCP_SERVER_TAG, "Dectection slave order to %d", slaveid);
+//
+//			int err = sendto(sock, stopUVCOrdreSlave, strlen(stopUVCOrdreSlave),
+//					0, (struct sockaddr * )&source_addr, sizeof(source_addr));
+//
+//			if (err < 0) {
+//				ESP_LOGE(TCP_SERVER_TAG,
+//						"Error occurred during sending: errno %d", errno);
+//			}
+//			ESP_LOGI(TCP_SERVER_TAG, "Sending detection message Successful");
+			UVTaskIsOn = false;
+		}
+		if (detectionTriggered) {
+			delay(slaveid * 100);
+			detectionTriggered = false;
+			ESP_LOGI(TCP_SERVER_TAG, "STOP order to %d", slaveid);
 			int err = sendto(sock, stopUVCOrdreSlave, strlen(stopUVCOrdreSlave),
-					0, (struct sockaddr * )&source_addr, sizeof(source_addr));
+					0, (struct sockaddr * )&source_addr_slave,
+					sizeof(source_addr_slave));
 
 			if (err < 0) {
 				ESP_LOGE(TCP_SERVER_TAG,
 						"Error occurred during sending: errno %d", errno);
 			}
 			ESP_LOGI(TCP_SERVER_TAG, "Sending detection message Successful");
-			detectionTriggered = false;
 			UVTaskIsOn = false;
 		}
 
 		if (stopEventTrigerred) {
+			delay(slaveid * 100);
+			detectionTriggered = true;
 			stopEventTrigerred = false;
 			stopIsPressed = true;
-			delay(1000);
+			ESP_LOGI(TCP_SERVER_TAG, "STOP order to %d", slaveid);
 			int err = sendto(sock, stopUVCOrdreSlave, strlen(stopUVCOrdreSlave),
 					0, (struct sockaddr * )&source_addr_slave,
 					sizeof(source_addr_slave));
@@ -164,20 +179,8 @@ void SlaveTask(void *pvParameters) {
 						"Error occurred during sending: errno %d", errno);
 			}
 			ESP_LOGI(TCP_SERVER_TAG, "Sending stop message Successful");
-			UVTaskIsOn = false;
-		}
-		if (detectionTriggered) {
+			delay(1200);
 			detectionTriggered = false;
-			delay(1000);
-			int err = sendto(sock, stopUVCOrdreSlave, strlen(stopUVCOrdreSlave),
-					0, (struct sockaddr * )&source_addr_slave,
-					sizeof(source_addr_slave));
-
-			if (err < 0) {
-				ESP_LOGE(TCP_SERVER_TAG,
-						"Error occurred during sending: errno %d", errno);
-			}
-			ESP_LOGI(TCP_SERVER_TAG, "Sending detection message Successful");
 			UVTaskIsOn = false;
 		}
 
@@ -221,17 +224,17 @@ void udp_server_task(void *pvParameters) {
 		}
 		ESP_LOGI(TCP_SERVER_TAG, "Socket bound, port %d", PORT);
 
-		struct timeval receiving_timeout;
-		receiving_timeout.tv_sec = 2;
-		receiving_timeout.tv_usec = 0;
-		if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &receiving_timeout,
-				sizeof(receiving_timeout)) < 0) {
-			ESP_LOGE(TCP_SERVER_TAG,
-					"... failed to set socket receiving timeout");
-			goto OUT;
-		}
-
-		ESP_LOGI(TCP_SERVER_TAG, "Timeout Successful");
+//		struct timeval receiving_timeout;
+//		receiving_timeout.tv_sec = 5;
+//		receiving_timeout.tv_usec = 0;
+//		if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &receiving_timeout,
+//				sizeof(receiving_timeout)) < 0) {
+//			ESP_LOGE(TCP_SERVER_TAG,
+//					"... failed to set socket receiving timeout");
+//			goto OUT;
+//		}
+//
+//		ESP_LOGI(TCP_SERVER_TAG, "Timeout Successful");
 
 		char rx_buffer[128];
 
@@ -269,10 +272,10 @@ void udp_server_task(void *pvParameters) {
 						addr_str);
 				ESP_LOGI(TCP_SERVER_TAG, "%s", rx_buffer);
 				if (strContains(rx_buffer, "Detection : 1") == 1) {
-					DetectionOnSlave = true;
+					stopEventTrigerred = true;
 				}
 				if (strContains(rx_buffer, "Message from CLIENT") == 1) {
-					xTaskCreate(SlaveTask, "SlaveTask", 4096, (void*) sock, 5,
+					xTaskCreate(SlaveTask, "SlaveTask", 4096, (void*) sock, 1,
 					NULL);
 				} else {
 					ESP_LOGI(TCP_SERVER_TAG, "this is not the password");

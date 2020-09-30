@@ -37,16 +37,11 @@ int app_main(void) {
 		return -1;
 	}
 
-	//Default_saving();
-
 	// Initiate Bluetooth services (only for SERVER).
 	bt_main();
 
 	//Intialize WIFI NETWORK for the server
-	//wifiConnectionServer();
-
-	//Intialize WIFI NETWORK for the client
-	//wifiConnectionClient();
+	wifiConnectionServer();
 
 	return 0;
 }
