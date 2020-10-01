@@ -6,6 +6,8 @@ class DataCSVView extends StatefulWidget {
   _DataCSVViewState createState() => _DataCSVViewState();
 }
 
+List<List<String>> uvcData ;
+
 class _DataCSVViewState extends State<DataCSVView> {
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,7 @@ class _DataCSVViewState extends State<DataCSVView> {
             1: FixedColumnWidth(200.0),
           },
           border: TableBorder.all(width: 1.0),
-          children: data.map((item) {
+          children: uvcData.map((item) {
             return TableRow(
                 children: item.map((row) {
               return Container(
