@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
+import 'package:flutterappdentaluvc/services/uvcClass.dart';
 
 class EndUVC extends StatefulWidget {
   @override
@@ -12,6 +14,10 @@ class _EndUVCState extends State<EndUVC> {
 
   Map endUVCClassData = {};
 
+  UVCDataFile uvcDataFile;
+
+  UvcLight myUvcLight;
+
   @override
   Widget build(BuildContext context) {
     endUVCClassData = endUVCClassData.isNotEmpty
@@ -19,6 +25,10 @@ class _EndUVCState extends State<EndUVC> {
         : ModalRoute.of(context).settings.arguments;
     isTreatmentCompleted = endUVCClassData['treatmentCompleted'];
     myDevice = endUVCClassData['myDevice'];
+    myUvcLight = endUVCClassData['uvclight'];
+
+    uvcDataFile = UVCDataFile();
+    uvcDataFile.readUVCDATA();
 
     return WillPopScope(
       child: screenResult(context),
@@ -144,6 +154,22 @@ class _EndUVCState extends State<EndUVC> {
         ),
       );
     }
+  }
+
+  IconButton settingsControl(BuildContext context) {
+    return IconButton(
+      icon: Icon(
+        Icons.assignment,
+        color: Colors.white,
+      ),
+      onPressed: () {
+        Navigator.pushNamed(context, '/DataCSVView', arguments: {
+          'isTreatmentCompleted': isTreatmentCompleted,
+          'uvclight': myUvcLight,
+        });
+        //settingsWidget(context);
+      },
+    );
   }
 
   Future<bool> exitApp(BuildContext context) async {

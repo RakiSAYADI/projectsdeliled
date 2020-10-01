@@ -23,6 +23,7 @@ class _BluetoothActivationState extends State<BluetoothActivation> with TickerPr
       scanDevices.clear();
       // do something with scan results
       for (ScanResult r in results) {
+        print('${r.device.name} found! mac: ${r.device.id.toString()}');
         if (scanDevices.isEmpty) {
           scanDevices.add(r.device);
         } else {
