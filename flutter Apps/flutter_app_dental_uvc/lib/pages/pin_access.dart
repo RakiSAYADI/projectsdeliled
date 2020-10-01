@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
@@ -262,6 +263,15 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
       _savePINFile('1234');
       return '1234';
     }
+  }
+
+  loadAsset() async {
+    final myData = await rootBundle.loadString("assets/ford.csv");
+    List<List<dynamic>> csvTable = CsvToListConverter().convert(myData);
+    print(csvTable);
+    setState(() {
+
+    });
   }
 
   _savePINFile(String pinCode) async {
