@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutterappdentaluvc/pages/data_view.dart';
 import 'package:flutterappdentaluvc/pages/end_uvc.dart';
 import 'package:flutterappdentaluvc/pages/pin_access.dart';
 import 'package:flutterappdentaluvc/pages/pin_settings.dart';
@@ -78,6 +79,7 @@ void main() async {
     routes: {
       '/': (context) => Welcome(),
       '/pin_access' : (context) => AccessPin(),
+      '/DataCSVView' : (context) => DataCSVView(),
       '/pin_settings' : (context) => PinSettings(),
       '/profiles': (context) => Profiles(),
       '/settings': (context) => Settings(),

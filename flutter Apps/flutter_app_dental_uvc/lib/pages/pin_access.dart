@@ -104,7 +104,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
       scanDevices.clear();
       // do something with scan results
       for (ScanResult r in results) {
-        print('${r.device.name} found! mac: ${r.device.id.toString()}');
+        //print('${r.device.name} found! mac: ${r.device.id.toString()}');
         if (scanDevices.isEmpty) {
           scanDevices.add(r.device);
         } else {
@@ -254,9 +254,8 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final file = File('${directory.path}/my_pin_code.txt');
-      String text = await file.readAsString();
-      print(text);
-      return text;
+      String pinCode = await file.readAsString();
+      return pinCode;
     } catch (e) {
       print("Couldn't read file");
       _savePINFile('1234');
