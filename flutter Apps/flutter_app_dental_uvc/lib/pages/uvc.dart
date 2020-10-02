@@ -92,6 +92,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
           treatmentIsSuccessful = false;
           Navigator.pushNamed(context, '/end_uvc', arguments: {
             'treatmentCompleted': treatmentIsSuccessful,
+            'uvclight': myUvcLight,
             'myDevice': myDevice,
           });
           break;
