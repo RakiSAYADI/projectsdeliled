@@ -140,6 +140,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
       controllerAnimationTimeBackground.reverse(from: controllerAnimationTimeBackground.value == 0.0 ? 1.0 : controllerAnimationTimeBackground.value);
 
       readingCharacteristic();
+
     }
 
     double screenWidth = MediaQuery.of(context).size.width;

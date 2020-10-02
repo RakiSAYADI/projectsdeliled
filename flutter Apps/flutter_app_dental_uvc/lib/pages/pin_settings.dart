@@ -133,7 +133,7 @@ class _PinSettingsState extends State<PinSettings> {
                         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
                       } else {
                         if (myOldPinCode.text == pinCodeAccess) {
-                          _saveToFile(myNewPinCode.text);
+                          _savePINFile(myNewPinCode.text);
                           myUvcToast.setToastDuration(2);
                           myUvcToast.setToastMessage('Code de sécurité modifié !');
                           myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
@@ -156,7 +156,8 @@ class _PinSettingsState extends State<PinSettings> {
       ),
     );
   }
-  _saveToFile(String pinCode) async {
+
+  _savePINFile(String pinCode) async {
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/my_pin_code.txt');
     await file.writeAsString(pinCode);

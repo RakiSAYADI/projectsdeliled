@@ -66,7 +66,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     myUvcToast = ToastyMessage(toastContext: context);
     //checks bluetooth current state
     Future.delayed(const Duration(seconds: 1), () async {
-      pinCodeAccess = await _readFromFile();
+      pinCodeAccess = await _readPINFile();
       flutterBlue.state.listen((state) {
         if (state == BluetoothState.off) {
           //Alert user to turn on bluetooth.
@@ -104,7 +104,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
       scanDevices.clear();
       // do something with scan results
       for (ScanResult r in results) {
-        print('${r.device.name} found! mac: ${r.device.id.toString()}');
+        //print('${r.device.name} found! mac: ${r.device.id.toString()}');
         if (scanDevices.isEmpty) {
           scanDevices.add(r.device);
         } else {
@@ -250,21 +250,20 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     );
   }
 
-  Future<String> _readFromFile() async {
+  Future<String> _readPINFile() async {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final file = File('${directory.path}/my_pin_code.txt');
-      String text = await file.readAsString();
-      print(text);
-      return text;
+      String pinCode = await file.readAsString();
+      return pinCode;
     } catch (e) {
       print("Couldn't read file");
-      _saveToFile('1234');
+      _savePINFile('1234');
       return '1234';
     }
   }
 
-  _saveToFile(String pinCode) async {
+  _savePINFile(String pinCode) async {
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/my_pin_code.txt');
     await file.writeAsString(pinCode);
@@ -279,7 +278,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   }
 
   void _showSnackBar(String pin, BuildContext context) async {
-    pinCodeAccess = await _readFromFile();
+    pinCodeAccess = await _readPINFile();
     String messagePin;
     Color messageColor;
     if (pin == pinCodeAccess && pin.isNotEmpty) {
