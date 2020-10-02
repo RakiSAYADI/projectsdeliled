@@ -18,6 +18,35 @@ class _EndUVCState extends State<EndUVC> {
 
   UvcLight myUvcLight;
 
+  List<List<String>> uvcData;
+
+  bool firstDisplayMainWidget = true;
+
+  void readCSVFile() async {
+    uvcDataFile = UVCDataFile();
+    uvcData = await uvcDataFile.readUVCDATA();
+    List<String> uvcOperationData =['default'];
+    uvcOperationData.length = 0;
+
+    uvcOperationData.add(myUvcLight.getMachineName());
+    uvcOperationData.add(myUvcLight.getOperatorName());
+    uvcOperationData.add(myUvcLight.getCompanyName());
+    uvcOperationData.add(myUvcLight.getRoomName());
+    var now = new DateTime.now();
+    uvcOperationData.add(now.toString());
+    uvcOperationData.add(myUvcLight.getInfectionTimeOnString());
+
+    if(isTreatmentCompleted){
+      uvcOperationData.add('réussi');
+    }else{
+      uvcOperationData.add('échoué');
+    }
+
+    uvcData.add(uvcOperationData);
+
+    await uvcDataFile.saveUVCDATA(uvcData);
+  }
+
   @override
   Widget build(BuildContext context) {
     endUVCClassData = endUVCClassData.isNotEmpty ? endUVCClassData : ModalRoute.of(context).settings.arguments;
@@ -25,131 +54,87 @@ class _EndUVCState extends State<EndUVC> {
     myDevice = endUVCClassData['myDevice'];
     myUvcLight = endUVCClassData['uvclight'];
 
-    uvcDataFile = UVCDataFile();
-    uvcDataFile.readUVCDATA();
+    if (firstDisplayMainWidget) {
+      firstDisplayMainWidget = false;
+      readCSVFile();
+    }
+
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    String title;
+    String message;
+    String imageGif;
+
+    if (isTreatmentCompleted) {
+      title = 'Désinfection terminée';
+      message = 'Désinfection réalisée avec succès.';
+      imageGif = 'assets/felicitation_animation.gif';
+    } else {
+      title = 'Désinfection annulée';
+      message = 'Désinfection interrompue.';
+      imageGif = 'assets/echec_logo.gif';
+    }
 
     return WillPopScope(
-      child: screenResult(context),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(title),
+          centerTitle: true,
+          actions: [
+            settingsControl(context),
+          ],
+        ),
+        body: Container(
+          decoration: BoxDecoration(color: Colors.grey[200]),
+          child: Container(
+            width: screenWidth,
+            height: screenHeight,
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      message,
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.06,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.05),
+                    Image.asset(
+                      imageGif,
+                      height: screenHeight * 0.2,
+                      width: screenWidth * 0.8,
+                    ),
+                    SizedBox(height: screenHeight * 0.05),
+                    FlatButton(
+                      onPressed: () {
+                        myDevice.disconnect();
+                        Navigator.pushNamedAndRemoveUntil(context, "/pin_access", (r) => false);
+                      },
+                      child: Text(
+                        'Nouvelle désinfection',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: screenWidth * 0.05,
+                        ),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      color: Colors.blue[400],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
       onWillPop: () => exitApp(context),
     );
-  }
-
-  Widget screenResult(BuildContext context) {
-    if (isTreatmentCompleted) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('Désinfection terminée'),
-          centerTitle: true,
-        ),
-        body: Container(
-          decoration: BoxDecoration(color: Colors.grey[200]),
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Center(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      'Désinfection réalisée avec succès.',
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.04,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                    Image.asset(
-                      'assets/felicitation_animation.gif',
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      width: MediaQuery.of(context).size.width * 0.8,
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                    FlatButton(
-                      onPressed: () {
-                        myDevice.disconnect();
-                        Navigator.pushNamedAndRemoveUntil(context, "/pin_access", (r) => false);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text(
-                          'Nouvelle désinfection',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: MediaQuery.of(context).size.width * 0.03,
-                          ),
-                        ),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      color: Colors.blue[400],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-    } else {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('Désinfection annulée'),
-          centerTitle: true,
-        ),
-        body: Container(
-          decoration: BoxDecoration(color: Colors.grey[200]),
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Center(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      'Désinfection interrompue',
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.04,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                    Image.asset(
-                      'assets/echec_logo.gif',
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      width: MediaQuery.of(context).size.width * 0.8,
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                    FlatButton(
-                      onPressed: () {
-                        myDevice.disconnect();
-                        Navigator.pushNamedAndRemoveUntil(context, "/pin_access", (r) => false);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text(
-                          'Nouvelle désinfection',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: MediaQuery.of(context).size.width * 0.03,
-                          ),
-                        ),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      color: Colors.blue[400],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-    }
   }
 
   IconButton settingsControl(BuildContext context) {
@@ -162,6 +147,7 @@ class _EndUVCState extends State<EndUVC> {
         Navigator.pushNamed(context, '/DataCSVView', arguments: {
           'isTreatmentCompleted': isTreatmentCompleted,
           'uvclight': myUvcLight,
+          'uvcData': uvcData,
         });
         //settingsWidget(context);
       },
@@ -170,7 +156,7 @@ class _EndUVCState extends State<EndUVC> {
 
   Future<bool> exitApp(BuildContext context) async {
     myDevice.disconnect();
-    Navigator.pushNamedAndRemoveUntil(context, "/bluetooth_activation", (r) => false);
+    Navigator.pushNamedAndRemoveUntil(context, "/pin_access", (r) => false);
     return true;
   }
 }

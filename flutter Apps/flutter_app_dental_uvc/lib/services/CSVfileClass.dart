@@ -42,15 +42,29 @@ class UVCDataFile {
       return textuvc;
     } catch (e) {
       print("Couldn't read file");
-      saveUVCDATA(_uvcDefaultDataString);
+      saveStringUVCDATA(_uvcDefaultDataString);
       return _uvcDefaultData;
     }
   }
 
-  saveUVCDATA(String uvcData) async {
+  saveStringUVCDATA(String uvcData) async {
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/$_uvcDataFileName');
     await file.writeAsString(uvcData);
-    print('saved');
+    print('saveStringUVCDATA : saved');
+  }
+
+  Future<void> saveUVCDATA(List<List<String>> uvcData) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/$_uvcDataFileName');
+    String uvcDATA ='';
+    for (int j = 0; j < uvcData.length; j++) {
+      for (int i = 0; i < uvcData.elementAt(j).length; i++) {
+        uvcDATA += '${uvcData.elementAt(j).elementAt(i)} ;';
+      }
+      uvcDATA += '\n';
+    }
+    await file.writeAsString(uvcDATA);
+    print('saveUVCDATA : saved');
   }
 }
