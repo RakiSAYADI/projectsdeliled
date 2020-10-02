@@ -22,7 +22,7 @@ class _EndUVCState extends State<EndUVC> {
 
   bool firstDisplayMainWidget = true;
 
-  void readCSVFile() async {
+  void csvDataFile() async {
     uvcDataFile = UVCDataFile();
     uvcData = await uvcDataFile.readUVCDATA();
     List<String> uvcOperationData =['default'];
@@ -56,7 +56,7 @@ class _EndUVCState extends State<EndUVC> {
 
     if (firstDisplayMainWidget) {
       firstDisplayMainWidget = false;
-      readCSVFile();
+      csvDataFile();
     }
 
     double screenWidth = MediaQuery.of(context).size.width;
