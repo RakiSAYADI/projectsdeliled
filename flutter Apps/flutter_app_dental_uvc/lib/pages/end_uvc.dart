@@ -20,9 +20,7 @@ class _EndUVCState extends State<EndUVC> {
 
   @override
   Widget build(BuildContext context) {
-    endUVCClassData = endUVCClassData.isNotEmpty
-        ? endUVCClassData
-        : ModalRoute.of(context).settings.arguments;
+    endUVCClassData = endUVCClassData.isNotEmpty ? endUVCClassData : ModalRoute.of(context).settings.arguments;
     isTreatmentCompleted = endUVCClassData['treatmentCompleted'];
     myDevice = endUVCClassData['myDevice'];
     myUvcLight = endUVCClassData['uvclight'];
@@ -70,8 +68,7 @@ class _EndUVCState extends State<EndUVC> {
                     FlatButton(
                       onPressed: () {
                         myDevice.disconnect();
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, "/pin_access", (r) => false);
+                        Navigator.pushNamedAndRemoveUntil(context, "/pin_access", (r) => false);
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
@@ -128,8 +125,7 @@ class _EndUVCState extends State<EndUVC> {
                     FlatButton(
                       onPressed: () {
                         myDevice.disconnect();
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, "/pin_access", (r) => false);
+                        Navigator.pushNamedAndRemoveUntil(context, "/pin_access", (r) => false);
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
@@ -174,8 +170,7 @@ class _EndUVCState extends State<EndUVC> {
 
   Future<bool> exitApp(BuildContext context) async {
     myDevice.disconnect();
-    Navigator.pushNamedAndRemoveUntil(
-        context, "/bluetooth_activation", (r) => false);
+    Navigator.pushNamedAndRemoveUntil(context, "/bluetooth_activation", (r) => false);
     return true;
   }
 }
