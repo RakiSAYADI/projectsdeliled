@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:path_provider/path_provider.dart';
@@ -21,7 +22,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   final TextEditingController _pinPutController = TextEditingController();
   String pinCode;
 
-  final String macRobot = '30:AE:A4:21:F1:BE';
+  final String macRobot = 'C8:2B:96:9D:15:26';
   String pinCodeAccess = '';
   String myPinCode = '';
 
@@ -42,6 +43,8 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
 
   Device myDevice;
 
+  UVCDataFile uvcDataFile;
+
   BoxDecoration get _pinPutDecoration {
     return BoxDecoration(
       border: Border.all(color: Colors.blue, width: 3),
@@ -49,10 +52,16 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     );
   }
 
+  void readfile()async {
+    uvcDataFile = UVCDataFile();
+    await uvcDataFile.readUVCDATA();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    readfile();
     // initialise the animation
     animationRefreshIcon = new AnimationController(
       vsync: this,
@@ -123,9 +132,6 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
       appBar: AppBar(
         title: const Text('Code PIN'),
         centerTitle: true,
-        actions: [
-          settingsControl(context),
-        ],
       ),
       body: Container(
         decoration: BoxDecoration(color: Colors.grey[200]),
@@ -204,21 +210,19 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
           },
         ),
       ),
-    );
-  }
-
-  IconButton settingsControl(BuildContext context) {
-    return IconButton(
-      icon: Icon(
-        Icons.settings,
-        color: Colors.white,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushNamed(context, '/pin_settings', arguments: {
+            'pinCodeAccess': pinCodeAccess,
+          });
+        },
+        label: Text('Réglages'),
+        icon: Icon(
+          Icons.settings,
+          color: Colors.white,
+        ),
+        backgroundColor: Colors.blue[400],
       ),
-      onPressed: () {
-        Navigator.pushNamed(context, '/pin_settings', arguments: {
-          'pinCodeAccess': pinCodeAccess,
-        });
-        //settingsWidget(context);
-      },
     );
   }
 
@@ -319,7 +323,12 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
             myUvcToast.setToastMessage('Autorisation de connexion validée !');
             myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
             // stop scanning and start connecting
-            await myDevice.connect(false);
+            try {
+              await myDevice.connect(false);
+            } catch (e) {
+              myDevice.disconnect();
+              await myDevice.connect(false);
+            }
             Future.delayed(const Duration(seconds: 2), () async {
               // clear the remaining toast message
               myUvcToast.clearAllToast();

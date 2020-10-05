@@ -33,6 +33,7 @@ dependencies:
   slide_countdown_clock: ^1.0.3
   path_provider: ^1.6.14
   fluttertoast: ^7.0.4
+  mailer: ^3.2.1
 
   webview_flutter: ^0.3.23
 

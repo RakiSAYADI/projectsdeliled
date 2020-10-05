@@ -106,11 +106,15 @@ class ToastyMessage {
 
   void clearAllToast() {
     this.flutterToast.removeQueuedCustomToasts();
-    this.animationRefreshIcon.stop();
+    if (this.animationRefreshIcon != null) {
+      this.animationRefreshIcon.stop();
+    }
   }
 
   void clearCurrentToast() {
-    this.animationRefreshIcon.stop();
+    if (this.animationRefreshIcon != null) {
+      this.animationRefreshIcon.stop();
+    }
     this.flutterToast.removeCustomToast();
   }
 }

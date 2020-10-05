@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 class UVCDataFile {
-  String _uvcDefaultDataString = 'Nom du robot ;Utilisateur ;Entreprise ;Chambre ;Temp D\'activation ;Durée de disinfection ;Etat ;\n';
+  final String _uvcDefaultDataString = 'Nom du robot ;Utilisateur ;Entreprise ;Chambre ;Temp D\'activation ;Durée de disinfection ;Etat \n';
 
-  String _uvcDataFileName = 'UVC_DATA.csv';
+  final String _uvcDataFileName = 'UVC_DATA.csv';
 
-  List<List<String>> _uvcDefaultData = [
+  final List<List<String>> _uvcDefaultData = [
     ['Nom du robot', 'Utilisateur', 'Entreprise', 'Chambre', 'Temp D\'activation', 'Durée de disinfection', 'Etat']
   ];
 
@@ -26,6 +26,8 @@ class UVCDataFile {
       for (int i = 0; i < text.length; i++) {
         if (text[i] == '\n') {
           print('we have /n');
+          textuvcrows.add(column);
+          column = '';
           print(textuvcrows);
           textuvc.add(textuvcrows);
           textuvcrows = ['default'];
@@ -57,10 +59,14 @@ class UVCDataFile {
   Future<void> saveUVCDATA(List<List<String>> uvcData) async {
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/$_uvcDataFileName');
-    String uvcDATA ='';
+    String uvcDATA = '';
     for (int j = 0; j < uvcData.length; j++) {
       for (int i = 0; i < uvcData.elementAt(j).length; i++) {
-        uvcDATA += '${uvcData.elementAt(j).elementAt(i)} ;';
+        if (i == uvcData.elementAt(j).length - 1) {
+          uvcDATA += '${uvcData.elementAt(j).elementAt(i)} ';
+        } else {
+          uvcDATA += '${uvcData.elementAt(j).elementAt(i)} ;';
+        }
       }
       uvcDATA += '\n';
     }

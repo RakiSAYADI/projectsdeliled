@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcClass.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 
 class EndUVC extends StatefulWidget {
   @override
@@ -25,20 +27,27 @@ class _EndUVCState extends State<EndUVC> {
   void csvDataFile() async {
     uvcDataFile = UVCDataFile();
     uvcData = await uvcDataFile.readUVCDATA();
-    List<String> uvcOperationData =['default'];
+    List<String> uvcOperationData = ['default'];
     uvcOperationData.length = 0;
 
     uvcOperationData.add(myUvcLight.getMachineName());
     uvcOperationData.add(myUvcLight.getOperatorName());
     uvcOperationData.add(myUvcLight.getCompanyName());
     uvcOperationData.add(myUvcLight.getRoomName());
-    var now = new DateTime.now();
-    uvcOperationData.add(now.toString());
+
+    var dateTime = new DateTime.now();
+    DateFormat dateFormat;
+    DateFormat timeFormat;
+    initializeDateFormatting();
+    dateFormat = new DateFormat.yMMMMd('fr');
+    timeFormat = new DateFormat.Hms('fr');
+    uvcOperationData.add('${timeFormat.format(dateTime)} à ${dateFormat.format(dateTime)}');
+
     uvcOperationData.add(myUvcLight.getInfectionTimeOnString());
 
-    if(isTreatmentCompleted){
+    if (isTreatmentCompleted) {
       uvcOperationData.add('réussi');
-    }else{
+    } else {
       uvcOperationData.add('échoué');
     }
 
@@ -81,9 +90,6 @@ class _EndUVCState extends State<EndUVC> {
         appBar: AppBar(
           title: Text(title),
           centerTitle: true,
-          actions: [
-            settingsControl(context),
-          ],
         ),
         body: Container(
           decoration: BoxDecoration(color: Colors.grey[200]),
@@ -132,25 +138,23 @@ class _EndUVCState extends State<EndUVC> {
             ),
           ),
         ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.pushNamed(context, '/DataCSVView', arguments: {
+              'isTreatmentCompleted': isTreatmentCompleted,
+              'uvclight': myUvcLight,
+              'uvcData': uvcData,
+            });
+          },
+          label: Text('Rapport'),
+          icon: Icon(
+            Icons.assignment,
+            color: Colors.white,
+          ),
+          backgroundColor: Colors.blue[400],
+        ),
       ),
       onWillPop: () => exitApp(context),
-    );
-  }
-
-  IconButton settingsControl(BuildContext context) {
-    return IconButton(
-      icon: Icon(
-        Icons.assignment,
-        color: Colors.white,
-      ),
-      onPressed: () {
-        Navigator.pushNamed(context, '/DataCSVView', arguments: {
-          'isTreatmentCompleted': isTreatmentCompleted,
-          'uvclight': myUvcLight,
-          'uvcData': uvcData,
-        });
-        //settingsWidget(context);
-      },
     );
   }
 
