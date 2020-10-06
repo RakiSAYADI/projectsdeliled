@@ -84,7 +84,7 @@ public class DeviceScanActivity extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MainActivity.active = false;
-        access_super_admin = false;
+        access_super_admin = true;
         getActionBar().setIcon(R.drawable.lumiair);
         arrayMAC[0] = "18:FE:34";
         arrayMAC[1] = "24:0A:C4";

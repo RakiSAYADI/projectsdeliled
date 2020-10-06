@@ -22,7 +22,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   final TextEditingController _pinPutController = TextEditingController();
   String pinCode;
 
-  final String macRobot = 'C8:2B:96:9D:15:26';
+  final String macRobot = '30:AE:A4:21:F1:BE';
   String pinCodeAccess = '';
   String myPinCode = '';
 
@@ -52,7 +52,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     );
   }
 
-  void readfile()async {
+  void readfile() async {
     uvcDataFile = UVCDataFile();
     await uvcDataFile.readUVCDATA();
   }
@@ -182,27 +182,30 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
                       ],
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      buttonNumbers('0', context),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.008),
-                      buttonNumbers('1', context),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.008),
-                      buttonNumbers('2', context),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.008),
-                      buttonNumbers('3', context),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.008),
-                      buttonNumbers('4', context),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.008),
-                      buttonNumbers('5', context),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.008),
-                      buttonNumbers('6', context),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.008),
-                      buttonNumbers('7', context),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.008),
-                      buttonNumbers('8', context),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.008),
-                      buttonNumbers('9', context),
-                    ]),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        buttonNumbers('0', context),
+                        SizedBox(width: MediaQuery.of(context).size.width * 0.003),
+                        buttonNumbers('1', context),
+                        SizedBox(width: MediaQuery.of(context).size.width * 0.003),
+                        buttonNumbers('2', context),
+                        SizedBox(width: MediaQuery.of(context).size.width * 0.003),
+                        buttonNumbers('3', context),
+                        SizedBox(width: MediaQuery.of(context).size.width * 0.003),
+                        buttonNumbers('4', context),
+                        SizedBox(width: MediaQuery.of(context).size.width * 0.003),
+                        buttonNumbers('5', context),
+                        SizedBox(width: MediaQuery.of(context).size.width * 0.003),
+                        buttonNumbers('6', context),
+                        SizedBox(width: MediaQuery.of(context).size.width * 0.003),
+                        buttonNumbers('7', context),
+                        SizedBox(width: MediaQuery.of(context).size.width * 0.003),
+                        buttonNumbers('8', context),
+                        SizedBox(width: MediaQuery.of(context).size.width * 0.003),
+                        buttonNumbers('9', context),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -226,11 +229,12 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     );
   }
 
-  FlatButton buttonNumbers(String number, BuildContext context) {
-    return FlatButton(
-      color: Colors.grey[400],
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
+  ButtonTheme buttonNumbers(String number, BuildContext context) {
+    return ButtonTheme(
+      minWidth: MediaQuery.of(context).size.width * 0.09,
+      height: MediaQuery.of(context).size.height * 0.07,
+      child: FlatButton(
+        color: Colors.grey[400],
         child: Text(
           number,
           style: TextStyle(
@@ -238,19 +242,19 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
             fontSize: MediaQuery.of(context).size.width * 0.02,
           ),
         ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18.0),
+        ),
+        onPressed: () async {
+          myPinCode += number;
+          print(myPinCode);
+          _pinPutController.text += '*';
+          if (_pinPutController.text.length == 4) {
+            _showSnackBar(myPinCode, context);
+            myPinCode = '';
+          }
+        },
       ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18.0),
-      ),
-      onPressed: () async {
-        myPinCode += number;
-        print(myPinCode);
-        _pinPutController.text += '*';
-        if (_pinPutController.text.length == 4) {
-          _showSnackBar(myPinCode, context);
-          myPinCode = '';
-        }
-      },
     );
   }
 

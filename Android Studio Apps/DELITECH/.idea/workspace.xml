@@ -10,12 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5ee4e1b8-c737-4975-a0d5-815f1ccc2e3f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/lib/pages/data_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/lib/pages/data_view.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/lib/pages/end_uvc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/lib/pages/end_uvc.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/lib/pages/pin_access.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/lib/pages/pin_access.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/lib/services/CSVfileClass.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/lib/services/CSVfileClass.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/lib/pages/settings.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/lib/pages/settings.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,7 +88,7 @@
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/Application/src/androidTestDebug/aidl" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/LED demo/demo" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
     <property name="show.migrate.to.gradle.popup" value="false" />
@@ -188,10 +184,10 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="2619" y="331" key="FileChooserDialogImpl" timestamp="1601290463155">
+    <state x="2608" y="325" key="FileChooserDialogImpl" timestamp="1601977324868">
       <screen x="1920" y="26" width="1680" height="1010" />
     </state>
-    <state x="2619" y="331" key="FileChooserDialogImpl/0.0.1920.1040/1920.26.1680.1010@1920.26.1680.1010" timestamp="1601290463155" />
+    <state x="2608" y="325" key="FileChooserDialogImpl/0.0.1920.1040/1920.26.1680.1010@1920.26.1680.1010" timestamp="1601977324868" />
     <state width="1637" height="239" key="GridCell.Tab.0.bottom" timestamp="1600266994721">
       <screen x="1920" y="26" width="1680" height="1010" />
     </state>

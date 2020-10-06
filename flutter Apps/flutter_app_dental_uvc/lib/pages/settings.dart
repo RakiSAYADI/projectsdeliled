@@ -231,9 +231,9 @@ class _SettingsState extends State<Settings> {
               Text(
                 'Confirmer ces informations :',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.04),
+                style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.03),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.04),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -241,19 +241,19 @@ class _SettingsState extends State<Settings> {
                     flex: 2,
                     child: Image.asset(
                       'assets/etablissement_logo.png',
-                      height: MediaQuery.of(context).size.height * 0.1,
-                      width: MediaQuery.of(context).size.width * 0.3,
+                      height: MediaQuery.of(context).size.height * 0.05,
+                      width: MediaQuery.of(context).size.width * 0.15,
                     ),
                   ),
                   Expanded(
                       flex: 3,
                       child: Text(
                         '${myUvcLight.getCompanyName()}',
-                        style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.04),
+                        style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.03),
                       )),
                 ],
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -261,19 +261,19 @@ class _SettingsState extends State<Settings> {
                     flex: 2,
                     child: Image.asset(
                       'assets/operateur_logo.png',
-                      height: MediaQuery.of(context).size.height * 0.1,
-                      width: MediaQuery.of(context).size.width * 0.3,
+                      height: MediaQuery.of(context).size.height * 0.05,
+                      width: MediaQuery.of(context).size.width * 0.15,
                     ),
                   ),
                   Expanded(
                       flex: 3,
                       child: Text(
                         '${myUvcLight.getOperatorName()}',
-                        style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.04),
+                        style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.03),
                       )),
                 ],
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -281,19 +281,19 @@ class _SettingsState extends State<Settings> {
                     flex: 2,
                     child: Image.asset(
                       'assets/piece_logo.png',
-                      height: MediaQuery.of(context).size.height * 0.1,
-                      width: MediaQuery.of(context).size.width * 0.3,
+                      height: MediaQuery.of(context).size.height * 0.05,
+                      width: MediaQuery.of(context).size.width * 0.15,
                     ),
                   ),
                   Expanded(
                       flex: 3,
                       child: Text(
                         '${myUvcLight.getRoomName()}',
-                        style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.04),
+                        style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.03),
                       )),
                 ],
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -301,19 +301,19 @@ class _SettingsState extends State<Settings> {
                     flex: 2,
                     child: Image.asset(
                       'assets/delais_logo.png',
-                      height: MediaQuery.of(context).size.height * 0.1,
-                      width: MediaQuery.of(context).size.width * 0.3,
+                      height: MediaQuery.of(context).size.height * 0.05,
+                      width: MediaQuery.of(context).size.width * 0.15,
                     ),
                   ),
                   Expanded(
                       flex: 3,
                       child: Text(
                         '${myUvcLight.getActivationTimeOnString().replaceAll(new RegExp(r"\s+"), "")}',
-                        style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.04),
+                        style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.03),
                       )),
                 ],
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -321,15 +321,15 @@ class _SettingsState extends State<Settings> {
                     flex: 2,
                     child: Image.asset(
                       'assets/duree_logo.png',
-                      height: MediaQuery.of(context).size.height * 0.1,
-                      width: MediaQuery.of(context).size.width * 0.3,
+                      height: MediaQuery.of(context).size.height * 0.05,
+                      width: MediaQuery.of(context).size.width * 0.15,
                     ),
                   ),
                   Expanded(
                       flex: 3,
                       child: Text(
                         '${myUvcLight.getInfectionTimeOnString().replaceAll(new RegExp(r"\s+"), "")}',
-                        style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.04),
+                        style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.03),
                       )),
                 ],
               ),
