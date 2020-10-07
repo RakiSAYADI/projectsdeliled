@@ -62,6 +62,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
   @override
   void dispose() {
     _controller.pause();
+    animationRefreshIcon.dispose();
     animationController.dispose();
     super.dispose();
   }

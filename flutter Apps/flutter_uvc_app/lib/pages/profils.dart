@@ -86,13 +86,14 @@ class _ProfilesState extends State<Profiles> {
       dataRobotUVC = '{\"Company\":\"Votre entreprise\",\"UserName\":\"Utilisateur\",\"Detection\":0,\"RoomName\":\"Chambre 1\",\"TimeData\":[0,0]}';
     }
 
-    Map<String, dynamic> user = jsonDecode(dataRobotUVC);
-
-    String timeDataList = user['TimeData'].toString();
-
-    print(_stringListAsciiToListInt(timeDataList.codeUnits));
-
     if (dataRobotUVC.isNotEmpty && firstDisplayMainWidget) {
+
+      Map<String, dynamic> user = jsonDecode(dataRobotUVC);
+
+      String timeDataList = user['TimeData'].toString();
+
+      print(_stringListAsciiToListInt(timeDataList.codeUnits));
+
       firstDisplayMainWidget = false;
       myCompany.text = user['Company'];
       myName.text = user['UserName'];

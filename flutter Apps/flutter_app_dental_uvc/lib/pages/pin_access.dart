@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:path_provider/path_provider.dart';
@@ -43,8 +42,6 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
 
   Device myDevice;
 
-  UVCDataFile uvcDataFile;
-
   BoxDecoration get _pinPutDecoration {
     return BoxDecoration(
       border: Border.all(color: Colors.blue, width: 3),
@@ -52,16 +49,10 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     );
   }
 
-  void readfile() async {
-    uvcDataFile = UVCDataFile();
-    await uvcDataFile.readUVCDATA();
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    readfile();
     // initialise the animation
     animationRefreshIcon = new AnimationController(
       vsync: this,

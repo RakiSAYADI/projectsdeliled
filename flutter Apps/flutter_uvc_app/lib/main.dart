@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutteruvcapp/pages/bluetooth_activation.dart';
+import 'package:flutteruvcapp/pages/data_view.dart';
 import 'package:flutteruvcapp/pages/end_uvc.dart';
 import 'package:flutteruvcapp/pages/profils.dart';
 import 'package:flutteruvcapp/pages/qr_code_scan.dart';
+import 'package:flutteruvcapp/pages/send_email.dart';
 import 'package:flutteruvcapp/pages/settings.dart';
 import 'package:flutteruvcapp/pages/uvc.dart';
 import 'package:flutteruvcapp/pages/warnings.dart';
@@ -68,6 +70,8 @@ void main() async {
       '/': (context) => Welcome(),
       '/bluetooth_activation': (context) => BluetoothActivation(),
       '/profiles': (context) => Profiles(),
+      '/DataCSVView' : (context) => DataCSVView(),
+      '/send_email' : (context) => SendEmail(),
       '/scan_ble_list': (context) => ScanListBle(),
       '/qr_code_scan': (context) => QrCodeScan(),
       '/settings': (context) => Settings(),

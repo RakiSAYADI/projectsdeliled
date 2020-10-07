@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutterappdentaluvc/services/uvcClass.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:mailer/mailer.dart';
@@ -47,10 +48,10 @@ class _DataCSVViewState extends State<DataCSVView> {
         decoration: BoxDecoration(color: Colors.grey[200]),
         child: SingleChildScrollView(
           child: Table(
-            columnWidths: {
+/*            columnWidths: {
               0: FixedColumnWidth(100.0),
               1: FixedColumnWidth(200.0),
-            },
+            },*/
             border: TableBorder.all(width: 2.0),
             children: uvcData.map((item) {
               return TableRow(
@@ -61,7 +62,7 @@ class _DataCSVViewState extends State<DataCSVView> {
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       row.toString(),
-                      style: TextStyle(fontSize: 20.0),
+                      style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.015,),
                     ),
                   ),
                 );

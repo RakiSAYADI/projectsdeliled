@@ -38,6 +38,8 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
   bool treatmentIsOnProgress;
   bool treatmentIsSuccessful;
 
+  bool stopReading = false;
+
   String dataRobotUVC = '';
 
   bool firstDisplayMainWidget = true;
@@ -82,6 +84,9 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     Map<String, dynamic> dataRead;
     int detectionResult = 0;
     do {
+      if (stopReading) {
+        break;
+      }
       if (!myDevice.getConnectionState()) {
         myUvcToast = ToastyMessage(toastContext: context);
         myUvcToast.setToastDuration(5);
@@ -108,7 +113,8 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
           treatmentIsOnProgress = false;
           treatmentIsSuccessful = false;
           Navigator.pushNamed(context, '/end_uvc', arguments: {
-            'treatmentCompleted': treatmentIsSuccessful,
+            'myUvcLight': myUvcLight,
+            'treatmentIsSuccessful': treatmentIsSuccessful,
             'myDevice': myDevice,
           });
           break;
@@ -126,21 +132,20 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     myUvcLight = uvcClassData['uvclight'];
     myDevice = uvcClassData['myDevice'];
 
-    durationOfDisinfect = Duration(seconds: myUvcLight.getActivationTime());
-    if (myUvcLight.infectionTime.contains('sec')) {
-      durationOfActivate = Duration(seconds: myUvcLight.getActivationTime() + myUvcLight.getInfectionTime());
-    } else {
-      durationOfActivate = Duration(minutes: myUvcLight.getInfectionTime(), seconds: myUvcLight.getActivationTime());
-    }
-
     if (firstDisplayMainWidget) {
+      durationOfDisinfect = Duration(seconds: myUvcLight.getActivationTime());
+      if (myUvcLight.infectionTime.contains('sec')) {
+        durationOfActivate = Duration(seconds: myUvcLight.getActivationTime() + myUvcLight.getInfectionTime());
+      } else {
+        durationOfActivate = Duration(minutes: myUvcLight.getInfectionTime(), seconds: myUvcLight.getActivationTime());
+      }
+
       firstDisplayMainWidget = false;
       controllerAnimationTimeBackground.duration = Duration(seconds: myUvcLight.getActivationTime());
 
       controllerAnimationTimeBackground.reverse(from: controllerAnimationTimeBackground.value == 0.0 ? 1.0 : controllerAnimationTimeBackground.value);
 
       readingCharacteristic();
-
     }
 
     double screenWidth = MediaQuery.of(context).size.width;
@@ -314,9 +319,11 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                                   print('finished activation');
                                                   treatmentIsOnProgress = false;
                                                   _getNotification();
+                                                  stopReading = true;
                                                   Navigator.pushNamed(context, '/end_uvc', arguments: {
                                                     'myDevice': myDevice,
-                                                    'treatmentCompleted': treatmentIsSuccessful,
+                                                    'myUvcLight': myUvcLight,
+                                                    'treatmentIsSuccessful': treatmentIsSuccessful,
                                                   });
                                                 }
                                               },
@@ -373,7 +380,8 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
               Navigator.pop(c, true);
               Navigator.pushNamed(context, '/end_uvc', arguments: {
                 'myDevice': myDevice,
-                'treatmentCompleted': treatmentIsSuccessful,
+                'myUvcLight': myUvcLight,
+                'treatmentIsSuccessful': treatmentIsSuccessful,
               });
             },
           ),
