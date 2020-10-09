@@ -150,7 +150,6 @@ void SlaveTask(void *pvParameters) {
 		}
 		if (detectionTriggered) {
 			delay(slaveid * 100);
-			detectionTriggered = false;
 			ESP_LOGI(TCP_SERVER_TAG, "STOP order to %d", slaveid);
 			int err = sendto(sock, stopUVCOrdreSlave, strlen(stopUVCOrdreSlave),
 					0, (struct sockaddr * )&source_addr_slave,
@@ -161,14 +160,15 @@ void SlaveTask(void *pvParameters) {
 						"Error occurred during sending: errno %d", errno);
 			}
 			ESP_LOGI(TCP_SERVER_TAG, "Sending detection message Successful");
+			delay(2000);
+			detectionTriggered = false;
 			UVTaskIsOn = false;
 		}
 
 		if (stopEventTrigerred) {
-			delay(slaveid * 100);
-			detectionTriggered = true;
-			stopEventTrigerred = false;
 			stopIsPressed = true;
+			delay(slaveid * 100);
+			stopEventTrigerred = false;
 			ESP_LOGI(TCP_SERVER_TAG, "STOP order to %d", slaveid);
 			int err = sendto(sock, stopUVCOrdreSlave, strlen(stopUVCOrdreSlave),
 					0, (struct sockaddr * )&source_addr_slave,
@@ -179,7 +179,8 @@ void SlaveTask(void *pvParameters) {
 						"Error occurred during sending: errno %d", errno);
 			}
 			ESP_LOGI(TCP_SERVER_TAG, "Sending stop message Successful");
-			delay(1200);
+			detectionTriggered = true;
+			delay(2000);
 			detectionTriggered = false;
 			UVTaskIsOn = false;
 		}

@@ -5,6 +5,8 @@
  *      Author: raki
  */
 
+#define UVCROBOTNAME "DEEPLIGHT-A026"
+
 void bt_main();
 void LedStatInit();
 void BaseMacInit();

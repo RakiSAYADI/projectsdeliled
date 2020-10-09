@@ -48,6 +48,8 @@ wifi_mode_t wifi_mode_client;
 
 void udp_client_task(void *pvParameters);
 
+bool SlaveTaskState;
+
 TaskHandle_t xSlaveTask;
 
 //
@@ -84,9 +86,11 @@ esp_err_t event_handler_client(void *ctx, system_event_t *event) {
 
 		// modification for testing
 
-		ESP_LOGI(TCP_CLIENT_TAG, "the app is running");
-
-		vTaskDelete(xSlaveTask);
+		if(SlaveTaskState){
+			ESP_LOGI(TCP_CLIENT_TAG, "the task is dying now ! ");
+			vTaskDelete(xSlaveTask);
+			SlaveTaskState = false;
+		}
 
 		esp_wifi_connect();
 
@@ -144,6 +148,8 @@ void CheckingPressence(void *pvParameters) {
 }
 
 void udp_client_task(void *pvParameters) {
+
+	SlaveTaskState = true;
 
 	while (1) {
 
@@ -239,7 +245,6 @@ void udp_client_task(void *pvParameters) {
 
 				Exit:
 				ESP_LOGI(TCP_CLIENT_TAG, "Reading again");
-
 			}
 		}
 		OUT:
