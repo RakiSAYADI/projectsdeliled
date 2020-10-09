@@ -62,6 +62,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
   @override
   void dispose() {
     _controller.pause();
+    animationRefreshIcon.dispose();
     animationController.dispose();
     super.dispose();
   }
@@ -227,12 +228,12 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           ),
         ),
       ),
-      onWillPop: () =>_ackDisconnect(context),
+      onWillPop: () => _ackDisconnect(context),
     );
   }
 
-  Future<bool> _ackDisconnect(BuildContext context) async{
-    if(Platform.isIOS & (myDevice!=null)){
+  Future<bool> _ackDisconnect(BuildContext context) async {
+    if (Platform.isIOS & (myDevice != null)) {
       myDevice.disconnect();
     }
     Navigator.pop(context, true);

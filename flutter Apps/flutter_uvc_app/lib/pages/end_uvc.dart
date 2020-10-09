@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutteruvcapp/services/CSVfileClass.dart';
 import 'package:flutteruvcapp/services/bleDeviceClass.dart';
+import 'package:flutteruvcapp/services/uvcClass.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 
 class EndUVC extends StatefulWidget {
   @override
@@ -12,11 +17,74 @@ class _EndUVCState extends State<EndUVC> {
 
   Map endUVCClassData = {};
 
+  UVCDataFile uvcDataFile;
+
+  UvcLight myUvcLight;
+
+  List<List<String>> uvcData;
+
+  bool firstDisplayMainWidget = true;
+
+  int activationTime;
+
+  void csvDataFile() async {
+    uvcDataFile = UVCDataFile();
+    uvcData = await uvcDataFile.readUVCDATA();
+    List<String> uvcOperationData = ['default'];
+    uvcOperationData.length = 0;
+
+    uvcOperationData.add(myUvcLight.getMachineName());
+    uvcOperationData.add(myUvcLight.getOperatorName());
+    uvcOperationData.add(myUvcLight.getCompanyName());
+    uvcOperationData.add(myUvcLight.getRoomName());
+
+    var dateTime = new DateTime.now();
+    DateFormat dateFormat;
+    DateFormat timeFormat;
+    initializeDateFormatting();
+    dateFormat = new DateFormat.yMd('fr');
+    timeFormat = new DateFormat.Hm('fr');
+    uvcOperationData.add(timeFormat.format(dateTime));
+    uvcOperationData.add(dateFormat.format(dateTime));
+
+    uvcOperationData.add(activationTime.toString());
+
+    if (isTreatmentCompleted) {
+      uvcOperationData.add('réussi');
+    } else {
+      uvcOperationData.add('échoué');
+    }
+
+    uvcData.add(uvcOperationData);
+
+    await uvcDataFile.saveUVCDATA(uvcData);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     endUVCClassData = endUVCClassData.isNotEmpty ? endUVCClassData : ModalRoute.of(context).settings.arguments;
-    isTreatmentCompleted = endUVCClassData['treatmentCompleted'];
+    isTreatmentCompleted = endUVCClassData['treatmentIsSuccessful'];
+    activationTime = endUVCClassData['myactivationtime'];
     myDevice = endUVCClassData['myDevice'];
+    myUvcLight = endUVCClassData['myUvcLight'];
+
+    if (firstDisplayMainWidget) {
+      firstDisplayMainWidget = false;
+      if (myDevice != null) {
+        myDevice.disconnect();
+      }
+      csvDataFile();
+    }
 
     return WillPopScope(
       child: screenResult(context),
@@ -43,6 +111,7 @@ class _EndUVCState extends State<EndUVC> {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(title),
         centerTitle: true,
@@ -94,11 +163,25 @@ class _EndUVCState extends State<EndUVC> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushNamed(context, '/DataCSVView', arguments: {
+            'isTreatmentCompleted': isTreatmentCompleted,
+            'myUvcLight': myUvcLight,
+            'uvcData': uvcData,
+          });
+        },
+        label: Text('Rapport'),
+        icon: Icon(
+          Icons.assignment,
+          color: Colors.white,
+        ),
+        backgroundColor: Colors.blue[400],
+      ),
     );
   }
 
   Future<bool> exitApp(BuildContext context) async {
-    myDevice.disconnect();
     Navigator.pushNamedAndRemoveUntil(context, "/bluetooth_activation", (r) => false);
     return true;
   }

@@ -35,6 +35,7 @@ dependencies:
   slide_countdown_clock: ^1.0.3
   path_provider: ^1.6.18
   fluttertoast: ^7.1.1
+  mailer: ^3.2.1
 
   web_socket_channel: ^1.1.0
 

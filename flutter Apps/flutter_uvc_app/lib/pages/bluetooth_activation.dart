@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
 
@@ -14,6 +15,8 @@ class _BluetoothActivationState extends State<BluetoothActivation> with TickerPr
 
   FlutterBlue flutterBlue = FlutterBlue.instance;
   List<BluetoothDevice> scanDevices = [];
+
+  bool firstDisplayMainWidget = true;
 
   void scanForDevices() {
     // Start scanning
@@ -41,7 +44,13 @@ class _BluetoothActivationState extends State<BluetoothActivation> with TickerPr
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     flutterBlue.state.listen((state) {
       if (state == BluetoothState.off) {
         //Alert user to turn on bluetooth.
@@ -58,6 +67,10 @@ class _BluetoothActivationState extends State<BluetoothActivation> with TickerPr
         scanForDevices();
       }
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -105,6 +118,8 @@ class _BluetoothActivationState extends State<BluetoothActivation> with TickerPr
                         borderRadius: BorderRadius.circular(18.0),
                       ),
                       onPressed: () {
+                        // Start scanning
+                        flutterBlue.startScan(timeout: Duration(seconds: 5));
                         if (Platform.isIOS) {
                           Navigator.pushNamed(context, '/scan_ble_list');
                         }
@@ -148,7 +163,8 @@ class _BluetoothActivationState extends State<BluetoothActivation> with TickerPr
             child: Text('OK'),
             onPressed: () async {
               Navigator.pop(c, true);
-              //flutterBlue.stopScan();
+              // Start scanning
+              flutterBlue.startScan(timeout: Duration(seconds: 5));
               Navigator.pushNamed(context, '/qr_code_scan', arguments: {
                 'scanDevices': scanDevices,
                 'qrCodeConnectionOrSecurity': false,

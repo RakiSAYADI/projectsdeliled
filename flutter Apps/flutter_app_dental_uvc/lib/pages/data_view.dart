@@ -47,10 +47,10 @@ class _DataCSVViewState extends State<DataCSVView> {
         decoration: BoxDecoration(color: Colors.grey[200]),
         child: SingleChildScrollView(
           child: Table(
-            columnWidths: {
+/*            columnWidths: {
               0: FixedColumnWidth(100.0),
               1: FixedColumnWidth(200.0),
-            },
+            },*/
             border: TableBorder.all(width: 2.0),
             children: uvcData.map((item) {
               return TableRow(
@@ -61,7 +61,9 @@ class _DataCSVViewState extends State<DataCSVView> {
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       row.toString(),
-                      style: TextStyle(fontSize: 20.0),
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.width * 0.015,
+                      ),
                     ),
                   ),
                 );
@@ -156,17 +158,17 @@ class _DataCSVViewState extends State<DataCSVView> {
     String username = 'raki.sayadi@delitech.eu';
     String password = 'TunRSayadi2019*';
     // Server SMTP
-    final serverSMTPDeepLight = SmtpServer(host, username:username, password:password);
+    final serverSMTPDeepLight = SmtpServer(host, username: username, password: password);
     // Create our message.
     final message = Message()
-          ..from = Address('raki.sayadi@delitech.eu', 'DEEPLGHIT')
-          ..recipients.add(destination)
-          ..subject = 'Rapport de désinfection UV-C - DEEPLIGHT'
-          ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataFileName'), fileName: 'rapport-uvc'))
-          ..text = 'Bonjour,\n\n'
-              'Vous trouverez ci-joint le rapport concernant la désinfection éffectuée à l’aide de'
-              ' votre solution de désinfection DEEPLIGHT® de DeliTech Medical®.\n\n'
-              'Merci de votre confiance.';
+      ..from = Address('raki.sayadi@delitech.eu', 'DEEPLGHIT')
+      ..recipients.add(destination)
+      ..subject = 'Rapport de désinfection UV-C - DEEPLIGHT'
+      ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataFileName'), fileName: 'rapport-uvc', contentType: 'test/csv'))
+      ..text = 'Bonjour,\n\n'
+          'Vous trouverez ci-joint le rapport concernant la désinfection éffectuée à l’aide de'
+          ' votre solution de désinfection DEEPLIGHT® de DeliTech Medical®.\n\n'
+          'Merci de votre confiance.';
 
     try {
       final sendReport = await send(message, serverSMTPDeepLight);
