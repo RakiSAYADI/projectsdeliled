@@ -7,6 +7,8 @@ class UVCDataFile {
 
   final String _uvcDataFileName = 'UVC_DATA.csv';
 
+  final String _uvcUserEmailFileName = 'User_email.txt';
+
   final List<List<String>> _uvcDefaultData = [
     ['Nom du robot', 'Utilisateur', 'Entreprise', 'Chambre', 'Temp D\'activation', 'Durée de disinfection', 'Etat']
   ];
@@ -72,5 +74,26 @@ class UVCDataFile {
     }
     await file.writeAsString(uvcDATA);
     print('saveUVCDATA : saved');
+  }
+
+  Future<String> readUserEmailDATA() async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/$_uvcUserEmailFileName');
+      String email = await file.readAsString();
+      print("Readed : $email");
+      return email;
+    } catch (e) {
+      print("Couldn't read file");
+      await saveStringUVCEmailDATA('');
+      return '';
+    }
+  }
+
+  Future<void> saveStringUVCEmailDATA(String userEmail) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/$_uvcUserEmailFileName');
+    await file.writeAsString(userEmail);
+    print('saveStringUVCEmailDATA : saved');
   }
 }

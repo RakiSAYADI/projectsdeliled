@@ -72,9 +72,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     treatmentIsOnProgress = true;
     treatmentIsSuccessful = false;
     durationInSeconds = 30;
-    controllerAnimationTimeBackground = AnimationController(
-      vsync: this,
-    );
+    controllerAnimationTimeBackground = AnimationController(vsync: this);
     circleColor = Colors.red;
     super.initState();
   }

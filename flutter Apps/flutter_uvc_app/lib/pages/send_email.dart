@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutteruvcapp/services/CSVfileClass.dart';
+import 'package:flutteruvcapp/services/uvcClass.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
@@ -16,9 +18,21 @@ class SendEmail extends StatefulWidget {
 class _SendEmailState extends State<SendEmail> {
   ToastyMessage myUvcToast;
 
+  Map sendEmailClassData = {};
+
   final String _uvcDataFileName = 'UVC_DATA.csv';
 
   final myEmail = TextEditingController();
+
+  List<List<String>> uvcData;
+
+  bool isTreatmentCompleted;
+  UvcLight myUvcLight;
+
+  UVCDataFile uvcDataFile;
+  String userEmail;
+
+  bool firstDisplayMainWidget = true;
 
   @override
   void initState() {
@@ -31,73 +45,93 @@ class _SendEmailState extends State<SendEmail> {
     ]);
   }
 
+  void readUserEmailFile() async {
+    if (firstDisplayMainWidget) {
+      firstDisplayMainWidget = false;
+      uvcDataFile = UVCDataFile();
+      userEmail = await uvcDataFile.readUserEmailDATA();
+      myEmail.text = userEmail;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    sendEmailClassData = sendEmailClassData.isNotEmpty ? sendEmailClassData : ModalRoute.of(context).settings.arguments;
+    isTreatmentCompleted = sendEmailClassData['isTreatmentCompleted'];
+    myUvcLight = sendEmailClassData['myUvcLight'];
+    uvcData = sendEmailClassData['uvcData'];
+
+    readUserEmailFile();
+
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        title: Text('Envoi Rapport'),
-        centerTitle: true,
-      ),
-      body: Container(
-        decoration: BoxDecoration(color: Colors.grey[200]),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Entrer votre Adresse Email :',
-                      style: TextStyle(fontSize: (screenWidth * 0.05)),
-                    ),
-                    SizedBox(height: screenHeight * 0.05),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
-                      child: TextField(
-                        textAlign: TextAlign.center,
-                        controller: myEmail,
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: (screenWidth * 0.05),
+    return WillPopScope(
+      child: Scaffold(
+        resizeToAvoidBottomPadding: false,
+        appBar: AppBar(
+          title: Text('Envoi Rapport'),
+          centerTitle: true,
+        ),
+        body: Container(
+          decoration: BoxDecoration(color: Colors.grey[200]),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Entrer votre Adresse Email :',
+                        style: TextStyle(fontSize: (screenWidth * 0.05)),
+                      ),
+                      SizedBox(height: screenHeight * 0.05),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          controller: myEmail,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: (screenWidth * 0.05),
+                          ),
+                          decoration: InputDecoration(
+                              hintText: 'user@exemple.fr',
+                              hintStyle: TextStyle(
+                                fontSize: (screenWidth * 0.05),
+                                color: Colors.grey,
+                              )),
                         ),
-                        decoration: InputDecoration(
-                            hintText: 'user@exemple.fr',
-                            hintStyle: TextStyle(
-                              fontSize: (screenWidth * 0.05),
-                              color: Colors.grey,
-                            )),
                       ),
-                    ),
-                    SizedBox(height: screenHeight * 0.1),
-                    FlatButton(
-                      onPressed: () async {
-                        myUvcToast.setToastDuration(60);
-                        myUvcToast.setToastMessage('Envoi en cours !');
-                        myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
-                        await sendEmail(myEmail.text);
-                      },
-                      child: Text(
-                        'Envoyer',
-                        style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                      SizedBox(height: screenHeight * 0.1),
+                      FlatButton(
+                        onPressed: () async {
+                          await uvcDataFile.saveStringUVCEmailDATA(myEmail.text);
+                          myUvcToast.setToastDuration(60);
+                          myUvcToast.setToastMessage('Envoi en cours !');
+                          myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
+                          await sendEmail(myEmail.text);
+                        },
+                        child: Text(
+                          'Envoyer',
+                          style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        color: Colors.blue[400],
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      color: Colors.blue[400],
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
+      onWillPop: () => exitApp(context),
     );
   }
 
@@ -113,7 +147,7 @@ class _SendEmailState extends State<SendEmail> {
       ..from = Address('raki.sayadi@delitech.eu', 'DEEPLGHIT')
       ..recipients.add(destination)
       ..subject = 'Rapport de désinfection UV-C - DEEPLIGHT'
-      ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataFileName'), fileName: 'rapport-uvc'))
+      ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataFileName'), fileName: 'RapportUVC', contentType: 'text/csv'))
       ..text = 'Bonjour,\n\n'
           'Vous trouverez ci-joint le rapport concernant la désinfection éffectuée à l’aide de'
           ' votre solution de désinfection DEEPLIGHT® de DeliTech Medical®.\n\n'
@@ -136,5 +170,14 @@ class _SendEmailState extends State<SendEmail> {
         print('Problem: ${p.code}: ${p.msg}');
       }
     }
+  }
+
+  Future<bool> exitApp(BuildContext context) async {
+    Navigator.pushNamedAndRemoveUntil(context, "/DataCSVView", (r) => false, arguments: {
+      'isTreatmentCompleted': isTreatmentCompleted,
+      'myUvcLight': myUvcLight,
+      'uvcData': uvcData,
+    });
+    return true;
   }
 }

@@ -71,11 +71,6 @@ class _BluetoothActivationState extends State<BluetoothActivation> with TickerPr
 
   @override
   Widget build(BuildContext context) {
-    if (firstDisplayMainWidget) {
-      // Start scanning
-      flutterBlue.startScan(timeout: Duration(seconds: 5));
-      firstDisplayMainWidget = false;
-    }
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
