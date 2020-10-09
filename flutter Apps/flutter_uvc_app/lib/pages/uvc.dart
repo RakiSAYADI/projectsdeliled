@@ -72,9 +72,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     treatmentIsOnProgress = true;
     treatmentIsSuccessful = false;
     durationInSeconds = 30;
-    controllerAnimationTimeBackground = AnimationController(
-      vsync: this,
-    );
+    controllerAnimationTimeBackground = AnimationController(vsync: this);
     circleColor = Colors.red;
     super.initState();
   }
@@ -83,6 +81,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     print('the read methode !');
     Map<String, dynamic> dataRead;
     int detectionResult = 0;
+    print(durationOfActivate.inSeconds-durationOfDisinfect.inSeconds);
     do {
       if (stopReading) {
         break;
@@ -114,6 +113,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
           treatmentIsSuccessful = false;
           Navigator.pushNamed(context, '/end_uvc', arguments: {
             'myUvcLight': myUvcLight,
+            'myactivationtime': (durationOfActivate.inSeconds-durationOfDisinfect.inSeconds),
             'treatmentIsSuccessful': treatmentIsSuccessful,
             'myDevice': myDevice,
           });
@@ -321,6 +321,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                                   _getNotification();
                                                   stopReading = true;
                                                   Navigator.pushNamed(context, '/end_uvc', arguments: {
+                                                    'myactivationtime': (durationOfActivate.inSeconds-durationOfDisinfect.inSeconds),
                                                     'myDevice': myDevice,
                                                     'myUvcLight': myUvcLight,
                                                     'treatmentIsSuccessful': treatmentIsSuccessful,
@@ -379,6 +380,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
               }
               Navigator.pop(c, true);
               Navigator.pushNamed(context, '/end_uvc', arguments: {
+                'myactivationtime': (durationOfActivate.inSeconds-durationOfDisinfect.inSeconds),
                 'myDevice': myDevice,
                 'myUvcLight': myUvcLight,
                 'treatmentIsSuccessful': treatmentIsSuccessful,

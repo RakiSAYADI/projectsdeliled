@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutteruvcapp/services/bleDeviceClass.dart';
 import 'package:flutteruvcapp/services/uvcClass.dart';
 
 class DataCSVView extends StatefulWidget {
@@ -10,7 +9,7 @@ class DataCSVView extends StatefulWidget {
 }
 
 class _DataCSVViewState extends State<DataCSVView> {
-  Map endUVCClassData = {};
+  Map dataCSVClassData = {};
   List<List<String>> uvcData;
 
   bool isTreatmentCompleted;
@@ -28,10 +27,10 @@ class _DataCSVViewState extends State<DataCSVView> {
 
   @override
   Widget build(BuildContext context) {
-    endUVCClassData = endUVCClassData.isNotEmpty ? endUVCClassData : ModalRoute.of(context).settings.arguments;
-    isTreatmentCompleted = endUVCClassData['isTreatmentCompleted'];
-    myUvcLight = endUVCClassData['myUvcLight'];
-    uvcData = endUVCClassData['uvcData'];
+    dataCSVClassData = dataCSVClassData.isNotEmpty ? dataCSVClassData : ModalRoute.of(context).settings.arguments;
+    isTreatmentCompleted = dataCSVClassData['isTreatmentCompleted'];
+    myUvcLight = dataCSVClassData['myUvcLight'];
+    uvcData = dataCSVClassData['uvcData'];
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -71,7 +70,11 @@ class _DataCSVViewState extends State<DataCSVView> {
           ),
         ),
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () =>     Navigator.pushNamed(context, "/send_email"),
+          onPressed: () =>     Navigator.pushNamed(context, "/send_email", arguments: {
+            'isTreatmentCompleted': isTreatmentCompleted,
+            'myUvcLight': myUvcLight,
+            'uvcData': uvcData,
+          }),
           label: Text('Envoi'),
           icon: Icon(
             Icons.send,

@@ -228,12 +228,12 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           ),
         ),
       ),
-      onWillPop: () =>_ackDisconnect(context),
+      onWillPop: () => _ackDisconnect(context),
     );
   }
 
-  Future<bool> _ackDisconnect(BuildContext context) async{
-    if(Platform.isIOS & (myDevice!=null)){
+  Future<bool> _ackDisconnect(BuildContext context) async {
+    if (Platform.isIOS & (myDevice != null)) {
       myDevice.disconnect();
     }
     Navigator.pop(context, true);
