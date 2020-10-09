@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
+import 'package:location_permissions/location_permissions.dart';
 
 class BluetoothActivation extends StatefulWidget {
   @override
@@ -18,7 +19,18 @@ class _BluetoothActivationState extends State<BluetoothActivation> with TickerPr
 
   bool firstDisplayMainWidget = true;
 
-  void scanForDevices() {
+  Widget _myAnimationWidget;
+
+  AnimationController _controller;
+  Animation<double> _animation;
+
+  PermissionStatus _permissionStatus = PermissionStatus.unknown;
+
+  bool changeWidget = false;
+  bool pageDisposed = false;
+
+  void scanForDevices() async {
+    PermissionStatus permission = await LocationPermissions().checkPermissionStatus();
     // Start scanning
     flutterBlue.startScan(timeout: Duration(seconds: 5));
     // Listen to scan results
@@ -40,7 +52,53 @@ class _BluetoothActivationState extends State<BluetoothActivation> with TickerPr
 
   @override
   void dispose() {
+    _controller.dispose();
+    pageDisposed = true;
     super.dispose();
+  }
+
+  void _listenForPermissionStatus() {
+    final Future<PermissionStatus> statusFuture = LocationPermissions().checkPermissionStatus();
+
+    statusFuture.then((PermissionStatus status) {
+      setState(() {
+        _permissionStatus = status;
+        if (_permissionStatus.index != 2) {
+          myUvcToast.setToastDuration(5);
+          myUvcToast.setToastMessage('La Localisation n\'est pas autorisée sur votre téléphone !');
+          myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+        } else {
+          checkServiceStatus(context);
+        }
+      });
+    });
+  }
+
+  void checkServiceStatus(BuildContext context) {
+    LocationPermissions().checkServiceStatus().then((ServiceStatus serviceStatus) {
+      if (serviceStatus.index != 2) {
+        myUvcToast.setToastDuration(5);
+        myUvcToast.setToastMessage('La Localisation n\'est pas activée sur votre téléphone !');
+        myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+      }
+    });
+  }
+
+  void animationControl() async {
+    _controller.repeat(reverse: true);
+    while (true) {
+      await Future.delayed(Duration(seconds: 6), () async {
+        setState(() {
+          changeWidget = !changeWidget;
+          if (changeWidget) {
+            _myAnimationWidget = locationWidget(context);
+          } else {
+            _myAnimationWidget = bluetoothWidget(context);
+          }
+        });
+        _controller.repeat(reverse: true);
+      });
+    }
   }
 
   @override
@@ -51,11 +109,20 @@ class _BluetoothActivationState extends State<BluetoothActivation> with TickerPr
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    _controller = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    );
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.fastOutSlowIn,
+    );
+    myUvcToast = ToastyMessage(toastContext: context);
+    _listenForPermissionStatus();
     flutterBlue.state.listen((state) {
       if (state == BluetoothState.off) {
         //Alert user to turn on bluetooth.
         print("Bluetooth is off");
-        myUvcToast = ToastyMessage(toastContext: context);
         myUvcToast.setToastDuration(5);
         myUvcToast.setToastMessage('Le Bluetooth (BLE) n\'est pas activé sur votre téléphone !');
         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
@@ -71,9 +138,14 @@ class _BluetoothActivationState extends State<BluetoothActivation> with TickerPr
 
   @override
   Widget build(BuildContext context) {
-
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    if (firstDisplayMainWidget) {
+      firstDisplayMainWidget = false;
+      pageDisposed = false;
+      _myAnimationWidget = bluetoothWidget(context);
+      animationControl();
+    }
 
     return WillPopScope(
       child: Scaffold(
@@ -90,22 +162,15 @@ class _BluetoothActivationState extends State<BluetoothActivation> with TickerPr
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        'Afin de garantir le bon fonctionnement de l\'application merci d\'activer votre Bluetooth.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: screenWidth * 0.04,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.05),
-                    Image.asset(
-                      'assets/loading_Bluetooth.gif',
-                      height: screenHeight * 0.3,
-                      width: screenWidth * 0.8,
+                    AnimatedSwitcher(
+                      duration: Duration(seconds: 2),
+                      transitionBuilder: (Widget child, Animation<double> animation) {
+                        return FadeTransition(
+                          opacity: _animation,
+                          child: _myAnimationWidget,
+                        );
+                      },
+                      child: _myAnimationWidget,
                     ),
                     SizedBox(height: screenHeight * 0.04),
                     FlatButton(
@@ -140,6 +205,60 @@ class _BluetoothActivationState extends State<BluetoothActivation> with TickerPr
     );
   }
 
+  Widget locationWidget(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            'Afin de garantir le bon fonctionnement de l\'application merci d\'activer votre Location.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: screenWidth * 0.04,
+            ),
+          ),
+        ),
+        SizedBox(height: screenHeight * 0.05),
+        Image.asset(
+          'assets/loading_Bluetooth.gif',
+          height: screenHeight * 0.3,
+          width: screenWidth * 0.8,
+        ),
+      ],
+    );
+  }
+
+  Widget bluetoothWidget(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            'Afin de garantir le bon fonctionnement de l\'application merci d\'activer votre Bluetooth.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: screenWidth * 0.04,
+            ),
+          ),
+        ),
+        SizedBox(height: screenHeight * 0.05),
+        Image.asset(
+          'assets/loading_Bluetooth.gif',
+          height: screenHeight * 0.3,
+          width: screenWidth * 0.8,
+        ),
+      ],
+    );
+  }
+
   Future<void> startScan(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -165,6 +284,7 @@ class _BluetoothActivationState extends State<BluetoothActivation> with TickerPr
               Navigator.pop(c, true);
               // Start scanning
               flutterBlue.startScan(timeout: Duration(seconds: 5));
+              pageDisposed = true;
               Navigator.pushNamed(context, '/qr_code_scan', arguments: {
                 'scanDevices': scanDevices,
                 'qrCodeConnectionOrSecurity': false,
