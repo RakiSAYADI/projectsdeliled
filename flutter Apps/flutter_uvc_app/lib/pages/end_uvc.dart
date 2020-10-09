@@ -50,9 +50,9 @@ class _EndUVCState extends State<EndUVC> {
     uvcOperationData.add(activationTime.toString());
 
     if (isTreatmentCompleted) {
-      uvcOperationData.add('réussi');
+      uvcOperationData.add('Valide');
     } else {
-      uvcOperationData.add('échoué');
+      uvcOperationData.add('Incident');
     }
 
     uvcData.add(uvcOperationData);
