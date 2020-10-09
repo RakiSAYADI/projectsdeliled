@@ -3,14 +3,24 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 class UVCDataFile {
-  final String _uvcDefaultDataString = 'Nom du robot ;Utilisateur ;Entreprise ;Chambre ;Temp D\'activation ;Durée de disinfection ;Etat \n';
+  final String _uvcDefaultDataString =
+      'Nom du robot ;Utilisateur ;Etablissement ;Chambre ;Heure d\'activation ;Date d\'activation ;Durée de disinfection (en secondes) ;Etat \n';
 
   final String _uvcDataFileName = 'UVC_DATA.csv';
 
   final String _uvcUserEmailFileName = 'User_email.txt';
 
   final List<List<String>> _uvcDefaultData = [
-    ['Nom du robot', 'Utilisateur', 'Entreprise', 'Chambre', 'Temp D\'activation', 'Durée de disinfection', 'Etat']
+    [
+      'Nom du robot',
+      'Utilisateur',
+      'Etablissement',
+      'Chambre',
+      'Heure D\'activation',
+      'Date D\'activation',
+      'Durée de disinfection (en secondes)',
+      'Etat'
+    ]
   ];
 
   Future<List<List<String>>> readUVCDATA() async {
@@ -23,7 +33,7 @@ class UVCDataFile {
         ['default']
       ];
       textuvc.length = 0;
-      List<String> textuvcrows = ['default'];
+      List<String> textuvcrows ;
       textuvcrows.length = 0;
       for (int i = 0; i < text.length; i++) {
         if (text[i] == '\n') {
