@@ -6,7 +6,7 @@ class UVCDataFile {
   final String _uvcDefaultDataString =
       'Nom du robot ;Utilisateur ;Etablissement ;Chambre ;Heure d\'activation ;Date d\'activation ;Durée de disinfection (en secondes) ;Etat \n';
 
-  final String _uvcDataFileName = 'UVC_DATA.csv';
+  final String _uvcDataFileName = 'RapportUVC.csv';
 
   final String _uvcUserEmailFileName = 'User_email.txt';
 
@@ -33,7 +33,7 @@ class UVCDataFile {
         ['default']
       ];
       textuvc.length = 0;
-      List<String> textuvcrows ;
+      List<String> textuvcrows = ['default'];
       textuvcrows.length = 0;
       for (int i = 0; i < text.length; i++) {
         if (text[i] == '\n') {

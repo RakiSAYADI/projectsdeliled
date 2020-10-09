@@ -20,7 +20,7 @@ class _SendEmailState extends State<SendEmail> {
 
   Map sendEmailClassData = {};
 
-  final String _uvcDataFileName = 'UVC_DATA.csv';
+  final String _uvcDataFileName = 'RapportUVC.csv';
 
   final myEmail = TextEditingController();
 
@@ -144,10 +144,10 @@ class _SendEmailState extends State<SendEmail> {
     final serverSMTPDeepLight = SmtpServer(host, username: username, password: password);
     // Create our message.
     final message = Message()
-      ..from = Address('raki.sayadi@delitech.eu', 'DEEPLGHIT')
+      ..from = Address('raki.sayadi@delitech.eu', 'DEEPLIGHT')
       ..recipients.add(destination)
       ..subject = 'Rapport de désinfection UV-C - DEEPLIGHT'
-      ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataFileName'), fileName: 'RapportUVC', contentType: 'text/csv'))
+      ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataFileName')))
       ..text = 'Bonjour,\n\n'
           'Vous trouverez ci-joint le rapport concernant la désinfection éffectuée à l’aide de'
           ' votre solution de désinfection DEEPLIGHT® de DeliTech Medical®.\n\n'
