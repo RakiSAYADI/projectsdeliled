@@ -147,7 +147,7 @@ class _SendEmailState extends State<SendEmail> {
       ..from = Address('raki.sayadi@delitech.eu', 'DEEPLIGHT')
       ..recipients.add(destination)
       ..subject = 'Rapport de désinfection UV-C - DEEPLIGHT'
-      ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataFileName')))
+      ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataFileName'), fileName: 'RapportUVC', contentType: 'test/csv'))
       ..text = 'Bonjour,\n\n'
           'Vous trouverez ci-joint le rapport concernant la désinfection éffectuée à l’aide de'
           ' votre solution de désinfection DEEPLIGHT® de DeliTech Medical®.\n\n'

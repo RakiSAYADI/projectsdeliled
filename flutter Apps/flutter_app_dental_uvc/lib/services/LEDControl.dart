@@ -3,8 +3,8 @@ import 'dart:io';
 
 class LedControl {
   final String _processName = 'su';
-  final String _packageName = '> ./sys/devices/platform/led_con_h/zigbee_reset';
   final String _commandOperation = 'echo w';
+  final String _packageName = '> ./sys/devices/platform/led_con_h/zigbee_reset';
   final String _exitCommand = 'exit';
 
   Future<bool> setLedColor(String ledColor) async {

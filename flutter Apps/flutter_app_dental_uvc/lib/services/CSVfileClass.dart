@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 class UVCDataFile {
   final String _uvcDefaultDataString = 'Nom du robot ;Utilisateur ;Entreprise ;Chambre ;Temp D\'activation ;Durée de disinfection ;Etat \n';
 
-  final String _uvcDataFileName = 'UVC_DATA.csv';
+  final String _uvcDataFileName = 'RapportUVC.csv';
 
   final List<List<String>> _uvcDefaultData = [
     ['Nom du robot', 'Utilisateur', 'Entreprise', 'Chambre', 'Temp D\'activation', 'Durée de disinfection', 'Etat']

@@ -22,7 +22,7 @@ class _DataCSVViewState extends State<DataCSVView> {
 
   ToastyMessage myUvcToast;
 
-  final String _uvcDataFileName = 'UVC_DATA.csv';
+  final String _uvcDataFileName = 'RapportUVC.csv';
 
   @override
   void initState() {
@@ -107,6 +107,7 @@ class _DataCSVViewState extends State<DataCSVView> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.02)),
                     child: TextField(
+                      style: TextStyle(fontSize: (screenWidth * 0.017)),
                       textAlign: TextAlign.center,
                       controller: myEmail,
                       maxLines: 1,
@@ -164,7 +165,7 @@ class _DataCSVViewState extends State<DataCSVView> {
       ..from = Address('raki.sayadi@delitech.eu', 'DEEPLGHIT')
       ..recipients.add(destination)
       ..subject = 'Rapport de désinfection UV-C - DEEPLIGHT'
-      ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataFileName'), fileName: 'rapport-uvc', contentType: 'test/csv'))
+      ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataFileName'), fileName: 'RapportUVC', contentType: 'test/csv'))
       ..text = 'Bonjour,\n\n'
           'Vous trouverez ci-joint le rapport concernant la désinfection éffectuée à l’aide de'
           ' votre solution de désinfection DEEPLIGHT® de DeliTech Medical®.\n\n'
