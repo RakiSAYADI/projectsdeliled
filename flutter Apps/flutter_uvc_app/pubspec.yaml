@@ -37,6 +37,7 @@ dependencies:
   fluttertoast: ^7.1.1
   mailer: ^3.2.1
   location_permissions: ^3.0.0+1
+  introduction_screen: ^1.0.9
 
   web_socket_channel: ^1.1.0
 
