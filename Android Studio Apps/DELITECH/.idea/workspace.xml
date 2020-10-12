@@ -9,12 +9,17 @@
     </shared>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5ee4e1b8-c737-4975-a0d5-815f1ccc2e3f" name="Default Changelist" comment="" />
+    <list default="true" id="5ee4e1b8-c737-4975-a0d5-815f1ccc2e3f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_uvc_app/lib/pages/bluetooth_activation.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_uvc_app/lib/pages/bluetooth_activation.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_uvc_app/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_uvc_app/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_uvc_app/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_uvc_app/pubspec.yaml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="39V4C19A12010231" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
