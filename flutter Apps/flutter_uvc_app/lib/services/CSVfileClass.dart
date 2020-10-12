@@ -18,7 +18,7 @@ class UVCDataFile {
       'Chambre',
       'Heure D\'activation',
       'Date D\'activation',
-      'Durée de disinfection (en secondes)',
+      'Temps de disinfection (en secondes)',
       'Etat'
     ]
   ];

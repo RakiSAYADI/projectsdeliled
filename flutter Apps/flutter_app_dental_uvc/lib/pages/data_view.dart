@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/uvcClass.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:mailer/mailer.dart';
@@ -24,11 +25,24 @@ class _DataCSVViewState extends State<DataCSVView> {
 
   final String _uvcDataFileName = 'RapportUVC.csv';
 
+  UVCDataFile uvcDataFile;
+  String userEmail;
+
+  bool firstDisplayMainWidget = true;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     myUvcToast = ToastyMessage(toastContext: context);
+  }
+
+  void readUserEmailFile() async {
+    if (firstDisplayMainWidget) {
+      firstDisplayMainWidget = false;
+      uvcDataFile = UVCDataFile();
+      userEmail = await uvcDataFile.readUserEmailDATA();
+    }
   }
 
   @override
@@ -37,6 +51,8 @@ class _DataCSVViewState extends State<DataCSVView> {
     isTreatmentCompleted = endUVCClassData['isTreatmentCompleted'];
     myUvcLight = endUVCClassData['myUvcLight'];
     uvcData = endUVCClassData['uvcData'];
+
+    readUserEmailFile();
 
     return Scaffold(
       appBar: AppBar(
@@ -88,6 +104,8 @@ class _DataCSVViewState extends State<DataCSVView> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     final myEmail = TextEditingController();
+    userEmail = await uvcDataFile.readUserEmailDATA();
+    myEmail.text = userEmail;
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -130,6 +148,7 @@ class _DataCSVViewState extends State<DataCSVView> {
                 style: TextStyle(fontSize: (screenWidth * 0.02)),
               ),
               onPressed: () async {
+                await uvcDataFile.saveStringUVCEmailDATA(myEmail.text);
                 myUvcToast.setToastDuration(60);
                 myUvcToast.setToastMessage('Envoi en cours !');
                 myUvcToast.showToast(Colors.green, Icons.send, Colors.white);

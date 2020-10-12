@@ -79,20 +79,18 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
   }
 
   void alertLedRed() async {
-    print('start alert');
     await ledControl.setLedColor('RED');
     do {
       await ledControl.setLedColor('ON');
       await Future.delayed(const Duration(milliseconds: 500));
       await ledControl.setLedColor('OFF');
       await Future.delayed(const Duration(milliseconds: 500));
-      print('alert is on');
       if (alertOrUVC) {
         break;
       }
     } while (true);
-    print('exit alert');
     await ledControl.setLedColor('ON');
+    await Future.delayed(const Duration(milliseconds: 50));
     await ledControl.setLedColor('GREEN');
   }
 
@@ -102,9 +100,6 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     int detectionResult = 0;
     do {
       if (treatmentIsOnProgress) {
-        if (alertOrUVC) {
-          print('UVC time');
-        }
         await myDevice.readCharacteristic(2, 0);
         dataRobotUVC = myDevice.getReadCharMessage();
         dataRead = jsonDecode(dataRobotUVC);
@@ -117,6 +112,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
           treatmentIsOnProgress = false;
           treatmentIsSuccessful = false;
           Navigator.pushNamed(context, '/end_uvc', arguments: {
+            'myactivationtime': (durationOfActivate.inSeconds-durationOfDisinfect.inSeconds),
             'treatmentCompleted': treatmentIsSuccessful,
             'uvclight': myUvcLight,
             'myDevice': myDevice,
@@ -335,6 +331,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                                       Navigator.pushNamed(context, '/end_uvc', arguments: {
                                                         'myDevice': myDevice,
                                                         'uvclight': myUvcLight,
+                                                        'myactivationtime': (durationOfActivate.inSeconds-durationOfDisinfect.inSeconds),
                                                         'treatmentCompleted': treatmentIsSuccessful,
                                                       });
                                                     }
@@ -403,6 +400,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
               Navigator.pushNamed(context, '/end_uvc', arguments: {
                 'myDevice': myDevice,
                 'uvclight': myUvcLight,
+                'myactivationtime': (durationOfActivate.inSeconds-durationOfDisinfect.inSeconds),
                 'treatmentCompleted': treatmentIsSuccessful,
               });
             },

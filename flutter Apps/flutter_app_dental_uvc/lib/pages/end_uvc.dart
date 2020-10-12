@@ -26,6 +26,8 @@ class _EndUVCState extends State<EndUVC> {
   bool firstDisplayMainWidget = true;
   LedControl ledControl;
 
+  int activationTime;
+
   void csvDataFile() async {
     uvcDataFile = UVCDataFile();
     ledControl = LedControl();
@@ -42,19 +44,21 @@ class _EndUVCState extends State<EndUVC> {
     DateFormat dateFormat;
     DateFormat timeFormat;
     initializeDateFormatting();
-    dateFormat = new DateFormat.yMMMMd('fr');
-    timeFormat = new DateFormat.Hms('fr');
-    uvcOperationData.add('${timeFormat.format(dateTime)} à ${dateFormat.format(dateTime)}');
+    dateFormat = new DateFormat.yMd('fr');
+    timeFormat = new DateFormat.Hm('fr');
+    uvcOperationData.add(timeFormat.format(dateTime));
+    uvcOperationData.add(dateFormat.format(dateTime));
 
-    uvcOperationData.add(myUvcLight.getInfectionTimeOnString());
+    uvcOperationData.add(activationTime.toString());
 
     await ledControl.setLedColor('ON');
+    await Future.delayed(const Duration(milliseconds: 50));
 
     if (isTreatmentCompleted) {
-      uvcOperationData.add('réussi');
+      uvcOperationData.add('Valide');
       await ledControl.setLedColor('GREEN');
     } else {
-      uvcOperationData.add('échoué');
+      uvcOperationData.add('Incident');
       await ledControl.setLedColor('RED');
     }
 
@@ -67,6 +71,7 @@ class _EndUVCState extends State<EndUVC> {
   Widget build(BuildContext context) {
     endUVCClassData = endUVCClassData.isNotEmpty ? endUVCClassData : ModalRoute.of(context).settings.arguments;
     isTreatmentCompleted = endUVCClassData['treatmentCompleted'];
+    activationTime = endUVCClassData['myactivationtime'];
     myDevice = endUVCClassData['myDevice'];
     myUvcLight = endUVCClassData['uvclight'];
 

@@ -3,12 +3,24 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 class UVCDataFile {
-  final String _uvcDefaultDataString = 'Nom du robot ;Utilisateur ;Entreprise ;Chambre ;Temp D\'activation ;Durée de disinfection ;Etat \n';
+  final String _uvcDefaultDataString =
+      'Nom du robot ;Utilisateur ;Etablissement ;Chambre ;Heure d\'activation ;Date d\'activation ;Temps de disinfection (en secondes) ;Etat \n';
 
   final String _uvcDataFileName = 'RapportUVC.csv';
 
+  final String _uvcUserEmailFileName = 'User_email.txt';
+
   final List<List<String>> _uvcDefaultData = [
-    ['Nom du robot', 'Utilisateur', 'Entreprise', 'Chambre', 'Temp D\'activation', 'Durée de disinfection', 'Etat']
+    [
+      'Nom du robot',
+      'Utilisateur',
+      'Etablissement',
+      'Chambre',
+      'Heure D\'activation',
+      'Date D\'activation',
+      'Temps de disinfection (en secondes)',
+      'Etat'
+    ]
   ];
 
   Future<List<List<String>>> readUVCDATA() async {
@@ -44,12 +56,12 @@ class UVCDataFile {
       return textuvc;
     } catch (e) {
       print("Couldn't read file");
-      saveStringUVCDATA(_uvcDefaultDataString);
+      await saveStringUVCDATA(_uvcDefaultDataString);
       return _uvcDefaultData;
     }
   }
 
-  saveStringUVCDATA(String uvcData) async {
+  Future<void> saveStringUVCDATA(String uvcData) async {
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/$_uvcDataFileName');
     await file.writeAsString(uvcData);
@@ -72,5 +84,26 @@ class UVCDataFile {
     }
     await file.writeAsString(uvcDATA);
     print('saveUVCDATA : saved');
+  }
+
+  Future<String> readUserEmailDATA() async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/$_uvcUserEmailFileName');
+      String email = await file.readAsString();
+      print("Readed : $email");
+      return email;
+    } catch (e) {
+      print("Couldn't read file");
+      await saveStringUVCEmailDATA('');
+      return '';
+    }
+  }
+
+  Future<void> saveStringUVCEmailDATA(String userEmail) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/$_uvcUserEmailFileName');
+    await file.writeAsString(userEmail);
+    print('saveStringUVCEmailDATA : saved');
   }
 }
