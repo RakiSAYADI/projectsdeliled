@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutterappdentaluvc/services/LEDControl.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/custum_timer_painter.dart';
 import 'package:flutterappdentaluvc/services/uvcClass.dart';
@@ -38,6 +39,10 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
 
   bool firstDisplayMainWidget = true;
 
+  bool alertOrUVC = false;
+
+  LedControl ledControl;
+
   void _changeOpacityDisinfection() {
     setState(() {
       opacityLevelDisinfection = opacityLevelDisinfection == 0 ? 1.0 : 0.0;
@@ -73,12 +78,33 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     super.initState();
   }
 
+  void alertLedRed() async {
+    print('start alert');
+    await ledControl.setLedColor('RED');
+    do {
+      await ledControl.setLedColor('ON');
+      await Future.delayed(const Duration(milliseconds: 500));
+      await ledControl.setLedColor('OFF');
+      await Future.delayed(const Duration(milliseconds: 500));
+      print('alert is on');
+      if (alertOrUVC) {
+        break;
+      }
+    } while (true);
+    print('exit alert');
+    await ledControl.setLedColor('ON');
+    await ledControl.setLedColor('GREEN');
+  }
+
   void readingCharacteristic() async {
     print('the read methode !');
     Map<String, dynamic> dataRead;
     int detectionResult = 0;
     do {
       if (treatmentIsOnProgress) {
+        if (alertOrUVC) {
+          print('UVC time');
+        }
         await myDevice.readCharacteristic(2, 0);
         dataRobotUVC = myDevice.getReadCharMessage();
         dataRead = jsonDecode(dataRobotUVC);
@@ -110,8 +136,6 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     myUvcLight = uvcClassData['uvclight'];
     myDevice = uvcClassData['myDevice'];
 
-    readingCharacteristic();
-
     durationOfDisinfect = Duration(seconds: myUvcLight.getActivationTime());
     if (myUvcLight.infectionTime.contains('sec')) {
       durationOfActivate = Duration(seconds: myUvcLight.getActivationTime() + myUvcLight.getInfectionTime());
@@ -121,6 +145,13 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
 
     if (firstDisplayMainWidget) {
       firstDisplayMainWidget = false;
+
+      alertOrUVC = false;
+      ledControl = LedControl();
+      alertLedRed();
+
+      readingCharacteristic();
+
       controllerAnimationTimeBackground.duration = Duration(seconds: myUvcLight.getActivationTime());
 
       controllerAnimationTimeBackground.reverse(from: controllerAnimationTimeBackground.value == 0.0 ? 1.0 : controllerAnimationTimeBackground.value);
@@ -219,6 +250,8 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                                   onDone: () async {
                                                     _changeOpacityDisinfection();
                                                     _changeOpacityActivation();
+                                                    alertOrUVC = true;
+                                                    print('alert is completed');
                                                     setState(() {
                                                       circleColor = Colors.green;
                                                       controllerAnimationTimeBackground.duration =

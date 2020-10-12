@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutterappdentaluvc/services/LEDControl.dart';
 import 'package:package_info/package_info.dart';
 
 class Welcome extends StatefulWidget {
@@ -14,6 +15,14 @@ class Welcome extends StatefulWidget {
 class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   AnimationController controller;
 
+  LedControl ledControl;
+
+  void ledInit()async{
+    ledControl = LedControl();
+    await ledControl.setLedColor('ON');
+    await ledControl.setLedColor('GREEN');
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -22,6 +31,8 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
+
+    ledInit();
 
     controller = AnimationController(
       vsync: this,

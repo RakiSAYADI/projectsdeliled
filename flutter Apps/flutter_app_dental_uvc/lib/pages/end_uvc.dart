@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
+import 'package:flutterappdentaluvc/services/LEDControl.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcClass.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -23,9 +24,11 @@ class _EndUVCState extends State<EndUVC> {
   List<List<String>> uvcData;
 
   bool firstDisplayMainWidget = true;
+  LedControl ledControl;
 
   void csvDataFile() async {
     uvcDataFile = UVCDataFile();
+    ledControl = LedControl();
     uvcData = await uvcDataFile.readUVCDATA();
     List<String> uvcOperationData = ['default'];
     uvcOperationData.length = 0;
@@ -45,10 +48,14 @@ class _EndUVCState extends State<EndUVC> {
 
     uvcOperationData.add(myUvcLight.getInfectionTimeOnString());
 
+    await ledControl.setLedColor('ON');
+
     if (isTreatmentCompleted) {
       uvcOperationData.add('réussi');
+      await ledControl.setLedColor('GREEN');
     } else {
       uvcOperationData.add('échoué');
+      await ledControl.setLedColor('RED');
     }
 
     uvcData.add(uvcOperationData);
@@ -65,6 +72,7 @@ class _EndUVCState extends State<EndUVC> {
 
     if (firstDisplayMainWidget) {
       firstDisplayMainWidget = false;
+      myDevice.disconnect();
       csvDataFile();
     }
 
@@ -159,7 +167,6 @@ class _EndUVCState extends State<EndUVC> {
   }
 
   Future<bool> exitApp(BuildContext context) async {
-    myDevice.disconnect();
     Navigator.pushNamedAndRemoveUntil(context, "/pin_access", (r) => false);
     return true;
   }
