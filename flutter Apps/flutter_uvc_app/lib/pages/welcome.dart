@@ -72,7 +72,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
               Image.asset(
                 'assets/logo_uv_c.png',
                 height: screenHeight * 0.15,
-                width: screenWidth* 0.7,
+                width: screenWidth * 0.7,
               ),
               SizedBox(height: screenHeight * 0.02),
               Image.asset(
