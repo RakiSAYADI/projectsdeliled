@@ -12,6 +12,7 @@ import 'package:flutteruvcapp/pages/warnings.dart';
 import 'package:flutteruvcapp/pages/scan_ble_list.dart';
 import 'package:flutteruvcapp/pages/welcome.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:wakelock/wakelock.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -64,6 +65,14 @@ void main() async {
         badge: true,
         sound: true,
       );
+
+  Wakelock.enable();
+  bool wakelockEnabled = await Wakelock.enabled;
+  if(wakelockEnabled){
+    // The following statement disables the wakelock.
+    Wakelock.toggle(enable: false);
+  }
+
   runApp(MaterialApp(
     initialRoute: '/',
     routes: {

@@ -32,8 +32,10 @@ dependencies:
   pinput: ^0.2.5
   slide_countdown_clock: ^1.0.3
   path_provider: ^1.6.14
-  fluttertoast: ^7.0.4
+  fluttertoast: ^7.1.1
   mailer: ^3.2.1
+  flutter_nfc_reader: ^0.1.0
+  wakelock: ^0.2.0+1
 
   webview_flutter: ^0.3.23
 

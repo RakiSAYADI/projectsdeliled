@@ -91,7 +91,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     } while (true);
     await ledControl.setLedColor('ON');
     await Future.delayed(const Duration(milliseconds: 50));
-    await ledControl.setLedColor('GREEN');
+    await ledControl.setLedColor('BLUE');
   }
 
   void readingCharacteristic() async {

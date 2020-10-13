@@ -24,7 +24,8 @@ class ToastyMessage {
   }
 
   void showToast(Color toastColor, IconData messageIcon, Color toastMessageColor) {
-    this.flutterToast = FToast(this.toastContext);
+    this.flutterToast = FToast(/*this.toastContext*/);
+    this.flutterToast.init(this.toastContext);
     Widget toast;
 
     if (animationRefreshIcon != null) {

@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutterappdentaluvc/services/LEDControl.dart';
+import 'package:flutterappdentaluvc/services/NFCManagerClass.dart';
 import 'package:package_info/package_info.dart';
+import 'package:wakelock/wakelock.dart';
 
 class Welcome extends StatefulWidget {
   @override
@@ -17,10 +19,20 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
 
   LedControl ledControl;
 
-  void ledInit()async{
+  void ledInit() async {
     ledControl = LedControl();
     await ledControl.setLedColor('ON');
     await ledControl.setLedColor('GREEN');
+  }
+
+  void wakeLock() async {
+    Wakelock.enable();
+    bool wakelockEnabled = await Wakelock.enabled;
+    if (wakelockEnabled) {
+      // The following statement disables the wakelock.
+      Wakelock.toggle(enable: false);
+    }
+    print('screen lock is disabled');
   }
 
   @override
@@ -31,6 +43,8 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
+
+    wakeLock();
 
     ledInit();
 
@@ -118,12 +132,12 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
                       String version = snapshot.data.version;
                       return Center(
                           child: Text(
-                            '$version',
-                            style: TextStyle(
-                              color: Colors.grey[300],
-                              fontSize: MediaQuery.of(context).size.width * 0.02,
-                            ),
-                          ));
+                        '$version',
+                        style: TextStyle(
+                          color: Colors.grey[300],
+                          fontSize: MediaQuery.of(context).size.width * 0.02,
+                        ),
+                      ));
                     } else {
                       return Center(
                         child: CircularProgressIndicator(),
