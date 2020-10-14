@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutterappdentaluvc/services/NFCManagerClass.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:path_provider/path_provider.dart';
@@ -42,6 +43,8 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
 
   Device myDevice;
 
+  NFCTagsManager nfcManager = NFCTagsManager();
+
   BoxDecoration get _pinPutDecoration {
     return BoxDecoration(
       border: Border.all(color: Colors.blue, width: 3),
@@ -61,6 +64,12 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     animationController = AnimationController(vsync: this, duration: Duration(seconds: 10));
     colorInfoQrCode = animationColor(Colors.red, Colors.transparent);
     animationController.forward();
+
+    nfcManager.checkNFCAvailibility().then((value){
+      print(value);
+    });
+
+    nfcManager.tagRead();
 
     animationRefreshIcon.repeat();
     myUvcToast = ToastyMessage(toastContext: context);
@@ -206,6 +215,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
+          //nfcManager.ndefWrite('Hello World!','https://flutter.dev','text/plain');
           Navigator.pushNamed(context, '/pin_settings', arguments: {
             'pinCodeAccess': pinCodeAccess,
           });
