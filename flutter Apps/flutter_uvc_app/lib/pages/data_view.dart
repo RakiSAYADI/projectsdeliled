@@ -33,7 +33,6 @@ class _DataCSVViewState extends State<DataCSVView> {
     uvcData = dataCSVClassData['uvcData'];
 
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
 
     return WillPopScope(
       child: Scaffold(

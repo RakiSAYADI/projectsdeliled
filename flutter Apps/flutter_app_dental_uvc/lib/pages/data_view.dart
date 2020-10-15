@@ -54,6 +54,8 @@ class _DataCSVViewState extends State<DataCSVView> {
 
     readUserEmailFile();
 
+    double widthScreen = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('rapport CSV'),
@@ -63,22 +65,17 @@ class _DataCSVViewState extends State<DataCSVView> {
         decoration: BoxDecoration(color: Colors.grey[200]),
         child: SingleChildScrollView(
           child: Table(
-/*            columnWidths: {
-              0: FixedColumnWidth(100.0),
-              1: FixedColumnWidth(200.0),
-            },*/
             border: TableBorder.all(width: 2.0),
             children: uvcData.map((item) {
               return TableRow(
                   children: item.map((row) {
                 return Container(
-                  //color: row.toString().contains("réussi") ? Colors.green : Colors.red,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       row.toString(),
                       style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.015,
+                        fontSize: widthScreen * 0.015,
                       ),
                     ),
                   ),
@@ -101,8 +98,8 @@ class _DataCSVViewState extends State<DataCSVView> {
   }
 
   Future<void> dataEmailSending(BuildContext context) async {
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
     final myEmail = TextEditingController();
     userEmail = await uvcDataFile.readUserEmailDATA();
     myEmail.text = userEmail;
@@ -119,20 +116,20 @@ class _DataCSVViewState extends State<DataCSVView> {
                 children: [
                   Text(
                     'Entrer votre Adresse Email :',
-                    style: TextStyle(fontSize: (screenWidth * 0.02)),
+                    style: TextStyle(fontSize: (widthScreen * 0.02)),
                   ),
-                  SizedBox(height: screenHeight * 0.005),
+                  SizedBox(height: heightScreen * 0.005),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.02)),
+                    padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.02)),
                     child: TextField(
-                      style: TextStyle(fontSize: (screenWidth * 0.017)),
+                      style: TextStyle(fontSize: (widthScreen * 0.017)),
                       textAlign: TextAlign.center,
                       controller: myEmail,
                       maxLines: 1,
                       decoration: InputDecoration(
                           hintText: 'user@exemple.fr',
                           hintStyle: TextStyle(
-                            fontSize: (screenWidth * 0.02),
+                            fontSize: (widthScreen * 0.02),
                             color: Colors.grey,
                           )),
                     ),
@@ -145,7 +142,7 @@ class _DataCSVViewState extends State<DataCSVView> {
             FlatButton(
               child: Text(
                 'Envoyer',
-                style: TextStyle(fontSize: (screenWidth * 0.02)),
+                style: TextStyle(fontSize: (widthScreen * 0.02)),
               ),
               onPressed: () async {
                 await uvcDataFile.saveStringUVCEmailDATA(myEmail.text);
@@ -159,7 +156,7 @@ class _DataCSVViewState extends State<DataCSVView> {
             FlatButton(
               child: Text(
                 'Annuler',
-                style: TextStyle(fontSize: (screenWidth * 0.02)),
+                style: TextStyle(fontSize: (widthScreen * 0.02)),
               ),
               onPressed: () {
                 myEmail.text = '';

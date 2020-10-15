@@ -95,54 +95,56 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
             children: <Widget>[
               Image.asset(
                 'assets/logo_uv_c.png',
-                height: MediaQuery.of(context).size.height * 0.15,
-                width: MediaQuery.of(context).size.width * 0.7,
+                height: heightScreen * 0.15,
+                width: widthScreen * 0.7,
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              SizedBox(height: heightScreen * 0.02),
               Image.asset(
                 'assets/logo_deeplight.png',
-                height: MediaQuery.of(context).size.height * 0.15,
-                width: MediaQuery.of(context).size.width * 0.7,
+                height: heightScreen * 0.15,
+                width: widthScreen * 0.7,
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              SizedBox(height: heightScreen * 0.05),
               SpinKitCircle(
                 color: Colors.white,
-                size: MediaQuery.of(context).size.height * 0.1,
+                size: heightScreen * 0.1,
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              SizedBox(height: heightScreen * 0.05),
               Image.asset(
                 'assets/logodelitechblanc.png',
-                height: MediaQuery.of(context).size.height * 0.15,
-                width: MediaQuery.of(context).size.width * 0.7,
+                height: heightScreen * 0.15,
+                width: widthScreen * 0.7,
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              SizedBox(height: heightScreen * 0.05),
               Text(
                 'Powered by DELITECH Group',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.grey[300],
-                  fontSize: MediaQuery.of(context).size.width * 0.02,
+                  fontSize: widthScreen * 0.02,
                 ),
               ),
               FutureBuilder(
-                  future: PackageInfo.fromPlatform(),
-                  builder: (BuildContext context, snapshot) {
-                    if (snapshot.hasData) {
-                      String version = snapshot.data.version;
-                      return Center(
-                          child: Text(
+                future: PackageInfo.fromPlatform(),
+                builder: (BuildContext context, snapshot) {
+                  if (snapshot.hasData) {
+                    String version = snapshot.data.version;
+                    return Center(
+                      child: Text(
                         '$version',
                         style: TextStyle(
                           color: Colors.grey[300],
-                          fontSize: MediaQuery.of(context).size.width * 0.02,
+                          fontSize: widthScreen * 0.02,
                         ),
-                      ));
-                    } else {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  }),
+                      ),
+                    );
+                  } else {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                },
+              ),
             ],
           ),
         ),

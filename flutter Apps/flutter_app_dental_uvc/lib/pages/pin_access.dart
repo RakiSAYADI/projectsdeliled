@@ -127,6 +127,8 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.blue[400],
       appBar: AppBar(
@@ -147,14 +149,14 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: MediaQuery.of(context).size.width * 0.04,
+                        fontSize: widthScreen * 0.04,
                       ),
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                    SizedBox(height: heightScreen * 0.05),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(flex: 1, child: SizedBox(height: MediaQuery.of(context).size.width * 0.01)),
+                        Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.01)),
                         Expanded(
                           flex: 3,
                           child: Container(
@@ -167,7 +169,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
                               controller: _pinPutController,
                               textStyle: TextStyle(
                                 color: Colors.black,
-                                fontSize: MediaQuery.of(context).size.width * 0.04,
+                                fontSize: widthScreen * 0.04,
                               ),
                               submittedFieldDecoration: _pinPutDecoration.copyWith(borderRadius: BorderRadius.circular(20)),
                               selectedFieldDecoration: _pinPutDecoration,
@@ -178,31 +180,31 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
                             ),
                           ),
                         ),
-                        Expanded(flex: 1, child: SizedBox(height: MediaQuery.of(context).size.width * 0.01)),
+                        Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.01)),
                       ],
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                    SizedBox(height: heightScreen * 0.05),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         buttonNumbers('0', context),
-                        SizedBox(width: MediaQuery.of(context).size.width * 0.003),
+                        SizedBox(width: widthScreen * 0.003),
                         buttonNumbers('1', context),
-                        SizedBox(width: MediaQuery.of(context).size.width * 0.003),
+                        SizedBox(width: widthScreen * 0.003),
                         buttonNumbers('2', context),
-                        SizedBox(width: MediaQuery.of(context).size.width * 0.003),
+                        SizedBox(width: widthScreen * 0.003),
                         buttonNumbers('3', context),
-                        SizedBox(width: MediaQuery.of(context).size.width * 0.003),
+                        SizedBox(width: widthScreen * 0.003),
                         buttonNumbers('4', context),
-                        SizedBox(width: MediaQuery.of(context).size.width * 0.003),
+                        SizedBox(width: widthScreen * 0.003),
                         buttonNumbers('5', context),
-                        SizedBox(width: MediaQuery.of(context).size.width * 0.003),
+                        SizedBox(width: widthScreen * 0.003),
                         buttonNumbers('6', context),
-                        SizedBox(width: MediaQuery.of(context).size.width * 0.003),
+                        SizedBox(width: widthScreen * 0.003),
                         buttonNumbers('7', context),
-                        SizedBox(width: MediaQuery.of(context).size.width * 0.003),
+                        SizedBox(width: widthScreen * 0.003),
                         buttonNumbers('8', context),
-                        SizedBox(width: MediaQuery.of(context).size.width * 0.003),
+                        SizedBox(width: widthScreen * 0.003),
                         buttonNumbers('9', context),
                       ],
                     ),
@@ -215,7 +217,6 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          //nfcManager.ndefWrite('Hello World!','https://flutter.dev','text/plain');
           Navigator.pushNamed(context, '/pin_settings', arguments: {
             'pinCodeAccess': pinCodeAccess,
           });
@@ -231,16 +232,18 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   }
 
   ButtonTheme buttonNumbers(String number, BuildContext context) {
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
     return ButtonTheme(
-      minWidth: MediaQuery.of(context).size.width * 0.09,
-      height: MediaQuery.of(context).size.height * 0.07,
+      minWidth: widthScreen * 0.09,
+      height: heightScreen * 0.07,
       child: FlatButton(
         color: Colors.grey[400],
         child: Text(
           number,
           style: TextStyle(
             color: Colors.white,
-            fontSize: MediaQuery.of(context).size.width * 0.02,
+            fontSize: widthScreen * 0.02,
           ),
         ),
         shape: RoundedRectangleBorder(
@@ -287,6 +290,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   }
 
   void _showSnackBar(String pin, BuildContext context) async {
+    double widthScreen = MediaQuery.of(context).size.width;
     pinCodeAccess = await _readPINFile();
     String messagePin;
     Color messageColor;
@@ -301,7 +305,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     final snackBar = SnackBar(
       duration: Duration(seconds: 2),
       content: Container(
-          height: MediaQuery.of(context).size.height * 0.1,
+          height: widthScreen * 0.1,
           child: Center(
             child: Text(
               messagePin,

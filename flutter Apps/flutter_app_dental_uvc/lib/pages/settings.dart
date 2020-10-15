@@ -78,6 +78,10 @@ class _SettingsState extends State<Settings> {
       myExtinctionTimeMinuteData = myExtinctionTimeMinute.elementAt(myExtinctionTimeMinutePosition);
       myActivationTimeMinuteData = myActivationTimeMinute.elementAt(myActivationTimeMinutePosition);
     }
+
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Paramètres'),
@@ -85,126 +89,122 @@ class _SettingsState extends State<Settings> {
       ),
       body: Container(
         decoration: BoxDecoration(color: Colors.grey[200]),
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/delais_logo.png',
-                            height: MediaQuery.of(context).size.height * 0.09,
-                            width: MediaQuery.of(context).size.width * 0.5,
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(height: heightScreen * 0.04),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/delais_logo.png',
+                          height: heightScreen * 0.09,
+                          width: widthScreen * 0.5,
+                        ),
+                        SizedBox(height: heightScreen * 0.03),
+                        Text(
+                          'Délais avant allumage :',
+                          style: TextStyle(
+                            fontSize: widthScreen * 0.03,
+                            color: Colors.black,
                           ),
-                          SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-                          Text(
-                            'Délais avant allumage :',
-                            style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width * 0.03,
-                              color: Colors.black,
-                            ),
-                          ),
-                          DropdownButton<String>(
-                            value: myActivationTimeMinuteData,
-                            icon: Icon(Icons.arrow_drop_down),
-                            iconSize: 24,
-                            elevation: 16,
-                            style: TextStyle(color: Colors.grey[800], fontSize: 18),
-                            onChanged: (String data) {
-                              setState(() {
-                                myActivationTimeMinuteData = data;
-                                myActivationTimeMinutePosition = myActivationTimeMinute.indexOf(data);
-                                print(myActivationTimeMinutePosition);
-                              });
-                            },
-                            items: myActivationTimeMinute.map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(
-                                  value,
-                                  style: TextStyle(
-                                    fontSize: MediaQuery.of(context).size.width * 0.03,
-                                    color: Colors.grey[600],
-                                  ),
+                        ),
+                        DropdownButton<String>(
+                          value: myActivationTimeMinuteData,
+                          icon: Icon(Icons.arrow_drop_down),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                          onChanged: (String data) {
+                            setState(() {
+                              myActivationTimeMinuteData = data;
+                              myActivationTimeMinutePosition = myActivationTimeMinute.indexOf(data);
+                              print(myActivationTimeMinutePosition);
+                            });
+                          },
+                          items: myActivationTimeMinute.map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: TextStyle(
+                                  fontSize: widthScreen * 0.03,
+                                  color: Colors.grey[600],
                                 ),
-                              );
-                            }).toList(),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Image.asset(
-                            'assets/duree_logo.png',
-                            height: MediaQuery.of(context).size.height * 0.09,
-                            width: MediaQuery.of(context).size.width * 0.5,
-                          ),
-                          SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-                          Text(
-                            'Durée de la désinfection :',
-                            style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width * 0.03,
-                              color: Colors.black,
-                            ),
-                          ),
-                          DropdownButton<String>(
-                            value: myExtinctionTimeMinuteData,
-                            icon: Icon(Icons.arrow_drop_down),
-                            iconSize: 24,
-                            elevation: 16,
-                            style: TextStyle(color: Colors.grey[800], fontSize: MediaQuery.of(context).size.width * 0.04),
-                            onChanged: (String data) {
-                              setState(() {
-                                myExtinctionTimeMinuteData = data;
-                                myExtinctionTimeMinutePosition = myExtinctionTimeMinute.indexOf(data);
-                                print(myExtinctionTimeMinutePosition);
-                              });
-                            },
-                            items: myExtinctionTimeMinute.map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(
-                                  value,
-                                  style: TextStyle(
-                                    fontSize: MediaQuery.of(context).size.width * 0.03,
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-                  FlatButton(
-                    onPressed: () {
-                      alertSecurity(context);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Text(
-                        'DÉMARRER',
-                        style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width * 0.02),
-                      ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ],
                     ),
-                    color: Colors.blue[400],
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                    Column(
+                      children: [
+                        Image.asset(
+                          'assets/duree_logo.png',
+                          height: heightScreen * 0.09,
+                          width: widthScreen * 0.5,
+                        ),
+                        SizedBox(height: heightScreen * 0.03),
+                        Text(
+                          'Durée de la désinfection :',
+                          style: TextStyle(
+                            fontSize: widthScreen * 0.03,
+                            color: Colors.black,
+                          ),
+                        ),
+                        DropdownButton<String>(
+                          value: myExtinctionTimeMinuteData,
+                          icon: Icon(Icons.arrow_drop_down),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: TextStyle(color: Colors.grey[800], fontSize: widthScreen * 0.04),
+                          onChanged: (String data) {
+                            setState(() {
+                              myExtinctionTimeMinuteData = data;
+                              myExtinctionTimeMinutePosition = myExtinctionTimeMinute.indexOf(data);
+                              print(myExtinctionTimeMinutePosition);
+                            });
+                          },
+                          items: myExtinctionTimeMinute.map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: TextStyle(
+                                  fontSize: widthScreen * 0.03,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(height: heightScreen * 0.1),
+                FlatButton(
+                  onPressed: () {
+                    alertSecurity(context);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      'DÉMARRER',
+                      style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.02),
                     ),
                   ),
-                ],
-              ),
+                  color: Colors.blue[400],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -213,6 +213,8 @@ class _SettingsState extends State<Settings> {
   }
 
   Future<void> alertSecurity(BuildContext context) async {
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
     myUvcLight.setInfectionTime(myExtinctionTimeMinuteData);
     myUvcLight.setActivationTime(myActivationTimeMinuteData);
     print(myExtinctionTimeMinutePosition);
@@ -231,9 +233,9 @@ class _SettingsState extends State<Settings> {
               Text(
                 'Confirmer ces informations :',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.03),
+                style: TextStyle(fontSize: widthScreen * 0.03),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+              SizedBox(height: heightScreen * 0.04),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -241,19 +243,19 @@ class _SettingsState extends State<Settings> {
                     flex: 2,
                     child: Image.asset(
                       'assets/etablissement_logo.png',
-                      height: MediaQuery.of(context).size.height * 0.05,
-                      width: MediaQuery.of(context).size.width * 0.15,
+                      height: heightScreen * 0.05,
+                      width: widthScreen * 0.15,
                     ),
                   ),
                   Expanded(
                       flex: 3,
                       child: Text(
                         '${myUvcLight.getCompanyName()}',
-                        style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.03),
+                        style: TextStyle(fontSize: widthScreen * 0.03),
                       )),
                 ],
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              SizedBox(height: heightScreen * 0.02),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -261,19 +263,19 @@ class _SettingsState extends State<Settings> {
                     flex: 2,
                     child: Image.asset(
                       'assets/operateur_logo.png',
-                      height: MediaQuery.of(context).size.height * 0.05,
-                      width: MediaQuery.of(context).size.width * 0.15,
+                      height: heightScreen * 0.05,
+                      width: widthScreen * 0.15,
                     ),
                   ),
                   Expanded(
                       flex: 3,
                       child: Text(
                         '${myUvcLight.getOperatorName()}',
-                        style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.03),
+                        style: TextStyle(fontSize: widthScreen * 0.03),
                       )),
                 ],
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              SizedBox(height: heightScreen * 0.02),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -281,19 +283,19 @@ class _SettingsState extends State<Settings> {
                     flex: 2,
                     child: Image.asset(
                       'assets/piece_logo.png',
-                      height: MediaQuery.of(context).size.height * 0.05,
-                      width: MediaQuery.of(context).size.width * 0.15,
+                      height: heightScreen * 0.05,
+                      width: widthScreen * 0.15,
                     ),
                   ),
                   Expanded(
                       flex: 3,
                       child: Text(
                         '${myUvcLight.getRoomName()}',
-                        style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.03),
+                        style: TextStyle(fontSize: widthScreen * 0.03),
                       )),
                 ],
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              SizedBox(height: heightScreen * 0.02),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -301,19 +303,19 @@ class _SettingsState extends State<Settings> {
                     flex: 2,
                     child: Image.asset(
                       'assets/delais_logo.png',
-                      height: MediaQuery.of(context).size.height * 0.05,
-                      width: MediaQuery.of(context).size.width * 0.15,
+                      height: heightScreen * 0.05,
+                      width: widthScreen * 0.15,
                     ),
                   ),
                   Expanded(
                       flex: 3,
                       child: Text(
                         '${myUvcLight.getActivationTimeOnString().replaceAll(new RegExp(r"\s+"), "")}',
-                        style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.03),
+                        style: TextStyle(fontSize: widthScreen * 0.03),
                       )),
                 ],
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              SizedBox(height: heightScreen * 0.02),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -321,15 +323,15 @@ class _SettingsState extends State<Settings> {
                     flex: 2,
                     child: Image.asset(
                       'assets/duree_logo.png',
-                      height: MediaQuery.of(context).size.height * 0.05,
-                      width: MediaQuery.of(context).size.width * 0.15,
+                      height: heightScreen * 0.05,
+                      width: widthScreen * 0.15,
                     ),
                   ),
                   Expanded(
                       flex: 3,
                       child: Text(
                         '${myUvcLight.getInfectionTimeOnString().replaceAll(new RegExp(r"\s+"), "")}',
-                        style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.03),
+                        style: TextStyle(fontSize: widthScreen * 0.03),
                       )),
                 ],
               ),
@@ -339,7 +341,7 @@ class _SettingsState extends State<Settings> {
             FlatButton(
               child: Text(
                 'OK',
-                style: TextStyle(color: Colors.green, fontSize: MediaQuery.of(context).size.width * 0.02),
+                style: TextStyle(color: Colors.green, fontSize: widthScreen * 0.02),
               ),
               onPressed: () async {
                 Navigator.of(context).pop();
@@ -352,7 +354,7 @@ class _SettingsState extends State<Settings> {
             FlatButton(
               child: Text(
                 'Annuler',
-                style: TextStyle(color: Colors.green, fontSize: MediaQuery.of(context).size.width * 0.02),
+                style: TextStyle(color: Colors.green, fontSize: widthScreen * 0.02),
               ),
               onPressed: () {
                 Navigator.of(context).pop();

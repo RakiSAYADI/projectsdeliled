@@ -100,6 +100,9 @@ class _ProfilesState extends State<Profiles> {
       myActivationTimeMinutePosition = _stringListAsciiToListInt(timeDataList.codeUnits)[1];
     }
 
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
+
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
@@ -108,159 +111,155 @@ class _ProfilesState extends State<Profiles> {
         ),
         body: Container(
           decoration: BoxDecoration(color: Colors.grey[200]),
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Center(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/etablissement_logo.png',
-                                height: MediaQuery.of(context).size.height * 0.09,
-                                width: MediaQuery.of(context).size.width * 0.5,
-                              ),
-                              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: (MediaQuery.of(context).size.width * 0.02)),
-                                child: TextField(
-                                  textAlign: TextAlign.center,
-                                  maxLines: 1,
-                                  controller: myCompany,
-                                  style: TextStyle(
-                                    fontSize: MediaQuery.of(context).size.width * 0.03,
-                                    color: Colors.grey[800],
-                                  ),
-                                  decoration: InputDecoration(
-                                      hintText: 'Établissement',
-                                      hintStyle: TextStyle(
-                                        color: Colors.grey,
-                                      )),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(height: heightScreen * 0.01),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/etablissement_logo.png',
+                              height: heightScreen * 0.09,
+                              width: widthScreen * 0.5,
+                            ),
+                            SizedBox(height: heightScreen * 0.03),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.02)),
+                              child: TextField(
+                                textAlign: TextAlign.center,
+                                maxLines: 1,
+                                controller: myCompany,
+                                style: TextStyle(
+                                  fontSize: widthScreen * 0.03,
+                                  color: Colors.grey[800],
                                 ),
+                                decoration: InputDecoration(
+                                    hintText: 'Établissement',
+                                    hintStyle: TextStyle(
+                                      color: Colors.grey,
+                                    )),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                        Expanded(
-                          flex: 1,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/operateur_logo.png',
-                                height: MediaQuery.of(context).size.height * 0.09,
-                                width: MediaQuery.of(context).size.width * 0.5,
-                              ),
-                              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: (MediaQuery.of(context).size.width * 0.02)),
-                                child: TextField(
-                                  textAlign: TextAlign.center,
-                                  maxLines: 1,
-                                  controller: myName,
-                                  style: TextStyle(
-                                    fontSize: MediaQuery.of(context).size.width * 0.03,
-                                    color: Colors.grey[800],
-                                  ),
-                                  decoration: InputDecoration(
-                                      hintText: 'Opérateur',
-                                      hintStyle: TextStyle(
-                                        color: Colors.grey,
-                                      )),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/operateur_logo.png',
+                              height: heightScreen * 0.09,
+                              width: widthScreen * 0.5,
+                            ),
+                            SizedBox(height: heightScreen * 0.03),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.02)),
+                              child: TextField(
+                                textAlign: TextAlign.center,
+                                maxLines: 1,
+                                controller: myName,
+                                style: TextStyle(
+                                  fontSize: widthScreen * 0.03,
+                                  color: Colors.grey[800],
                                 ),
+                                decoration: InputDecoration(
+                                    hintText: 'Opérateur',
+                                    hintStyle: TextStyle(
+                                      color: Colors.grey,
+                                    )),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                        Expanded(
-                          flex: 1,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/piece_logo.png',
-                                height: MediaQuery.of(context).size.height * 0.09,
-                                width: MediaQuery.of(context).size.width * 0.5,
-                              ),
-                              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: (MediaQuery.of(context).size.width * 0.02)),
-                                child: TextField(
-                                  textAlign: TextAlign.center,
-                                  maxLines: 1,
-                                  controller: myRoomName,
-                                  style: TextStyle(
-                                    fontSize: MediaQuery.of(context).size.width * 0.03,
-                                  ),
-                                  decoration: InputDecoration(
-                                      hintText: 'Pièce/local',
-                                      hintStyle: TextStyle(
-                                        color: Colors.grey,
-                                      )),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/piece_logo.png',
+                              height: heightScreen * 0.09,
+                              width: widthScreen * 0.5,
+                            ),
+                            SizedBox(height: heightScreen * 0.03),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.02)),
+                              child: TextField(
+                                textAlign: TextAlign.center,
+                                maxLines: 1,
+                                controller: myRoomName,
+                                style: TextStyle(
+                                  fontSize: widthScreen * 0.03,
                                 ),
+                                decoration: InputDecoration(
+                                    hintText: 'Pièce/local',
+                                    hintStyle: TextStyle(
+                                      color: Colors.grey,
+                                    )),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: heightScreen * 0.15),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.1)),
+                    child: Text(
+                      'Merci de compléter ces informations pour garantir un suivi de désinfection optimal.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: widthScreen * 0.03,
+                        color: Colors.black,
+                      ),
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.15),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: (MediaQuery.of(context).size.width * 0.1)),
+                  ),
+                  SizedBox(height: heightScreen * 0.04),
+                  FlatButton(
+                    onPressed: () {
+                      myUvcLight = UvcLight(
+                          machineName: myDevice.device.name,
+                          machineMac: myDevice.device.id.toString(),
+                          company: myCompany.text,
+                          operatorName: myName.text,
+                          roomName: myRoomName.text);
+                      Navigator.pushNamed(context, '/settings', arguments: {
+                        'myDevice': myDevice,
+                        'myUvcLight': myUvcLight,
+                        'disinfectionTime': myExtinctionTimeMinutePosition,
+                        'activationTime': myActivationTimeMinutePosition,
+                      });
+                      //alertSecurity(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
                       child: Text(
-                        'Merci de compléter ces informations pour garantir un suivi de désinfection optimal.',
-                        textAlign: TextAlign.center,
+                        'SUIVANT',
                         style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width * 0.03,
-                          color: Colors.black,
+                          color: Colors.white,
+                          fontSize: widthScreen * 0.02,
                         ),
                       ),
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-                    FlatButton(
-                      onPressed: () {
-                        myUvcLight = UvcLight(
-                            machineName: myDevice.device.name,
-                            machineMac: myDevice.device.id.toString(),
-                            company: myCompany.text,
-                            operatorName: myName.text,
-                            roomName: myRoomName.text);
-                        Navigator.pushNamed(context, '/settings', arguments: {
-                          'myDevice': myDevice,
-                          'myUvcLight': myUvcLight,
-                          'disinfectionTime': myExtinctionTimeMinutePosition,
-                          'activationTime': myActivationTimeMinutePosition,
-                        });
-                        //alertSecurity(context);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text(
-                          'SUIVANT',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: MediaQuery.of(context).size.width * 0.02,
-                          ),
-                        ),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      color: Colors.blue[400],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-                  ],
-                ),
+                    color: Colors.blue[400],
+                  ),
+                  SizedBox(height: heightScreen * 0.04),
+                ],
               ),
             ),
           ),
@@ -271,6 +270,7 @@ class _ProfilesState extends State<Profiles> {
   }
 
   Future<void> disconnection(BuildContext context) {
+    double widthScreen = MediaQuery.of(context).size.width;
     return showDialog<bool>(
       context: context,
       builder: (c) => AlertDialog(
@@ -278,7 +278,7 @@ class _ProfilesState extends State<Profiles> {
         content: Text(
           'Voulez-vous vraiment quitter la page \"Profil\" ?',
           style: TextStyle(
-            fontSize: MediaQuery.of(context).size.width * 0.02,
+            fontSize: widthScreen * 0.02,
           ),
         ),
         actions: [
@@ -286,7 +286,7 @@ class _ProfilesState extends State<Profiles> {
             child: Text(
               'Oui',
               style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.02,
+                fontSize: widthScreen * 0.02,
               ),
             ),
             onPressed: () {
@@ -299,7 +299,7 @@ class _ProfilesState extends State<Profiles> {
             child: Text(
               'Non',
               style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.02,
+                fontSize: widthScreen * 0.02,
               ),
             ),
             onPressed: () => Navigator.pop(c, false),

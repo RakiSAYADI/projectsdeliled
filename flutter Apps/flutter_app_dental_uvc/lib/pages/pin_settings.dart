@@ -40,7 +40,8 @@ class _PinSettingsState extends State<PinSettings> {
     pinSettingsData = pinSettingsData.isNotEmpty ? pinSettingsData : ModalRoute.of(context).settings.arguments;
     pinCodeAccess = pinSettingsData['pinCodeAccess'];
 
-    double screenHeight = MediaQuery.of(context).size.height;
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: Colors.blue[400],
@@ -58,16 +59,16 @@ class _PinSettingsState extends State<PinSettings> {
                 children: [
                   Text(
                     'Entrer l\'ancien code de sécurité: ',
-                    style: TextStyle(fontSize: (MediaQuery.of(context).size.width * 0.02)),
+                    style: TextStyle(fontSize: (widthScreen * 0.02)),
                   ),
-                  SizedBox(height: screenHeight * 0.05),
+                  SizedBox(height: heightScreen * 0.05),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: (MediaQuery.of(context).size.width * 0.2)),
+                    padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.2)),
                     child: TextField(
                       textAlign: TextAlign.center,
                       controller: myOldPinCode,
                       style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.02,
+                        fontSize: widthScreen * 0.02,
                       ),
                       maxLines: 1,
                       maxLength: 4,
@@ -82,19 +83,19 @@ class _PinSettingsState extends State<PinSettings> {
                           )),
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.1),
+                  SizedBox(height: heightScreen * 0.1),
                   Text(
                     'Entrer le nouveau code de sécurité : ',
-                    style: TextStyle(fontSize: (MediaQuery.of(context).size.width * 0.02)),
+                    style: TextStyle(fontSize: (widthScreen * 0.02)),
                   ),
-                  SizedBox(height: screenHeight * 0.05),
+                  SizedBox(height: heightScreen * 0.05),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: (MediaQuery.of(context).size.width * 0.2)),
+                    padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.2)),
                     child: TextField(
                       textAlign: TextAlign.center,
                       controller: myNewPinCode,
                       style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.02,
+                        fontSize: widthScreen * 0.02,
                       ),
                       maxLines: 1,
                       maxLength: 4,
@@ -109,7 +110,7 @@ class _PinSettingsState extends State<PinSettings> {
                           )),
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.05),
+                  SizedBox(height: heightScreen * 0.05),
                   FlatButton(
                     color: Colors.blue[400],
                     child: Padding(
@@ -118,7 +119,7 @@ class _PinSettingsState extends State<PinSettings> {
                         'VALIDER',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: MediaQuery.of(context).size.width * 0.02,
+                          fontSize: widthScreen * 0.02,
                         ),
                       ),
                     ),

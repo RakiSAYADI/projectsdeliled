@@ -81,8 +81,8 @@ class _EndUVCState extends State<EndUVC> {
       csvDataFile();
     }
 
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
 
     String title;
     String message;
@@ -106,47 +106,43 @@ class _EndUVCState extends State<EndUVC> {
         ),
         body: Container(
           decoration: BoxDecoration(color: Colors.grey[200]),
-          child: Container(
-            width: screenWidth,
-            height: screenHeight,
-            child: Center(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      message,
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    message,
+                    style: TextStyle(
+                      fontSize: widthScreen * 0.06,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: heightScreen * 0.05),
+                  Image.asset(
+                    imageGif,
+                    height: heightScreen * 0.2,
+                    width: widthScreen * 0.8,
+                  ),
+                  SizedBox(height: heightScreen * 0.05),
+                  FlatButton(
+                    onPressed: () {
+                      myDevice.disconnect();
+                      Navigator.pushNamedAndRemoveUntil(context, "/pin_access", (r) => false);
+                    },
+                    child: Text(
+                      'Nouvelle désinfection',
                       style: TextStyle(
-                        fontSize: screenWidth * 0.06,
-                        color: Colors.black,
+                        color: Colors.white,
+                        fontSize: widthScreen * 0.05,
                       ),
                     ),
-                    SizedBox(height: screenHeight * 0.05),
-                    Image.asset(
-                      imageGif,
-                      height: screenHeight * 0.2,
-                      width: screenWidth * 0.8,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
                     ),
-                    SizedBox(height: screenHeight * 0.05),
-                    FlatButton(
-                      onPressed: () {
-                        myDevice.disconnect();
-                        Navigator.pushNamedAndRemoveUntil(context, "/pin_access", (r) => false);
-                      },
-                      child: Text(
-                        'Nouvelle désinfection',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: screenWidth * 0.05,
-                        ),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      color: Colors.blue[400],
-                    ),
-                  ],
-                ),
+                    color: Colors.blue[400],
+                  ),
+                ],
               ),
             ),
           ),

@@ -8,7 +8,7 @@ class DataBaseRequests {
 
   final String _insertUVCDataLink = 'https://www.deeplight.fr/insertdata/';
   final String _idRobotName = 'idNomRobot';
-  final String _idUser = 'utilisatuer';
+  final String _idUser = 'utilisateur';
   final String _idEnterprise = 'etablissement';
   final String _idRoom = 'chambre';
   final String _idStartHour = 'heureActivite';
@@ -66,5 +66,4 @@ class DataBaseRequests {
     // Finally, close the connection
     await conn.close();
   }
-
 }

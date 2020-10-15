@@ -153,6 +153,9 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
       controllerAnimationTimeBackground.reverse(from: controllerAnimationTimeBackground.value == 0.0 ? 1.0 : controllerAnimationTimeBackground.value);
     }
 
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
+
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
@@ -176,8 +179,8 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                     flex: 1,
                     child: Image.asset(
                       'assets/logo_deeplight.png',
-                      height: MediaQuery.of(context).size.height * 0.05,
-                      width: MediaQuery.of(context).size.width * 0.5,
+                      height: heightScreen * 0.05,
+                      width: widthScreen * 0.5,
                     ),
                   ),
                   Expanded(
@@ -222,7 +225,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.red,
-                                                  fontSize: MediaQuery.of(context).size.width * 0.015,
+                                                  fontSize: widthScreen * 0.015,
                                                 ),
                                               ),
                                               Padding(
@@ -232,12 +235,12 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                                   slideDirection: SlideDirection.Up,
                                                   separator: ":",
                                                   textStyle: TextStyle(
-                                                    fontSize: MediaQuery.of(context).size.width * 0.02,
+                                                    fontSize: widthScreen * 0.02,
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.grey[300],
                                                   ),
                                                   separatorTextStyle: TextStyle(
-                                                    fontSize: MediaQuery.of(context).size.width * 0.02,
+                                                    fontSize: widthScreen * 0.02,
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.red,
                                                   ),
@@ -271,15 +274,15 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                           child: ClipOval(
                                             child: Container(
                                               color: Colors.red,
-                                              height: 100.0 * MediaQuery.of(context).size.height * 0.001,
-                                              width: 100.0 * MediaQuery.of(context).size.width * 0.001,
+                                              height: heightScreen * 0.1,
+                                              width: widthScreen * 0.1,
                                               child: Center(
                                                 child: Text(
                                                   'STOP',
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.grey[300],
-                                                    fontSize: MediaQuery.of(context).size.width * 0.015,
+                                                    fontSize: widthScreen * 0.015,
                                                   ),
                                                 ),
                                               ),
@@ -301,7 +304,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.green,
-                                                  fontSize: MediaQuery.of(context).size.width * 0.015,
+                                                  fontSize: widthScreen * 0.015,
                                                 ),
                                               ),
                                               Padding(
@@ -311,12 +314,12 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                                   slideDirection: SlideDirection.Up,
                                                   separator: ":",
                                                   textStyle: TextStyle(
-                                                    fontSize: MediaQuery.of(context).size.width * 0.02,
+                                                    fontSize: widthScreen * 0.02,
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.grey[300],
                                                   ),
                                                   separatorTextStyle: TextStyle(
-                                                    fontSize: MediaQuery.of(context).size.width * 0.02,
+                                                    fontSize: widthScreen * 0.02,
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.green,
                                                   ),
@@ -356,8 +359,8 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                     flex: 1,
                     child: Image.asset(
                       'assets/logodelitechblanc.png',
-                      height: MediaQuery.of(context).size.height * 0.1,
-                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: heightScreen * 0.1,
+                      width: widthScreen * 0.8,
                     ),
                   ),
                 ],
@@ -371,6 +374,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
   }
 
   Future<void> stopSecurity(BuildContext context) {
+    double widthScreen = MediaQuery.of(context).size.width;
     return showDialog<bool>(
       context: context,
       builder: (c) => AlertDialog(
@@ -378,7 +382,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
         content: Text(
           'Voulez-vous vraiment annuler le traitement UVC ?',
           style: TextStyle(
-            fontSize: MediaQuery.of(context).size.width * 0.02,
+            fontSize: widthScreen * 0.02,
           ),
         ),
         actions: [
@@ -386,7 +390,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
             child: Text(
               'Oui',
               style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.02,
+                fontSize: widthScreen * 0.02,
               ),
             ),
             onPressed: () async {
@@ -409,7 +413,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
             child: Text(
               'Non',
               style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.02,
+                fontSize: widthScreen * 0.02,
               ),
             ),
             onPressed: () => Navigator.pop(c, false),
@@ -427,6 +431,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
   }
 
   Widget _buildSpace() {
-    return SizedBox(height: MediaQuery.of(context).size.height * 0.02);
+    double heightScreen = MediaQuery.of(context).size.height;
+    return SizedBox(height: heightScreen * 0.02);
   }
 }
