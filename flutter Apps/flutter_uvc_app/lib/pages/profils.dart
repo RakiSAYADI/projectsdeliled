@@ -92,8 +92,6 @@ class _ProfilesState extends State<Profiles> {
 
       String timeDataList = user['TimeData'].toString();
 
-      print(_stringListAsciiToListInt(timeDataList.codeUnits));
-
       firstDisplayMainWidget = false;
       myCompany.text = user['Company'];
       myName.text = user['UserName'];

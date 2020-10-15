@@ -138,13 +138,13 @@ class _SendEmailState extends State<SendEmail> {
   Future<void> sendEmail(String destination) async {
     final directory = await getApplicationDocumentsDirectory();
     String host = 'smtp.office365.com';
-    String username = 'raki.sayadi@delitech.eu';
-    String password = 'TunRSayadi2019*';
+    String username = 'rapports-deeplight@delitech.eu';
+    String password = 'Ven34Dar20*';
     // Server SMTP
     final serverSMTPDeepLight = SmtpServer(host, username: username, password: password);
     // Create our message.
     final message = Message()
-      ..from = Address('raki.sayadi@delitech.eu', 'DEEPLIGHT')
+      ..from = Address(username, 'DEEPLIGHT')
       ..recipients.add(destination)
       ..subject = 'Rapport de désinfection UV-C - DEEPLIGHT'
       ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataFileName')))
@@ -154,21 +154,16 @@ class _SendEmailState extends State<SendEmail> {
           'Merci de votre confiance.';
 
     try {
-      final sendReport = await send(message, serverSMTPDeepLight);
-      print('Message sent: ' + sendReport.toString());
+      await send(message, serverSMTPDeepLight);
       myUvcToast.clearAllToast();
       myUvcToast.setToastDuration(3);
       myUvcToast.setToastMessage('Email bien envoyé , Verifier votre boite de reception !');
       myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
     } on MailerException catch (e) {
-      print('Message not sent' + e.toString());
       myUvcToast.clearAllToast();
       myUvcToast.setToastDuration(3);
       myUvcToast.setToastMessage('Email n\'est pas envoyé , Verifier votre addresse email !');
       myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
-      for (var p in e.problems) {
-        print('Problem: ${p.code}: ${p.msg}');
-      }
     }
   }
 
