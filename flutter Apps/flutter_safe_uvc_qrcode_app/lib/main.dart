@@ -3,8 +3,7 @@ import 'package:flutter_safe_uvc_qrcode_app/pages/QrcodeDisplay.dart';
 import 'package:flutter_safe_uvc_qrcode_app/pages/QrcodeGenerate.dart';
 import 'package:flutter_safe_uvc_qrcode_app/pages/welcome.dart';
 
-void main() async {
-
+void main() {
   runApp(MaterialApp(
     initialRoute: '/',
     routes: {
