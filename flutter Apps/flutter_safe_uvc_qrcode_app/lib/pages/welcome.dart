@@ -1,13 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:package_info/package_info.dart';
 
 class Welcome extends StatefulWidget {
   @override
   _WelcomeState createState() => _WelcomeState();
 }
 
-class _WelcomeState extends State<Welcome> {
+class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   AnimationController controller;
 
   @override
@@ -41,7 +44,7 @@ class _WelcomeState extends State<Welcome> {
     }
 
     Future.delayed(Duration(seconds: 5), () async {
-      Navigator.pushReplacementNamed(context, '/bluetooth_activation');
+      Navigator.pushReplacementNamed(context, '/Qr_code_Generate');
     });
 
     super.initState();
@@ -103,12 +106,12 @@ class _WelcomeState extends State<Welcome> {
                       String version = snapshot.data.version;
                       return Center(
                           child: Text(
-                            '$version',
-                            style: TextStyle(
-                              color: Colors.grey[300],
-                              fontSize: screenWidth * 0.04,
-                            ),
-                          ));
+                        '$version',
+                        style: TextStyle(
+                          color: Colors.grey[300],
+                          fontSize: screenWidth * 0.04,
+                        ),
+                      ));
                     } else {
                       return Center(
                         child: CircularProgressIndicator(),

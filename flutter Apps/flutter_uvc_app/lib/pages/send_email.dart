@@ -160,6 +160,7 @@ class _SendEmailState extends State<SendEmail> {
       myUvcToast.setToastMessage('Email bien envoyé , Verifier votre boite de reception !');
       myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
     } on MailerException catch (e) {
+      print(e.message);
       myUvcToast.clearAllToast();
       myUvcToast.setToastDuration(3);
       myUvcToast.setToastMessage('Email n\'est pas envoyé , Verifier votre addresse email !');

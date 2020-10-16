@@ -1,0 +1,223 @@
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_safe_uvc_qrcode_app/services/EMAILfileClass.dart';
+import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+
+class QrCodeDisplay extends StatefulWidget {
+  @override
+  _QrCodeDisplayState createState() => _QrCodeDisplayState();
+}
+
+class _QrCodeDisplayState extends State<QrCodeDisplay> {
+  Map qrCodeDisplayClassData = {};
+  String myQrCodeData;
+  String myQrCodeName;
+  List<Attachment> qrCodeList = [new FileAttachment(File('path'))];
+  GlobalKey globalKey = new GlobalKey();
+  ToastyMessage myUvcToast;
+  EmailDataFile emailDataFile = EmailDataFile();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    myUvcToast = ToastyMessage(toastContext: context);
+    qrCodeList.length = 0;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    qrCodeDisplayClassData = qrCodeDisplayClassData.isNotEmpty ? qrCodeDisplayClassData : ModalRoute.of(context).settings.arguments;
+    myQrCodeData = qrCodeDisplayClassData['myQrcodeData'];
+    myQrCodeName = qrCodeDisplayClassData['myQrcodeFileName'];
+    qrCodeList = qrCodeDisplayClassData['myQrcodeListFile'];
+
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text('QR Code Display'),
+        ),
+        body: Container(
+          decoration: BoxDecoration(color: Colors.grey[200]),
+          child: Center(
+            child: SingleChildScrollView(
+              child: RepaintBoundary(
+                key: globalKey,
+                child: QrImage(
+                  data: myQrCodeData,
+                ),
+              ),
+            ),
+          ),
+        ),
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton.extended(
+              label: Text('Ajouter un autre QrCode'),
+              icon: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+              backgroundColor: Colors.blue[400],
+              onPressed: () async {
+                await captureQrcodePNG();
+                Navigator.pushNamed(context, '/Qr_code_Generate', arguments: {
+                  'myQrcodeListFile': qrCodeList,
+                });
+              },
+              heroTag: null,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            FloatingActionButton.extended(
+              label: Text('Envoi par email'),
+              icon: Icon(
+                Icons.send,
+                color: Colors.white,
+              ),
+              backgroundColor: Colors.blue[400],
+              onPressed: () async{
+                await captureQrcodePNG();
+                await dataEmailSending(context);
+              },
+              heroTag: null,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> captureQrcodePNG() async {
+    try {
+      RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();
+      var image = await boundary.toImage();
+      ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
+      Uint8List pngBytes = byteData.buffer.asUint8List();
+      final tempDir = await getTemporaryDirectory();
+      final file = await new File('${tempDir.path}/$myQrCodeName').create();
+      await file.writeAsBytes(pngBytes);
+      qrCodeList.add(new FileAttachment(file));
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> dataEmailSending(BuildContext context) async {
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
+    final myEmail = TextEditingController();
+    String userEmail = await emailDataFile.readUserEmailDATA();
+    myEmail.text = userEmail;
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Entrer votre Adresse Email :',
+                    style: TextStyle(fontSize: (widthScreen * 0.05)),
+                  ),
+                  SizedBox(height: heightScreen * 0.05),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.05)),
+                    child: TextField(
+                      style: TextStyle(fontSize: (widthScreen * 0.05)),
+                      textAlign: TextAlign.center,
+                      controller: myEmail,
+                      maxLines: 1,
+                      decoration: InputDecoration(
+                          hintText: 'user@exemple.fr',
+                          hintStyle: TextStyle(
+                            fontSize: (widthScreen * 0.1),
+                            color: Colors.grey,
+                          )),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          actions: [
+            FlatButton(
+              child: Text(
+                'Envoyer',
+                style: TextStyle(fontSize: (widthScreen * 0.05)),
+              ),
+              onPressed: () async {
+                await emailDataFile.saveStringUVCEmailDATA(myEmail.text);
+                myUvcToast.setToastDuration(60);
+                myUvcToast.setToastMessage('Envoi en cours !');
+                myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
+                await sendEmail(myEmail.text);
+                Navigator.pop(context, false);
+                Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+              },
+            ),
+            FlatButton(
+              child: Text(
+                'Annuler',
+                style: TextStyle(fontSize: (widthScreen * 0.05)),
+              ),
+              onPressed: () {
+                myEmail.text = '';
+                Navigator.pop(context, false);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> sendEmail(String destination) async {
+    String host = 'smtp.office365.com';
+    String username = 'rapports-deeplight@delitech.eu';
+    String password = 'Ven34Dar20*';
+    // Server SMTP
+    final serverSMTPDeepLight = SmtpServer(host, username: username, password: password);
+    // Create our message.
+    final message = Message()
+      ..from = Address(username, 'QrcodeData')
+      ..recipients.add(destination)
+      ..subject = 'Vos Qrcode Desinfinction'
+      ..attachments = qrCodeList
+      ..text = 'Bonjour,\n\n'
+          'Vous trouverez ci-joint le rapport concernant la désinfection éffectuée à l’aide de'
+          ' votre solution de désinfection DEEPLIGHT® de DeliTech Medical®.\n\n'
+          'Merci de votre confiance.';
+
+    try {
+      await send(message, serverSMTPDeepLight);
+      myUvcToast.clearAllToast();
+      myUvcToast.setToastDuration(3);
+      myUvcToast.setToastMessage('Email bien envoyé , Verifier votre boite de reception !');
+      myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+    } on MailerException catch (e) {
+      print(e.message);
+      myUvcToast.clearAllToast();
+      myUvcToast.setToastDuration(3);
+      myUvcToast.setToastMessage('Email n\'est pas envoyé , Verifier votre addresse email !');
+      myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
+    }
+  }
+}
