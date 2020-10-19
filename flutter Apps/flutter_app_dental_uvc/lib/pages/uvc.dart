@@ -57,9 +57,9 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
 
   void _getNotification() async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails('your channel id', 'your channel name', 'your channel description',
-        importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
+        importance: Importance.max, priority: Priority.high, ticker: 'ticker');
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    var platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics,iOS: iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin
         .show(0, 'Félicitation', 'La désinfection de la pièce a été réalisée avec succés !', platformChannelSpecifics, payload: 'item x');
   }

@@ -109,9 +109,9 @@ class _ProfilesState extends State<Profiles> {
         appBar: AppBar(
           title: const Text('Profil'),
           centerTitle: true,
-          actions: [
+/*          actions: [
             settingsControl(context),
-          ],
+          ],*/
         ),
         body: Container(
           decoration: BoxDecoration(color: Colors.grey[200]),

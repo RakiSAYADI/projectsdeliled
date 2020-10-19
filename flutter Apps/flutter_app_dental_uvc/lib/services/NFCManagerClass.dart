@@ -3,18 +3,29 @@ import 'dart:typed_data';
 import 'package:nfc_manager/nfc_manager.dart';
 
 class NFCTagsManager {
+  Map<String, dynamic> _tagData;
   Future<bool> checkNFCAvailibility() async {
     return await NfcManager.instance.isAvailable();
   }
 
-  void tagRead() {
-    NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
+  Future<void> startTagRead() async {
+    await NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
       print(tag.data);
-      //NfcManager.instance.stopSession();
+      print(tag.handle);
+      print(tag.toString());
+      _tagData = tag.data;
     });
   }
 
-  void ndefWrite(String text, String uri, String mime) {
+  Future<void> stopNFCTask() async {
+    await NfcManager.instance.stopSession();
+  }
+
+  Map<String, dynamic> getTagData(){
+    return _tagData;
+  }
+
+  void nDefWrite(String text, String uri, String mime) {
     NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
       Ndef ndef = Ndef.from(tag);
       if (ndef == null || !ndef.isWritable) {
@@ -41,7 +52,7 @@ class NFCTagsManager {
     });
   }
 
-  void ndefWriteLock() {
+  void nDefWriteLock() {
     NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
       Ndef ndef = Ndef.from(tag);
       if (ndef == null) {

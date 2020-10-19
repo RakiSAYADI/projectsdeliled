@@ -395,6 +395,8 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
   Future<void> alertSecurity(String company, String userName, String room, int extinction, int activation, BuildContext context) async {
 
     myUvcLight = UvcLight();
+    myUvcLight.setMachineName(myDevice.device.name);
+    myUvcLight.setMachineMac(myDevice.device.id.id);
     myUvcLight.setCompanyName(company);
     myUvcLight.setOperatorName(userName);
     myUvcLight.setRoomName(room);
@@ -609,12 +611,15 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                   myUvcToast.clearAllToast();
                   try {
                     int.parse(dataRead['Version'].toString());
-                    print('Version');
+                    print('Version detected');
                     _controller.resume();
                     qrCodeSettings = true;
                     qrCodeScanAccess = false;
+                    myUvcToast.setToastDuration(4);
+                    myUvcToast.setToastMessage('Scanner le qr code DATA !');
+                    myUvcToast.showToast(Colors.green, Icons.qr_code, Colors.white);
                   } catch (e) {
-                    print('no Version');
+                    print('No version detected');
                     Navigator.pushNamed(context, '/profiles', arguments: {
                       'myDevice': myDevice,
                       'dataRead': myDevice.getReadCharMessage(),

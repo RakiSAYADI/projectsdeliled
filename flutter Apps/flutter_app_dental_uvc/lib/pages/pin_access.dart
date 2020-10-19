@@ -5,6 +5,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutterappdentaluvc/services/NFCManagerClass.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
+import 'package:location_permissions/location_permissions.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 
@@ -43,13 +44,51 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
 
   Device myDevice;
 
-  NFCTagsManager nfcManager = NFCTagsManager();
+  PermissionStatus _permissionStatus = PermissionStatus.unknown;
 
   BoxDecoration get _pinPutDecoration {
     return BoxDecoration(
       border: Border.all(color: Colors.blue, width: 3),
       borderRadius: BorderRadius.circular(15),
     );
+  }
+
+  void readingNFCTags() async {
+    NFCTagsManager nfcManager = NFCTagsManager();
+
+    nfcManager.checkNFCAvailibility().then((value) {
+      print(value);
+    });
+
+    await nfcManager.startTagRead();
+
+  }
+
+  void _listenForPermissionStatus() {
+    final Future<PermissionStatus> statusFuture = LocationPermissions().checkPermissionStatus();
+
+    statusFuture.then((PermissionStatus status) {
+      setState(() {
+        _permissionStatus = status;
+        if (_permissionStatus.index != 2) {
+          myUvcToast.setToastDuration(5);
+          myUvcToast.setToastMessage('La Localisation n\'est pas autorisée sur votre téléphone !');
+          myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+        } else {
+          checkServiceStatus(context);
+        }
+      });
+    });
+  }
+
+  void checkServiceStatus(BuildContext context) {
+    LocationPermissions().checkServiceStatus().then((ServiceStatus serviceStatus) {
+      if (serviceStatus.index != 2) {
+        myUvcToast.setToastDuration(5);
+        myUvcToast.setToastMessage('La Localisation n\'est pas activée sur votre téléphone !');
+        myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+      }
+    });
   }
 
   @override
@@ -65,11 +104,9 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     colorInfoQrCode = animationColor(Colors.red, Colors.transparent);
     animationController.forward();
 
-    nfcManager.checkNFCAvailibility().then((value){
-      print(value);
-    });
+    _listenForPermissionStatus();
 
-    nfcManager.tagRead();
+    readingNFCTags();
 
     animationRefreshIcon.repeat();
     myUvcToast = ToastyMessage(toastContext: context);
@@ -113,7 +150,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
       scanDevices.clear();
       // do something with scan results
       for (ScanResult r in results) {
-        //print('${r.device.name} found! mac: ${r.device.id.toString()}');
+        print('${r.device.name} found! mac: ${r.device.id.toString()}');
         if (scanDevices.isEmpty) {
           scanDevices.add(r.device);
         } else {

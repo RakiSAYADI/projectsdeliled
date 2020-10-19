@@ -144,13 +144,14 @@ class _SendEmailState extends State<SendEmail> {
     final serverSMTPDeepLight = SmtpServer(host, username: username, password: password);
     // Create our message.
     final message = Message()
-      ..from = Address(username, 'DEEPLIGHT')
+      ..from = Address(username, 'DeliTech Medical')
       ..recipients.add(destination)
-      ..subject = 'Rapport de désinfection UV-C - DEEPLIGHT'
+      ..subject = 'Rapport de désinfection UVC'
       ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataFileName')))
       ..text = 'Bonjour,\n\n'
           'Vous trouverez ci-joint le rapport concernant la désinfection éffectuée à l’aide de'
-          ' votre solution de désinfection DEEPLIGHT® de DeliTech Medical®.\n\n'
+          ' votre solution de désinfection DEEPLIGHT® de DeliTech Medical®.\n'
+          'Cet email est envoyé automatiquement, merci de ne pas y répondre.\n\n'
           'Merci de votre confiance.';
 
     try {

@@ -9,7 +9,7 @@ class ToastyMessage {
   String toastMessage;
   int toastDuration;
 
-  ToastyMessage({this.toastContext});
+  ToastyMessage({@required this.toastContext});
 
   void setToastMessage(String message) {
     this.toastMessage = message;
@@ -23,9 +23,8 @@ class ToastyMessage {
     this.animationRefreshIcon = animationController;
   }
 
-  void showToast(
-      Color toastColor, IconData messageIcon, Color toastMessageColor) {
-    this.flutterToast = FToast(/*this.toastContext*/);
+  void showToast(Color toastColor, IconData messageIcon, Color toastMessageColor) {
+    this.flutterToast = FToast();
     this.flutterToast.init(this.toastContext);
     Widget toast;
 

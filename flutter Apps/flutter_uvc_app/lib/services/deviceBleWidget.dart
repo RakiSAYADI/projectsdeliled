@@ -6,7 +6,7 @@ class DeviceCard extends StatelessWidget {
   final Device device;
   final Function connect;
 
-  DeviceCard({this.device, this.connect});
+  DeviceCard({@required this.device, @required this.connect});
 
   @override
   Widget build(BuildContext context) {

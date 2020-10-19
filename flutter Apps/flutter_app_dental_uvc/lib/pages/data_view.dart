@@ -178,13 +178,14 @@ class _DataCSVViewState extends State<DataCSVView> {
     final serverSMTPDeepLight = SmtpServer(host, username: username, password: password);
     // Create our message.
     final message = Message()
-      ..from = Address(username, 'DEEPLGHIT')
+      ..from = Address(username, 'DeliTech Medical')
       ..recipients.add(destination)
-      ..subject = 'Rapport de désinfection UV-C - DEEPLIGHT'
+      ..subject = 'Rapport de désinfection UVC'
       ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataFileName')))
       ..text = 'Bonjour,\n\n'
           'Vous trouverez ci-joint le rapport concernant la désinfection éffectuée à l’aide de'
-          ' votre solution de désinfection DEEPLIGHT® de DeliTech Medical®.\n\n'
+          ' votre solution de désinfection DEEPLIGHT® de DeliTech Medical®.\n'
+          'Cet email est envoyé automatiquement, merci de ne pas y répondre.\n\n'
           'Merci de votre confiance.';
 
     try {
@@ -194,10 +195,11 @@ class _DataCSVViewState extends State<DataCSVView> {
       myUvcToast.setToastMessage('Email bien envoyé , Verifier votre boite de reception !');
       myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
     } on MailerException catch (e) {
+      print(e.message);
       myUvcToast.clearAllToast();
       myUvcToast.setToastDuration(3);
       myUvcToast.setToastMessage('Email n\'est pas envoyé , Verifier votre addresse email !');
-      myUvcToast.showToast(Colors.red, Icons.thumb_up, Colors.white);
+      myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
     }
   }
 }

@@ -23,23 +23,24 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_local_notifications: ^1.4.4+4
+  flutter_local_notifications: ^2.0.1+1
   flutter_blue: ^0.7.2
   http: ^0.12.2
   intl: ^0.16.1
   flutter_spinkit: ^4.1.2+1
   package_info: ^0.4.3
-  pinput: ^0.2.5
+  pinput: ^0.2.6
   slide_countdown_clock: ^1.0.3
-  path_provider: ^1.6.14
+  path_provider: ^1.6.21
   fluttertoast: ^7.1.1
   mailer: ^3.2.1
+  location_permissions: ^3.0.0+1
   nfc_manager: ^2.0.2
   wakelock: ^0.2.0+1
 
   mysql1: ^0.17.1
 
-  webview_flutter: ^0.3.23
+  webview_flutter: ^1.0.3
 
   web_socket_channel: ^1.1.0
 
@@ -52,12 +53,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_launcher_icons: ^0.8.0
+  flutter_launcher_icons: ^0.8.1
 
 flutter_icons:
   #  image_path: "assets/images/icon-128x128.png"
-  image_path_android: "assets/logo-safe-uvc-96.png"
-  image_path_ios: "assets/logo-safe-uvc-96.png"
+  image_path_android: "assets/ic_launcher_UVC.png"
+  image_path_ios: "assets/My-Launcher-Icon-UVC.jpg"
   android: true # can specify file name here e.g. "ic_launcher"
   ios: true # can specify file name here e.g. "My-Launcher-Icon"
 

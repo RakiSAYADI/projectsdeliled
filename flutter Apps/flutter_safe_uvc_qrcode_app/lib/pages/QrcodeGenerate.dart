@@ -77,12 +77,8 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
       qrCodeGeneratorClassData = qrCodeGeneratorClassData.isNotEmpty ? qrCodeGeneratorClassData : ModalRoute.of(context).settings.arguments;
       qrCodeList = qrCodeGeneratorClassData['myQrcodeListFile'];
       firstDisplayMainWidget =true;
-    }catch(e){
-      firstDisplayMainWidget =false;
-    }
-    if (firstDisplayMainWidget) {
-      qrCodeGeneratorClassData = qrCodeGeneratorClassData.isNotEmpty ? qrCodeGeneratorClassData : ModalRoute.of(context).settings.arguments;
-      qrCodeList = qrCodeGeneratorClassData['myQrcodeListFile'];
+    }catch(e) {
+      firstDisplayMainWidget = false;
     }
 
     double screenWidth = MediaQuery.of(context).size.width;
@@ -261,24 +257,18 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
                       myUvcToast.setToastDuration(10);
                       myUvcToast.setToastMessage('Génération en cours !');
                       myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
+                      String qrCodeFileName = 'QrCode_${myCompany.text}_${myName.text}_${myRoomName.text}.png';
+                      String qrCodeData = '{\"Company\":\"${myCompany.text}\",\"UserName\":\"${myName.text}\",\"RoomName\":\"${myRoomName.text}\",\"TimeData\":[$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition]}';
                       await Future.delayed(Duration(seconds: 5), () async {
                         myUvcToast.clearAllToast();
-                        if (firstDisplayMainWidget) {
-                          Navigator.pushNamed(context, '/Qr_code_Display', arguments: {
-                            'myQrcodeListFile': qrCodeList,
-                            'myQrcodeFileName': 'QrCode_${myCompany.text}_${myName.text}_${myRoomName.text}.png',
-                            'myQrcodeData':
-                                '{\"Company\":\"${myCompany.text}\",\"UserName\":\"${myName.text}\",\"RoomName\":\"${myRoomName.text}\",\"TimeData\":[$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition]}',
-                          });
-                        } else {
+                        if (!firstDisplayMainWidget) {
                           firstDisplayMainWidget = true;
-                          Navigator.pushNamed(context, '/Qr_code_Display', arguments: {
-                            'myQrcodeListFile': qrCodeList,
-                            'myQrcodeFileName': 'QrCode_${myCompany.text}_${myName.text}_${myRoomName.text}.png',
-                            'myQrcodeData':
-                                '{\"Company\":\"${myCompany.text}\",\"UserName\":\"${myName.text}\",\"RoomName\":\"${myRoomName.text}\",\"TimeData\":[$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition]}',
-                          });
                         }
+                        Navigator.pushNamed(context, '/Qr_code_Display', arguments: {
+                          'myQrcodeListFile': qrCodeList,
+                          'myQrcodeFileName': qrCodeFileName,
+                          'myQrcodeData': qrCodeData,
+                        });
                       });
                     },
                     child: Text(
@@ -290,6 +280,7 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
                       borderRadius: BorderRadius.circular(18.0),
                     ),
                   ),
+                  SizedBox(height: screenHeight * 0.01),
                 ],
               ),
             ),

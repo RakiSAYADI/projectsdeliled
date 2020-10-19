@@ -197,14 +197,15 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
     final serverSMTPDeepLight = SmtpServer(host, username: username, password: password);
     // Create our message.
     final message = Message()
-      ..from = Address(username, 'QrcodeData')
+      ..from = Address(username, 'DeliTech Medical')
       ..recipients.add(destination)
-      ..subject = 'Vos Qrcode Desinfinction'
+      ..subject = 'Votre QR code'
       ..attachments = qrCodeList
       ..text = 'Bonjour,\n\n'
-          'Vous trouverez ci-joint le rapport concernant la désinfection éffectuée à l’aide de'
-          ' votre solution de désinfection DEEPLIGHT® de DeliTech Medical®.\n\n'
-          'Merci de votre confiance.';
+          'Veuillez trouver ci-joint le QRcode généré grâce à l\'application QRCODE UVC de DeliTech Medical®.\n'
+          'Cet email est envoyé automatiquement, merci de ne pas y répondre.\n\n'
+          'Merci de votre confiance,\n'
+          'L\'équipe DeliTech Medical.';
 
     try {
       await send(message, serverSMTPDeepLight);

@@ -1,11 +1,11 @@
 import 'dart:io';
-
+import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
 class Device {
   BluetoothDevice device;
 
-  Device({this.device});
+  Device({@required this.device});
 
   int _connectionState;
   List<BluetoothService> _services;

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -21,12 +20,9 @@ class _BluetoothActivationState extends State<BluetoothActivation> with TickerPr
 
   bool firstDisplayMainWidget = true;
 
-  Widget _myAnimationWidget;
-
   PermissionStatus _permissionStatus = PermissionStatus.unknown;
 
   void scanForDevices() async {
-    PermissionStatus permission = await LocationPermissions().checkPermissionStatus();
     // Start scanning
     flutterBlue.startScan(timeout: Duration(seconds: 5));
     // Listen to scan results
@@ -127,8 +123,6 @@ class _BluetoothActivationState extends State<BluetoothActivation> with TickerPr
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
     const bodyStyle = TextStyle(fontSize: 19.0);
     const pageDecoration = const PageDecoration(
       titleTextStyle: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
