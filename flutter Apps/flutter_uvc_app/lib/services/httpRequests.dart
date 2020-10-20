@@ -1,4 +1,4 @@
-import 'package:mysql1/mysql1.dart';
+/*import 'package:mysql1/mysql1.dart';*/
 import 'package:http/http.dart' as http;
 
 class DataBaseRequests {
@@ -39,7 +39,7 @@ class DataBaseRequests {
     print(response.body);
   }
 
-  void sqlConnection() async {
+/*  void sqlConnection() async {
     // Open a connection (testdb should already exist)
     final conn = await MySqlConnection.connect(ConnectionSettings(
         host: 'deepliwadmin.mysql.db',
@@ -65,5 +65,5 @@ class DataBaseRequests {
 
     // Finally, close the connection
     await conn.close();
-  }
+  }*/
 }

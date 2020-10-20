@@ -52,15 +52,14 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
       borderRadius: BorderRadius.circular(15),
     );
   }
+  NFCTagsManager nfcManager = NFCTagsManager();
 
   void readingNFCTags() async {
-    NFCTagsManager nfcManager = NFCTagsManager();
 
-    nfcManager.checkNFCAvailibility().then((value) {
-      print(value);
-    });
 
-    await nfcManager.startTagRead();
+    print(await nfcManager.checkNFCAvailibility());
+
+    nfcManager.tagRead();
 
   }
 
@@ -287,6 +286,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
           borderRadius: BorderRadius.circular(18.0),
         ),
         onPressed: () async {
+       /*   await nfcManager.nDefWrite('hello app flutter !');*/
           myPinCode += number;
           print(myPinCode);
           _pinPutController.text += '*';

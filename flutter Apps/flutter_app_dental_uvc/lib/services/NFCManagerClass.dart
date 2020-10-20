@@ -1,19 +1,19 @@
-import 'dart:typed_data';
+import 'dart:async';
 
 import 'package:nfc_manager/nfc_manager.dart';
 
 class NFCTagsManager {
   Map<String, dynamic> _tagData;
+
   Future<bool> checkNFCAvailibility() async {
     return await NfcManager.instance.isAvailable();
   }
 
-  Future<void> startTagRead() async {
-    await NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
-      print(tag.data);
-      print(tag.handle);
-      print(tag.toString());
+  void tagRead() {
+    NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
       _tagData = tag.data;
+      print(tag.handle);
+      print(_tagData);
     });
   }
 
@@ -21,11 +21,11 @@ class NFCTagsManager {
     await NfcManager.instance.stopSession();
   }
 
-  Map<String, dynamic> getTagData(){
+  Map<String, dynamic> getTagData() {
     return _tagData;
   }
 
-  void nDefWrite(String text, String uri, String mime) {
+  Future<void> nDefWrite(String text) async {
     NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
       Ndef ndef = Ndef.from(tag);
       if (ndef == null || !ndef.isWritable) {
@@ -36,17 +36,16 @@ class NFCTagsManager {
 
       NdefMessage message = NdefMessage([
         NdefRecord.createText(text),
-        NdefRecord.createUri(Uri.parse(uri)),
-        NdefRecord.createMime(mime, Uint8List.fromList('Hello'.codeUnits)),
-        NdefRecord.createExternal('com.example', 'mytype', Uint8List.fromList('mydata'.codeUnits)),
       ]);
 
       try {
+        print('Writing to nfc');
         await ndef.write(message);
-        print('Success to "Ndef Write');
+        print('Success to Ndef Write');
         NfcManager.instance.stopSession();
       } catch (e) {
-        NfcManager.instance.stopSession(errorMessage: e.toString());
+        print('Failed to Ndef Write');
+        NfcManager.instance.stopSession();
         return;
       }
     });
