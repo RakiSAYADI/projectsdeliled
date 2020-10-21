@@ -29,7 +29,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     bool wakelockEnabled = await Wakelock.enabled;
     if (wakelockEnabled) {
       // The following statement disables the wakelock.
-      Wakelock.toggle(enable: false);
+      Wakelock.toggle(enable: true);
     }
     print('screen lock is disabled');
   }

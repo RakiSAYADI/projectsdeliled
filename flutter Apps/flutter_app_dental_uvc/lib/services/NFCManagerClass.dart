@@ -1,23 +1,34 @@
 import 'dart:async';
 
-import 'package:nfc_manager/nfc_manager.dart';
+import 'package:nfc_in_flutter/nfc_in_flutter.dart';
+
+//import 'package:nfc_manager/nfc_manager.dart';
 
 class NFCTagsManager {
   Map<String, dynamic> _tagData;
 
   Future<bool> checkNFCAvailibility() async {
-    return await NfcManager.instance.isAvailable();
+    return await true/*NfcManager.instance.isAvailable()*/;
   }
 
   void tagRead() {
-    NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
+// NFC.readNDEF returns a stream of NDEFMessage
+    Stream<NDEFMessage> stream = NFC.readNDEF();
+    stream.listen((NDEFMessage message) {
+      print("id: ${message.id}");
+      print("data: ${message.data}");
+      print("payload: ${message.payload}");
+      print("message type: ${message.messageType}");
+      print("type: ${message.type}");
+    });
+/*    NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
       _tagData = tag.data;
       print(tag.handle);
       print(_tagData);
-    });
+    });*/
   }
 
-  Future<void> stopNFCTask() async {
+/*  Future<void> stopNFCTask() async {
     await NfcManager.instance.stopSession();
   }
 
@@ -68,5 +79,5 @@ class NFCTagsManager {
         return;
       }
     });
-  }
+  }*/
 }

@@ -72,7 +72,7 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
               ),
               backgroundColor: Colors.blue[400],
               onPressed: () async {
-                await captureQrcodePNG();
+                await captureQrCodePNG();
                 Navigator.pushNamed(context, '/Qr_code_Generate', arguments: {
                   'myQrcodeListFile': qrCodeList,
                 });
@@ -90,7 +90,7 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
               ),
               backgroundColor: Colors.blue[400],
               onPressed: () async{
-                await captureQrcodePNG();
+                await captureQrCodePNG();
                 await dataEmailSending(context);
               },
               heroTag: null,
@@ -101,7 +101,7 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
     );
   }
 
-  Future<void> captureQrcodePNG() async {
+  Future<void> captureQrCodePNG() async {
     try {
       RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();
       var image = await boundary.toImage();
