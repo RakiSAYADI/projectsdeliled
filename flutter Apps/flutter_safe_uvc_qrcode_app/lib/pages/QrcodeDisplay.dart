@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/EMAILfileClass.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 import 'package:path_provider/path_provider.dart';
@@ -25,6 +26,7 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
   GlobalKey globalKey = new GlobalKey();
   ToastyMessage myUvcToast;
   EmailDataFile emailDataFile = EmailDataFile();
+  String myRoomName;
 
   @override
   void initState() {
@@ -39,8 +41,11 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
     qrCodeDisplayClassData = qrCodeDisplayClassData.isNotEmpty ? qrCodeDisplayClassData : ModalRoute.of(context).settings.arguments;
     myQrCodeData = qrCodeDisplayClassData['myQrcodeData'];
     myQrCodeName = qrCodeDisplayClassData['myQrcodeFileName'];
+    myRoomName = qrCodeDisplayClassData['myRoomName'];
     qrCodeList = qrCodeDisplayClassData['myQrcodeListFile'];
 
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -51,50 +56,79 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
         body: Container(
           decoration: BoxDecoration(color: Colors.grey[200]),
           child: Center(
-            child: SingleChildScrollView(
-              child: RepaintBoundary(
-                key: globalKey,
-                child: QrImage(
-                  data: myQrCodeData,
-                ),
+            child: RepaintBoundary(
+              key: globalKey,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.asset(
+                    'assets/fond-delitech-medical-qrcode.jpg',
+                  ),
+                  QrImage(
+                    data: myQrCodeData,
+                  ),
+                  Container(
+                    alignment: Alignment.bottomCenter, // align the row
+                    padding: EdgeInsets.all(16.0),
+                    child: Text(myRoomName),
+                  ),
+                ],
               ),
             ),
           ),
         ),
-        floatingActionButton: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+        floatingActionButton: SpeedDial(
+          // both default to 16
+          marginRight: 18,
+          marginBottom: 20,
+          animatedIcon: AnimatedIcons.menu_close,
+          animatedIconTheme: IconThemeData(size: 22.0),
+          // this is ignored if animatedIcon is non null
+          // child: Icon(Icons.add),
+
+          // If true user is forced to close dial manually
+          // by tapping main button and overlay is not rendered.
+          closeManually: false,
+          curve: Curves.bounceIn,
+          overlayColor: Colors.black,
+          overlayOpacity: 0.5,
+/*          onOpen: () => print('OPENING DIAL'),
+          onClose: () => print('DIAL CLOSED'),*/
+          tooltip: 'Menu',
+/*          heroTag: 'speed-dial-hero-tag',*/
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: 8.0,
+          shape: CircleBorder(),
           children: [
-            FloatingActionButton.extended(
-              label: Text('Ajouter un autre QrCode'),
-              icon: Icon(
+            SpeedDialChild(
+              child: Icon(
                 Icons.add,
                 color: Colors.white,
               ),
-              backgroundColor: Colors.blue[400],
-              onPressed: () async {
+              backgroundColor: Colors.green,
+              label: 'Ajouter un autre QrCode',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () async {
                 await captureQrCodePNG();
                 Navigator.pushNamed(context, '/Qr_code_Generate', arguments: {
                   'myQrcodeListFile': qrCodeList,
                 });
               },
-              heroTag: null,
             ),
-            SizedBox(
-              height: 10,
-            ),
-            FloatingActionButton.extended(
-              label: Text('Envoi par email'),
-              icon: Icon(
+            SpeedDialChild(
+              child: Icon(
                 Icons.send,
                 color: Colors.white,
               ),
-              backgroundColor: Colors.blue[400],
-              onPressed: () async{
+              backgroundColor: Colors.blue,
+              label: 'Envoi par email',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () async {
                 await captureQrCodePNG();
                 await dataEmailSending(context);
               },
-              heroTag: null,
-            )
+            ),
           ],
         ),
       ),
@@ -148,7 +182,7 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
                       decoration: InputDecoration(
                           hintText: 'user@exemple.fr',
                           hintStyle: TextStyle(
-                            fontSize: (widthScreen * 0.1),
+                            fontSize: (widthScreen * 0.05),
                             color: Colors.grey,
                           )),
                     ),

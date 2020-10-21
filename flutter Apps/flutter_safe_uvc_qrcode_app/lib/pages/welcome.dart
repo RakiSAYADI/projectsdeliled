@@ -68,56 +68,45 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image.asset(
-                'assets/logo_uv_c.png',
-                height: screenHeight * 0.15,
-                width: screenWidth * 0.7,
-              ),
-              SizedBox(height: screenHeight * 0.02),
-              Image.asset(
-                'assets/logo_deeplight.png',
-                height: screenHeight * 0.15,
-                width: screenWidth * 0.7,
-              ),
               SizedBox(height: screenHeight * 0.1),
               SpinKitCircle(
-                color: Colors.white,
+                color: Colors.black,
                 size: screenHeight * 0.1,
               ),
-              SizedBox(height: screenHeight * 0.1),
-              Image.asset(
-                'assets/logodelitechblanc.png',
-                height: screenHeight * 0.15,
-                width: screenWidth * 0.7,
-              ),
-              SizedBox(height: screenHeight * 0.05),
-              Text(
-                'Powered by DELITECH Group',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.grey[300],
-                  fontSize: screenWidth * 0.04,
+              Container(
+                alignment: Alignment.bottomCenter,
+                child: Column(
+                  children: [
+                    Text(
+                      'Powered by DELITECH Group',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: screenWidth * 0.04,
+                      ),
+                    ),
+                    FutureBuilder(
+                        future: PackageInfo.fromPlatform(),
+                        builder: (BuildContext context, snapshot) {
+                          if (snapshot.hasData) {
+                            String version = snapshot.data.version;
+                            return Center(
+                                child: Text(
+                              '$version',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: screenWidth * 0.04,
+                              ),
+                            ));
+                          } else {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                        }),
+                  ],
                 ),
               ),
-              FutureBuilder(
-                  future: PackageInfo.fromPlatform(),
-                  builder: (BuildContext context, snapshot) {
-                    if (snapshot.hasData) {
-                      String version = snapshot.data.version;
-                      return Center(
-                          child: Text(
-                        '$version',
-                        style: TextStyle(
-                          color: Colors.grey[300],
-                          fontSize: screenWidth * 0.04,
-                        ),
-                      ));
-                    } else {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  }),
             ],
           ),
         ),

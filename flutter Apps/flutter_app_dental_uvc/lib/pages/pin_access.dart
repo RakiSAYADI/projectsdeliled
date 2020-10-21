@@ -23,7 +23,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   final TextEditingController _pinPutController = TextEditingController();
   String pinCode;
 
-  final String macRobot = '30:AE:A4:21:F1:BE';
+  final String macRobot = '70:B3:D5:01:80:06';
   String pinCodeAccess = '';
   String myPinCode = '';
 
@@ -52,15 +52,13 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
       borderRadius: BorderRadius.circular(15),
     );
   }
-  NFCTagsManager nfcManager = NFCTagsManager();
 
   void readingNFCTags() async {
-
-
+    NFCTagsManager nfcManager = NFCTagsManager();
     print(await nfcManager.checkNFCAvailibility());
-
-    nfcManager.tagRead();
-
+    nfcManager.setContext(context);
+    nfcManager.startNFCTask();
+    print(nfcManager.nfcGetMessage());
   }
 
   void _listenForPermissionStatus() {
@@ -105,7 +103,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
 
     _listenForPermissionStatus();
 
-    readingNFCTags();
+    //readingNFCTags();
 
     animationRefreshIcon.repeat();
     myUvcToast = ToastyMessage(toastContext: context);
@@ -286,7 +284,6 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
           borderRadius: BorderRadius.circular(18.0),
         ),
         onPressed: () async {
-       /*   await nfcManager.nDefWrite('hello app flutter !');*/
           myPinCode += number;
           print(myPinCode);
           _pinPutController.text += '*';

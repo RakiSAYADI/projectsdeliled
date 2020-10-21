@@ -267,6 +267,7 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
                         Navigator.pushNamed(context, '/Qr_code_Display', arguments: {
                           'myQrcodeListFile': qrCodeList,
                           'myQrcodeFileName': qrCodeFileName,
+                          'myRoomName':myRoomName.text,
                           'myQrcodeData': qrCodeData,
                         });
                       });

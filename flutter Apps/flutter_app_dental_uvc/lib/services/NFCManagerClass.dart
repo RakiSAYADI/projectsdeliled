@@ -1,83 +1,68 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:nfc_in_flutter/nfc_in_flutter.dart';
 
-//import 'package:nfc_manager/nfc_manager.dart';
-
 class NFCTagsManager {
-  Map<String, dynamic> _tagData;
+  StreamSubscription<NDEFMessage> _stream;
+  String _nfcMessage;
+  bool _appIsConnected = false;
+  BuildContext _context;
+  ToastyMessage myUvcToast ;
+
+  void setContext(BuildContext context) {
+    this._context = context;
+  }
 
   Future<bool> checkNFCAvailibility() async {
-    return await true/*NfcManager.instance.isAvailable()*/;
+    return await NFC.isNDEFSupported;
   }
 
-  void tagRead() {
-// NFC.readNDEF returns a stream of NDEFMessage
-    Stream<NDEFMessage> stream = NFC.readNDEF();
-    stream.listen((NDEFMessage message) {
-      print("id: ${message.id}");
-      print("data: ${message.data}");
-      print("payload: ${message.payload}");
-      print("message type: ${message.messageType}");
-      print("type: ${message.type}");
-    });
-/*    NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
-      _tagData = tag.data;
-      print(tag.handle);
-      print(_tagData);
-    });*/
+  Future<void> stopNFCTask() async {
+    _appIsConnected = true;
+    await _stream.cancel();
   }
 
-/*  Future<void> stopNFCTask() async {
-    await NfcManager.instance.stopSession();
-  }
-
-  Map<String, dynamic> getTagData() {
-    return _tagData;
-  }
-
-  Future<void> nDefWrite(String text) async {
-    NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
-      Ndef ndef = Ndef.from(tag);
-      if (ndef == null || !ndef.isWritable) {
-        print('Tag is not ndef writable');
-        NfcManager.instance.stopSession(errorMessage: 'Tag is not ndef writable');
-        return;
+  void startNFCTask() async {
+    myUvcToast = ToastyMessage(toastContext: _context);
+    _appIsConnected = false;
+    // NFC.readNDEF returns a stream of NDEFMessage
+    _stream = await NFC
+        .readNDEF(
+      throwOnUserCancel: false,
+    )
+        .listen((NDEFMessage message) {
+      if (!_appIsConnected) {
+        print("id: ${message.id}");
+        print("data: ${message.data}");
+        print("payload: ${message.payload}");
+        print("message type: ${message.messageType}");
+        print("type: ${message.type}");
+        try {
+          if (message.data.contains('Deliled')) {
+            myUvcToast.setToastDuration(2);
+            myUvcToast.setToastMessage('Le Tag est correcte!');
+            myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+            print('its our tags');
+            _nfcMessage = message.data.substring(8);
+            //stopNFCTask();
+          } else {
+            print('its not our tags');
+          }
+        } catch (e) {
+          myUvcToast.setToastDuration(2);
+          myUvcToast.setToastMessage('Le Tag est vide!');
+          myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
+          print('its not our tags and its empty');
+        }
       }
-
-      NdefMessage message = NdefMessage([
-        NdefRecord.createText(text),
-      ]);
-
-      try {
-        print('Writing to nfc');
-        await ndef.write(message);
-        print('Success to Ndef Write');
-        NfcManager.instance.stopSession();
-      } catch (e) {
-        print('Failed to Ndef Write');
-        NfcManager.instance.stopSession();
-        return;
-      }
+    }, onError: (e) {
+      // Check error handling guide below
     });
   }
 
-  void nDefWriteLock() {
-    NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
-      Ndef ndef = Ndef.from(tag);
-      if (ndef == null) {
-        NfcManager.instance.stopSession(errorMessage: 'Tag is not ndef');
-        return;
-      }
-
-      try {
-        await ndef.writeLock();
-        print('Success to "Ndef Write Lock');
-        NfcManager.instance.stopSession();
-      } catch (e) {
-        NfcManager.instance.stopSession(errorMessage: e.toString());
-        return;
-      }
-    });
-  }*/
+  String nfcGetMessage() {
+    return _nfcMessage;
+  }
 }
