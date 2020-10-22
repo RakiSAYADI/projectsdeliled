@@ -44,8 +44,6 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
     myRoomName = qrCodeDisplayClassData['myRoomName'];
     qrCodeList = qrCodeDisplayClassData['myQrcodeListFile'];
 
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
