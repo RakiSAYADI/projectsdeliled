@@ -45,7 +45,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     }
 
     Future.delayed(Duration(seconds: 5), () async {
-      Navigator.pushReplacementNamed(context, '/bluetooth_activation');
+      Navigator.pushReplacementNamed(context, '/check_permissions');
     });
 
     super.initState();

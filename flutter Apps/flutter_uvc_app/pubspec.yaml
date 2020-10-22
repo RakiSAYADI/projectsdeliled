@@ -23,7 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_local_notifications: ^2.0.1+1
+  flutter_local_notifications: ^3.0.0
   rxdart: ^0.24.1
   flutter_blue: ^0.7.2
   http: ^0.12.2
@@ -39,6 +39,8 @@ dependencies:
   location_permissions: ^3.0.0+1
   introduction_screen: ^1.0.9
   wakelock: ^0.2.0+1
+
+  #mysql1: ^0.17.1
 
   web_socket_channel: ^1.1.0
 

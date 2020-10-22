@@ -7,12 +7,12 @@ import 'package:flutteruvcapp/services/uvcToast.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:location_permissions/location_permissions.dart';
 
-class BluetoothActivation extends StatefulWidget {
+class CheckPermissions extends StatefulWidget {
   @override
-  _BluetoothActivationState createState() => _BluetoothActivationState();
+  _CheckPermissionsState createState() => _CheckPermissionsState();
 }
 
-class _BluetoothActivationState extends State<BluetoothActivation> with TickerProviderStateMixin {
+class _CheckPermissionsState extends State<CheckPermissions> with TickerProviderStateMixin {
   ToastyMessage myUvcToast;
 
   FlutterBlue flutterBlue = FlutterBlue.instance;

@@ -191,7 +191,7 @@ class _SettingsState extends State<Settings> {
                         myUvcToast.setToastMessage('Connexion perdue avec le robot !');
                         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
                         myDevice.disconnect();
-                        Navigator.pushNamedAndRemoveUntil(context, "/bluetooth_activation", (r) => false);
+                        Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
                       }
                     },
                     child: Text(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutteruvcapp/pages/bluetooth_activation.dart';
+import 'package:flutteruvcapp/pages/check_permissions.dart';
 import 'package:flutteruvcapp/pages/data_view.dart';
 import 'package:flutteruvcapp/pages/end_uvc.dart';
 import 'package:flutteruvcapp/pages/profils.dart';
@@ -77,7 +77,7 @@ void main() async {
     initialRoute: '/',
     routes: {
       '/': (context) => Welcome(),
-      '/bluetooth_activation': (context) => BluetoothActivation(),
+      '/check_permissions': (context) => CheckPermissions(),
       '/profiles': (context) => Profiles(),
       '/DataCSVView' : (context) => DataCSVView(),
       '/send_email' : (context) => SendEmail(),

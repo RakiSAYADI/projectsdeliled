@@ -103,7 +103,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
 
     _listenForPermissionStatus();
 
-    //readingNFCTags();
+    readingNFCTags();
 
     animationRefreshIcon.repeat();
     myUvcToast = ToastyMessage(toastContext: context);

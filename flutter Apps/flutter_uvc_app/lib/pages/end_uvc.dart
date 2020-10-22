@@ -143,7 +143,7 @@ class _EndUVCState extends State<EndUVC> {
                   FlatButton(
                     onPressed: () {
                       myDevice.disconnect();
-                      Navigator.pushNamedAndRemoveUntil(context, "/bluetooth_activation", (r) => false);
+                      Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
                     },
                     child: Text(
                       'Nouvelle désinfection',
@@ -182,7 +182,7 @@ class _EndUVCState extends State<EndUVC> {
   }
 
   Future<bool> exitApp(BuildContext context) async {
-    Navigator.pushNamedAndRemoveUntil(context, "/bluetooth_activation", (r) => false);
+    Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
     return true;
   }
 }

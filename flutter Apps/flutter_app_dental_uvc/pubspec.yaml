@@ -38,7 +38,7 @@ dependencies:
   nfc_in_flutter: ^2.0.5
   wakelock: ^0.2.0+1
 
-  mysql1: ^0.17.1
+  #mysql1: ^0.17.1
 
   webview_flutter: ^1.0.5
 

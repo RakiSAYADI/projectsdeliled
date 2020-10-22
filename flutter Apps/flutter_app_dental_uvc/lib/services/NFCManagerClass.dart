@@ -9,7 +9,7 @@ class NFCTagsManager {
   String _nfcMessage;
   bool _appIsConnected = false;
   BuildContext _context;
-  ToastyMessage myUvcToast ;
+  ToastyMessage myUvcToast;
 
   void setContext(BuildContext context) {
     this._context = context;
@@ -24,11 +24,11 @@ class NFCTagsManager {
     await _stream.cancel();
   }
 
-  void startNFCTask() async {
+  void startNFCTask() {
     myUvcToast = ToastyMessage(toastContext: _context);
     _appIsConnected = false;
     // NFC.readNDEF returns a stream of NDEFMessage
-    _stream = await NFC
+    _stream = NFC
         .readNDEF(
       throwOnUserCancel: false,
     )
