@@ -1,4 +1,6 @@
 //import 'package:mysql1/mysql1.dart';
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
 
 class DataBaseRequests {
@@ -22,6 +24,21 @@ class DataBaseRequests {
       _idNomRobot: robotName,
     });
     print(response.body);
+  }
+
+  Future<bool> checkConnection() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+        return true;
+      } else {
+        return false;
+      }
+    } on SocketException catch (_) {
+      print('not connected');
+      return false;
+    }
   }
 
   void sendUVCDataToDataBase(

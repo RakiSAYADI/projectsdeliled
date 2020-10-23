@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutterappdentaluvc/services/NFCManagerClass.dart';
@@ -11,7 +12,10 @@ import 'package:pinput/pin_put/pin_put.dart';
 
 class AccessPin extends StatefulWidget {
   @override
-  _AccessPinState createState() => _AccessPinState();
+  _AccessPinState createState() {
+    print('create task');
+    return _AccessPinState();
+  }
 }
 
 class AlwaysDisabledFocusNode extends FocusNode {
@@ -45,6 +49,8 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   Device myDevice;
 
   PermissionStatus _permissionStatus = PermissionStatus.unknown;
+
+  Widget mainWidgetScreen;
 
   BoxDecoration get _pinPutDecoration {
     return BoxDecoration(
@@ -90,6 +96,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    print('init task');
     // TODO: implement initState
     super.initState();
     // initialise the animation
@@ -159,8 +166,19 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget sleepWidget(BuildContext context) {
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
+    return Center(
+      child: Image.asset(
+        'assets/logo_uv_c.png',
+        height: heightScreen,
+        width: widthScreen,
+      ),
+    );
+  }
+
+  Widget appWidget(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -265,6 +283,29 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     );
   }
 
+  void screenSleep(BuildContext context) {
+    setState(() {
+      mainWidgetScreen = sleepWidget(context);
+    });
+  }
+
+  bool firstDisplayMainWidget = true;
+
+  @override
+  Widget build(BuildContext context) {
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
+    print('build task');
+    if (firstDisplayMainWidget) {
+      mainWidgetScreen = appWidget(context);
+      firstDisplayMainWidget = false;
+    }
+    return GestureDetector(
+      child: mainWidgetScreen,
+      onTap: () => screenSleep(context),
+    );
+  }
+
   ButtonTheme buttonNumbers(String number, BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
@@ -320,6 +361,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   void dispose() {
     animationController.dispose();
     animationRefreshIcon.dispose();
+    print('dispose task');
     super.dispose();
   }
 
@@ -394,7 +436,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
         }
       },
     );
-    Scaffold.of(context).hideCurrentSnackBar();
-    Scaffold.of(context).showSnackBar(snackBar);
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

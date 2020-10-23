@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutteruvcapp/services/httpRequests.dart';
 import 'package:package_info/package_info.dart';
 
 class Welcome extends StatefulWidget {
@@ -14,6 +15,8 @@ class Welcome extends StatefulWidget {
 class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   AnimationController controller;
 
+  DataBaseRequests dataBaseRequests = DataBaseRequests();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -22,6 +25,8 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
+    dataBaseRequests.checkInternetConnection();
 
     controller = AnimationController(
       vsync: this,
