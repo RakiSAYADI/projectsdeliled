@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutterappdentaluvc/services/NFCManagerClass.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
@@ -25,26 +26,28 @@ class AlwaysDisabledFocusNode extends FocusNode {
 
 class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   final TextEditingController _pinPutController = TextEditingController();
-  String pinCode;
 
   final String macRobot = '70:B3:D5:01:80:06';
+  String pinCode;
   String pinCodeAccess = '';
   String myPinCode = '';
 
   ToastyMessage myUvcToast;
 
   FlutterBlue flutterBlue = FlutterBlue.instance;
+
   List<BluetoothDevice> scanDevices = [];
 
   Animation colorInfoQrCode;
 
   bool qrCodeScanAccess = false;
+  bool deviceExistOrNot = false;
 
   AnimationController animationRefreshIcon;
   AnimationController animationController;
+  GifController gifController;
 
   int devicesPosition = 0;
-  bool deviceExistOrNot = false;
 
   Device myDevice;
 
@@ -99,6 +102,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     print('init task');
     // TODO: implement initState
     super.initState();
+    gifController = GifController(vsync: this);
     // initialise the animation
     animationRefreshIcon = new AnimationController(
       vsync: this,
@@ -110,7 +114,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
 
     _listenForPermissionStatus();
 
-    readingNFCTags();
+    //readingNFCTags();
 
     animationRefreshIcon.repeat();
     myUvcToast = ToastyMessage(toastContext: context);
@@ -164,18 +168,6 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
         }
       }
     });
-  }
-
-  Widget sleepWidget(BuildContext context) {
-    double widthScreen = MediaQuery.of(context).size.width;
-    double heightScreen = MediaQuery.of(context).size.height;
-    return Center(
-      child: Image.asset(
-        'assets/logo_uv_c.png',
-        height: heightScreen,
-        width: widthScreen,
-      ),
-    );
   }
 
   Widget appWidget(BuildContext context) {
@@ -269,6 +261,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
+          widgetIsInactive = true;
           Navigator.pushNamed(context, '/pin_settings', arguments: {
             'pinCodeAccess': pinCodeAccess,
           });
@@ -283,26 +276,70 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     );
   }
 
-  void screenSleep(BuildContext context) {
-    setState(() {
-      mainWidgetScreen = sleepWidget(context);
-    });
+  final int timeSleep = 10000;
+
+  bool widgetIsInactive = false;
+
+  int timeToSleep;
+
+  Widget sleepWidget(BuildContext context) {
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
+    // loop from 0 frame to 29 frame
+    gifController.repeat(min: 0, max: 11, period: Duration(milliseconds: 1000));
+    return Scaffold(
+      backgroundColor: Colors.blue[400],
+      body: Center(
+        child: GifImage(
+          controller: gifController,
+          fit: BoxFit.cover,
+          height: heightScreen,
+          width: widthScreen,
+          image: AssetImage('assets/logo-delitech-animation.gif'),
+        ),
+      ),
+    );
+  }
+
+  void screenSleep(BuildContext context) async {
+    timeToSleep = timeSleep;
+    do {
+      timeToSleep -= 1000;
+      if (timeToSleep == 0) {
+        setState(() {
+          mainWidgetScreen = sleepWidget(context);
+        });
+      }
+
+      if (timeToSleep < 0) {
+        timeToSleep = (-1000);
+      }
+
+      if (widgetIsInactive) {
+        break;
+      }
+      await Future.delayed(Duration(seconds: 1));
+    } while (true);
   }
 
   bool firstDisplayMainWidget = true;
 
   @override
   Widget build(BuildContext context) {
-    double widthScreen = MediaQuery.of(context).size.width;
-    double heightScreen = MediaQuery.of(context).size.height;
     print('build task');
     if (firstDisplayMainWidget) {
       mainWidgetScreen = appWidget(context);
+      screenSleep(context);
       firstDisplayMainWidget = false;
     }
     return GestureDetector(
       child: mainWidgetScreen,
-      onTap: () => screenSleep(context),
+      onTap: () {
+        timeToSleep = timeSleep;
+        setState(() {
+          mainWidgetScreen = appWidget(context);
+        });
+      },
     );
   }
 
@@ -359,6 +396,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    gifController.dispose();
     animationController.dispose();
     animationRefreshIcon.dispose();
     print('dispose task');
@@ -419,6 +457,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
               myUvcToast.clearAllToast();
               await myDevice.readCharacteristic(2, 0);
               Navigator.of(context).pop();
+              widgetIsInactive = true;
               Navigator.pushNamed(context, '/profiles', arguments: {
                 'myDevice': myDevice,
                 'dataRead': myDevice.getReadCharMessage(),
