@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutterappdentaluvc/services/NFCManagerClass.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
@@ -25,32 +26,42 @@ class AlwaysDisabledFocusNode extends FocusNode {
 
 class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   final TextEditingController _pinPutController = TextEditingController();
-  String pinCode;
 
-  final String macRobot = '70:B3:D5:01:80:06';
+  final String macRobot = '30:AE:A4:20:3C:42';
+  String pinCode;
   String pinCodeAccess = '';
   String myPinCode = '';
 
   ToastyMessage myUvcToast;
 
   FlutterBlue flutterBlue = FlutterBlue.instance;
+
   List<BluetoothDevice> scanDevices = [];
 
   Animation colorInfoQrCode;
 
   bool qrCodeScanAccess = false;
+  bool deviceExistOrNot = false;
 
   AnimationController animationRefreshIcon;
   AnimationController animationController;
+  GifController gifController;
 
   int devicesPosition = 0;
-  bool deviceExistOrNot = false;
 
   Device myDevice;
 
   PermissionStatus _permissionStatus = PermissionStatus.unknown;
 
   Widget mainWidgetScreen;
+
+  final int timeSleep = 120000;
+
+  bool widgetIsInactive = false;
+
+  int timeToSleep;
+
+  bool firstDisplayMainWidget = true;
 
   BoxDecoration get _pinPutDecoration {
     return BoxDecoration(
@@ -99,6 +110,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     print('init task');
     // TODO: implement initState
     super.initState();
+    gifController = GifController(vsync: this);
     // initialise the animation
     animationRefreshIcon = new AnimationController(
       vsync: this,
@@ -110,7 +122,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
 
     _listenForPermissionStatus();
 
-    readingNFCTags();
+    //readingNFCTags();
 
     animationRefreshIcon.repeat();
     myUvcToast = ToastyMessage(toastContext: context);
@@ -166,143 +178,176 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     });
   }
 
-  Widget sleepWidget(BuildContext context) {
-    double widthScreen = MediaQuery.of(context).size.width;
-    double heightScreen = MediaQuery.of(context).size.height;
-    return Center(
-      child: Image.asset(
-        'assets/logo_uv_c.png',
-        height: heightScreen,
-        width: widthScreen,
-      ),
-    );
-  }
-
   Widget appWidget(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: Colors.blue[400],
-      appBar: AppBar(
-        title: const Text('Code PIN'),
-        centerTitle: true,
-      ),
-      body: Container(
-        decoration: BoxDecoration(color: Colors.grey[200]),
-        child: Builder(
-          builder: (context) {
-            return Center(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text(
-                      'Entrer le code de sécurité :',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: widthScreen * 0.04,
+    return WillPopScope(
+      child: Scaffold(
+        backgroundColor: Colors.blue[400],
+        appBar: AppBar(
+          title: const Text('Code PIN'),
+          centerTitle: true,
+        ),
+        body: Container(
+          decoration: BoxDecoration(color: Colors.grey[200]),
+          child: Builder(
+            builder: (context) {
+              return Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        'Entrer le code de sécurité :',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: widthScreen * 0.04,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: heightScreen * 0.05),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.01)),
-                        Expanded(
-                          flex: 3,
-                          child: Container(
-                            margin: EdgeInsets.all(20),
-                            padding: EdgeInsets.all(10),
-                            child: PinPut(
-                              fieldsCount: 4,
-                              onSubmit: (String pin) => pinCode = pin,
-                              focusNode: AlwaysDisabledFocusNode(),
-                              controller: _pinPutController,
-                              textStyle: TextStyle(
-                                color: Colors.black,
-                                fontSize: widthScreen * 0.04,
-                              ),
-                              submittedFieldDecoration: _pinPutDecoration.copyWith(borderRadius: BorderRadius.circular(20)),
-                              selectedFieldDecoration: _pinPutDecoration,
-                              followingFieldDecoration: _pinPutDecoration.copyWith(
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(color: Colors.grey[600].withOpacity(.5), width: 3),
+                      SizedBox(height: heightScreen * 0.05),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.01)),
+                          Expanded(
+                            flex: 3,
+                            child: Container(
+                              margin: EdgeInsets.all(20),
+                              padding: EdgeInsets.all(10),
+                              child: PinPut(
+                                fieldsCount: 4,
+                                onSubmit: (String pin) => pinCode = pin,
+                                focusNode: AlwaysDisabledFocusNode(),
+                                controller: _pinPutController,
+                                textStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: widthScreen * 0.04,
+                                ),
+                                submittedFieldDecoration: _pinPutDecoration.copyWith(borderRadius: BorderRadius.circular(20)),
+                                selectedFieldDecoration: _pinPutDecoration,
+                                followingFieldDecoration: _pinPutDecoration.copyWith(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(color: Colors.grey[600].withOpacity(.5), width: 3),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.01)),
-                      ],
-                    ),
-                    SizedBox(height: heightScreen * 0.05),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        buttonNumbers('0', context),
-                        SizedBox(width: widthScreen * 0.003),
-                        buttonNumbers('1', context),
-                        SizedBox(width: widthScreen * 0.003),
-                        buttonNumbers('2', context),
-                        SizedBox(width: widthScreen * 0.003),
-                        buttonNumbers('3', context),
-                        SizedBox(width: widthScreen * 0.003),
-                        buttonNumbers('4', context),
-                        SizedBox(width: widthScreen * 0.003),
-                        buttonNumbers('5', context),
-                        SizedBox(width: widthScreen * 0.003),
-                        buttonNumbers('6', context),
-                        SizedBox(width: widthScreen * 0.003),
-                        buttonNumbers('7', context),
-                        SizedBox(width: widthScreen * 0.003),
-                        buttonNumbers('8', context),
-                        SizedBox(width: widthScreen * 0.003),
-                        buttonNumbers('9', context),
-                      ],
-                    ),
-                  ],
+                          Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.01)),
+                        ],
+                      ),
+                      SizedBox(height: heightScreen * 0.05),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          buttonNumbers('0', context),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('1', context),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('2', context),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('3', context),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('4', context),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('5', context),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('6', context),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('7', context),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('8', context),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('9', context),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
+              );
+            },
+          ),
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            widgetIsInactive = true;
+            Navigator.pushNamed(context, '/pin_settings', arguments: {
+              'pinCodeAccess': pinCodeAccess,
+            });
           },
+          label: Text('Réglages'),
+          icon: Icon(
+            Icons.settings,
+            color: Colors.white,
+          ),
+          backgroundColor: Colors.blue[400],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.pushNamed(context, '/pin_settings', arguments: {
-            'pinCodeAccess': pinCodeAccess,
-          });
-        },
-        label: Text('Réglages'),
-        icon: Icon(
-          Icons.settings,
-          color: Colors.white,
+      onWillPop: () => exit(),
+    );
+  }
+
+  Future<bool> exit() async {
+    widgetIsInactive = true;
+    return true;
+  }
+
+  Widget sleepWidget(BuildContext context) {
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
+    // loop from 0 frame to 29 frame
+    gifController.repeat(min: 0, max: 11, period: Duration(milliseconds: 1000));
+    return Scaffold(
+      backgroundColor: Colors.blue[400],
+      body: Center(
+        child: GifImage(
+          controller: gifController,
+          fit: BoxFit.cover,
+          height: heightScreen,
+          width: widthScreen,
+          image: AssetImage('assets/logo-delitech-animation.gif'),
         ),
-        backgroundColor: Colors.blue[400],
       ),
     );
   }
 
-  void screenSleep(BuildContext context) {
-    setState(() {
-      mainWidgetScreen = sleepWidget(context);
-    });
-  }
+  void screenSleep(BuildContext context) async {
+    timeToSleep = timeSleep;
+    do {
+      timeToSleep -= 1000;
+      if (timeToSleep == 0) {
+        setState(() {
+          mainWidgetScreen = sleepWidget(context);
+        });
+      }
 
-  bool firstDisplayMainWidget = true;
+      if (timeToSleep < 0) {
+        timeToSleep = (-1000);
+      }
+
+      if (widgetIsInactive) {
+        break;
+      }
+      await Future.delayed(Duration(seconds: 1));
+    } while (true);
+  }
 
   @override
   Widget build(BuildContext context) {
-    double widthScreen = MediaQuery.of(context).size.width;
-    double heightScreen = MediaQuery.of(context).size.height;
     print('build task');
     if (firstDisplayMainWidget) {
       mainWidgetScreen = appWidget(context);
+      screenSleep(context);
       firstDisplayMainWidget = false;
     }
     return GestureDetector(
       child: mainWidgetScreen,
-      onTap: () => screenSleep(context),
+      onTap: () {
+        setState(() {
+          timeToSleep = timeSleep;
+          mainWidgetScreen = appWidget(context);
+        });
+      },
     );
   }
 
@@ -359,6 +404,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    gifController.dispose();
     animationController.dispose();
     animationRefreshIcon.dispose();
     print('dispose task');
@@ -419,6 +465,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
               myUvcToast.clearAllToast();
               await myDevice.readCharacteristic(2, 0);
               Navigator.of(context).pop();
+              widgetIsInactive = true;
               Navigator.pushNamed(context, '/profiles', arguments: {
                 'myDevice': myDevice,
                 'dataRead': myDevice.getReadCharMessage(),
