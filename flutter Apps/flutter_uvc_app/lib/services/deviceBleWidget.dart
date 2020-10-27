@@ -8,13 +8,23 @@ class DeviceCard extends StatelessWidget {
 
   DeviceCard({@required this.device, @required this.connect});
 
+  Image iconDeepLight;
+
   @override
   Widget build(BuildContext context) {
-    String deviceName;
-    if ((device.device.name == null)||(device.device.name.isEmpty)) {
-      deviceName = 'Appareil sans nom';
+    if (device.device.name.contains('DEEPLIGHT')) {
+      iconDeepLight = Image.asset(
+        'assets/scan-uvc-deeplight.png',
+        height: 40.0,
+        width: 40.0,
+      );
     } else {
-      deviceName = device.device.name;
+      iconDeepLight = Image.asset(
+        'assets/scan-uvc-deeplight.png',
+        height: 40.0,
+        width: 40.0,
+        color: Colors.white,
+      );
     }
     return Card(
       margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
@@ -28,15 +38,19 @@ class DeviceCard extends StatelessWidget {
               style: TextStyle(fontSize: 10.0, color: Colors.grey[600]),
             ),
             SizedBox(height: 2.0),
-            Text(
-              deviceName,
-              style: TextStyle(fontSize: 16.0, color: Colors.grey[800]),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  device.device.name,
+                  style: TextStyle(fontSize: 20.0, color: Colors.grey[800]),
+                ),
+                SizedBox(width: 2.0),
+                iconDeepLight
+              ],
             ),
             SizedBox(height: 8.0),
-            FlatButton.icon(
-                onPressed: connect,
-                icon: Icon(Icons.bluetooth),
-                label: Text('connect'))
+            FlatButton.icon(onPressed: connect, icon: Icon(Icons.bluetooth), label: Text('connect'))
           ],
         ),
       ),
