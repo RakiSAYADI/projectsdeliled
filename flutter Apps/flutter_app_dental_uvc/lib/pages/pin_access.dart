@@ -27,7 +27,7 @@ class AlwaysDisabledFocusNode extends FocusNode {
 class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   final TextEditingController _pinPutController = TextEditingController();
 
-  final String macRobot = '70:B3:D5:01:80:06';
+  final String macRobot = '30:AE:A4:20:3C:42';
   String pinCode;
   String pinCodeAccess = '';
   String myPinCode = '';
@@ -54,6 +54,14 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   PermissionStatus _permissionStatus = PermissionStatus.unknown;
 
   Widget mainWidgetScreen;
+
+  final int timeSleep = 120000;
+
+  bool widgetIsInactive = false;
+
+  int timeToSleep;
+
+  bool firstDisplayMainWidget = true;
 
   BoxDecoration get _pinPutDecoration {
     return BoxDecoration(
@@ -173,114 +181,116 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   Widget appWidget(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: Colors.blue[400],
-      appBar: AppBar(
-        title: const Text('Code PIN'),
-        centerTitle: true,
-      ),
-      body: Container(
-        decoration: BoxDecoration(color: Colors.grey[200]),
-        child: Builder(
-          builder: (context) {
-            return Center(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text(
-                      'Entrer le code de sécurité :',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: widthScreen * 0.04,
+    return WillPopScope(
+      child: Scaffold(
+        backgroundColor: Colors.blue[400],
+        appBar: AppBar(
+          title: const Text('Code PIN'),
+          centerTitle: true,
+        ),
+        body: Container(
+          decoration: BoxDecoration(color: Colors.grey[200]),
+          child: Builder(
+            builder: (context) {
+              return Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        'Entrer le code de sécurité :',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: widthScreen * 0.04,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: heightScreen * 0.05),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.01)),
-                        Expanded(
-                          flex: 3,
-                          child: Container(
-                            margin: EdgeInsets.all(20),
-                            padding: EdgeInsets.all(10),
-                            child: PinPut(
-                              fieldsCount: 4,
-                              onSubmit: (String pin) => pinCode = pin,
-                              focusNode: AlwaysDisabledFocusNode(),
-                              controller: _pinPutController,
-                              textStyle: TextStyle(
-                                color: Colors.black,
-                                fontSize: widthScreen * 0.04,
-                              ),
-                              submittedFieldDecoration: _pinPutDecoration.copyWith(borderRadius: BorderRadius.circular(20)),
-                              selectedFieldDecoration: _pinPutDecoration,
-                              followingFieldDecoration: _pinPutDecoration.copyWith(
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(color: Colors.grey[600].withOpacity(.5), width: 3),
+                      SizedBox(height: heightScreen * 0.05),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.01)),
+                          Expanded(
+                            flex: 3,
+                            child: Container(
+                              margin: EdgeInsets.all(20),
+                              padding: EdgeInsets.all(10),
+                              child: PinPut(
+                                fieldsCount: 4,
+                                onSubmit: (String pin) => pinCode = pin,
+                                focusNode: AlwaysDisabledFocusNode(),
+                                controller: _pinPutController,
+                                textStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: widthScreen * 0.04,
+                                ),
+                                submittedFieldDecoration: _pinPutDecoration.copyWith(borderRadius: BorderRadius.circular(20)),
+                                selectedFieldDecoration: _pinPutDecoration,
+                                followingFieldDecoration: _pinPutDecoration.copyWith(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(color: Colors.grey[600].withOpacity(.5), width: 3),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.01)),
-                      ],
-                    ),
-                    SizedBox(height: heightScreen * 0.05),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        buttonNumbers('0', context),
-                        SizedBox(width: widthScreen * 0.003),
-                        buttonNumbers('1', context),
-                        SizedBox(width: widthScreen * 0.003),
-                        buttonNumbers('2', context),
-                        SizedBox(width: widthScreen * 0.003),
-                        buttonNumbers('3', context),
-                        SizedBox(width: widthScreen * 0.003),
-                        buttonNumbers('4', context),
-                        SizedBox(width: widthScreen * 0.003),
-                        buttonNumbers('5', context),
-                        SizedBox(width: widthScreen * 0.003),
-                        buttonNumbers('6', context),
-                        SizedBox(width: widthScreen * 0.003),
-                        buttonNumbers('7', context),
-                        SizedBox(width: widthScreen * 0.003),
-                        buttonNumbers('8', context),
-                        SizedBox(width: widthScreen * 0.003),
-                        buttonNumbers('9', context),
-                      ],
-                    ),
-                  ],
+                          Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.01)),
+                        ],
+                      ),
+                      SizedBox(height: heightScreen * 0.05),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          buttonNumbers('0', context),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('1', context),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('2', context),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('3', context),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('4', context),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('5', context),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('6', context),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('7', context),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('8', context),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('9', context),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
+              );
+            },
+          ),
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            widgetIsInactive = true;
+            Navigator.pushNamed(context, '/pin_settings', arguments: {
+              'pinCodeAccess': pinCodeAccess,
+            });
           },
+          label: Text('Réglages'),
+          icon: Icon(
+            Icons.settings,
+            color: Colors.white,
+          ),
+          backgroundColor: Colors.blue[400],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          widgetIsInactive = true;
-          Navigator.pushNamed(context, '/pin_settings', arguments: {
-            'pinCodeAccess': pinCodeAccess,
-          });
-        },
-        label: Text('Réglages'),
-        icon: Icon(
-          Icons.settings,
-          color: Colors.white,
-        ),
-        backgroundColor: Colors.blue[400],
-      ),
+      onWillPop: () => exit(),
     );
   }
 
-  final int timeSleep = 10000;
-
-  bool widgetIsInactive = false;
-
-  int timeToSleep;
+  Future<bool> exit() async {
+    widgetIsInactive = true;
+    return true;
+  }
 
   Widget sleepWidget(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
@@ -322,8 +332,6 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     } while (true);
   }
 
-  bool firstDisplayMainWidget = true;
-
   @override
   Widget build(BuildContext context) {
     print('build task');
@@ -335,8 +343,8 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     return GestureDetector(
       child: mainWidgetScreen,
       onTap: () {
-        timeToSleep = timeSleep;
         setState(() {
+          timeToSleep = timeSleep;
           mainWidgetScreen = appWidget(context);
         });
       },

@@ -23,7 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_local_notifications: ^3.0.0
+  flutter_local_notifications: ^3.0.1
   rxdart: ^0.24.1
   flutter_blue: ^0.7.2
   http: ^0.12.2
@@ -33,12 +33,12 @@ dependencies:
   package_info: ^0.4.3
   pinput: ^0.2.6
   slide_countdown_clock: ^1.0.3
-  path_provider: ^1.6.21
+  path_provider: ^1.6.22
   fluttertoast: ^7.1.1
   mailer: ^3.2.1
   location_permissions: ^3.0.0+1
   introduction_screen: ^1.0.9
-  wakelock: ^0.2.0+1
+  wakelock: ^0.2.1
 
   #mysql1: ^0.17.1
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/LEDControl.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
@@ -11,7 +12,7 @@ class EndUVC extends StatefulWidget {
   _EndUVCState createState() => _EndUVCState();
 }
 
-class _EndUVCState extends State<EndUVC> {
+class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
   Device myDevice;
   bool isTreatmentCompleted;
 
@@ -27,6 +28,30 @@ class _EndUVCState extends State<EndUVC> {
   LedControl ledControl;
 
   int activationTime;
+
+  GifController gifController;
+
+  Widget mainWidgetScreen;
+
+  final int timeSleep = 120000;
+
+  bool widgetIsInactive = false;
+
+  int timeToSleep;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    gifController = GifController(vsync: this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    gifController.dispose();
+    super.dispose();
+  }
 
   void csvDataFile() async {
     uvcDataFile = UVCDataFile();
@@ -67,20 +92,47 @@ class _EndUVCState extends State<EndUVC> {
     await uvcDataFile.saveUVCDATA(uvcData);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    endUVCClassData = endUVCClassData.isNotEmpty ? endUVCClassData : ModalRoute.of(context).settings.arguments;
-    isTreatmentCompleted = endUVCClassData['treatmentCompleted'];
-    activationTime = endUVCClassData['myactivationtime'];
-    myDevice = endUVCClassData['myDevice'];
-    myUvcLight = endUVCClassData['uvclight'];
+  Widget sleepWidget(BuildContext context) {
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
+    // loop from 0 frame to 29 frame
+    gifController.repeat(min: 0, max: 11, period: Duration(milliseconds: 1000));
+    return Scaffold(
+      backgroundColor: Colors.blue[400],
+      body: Center(
+        child: GifImage(
+          controller: gifController,
+          fit: BoxFit.cover,
+          height: heightScreen,
+          width: widthScreen,
+          image: AssetImage('assets/logo-delitech-animation.gif'),
+        ),
+      ),
+    );
+  }
 
-    if (firstDisplayMainWidget) {
-      firstDisplayMainWidget = false;
-      myDevice.disconnect();
-      csvDataFile();
-    }
+  void screenSleep(BuildContext context) async {
+    timeToSleep = timeSleep;
+    do {
+      timeToSleep -= 1000;
+      if (timeToSleep == 0) {
+        setState(() {
+          mainWidgetScreen = sleepWidget(context);
+        });
+      }
 
+      if (timeToSleep < 0) {
+        timeToSleep = (-1000);
+      }
+
+      if (widgetIsInactive) {
+        break;
+      }
+      await Future.delayed(Duration(seconds: 1));
+    } while (true);
+  }
+
+  Widget appWidget(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
 
@@ -149,6 +201,7 @@ class _EndUVCState extends State<EndUVC> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
+            widgetIsInactive = false;
             Navigator.pushNamed(context, '/DataCSVView', arguments: {
               'isTreatmentCompleted': isTreatmentCompleted,
               'uvclight': myUvcLight,
@@ -167,7 +220,35 @@ class _EndUVCState extends State<EndUVC> {
     );
   }
 
+  @override
+  Widget build(BuildContext context) {
+    endUVCClassData = endUVCClassData.isNotEmpty ? endUVCClassData : ModalRoute.of(context).settings.arguments;
+    isTreatmentCompleted = endUVCClassData['treatmentCompleted'];
+    activationTime = endUVCClassData['myactivationtime'];
+    myDevice = endUVCClassData['myDevice'];
+    myUvcLight = endUVCClassData['uvclight'];
+
+    if (firstDisplayMainWidget) {
+      firstDisplayMainWidget = false;
+      myDevice.disconnect();
+      csvDataFile();
+      mainWidgetScreen = appWidget(context);
+      screenSleep(context);
+    }
+
+    return GestureDetector(
+      child: mainWidgetScreen,
+      onTap: () {
+        setState(() {
+          timeToSleep = timeSleep;
+          mainWidgetScreen = appWidget(context);
+        });
+      },
+    );
+  }
+
   Future<bool> exitApp(BuildContext context) async {
+    widgetIsInactive = false;
     Navigator.pushNamedAndRemoveUntil(context, "/pin_access", (r) => false);
     return true;
   }
