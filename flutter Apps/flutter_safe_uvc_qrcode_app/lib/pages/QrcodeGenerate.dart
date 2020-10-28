@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
 import 'package:mailer/mailer.dart';
 
@@ -252,6 +253,7 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
                   SizedBox(height: screenHeight * 0.04),
                   FlatButton(
                     onPressed: () async {
+                      SystemChannels.textInput.invokeMethod('TextInput.hide');
                       animationRefreshIcon.repeat();
                       myUvcToast.setAnimationIcon(animationRefreshIcon);
                       myUvcToast.setToastDuration(10);

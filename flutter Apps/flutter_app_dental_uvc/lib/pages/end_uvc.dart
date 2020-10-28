@@ -97,15 +97,18 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
     double heightScreen = MediaQuery.of(context).size.height;
     // loop from 0 frame to 29 frame
     gifController.repeat(min: 0, max: 11, period: Duration(milliseconds: 1000));
-    return Scaffold(
-      backgroundColor: Colors.blue[400],
-      body: Center(
-        child: GifImage(
-          controller: gifController,
-          fit: BoxFit.cover,
-          height: heightScreen,
-          width: widthScreen,
-          image: AssetImage('assets/logo-delitech-animation.gif'),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: Colors.blue[400],
+        body: Center(
+          child: GifImage(
+            controller: gifController,
+            fit: BoxFit.cover,
+            height: heightScreen,
+            width: widthScreen,
+            image: AssetImage('assets/logo-delitech-animation.gif'),
+          ),
         ),
       ),
     );

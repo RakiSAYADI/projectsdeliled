@@ -108,6 +108,7 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
               label: 'Ajouter un autre QrCode',
               labelStyle: TextStyle(fontSize: 18.0),
               onTap: () async {
+                SystemChannels.textInput.invokeMethod('TextInput.hide');
                 await captureQrCodePNG();
                 Navigator.pushNamed(context, '/Qr_code_Generate', arguments: {
                   'myQrcodeListFile': qrCodeList,
@@ -123,6 +124,7 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
               label: 'Envoi par email',
               labelStyle: TextStyle(fontSize: 18.0),
               onTap: () async {
+                SystemChannels.textInput.invokeMethod('TextInput.hide');
                 await captureQrCodePNG();
                 await dataEmailSending(context);
               },
