@@ -56,11 +56,11 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
           child: Center(
             child: RepaintBoundary(
               key: globalKey,
-              child: Stack(
-                alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
-                    'assets/fond-delitech-medical-qrcode.jpg',
+                    'assets/delitech.png',
                   ),
                   QrImage(
                     data: myQrCodeData,
@@ -69,6 +69,9 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
                     alignment: Alignment.bottomCenter, // align the row
                     padding: EdgeInsets.all(16.0),
                     child: Text(myRoomName),
+                  ),
+                  Image.asset(
+                    'assets/texte-deeplight.png',
                   ),
                 ],
               ),
@@ -198,6 +201,7 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
                 style: TextStyle(fontSize: (widthScreen * 0.05)),
               ),
               onPressed: () async {
+                SystemChannels.textInput.invokeMethod('TextInput.hide');
                 await emailDataFile.saveStringUVCEmailDATA(myEmail.text);
                 myUvcToast.setToastDuration(60);
                 myUvcToast.setToastMessage('Envoi en cours !');
