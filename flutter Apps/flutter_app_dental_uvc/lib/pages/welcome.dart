@@ -45,7 +45,9 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
 
     wakeLock();
 
-    ledInit();
+    if(Platform.isAndroid){
+      ledInit();
+    }
 
     controller = AnimationController(
       vsync: this,

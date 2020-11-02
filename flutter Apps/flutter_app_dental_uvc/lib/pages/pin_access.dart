@@ -486,7 +486,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
         }
       },
     );
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    Scaffold.of(context).hideCurrentSnackBar();
+    Scaffold.of(context).showSnackBar(snackBar);
   }
 }
