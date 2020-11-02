@@ -16,6 +16,8 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
 
   ToastyMessage myUvcToast;
 
+  final String robotUVCName = 'DEEPLIGHT';
+
   ///Initialisation and listening to device state
 
   BluetoothDevice device;
@@ -66,17 +68,19 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
       // do something with scan results
       for (ScanResult r in results) {
         print('${r.device.name} found! mac: ${r.device.id.toString()}');
-        if (scanIdentifiers.isEmpty) {
-          scanIdentifiers.add(r.device.id.toString());
-          setState(() {
-            devices.add(Device(device: r.device));
-          });
-        } else {
-          if (!scanIdentifiers.contains(r.device.id.toString())) {
+        if(r.device.name.contains(robotUVCName)){
+          if (scanIdentifiers.isEmpty) {
             scanIdentifiers.add(r.device.id.toString());
             setState(() {
               devices.add(Device(device: r.device));
             });
+          } else {
+            if (!scanIdentifiers.contains(r.device.id.toString())) {
+              scanIdentifiers.add(r.device.id.toString());
+              setState(() {
+                devices.add(Device(device: r.device));
+              });
+            }
           }
         }
       }
