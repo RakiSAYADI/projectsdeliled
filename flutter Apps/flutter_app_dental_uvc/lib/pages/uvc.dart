@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -142,9 +143,11 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     if (firstDisplayMainWidget) {
       firstDisplayMainWidget = false;
 
-      alertOrUVC = false;
-      ledControl = LedControl();
-      alertLedRed();
+      if(Platform.isAndroid){
+        alertOrUVC = false;
+        ledControl = LedControl();
+        alertLedRed();
+      }
 
       readingCharacteristic();
 

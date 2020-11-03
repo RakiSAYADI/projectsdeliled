@@ -50,7 +50,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
   int extinctionTime;
   int activationTime;
 
-  FloatingActionButton changeModeFloatButton;
+  bool changeModeFloatButton = false;
 
   List<String> myExtinctionTimeMinute = [
     ' 30 sec',
@@ -347,7 +347,19 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
             ],
           ),
         ),
-        floatingActionButton: changeModeFloatButton,
+        floatingActionButton:new Visibility(
+          visible: changeModeFloatButton,
+          child:FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/profiles', arguments: {
+              'myDevice': myDevice,
+              'dataRead': myDevice.getReadCharMessage(),
+            });
+          },
+          child: Icon(Icons.assignment),
+          backgroundColor: Colors.blue,
+        ),
+        ),
       ),
       onWillPop: () => _ackDisconnect(context),
     );
@@ -611,16 +623,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                     qrCodeSettings = true;
                     qrCodeScanAccess = false;
                     setState(() {
-                      changeModeFloatButton = FloatingActionButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/profiles', arguments: {
-                            'myDevice': myDevice,
-                            'dataRead': myDevice.getReadCharMessage(),
-                          });
-                        },
-                        child: Icon(Icons.assignment),
-                        backgroundColor: Colors.blue,
-                      );
+                      changeModeFloatButton = true;
                     });
                   }),
             ],

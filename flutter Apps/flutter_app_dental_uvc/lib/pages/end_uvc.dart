@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
@@ -55,7 +57,9 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
 
   void csvDataFile() async {
     uvcDataFile = UVCDataFile();
-    ledControl = LedControl();
+    if(Platform.isAndroid){
+      ledControl = LedControl();
+    }
     uvcData = await uvcDataFile.readUVCDATA();
     List<String> uvcOperationData = ['default'];
     uvcOperationData.length = 0;
@@ -76,15 +80,21 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
 
     uvcOperationData.add(activationTime.toString());
 
-    await ledControl.setLedColor('ON');
+    if(Platform.isAndroid){
+      await ledControl.setLedColor('ON');
+    }
     await Future.delayed(const Duration(milliseconds: 50));
 
     if (isTreatmentCompleted) {
       uvcOperationData.add('Valide');
-      await ledControl.setLedColor('GREEN');
+      if(Platform.isAndroid){
+        await ledControl.setLedColor('GREEN');
+      }
     } else {
       uvcOperationData.add('Incident');
-      await ledControl.setLedColor('RED');
+      if(Platform.isAndroid){
+        await ledControl.setLedColor('RED');
+      }
     }
 
     uvcData.add(uvcOperationData);
