@@ -206,7 +206,14 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
                 myUvcToast.setToastDuration(60);
                 myUvcToast.setToastMessage('Envoi en cours !');
                 myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
-                await sendEmail(myEmail.text);
+                if(await checkInternetConnection()){
+                  await sendEmail(myEmail.text);
+                }else{
+                  myUvcToast.clearAllToast();
+                  myUvcToast.setToastDuration(3);
+                  myUvcToast.setToastMessage('Votre téléphone n\'est connecté sur internet !');
+                  myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
+                }
                 Navigator.pop(context, false);
                 Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
               },
@@ -257,6 +264,21 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
       myUvcToast.setToastDuration(3);
       myUvcToast.setToastMessage('Email n\'est pas envoyé , Verifier votre addresse email !');
       myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
+    }
+  }
+
+  Future<bool> checkInternetConnection() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+        return true;
+      } else {
+        return false;
+      }
+    } on SocketException catch (_) {
+      print('not connected');
+      return false;
     }
   }
 }
