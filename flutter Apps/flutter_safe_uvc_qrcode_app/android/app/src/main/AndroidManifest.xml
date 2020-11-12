@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="deliled.applications.flutter_safe_uvc_qrcode_app">
+    package="deliled.applications.safeuvcqrcodeapp">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
