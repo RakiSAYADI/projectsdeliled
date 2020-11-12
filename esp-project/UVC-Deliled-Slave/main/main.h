@@ -4,6 +4,8 @@
  *  Created on: 19 août 2020
  *      Author: raki
  */
+ 
+#define UVCROBOTNAME "DEEPLIGHT-A026"
 
 void LedStatInit();
 void wifiConnectionClient();
