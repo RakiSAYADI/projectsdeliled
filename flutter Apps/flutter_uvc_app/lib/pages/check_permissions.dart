@@ -132,6 +132,9 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
       imagePadding: EdgeInsets.zero,
     );
 
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return WillPopScope(
       child: Scaffold(
         backgroundColor: Colors.blue[400],
@@ -143,7 +146,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
           decoration: BoxDecoration(color: Colors.grey[200]),
           child: Builder(
             builder: (context) {
-              return IntroductionScreen(
+/*              return IntroductionScreen(
                 key: introKey,
                 pages: [
                   PageViewModel(
@@ -164,7 +167,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                     image: _buildImage('loading_Bluetooth.gif'),
                     decoration: pageDecoration,
                   ),
-/*                  PageViewModel(
+*//*                  PageViewModel(
                     title: "Another title page",
                     body: "Another beautiful body text for this example onboarding",
                     image: _buildImage('img2'),
@@ -182,7 +185,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                       ),
                     ),
                     decoration: pageDecoration,
-                  ),*/
+                  ),*//*
                   PageViewModel(
                     title: "Title of last page",
                     bodyWidget: Row(
@@ -213,14 +216,27 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                     borderRadius: BorderRadius.all(Radius.circular(25.0)),
                   ),
                 ),
-              );
-/*              return Center(
+              );*/
+              return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    AnimatedSwitcher(
-                      duration: Duration(seconds: 2),
-                      child: _myAnimationWidget,
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        'Afin de garantir le bon fonctionnement de l\'application merci d\'activer votre Bluetooth.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: screenWidth * 0.04,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.05),
+                    Image.asset(
+                      'assets/loading_Bluetooth.gif',
+                      height: screenHeight * 0.3,
+                      width: screenWidth * 0.8,
                     ),
                     SizedBox(height: screenHeight * 0.04),
                     FlatButton(
@@ -246,7 +262,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                     SizedBox(height: screenHeight * 0.05),
                   ],
                 ),
-              );*/
+              );
             },
           ),
         ),
