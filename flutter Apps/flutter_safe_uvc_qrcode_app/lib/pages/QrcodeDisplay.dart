@@ -54,26 +54,28 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
         body: Container(
           decoration: BoxDecoration(color: Colors.grey[200]),
           child: Center(
-            child: RepaintBoundary(
-              key: globalKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/delitech.png',
-                  ),
-                  QrImage(
-                    data: myQrCodeData,
-                  ),
-                  Container(
-                    alignment: Alignment.bottomCenter, // align the row
-                    padding: EdgeInsets.all(16.0),
-                    child: Text(myRoomName),
-                  ),
-                  Image.asset(
-                    'assets/texte-deeplight.png',
-                  ),
-                ],
+            child: SingleChildScrollView(
+              child: RepaintBoundary(
+                key: globalKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/delitech.png',
+                    ),
+                    QrImage(
+                      data: myQrCodeData,
+                    ),
+                    Container(
+                      alignment: Alignment.bottomCenter, // align the row
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(myRoomName),
+                    ),
+                    Image.asset(
+                      'assets/texte-deeplight.png',
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -206,11 +208,11 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
                 myUvcToast.setToastDuration(60);
                 myUvcToast.setToastMessage('Envoi en cours !');
                 myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
-                if(await checkInternetConnection()){
+                if (await checkInternetConnection()) {
                   await sendEmail(myEmail.text);
                   Navigator.pop(context, false);
                   Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
-                }else{
+                } else {
                   myUvcToast.clearAllToast();
                   myUvcToast.setToastDuration(3);
                   myUvcToast.setToastMessage('Votre téléphone n\'est connecté sur internet !');
