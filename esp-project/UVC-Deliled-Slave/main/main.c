@@ -36,6 +36,8 @@ int app_main(void) {
 	if (InitLoadCfg() != 0) {
 		return -1;
 	}
+	
+	//Default_saving();
 
 	//Intialize WIFI NETWORK for the client
 	wifiConnectionClient();

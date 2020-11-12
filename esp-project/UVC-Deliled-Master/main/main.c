@@ -36,6 +36,8 @@ int app_main(void) {
 	if (InitLoadCfg() != 0) {
 		return -1;
 	}
+	
+	//Default_saving();
 
 	// Initiate Bluetooth services (only for SERVER).
 	bt_main();
