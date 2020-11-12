@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="deliled.applications.flutter_safe_uvc_qrcode_app">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
    <application
         android:label="SAFE UVC QR CODE"
         android:icon="@mipmap/ic_launcher">
