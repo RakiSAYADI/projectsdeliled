@@ -167,7 +167,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                     image: _buildImage('loading_Bluetooth.gif'),
                     decoration: pageDecoration,
                   ),
-*//*                  PageViewModel(
+                  PageViewModel(
                     title: "Another title page",
                     body: "Another beautiful body text for this example onboarding",
                     image: _buildImage('img2'),
