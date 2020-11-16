@@ -224,7 +224,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
-                        'Afin de garantir le bon fonctionnement de l\'application merci d\'activer votre Bluetooth.',
+                        'Afin de garantir le bon fonctionnement de l\'application merci d\'activer votre Bluetooth ainsi que votre Localisation.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.black,
