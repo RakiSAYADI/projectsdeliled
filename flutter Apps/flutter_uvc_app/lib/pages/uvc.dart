@@ -89,7 +89,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
       if (!myDevice.getConnectionState()) {
         myUvcToast = ToastyMessage(toastContext: context);
         myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('Connexion perdue avec le robot !');
+        myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
         myDevice.disconnect();
         Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
@@ -115,6 +115,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
             'myUvcLight': myUvcLight,
             'myactivationtime': (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds),
             'treatmentIsSuccessful': treatmentIsSuccessful,
+            'dataRead':dataRobotUVC,
             'myDevice': myDevice,
           });
           break;
@@ -324,6 +325,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                                     'myactivationtime': (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds),
                                                     'myDevice': myDevice,
                                                     'myUvcLight': myUvcLight,
+                                                    'dataRead':dataRobotUVC,
                                                     'treatmentIsSuccessful': treatmentIsSuccessful,
                                                   });
                                                 }
@@ -383,6 +385,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                 'myactivationtime': (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds),
                 'myDevice': myDevice,
                 'myUvcLight': myUvcLight,
+                'dataRead':dataRobotUVC,
                 'treatmentIsSuccessful': treatmentIsSuccessful,
               });
             },

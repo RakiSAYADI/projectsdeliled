@@ -191,7 +191,7 @@ class _WarningsState extends State<Warnings> {
                           } else {
                             myUvcToast = ToastyMessage(toastContext: context);
                             myUvcToast.setToastDuration(5);
-                            myUvcToast.setToastMessage('Connexion perdue avec le robot !');
+                            myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
                             myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
                             myDevice.disconnect();
                             Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);

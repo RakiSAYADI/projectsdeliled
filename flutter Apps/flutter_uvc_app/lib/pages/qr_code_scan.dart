@@ -255,7 +255,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                 });
               } else {
                 myUvcToast.setToastDuration(5);
-                myUvcToast.setToastMessage('Connexion perdue avec le robot !');
+                myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
                 myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
                 myDevice.disconnect();
                 Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
@@ -644,7 +644,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Valider la connexion au dispositif UVC DEEPLIGHT'),
+              Text('Veuillez rester près du dispositif UVC pendant quelques instants, la connexion est en cours.'),
               Image.asset(
                 'assets/connexion_dispositif.gif',
                 height: screenHeight * 0.3,

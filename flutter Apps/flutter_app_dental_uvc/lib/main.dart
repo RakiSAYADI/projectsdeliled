@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutterappdentaluvc/pages/Automatique_UVC.dart';
+import 'package:flutterappdentaluvc/pages/advanced_settings.dart';
 import 'package:flutterappdentaluvc/pages/data_view.dart';
 import 'package:flutterappdentaluvc/pages/end_uvc.dart';
 import 'package:flutterappdentaluvc/pages/pin_access.dart';
 import 'package:flutterappdentaluvc/pages/pin_settings.dart';
 import 'package:flutterappdentaluvc/pages/profils.dart';
+import 'package:flutterappdentaluvc/pages/scan_ble_list.dart';
 import 'package:flutterappdentaluvc/pages/settings.dart';
 import 'package:flutterappdentaluvc/pages/uvc.dart';
 import 'package:flutterappdentaluvc/pages/warnings.dart';
@@ -67,6 +70,9 @@ void main() async {
     routes: {
       '/': (context) => Welcome(),
       '/pin_access': (context) => AccessPin(),
+      '/advanced_settings': (context) => AdvancedSettings(),
+      '/scan_ble_list': (context) => ScanListBle(),
+      '/auto_uvc': (context) => UVCAuto(),
       '/DataCSVView': (context) => DataCSVView(),
       '/pin_settings': (context) => PinSettings(),
       '/profiles': (context) => Profiles(),

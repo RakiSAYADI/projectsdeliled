@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutteruvcapp/services/httpRequests.dart';
 import 'package:package_info/package_info.dart';
+import 'package:wakelock/wakelock.dart';
 
 class Welcome extends StatefulWidget {
   @override
@@ -17,6 +18,16 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
 
   DataBaseRequests dataBaseRequests = DataBaseRequests();
 
+  void wakeLock() async {
+    await Wakelock.enable();
+    bool wakelockEnabled = await Wakelock.enabled;
+    if (wakelockEnabled) {
+      // The following statement disables the wakelock.
+      Wakelock.toggle(enable: true);
+    }
+    print('screen lock is disabled');
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -25,6 +36,8 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
+    wakeLock();
 
     dataBaseRequests.checkInternetConnection();
 

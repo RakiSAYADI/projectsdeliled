@@ -3,8 +3,12 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/LEDControl.dart';
+import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
+import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:package_info/package_info.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -18,6 +22,23 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
 
   LedControl ledControl;
 
+  UVCDataFile uvcDataFile = UVCDataFile();
+
+  String macRobotUVC = '';
+
+  ToastyMessage myUvcToast;
+
+  Animation colorInfoQrCode;
+
+  List<BluetoothDevice> scanDevices = [];
+
+  AnimationController animationRefreshIcon;
+  AnimationController animationController;
+
+  Device myDevice;
+
+  FlutterBlue flutterBlue = FlutterBlue.instance;
+
   void ledInit() async {
     ledControl = LedControl();
     await ledControl.setLedColor('ON');
@@ -25,13 +46,81 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   }
 
   void wakeLock() async {
-    Wakelock.enable();
+    await Wakelock.enable();
     bool wakelockEnabled = await Wakelock.enabled;
     if (wakelockEnabled) {
       // The following statement disables the wakelock.
       Wakelock.toggle(enable: true);
     }
     print('screen lock is disabled');
+  }
+
+  void readUVCDevice() async {
+    int devicesPosition = 0;
+    bool deviceExistOrNot = false;
+    macRobotUVC = await uvcDataFile.readUVCDevice();
+    await Future.delayed(const Duration(seconds: 3));
+    //myDevice.disconnect();
+    if (macRobotUVC.isEmpty) {
+      myUvcToast.setToastDuration(3);
+      myDevice = Device(device: scanDevices.elementAt(devicesPosition));
+      myUvcToast.setToastMessage('Veuillez selectionner un dispositif UV-C dans la page \'Réglages\' !');
+      myUvcToast.showToast(Colors.yellow, Icons.warning, Colors.white);
+      Future.delayed(Duration(seconds: 1), () async {
+        Navigator.pushReplacementNamed(context, '/pin_access',arguments: {
+          'myDevice': myDevice,
+          'dataRead': '',
+        });
+      });
+    } else {
+      for (int i = 0; i < scanDevices.length; i++) {
+        if (scanDevices.elementAt(i).id.toString().contains(macRobotUVC)) {
+          deviceExistOrNot = true;
+          devicesPosition = i;
+          break;
+        } else {
+          deviceExistOrNot = false;
+        }
+      }
+      if (deviceExistOrNot) {
+        myUvcToast.setAnimationIcon(animationRefreshIcon);
+        myUvcToast.setToastDuration(60);
+        myDevice = Device(device: scanDevices.elementAt(devicesPosition));
+        myUvcToast.setToastMessage('Autorisation de connexion validée !');
+        myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
+        // stop scanning and start connecting
+        try {
+          await myDevice.connect(false);
+        } catch (e) {
+          myDevice.disconnect();
+          await myDevice.connect(false);
+        }
+        Future.delayed(const Duration(seconds: 2), () async {
+          // clear the remaining toast message
+          myUvcToast.clearAllToast();
+          await myDevice.readCharacteristic(2, 0);
+          Future.delayed(Duration(seconds: 1), () async {
+            Navigator.pushReplacementNamed(context, '/pin_access',arguments: {
+              'myDevice': myDevice,
+              'dataRead': myDevice.getReadCharMessage(),
+            });
+          });
+        });
+      } else {
+        myUvcToast.setToastDuration(1000);
+        myDevice = Device(device: scanDevices.elementAt(devicesPosition));
+        myUvcToast.setToastMessage('Le dispositif UV-C enregistré n\'est pas détecté !\n Veuillez le mettre sous tension et redémarrer l\'application.');
+        myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    animationRefreshIcon.dispose();
+    animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -45,7 +134,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
 
     wakeLock();
 
-    if(Platform.isAndroid){
+    if (Platform.isAndroid) {
       ledInit();
     }
 
@@ -70,11 +159,69 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       print('macos');
     }
 
-    Future.delayed(Duration(seconds: 5), () async {
-      Navigator.pushReplacementNamed(context, '/pin_access');
+    animationRefreshIcon = new AnimationController(
+      vsync: this,
+      duration: new Duration(seconds: 3),
+    );
+    animationController = AnimationController(vsync: this, duration: Duration(seconds: 10));
+    colorInfoQrCode = animationColor(Colors.red, Colors.transparent);
+    animationController.forward();
+
+    animationRefreshIcon.repeat();
+    myUvcToast = ToastyMessage(toastContext: context);
+    //checks bluetooth current state
+    Future.delayed(const Duration(seconds: 1), () async {
+      flutterBlue.state.listen((state) {
+        if (state == BluetoothState.off) {
+          //Alert user to turn on bluetooth.
+          print("Bluetooth is off");
+          myUvcToast.setToastDuration(5);
+          myUvcToast.setToastMessage('Le Bluetooth (BLE) sur votre téléphone n\'est pas activé !');
+          myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+        } else if (state == BluetoothState.on) {
+          //if bluetooth is enabled then go ahead.
+          //Make sure user's device gps is on.
+          flutterBlue = FlutterBlue.instance;
+          print("Bluetooth is on");
+          scanForDevices();
+        }
+      });
     });
 
+    readUVCDevice();
+
     super.initState();
+  }
+
+  Animation animationColor(Color colorBegin, Color colorEnd) {
+    return ColorTween(begin: colorBegin, end: colorEnd).animate(animationController)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          animationController.reverse();
+        } else if (status == AnimationStatus.dismissed) {
+          animationController.forward();
+        }
+      });
+  }
+
+  void scanForDevices() {
+    // Start scanning
+    flutterBlue.startScan(timeout: Duration(seconds: 5));
+    // Listen to scan results
+    flutterBlue.scanResults.listen((results) {
+      scanDevices.clear();
+      // do something with scan results
+      for (ScanResult r in results) {
+        print('${r.device.name} found! mac: ${r.device.id.toString()}');
+        if (scanDevices.isEmpty) {
+          scanDevices.add(r.device);
+        } else {
+          if (!scanDevices.contains(r.device)) {
+            scanDevices.add(r.device);
+          }
+        }
+      }
+    });
   }
 
   @override

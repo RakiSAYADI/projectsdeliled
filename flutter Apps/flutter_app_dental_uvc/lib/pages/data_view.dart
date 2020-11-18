@@ -145,12 +145,12 @@ class _DataCSVViewState extends State<DataCSVView> {
                 style: TextStyle(fontSize: (widthScreen * 0.02)),
               ),
               onPressed: () async {
+                Navigator.pop(context, false);
                 await uvcDataFile.saveStringUVCEmailDATA(myEmail.text);
                 myUvcToast.setToastDuration(60);
                 myUvcToast.setToastMessage('Envoi en cours !');
                 myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
                 await sendemail(myEmail.text);
-                Navigator.pop(context, false);
               },
             ),
             FlatButton(

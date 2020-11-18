@@ -193,7 +193,7 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
                   FlatButton(
                     onPressed: () {
                       myDevice.disconnect();
-                      Navigator.pushNamedAndRemoveUntil(context, "/pin_access", (r) => false);
+                      Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
                     },
                     child: Text(
                       'Nouvelle désinfection',
@@ -243,7 +243,7 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
 
     if (firstDisplayMainWidget) {
       firstDisplayMainWidget = false;
-      myDevice.disconnect();
+      //myDevice.disconnect();
       csvDataFile();
       mainWidgetScreen = appWidget(context);
       screenSleep(context);
@@ -262,7 +262,8 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
 
   Future<bool> exitApp(BuildContext context) async {
     widgetIsInactive = false;
-    Navigator.pushNamedAndRemoveUntil(context, "/pin_access", (r) => false);
+    myDevice.disconnect();
+    Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
     return true;
   }
 }

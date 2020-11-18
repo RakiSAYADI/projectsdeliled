@@ -84,7 +84,7 @@ class _SendEmailState extends State<SendEmail> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Entrer votre Adresse Email :',
+                        'Entrer votre adresse email :',
                         style: TextStyle(fontSize: (screenWidth * 0.05)),
                       ),
                       SizedBox(height: screenHeight * 0.05),

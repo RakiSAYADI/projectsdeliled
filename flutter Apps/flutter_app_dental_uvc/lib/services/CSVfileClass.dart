@@ -10,6 +10,8 @@ class UVCDataFile {
 
   final String _uvcUserEmailFileName = 'User_email.txt';
 
+  final String _uvcDeviceFileName = 'UVC_Device.txt';
+
   final List<List<String>> _uvcDefaultData = [
     [
       'Dispositif UVC',
@@ -105,5 +107,26 @@ class UVCDataFile {
     final file = File('${directory.path}/$_uvcUserEmailFileName');
     await file.writeAsString(userEmail);
     print('saveStringUVCEmailDATA : saved');
+  }
+
+  Future<String> readUVCDevice() async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/$_uvcDeviceFileName');
+      String uvcDevice = await file.readAsString();
+      print("Readed : $uvcDevice");
+      return uvcDevice;
+    } catch (e) {
+      print("Couldn't read file");
+      await saveUVCDevice('');
+      return '';
+    }
+  }
+
+  Future<void> saveUVCDevice(String uvcDevice) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/$_uvcDeviceFileName');
+    await file.writeAsString(uvcDevice);
+    print('saveUVCDevice : saved');
   }
 }

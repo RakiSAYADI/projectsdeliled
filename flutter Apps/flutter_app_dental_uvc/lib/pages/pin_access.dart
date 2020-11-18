@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutterappdentaluvc/services/NFCManagerClass.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
@@ -27,27 +26,15 @@ class AlwaysDisabledFocusNode extends FocusNode {
 class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   final TextEditingController _pinPutController = TextEditingController();
 
-  final String macRobot = '30:AE:A4:21:F1:BE';
   String pinCode;
   String pinCodeAccess = '';
   String myPinCode = '';
 
   ToastyMessage myUvcToast;
 
-  FlutterBlue flutterBlue = FlutterBlue.instance;
-
-  List<BluetoothDevice> scanDevices = [];
-
   Animation colorInfoQrCode;
 
-  bool qrCodeScanAccess = false;
-  bool deviceExistOrNot = false;
-
-  AnimationController animationRefreshIcon;
-  AnimationController animationController;
   GifController gifController;
-
-  int devicesPosition = 0;
 
   Device myDevice;
 
@@ -62,6 +49,10 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   int timeToSleep;
 
   bool firstDisplayMainWidget = true;
+
+  Map pinAccessClassData = {};
+
+  String dataRobotUVC = '';
 
   BoxDecoration get _pinPutDecoration {
     return BoxDecoration(
@@ -111,76 +102,24 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     // TODO: implement initState
     super.initState();
     gifController = GifController(vsync: this);
-    // initialise the animation
-    animationRefreshIcon = new AnimationController(
-      vsync: this,
-      duration: new Duration(seconds: 3),
-    );
-    animationController = AnimationController(vsync: this, duration: Duration(seconds: 10));
-    colorInfoQrCode = animationColor(Colors.red, Colors.transparent);
-    animationController.forward();
 
     _listenForPermissionStatus();
 
     readingNFCTags();
 
-    animationRefreshIcon.repeat();
     myUvcToast = ToastyMessage(toastContext: context);
     //checks bluetooth current state
     Future.delayed(const Duration(seconds: 1), () async {
       pinCodeAccess = await _readPINFile();
-      flutterBlue.state.listen((state) {
-        if (state == BluetoothState.off) {
-          //Alert user to turn on bluetooth.
-          print("Bluetooth is off");
-          myUvcToast.setToastDuration(5);
-          myUvcToast.setToastMessage('Le Bluetooth (BLE) sur votre téléphone n\'est pas activé !');
-          myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-        } else if (state == BluetoothState.on) {
-          //if bluetooth is enabled then go ahead.
-          //Make sure user's device gps is on.
-          flutterBlue = FlutterBlue.instance;
-          print("Bluetooth is on");
-          scanForDevices();
-        }
-      });
-    });
-  }
-
-  Animation animationColor(Color colorBegin, Color colorEnd) {
-    return ColorTween(begin: colorBegin, end: colorEnd).animate(animationController)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          animationController.reverse();
-        } else if (status == AnimationStatus.dismissed) {
-          animationController.forward();
-        }
-      });
-  }
-
-  void scanForDevices() {
-    // Start scanning
-    flutterBlue.startScan(timeout: Duration(seconds: 5));
-    // Listen to scan results
-    flutterBlue.scanResults.listen((results) {
-      scanDevices.clear();
-      // do something with scan results
-      for (ScanResult r in results) {
-        print('${r.device.name} found! mac: ${r.device.id.toString()}');
-        if (scanDevices.isEmpty) {
-          scanDevices.add(r.device);
-        } else {
-          if (!scanDevices.contains(r.device)) {
-            scanDevices.add(r.device);
-          }
-        }
-      }
     });
   }
 
   Widget appWidget(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
+    pinAccessClassData = pinAccessClassData.isNotEmpty ? pinAccessClassData : ModalRoute.of(context).settings.arguments;
+    myDevice = pinAccessClassData['myDevice'];
+    dataRobotUVC = pinAccessClassData['dataRead'];
     return WillPopScope(
       child: Scaffold(
         backgroundColor: Colors.blue[400],
@@ -271,8 +210,9 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
             widgetIsInactive = true;
-            Navigator.pushNamed(context, '/pin_settings', arguments: {
+            Navigator.pushNamed(context, '/advanced_settings', arguments: {
               'pinCodeAccess': pinCodeAccess,
+              'myDevice': myDevice,
             });
           },
           label: Text('Réglages'),
@@ -408,8 +348,6 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   @override
   void dispose() {
     gifController.dispose();
-    animationController.dispose();
-    animationRefreshIcon.dispose();
     print('dispose task');
     super.dispose();
   }
@@ -440,48 +378,16 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
       backgroundColor: messageColor,
       onVisible: () async {
         if (pin == pinCodeAccess && pin.isNotEmpty) {
-          for (int i = 0; i < scanDevices.length; i++) {
-            if (scanDevices.elementAt(i).id.toString().contains(macRobot)) {
-              deviceExistOrNot = true;
-              devicesPosition = i;
-              break;
-            } else {
-              deviceExistOrNot = false;
-            }
-          }
-          if (deviceExistOrNot) {
-            qrCodeScanAccess = true;
-            myUvcToast.setAnimationIcon(animationRefreshIcon);
-            myUvcToast.setToastDuration(60);
-            myDevice = Device(device: scanDevices.elementAt(devicesPosition));
-            myUvcToast.setToastMessage('Autorisation de connexion validée !');
-            myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
-            // stop scanning and start connecting
-            try {
-              await myDevice.connect(false);
-            } catch (e) {
-              myDevice.disconnect();
-              await myDevice.connect(false);
-            }
-            Future.delayed(const Duration(seconds: 2), () async {
-              // clear the remaining toast message
-              myUvcToast.clearAllToast();
-              await myDevice.readCharacteristic(2, 0);
-              Navigator.of(context).pop();
-              widgetIsInactive = true;
-              Navigator.pushNamed(context, '/profiles', arguments: {
-                'myDevice': myDevice,
-                'dataRead': myDevice.getReadCharMessage(),
-              });
-              //myDevice.disconnect();
-            });
-          } else {
-            qrCodeScanAccess = false;
+          widgetIsInactive = true;
+          if(dataRobotUVC.isEmpty){
             myUvcToast.setToastDuration(3);
-            myDevice = Device(device: scanDevices.elementAt(devicesPosition));
-            myUvcToast.setToastMessage('Aucun dispositif UVC disponible !');
+            myUvcToast.setToastMessage('Veuillez selectionner un dispositif UV-C dans la page \'Réglages\' !');
             myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
-            flutterBlue.startScan(timeout: Duration(seconds: 5));
+          }else{
+            Navigator.pushNamed(context, '/profiles', arguments: {
+              'myDevice': myDevice,
+              'dataRead': myDevice.getReadCharMessage(),
+            });
           }
         }
       },

@@ -15,6 +15,8 @@ class _EndUVCState extends State<EndUVC> {
   Device myDevice;
   bool isTreatmentCompleted;
 
+  String dataRobotUVC = '';
+
   Map endUVCClassData = {};
 
   UVCDataFile uvcDataFile;
@@ -80,9 +82,9 @@ class _EndUVCState extends State<EndUVC> {
 
     if (firstDisplayMainWidget) {
       firstDisplayMainWidget = false;
-      if (myDevice != null) {
+/*      if (myDevice != null) {
         myDevice.disconnect();
-      }
+      }*/
       csvDataFile();
     }
 
@@ -138,6 +140,26 @@ class _EndUVCState extends State<EndUVC> {
                     imageGif,
                     height: screenHeight * 0.2,
                     width: screenWidth * 0.8,
+                  ),
+                  SizedBox(height: screenHeight * 0.05),
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.pushNamedAndRemoveUntil(context, "/profil", (r) => false, arguments: {
+                        'myDevice': myDevice,
+                        'dataRead': dataRobotUVC,
+                      });
+                    },
+                    child: Text(
+                      'Changer de dispositif',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: screenWidth * 0.05,
+                      ),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                    color: Colors.blue[400],
                   ),
                   SizedBox(height: screenHeight * 0.05),
                   FlatButton(

@@ -1,4 +1,4 @@
-package deliled.applications.flutter_safe_uvc_qrcode_app
+package deliled.applications.safeuvcqrcodeapp
 
 import io.flutter.embedding.android.FlutterActivity
 
