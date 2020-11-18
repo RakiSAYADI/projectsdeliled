@@ -141,16 +141,16 @@ class _EndUVCState extends State<EndUVC> {
                     height: screenHeight * 0.2,
                     width: screenWidth * 0.8,
                   ),
-                  SizedBox(height: screenHeight * 0.05),
+/*                  SizedBox(height: screenHeight * 0.05),
                   FlatButton(
                     onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(context, "/profil", (r) => false, arguments: {
+                      Navigator.pushNamedAndRemoveUntil(context, "/profiles", (r) => false, arguments: {
                         'myDevice': myDevice,
                         'dataRead': dataRobotUVC,
                       });
                     },
                     child: Text(
-                      'Changer de dispositif',
+                      'Nouvelle désinfection',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: screenWidth * 0.05,
@@ -160,7 +160,7 @@ class _EndUVCState extends State<EndUVC> {
                       borderRadius: BorderRadius.circular(18.0),
                     ),
                     color: Colors.blue[400],
-                  ),
+                  ),*/
                   SizedBox(height: screenHeight * 0.05),
                   FlatButton(
                     onPressed: () {
@@ -168,7 +168,7 @@ class _EndUVCState extends State<EndUVC> {
                       Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
                     },
                     child: Text(
-                      'Nouvelle désinfection',
+                      'Changer de dispositif',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: screenWidth * 0.05,
@@ -185,7 +185,7 @@ class _EndUVCState extends State<EndUVC> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
+/*      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.pushNamed(context, '/DataCSVView', arguments: {
             'isTreatmentCompleted': isTreatmentCompleted,
@@ -199,7 +199,7 @@ class _EndUVCState extends State<EndUVC> {
           color: Colors.white,
         ),
         backgroundColor: Colors.blue[400],
-      ),
+      ),*/
     );
   }
 

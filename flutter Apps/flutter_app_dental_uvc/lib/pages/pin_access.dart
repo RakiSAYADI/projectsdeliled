@@ -6,7 +6,6 @@ import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutterappdentaluvc/services/NFCManagerClass.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
-import 'package:location_permissions/location_permissions.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 
@@ -38,8 +37,6 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
 
   Device myDevice;
 
-  PermissionStatus _permissionStatus = PermissionStatus.unknown;
-
   Widget mainWidgetScreen;
 
   final int timeSleep = 120000;
@@ -69,41 +66,12 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     print(nfcManager.nfcGetMessage());
   }
 
-  void _listenForPermissionStatus() {
-    final Future<PermissionStatus> statusFuture = LocationPermissions().checkPermissionStatus();
-
-    statusFuture.then((PermissionStatus status) {
-      setState(() {
-        _permissionStatus = status;
-        if (_permissionStatus.index != 2) {
-          myUvcToast.setToastDuration(5);
-          myUvcToast.setToastMessage('La Localisation n\'est pas autorisée sur votre téléphone !');
-          myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-        } else {
-          checkServiceStatus(context);
-        }
-      });
-    });
-  }
-
-  void checkServiceStatus(BuildContext context) {
-    LocationPermissions().checkServiceStatus().then((ServiceStatus serviceStatus) {
-      if (serviceStatus.index != 2) {
-        myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('La Localisation n\'est pas activée sur votre téléphone !');
-        myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-      }
-    });
-  }
-
   @override
   void initState() {
     print('init task');
     // TODO: implement initState
     super.initState();
     gifController = GifController(vsync: this);
-
-    _listenForPermissionStatus();
 
     readingNFCTags();
 
@@ -117,9 +85,14 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   Widget appWidget(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
-    pinAccessClassData = pinAccessClassData.isNotEmpty ? pinAccessClassData : ModalRoute.of(context).settings.arguments;
-    myDevice = pinAccessClassData['myDevice'];
-    dataRobotUVC = pinAccessClassData['dataRead'];
+    try {
+      pinAccessClassData = pinAccessClassData.isNotEmpty ? pinAccessClassData : ModalRoute.of(context).settings.arguments;
+      myDevice = pinAccessClassData['myDevice'];
+      dataRobotUVC = pinAccessClassData['dataRead'];
+    } catch (e) {
+      print('its empty');
+    }
+
     return WillPopScope(
       child: Scaffold(
         backgroundColor: Colors.blue[400],
@@ -379,15 +352,17 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
       onVisible: () async {
         if (pin == pinCodeAccess && pin.isNotEmpty) {
           widgetIsInactive = true;
-          if(dataRobotUVC.isEmpty){
+          if (dataRobotUVC.isEmpty) {
             myUvcToast.setToastDuration(3);
             myUvcToast.setToastMessage('Veuillez selectionner un dispositif UV-C dans la page \'Réglages\' !');
             myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
-          }else{
-            Navigator.pushNamed(context, '/profiles', arguments: {
-              'myDevice': myDevice,
-              'dataRead': myDevice.getReadCharMessage(),
-            });
+          } else {
+            if (myDevice != null) {
+              Navigator.pushNamed(context, '/profiles', arguments: {
+                'myDevice': myDevice,
+                'dataRead': myDevice.getReadCharMessage(),
+              });
+            }
           }
         }
       },

@@ -17,6 +17,7 @@ class _PinSettingsState extends State<PinSettings> {
 
   final myOldPinCode = TextEditingController();
   final myNewPinCode = TextEditingController();
+  final myRenewPinCode = TextEditingController();
 
   ToastyMessage myUvcToast;
 
@@ -32,6 +33,7 @@ class _PinSettingsState extends State<PinSettings> {
     // TODO: implement dispose
     myOldPinCode.dispose();
     myNewPinCode.dispose();
+    myRenewPinCode.dispose();
     super.dispose();
   }
 
@@ -110,6 +112,33 @@ class _PinSettingsState extends State<PinSettings> {
                           )),
                     ),
                   ),
+                  SizedBox(height: heightScreen * 0.1),
+                  Text(
+                    'Rentrer le nouveau code de sécurité : ',
+                    style: TextStyle(fontSize: (widthScreen * 0.02)),
+                  ),
+                  SizedBox(height: heightScreen * 0.05),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.2)),
+                    child: TextField(
+                      textAlign: TextAlign.center,
+                      controller: myRenewPinCode,
+                      style: TextStyle(
+                        fontSize: widthScreen * 0.02,
+                      ),
+                      maxLines: 1,
+                      maxLength: 4,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                      ],
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          hintText: '',
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                          )),
+                    ),
+                  ),
                   SizedBox(height: heightScreen * 0.05),
                   FlatButton(
                     color: Colors.blue[400],
@@ -133,17 +162,24 @@ class _PinSettingsState extends State<PinSettings> {
                         myUvcToast.setToastMessage('Veuillez remplir les champs ci-dessus !');
                         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
                       } else {
-                        if (myOldPinCode.text == pinCodeAccess) {
-                          _savePINFile(myNewPinCode.text);
-                          myUvcToast.setToastDuration(2);
-                          myUvcToast.setToastMessage('Code de sécurité modifié !');
-                          myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
-                          myOldPinCode.text = '';
-                          myNewPinCode.text = '';
-                          Navigator.pop(context, true);
+                        if (myOldPinCode.text == pinCodeAccess ) {
+                          if(myNewPinCode.text == myRenewPinCode.text){
+                            _savePINFile(myNewPinCode.text);
+                            myUvcToast.setToastDuration(2);
+                            myUvcToast.setToastMessage('Merci, Le changement de mot de passe a été pris en compte !');
+                            myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+                            myOldPinCode.text = '';
+                            myNewPinCode.text = '';
+                            myRenewPinCode.text = '';
+                            Navigator.pop(context, true);
+                          }else{
+                            myUvcToast.setToastDuration(2);
+                            myUvcToast.setToastMessage('Les codes sont différentes, Veuillez réssayer !');
+                            myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+                          }
                         } else {
                           myUvcToast.setToastDuration(2);
-                          myUvcToast.setToastMessage('L\'ancien code de sécurité ne correspond pas !');
+                          myUvcToast.setToastMessage('L\'ancien code de sécurité n\'est pas correct !');
                           myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
                         }
                       }

@@ -9,6 +9,7 @@ import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/LEDControl.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
+import 'package:location_permissions/location_permissions.dart';
 import 'package:package_info/package_info.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -39,6 +40,8 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
 
   FlutterBlue flutterBlue = FlutterBlue.instance;
 
+  PermissionStatus _permissionStatus = PermissionStatus.unknown;
+
   void ledInit() async {
     ledControl = LedControl();
     await ledControl.setLedColor('ON');
@@ -62,12 +65,12 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     await Future.delayed(const Duration(seconds: 3));
     //myDevice.disconnect();
     if (macRobotUVC.isEmpty) {
-      myUvcToast.setToastDuration(3);
+      myUvcToast.setToastDuration(10);
       myDevice = Device(device: scanDevices.elementAt(devicesPosition));
       myUvcToast.setToastMessage('Veuillez selectionner un dispositif UV-C dans la page \'Réglages\' !');
-      myUvcToast.showToast(Colors.yellow, Icons.warning, Colors.white);
+      myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
       Future.delayed(Duration(seconds: 1), () async {
-        Navigator.pushReplacementNamed(context, '/pin_access',arguments: {
+        Navigator.pushReplacementNamed(context, '/pin_access', arguments: {
           'myDevice': myDevice,
           'dataRead': '',
         });
@@ -100,17 +103,19 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
           myUvcToast.clearAllToast();
           await myDevice.readCharacteristic(2, 0);
           Future.delayed(Duration(seconds: 1), () async {
-            Navigator.pushReplacementNamed(context, '/pin_access',arguments: {
+            Navigator.pushReplacementNamed(context, '/pin_access', arguments: {
               'myDevice': myDevice,
               'dataRead': myDevice.getReadCharMessage(),
             });
           });
         });
       } else {
-        myUvcToast.setToastDuration(1000);
+        myUvcToast.setToastDuration(10);
         myDevice = Device(device: scanDevices.elementAt(devicesPosition));
-        myUvcToast.setToastMessage('Le dispositif UV-C enregistré n\'est pas détecté !\n Veuillez le mettre sous tension et redémarrer l\'application.');
+        myUvcToast
+            .setToastMessage('Le dispositif UV-C enregistré n\'est pas détecté !\n Veuillez le mettre sous tension et redémarrer l\'application.');
         myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+        Navigator.pushReplacementNamed(context, '/pin_access');
       }
     }
   }
@@ -133,6 +138,8 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     ]);
 
     wakeLock();
+
+    _listenForPermissionStatus();
 
     if (Platform.isAndroid) {
       ledInit();
@@ -188,9 +195,44 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       });
     });
 
-    readUVCDevice();
-
     super.initState();
+  }
+
+  void _listenForPermissionStatus() {
+    checkServiceStatus(context);
+    final Future<PermissionStatus> statusFuture = LocationPermissions().checkPermissionStatus();
+
+    statusFuture.then((PermissionStatus status) async{
+        _permissionStatus = status;
+        if (_permissionStatus.index != 2) {
+          myUvcToast.setToastDuration(5);
+          myUvcToast.setToastMessage('La Localisation n\'est pas autorisée sur votre téléphone first!');
+          myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+/*          do{
+            _permissionStatus = status;
+            if(_permissionStatus.index == 2){
+              print('we got it');
+              readUVCDevice();
+              break;
+            }
+            print(_permissionStatus.index);
+            print('this is test');
+            await Future.delayed(const Duration(milliseconds: 500));
+          }while(true);*/
+        } else {
+          checkServiceStatus(context);
+        }
+    });
+  }
+
+  void checkServiceStatus(BuildContext context) {
+    LocationPermissions().checkServiceStatus().then((ServiceStatus serviceStatus) {
+      if (serviceStatus.index != 2) {
+        myUvcToast.setToastDuration(5);
+        myUvcToast.setToastMessage('La Localisation n\'est pas activée sur votre téléphone second!');
+        myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+      }
+    });
   }
 
   Animation animationColor(Color colorBegin, Color colorEnd) {
@@ -208,10 +250,15 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     // Start scanning
     flutterBlue.startScan(timeout: Duration(seconds: 5));
     // Listen to scan results
+    bool firstTime = true;
     flutterBlue.scanResults.listen((results) {
       scanDevices.clear();
       // do something with scan results
       for (ScanResult r in results) {
+        if(firstTime){
+          firstTime = false;
+          readUVCDevice();
+        }
         print('${r.device.name} found! mac: ${r.device.id.toString()}');
         if (scanDevices.isEmpty) {
           scanDevices.add(r.device);

@@ -103,7 +103,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     Future.delayed(const Duration(seconds: 1), () {
       _controller.resume();
       myUvcToast.setToastDuration(2);
-      myUvcToast.setToastMessage('Opening the camera ,please wait!');
+      myUvcToast.setToastMessage('Lancement de la camera !');
       myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
     });
     // initialise the animation

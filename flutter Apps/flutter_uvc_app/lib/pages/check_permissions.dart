@@ -55,7 +55,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
         _permissionStatus = status;
         if (_permissionStatus.index != 2) {
           myUvcToast.setToastDuration(5);
-          myUvcToast.setToastMessage('La Localisation n\'est pas autorisée sur votre téléphone !');
+          myUvcToast.setToastMessage('La localisation n\'est pas activée sur votre téléphone !');
           myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
         } else {
           checkServiceStatus(context);
@@ -68,7 +68,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
     LocationPermissions().checkServiceStatus().then((ServiceStatus serviceStatus) {
       if (serviceStatus.index != 2) {
         myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('La Localisation n\'est pas activée sur votre téléphone !');
+        myUvcToast.setToastMessage('La localisation n\'est pas activée sur votre téléphone !');
         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
       }
     });
@@ -224,7 +224,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
-                        'Afin de garantir le bon fonctionnement de l\'application merci d\'activer votre Bluetooth ainsi que votre Localisation.',
+                        'Afin de garantir le bon fonctionnement de l\'application merci d\'activer votre Bluetooth ainsi que votre localisation.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.black,
