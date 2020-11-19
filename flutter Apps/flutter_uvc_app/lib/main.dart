@@ -74,6 +74,8 @@ void main() async {
   }
 
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    title: 'SAFE UVC',
     initialRoute: '/',
     routes: {
       '/': (context) => Welcome(),

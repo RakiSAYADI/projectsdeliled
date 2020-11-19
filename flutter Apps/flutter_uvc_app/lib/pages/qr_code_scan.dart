@@ -103,7 +103,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     Future.delayed(const Duration(seconds: 1), () {
       _controller.resume();
       myUvcToast.setToastDuration(2);
-      myUvcToast.setToastMessage('Lancement de la camera !');
+      myUvcToast.setToastMessage('Lancement de la caméra !');
       myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
     });
     // initialise the animation
@@ -138,6 +138,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       if (!qrCodeConnectionOrSecurity) {
         if (Platform.isAndroid) {
           scanDevices = qrCodeClassData['scanDevices'];
+          _controller.resume();
           _controller.onCapture((data) {
             print('onCapture----$data');
             if (data.isNotEmpty && !qrCodeScanAccess) {
@@ -171,6 +172,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
         }
         if (Platform.isIOS) {
           myDevice = qrCodeClassData['myDevice'];
+          _controller.resume();
           _controller.onCapture((data) {
             print('onCapture----$data');
             if (data.isNotEmpty && !qrCodeScanAccess) {
@@ -235,6 +237,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       } else {
         myDevice = qrCodeClassData['myDevice'];
         myUvcLight = qrCodeClassData['myUvcLight'];
+        _controller.resume();
         _controller.onCapture((data) async {
           print('onCapture----$data');
           if (data.isNotEmpty) {
@@ -265,6 +268,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
         });
       }
     } else {
+      _controller.resume();
       _controller.onCapture((data) async {
         print('onCapture----$data');
         if (data.isNotEmpty) {
@@ -299,7 +303,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Qr code Scan'),
+          title: const Text('Scanner le QR code'),
           centerTitle: true,
         ),
         body: Container(
@@ -310,7 +314,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
               Align(
                 alignment: Alignment.topCenter,
                 child: Text(
-                  'Scanner le QR code du dispositif UV-C DEEPLIGHT',
+                  '',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.black,
@@ -347,18 +351,18 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
             ],
           ),
         ),
-        floatingActionButton:new Visibility(
+        floatingActionButton: new Visibility(
           visible: changeModeFloatButton,
-          child:FloatingActionButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/profiles', arguments: {
-              'myDevice': myDevice,
-              'dataRead': myDevice.getReadCharMessage(),
-            });
-          },
-          child: Icon(Icons.assignment),
-          backgroundColor: Colors.blue,
-        ),
+          child: FloatingActionButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/profiles', arguments: {
+                'myDevice': myDevice,
+                'dataRead': myDevice.getReadCharMessage(),
+              });
+            },
+            child: Icon(Icons.assignment),
+            backgroundColor: Colors.blue,
+          ),
         ),
       ),
       onWillPop: () => _ackDisconnect(context),
@@ -644,7 +648,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Veuillez rester près du dispositif UVC pendant quelques instants, la connexion est en cours.'),
+              Text('Veuillez rester près du dispositif UV-C pendant quelques instants, la connexion est en cours.'),
               Image.asset(
                 'assets/connexion_dispositif.gif',
                 height: screenHeight * 0.3,

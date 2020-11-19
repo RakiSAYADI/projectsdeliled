@@ -168,7 +168,7 @@ class _EndUVCState extends State<EndUVC> {
                       Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
                     },
                     child: Text(
-                      'Changer de dispositif',
+                      'Nouvelle désinfection',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: screenWidth * 0.05,
