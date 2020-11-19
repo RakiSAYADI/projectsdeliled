@@ -69,6 +69,8 @@ void main() async {
   runApp(
     Phoenix(
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'GLOBAL UVC',
         initialRoute: '/',
         routes: {
           '/': (context) => Welcome(),

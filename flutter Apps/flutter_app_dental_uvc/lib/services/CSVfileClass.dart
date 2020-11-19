@@ -12,6 +12,8 @@ class UVCDataFile {
 
   final String _uvcDeviceFileName = 'UVC_Device.txt';
 
+  final String _uvcAutoDataFileName = 'UVC_Auto_Data.txt';
+
   final List<List<String>> _uvcDefaultData = [
     [
       'Dispositif UVC',
@@ -128,5 +130,36 @@ class UVCDataFile {
     final file = File('${directory.path}/$_uvcDeviceFileName');
     await file.writeAsString(uvcDevice);
     print('saveUVCDevice : saved');
+  }
+
+  Future<String> readUVCAutoData() async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/$_uvcAutoDataFileName');
+      String uvcAutoData = await file.readAsString();
+      print("Readed : $uvcAutoData");
+      return uvcAutoData;
+    } catch (e) {
+      print("Couldn't read file");
+      String autoDataDefault = '{'
+          '\"Days\":\"0\",'
+          '\"Monday\":[0,0,0,0],'
+          '\"Tuesday\":[0,0,0,0],'
+          '\"Wednesday\":[0,0,0,0],'
+          '\"Thursday\":[0,0,0,0],'
+          '\"Friday\":[0,0,0,0],'
+          '\"Saturday\":[0,0,0,0],'
+          '\"Sunday\":[0,0,0,0]'
+          '}';
+      await saveUVCAutoData(autoDataDefault);
+      return autoDataDefault;
+    }
+  }
+
+  Future<void> saveUVCAutoData(String uvcAutoData) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/$_uvcAutoDataFileName');
+    await file.writeAsString(uvcAutoData);
+    print('saveUVCAutoData : saved');
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -19,6 +21,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
   ToastyMessage myUvcToast;
 
   final String robotUVCMAC = '70:B3:D5:01:8';
+  final String robotUVCName = 'DEEPLIGHT';
 
   ///Initialisation and listening to device state
 
@@ -54,14 +57,19 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
         //Make sure user's device gps is on.
         flutterBlue = FlutterBlue.instance;
         print("Bluetooth is on");
-        scanForDevices();
+        if(Platform.isAndroid){
+          scanForDevicesAndroid();
+        }
+        if(Platform.isIOS){
+          scanForDevicesIos();
+        }
       }
     });
   }
 
   List<String> scanIdentifiers = [];
 
-  void scanForDevices() {
+  void scanForDevicesAndroid() {
     // Start scanning
     flutterBlue.startScan(timeout: Duration(seconds: 5));
     // Listen to scan results
@@ -70,6 +78,33 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
       for (ScanResult r in results) {
         print('${r.device.name} found! mac: ${r.device.id.toString()}');
         if (r.device.id.id.contains(robotUVCMAC)) {
+          if (scanIdentifiers.isEmpty) {
+            scanIdentifiers.add(r.device.id.toString());
+            setState(() {
+              devices.add(Device(device: r.device));
+            });
+          } else {
+            if (!scanIdentifiers.contains(r.device.id.toString())) {
+              scanIdentifiers.add(r.device.id.toString());
+              setState(() {
+                devices.add(Device(device: r.device));
+              });
+            }
+          }
+        }
+      }
+    });
+  }
+
+  void scanForDevicesIos() {
+    // Start scanning
+    flutterBlue.startScan(timeout: Duration(seconds: 5));
+    // Listen to scan results
+    flutterBlue.scanResults.listen((results) {
+      // do something with scan results
+      for (ScanResult r in results) {
+        print('${r.device.name} found! mac: ${r.device.id.toString()}');
+        if (r.device.name.contains(robotUVCName)) {
           if (scanIdentifiers.isEmpty) {
             scanIdentifiers.add(r.device.id.toString());
             setState(() {

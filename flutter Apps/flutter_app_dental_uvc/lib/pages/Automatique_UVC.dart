@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 
 class UVCAuto extends StatefulWidget {
   @override
@@ -7,10 +10,27 @@ class UVCAuto extends StatefulWidget {
 }
 
 class _UVCAutoState extends State<UVCAuto> {
-  List<bool> daysStates;
+  List<bool> days;
+  List<bool> daysStates = [false, false, false, false, false, false, false];
+
+  List<int> hourList = [0, 0, 0, 0, 0, 0, 0];
+  List<int> minutesList = [0, 0, 0, 0, 0, 0, 0];
+  List<int> delayList = [0, 0, 0, 0, 0, 0, 0];
+  List<int> durationList = [0, 0, 0, 0, 0, 0, 0];
+
   String daysInHex;
+  String activationButtonText;
+  Color activationButtonColor;
+  bool activationButtonState = false;
+  int day = 0;
+
+  UVCDataFile uvcDataFile = UVCDataFile();
+
+  Map<String, dynamic> uvcAutoDataJson;
 
   int boolToInt(bool a) => a == true ? 1 : 0;
+
+  bool intToBool(int a) => a == 1 ? true : false;
 
   String myTimeHoursData = '00';
   String myTimeMinutesData = '00';
@@ -160,15 +180,48 @@ class _UVCAutoState extends State<UVCAuto> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    daysStates = [false, false, false, false, false, false, false];
-    daysInHex = ((boolToInt(daysStates[0])) +
-            (boolToInt(daysStates[1]) * 2) +
-            (boolToInt(daysStates[2]) * 4) +
-            (boolToInt(daysStates[3]) * 8) +
-            (boolToInt(daysStates[4]) * 16) +
-            (boolToInt(daysStates[5]) * 32) +
-            (boolToInt(daysStates[6]) * 64))
-        .toRadixString(16);
+    readUVCAuto();
+    days = [false, false, false, false, false, false, false];
+    setState(() {
+      if (activationButtonState) {
+        activationButtonText = 'Activé';
+        activationButtonColor = Colors.green;
+      } else {
+        activationButtonText = 'Desactivé';
+        activationButtonColor = Colors.red;
+      }
+    });
+  }
+
+  void readDayData(String day, int position) {
+    String timeDataList = uvcAutoDataJson[day].toString();
+    print(timeDataList);
+    hourList[position] = _stringListAsciiToListInt(timeDataList.codeUnits)[0];
+    minutesList[position] = _stringListAsciiToListInt(timeDataList.codeUnits)[1];
+    delayList[position] = _stringListAsciiToListInt(timeDataList.codeUnits)[2];
+    durationList[position] = _stringListAsciiToListInt(timeDataList.codeUnits)[3];
+  }
+
+  void readUVCAuto() async {
+    String uvcAutoData = await uvcDataFile.readUVCAutoData();
+    uvcAutoDataJson = jsonDecode(uvcAutoData);
+    daysInHex = uvcAutoDataJson['days'];
+    int days = int.parse(daysInHex, radix: 16);
+    daysStates[0] = intToBool(days % 2);
+    daysStates[1] = intToBool(((days % 4) / 2).round());
+    daysStates[2] = intToBool(((days % 8) / 4).round());
+    daysStates[3] = intToBool(((days % 16) / 8).round());
+    daysStates[4] = intToBool(((days % 32) / 16).round());
+    daysStates[5] = intToBool(((days % 64) / 32).round());
+    daysStates[6] = intToBool((days / 64).round());
+
+    readDayData('Monday', 0);
+    readDayData('Tuesday', 1);
+    readDayData('Wednesday', 2);
+    readDayData('Thursday', 3);
+    readDayData('Friday', 4);
+    readDayData('Saturday', 5);
+    readDayData('Sunday', 6);
   }
 
   @override
@@ -196,48 +249,39 @@ class _UVCAutoState extends State<UVCAuto> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       ToggleButtons(
-                        isSelected: daysStates,
+                        isSelected: days,
                         onPressed: (int index) async {
+                          day = index;
                           setState(() {
-                            daysStates[index] = !daysStates[index];
+                            days[day] = !days[day];
+                            for (int buttonIndex = 0; buttonIndex < days.length; buttonIndex++) {
+                              if (buttonIndex == day) {
+                                days[buttonIndex] = true;
+                              } else {
+                                days[buttonIndex] = false;
+                              }
+                            }
                           });
-                          // Writes to a characteristic
-                          int zoneState = boolToInt(daysStates[index]);
 
-                          daysInHex = ((boolToInt(daysStates[0])) +
-                                  (boolToInt(daysStates[1]) * 2) +
-                                  (boolToInt(daysStates[2]) * 4) +
-                                  (boolToInt(daysStates[3]) * 8) +
-                                  (boolToInt(daysStates[4]) * 16) +
-                                  (boolToInt(daysStates[5]) * 32) +
-                                  (boolToInt(daysStates[6]) * 64))
-                              .toRadixString(16);
+                          setState(() {
+                            if (daysStates[day]) {
+                              activationButtonText = 'Activé';
+                              activationButtonColor = Colors.green;
+                            } else {
+                              activationButtonText = 'Desactivé';
+                              activationButtonColor = Colors.red;
+                            }
+                          });
 
-                          print(daysInHex);
+                          myTimeHoursPosition = hourList[day];
+                          myTimeMinutesPosition = minutesList[day];
+                          myActivationTimeMinutePosition = delayList[day];
+                          myExtinctionTimeMinutePosition = durationList[day];
 
-                          switch (index) {
-                            case 0:
-                              print('{\"light\": 1,$zoneState,\"1\"}');
-                              break;
-                            case 1:
-                              print('{\"light\": 1,$zoneState,\"2\"}');
-                              break;
-                            case 2:
-                              print('{\"light\": 1,$zoneState,\"4\"}');
-                              break;
-                            case 3:
-                              print('{\"light\": 1,$zoneState,\"8\"}');
-                              break;
-                            case 4:
-                              print('{\"light\": 1,$zoneState,\"16\"}');
-                              break;
-                            case 5:
-                              print('{\"light\": 1,$zoneState,\"32\"}');
-                              break;
-                            case 6:
-                              print('{\"light\": 1,$zoneState,\"64\"}');
-                              break;
-                          }
+                          myTimeHoursData = myTimeHours.elementAt(myTimeHoursPosition);
+                          myTimeMinutesData = myTimeMinutes.elementAt(myTimeMinutesPosition);
+                          myActivationTimeMinuteData = myActivationTimeMinute.elementAt(myActivationTimeMinutePosition);
+                          myExtinctionTimeMinuteData = myExtinctionTimeMinute.elementAt(myExtinctionTimeMinutePosition);
                         },
                         children: [
                           Container(
@@ -284,7 +328,35 @@ class _UVCAutoState extends State<UVCAuto> {
                     ],
                   ),
                 ),
-                SizedBox(height: heightScreen * 0.04),
+                SizedBox(height: heightScreen * 0.02),
+                FlatButton(
+                  onPressed: () {
+                    activationButtonState = daysStates[day];
+                    activationButtonState = !activationButtonState;
+                    setState(() {
+                      if (activationButtonState) {
+                        activationButtonText = 'Activé';
+                        activationButtonColor = Colors.green;
+                      } else {
+                        activationButtonText = 'Desactivé';
+                        activationButtonColor = Colors.red;
+                      }
+                    });
+                    daysStates[day] = activationButtonState;
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      activationButtonText,
+                      style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.02),
+                    ),
+                  ),
+                  color: activationButtonColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                  ),
+                ),
+                SizedBox(height: heightScreen * 0.02),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -309,6 +381,7 @@ class _UVCAutoState extends State<UVCAuto> {
                             setState(() {
                               myTimeHoursData = data;
                               myTimeHoursPosition = myTimeHours.indexOf(data);
+                              hourList[day] = myTimeHoursPosition;
                               print(myTimeHoursPosition);
                             });
                           },
@@ -342,6 +415,7 @@ class _UVCAutoState extends State<UVCAuto> {
                             setState(() {
                               myTimeMinutesData = data;
                               myTimeMinutesPosition = myTimeMinutes.indexOf(data);
+                              minutesList[day] = myTimeMinutesPosition;
                               print(myTimeMinutesPosition);
                             });
                           },
@@ -396,6 +470,7 @@ class _UVCAutoState extends State<UVCAuto> {
                                 setState(() {
                                   myActivationTimeMinuteData = data;
                                   myActivationTimeMinutePosition = myActivationTimeMinute.indexOf(data);
+                                  delayList[day] = myActivationTimeMinutePosition;
                                   print(myActivationTimeMinutePosition);
                                 });
                               },
@@ -439,6 +514,7 @@ class _UVCAutoState extends State<UVCAuto> {
                                 setState(() {
                                   myExtinctionTimeMinuteData = data;
                                   myExtinctionTimeMinutePosition = myExtinctionTimeMinute.indexOf(data);
+                                  durationList[day] = myExtinctionTimeMinutePosition;
                                   print(myExtinctionTimeMinutePosition);
                                 });
                               },
@@ -471,7 +547,25 @@ class _UVCAutoState extends State<UVCAuto> {
                 ),
                 SizedBox(height: heightScreen * 0.04),
                 FlatButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    String days = ((boolToInt(daysStates[6]) * 64) +
+                            (boolToInt(daysStates[5]) * 32) +
+                            (boolToInt(daysStates[4]) * 16) +
+                            (boolToInt(daysStates[3]) * 8) +
+                            (boolToInt(daysStates[2]) * 4) +
+                            (boolToInt(daysStates[1]) * 2) +
+                            boolToInt(daysStates[0]))
+                        .toRadixString(16);
+                    String uvcAutoData = '{\"days\":\"$days\",'
+                        '\"Monday\":[${hourList[0]},${minutesList[0]},${delayList[0]},${durationList[0]}],'
+                        '\"Tuesday\":[${hourList[1]},${minutesList[1]},${delayList[1]},${durationList[1]}],'
+                        '\"Wednesday\":[${hourList[2]},${minutesList[2]},${delayList[2]},${durationList[2]}],'
+                        '\"Thursday\":[${hourList[3]},${minutesList[3]},${delayList[3]},${durationList[3]}],'
+                        '\"Friday\":[${hourList[4]},${minutesList[4]},${delayList[4]},${durationList[4]}],'
+                        '\"Saturday\":[${hourList[5]},${minutesList[5]},${delayList[5]},${durationList[5]}],'
+                        '\"Sunday\":[${hourList[6]},${minutesList[6]},${delayList[6]},${durationList[6]}]'
+                        '}';
+                    await uvcDataFile.saveUVCAutoData(uvcAutoData);
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -491,5 +585,31 @@ class _UVCAutoState extends State<UVCAuto> {
         }),
       ),
     );
+  }
+
+  List<int> _stringListAsciiToListInt(List<int> listInt) {
+    List<int> ourListInt = [0];
+    int listIntLength = listInt.length;
+    int intNumber = (listIntLength / 4).round();
+    ourListInt.length = intNumber;
+    int listCounter;
+    int listIntCounter = 0;
+    String numberString = '';
+    if (listInt.first == 91 && listInt.last == 93) {
+      for (listCounter = 0; listCounter < listIntLength - 1; listCounter++) {
+        if (!((listInt[listCounter] == 91) || (listInt[listCounter] == 93) || (listInt[listCounter] == 32) || (listInt[listCounter] == 44))) {
+          numberString = '';
+          do {
+            numberString += String.fromCharCode(listInt[listCounter]);
+            listCounter++;
+          } while (!((listInt[listCounter] == 44) || (listInt[listCounter] == 93)));
+          ourListInt[listIntCounter] = int.parse(numberString);
+          listIntCounter++;
+        }
+      }
+      return ourListInt;
+    } else {
+      return [0];
+    }
   }
 }
