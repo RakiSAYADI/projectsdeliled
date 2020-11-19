@@ -49,7 +49,7 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('QR Code Display'),
+          title: Text('Votre QR code'),
         ),
         body: Container(
           decoration: BoxDecoration(color: Colors.grey[200]),
@@ -110,12 +110,12 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
                 color: Colors.white,
               ),
               backgroundColor: Colors.green,
-              label: 'Ajouter un autre QrCode',
+              label: 'Ajouter un autre QR code',
               labelStyle: TextStyle(fontSize: 18.0),
               onTap: () async {
                 SystemChannels.textInput.invokeMethod('TextInput.hide');
                 await captureQrCodePNG();
-                Navigator.pushNamed(context, '/Qr_code_Generate', arguments: {
+                Navigator.pushReplacementNamed(context, '/Qr_code_Generate', arguments: {
                   'myQrcodeListFile': qrCodeList,
                 });
               },

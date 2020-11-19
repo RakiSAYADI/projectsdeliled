@@ -90,7 +90,7 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
         backgroundColor: Colors.blue[400],
         appBar: AppBar(
           centerTitle: true,
-          title: Text('QR Code Generator'),
+          title: Text('Informations'),
         ),
         body: Container(
           decoration: BoxDecoration(color: Colors.grey[200]),
@@ -266,7 +266,7 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
                         if (!firstDisplayMainWidget) {
                           firstDisplayMainWidget = true;
                         }
-                        Navigator.pushNamed(context, '/Qr_code_Display', arguments: {
+                        Navigator.pushReplacementNamed(context, '/Qr_code_Display', arguments: {
                           'myQrcodeListFile': qrCodeList,
                           'myQrcodeFileName': qrCodeFileName,
                           'myRoomName':myRoomName.text,

@@ -44,7 +44,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     }
 
     Future.delayed(Duration(seconds: 5), () async {
-      Navigator.pushReplacementNamed(context, '/Qr_code_Generate');
+      Navigator.pushReplacementNamed(context, '/check_permissions');
     });
 
     super.initState();
