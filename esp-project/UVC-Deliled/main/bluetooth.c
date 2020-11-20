@@ -272,33 +272,11 @@ void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 			esp_get_free_heap_size());
 
 	sprintf((char*) total,
-			"{\"Company\":\"%s\",\"UserName\":\"%s\",\"Detection\":%d,\"RoomName\":\"%s\",\"TimeData\":[%d,%d]}",
+			"{\"Company\":\"%s\",\"UserName\":\"%s\",\"Detection\":%d,\"RoomName\":\"%s\",\"Version\":%d,\"TimeData\":[%d,%d],\"UVCTimeData\":[%d,%d]}",
 			UnitCfg.Company, UnitCfg.OperatorName, detectionTriggered,
-			UnitCfg.RoomName, UnitCfg.DisinfictionTime, UnitCfg.ActivationTime);
+			UnitCfg.RoomName,UnitCfg.Version, UnitCfg.DisinfictionTime, UnitCfg.ActivationTime,UnitCfg.UVCLifeTime,UnitCfg.UVCTimeExecution);
 
 	TOTAL.attr_len = strlen((char *) total);
-
-//	dataStorage = cJSON_CreateObject();
-//	timeArray = cJSON_CreateArray();
-//
-//	cJSON_AddStringToObject(dataStorage, "Company", UnitCfg.Company);
-//	cJSON_AddStringToObject(dataStorage, "UserName", UnitCfg.OperatorName);
-//	cJSON_AddNumberToObject(dataStorage, "Detection", detectionTriggered);
-//	cJSON_AddStringToObject(dataStorage, "RoomName", UnitCfg.RoomName);
-//
-//	cJSON_AddItemToArray(timeArray,
-//			cJSON_CreateNumber(UnitCfg.DisinfictionTime));
-//	cJSON_AddItemToArray(timeArray, cJSON_CreateNumber(UnitCfg.ActivationTime));
-//
-//	cJSON_AddItemToObject(dataStorage, "TimeData", timeArray);
-//
-//	printf("%s\n", cJSON_PrintUnformatted(dataStorage));
-//
-//	sprintf((char *) total, cJSON_PrintUnformatted(dataStorage));
-//
-//	TOTAL.attr_len = strlen((char *) total);
-//
-//	cJSON_Delete(dataStorage);
 
 	esp_gatt_rsp_t rsp;
 	memset(&rsp, 0, sizeof(esp_gatt_rsp_t));
@@ -387,7 +365,23 @@ void char_total_write_handler(esp_gatts_cb_event_t event,
 
 		cJSON_Delete(messageJson);
 
-	} else {
+	} else if (strContains(config_json, "(SetVersion : ") == 1) {
+		char *version;
+		version = strtok(config_json, "(SetVersion : "); // find the first double quote
+		version = strtok(NULL, ")");   // find the second double quote
+		UnitCfg.Version = atoi(version);
+		ESP_LOGI(GATTS_TAG, "Setting version to %d  ",UnitCfg.Version);
+		free(version);
+		savenvsFlag = true;
+	} else if (strContains(config_json, "(SetUVCLIFETIME : ") == 1) {
+		char *uvcLifeTime;
+		uvcLifeTime = strtok(config_json, "(SetVersion : "); // find the first double quote
+		uvcLifeTime = strtok(NULL, ")");   // find the second double quote
+		UnitCfg.UVCLifeTime = atoi(uvcLifeTime);
+		ESP_LOGI(GATTS_TAG, "Setting uvc life time to %d  ",UnitCfg.UVCLifeTime);
+		free(uvcLifeTime);
+		savenvsFlag = true;
+	}else {
 		ESP_LOGE(GATTS_TAG, "BAD MESSAGE");
 	}
 

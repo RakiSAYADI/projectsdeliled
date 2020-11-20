@@ -56,10 +56,11 @@ TaskHandle_t xSlaveTask;
 
 esp_err_t event_handler_client(void *ctx, system_event_t *event) {
 	switch (event->event_id) {
-	case SYSTEM_EVENT_STA_START:
+	case SYSTEM_EVENT_STA_START: {
 		esp_wifi_connect();
 		break;
-	case SYSTEM_EVENT_STA_GOT_IP:
+	}
+	case SYSTEM_EVENT_STA_GOT_IP: {
 		xEventGroupSetBits(wifi_event_group_client, CONNECTED_BIT_CLIENT);
 		ESP_LOGI(TCP_CLIENT_TAG, "Got IP");
 		ESP_LOGI(TCP_CLIENT_TAG, "IP: %s\r",
@@ -80,13 +81,14 @@ esp_err_t event_handler_client(void *ctx, system_event_t *event) {
 		//
 
 		break;
+	}
 	case SYSTEM_EVENT_STA_DISCONNECTED: {
 		xEventGroupClearBits(wifi_event_group_client, CONNECTED_BIT_CLIENT);
 		ESP_LOGI(TCP_CLIENT_TAG, "retry to connect to the AP");
 
 		// modification for testing
 
-		if(SlaveTaskState){
+		if (SlaveTaskState) {
 			ESP_LOGI(TCP_CLIENT_TAG, "the task is dying now ! ");
 			vTaskDelete(xSlaveTask);
 			SlaveTaskState = false;
@@ -139,7 +141,7 @@ void CheckingPressence(void *pvParameters) {
 				free(UVDetection);
 				break;
 			}
-		}else{
+		} else {
 			break;
 		}
 		delay(100);
@@ -221,9 +223,12 @@ void udp_client_task(void *pvParameters) {
 					ESP_LOGI(TCP_CLIENT_TAG, "%s", rx_buffer);
 
 					if (strContains(rx_buffer, "UVC IS ON") == 1) {
-						xTaskCreate(&UVCTreatement, "UVCTreatement",
-						configMINIMAL_STACK_SIZE * 3, NULL, 5,
-						NULL);
+						if(!UVCThreadState){
+							UVCThreadState = true;
+							xTaskCreate(&UVCTreatement, "UVCTreatement",
+							configMINIMAL_STACK_SIZE * 3, NULL, 5,
+							NULL);
+						}
 					}
 					if (strContains(rx_buffer, "DisinfictionTime") == 1) {
 						cJSON *messageJson, *DisinfictionTimeData,
@@ -270,7 +275,7 @@ void initialize_wifi_client(void) {
 	ESP_ERROR_CHECK(esp_wifi_set_storage(WIFI_STORAGE_RAM));
 	ESP_ERROR_CHECK(esp_wifi_set_mode(wifi_mode_client));
 
-	wifi_config_t conf = { .sta = { .ssid = "TEST", .password = "123456789",
+	wifi_config_t conf = { .sta = { .ssid = SSIDNAME, .password = PASSWORD,
 			.bssid_set = false } };
 
 	ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_STA, &conf));

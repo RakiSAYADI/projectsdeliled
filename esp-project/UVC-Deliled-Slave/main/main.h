@@ -4,8 +4,10 @@
  *  Created on: 19 août 2020
  *      Author: raki
  */
- 
-#define UVCROBOTNAME "DEEPLIGHT-A026"
+
+#define UVCROBOTNAME "DEEPLIGHT-B001"
+#define SSIDNAME "DEEPLIGHT-A037"
+#define PASSWORD "123456789"
 
 void LedStatInit();
 void wifiConnectionClient();
@@ -21,6 +23,7 @@ int set_relay_state(int relay, uint32_t level);
 
 uint8_t strContains(char* string, char* toFind);
 
+bool UVCThreadState;
 bool detectionTriggered;
 bool stopIsPressed;
 bool UVTreatementIsOn;

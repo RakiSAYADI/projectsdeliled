@@ -40,6 +40,7 @@ wifi_mode_t wifi_mode_server;
 char addr_str[128];
 
 esp_err_t event_handler_server(void *ctx, system_event_t *event) {
+	ESP_LOGI(TCP_SERVER_TAG, "SYSTEM EVENT : %d", event->event_id);
 	switch (event->event_id) {
 	case SYSTEM_EVENT_AP_START:
 		// AP has started up. Now start the DHCP server.
@@ -52,7 +53,16 @@ esp_err_t event_handler_server(void *ctx, system_event_t *event) {
 		tcpip_adapter_dhcps_stop(TCPIP_ADAPTER_IF_AP);
 		if (tcpip_adapter_set_ip_info(TCPIP_ADAPTER_IF_AP, &ipInfo) == ESP_OK) {
 			ESP_LOGI(TCP_SERVER_TAG, "starting DHCP server");
-			return tcpip_adapter_dhcps_start(TCPIP_ADAPTER_IF_AP) == ESP_OK;
+			esp_err_t espResult;
+			espResult = tcpip_adapter_dhcps_start(TCPIP_ADAPTER_IF_AP);
+			if (espResult == ESP_OK) {
+				ESP_LOGI(TCP_SERVER_TAG, "DHCP server is started !");
+				return espResult;
+			} else {
+				ESP_LOGE(TCP_SERVER_TAG,
+						"DHCP server is not started , err = %x", espResult);
+				return espResult;
+			}
 		}
 		break;
 	case SYSTEM_EVENT_AP_STOP:
@@ -308,9 +318,9 @@ void initialize_wifi_server(void) {
 	ESP_ERROR_CHECK(esp_wifi_set_storage(WIFI_STORAGE_RAM));
 	ESP_ERROR_CHECK(esp_wifi_set_mode(wifi_mode_server));
 
-	wifi_config_t conf = { .ap = { .ssid = "TEST", .ssid_len = 4, .password =
-			"123456789", .authmode = WIFI_AUTH_WPA2_PSK, .ssid_hidden = 0,
-			.max_connection = 5 } };
+	wifi_config_t conf = { .ap = { .ssid = UVCROBOTNAME, .ssid_len = 14,
+			.password = PASSWORD, .authmode = WIFI_AUTH_WPA2_PSK, .ssid_hidden =
+					0, .max_connection = 5 } };
 
 	ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_AP, &conf));
 	ESP_ERROR_CHECK(esp_wifi_start());

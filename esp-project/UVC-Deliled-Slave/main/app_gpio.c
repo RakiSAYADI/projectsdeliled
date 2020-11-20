@@ -263,6 +263,7 @@ void StopUVTreatement() {
 	buzzerEnable = false;
 	stopIsPressed = false;
 	delay(500);
+	UVCThreadState = false;
 	UVTreatementIsOn = false;
 	set_relay_state(RedLightRelay, RelayStateON);
 
@@ -291,6 +292,7 @@ void UVCTreatement() {
 		redLightEnable = false;
 		buzzerEnable = false;
 		set_relay_state(UVRelay, RelayStateOFF);
+		UVCThreadState = false;
 		delay(100);
 		set_relay_state(RedLightRelay, RelayStateON);
 		vTaskDelete(NULL);
@@ -333,6 +335,7 @@ void UVCTreatement() {
 		}
 	}
 	set_relay_state(UVRelay, RelayStateOFF);
+	UVCThreadState = false;
 	UVTreatementIsOn = false;
 	vTaskDelete(NULL);
 }
@@ -369,6 +372,7 @@ void LedStatusTask() {
 	detectionTriggered = false;
 	stopIsPressed = false;
 	UVTreatementIsOn = false;
+	UVCThreadState = false;
 
 	// initialize the gpio
 	int i;

@@ -151,6 +151,11 @@ void Default_saving() {
 	UnitCfg.DisinfictionTime = 0;
 	UnitCfg.ActivationTime = 0;
 
+	UnitCfg.UVCTimeExecution = 0;
+	UnitCfg.UVCLifeTime = 32400000;
+
+	UnitCfg.Version = VERSION;
+
 	sprintf(UnitCfg.FLASH_MEMORY, "OK");
 
 	if (SaveNVS(&UnitCfg) == 0) {

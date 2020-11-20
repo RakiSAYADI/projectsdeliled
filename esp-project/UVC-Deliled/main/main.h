@@ -5,7 +5,8 @@
  *      Author: raki
  */
 
-#define UVCROBOTNAME "DEEPLIGHT-A026"
+#define UVCROBOTNAME "DEEPLIGHT-G005"
+#define VERSION 0
 
 void bt_main();
 void LedStatInit();
@@ -33,8 +34,11 @@ typedef struct {
 	char Company[64];
 	char OperatorName[64];
 	char RoomName[64];
+	uint8_t Version;
 	uint8_t DisinfictionTime;
 	uint8_t ActivationTime;
+	int UVCTimeExecution;
+	int UVCLifeTime;
 	char FLASH_MEMORY[3];
 } UnitConfig_Typedef;
 

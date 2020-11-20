@@ -40,6 +40,7 @@ bool buzzerEnable = false;
 
 uint16_t phaseTimeStep = 0;
 int32_t phaseTime = 0;
+int32_t phaseTimeExecuted = 0;
 
 void TreatementTime() {
 	if (UnitCfg.DisinfictionTime == 0) {
@@ -264,6 +265,9 @@ void StopUVTreatement() {
 	buzzerEnable = false;
 	stopIsPressed = false;
 	delay(500);
+	UnitCfg.UVCTimeExecution += phaseTimeExecuted / 1000;
+	ESP_LOGI(GPIO_TAG, "UVC Time executed: %d",UnitCfg.UVCTimeExecution);
+	SaveNVS(&UnitCfg);
 	set_relay_state(RedLightRelay, RelayStateON);
 	UVTaskIsOn = false;
 
@@ -310,6 +314,7 @@ void UVCTreatement() {
 		buzzerEnable = false;
 		phaseTimeStep = 50;
 		phaseTime *= 1000;
+		phaseTimeExecuted = 0;
 		ESP_LOGI(GPIO_TAG, "SETTING the UVC treatement !");
 		while (phaseTime > 0) {
 			if (detectionTriggered) {
@@ -320,6 +325,7 @@ void UVCTreatement() {
 				set_relay_state(UVRelay, RelayStateON);
 			}
 			phaseTime -= phaseTimeStep;
+			phaseTimeExecuted += phaseTimeStep;
 			delay(phaseTimeStep);
 			if (stopIsPressed) {
 				ESP_LOGI(GPIO_TAG, "STOP is Pressed !");
@@ -335,6 +341,9 @@ void UVCTreatement() {
 	}
 	set_relay_state(UVRelay, RelayStateOFF);
 	UVTreatementIsOn = false;
+	UnitCfg.UVCTimeExecution += phaseTimeExecuted / 1000;
+	ESP_LOGI(GPIO_TAG, "UVC Time executed: %d",UnitCfg.UVCTimeExecution);
+	SaveNVS(&UnitCfg);
 	UVTaskIsOn = false;
 	vTaskDelete(NULL);
 }

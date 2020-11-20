@@ -27,7 +27,7 @@ int app_main(void) {
 	ESP_ERROR_CHECK(nvs_flash_init());
 
 	// Initialize Base Mac Address.
-	//BaseMacInit();
+	BaseMacInit();
 
 	// Initialize GPIOs.
 	LedStatInit();
@@ -36,7 +36,7 @@ int app_main(void) {
 	if (InitLoadCfg() != 0) {
 		return -1;
 	}
-	
+
 	//Default_saving();
 
 	// Initiate Bluetooth services (only for SERVER).
