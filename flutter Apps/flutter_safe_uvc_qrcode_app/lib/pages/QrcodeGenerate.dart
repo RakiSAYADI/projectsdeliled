@@ -85,7 +85,7 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () => stopActivity(context),
       child: Scaffold(
         backgroundColor: Colors.blue[400],
         appBar: AppBar(
@@ -289,6 +289,28 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Future<void> stopActivity(BuildContext context) {
+    return showDialog<bool>(
+      context: context,
+      builder: (c) => AlertDialog(
+        title: Text('Attention'),
+        content: Text('Voulez-vous vraiment quitter l\'application ?'),
+        actions: [
+          FlatButton(
+            child: Text('Oui'),
+            onPressed: () {
+              Navigator.pop(c, true);
+            },
+          ),
+          FlatButton(
+            child: Text('Non'),
+            onPressed: () => Navigator.pop(c, false),
+          ),
+        ],
       ),
     );
   }

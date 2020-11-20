@@ -45,7 +45,7 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
     qrCodeList = qrCodeDisplayClassData['myQrcodeListFile'];
 
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () => stopActivity(context),
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -268,6 +268,28 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
       myUvcToast.setToastMessage('Email n\'est pas envoyé , Verifier votre addresse email !');
       myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
     }
+  }
+
+  Future<void> stopActivity(BuildContext context) {
+    return showDialog<bool>(
+      context: context,
+      builder: (c) => AlertDialog(
+        title: Text('Attention'),
+        content: Text('Voulez-vous vraiment quitter l\'application ?'),
+        actions: [
+          FlatButton(
+            child: Text('Oui'),
+            onPressed: () {
+              Navigator.pop(c, true);
+            },
+          ),
+          FlatButton(
+            child: Text('Non'),
+            onPressed: () => Navigator.pop(c, false),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<bool> checkInternetConnection() async {
