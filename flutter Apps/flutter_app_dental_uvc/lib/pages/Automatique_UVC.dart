@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterappdentaluvc/pages/pin_access.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
+import 'package:flutterappdentaluvc/services/uvcToast.dart';
 
 class UVCAuto extends StatefulWidget {
   @override
@@ -10,7 +12,7 @@ class UVCAuto extends StatefulWidget {
 }
 
 class _UVCAutoState extends State<UVCAuto> {
-  List<bool> days;
+  List<bool> days = [false, false, false, false, false, false, false];
   List<bool> daysStates = [false, false, false, false, false, false, false];
 
   List<int> hourList = [0, 0, 0, 0, 0, 0, 0];
@@ -19,10 +21,12 @@ class _UVCAutoState extends State<UVCAuto> {
   List<int> durationList = [0, 0, 0, 0, 0, 0, 0];
 
   String daysInHex;
-  String activationButtonText;
-  Color activationButtonColor;
+  String activationButtonText = 'Désactivé';
+  Color activationButtonColor = Colors.red;
   bool activationButtonState = false;
   int day = 0;
+
+  ToastyMessage myUvcToast;
 
   UVCDataFile uvcDataFile = UVCDataFile();
 
@@ -31,6 +35,8 @@ class _UVCAutoState extends State<UVCAuto> {
   int boolToInt(bool a) => a == true ? 1 : 0;
 
   bool intToBool(int a) => a == 1 ? true : false;
+
+  bool charToBool(String a) => a == '1' ? true : false;
 
   String myTimeHoursData = '00';
   String myTimeMinutesData = '00';
@@ -180,40 +186,23 @@ class _UVCAutoState extends State<UVCAuto> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    myUvcToast = ToastyMessage(toastContext: context);
     readUVCAuto();
-    days = [false, false, false, false, false, false, false];
-    setState(() {
-      if (activationButtonState) {
-        activationButtonText = 'Activé';
-        activationButtonColor = Colors.green;
-      } else {
-        activationButtonText = 'Desactivé';
-        activationButtonColor = Colors.red;
-      }
-    });
   }
 
   void readDayData(String day, int position) {
     String timeDataList = uvcAutoDataJson[day].toString();
-    print(timeDataList);
-    hourList[position] = _stringListAsciiToListInt(timeDataList.codeUnits)[0];
-    minutesList[position] = _stringListAsciiToListInt(timeDataList.codeUnits)[1];
-    delayList[position] = _stringListAsciiToListInt(timeDataList.codeUnits)[2];
-    durationList[position] = _stringListAsciiToListInt(timeDataList.codeUnits)[3];
+    List<int> timeDataIntList = _stringListAsciiToListInt(timeDataList.codeUnits);
+    daysStates[position] = intToBool(timeDataIntList[0]);
+    hourList[position] = timeDataIntList[1];
+    minutesList[position] = timeDataIntList[2];
+    delayList[position] = timeDataIntList[3];
+    durationList[position] = timeDataIntList[4];
   }
 
   void readUVCAuto() async {
     String uvcAutoData = await uvcDataFile.readUVCAutoData();
     uvcAutoDataJson = jsonDecode(uvcAutoData);
-    daysInHex = uvcAutoDataJson['days'];
-    int days = int.parse(daysInHex, radix: 16);
-    daysStates[0] = intToBool(days % 2);
-    daysStates[1] = intToBool(((days % 4) / 2).round());
-    daysStates[2] = intToBool(((days % 8) / 4).round());
-    daysStates[3] = intToBool(((days % 16) / 8).round());
-    daysStates[4] = intToBool(((days % 32) / 16).round());
-    daysStates[5] = intToBool(((days % 64) / 32).round());
-    daysStates[6] = intToBool((days / 64).round());
 
     readDayData('Monday', 0);
     readDayData('Tuesday', 1);
@@ -268,7 +257,7 @@ class _UVCAutoState extends State<UVCAuto> {
                               activationButtonText = 'Activé';
                               activationButtonColor = Colors.green;
                             } else {
-                              activationButtonText = 'Desactivé';
+                              activationButtonText = 'Désactivé';
                               activationButtonColor = Colors.red;
                             }
                           });
@@ -338,7 +327,7 @@ class _UVCAutoState extends State<UVCAuto> {
                         activationButtonText = 'Activé';
                         activationButtonColor = Colors.green;
                       } else {
-                        activationButtonText = 'Desactivé';
+                        activationButtonText = 'Désactivé';
                         activationButtonColor = Colors.red;
                       }
                     });
@@ -548,24 +537,26 @@ class _UVCAutoState extends State<UVCAuto> {
                 SizedBox(height: heightScreen * 0.04),
                 FlatButton(
                   onPressed: () async {
-                    String days = ((boolToInt(daysStates[6]) * 64) +
-                            (boolToInt(daysStates[5]) * 32) +
-                            (boolToInt(daysStates[4]) * 16) +
-                            (boolToInt(daysStates[3]) * 8) +
-                            (boolToInt(daysStates[2]) * 4) +
-                            (boolToInt(daysStates[1]) * 2) +
-                            boolToInt(daysStates[0]))
-                        .toRadixString(16);
-                    String uvcAutoData = '{\"days\":\"$days\",'
-                        '\"Monday\":[${hourList[0]},${minutesList[0]},${delayList[0]},${durationList[0]}],'
-                        '\"Tuesday\":[${hourList[1]},${minutesList[1]},${delayList[1]},${durationList[1]}],'
-                        '\"Wednesday\":[${hourList[2]},${minutesList[2]},${delayList[2]},${durationList[2]}],'
-                        '\"Thursday\":[${hourList[3]},${minutesList[3]},${delayList[3]},${durationList[3]}],'
-                        '\"Friday\":[${hourList[4]},${minutesList[4]},${delayList[4]},${durationList[4]}],'
-                        '\"Saturday\":[${hourList[5]},${minutesList[5]},${delayList[5]},${durationList[5]}],'
-                        '\"Sunday\":[${hourList[6]},${minutesList[6]},${delayList[6]},${durationList[6]}]'
+                    String uvcAutoData = '{'
+                        '\"Monday\":[${boolToInt(daysStates[0])},${hourList[0]},${minutesList[0]},${delayList[0]},${durationList[0]}],'
+                        '\"Tuesday\":[${boolToInt(daysStates[1])},${hourList[1]},${minutesList[1]},${delayList[1]},${durationList[1]}],'
+                        '\"Wednesday\":[${boolToInt(daysStates[2])},${hourList[2]},${minutesList[2]},${delayList[2]},${durationList[2]}],'
+                        '\"Thursday\":[${boolToInt(daysStates[3])},${hourList[3]},${minutesList[3]},${delayList[3]},${durationList[3]}],'
+                        '\"Friday\":[${boolToInt(daysStates[4])},${hourList[4]},${minutesList[4]},${delayList[4]},${durationList[4]}],'
+                        '\"Saturday\":[${boolToInt(daysStates[5])},${hourList[5]},${minutesList[5]},${delayList[5]},${durationList[5]}],'
+                        '\"Sunday\":[${boolToInt(daysStates[6])},${hourList[6]},${minutesList[6]},${delayList[6]},${durationList[6]}]'
                         '}';
                     await uvcDataFile.saveUVCAutoData(uvcAutoData);
+                    myUvcToast.setToastDuration(3);
+                    myUvcToast.setToastMessage('Configuration Sauvegardée !');
+                    myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+                    if (!autoUVCService.getUVCAutoServiceState()) {
+                      autoUVCService.startUVCService();
+                    } else {
+                      autoUVCService.stopUVCAutoService();
+                      await Future.delayed(const Duration(seconds: 2));
+                      autoUVCService.startUVCService();
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -590,7 +581,12 @@ class _UVCAutoState extends State<UVCAuto> {
   List<int> _stringListAsciiToListInt(List<int> listInt) {
     List<int> ourListInt = [0];
     int listIntLength = listInt.length;
-    int intNumber = (listIntLength / 4).round();
+    int intNumber = 1;
+    for (int i = 0; i < listIntLength; i++) {
+      if (listInt[i] == 44) {
+        intNumber++;
+      }
+    }
     ourListInt.length = intNumber;
     int listCounter;
     int listIntCounter = 0;

@@ -64,6 +64,14 @@ class Device {
     });
   }
 
+  bool getConnectionState() {
+    if (_connectionState == BluetoothDeviceState.connected.index) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   void disconnect() {
     // disconnect
     device.disconnect();

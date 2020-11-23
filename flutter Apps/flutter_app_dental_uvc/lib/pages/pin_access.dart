@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'dart:io' as io;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
+import 'package:flutterappdentaluvc/services/AutoUVCService.dart';
 import 'package:flutterappdentaluvc/services/NFCManagerClass.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
@@ -21,6 +23,8 @@ class AlwaysDisabledFocusNode extends FocusNode {
   @override
   bool get hasFocus => false;
 }
+
+AutoUVCService autoUVCService = AutoUVCService();
 
 class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   final TextEditingController _pinPutController = TextEditingController();
@@ -51,6 +55,8 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
 
   String dataRobotUVC = '';
 
+  final String _uvcAutoDataFileName = 'UVC_Auto_Data.txt';
+
   BoxDecoration get _pinPutDecoration {
     return BoxDecoration(
       border: Border.all(color: Colors.blue, width: 3),
@@ -66,6 +72,16 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     print(nfcManager.nfcGetMessage());
   }
 
+  void checkAutoFileExists() async {
+    bool isExisted = false;
+    final directory = await getApplicationDocumentsDirectory();
+    isExisted = await io.File('${directory.path}/$_uvcAutoDataFileName').exists();
+    if (isExisted) {
+      autoUVCService.setContext(context);
+      autoUVCService.startUVCService();
+    }
+  }
+
   @override
   void initState() {
     print('init task');
@@ -74,6 +90,8 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     gifController = GifController(vsync: this);
 
     readingNFCTags();
+
+    checkAutoFileExists();
 
     myUvcToast = ToastyMessage(toastContext: context);
     //checks bluetooth current state
@@ -89,6 +107,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
       pinAccessClassData = pinAccessClassData.isNotEmpty ? pinAccessClassData : ModalRoute.of(context).settings.arguments;
       myDevice = pinAccessClassData['myDevice'];
       dataRobotUVC = pinAccessClassData['dataRead'];
+      autoUVCService.setUVCDevice(myDevice);
     } catch (e) {
       print('its empty');
     }

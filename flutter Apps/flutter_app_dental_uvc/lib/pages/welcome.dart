@@ -67,7 +67,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     if (macRobotUVC.isEmpty) {
       myUvcToast.setToastDuration(10);
       myDevice = Device(device: scanDevices.elementAt(devicesPosition));
-      myUvcToast.setToastMessage('Veuillez selectionner un dispositif UV-C dans la page \'Réglages\' !');
+      myUvcToast.setToastMessage('Veuillez associer un dispositif UV-C dans la page \'Réglages\' !');
       myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
       Future.delayed(Duration(seconds: 1), () async {
         Navigator.pushReplacementNamed(context, '/pin_access', arguments: {
@@ -206,7 +206,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
         _permissionStatus = status;
         if (_permissionStatus.index != 2) {
           myUvcToast.setToastDuration(5);
-          myUvcToast.setToastMessage('La Localisation n\'est pas autorisée sur votre téléphone first!');
+          myUvcToast.setToastMessage('La Localisation n\'est pas autorisée sur votre téléphone !');
           myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
 /*          do{
             _permissionStatus = status;
@@ -229,7 +229,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     LocationPermissions().checkServiceStatus().then((ServiceStatus serviceStatus) {
       if (serviceStatus.index != 2) {
         myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('La Localisation n\'est pas activée sur votre téléphone second!');
+        myUvcToast.setToastMessage('La Localisation n\'est pas activée sur votre téléphone !');
         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
       }
     });

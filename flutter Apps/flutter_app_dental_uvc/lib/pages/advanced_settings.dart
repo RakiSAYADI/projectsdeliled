@@ -60,7 +60,7 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                       });
                     },
                     child: Text(
-                      'Changer MDP',
+                      'Changer le mot de passe',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: widthScreen * 0.05,
@@ -74,10 +74,10 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                   SizedBox(height: heightScreen * 0.05),
                   FlatButton(
                     onPressed: () {
-                      alertSecurity(context);
+                      alertSecurity(context, 'scanlist');
                     },
                     child: Text(
-                      'Changer dispositif',
+                      'Changer de dispositif UV-C',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: widthScreen * 0.05,
@@ -88,15 +88,16 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                     ),
                     color: Colors.blue[400],
                   ),
-/*                  SizedBox(height: heightScreen * 0.05),
+                  SizedBox(height: heightScreen * 0.05),
                   FlatButton(
                     onPressed: () {
+                      //alertSecurity(context,'autouvc');
                       Navigator.pushNamed(context, '/auto_uvc', arguments: {
                         'pinCodeAccess': pinCodeAccess,
                       });
                     },
                     child: Text(
-                      'Auto',
+                      'Planning de désinfection',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: widthScreen * 0.05,
@@ -106,7 +107,7 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                       borderRadius: BorderRadius.circular(18.0),
                     ),
                     color: Colors.blue[400],
-                  ),*/
+                  ),
                 ],
               ),
             ),
@@ -127,7 +128,7 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
     );
   }
 
-  Future<void> alertSecurity(BuildContext context) async {
+  Future<void> alertSecurity(BuildContext context, String accessPath) async {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
 
@@ -137,7 +138,6 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
         builder: (BuildContext context) {
           return AlertDialog(
             content: Container(
-              decoration: BoxDecoration(color: Colors.grey[200]),
               child: Builder(
                 builder: (context) {
                   return Center(
@@ -188,25 +188,25 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              buttonNumbers('0', context),
+                              buttonNumbers('0', context, accessPath),
                               SizedBox(width: widthScreen * 0.003),
-                              buttonNumbers('1', context),
+                              buttonNumbers('1', context, accessPath),
                               SizedBox(width: widthScreen * 0.003),
-                              buttonNumbers('2', context),
+                              buttonNumbers('2', context, accessPath),
                               SizedBox(width: widthScreen * 0.003),
-                              buttonNumbers('3', context),
+                              buttonNumbers('3', context, accessPath),
                               SizedBox(width: widthScreen * 0.003),
-                              buttonNumbers('4', context),
+                              buttonNumbers('4', context, accessPath),
                               SizedBox(width: widthScreen * 0.003),
-                              buttonNumbers('5', context),
+                              buttonNumbers('5', context, accessPath),
                               SizedBox(width: widthScreen * 0.003),
-                              buttonNumbers('6', context),
+                              buttonNumbers('6', context, accessPath),
                               SizedBox(width: widthScreen * 0.003),
-                              buttonNumbers('7', context),
+                              buttonNumbers('7', context, accessPath),
                               SizedBox(width: widthScreen * 0.003),
-                              buttonNumbers('8', context),
+                              buttonNumbers('8', context, accessPath),
                               SizedBox(width: widthScreen * 0.003),
-                              buttonNumbers('9', context),
+                              buttonNumbers('9', context, accessPath),
                             ],
                           ),
                         ],
@@ -220,7 +220,7 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
         });
   }
 
-  ButtonTheme buttonNumbers(String number, BuildContext context) {
+  ButtonTheme buttonNumbers(String number, BuildContext context, String accessPath) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
     return ButtonTheme(
@@ -247,10 +247,19 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
             //_showSnackBar(myPinCode, context);
             if (myPinCode == pinCodeAccess) {
               Navigator.pop(context);
-              Navigator.pushNamed(context, '/scan_ble_list', arguments: {
-                'pinCodeAccess': pinCodeAccess,
-                'myDevice': myDevice,
-              });
+              switch (accessPath) {
+                case 'scanlist':
+                  Navigator.pushNamed(context, '/scan_ble_list', arguments: {
+                    'pinCodeAccess': pinCodeAccess,
+                    'myDevice': myDevice,
+                  });
+                  break;
+                case 'autouvc':
+                  Navigator.pushNamed(context, '/auto_uvc', arguments: {
+                    'pinCodeAccess': pinCodeAccess,
+                  });
+                  break;
+              }
             } else {
               myUvcToast.setToastDuration(3);
               myUvcToast.setToastMessage('Code Invalide !');
