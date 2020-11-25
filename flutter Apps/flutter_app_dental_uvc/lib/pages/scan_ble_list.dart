@@ -57,10 +57,10 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
         //Make sure user's device gps is on.
         flutterBlue = FlutterBlue.instance;
         print("Bluetooth is on");
-        if(Platform.isAndroid){
+        if (Platform.isAndroid) {
           scanForDevicesAndroid();
         }
-        if(Platform.isIOS){
+        if (Platform.isIOS) {
           scanForDevicesIos();
         }
       }
@@ -123,7 +123,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
     });
   }
 
-  Future<void> startScan(BuildContext context,String uvcDeviceMac) {
+  Future<void> startBind(BuildContext context, String uvcDeviceMac) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     scanUVCDevicesData = scanUVCDevicesData.isNotEmpty ? scanUVCDevicesData : ModalRoute.of(context).settings.arguments;
@@ -135,23 +135,33 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Voulez vous vraiment enregistrer ce dispositif ?'),
-            Image.asset(
-              'assets/scan_qr_code.gif',
-              height: screenHeight * 0.3,
-              width: screenWidth * 0.8,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Voulez vous vraiment enregistrer ce dispositif ?',
+                  style: TextStyle(fontSize: (screenWidth * 0.02)),
+                ),
+                SizedBox(height: screenHeight * 0.1),
+                Image.asset(
+                  'assets/connexion_dispositif.gif',
+                  height: screenHeight * 0.3,
+                  width: screenWidth * 0.5,
+                ),
+              ],
             ),
           ],
         ),
         actions: [
           FlatButton(
-            child: Text('Oui'),
+            child: Text(
+              'Oui',
+              style: TextStyle(fontSize: (screenWidth * 0.02)),
+            ),
             onPressed: () async {
-              try{
+              try {
                 myDevice.disconnect();
-              }catch(e){
-
-              }
+              } catch (e) {}
               Navigator.pop(c, true);
               UVCDataFile uvcDataFile = UVCDataFile();
               uvcDataFile.saveUVCDevice(uvcDeviceMac);
@@ -160,7 +170,10 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
             },
           ),
           FlatButton(
-            child: Text('Non'),
+            child: Text(
+              'Non',
+              style: TextStyle(fontSize: (screenWidth * 0.02)),
+            ),
             onPressed: () {
               setState(() {
                 devices.clear();
@@ -214,7 +227,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                 .map((device) => DeviceCard(
                     device: device,
                     connect: () async {
-                      startScan(context,device.device.id.id);
+                      startBind(context, device.device.id.id);
                     }))
                 .toList()),
       ),

@@ -203,6 +203,7 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
                 style: TextStyle(fontSize: (widthScreen * 0.05)),
               ),
               onPressed: () async {
+                Navigator.pop(context, false);
                 SystemChannels.textInput.invokeMethod('TextInput.hide');
                 await emailDataFile.saveStringUVCEmailDATA(myEmail.text);
                 myUvcToast.setToastDuration(60);
@@ -210,14 +211,12 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
                 myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
                 if (await checkInternetConnection()) {
                   await sendEmail(myEmail.text);
-                  Navigator.pop(context, false);
                   Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
                 } else {
                   myUvcToast.clearAllToast();
                   myUvcToast.setToastDuration(3);
                   myUvcToast.setToastMessage('Votre téléphone n\'est connecté sur internet !');
                   myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
-                  Navigator.pop(context, false);
                 }
               },
             ),

@@ -14,7 +14,6 @@ import 'package:pinput/pin_put/pin_put.dart';
 class AccessPin extends StatefulWidget {
   @override
   _AccessPinState createState() {
-    print('create task');
     return _AccessPinState();
   }
 }
@@ -84,7 +83,6 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    print('init task');
     // TODO: implement initState
     super.initState();
     gifController = GifController(vsync: this);
@@ -269,7 +267,6 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    print('build task');
     if (firstDisplayMainWidget) {
       mainWidgetScreen = appWidget(context);
       screenSleep(context);
@@ -306,7 +303,6 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
         ),
         onPressed: () async {
           myPinCode += number;
-          print(myPinCode);
           _pinPutController.text += '*';
           if (_pinPutController.text.length == 4) {
             _showSnackBar(myPinCode, context);
@@ -340,7 +336,6 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   @override
   void dispose() {
     gifController.dispose();
-    print('dispose task');
     super.dispose();
   }
 

@@ -15,6 +15,7 @@ class AutoUVCService {
   List<int> _daysStates = [0, 0, 0, 0, 0, 0, 0];
   List<int> _hourList = [0, 0, 0, 0, 0, 0, 0];
   List<int> _minutesList = [0, 0, 0, 0, 0, 0, 0];
+  List<int> _secondsList = [0, 0, 0, 0, 0, 0, 0];
   List<int> _delayList = [0, 0, 0, 0, 0, 0, 0];
   List<int> _durationList = [0, 0, 0, 0, 0, 0, 0];
 
@@ -77,7 +78,7 @@ class AutoUVCService {
               ((_daysStates[i]) == 1) &&
               (date.hour == _hourList[i]) &&
               (date.minute == _minutesList[i]) &&
-              (date.second == 0)) {
+              (date.second == _secondsList[i])) {
             if (_myDevice != null && _myDevice.getConnectionState()) {
               print('detection of activation today');
               Map<String, dynamic> user = jsonDecode(_myDevice.getReadCharMessage());
@@ -146,8 +147,9 @@ class AutoUVCService {
     _daysStates[position] = timeDataIntList[0];
     _hourList[position] = timeDataIntList[1];
     _minutesList[position] = timeDataIntList[2];
-    _delayList[position] = timeDataIntList[3];
-    _durationList[position] = timeDataIntList[4];
+    _secondsList[position] = timeDataIntList[3];
+    _delayList[position] = timeDataIntList[4];
+    _durationList[position] = timeDataIntList[5];
   }
 
   List<int> _stringListAsciiToListInt(List<int> listInt) {

@@ -208,17 +208,6 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
           myUvcToast.setToastDuration(5);
           myUvcToast.setToastMessage('La Localisation n\'est pas autorisée sur votre téléphone !');
           myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-/*          do{
-            _permissionStatus = status;
-            if(_permissionStatus.index == 2){
-              print('we got it');
-              readUVCDevice();
-              break;
-            }
-            print(_permissionStatus.index);
-            print('this is test');
-            await Future.delayed(const Duration(milliseconds: 500));
-          }while(true);*/
         } else {
           checkServiceStatus(context);
         }

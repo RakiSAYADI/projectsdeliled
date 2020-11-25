@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:path_provider/path_provider.dart';
@@ -23,6 +24,8 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
   String myPinCode = '';
 
   ToastyMessage myUvcToast;
+
+  UVCDataFile uvcDataFile = UVCDataFile();
 
   @override
   void initState() {
@@ -90,11 +93,16 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                   ),
                   SizedBox(height: heightScreen * 0.05),
                   FlatButton(
-                    onPressed: () {
-                      //alertSecurity(context,'autouvc');
-                      Navigator.pushNamed(context, '/auto_uvc', arguments: {
-                        'pinCodeAccess': pinCodeAccess,
-                      });
+                    onPressed: () async {
+                      String macRobotUVC = '';
+                      macRobotUVC = await uvcDataFile.readUVCDevice();
+                      if (macRobotUVC.isEmpty) {
+                        myUvcToast.setToastDuration(3);
+                        myUvcToast.setToastMessage('Veuillez associer un dispositif UV-C !');
+                        myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                      } else {
+                        alertSecurity(context,'autouvc');
+                      }
                     },
                     child: Text(
                       'Planning de désinfection',
@@ -240,7 +248,6 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
         ),
         onPressed: () async {
           myPinCode += number;
-          print(myPinCode);
           _pinPutController.text += '*';
           if (_pinPutController.text.length == 4) {
             pinCodeAccess = await _readPINFile();

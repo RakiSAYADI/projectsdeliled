@@ -150,7 +150,7 @@ class _DataCSVViewState extends State<DataCSVView> {
                 myUvcToast.setToastDuration(60);
                 myUvcToast.setToastMessage('Envoi en cours !');
                 myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
-                await sendemail(myEmail.text);
+                await sendEmail(myEmail.text);
               },
             ),
             FlatButton(
@@ -169,7 +169,7 @@ class _DataCSVViewState extends State<DataCSVView> {
     );
   }
 
-  Future<void> sendemail(String destination) async {
+  Future<void> sendEmail(String destination) async {
     final directory = await getApplicationDocumentsDirectory();
     String host = 'smtp.office365.com';
     String username = 'rapports-deeplight@delitech.eu';

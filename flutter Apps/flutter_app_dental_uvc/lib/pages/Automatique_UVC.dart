@@ -17,6 +17,7 @@ class _UVCAutoState extends State<UVCAuto> {
 
   List<int> hourList = [0, 0, 0, 0, 0, 0, 0];
   List<int> minutesList = [0, 0, 0, 0, 0, 0, 0];
+  List<int> secondsList = [0, 0, 0, 0, 0, 0, 0];
   List<int> delayList = [0, 0, 0, 0, 0, 0, 0];
   List<int> durationList = [0, 0, 0, 0, 0, 0, 0];
 
@@ -40,11 +41,13 @@ class _UVCAutoState extends State<UVCAuto> {
 
   String myTimeHoursData = '00';
   String myTimeMinutesData = '00';
+  String myTimeSecondsData = '00';
   String myExtinctionTimeMinuteData = ' 30 sec';
   String myActivationTimeMinuteData = ' 10 sec';
 
   int myTimeHoursPosition = 0;
   int myTimeMinutesPosition = 0;
+  int myTimeSecondsPosition = 0;
   int myExtinctionTimeMinutePosition = 0;
   int myActivationTimeMinutePosition = 0;
 
@@ -74,7 +77,71 @@ class _UVCAutoState extends State<UVCAuto> {
     '22',
     '23'
   ];
+
   List<String> myTimeMinutes = [
+    '00',
+    '01',
+    '02',
+    '03',
+    '04',
+    '05',
+    '06',
+    '07',
+    '08',
+    '09',
+    '10',
+    '11',
+    '12',
+    '13',
+    '14',
+    '15',
+    '16',
+    '17',
+    '18',
+    '19',
+    '20',
+    '21',
+    '22',
+    '23',
+    '24',
+    '25',
+    '26',
+    '27',
+    '28',
+    '29',
+    '30',
+    '31',
+    '32',
+    '33',
+    '34',
+    '35',
+    '36',
+    '37',
+    '38',
+    '39',
+    '40',
+    '41',
+    '42',
+    '43',
+    '44',
+    '45',
+    '46',
+    '47',
+    '48',
+    '49',
+    '50',
+    '51',
+    '52',
+    '53',
+    '54',
+    '55',
+    '56',
+    '57',
+    '58',
+    '59'
+  ];
+
+  List<String> myTimeSeconds = [
     '00',
     '01',
     '02',
@@ -196,8 +263,9 @@ class _UVCAutoState extends State<UVCAuto> {
     daysStates[position] = intToBool(timeDataIntList[0]);
     hourList[position] = timeDataIntList[1];
     minutesList[position] = timeDataIntList[2];
-    delayList[position] = timeDataIntList[3];
-    durationList[position] = timeDataIntList[4];
+    secondsList[position] = timeDataIntList[3];
+    delayList[position] = timeDataIntList[4];
+    durationList[position] = timeDataIntList[5];
   }
 
   void readUVCAuto() async {
@@ -264,11 +332,13 @@ class _UVCAutoState extends State<UVCAuto> {
 
                           myTimeHoursPosition = hourList[day];
                           myTimeMinutesPosition = minutesList[day];
+                          myTimeSecondsPosition = secondsList[day];
                           myActivationTimeMinutePosition = delayList[day];
                           myExtinctionTimeMinutePosition = durationList[day];
 
                           myTimeHoursData = myTimeHours.elementAt(myTimeHoursPosition);
                           myTimeMinutesData = myTimeMinutes.elementAt(myTimeMinutesPosition);
+                          myTimeSecondsData = myTimeSeconds.elementAt(myTimeSecondsPosition);
                           myActivationTimeMinuteData = myActivationTimeMinute.elementAt(myActivationTimeMinutePosition);
                           myExtinctionTimeMinuteData = myExtinctionTimeMinute.elementAt(myExtinctionTimeMinutePosition);
                         },
@@ -371,7 +441,6 @@ class _UVCAutoState extends State<UVCAuto> {
                               myTimeHoursData = data;
                               myTimeHoursPosition = myTimeHours.indexOf(data);
                               hourList[day] = myTimeHoursPosition;
-                              print(myTimeHoursPosition);
                             });
                           },
                           items: myTimeHours.map<DropdownMenuItem<String>>((String value) {
@@ -405,7 +474,39 @@ class _UVCAutoState extends State<UVCAuto> {
                               myTimeMinutesData = data;
                               myTimeMinutesPosition = myTimeMinutes.indexOf(data);
                               minutesList[day] = myTimeMinutesPosition;
-                              print(myTimeMinutesPosition);
+                            });
+                          },
+                          items: myTimeMinutes.map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: TextStyle(
+                                  fontSize: widthScreen * 0.03,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                        Text(
+                          ' : ',
+                          style: TextStyle(
+                            fontSize: widthScreen * 0.03,
+                            color: Colors.black,
+                          ),
+                        ),
+                        DropdownButton<String>(
+                          value: myTimeSecondsData,
+                          icon: Icon(Icons.arrow_drop_down),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                          onChanged: (String data) {
+                            setState(() {
+                              myTimeSecondsData = data;
+                              myTimeSecondsPosition = myTimeSeconds.indexOf(data);
+                              secondsList[day] = myTimeSecondsPosition;
                             });
                           },
                           items: myTimeMinutes.map<DropdownMenuItem<String>>((String value) {
@@ -460,7 +561,6 @@ class _UVCAutoState extends State<UVCAuto> {
                                   myActivationTimeMinuteData = data;
                                   myActivationTimeMinutePosition = myActivationTimeMinute.indexOf(data);
                                   delayList[day] = myActivationTimeMinutePosition;
-                                  print(myActivationTimeMinutePosition);
                                 });
                               },
                               items: myActivationTimeMinute.map<DropdownMenuItem<String>>((String value) {
@@ -504,7 +604,6 @@ class _UVCAutoState extends State<UVCAuto> {
                                   myExtinctionTimeMinuteData = data;
                                   myExtinctionTimeMinutePosition = myExtinctionTimeMinute.indexOf(data);
                                   durationList[day] = myExtinctionTimeMinutePosition;
-                                  print(myExtinctionTimeMinutePosition);
                                 });
                               },
                               items: myExtinctionTimeMinute.map<DropdownMenuItem<String>>((String value) {
@@ -538,13 +637,13 @@ class _UVCAutoState extends State<UVCAuto> {
                 FlatButton(
                   onPressed: () async {
                     String uvcAutoData = '{'
-                        '\"Monday\":[${boolToInt(daysStates[0])},${hourList[0]},${minutesList[0]},${delayList[0]},${durationList[0]}],'
-                        '\"Tuesday\":[${boolToInt(daysStates[1])},${hourList[1]},${minutesList[1]},${delayList[1]},${durationList[1]}],'
-                        '\"Wednesday\":[${boolToInt(daysStates[2])},${hourList[2]},${minutesList[2]},${delayList[2]},${durationList[2]}],'
-                        '\"Thursday\":[${boolToInt(daysStates[3])},${hourList[3]},${minutesList[3]},${delayList[3]},${durationList[3]}],'
-                        '\"Friday\":[${boolToInt(daysStates[4])},${hourList[4]},${minutesList[4]},${delayList[4]},${durationList[4]}],'
-                        '\"Saturday\":[${boolToInt(daysStates[5])},${hourList[5]},${minutesList[5]},${delayList[5]},${durationList[5]}],'
-                        '\"Sunday\":[${boolToInt(daysStates[6])},${hourList[6]},${minutesList[6]},${delayList[6]},${durationList[6]}]'
+                        '\"Monday\":[${boolToInt(daysStates[0])},${hourList[0]},${minutesList[0]},${secondsList[0]},${delayList[0]},${durationList[0]}],'
+                        '\"Tuesday\":[${boolToInt(daysStates[1])},${hourList[1]},${minutesList[1]},${secondsList[1]},${delayList[1]},${durationList[1]}],'
+                        '\"Wednesday\":[${boolToInt(daysStates[2])},${hourList[2]},${minutesList[2]},${secondsList[2]},${delayList[2]},${durationList[2]}],'
+                        '\"Thursday\":[${boolToInt(daysStates[3])},${hourList[3]},${minutesList[3]},${secondsList[3]},${delayList[3]},${durationList[3]}],'
+                        '\"Friday\":[${boolToInt(daysStates[4])},${hourList[4]},${minutesList[4]},${secondsList[4]},${delayList[4]},${durationList[4]}],'
+                        '\"Saturday\":[${boolToInt(daysStates[5])},${hourList[5]},${minutesList[5]},${secondsList[5]},${delayList[5]},${durationList[5]}],'
+                        '\"Sunday\":[${boolToInt(daysStates[6])},${hourList[6]},${minutesList[6]},${secondsList[6]},${delayList[6]},${durationList[6]}]'
                         '}';
                     await uvcDataFile.saveUVCAutoData(uvcAutoData);
                     myUvcToast.setToastDuration(3);

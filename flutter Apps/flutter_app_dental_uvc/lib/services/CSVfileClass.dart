@@ -41,22 +41,19 @@ class UVCDataFile {
       textuvcrows.length = 0;
       for (int i = 0; i < text.length; i++) {
         if (text[i] == '\n') {
-          print('we have /n');
           textuvcrows.add(column);
           column = '';
-          print(textuvcrows);
           textuvc.add(textuvcrows);
           textuvcrows = ['default'];
           textuvcrows.length = 0;
         } else if (text[i] == ';') {
-          print(column);
           textuvcrows.add(column);
           column = '';
         } else {
           column += text[i];
         }
       }
-      print(textuvc);
+      print("uvc csv file Readed");
       return textuvc;
     } catch (e) {
       print("Couldn't read file");
@@ -95,7 +92,7 @@ class UVCDataFile {
       final directory = await getApplicationDocumentsDirectory();
       final file = File('${directory.path}/$_uvcUserEmailFileName');
       String email = await file.readAsString();
-      print("Readed : $email");
+      print("email file Readed");
       return email;
     } catch (e) {
       print("Couldn't read file");
@@ -116,7 +113,7 @@ class UVCDataFile {
       final directory = await getApplicationDocumentsDirectory();
       final file = File('${directory.path}/$_uvcDeviceFileName');
       String uvcDevice = await file.readAsString();
-      print("Readed : $uvcDevice");
+      print("uvc device file Readed");
       return uvcDevice;
     } catch (e) {
       print("Couldn't read file");
@@ -137,18 +134,18 @@ class UVCDataFile {
       final directory = await getApplicationDocumentsDirectory();
       final file = File('${directory.path}/$_uvcAutoDataFileName');
       String uvcAutoData = await file.readAsString();
-      print("Readed : $uvcAutoData");
+      print("uvc auto file Readed");
       return uvcAutoData;
     } catch (e) {
       print("Couldn't read file");
       String autoDataDefault = '{'
-          '\"Monday\":[0,0,0,0,0],'
-          '\"Tuesday\":[0,0,0,0,0],'
-          '\"Wednesday\":[0,0,0,0,0],'
-          '\"Thursday\":[0,0,0,0,0],'
-          '\"Friday\":[0,0,0,0,0],'
-          '\"Saturday\":[0,0,0,0,0],'
-          '\"Sunday\":[0,0,0,0,0]'
+          '\"Monday\":[0,0,0,0,0,0],'
+          '\"Tuesday\":[0,0,0,0,0,0],'
+          '\"Wednesday\":[0,0,0,0,0,0],'
+          '\"Thursday\":[0,0,0,0,0,0],'
+          '\"Friday\":[0,0,0,0,0,0],'
+          '\"Saturday\":[0,0,0,0,0,0],'
+          '\"Sunday\":[0,0,0,0,0,0]'
           '}';
       await saveUVCAutoData(autoDataDefault);
       return autoDataDefault;
