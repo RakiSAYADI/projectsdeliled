@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcClass.dart';
+import 'package:flutterappdentaluvc/services/uvcToast.dart';
 
 class AutoUVCService {
   Device _myDevice;
   BuildContext _buildContext;
   UvcLight _myUVCLight;
+  ToastyMessage _myUvcToast;
   bool _serviceState = false;
   UVCDataFile _uvcDataFile = UVCDataFile();
   Map<String, dynamic> _uvcAutoDataJson;
@@ -69,6 +71,7 @@ class AutoUVCService {
     _serviceState = true;
     await _readUVCAuto();
     DateTime date = DateTime.now();
+    _myUvcToast = ToastyMessage(toastContext: _buildContext);
     do {
       if (_serviceState) {
         //service functionality
@@ -100,7 +103,9 @@ class AutoUVCService {
                 'myDevice': _myDevice,
               });
             } else {
-              print('activation automatique n\'est pas valable car le robot n\'est connecté !');
+              _myUvcToast.setToastDuration(3);
+              _myUvcToast.setToastMessage('La désinfection est ignorée car le dispositif UV-C n\'est pas connecté !');
+              _myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
             }
           }
         }

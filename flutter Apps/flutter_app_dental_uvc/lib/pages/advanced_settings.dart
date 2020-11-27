@@ -101,7 +101,7 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                         myUvcToast.setToastMessage('Veuillez associer un dispositif UV-C !');
                         myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
                       } else {
-                        alertSecurity(context,'autouvc');
+                        alertSecurity(context, 'autouvc');
                       }
                     },
                     child: Text(
@@ -262,9 +262,16 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                   });
                   break;
                 case 'autouvc':
-                  Navigator.pushNamed(context, '/auto_uvc', arguments: {
-                    'pinCodeAccess': pinCodeAccess,
-                  });
+                  if (myDevice != null) {
+                    Navigator.pushNamed(context, '/auto_uvc', arguments: {
+                      'pinCodeAccess': pinCodeAccess,
+                    });
+                  } else {
+                    myUvcToast.setToastDuration(3);
+                    myUvcToast.setToastMessage('Veuillez associer un dispositif UV-C !');
+                    myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                  }
+
                   break;
               }
             } else {

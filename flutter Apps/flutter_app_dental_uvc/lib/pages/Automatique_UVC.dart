@@ -12,7 +12,7 @@ class UVCAuto extends StatefulWidget {
 }
 
 class _UVCAutoState extends State<UVCAuto> {
-  List<bool> days = [false, false, false, false, false, false, false];
+  List<bool> days = [true, false, false, false, false, false, false];
   List<bool> daysStates = [false, false, false, false, false, false, false];
 
   List<int> hourList = [0, 0, 0, 0, 0, 0, 0];
@@ -23,8 +23,9 @@ class _UVCAutoState extends State<UVCAuto> {
 
   String daysInHex;
   String activationButtonText = 'Désactivé';
-  Color activationButtonColor = Colors.red;
+  List<Color> activationButtonColor = [Colors.red, Colors.red, Colors.red, Colors.red, Colors.red, Colors.red, Colors.red];
   bool activationButtonState = false;
+  Color saveButtonColor = Colors.blue[400];
   int day = 0;
 
   ToastyMessage myUvcToast;
@@ -279,6 +280,16 @@ class _UVCAutoState extends State<UVCAuto> {
     readDayData('Friday', 4);
     readDayData('Saturday', 5);
     readDayData('Sunday', 6);
+
+    setState(() {
+      for (int i = 0; i < daysStates.length; i++) {
+        if (daysStates[i]) {
+          activationButtonColor[i] = Colors.green;
+        } else {
+          activationButtonColor[i] = Colors.red;
+        }
+      }
+    });
   }
 
   @override
@@ -323,10 +334,10 @@ class _UVCAutoState extends State<UVCAuto> {
                           setState(() {
                             if (daysStates[day]) {
                               activationButtonText = 'Activé';
-                              activationButtonColor = Colors.green;
+                              activationButtonColor[day] = Colors.green;
                             } else {
                               activationButtonText = 'Désactivé';
-                              activationButtonColor = Colors.red;
+                              activationButtonColor[day] = Colors.red;
                             }
                           });
 
@@ -345,39 +356,46 @@ class _UVCAutoState extends State<UVCAuto> {
                         children: [
                           Container(
                               width: (widthScreen - 84) / 7,
-                              child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[new SizedBox(width: 4.0), new Text("Lundi", style: TextStyle(fontSize: 15))])),
+                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                new SizedBox(width: 4.0),
+                                new Text("Lundi", style: TextStyle(fontSize: 15, color: activationButtonColor[0], fontWeight: FontWeight.bold))
+                              ])),
                           Container(
                               width: (widthScreen - 84) / 7,
-                              child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[new SizedBox(width: 4.0), new Text("Mardi", style: TextStyle(fontSize: 15))])),
+                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                new SizedBox(width: 4.0),
+                                new Text("Mardi", style: TextStyle(fontSize: 15, color: activationButtonColor[1], fontWeight: FontWeight.bold))
+                              ])),
                           Container(
                               width: (widthScreen - 84) / 7,
-                              child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[new SizedBox(width: 4.0), new Text("Mercredi", style: TextStyle(fontSize: 15))])),
+                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                new SizedBox(width: 4.0),
+                                new Text("Mercredi", style: TextStyle(fontSize: 15, color: activationButtonColor[2], fontWeight: FontWeight.bold))
+                              ])),
                           Container(
                               width: (widthScreen - 84) / 7,
-                              child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[new SizedBox(width: 4.0), new Text("Jeudi", style: TextStyle(fontSize: 15))])),
+                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                new SizedBox(width: 4.0),
+                                new Text("Jeudi", style: TextStyle(fontSize: 15, color: activationButtonColor[3], fontWeight: FontWeight.bold))
+                              ])),
                           Container(
                               width: (widthScreen - 84) / 7,
-                              child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[new SizedBox(width: 4.0), new Text("Vendredi", style: TextStyle(fontSize: 15))])),
+                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                new SizedBox(width: 4.0),
+                                new Text("Vendredi", style: TextStyle(fontSize: 15, color: activationButtonColor[4], fontWeight: FontWeight.bold))
+                              ])),
                           Container(
                               width: (widthScreen - 84) / 7,
-                              child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[new SizedBox(width: 4.0), new Text("Samedi", style: TextStyle(fontSize: 15))])),
+                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                new SizedBox(width: 4.0),
+                                new Text("Samedi", style: TextStyle(fontSize: 15, color: activationButtonColor[5], fontWeight: FontWeight.bold))
+                              ])),
                           Container(
                               width: (widthScreen - 84) / 7,
-                              child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[new SizedBox(width: 4.0), new Text("Dimanche", style: TextStyle(fontSize: 15))])),
+                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                new SizedBox(width: 4.0),
+                                new Text("Dimanche", style: TextStyle(fontSize: 15, color: activationButtonColor[6], fontWeight: FontWeight.bold))
+                              ])),
                         ],
                         borderWidth: 2,
                         color: Colors.grey,
@@ -393,12 +411,13 @@ class _UVCAutoState extends State<UVCAuto> {
                     activationButtonState = daysStates[day];
                     activationButtonState = !activationButtonState;
                     setState(() {
+                      saveButtonColor = Colors.grey[400];
                       if (activationButtonState) {
                         activationButtonText = 'Activé';
-                        activationButtonColor = Colors.green;
+                        activationButtonColor[day] = Colors.green;
                       } else {
                         activationButtonText = 'Désactivé';
-                        activationButtonColor = Colors.red;
+                        activationButtonColor[day] = Colors.red;
                       }
                     });
                     daysStates[day] = activationButtonState;
@@ -410,7 +429,7 @@ class _UVCAutoState extends State<UVCAuto> {
                       style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.02),
                     ),
                   ),
-                  color: activationButtonColor,
+                  color: activationButtonColor[day],
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0),
                   ),
@@ -438,6 +457,7 @@ class _UVCAutoState extends State<UVCAuto> {
                           style: TextStyle(color: Colors.grey[800], fontSize: 18),
                           onChanged: (String data) {
                             setState(() {
+                              saveButtonColor = Colors.grey[400];
                               myTimeHoursData = data;
                               myTimeHoursPosition = myTimeHours.indexOf(data);
                               hourList[day] = myTimeHoursPosition;
@@ -471,6 +491,7 @@ class _UVCAutoState extends State<UVCAuto> {
                           style: TextStyle(color: Colors.grey[800], fontSize: 18),
                           onChanged: (String data) {
                             setState(() {
+                              saveButtonColor = Colors.grey[400];
                               myTimeMinutesData = data;
                               myTimeMinutesPosition = myTimeMinutes.indexOf(data);
                               minutesList[day] = myTimeMinutesPosition;
@@ -504,6 +525,7 @@ class _UVCAutoState extends State<UVCAuto> {
                           style: TextStyle(color: Colors.grey[800], fontSize: 18),
                           onChanged: (String data) {
                             setState(() {
+                              saveButtonColor = Colors.grey[400];
                               myTimeSecondsData = data;
                               myTimeSecondsPosition = myTimeSeconds.indexOf(data);
                               secondsList[day] = myTimeSecondsPosition;
@@ -558,6 +580,7 @@ class _UVCAutoState extends State<UVCAuto> {
                               style: TextStyle(color: Colors.grey[800], fontSize: 18),
                               onChanged: (String data) {
                                 setState(() {
+                                  saveButtonColor = Colors.grey[400];
                                   myActivationTimeMinuteData = data;
                                   myActivationTimeMinutePosition = myActivationTimeMinute.indexOf(data);
                                   delayList[day] = myActivationTimeMinutePosition;
@@ -601,6 +624,7 @@ class _UVCAutoState extends State<UVCAuto> {
                               style: TextStyle(color: Colors.grey[800], fontSize: widthScreen * 0.04),
                               onChanged: (String data) {
                                 setState(() {
+                                  saveButtonColor = Colors.grey[400];
                                   myExtinctionTimeMinuteData = data;
                                   myExtinctionTimeMinutePosition = myExtinctionTimeMinute.indexOf(data);
                                   durationList[day] = myExtinctionTimeMinutePosition;
@@ -636,6 +660,9 @@ class _UVCAutoState extends State<UVCAuto> {
                 SizedBox(height: heightScreen * 0.04),
                 FlatButton(
                   onPressed: () async {
+                    setState(() {
+                      saveButtonColor = Colors.blue[400];
+                    });
                     String uvcAutoData = '{'
                         '\"Monday\":[${boolToInt(daysStates[0])},${hourList[0]},${minutesList[0]},${secondsList[0]},${delayList[0]},${durationList[0]}],'
                         '\"Tuesday\":[${boolToInt(daysStates[1])},${hourList[1]},${minutesList[1]},${secondsList[1]},${delayList[1]},${durationList[1]}],'
@@ -664,7 +691,7 @@ class _UVCAutoState extends State<UVCAuto> {
                       style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.02),
                     ),
                   ),
-                  color: Colors.blue[400],
+                  color: saveButtonColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0),
                   ),
