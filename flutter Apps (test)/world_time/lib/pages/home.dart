@@ -10,12 +10,18 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    data = data.isNotEmpty ? data : ModalRoute.of(context).settings.arguments;
-    print(data);
+    String bgImage = 'day.png';
+    Color bgColor = Colors.blue;
+    Color textColor = Colors.black;
+    try {
+      data = data.isNotEmpty ? data : ModalRoute.of(context).settings.arguments;
+      print(data);
 
-    String bgImage = data['isDayTime'] ? 'day.png' : 'night.png';
-    Color bgColor = data['isDayTime'] ? Colors.blue : Colors.indigo[700];
-    Color textColor = data['isDayTime'] ? Colors.black : Colors.white;
+      bgImage = data['isDayTime'] ? 'day.png' : 'night.png';
+      bgColor = data['isDayTime'] ? Colors.blue : Colors.indigo[700];
+      textColor = data['isDayTime'] ? Colors.black : Colors.white;
+    } catch (e) {}
+
     return Scaffold(
       backgroundColor: bgColor,
       body: SafeArea(

@@ -14,8 +14,7 @@ class WorldTime {
 
   Future<String> getTime() async {
     try {
-      Response response =
-          await get('http://worldtimeapi.org/api/timezone/$url');
+      Response response = await get('http://worldtimeapi.org/api/timezone/$url');
       Map data = jsonDecode(response.body);
 
       String dateTimeTunis = data['datetime'];
