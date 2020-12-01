@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_master_uvc/pages/pin_access.dart';
-import 'package:flutter_app_master_uvc/pages/pin_settings.dart';
-import 'package:flutter_app_master_uvc/pages/profils.dart';
+import 'package:flutter_app_master_uvc/pages/check_permissions.dart';
+import 'package:flutter_app_master_uvc/pages/home.dart';
 import 'package:flutter_app_master_uvc/pages/qr_code_scan.dart';
 import 'package:flutter_app_master_uvc/pages/scan_ble_list.dart';
 import 'package:flutter_app_master_uvc/pages/welcome.dart';
@@ -20,11 +19,12 @@ void main() async {
 
   runApp(MaterialApp(
     initialRoute: '/',
+    title: 'MASTER UVC',
+    debugShowCheckedModeBanner: false,
     routes: {
       '/': (context) => Welcome(),
-      '/pin_access': (context) => AccessPin(),
-      '/pin_settings': (context) => PinSettings(),
-      '/profiles': (context) => Profiles(),
+      '/check_permissions': (context) => CheckPermissions(),
+      '/home': (context) => Home(),
       '/scan_ble_list': (context) => ScanListBle(),
       '/qr_code_scan': (context) => QrCodeScan(),
     },

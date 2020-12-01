@@ -53,7 +53,7 @@ void main() async {
       onDidReceiveLocalNotification: (int id, String title, String body, String payload) async {
         didReceiveLocalNotificationSubject.add(ReceivedNotification(id: id, title: title, body: body, payload: payload));
       });
-  var initializationSettings = InitializationSettings(android:initializationSettingsAndroid, iOS:initializationSettingsIOS);
+  var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
   await flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: (String payload) async {
     if (payload != null) {
       debugPrint('notification payload: ' + payload);
@@ -68,7 +68,7 @@ void main() async {
 
   Wakelock.enable();
   bool wakelockEnabled = await Wakelock.enabled;
-  if(wakelockEnabled){
+  if (wakelockEnabled) {
     // The following statement disables the wakelock.
     Wakelock.toggle(enable: false);
   }
@@ -81,8 +81,8 @@ void main() async {
       '/': (context) => Welcome(),
       '/check_permissions': (context) => CheckPermissions(),
       '/profiles': (context) => Profiles(),
-      '/DataCSVView' : (context) => DataCSVView(),
-      '/send_email' : (context) => SendEmail(),
+      '/DataCSVView': (context) => DataCSVView(),
+      '/send_email': (context) => SendEmail(),
       '/scan_ble_list': (context) => ScanListBle(),
       '/qr_code_scan': (context) => QrCodeScan(),
       '/settings': (context) => Settings(),

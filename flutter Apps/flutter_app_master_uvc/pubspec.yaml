@@ -32,6 +32,7 @@ dependencies:
   package_info: ^0.4.3
   pinput: ^0.2.6
   location_permissions: ^3.0.0+1
+  introduction_screen: ^1.0.9
   qrcode_flutter: ^1.0.8
 
   # The following adds the Cupertino Icons font to your application.

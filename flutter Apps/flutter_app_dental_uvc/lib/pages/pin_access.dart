@@ -3,7 +3,6 @@ import 'dart:io' as io;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutterappdentaluvc/services/AutoUVCService.dart';
 import 'package:flutterappdentaluvc/services/NFCManagerClass.dart';
@@ -15,9 +14,7 @@ import 'package:pinput/pin_put/pin_put.dart';
 
 class AccessPin extends StatefulWidget {
   @override
-  _AccessPinState createState() {
-    return _AccessPinState();
-  }
+  _AccessPinState createState() => _AccessPinState();
 }
 
 class AlwaysDisabledFocusNode extends FocusNode {
@@ -93,10 +90,10 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
 
     checkAutoFileExists();
 
-    WidgetsBinding.instance.addObserver(LifecycleEventHandler(
+/*    WidgetsBinding.instance.addObserver(LifecycleEventHandler(
         resumeCallBack: () async => setState(() {
               Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
-            })));
+            })));*/
 
     myUvcToast = ToastyMessage(toastContext: context);
     //checks bluetooth current state
@@ -289,7 +286,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
           });
         },
       ),
-      onWillPop: () => exitApp(context),
+      onWillPop: () => exitMessage(context),
     );
   }
 
@@ -326,51 +323,40 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   Future<void> exitMessage(BuildContext context) async {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: heightScreen * 0.005),
-              Text(
-                'Voulez-vous quittez l\'application ? Les désinfections programmées ne seront pas effectuées.',
-                style: TextStyle(fontSize: (widthScreen * 0.02)),
+    return showDialog<bool>(
+        context: context,
+        builder: (c) => AlertDialog(
+              content: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(height: heightScreen * 0.005),
+                  Text(
+                    'Voulez-vous quittez l\'application ? Les désinfections programmées ne seront pas effectuées.',
+                    style: TextStyle(fontSize: (widthScreen * 0.02)),
+                  ),
+                  SizedBox(height: heightScreen * 0.005),
+                ],
               ),
-              SizedBox(height: heightScreen * 0.005),
-            ],
-          ),
-          actions: [
-            FlatButton(
-              child: Text(
-                'Oui',
-                style: TextStyle(fontSize: (widthScreen * 0.02)),
-              ),
-              onPressed: () {
-                Navigator.pop(context, false);
-                Navigator.pop(context);
-              },
-            ),
-            FlatButton(
-              child: Text(
-                'Non',
-                style: TextStyle(fontSize: (widthScreen * 0.02)),
-              ),
-              onPressed: () {
-                Navigator.pop(context, false);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<bool> exitApp(BuildContext context) async {
-    exitMessage(context);
-    return true;
+              actions: [
+                FlatButton(
+                  child: Text(
+                    'Oui',
+                    style: TextStyle(fontSize: (widthScreen * 0.02)),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(c, true);
+                  },
+                ),
+                FlatButton(
+                  child: Text(
+                    'Non',
+                    style: TextStyle(fontSize: (widthScreen * 0.02)),
+                  ),
+                  onPressed: () => Navigator.pop(c, false),
+                ),
+              ],
+            ));
   }
 
   Future<String> _readPINFile() async {

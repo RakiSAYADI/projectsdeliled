@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:package_info/package_info.dart';
+import 'package:wakelock/wakelock.dart';
 
 class Welcome extends StatefulWidget {
   @override
@@ -14,6 +15,16 @@ class Welcome extends StatefulWidget {
 class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   AnimationController controller;
 
+  void wakeLock() async {
+    await Wakelock.enable();
+    bool wakelockEnabled = await Wakelock.enabled;
+    if (wakelockEnabled) {
+      // The following statement disables the wakelock.
+      Wakelock.toggle(enable: true);
+    }
+    print('screen lock is disabled');
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -22,6 +33,8 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
+    wakeLock();
 
     controller = AnimationController(
       vsync: this,
@@ -45,7 +58,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     }
 
     Future.delayed(Duration(seconds: 5), () async {
-      Navigator.pushReplacementNamed(context, '/pin_access');
+      Navigator.pushReplacementNamed(context, '/check_permissions');
     });
 
     super.initState();

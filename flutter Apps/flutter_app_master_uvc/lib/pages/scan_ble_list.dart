@@ -16,6 +16,8 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
 
   ToastyMessage myUvcToast;
 
+  final String robotUVCName = 'DEEPLIGHT';
+
   ///Initialisation and listening to device state
 
   BluetoothDevice device;
@@ -66,17 +68,19 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
       // do something with scan results
       for (ScanResult r in results) {
         print('${r.device.name} found! mac: ${r.device.id.toString()}');
-        if (scanIdentifiers.isEmpty) {
-          scanIdentifiers.add(r.device.id.toString());
-          setState(() {
-            devices.add(Device(device: r.device));
-          });
-        } else {
-          if (!scanIdentifiers.contains(r.device.id.toString())) {
+        if(r.device.name.contains(robotUVCName)){
+          if (scanIdentifiers.isEmpty) {
             scanIdentifiers.add(r.device.id.toString());
             setState(() {
               devices.add(Device(device: r.device));
             });
+          } else {
+            if (!scanIdentifiers.contains(r.device.id.toString())) {
+              scanIdentifiers.add(r.device.id.toString());
+              setState(() {
+                devices.add(Device(device: r.device));
+              });
+            }
           }
         }
       }
@@ -158,31 +162,31 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
         child: Column(
             children: devices
                 .map((device) => DeviceCard(
-                    device: device,
-                    connect: () async {
-                      setState(() {
-                        myDevice = Device(device: device.device);
-                      });
-                      animationRefreshIcon.repeat();
-                      await Future.delayed(const Duration(milliseconds: 400));
-                      myUvcToast.setAnimationIcon(animationRefreshIcon);
-                      myUvcToast.setToastDuration(60);
-                      myUvcToast.setToastMessage('Connexion en cours');
-                      myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
-                      // stop scanning and start connecting
-                      await myDevice.connect(false);
-                      Future.delayed(const Duration(seconds: 2), () async {
-                        // Stop uvc treatment if it's on
-                        String message = 'STOP : ON';
-                        await myDevice.writeCharacteristic(0, 0, message);
-                        // Read data from robot
-                        await myDevice.readCharacteristic(0, 0);
-                        // clear the remaining toast message
-                        myUvcToast.clearAllToast();
-                        flutterBlue.stopScan();
-                        startScan(context);
-                      });
-                    }))
+                device: device,
+                connect: () async {
+                  setState(() {
+                    myDevice = Device(device: device.device);
+                  });
+                  animationRefreshIcon.repeat();
+                  await Future.delayed(const Duration(milliseconds: 400));
+                  myUvcToast.setAnimationIcon(animationRefreshIcon);
+                  myUvcToast.setToastDuration(60);
+                  myUvcToast.setToastMessage('Connexion en cours');
+                  myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
+                  // stop scanning and start connecting
+                  await myDevice.connect(false);
+                  Future.delayed(const Duration(seconds: 2), () async {
+                    // Stop uvc treatment if it's on
+                    String message = 'STOP : ON';
+                    await myDevice.writeCharacteristic(0, 0, message);
+                    // Read data from robot
+                    await myDevice.readCharacteristic(0, 0);
+                    // clear the remaining toast message
+                    myUvcToast.clearAllToast();
+                    flutterBlue.stopScan();
+                    startScan(context);
+                  });
+                }))
                 .toList()),
       ),
     );
