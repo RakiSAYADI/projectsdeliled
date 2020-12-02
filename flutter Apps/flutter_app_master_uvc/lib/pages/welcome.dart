@@ -95,7 +95,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
               ),
               SizedBox(height: screenHeight * 0.1),
               SpinKitCircle(
-                color: Colors.white,
+                color: Color(0xFF554c9a),
                 size: screenHeight * 0.1,
               ),
               SizedBox(height: screenHeight * 0.1),

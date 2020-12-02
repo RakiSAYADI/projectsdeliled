@@ -137,10 +137,10 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
 
     return WillPopScope(
       child: Scaffold(
-        backgroundColor: Colors.blue[400],
         appBar: AppBar(
           title: const Text('Permissions'),
           centerTitle: true,
+          backgroundColor: Color(0xFF554c9a),
         ),
         body: Container(
           decoration: BoxDecoration(color: Colors.grey[200]),
@@ -240,7 +240,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                     ),
                     SizedBox(height: screenHeight * 0.04),
                     FlatButton(
-                      color: Colors.blue[400],
+                      color: Color(0xFF554c9a),
                       child: Text(
                         'COMPRIS',
                         style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),

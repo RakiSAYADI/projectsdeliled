@@ -210,6 +210,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Color(0xFF554c9a),
           title: const Text('Scanner le QR code'),
           centerTitle: true,
         ),

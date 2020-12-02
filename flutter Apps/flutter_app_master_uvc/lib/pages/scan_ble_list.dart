@@ -132,7 +132,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
       appBar: AppBar(
         title: Text('Liste des UVC-LIGHT :'),
         centerTitle: true,
-        backgroundColor: Colors.blue[400],
+        backgroundColor: Color(0xFF554c9a),
       ),
       floatingActionButton: StreamBuilder<bool>(
         stream: flutterBlue.isScanning,
