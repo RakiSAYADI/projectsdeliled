@@ -65,8 +65,10 @@ class _HomeState extends State<Home> {
               variableUVCMode = data['Version'];
               if (data['Security'] == 0) {
                 securityAccess = false;
+                qrCodeScanMessage = 'QrCode de sécurité : activé';
               } else {
                 securityAccess = true;
+                qrCodeScanMessage = 'QrCode de sécurité : désactivé';
               }
 
               String timeDataList = data['UVCTimeData'].toString();
@@ -96,6 +98,7 @@ class _HomeState extends State<Home> {
             break;
           default:
             print('it\'s another version !');
+            deviceNotCompatible();
             break;
         }
       } else {
@@ -144,7 +147,7 @@ class _HomeState extends State<Home> {
                           padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5),
                           child: FlatButton(
                             onPressed: () async {
-                              changeFunctionMode(context, variableUVCMode);
+                              changeFunctionMode(context);
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(1.0),
@@ -181,7 +184,7 @@ class _HomeState extends State<Home> {
                           padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5),
                           child: FlatButton(
                             onPressed: () async {
-                              changeFunctionMode(context, variableUVCMode);
+                              securityAccessPage(context);
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(1.0),
@@ -306,10 +309,9 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Future<void> changeFunctionMode(BuildContext context, int mode) {
+  Future<void> changeFunctionMode(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    String modeMessageCommand = '{\"SetVersion\" :$mode}';
 
     return showDialog<void>(
       context: context,
@@ -327,9 +329,8 @@ class _HomeState extends State<Home> {
                   borderRadius: BorderRadius.circular(18.0),
                 ),
                 onPressed: () async {
-                  mode = 1;
-                  variableUVCMode = mode;
-                  modeMessageCommand = '{\"SetVersion\" :$mode}';
+                  variableUVCMode = 1;
+                  String modeMessageCommand = '{\"SetVersion\" :$variableUVCMode}';
                   if (myDevice.getConnectionState()) {
                     myUvcToast.setToastDuration(2);
                     myUvcToast.setToastMessage('Confuguration sauvegardée !');
@@ -341,14 +342,7 @@ class _HomeState extends State<Home> {
                     }
                     Navigator.pop(c, false);
                     setState(() {
-                      switch (variableUVCMode) {
-                        case 0:
-                          typeOfDisinfectionMessage = 'Type de pilotage manuel';
-                          break;
-                        case 1:
-                          typeOfDisinfectionMessage = 'Type de pilotage automatique';
-                          break;
-                      }
+                      typeOfDisinfectionMessage = 'Type de pilotage automatique';
                     });
                   } else {
                     myUvcToast.setToastDuration(5);
@@ -375,9 +369,8 @@ class _HomeState extends State<Home> {
                   borderRadius: BorderRadius.circular(18.0),
                 ),
                 onPressed: () async {
-                  mode = 0;
-                  variableUVCMode = mode;
-                  modeMessageCommand = '{\"SetVersion\" :$mode}';
+                  variableUVCMode = 0;
+                  String modeMessageCommand = '{\"SetVersion\" :$variableUVCMode}';
                   if (myDevice.getConnectionState()) {
                     myUvcToast.setToastDuration(2);
                     myUvcToast.setToastMessage('Confuguration sauvegardée !');
@@ -389,14 +382,7 @@ class _HomeState extends State<Home> {
                     }
                     Navigator.pop(c, false);
                     setState(() {
-                      switch (variableUVCMode) {
-                        case 0:
-                          typeOfDisinfectionMessage = 'Type de pilotage manuel';
-                          break;
-                        case 1:
-                          typeOfDisinfectionMessage = 'Type de pilotage automatique';
-                          break;
-                      }
+                      typeOfDisinfectionMessage = 'Type de pilotage manuel';
                     });
                   } else {
                     myUvcToast.setToastDuration(5);
@@ -413,6 +399,107 @@ class _HomeState extends State<Home> {
                 ),
                 label: Text(
                   'Mode manuel',
+                  style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.045),
+                ),
+              ),
+              SizedBox(width: screenWidth * 0.1),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> securityAccessPage(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    return showDialog<void>(
+      context: context,
+      builder: (c) => AlertDialog(
+        title: Text('Scan QrCode Securité:'),
+        content: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(width: screenWidth * 0.1),
+              FlatButton.icon(
+                color: Colors.grey[200],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                ),
+                onPressed: () async {
+                  String modeMessageCommand = '{\"SetUVCLIFESecurity\" :0}';
+                  securityAccess = false;
+                  if (myDevice.getConnectionState()) {
+                    myUvcToast.setToastDuration(2);
+                    myUvcToast.setToastMessage('Confuguration sauvegardée !');
+                    myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+                    if (Platform.isIOS) {
+                      await myDevice.writeCharacteristic(0, 0, modeMessageCommand);
+                    } else {
+                      await myDevice.writeCharacteristic(2, 0, modeMessageCommand);
+                    }
+                    Navigator.pop(c, false);
+                    setState(() {
+                      qrCodeScanMessage = 'QrCode de sécurité : activé';
+                    });
+                  } else {
+                    myUvcToast.setToastDuration(5);
+                    myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
+                    myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+                    myDevice.disconnect();
+                    Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
+                  }
+                },
+                icon: Icon(
+                  Icons.computer,
+                  color: Colors.black,
+                  size: screenHeight * 0.035,
+                ),
+                label: Text(
+                  'Activée',
+                  style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.045),
+                ),
+              ),
+              SizedBox(width: screenWidth * 0.1),
+              FlatButton.icon(
+                color: Colors.grey[200],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                ),
+                onPressed: () async {
+                  String modeMessageCommand = '{\"SetUVCLIFESecurity\" :1}';
+                  securityAccess = true;
+                  if (myDevice.getConnectionState()) {
+                    myUvcToast.setToastDuration(2);
+                    myUvcToast.setToastMessage('Confuguration sauvegardée !');
+                    myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+                    if (Platform.isIOS) {
+                      await myDevice.writeCharacteristic(0, 0, modeMessageCommand);
+                    } else {
+                      await myDevice.writeCharacteristic(2, 0, modeMessageCommand);
+                    }
+                    Navigator.pop(c, false);
+                    setState(() {
+                      qrCodeScanMessage = 'QrCode de sécurité : désactivé';
+                    });
+                  } else {
+                    myUvcToast.setToastDuration(5);
+                    myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
+                    myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+                    myDevice.disconnect();
+                    Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
+                  }
+                },
+                icon: Icon(
+                  Icons.handyman,
+                  color: Colors.black,
+                  size: screenHeight * 0.035,
+                ),
+                label: Text(
+                  'Désctivée',
                   style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.045),
                 ),
               ),

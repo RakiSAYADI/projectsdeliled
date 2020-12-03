@@ -190,9 +190,6 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
             _controller.pause();
             qrCodeScanAccess = false;
             Future.delayed(const Duration(seconds: 2), () async {
-              // Stop uvc treatment if it's on
-              String message = 'STOP : ON';
-              await myDevice.writeCharacteristic(0, 0, message);
               // Read data from robot
               await myDevice.readCharacteristic(0, 0);
               // clear the remaining toast message
@@ -349,9 +346,6 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                 // stop scanning and start connecting
                 await myDevice.connect(false);
                 Future.delayed(const Duration(seconds: 2), () async {
-                  // Stop uvc treatment if it's on
-                  String message = 'STOP : ON';
-                  await myDevice.writeCharacteristic(2, 0, message);
                   // Read data from robot
                   await myDevice.readCharacteristic(2, 0);
                   myUvcToast.clearAllToast();
