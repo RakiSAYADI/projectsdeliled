@@ -12,18 +12,14 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   ToastyMessage myUvcToast;
-
   Map homeClassData = {};
-
   Device myDevice;
-
-  String dataRobotUVC = '';
-
   bool firstDisplayMainWidget = true;
 
+  String dataRobotUVC = '';
   String durationUVC = '122 heures';
-
   String numberOfUVC = '1 fois';
+  String typeOfDisinfectionMessage = '';
 
   int variableUVCMode = 0;
 
@@ -77,6 +73,14 @@ class _HomeState extends State<Home> {
               } else {
                 lifeTimeCycle = (lifeTimeCycle / 3600).round();
                 durationUVC = '$lifeTimeCycle heures';
+              }
+              switch (variableUVCMode) {
+                case 0:
+                  typeOfDisinfectionMessage = ' Type de pilotage manuel , Changer ?';
+                  break;
+                case 1:
+                  typeOfDisinfectionMessage = ' Type de pilotage automatique, Changer ?';
+                  break;
               }
             } catch (e) {
               deviceNotCompatible();
@@ -179,7 +183,7 @@ class _HomeState extends State<Home> {
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
                           child: Text(
-                            'Changer le type de pilotage automatique/manuel',
+                            typeOfDisinfectionMessage,
                             textAlign: TextAlign.center,
                             style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.06),
                           ),
@@ -239,84 +243,63 @@ class _HomeState extends State<Home> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     String modeMessageCommand = '{\"SetVersion\" :$mode}';
-    Color buttonColorManuel;
-    Color buttonColorAuto;
-    Color buttonColorOn = Colors.green;
-    Color buttonColorOff = Colors.red;
 
-    switch (mode) {
-      case 0:
-        buttonColorManuel = buttonColorOn;
-        buttonColorAuto = buttonColorOff;
-        break;
-      case 1:
-        buttonColorManuel = buttonColorOff;
-        buttonColorAuto = buttonColorOn;
-        break;
-    }
-
-    return showDialog<bool>(
+    return showDialog<void>(
       barrierDismissible: false,
       context: context,
       builder: (c) => AlertDialog(
         title: Text('Type de pilotage:'),
         content: Container(
-          child: Scaffold(
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(width: screenWidth * 0.1),
-                FlatButton.icon(
-                  color: Colors.grey[200],
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      mode = 1;
-                      print(mode);
-                      buttonColorManuel = buttonColorOff;
-                      buttonColorAuto = buttonColorOn;
-                    });
-                  },
-                  icon: Icon(
-                    Icons.computer,
-                    color: buttonColorAuto,
-                    size: screenHeight * 0.035,
-                  ),
-                  label: Text(
-                    'Mode automatique',
-                    style: TextStyle(color: buttonColorAuto, fontSize: screenWidth * 0.045),
-                  ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(width: screenWidth * 0.1),
+              FlatButton.icon(
+                color: Colors.grey[200],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
                 ),
-                SizedBox(width: screenWidth * 0.1),
-                FlatButton.icon(
-                  color: Colors.grey[200],
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      mode = 0;
-                      print(mode);
-                      buttonColorManuel = buttonColorOn;
-                      buttonColorAuto = buttonColorOff;
-                    });
-                  },
-                  icon: Icon(
-                    Icons.handyman,
-                    color: buttonColorManuel,
-                    size: screenHeight * 0.035,
-                  ),
-                  label: Text(
-                    'Mode manuel',
-                    style: TextStyle(color: buttonColorManuel, fontSize: screenWidth * 0.045),
-                  ),
+                onPressed: () {
+                  mode = 1;
+                  myUvcToast.setToastDuration(2);
+                  myUvcToast.setToastMessage('Mode automatique est sélectionnée !');
+                  myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+                },
+                icon: Icon(
+                  Icons.computer,
+                  color: Colors.black,
+                  size: screenHeight * 0.035,
                 ),
-                SizedBox(width: screenWidth * 0.1),
-              ],
-            ),
+                label: Text(
+                  'Mode automatique',
+                  style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.045),
+                ),
+              ),
+              SizedBox(width: screenWidth * 0.1),
+              FlatButton.icon(
+                color: Colors.grey[200],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                ),
+                onPressed: () {
+                  mode = 0;
+                  myUvcToast.setToastDuration(2);
+                  myUvcToast.setToastMessage('Mode manuel est sélectionnée !');
+                  myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+                },
+                icon: Icon(
+                  Icons.handyman,
+                  color: Colors.black,
+                  size: screenHeight * 0.035,
+                ),
+                label: Text(
+                  'Mode manuel',
+                  style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.045),
+                ),
+              ),
+              SizedBox(width: screenWidth * 0.1),
+            ],
           ),
         ),
         actions: [
@@ -326,12 +309,25 @@ class _HomeState extends State<Home> {
               variableUVCMode = mode;
               modeMessageCommand = '{\"SetVersion\" :$mode}';
               if (myDevice.getConnectionState()) {
+                myUvcToast.setToastDuration(2);
+                myUvcToast.setToastMessage('Confuguration sauvegardée !');
+                myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
                 if (Platform.isIOS) {
                   await myDevice.writeCharacteristic(0, 0, modeMessageCommand);
                 } else {
                   await myDevice.writeCharacteristic(2, 0, modeMessageCommand);
                 }
-                //startScan(context);
+                Navigator.pop(c, false);
+                setState(() {
+                  switch (variableUVCMode) {
+                    case 0:
+                      typeOfDisinfectionMessage = ' Type de pilotage manuel , Changer ?';
+                      break;
+                    case 1:
+                      typeOfDisinfectionMessage = ' Type de pilotage automatique, Changer ?';
+                      break;
+                  }
+                });
               } else {
                 myUvcToast.setToastDuration(5);
                 myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
