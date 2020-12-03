@@ -324,39 +324,43 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
     return showDialog<bool>(
-        context: context,
-        builder: (c) => AlertDialog(
-              content: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(height: heightScreen * 0.005),
-                  Text(
-                    'Voulez-vous quittez l\'application ? Les désinfections programmées ne seront pas effectuées.',
-                    style: TextStyle(fontSize: (widthScreen * 0.02)),
-                  ),
-                  SizedBox(height: heightScreen * 0.005),
-                ],
-              ),
-              actions: [
-                FlatButton(
-                  child: Text(
-                    'Oui',
-                    style: TextStyle(fontSize: (widthScreen * 0.02)),
-                  ),
-                  onPressed: () {
-                    Navigator.pop(c, true);
-                  },
-                ),
-                FlatButton(
-                  child: Text(
-                    'Non',
-                    style: TextStyle(fontSize: (widthScreen * 0.02)),
-                  ),
-                  onPressed: () => Navigator.pop(c, false),
-                ),
-              ],
-            ));
+      context: context,
+      builder: (c) => AlertDialog(
+        content: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(height: heightScreen * 0.005),
+            Text(
+              'Voulez-vous quittez l\'application ? Les désinfections programmées ne seront pas effectuées.',
+              style: TextStyle(fontSize: (widthScreen * 0.02)),
+            ),
+            SizedBox(height: heightScreen * 0.005),
+          ],
+        ),
+        actions: [
+          FlatButton(
+            child: Text(
+              'Oui',
+              style: TextStyle(fontSize: (widthScreen * 0.02)),
+            ),
+            onPressed: () {
+              if (myDevice != null) {
+                myDevice.disconnect();
+              }
+              Navigator.pop(c, true);
+            },
+          ),
+          FlatButton(
+            child: Text(
+              'Non',
+              style: TextStyle(fontSize: (widthScreen * 0.02)),
+            ),
+            onPressed: () => Navigator.pop(c, false),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<String> _readPINFile() async {

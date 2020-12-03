@@ -20,8 +20,10 @@ class _HomeState extends State<Home> {
   String durationUVC = '122 heures';
   String numberOfUVC = '1 fois';
   String typeOfDisinfectionMessage = '';
+  String qrCodeScanMessage = 'QrCode de sécurité : activé';
 
   int variableUVCMode = 0;
+  bool securityAccess = false;
 
   @override
   void initState() {
@@ -56,11 +58,17 @@ class _HomeState extends State<Home> {
       Map<String, dynamic> data = jsonDecode(dataRobotUVC);
       print(data.toString());
       List<int> lifeCycleUVCList = [];
-      if ((data['FirmwareVersion'] != null) || (data['Version'] != null)) {
+      if ((data['FirmwareVersion'] != null) || (data['Version'] != null) || (data['Security'] != null)) {
         switch (data['FirmwareVersion']) {
-          case '2.0.0':
+          case '3.0.0':
             try {
               variableUVCMode = data['Version'];
+              if (data['Security'] == 0) {
+                securityAccess = false;
+              } else {
+                securityAccess = true;
+              }
+
               String timeDataList = data['UVCTimeData'].toString();
               lifeCycleUVCList = _stringListAsciiToListInt(timeDataList.codeUnits);
               int lifeTimeCycle = lifeCycleUVCList[1];
@@ -76,10 +84,10 @@ class _HomeState extends State<Home> {
               }
               switch (variableUVCMode) {
                 case 0:
-                  typeOfDisinfectionMessage = ' Type de pilotage manuel , Changer ?';
+                  typeOfDisinfectionMessage = 'Type de pilotage : manuel';
                   break;
                 case 1:
-                  typeOfDisinfectionMessage = ' Type de pilotage automatique, Changer ?';
+                  typeOfDisinfectionMessage = 'Type de pilotage : automatique';
                   break;
               }
             } catch (e) {
@@ -103,7 +111,7 @@ class _HomeState extends State<Home> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Accueil'),
+          title: const Text('Réglages dispositif'),
           centerTitle: true,
           backgroundColor: Color(0xFF554c9a),
         ),
@@ -118,6 +126,88 @@ class _HomeState extends State<Home> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(height: screenHeight * 0.02),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Text(
+                            typeOfDisinfectionMessage,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.05,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5),
+                          child: FlatButton(
+                            onPressed: () async {
+                              changeFunctionMode(context, variableUVCMode);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(1.0),
+                              child: Text(
+                                'Changer',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                              ),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            ),
+                            color: Color(0xFF554c9a),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: screenHeight * 0.04),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Text(
+                            qrCodeScanMessage,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.05,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5),
+                          child: FlatButton(
+                            onPressed: () async {
+                              changeFunctionMode(context, variableUVCMode);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(1.0),
+                              child: Text(
+                                'Changer',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                              ),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            ),
+                            color: Color(0xFF554c9a),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: screenHeight * 0.04),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Divider(
+                        thickness: 5.0,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.04),
                     Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: Text(
@@ -167,35 +257,6 @@ class _HomeState extends State<Home> {
                     ),
                     SizedBox(height: screenHeight * 0.04),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Divider(
-                        thickness: 5.0,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.04),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 30),
-                      child: FlatButton(
-                        onPressed: () async {
-                          changeFunctionMode(context, variableUVCMode);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Text(
-                            typeOfDisinfectionMessage,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.06),
-                          ),
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        ),
-                        color: Color(0xFF554c9a),
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.04),
-                    Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 30),
                       child: FlatButton(
                         onPressed: () async {
@@ -205,6 +266,13 @@ class _HomeState extends State<Home> {
                             } else {
                               await myDevice.writeCharacteristic(2, 0, '(SetUVCLIFETIME : 0)');
                             }
+                            myUvcToast.setToastDuration(2);
+                            myUvcToast.setToastMessage('Confuguration sauvegardée !');
+                            myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+                            setState(() {
+                              durationUVC = '0 secondes';
+                              numberOfUVC = '0 fois';
+                            });
                           } else {
                             myUvcToast.setToastDuration(5);
                             myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
@@ -227,7 +295,6 @@ class _HomeState extends State<Home> {
                         color: Color(0xFF554c9a),
                       ),
                     ),
-                    SizedBox(height: screenHeight * 0.02),
                   ],
                 ),
               ),
@@ -245,7 +312,6 @@ class _HomeState extends State<Home> {
     String modeMessageCommand = '{\"SetVersion\" :$mode}';
 
     return showDialog<void>(
-      barrierDismissible: false,
       context: context,
       builder: (c) => AlertDialog(
         title: Text('Type de pilotage:'),
@@ -260,11 +326,37 @@ class _HomeState extends State<Home> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18.0),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   mode = 1;
-                  myUvcToast.setToastDuration(2);
-                  myUvcToast.setToastMessage('Mode automatique est sélectionnée !');
-                  myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+                  variableUVCMode = mode;
+                  modeMessageCommand = '{\"SetVersion\" :$mode}';
+                  if (myDevice.getConnectionState()) {
+                    myUvcToast.setToastDuration(2);
+                    myUvcToast.setToastMessage('Confuguration sauvegardée !');
+                    myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+                    if (Platform.isIOS) {
+                      await myDevice.writeCharacteristic(0, 0, modeMessageCommand);
+                    } else {
+                      await myDevice.writeCharacteristic(2, 0, modeMessageCommand);
+                    }
+                    Navigator.pop(c, false);
+                    setState(() {
+                      switch (variableUVCMode) {
+                        case 0:
+                          typeOfDisinfectionMessage = 'Type de pilotage manuel';
+                          break;
+                        case 1:
+                          typeOfDisinfectionMessage = 'Type de pilotage automatique';
+                          break;
+                      }
+                    });
+                  } else {
+                    myUvcToast.setToastDuration(5);
+                    myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
+                    myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+                    myDevice.disconnect();
+                    Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
+                  }
                 },
                 icon: Icon(
                   Icons.computer,
@@ -282,11 +374,37 @@ class _HomeState extends State<Home> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18.0),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   mode = 0;
-                  myUvcToast.setToastDuration(2);
-                  myUvcToast.setToastMessage('Mode manuel est sélectionnée !');
-                  myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+                  variableUVCMode = mode;
+                  modeMessageCommand = '{\"SetVersion\" :$mode}';
+                  if (myDevice.getConnectionState()) {
+                    myUvcToast.setToastDuration(2);
+                    myUvcToast.setToastMessage('Confuguration sauvegardée !');
+                    myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+                    if (Platform.isIOS) {
+                      await myDevice.writeCharacteristic(0, 0, modeMessageCommand);
+                    } else {
+                      await myDevice.writeCharacteristic(2, 0, modeMessageCommand);
+                    }
+                    Navigator.pop(c, false);
+                    setState(() {
+                      switch (variableUVCMode) {
+                        case 0:
+                          typeOfDisinfectionMessage = 'Type de pilotage manuel';
+                          break;
+                        case 1:
+                          typeOfDisinfectionMessage = 'Type de pilotage automatique';
+                          break;
+                      }
+                    });
+                  } else {
+                    myUvcToast.setToastDuration(5);
+                    myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
+                    myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+                    myDevice.disconnect();
+                    Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
+                  }
                 },
                 icon: Icon(
                   Icons.handyman,
@@ -302,46 +420,6 @@ class _HomeState extends State<Home> {
             ],
           ),
         ),
-        actions: [
-          FlatButton(
-            child: Text('Valider'),
-            onPressed: () async {
-              variableUVCMode = mode;
-              modeMessageCommand = '{\"SetVersion\" :$mode}';
-              if (myDevice.getConnectionState()) {
-                myUvcToast.setToastDuration(2);
-                myUvcToast.setToastMessage('Confuguration sauvegardée !');
-                myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
-                if (Platform.isIOS) {
-                  await myDevice.writeCharacteristic(0, 0, modeMessageCommand);
-                } else {
-                  await myDevice.writeCharacteristic(2, 0, modeMessageCommand);
-                }
-                Navigator.pop(c, false);
-                setState(() {
-                  switch (variableUVCMode) {
-                    case 0:
-                      typeOfDisinfectionMessage = ' Type de pilotage manuel , Changer ?';
-                      break;
-                    case 1:
-                      typeOfDisinfectionMessage = ' Type de pilotage automatique, Changer ?';
-                      break;
-                  }
-                });
-              } else {
-                myUvcToast.setToastDuration(5);
-                myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
-                myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-                myDevice.disconnect();
-                Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
-              }
-            },
-          ),
-          FlatButton(
-            child: Text('Annuler'),
-            onPressed: () => Navigator.pop(c, false),
-          ),
-        ],
       ),
     );
   }
@@ -351,7 +429,7 @@ class _HomeState extends State<Home> {
       context: context,
       builder: (c) => AlertDialog(
         title: Text('Attention'),
-        content: Text('Voulez-vous vraiment quitter la page profil ?'),
+        content: Text('Voulez-vous vraiment quitter la page Réglages dispositif ?'),
         actions: [
           FlatButton(
             child: Text('Oui'),
