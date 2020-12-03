@@ -137,164 +137,174 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     if (!qrCodeSettings) {
       if (!qrCodeConnectionOrSecurity) {
         if (Platform.isAndroid) {
+          bool noLongerScan = false;
           scanDevices = qrCodeClassData['scanDevices'];
-          _controller.resume();
           _controller.onCapture((data) {
             print('onCapture----$data');
             if (data.isNotEmpty && !qrCodeScanAccess) {
-              print('is checking qrcode android');
-              for (int i = 0; i < scanDevices.length; i++) {
-                if (data.contains(scanDevices.elementAt(i).id.toString())) {
-                  deviceExistOrNot = true;
-                  devicesPosition = i;
-                  break;
-                } else {
-                  deviceExistOrNot = false;
+              if (!noLongerScan) {
+                print('is checking qrcode android');
+                for (int i = 0; i < scanDevices.length; i++) {
+                  if (data.contains(scanDevices.elementAt(i).id.toString())) {
+                    deviceExistOrNot = true;
+                    devicesPosition = i;
+                    _controller.pause();
+                    noLongerScan = true;
+                    qrCodeScanAccess = true;
+                    break;
+                  } else {
+                    deviceExistOrNot = false;
+                  }
                 }
-              }
-              setState(() {
+                setState(() {
+                  if (deviceExistOrNot) {
+                    qrCodeMessage = 'Accès valide';
+                    colorMessage = Colors.green;
+                    qrCodeScanAccess = true;
+                  } else {
+                    qrCodeMessage = 'Accès non valide';
+                    colorMessage = Colors.red;
+                    qrCodeScanAccess = false;
+                  }
+                });
                 if (deviceExistOrNot) {
-                  qrCodeMessage = 'Accès valide';
-                  colorMessage = Colors.green;
-                  qrCodeScanAccess = true;
-                } else {
-                  qrCodeMessage = 'Accès non valide';
-                  colorMessage = Colors.red;
-                  qrCodeScanAccess = false;
+                  _ackAlert(data, context);
                 }
-              });
-              if (deviceExistOrNot) {
-                _controller.pause();
-                _ackAlert(data, context);
               }
             }
           });
         }
         if (Platform.isIOS) {
           myDevice = qrCodeClassData['myDevice'];
-          _controller.resume();
+          bool noLongerScan = false;
           _controller.onCapture((data) {
             print('onCapture----$data');
             if (data.isNotEmpty && !qrCodeScanAccess) {
               print('is checking qrcode ios');
-              if (data.contains(myDevice.device.name)) {
-                deviceExistOrNot = true;
-              } else {
-                deviceExistOrNot = false;
-              }
-              setState(() {
-                if (deviceExistOrNot) {
-                  qrCodeMessage = 'Accès valide';
-                  colorMessage = Colors.green;
+              if (!noLongerScan) {
+                if (data.contains(myDevice.device.name)) {
+                  deviceExistOrNot = true;
+                  _controller.pause();
+                  noLongerScan = true;
                   qrCodeScanAccess = true;
                 } else {
-                  qrCodeMessage = 'Accès non valide';
-                  colorMessage = Colors.red;
-                  qrCodeScanAccess = false;
+                  deviceExistOrNot = false;
                 }
-              });
-              if (deviceExistOrNot) {
-                _controller.pause();
-                qrCodeScanAccess = false;
-                Future.delayed(const Duration(seconds: 2), () async {
-                  // Stop uvc treatment if it's on
-                  String message = 'STOP : ON';
-                  await myDevice.writeCharacteristic(0, 0, message);
-                  // Read data from robot
-                  await myDevice.readCharacteristic(0, 0);
-                  Map<String, dynamic> dataRead;
-                  dataRead = jsonDecode(myDevice.getReadCharMessage());
-                  // clear the remaining toast message
-                  myUvcToast.clearAllToast();
-                  try {
-                    switch (int.parse(dataRead['Version'].toString())) {
-                      case 0:
-                        break;
-                      case 1:
-                        break;
-                      default:
-                        break;
-                    }
-                    int.parse(dataRead['Version'].toString());
-                    print('Version detected');
-                    await scanQrCodeDATA();
-                  } catch (e) {
-                    print('No version detected');
-                    Navigator.pushNamed(context, '/profiles', arguments: {
-                      'myDevice': myDevice,
-                      'dataRead': myDevice.getReadCharMessage(),
-                    });
+                setState(() {
+                  if (deviceExistOrNot) {
+                    qrCodeMessage = 'Accès valide';
+                    colorMessage = Colors.green;
+                    qrCodeScanAccess = true;
+                  } else {
+                    qrCodeMessage = 'Accès non valide';
+                    colorMessage = Colors.red;
+                    qrCodeScanAccess = false;
                   }
                 });
-/*                Navigator.pushNamed(context, '/profiles', arguments: {
-                  'myDevice': myDevice,
-                  'dataRead': myDevice.getReadCharMessage(),
-                });*/
+                if (deviceExistOrNot) {
+                  qrCodeScanAccess = false;
+                  Future.delayed(const Duration(seconds: 2), () async {
+                    // Stop uvc treatment if it's on
+                    String message = 'STOP : ON';
+                    await myDevice.writeCharacteristic(0, 0, message);
+                    // Read data from robot
+                    await myDevice.readCharacteristic(0, 0);
+                    Map<String, dynamic> dataRead;
+                    dataRead = jsonDecode(myDevice.getReadCharMessage());
+                    // clear the remaining toast message
+                    myUvcToast.clearAllToast();
+                    try {
+                      switch (int.parse(dataRead['Version'].toString())) {
+                        case 0:
+                          break;
+                        case 1:
+                          break;
+                        default:
+                          break;
+                      }
+                      int.parse(dataRead['Version'].toString());
+                      print('Version detected');
+                      await scanQrCodeDATA();
+                    } catch (e) {
+                      print('No version detected');
+                      Navigator.pushNamed(context, '/profiles', arguments: {
+                        'myDevice': myDevice,
+                        'dataRead': myDevice.getReadCharMessage(),
+                      });
+                    }
+                  });
+                }
               }
             }
           });
         }
       } else {
+        bool noLongerScan = false;
         myDevice = qrCodeClassData['myDevice'];
         myUvcLight = qrCodeClassData['myUvcLight'];
-        _controller.resume();
         _controller.onCapture((data) async {
           print('onCapture----$data');
           if (data.isNotEmpty) {
             print('is checking qrcode security');
-            if (data.contains(uvcSecurityWebPage) && !(qrCodeValidOrNot)) {
-              qrCodeValidOrNot = true;
-              _controller.pause();
-              if (myDevice.getConnectionState()) {
-                String message = 'UVCTreatement : ON';
-                if (Platform.isIOS) {
-                  await myDevice.writeCharacteristic(0, 0, message);
+            if (!noLongerScan) {
+              if (data.contains(uvcSecurityWebPage) && !(qrCodeValidOrNot)) {
+                qrCodeValidOrNot = true;
+                _controller.pause();
+                noLongerScan = true;
+                if (myDevice.getConnectionState()) {
+                  String message = 'UVCTreatement : ON';
+                  if (Platform.isIOS) {
+                    await myDevice.writeCharacteristic(0, 0, message);
+                  } else {
+                    await myDevice.writeCharacteristic(2, 0, message);
+                  }
+                  Navigator.pushNamed(context, '/uvc', arguments: {
+                    'uvclight': myUvcLight,
+                    'myDevice': myDevice,
+                  });
                 } else {
-                  await myDevice.writeCharacteristic(2, 0, message);
+                  myUvcToast.setToastDuration(5);
+                  myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
+                  myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+                  myDevice.disconnect();
+                  Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
                 }
-                Navigator.pushNamed(context, '/uvc', arguments: {
-                  'uvclight': myUvcLight,
-                  'myDevice': myDevice,
-                });
-              } else {
-                myUvcToast.setToastDuration(5);
-                myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
-                myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-                myDevice.disconnect();
-                Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
               }
             }
           }
         });
       }
     } else {
-      _controller.resume();
+      bool noLongerScan = false;
       _controller.onCapture((data) async {
         print('onCapture----$data');
         if (data.isNotEmpty) {
           print('is checking qrcode data');
-          try {
-            dataRead = jsonDecode(data);
-            String timeDataList = dataRead['TimeData'].toString();
-            myCompany = dataRead['Company'];
-            myName = dataRead['UserName'];
-            myRoom = dataRead['RoomName'];
-            /*'{"UVCDATA":{"Company":"deliled","UserName":"raki","RoomName":"cabine 1","TimeData":[0,0]}}'*/
-            extinctionTime = _stringListAsciiToListInt(timeDataList.codeUnits)[0];
-            activationTime = _stringListAsciiToListInt(timeDataList.codeUnits)[1];
-            if (!(qrCodeValidOrNot)) {
-              qrCodeMessage = 'Accès valide';
-              colorMessage = Colors.green;
-              qrCodeValidOrNot = true;
+          if (!noLongerScan) {
+            try {
+              dataRead = jsonDecode(data);
+              String timeDataList = dataRead['TimeData'].toString();
+              myCompany = dataRead['Company'];
+              myName = dataRead['UserName'];
+              myRoom = dataRead['RoomName'];
               _controller.pause();
-              alertSecurity(myCompany, myName, myRoom, extinctionTime, activationTime, context);
+              noLongerScan = true;
+              /*'{"UVCDATA":{"Company":"deliled","UserName":"raki","RoomName":"cabine 1","TimeData":[0,0]}}'*/
+              extinctionTime = _stringListAsciiToListInt(timeDataList.codeUnits)[0];
+              activationTime = _stringListAsciiToListInt(timeDataList.codeUnits)[1];
+              if (!(qrCodeValidOrNot)) {
+                qrCodeMessage = 'Accès valide';
+                colorMessage = Colors.green;
+                qrCodeValidOrNot = true;
+                alertSecurity(myCompany, myName, myRoom, extinctionTime, activationTime, context);
+              }
+            } catch (e) {
+              qrCodeValidOrNot = false;
+              setState(() {
+                qrCodeMessage = 'Accès non valide';
+                colorMessage = Colors.red;
+              });
             }
-          } catch (e) {
-            qrCodeValidOrNot = false;
-            setState(() {
-              qrCodeMessage = 'Accès non valide';
-              colorMessage = Colors.red;
-            });
           }
         }
       });
