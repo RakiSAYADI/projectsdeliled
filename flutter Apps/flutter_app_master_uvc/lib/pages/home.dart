@@ -20,10 +20,13 @@ class _HomeState extends State<Home> {
   String durationUVC = '122 heures';
   String numberOfUVC = '1 fois';
   String typeOfDisinfectionMessage = '';
-  String qrCodeScanMessage = 'QrCode de sécurité : activé';
+  String qrCodeScanMessage = '';
 
   int variableUVCMode = 0;
   bool securityAccess = false;
+
+  final Color hardPink = Color(0xFF554c9a);
+  final Color softPink = Color(0xFF784886);
 
   @override
   void initState() {
@@ -38,7 +41,7 @@ class _HomeState extends State<Home> {
   }
 
   void deviceNotCompatible() {
-    Future.delayed(const Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 200), () {
       myDevice.disconnect();
       Navigator.pushNamed(context, '/warning');
     });
@@ -65,10 +68,10 @@ class _HomeState extends State<Home> {
               variableUVCMode = data['Version'];
               if (data['Security'] == 0) {
                 securityAccess = false;
-                qrCodeScanMessage = 'QrCode de sécurité : activé';
+                qrCodeScanMessage = 'activé';
               } else {
                 securityAccess = true;
-                qrCodeScanMessage = 'QrCode de sécurité : désactivé';
+                qrCodeScanMessage = 'désactivé';
               }
 
               String timeDataList = data['UVCTimeData'].toString();
@@ -86,10 +89,10 @@ class _HomeState extends State<Home> {
               }
               switch (variableUVCMode) {
                 case 0:
-                  typeOfDisinfectionMessage = 'Type de pilotage : manuel';
+                  typeOfDisinfectionMessage = 'manuel';
                   break;
                 case 1:
-                  typeOfDisinfectionMessage = 'Type de pilotage : automatique';
+                  typeOfDisinfectionMessage = 'automatique';
                   break;
               }
             } catch (e) {
@@ -114,9 +117,9 @@ class _HomeState extends State<Home> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Réglages dispositif'),
+          title: const Text('Master UVC'),
           centerTitle: true,
-          backgroundColor: Color(0xFF554c9a),
+          backgroundColor: hardPink,
         ),
         body: Container(
           decoration: BoxDecoration(color: Colors.grey[200]),
@@ -128,137 +131,294 @@ class _HomeState extends State<Home> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(height: screenHeight * 0.02),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Text(
-                            typeOfDisinfectionMessage,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: screenWidth * 0.05,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5),
-                          child: FlatButton(
-                            onPressed: () async {
-                              changeFunctionMode(context);
-                            },
+                    Card(
+                      margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
+                      shape: RoundedRectangleBorder(side: new BorderSide(color: hardPink, width: 2.0), borderRadius: BorderRadius.circular(4.0)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            color: hardPink,
                             child: Padding(
-                              padding: const EdgeInsets.all(1.0),
+                              padding: const EdgeInsets.all(5.0),
                               child: Text(
-                                'Changer',
+                                'Paramétrages de l\'application',
                                 textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                                style: TextStyle(
+                                  fontSize: screenWidth * 0.05,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                            ),
-                            color: Color(0xFF554c9a),
                           ),
-                        ),
-                      ],
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(3.0),
+                                      child: Text(
+                                        'Type de pilotage :',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: screenWidth * 0.05,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(3.0),
+                                      child: Text(
+                                        typeOfDisinfectionMessage,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: screenWidth * 0.05,
+                                          color: Colors.black,
+                                          decoration: TextDecoration.underline,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(height: screenHeight * 0.01),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5),
+                                      child: IconButton(
+                                        onPressed: () async {
+                                          changeFunctionMode(context);
+                                        },
+                                        icon: Padding(
+                                          padding: const EdgeInsets.all(1.0),
+                                          child: Icon(
+                                            Icons.info_outline,
+                                            color: hardPink,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5),
+                                      child: FlatButton(
+                                        onPressed: () async {
+                                          changeFunctionMode(context);
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(1.0),
+                                          child: Text(
+                                            'Changer',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                                          ),
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(18.0),
+                                        ),
+                                        color: hardPink,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: screenHeight * 0.01),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 30),
+                            child: Divider(
+                              thickness: 2.0,
+                              color: hardPink,
+                            ),
+                          ),
+                          SizedBox(height: screenHeight * 0.01),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(3.0),
+                                      child: Text(
+                                        'QR code de sécurité :',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: screenWidth * 0.05,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(3.0),
+                                      child: Text(
+                                        qrCodeScanMessage,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: screenWidth * 0.05,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          decoration: TextDecoration.underline,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5),
+                                      child: IconButton(
+                                        onPressed: () async {
+                                          changeFunctionMode(context);
+                                        },
+                                        icon: Padding(
+                                          padding: const EdgeInsets.all(1.0),
+                                          child: Icon(
+                                            Icons.info_outline,
+                                            color: hardPink,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5),
+                                      child: FlatButton(
+                                        onPressed: () async {
+                                          securityAccessPage(context);
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(1.0),
+                                          child: Text(
+                                            'Changer',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                                          ),
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(18.0),
+                                        ),
+                                        color: hardPink,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                    SizedBox(height: screenHeight * 0.04),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Text(
-                            qrCodeScanMessage,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: screenWidth * 0.05,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5),
-                          child: FlatButton(
-                            onPressed: () async {
-                              securityAccessPage(context);
-                            },
+                    SizedBox(height: screenHeight * 0.01),
+                    Card(
+                      margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
+                      shape: RoundedRectangleBorder(side: new BorderSide(color: hardPink, width: 2.0), borderRadius: BorderRadius.circular(4.0)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            color: hardPink,
                             child: Padding(
-                              padding: const EdgeInsets.all(1.0),
+                              padding: const EdgeInsets.all(5.0),
                               child: Text(
-                                'Changer',
+                                'Maintenance des tubes UV-C',
                                 textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                                style: TextStyle(
+                                  fontSize: screenWidth * 0.05,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                            ),
-                            color: Color(0xFF554c9a),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: screenHeight * 0.04),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Divider(
-                        thickness: 5.0,
-                        color: Colors.grey[600],
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Container(
+                              color: hardPink,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Text(
+                                      'Durée d\'utilisation',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: screenWidth * 0.05,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: screenHeight * 0.02),
+                                  Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Text(
+                                      durationUVC,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: screenWidth * 0.05,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: screenHeight * 0.01),
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Container(
+                              color: hardPink,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Text(
+                                      'Nombre d\'allumages',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: screenWidth * 0.05,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: screenHeight * 0.02),
+                                  Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Text(
+                                      numberOfUVC,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: screenWidth * 0.05,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(height: screenHeight * 0.04),
-                    Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Text(
-                        'Fonctionnement des tubes UV-C:',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.05,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.02),
-                    Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Text(
-                        durationUVC,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.05,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.04),
-                    Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Text(
-                        'Nombre d\'allumages des tubes UV-C:',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.05,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.02),
-                    Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Text(
-                        numberOfUVC,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.05,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.04),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 30),
                       child: FlatButton(
@@ -287,7 +447,7 @@ class _HomeState extends State<Home> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            'Remettre à zéro la duré de vie des tubes UV-C',
+                            'Remise à zero',
                             textAlign: TextAlign.center,
                             style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.06),
                           ),
@@ -295,7 +455,7 @@ class _HomeState extends State<Home> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
                         ),
-                        color: Color(0xFF554c9a),
+                        color: hardPink,
                       ),
                     ),
                   ],
@@ -342,7 +502,7 @@ class _HomeState extends State<Home> {
                     }
                     Navigator.pop(c, false);
                     setState(() {
-                      typeOfDisinfectionMessage = 'Type de pilotage automatique';
+                      typeOfDisinfectionMessage = 'automatique';
                     });
                   } else {
                     myUvcToast.setToastDuration(5);
@@ -382,7 +542,7 @@ class _HomeState extends State<Home> {
                     }
                     Navigator.pop(c, false);
                     setState(() {
-                      typeOfDisinfectionMessage = 'Type de pilotage manuel';
+                      typeOfDisinfectionMessage = 'manuel';
                     });
                   } else {
                     myUvcToast.setToastDuration(5);
@@ -443,7 +603,7 @@ class _HomeState extends State<Home> {
                     }
                     Navigator.pop(c, false);
                     setState(() {
-                      qrCodeScanMessage = 'QrCode de sécurité : activé';
+                      qrCodeScanMessage = 'activé';
                     });
                   } else {
                     myUvcToast.setToastDuration(5);
@@ -483,7 +643,7 @@ class _HomeState extends State<Home> {
                     }
                     Navigator.pop(c, false);
                     setState(() {
-                      qrCodeScanMessage = 'QrCode de sécurité : désactivé';
+                      qrCodeScanMessage = 'désactivé';
                     });
                   } else {
                     myUvcToast.setToastDuration(5);

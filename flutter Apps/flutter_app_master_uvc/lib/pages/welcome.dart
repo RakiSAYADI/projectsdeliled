@@ -120,12 +120,12 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
                       String version = snapshot.data.version;
                       return Center(
                           child: Text(
-                            '$version',
-                            style: TextStyle(
-                              color: Colors.grey[300],
-                              fontSize: screenWidth * 0.04,
-                            ),
-                          ));
+                        '$version',
+                        style: TextStyle(
+                          color: Colors.grey[300],
+                          fontSize: screenWidth * 0.04,
+                        ),
+                      ));
                     } else {
                       return Center(
                         child: CircularProgressIndicator(),
