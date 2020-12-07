@@ -217,13 +217,8 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
           backgroundColor: Colors.blue[400],
         ),
       ),
-      onWillPop: () => exit(),
+      onWillPop: () => exitMessage(context),
     );
-  }
-
-  Future<bool> exit() async {
-    widgetIsInactive = true;
-    return true;
   }
 
   Widget sleepWidget(BuildContext context) {
@@ -276,8 +271,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
       screenSleep(context);
       firstDisplayMainWidget = false;
     }
-    return WillPopScope(
-      child: GestureDetector(
+    return  GestureDetector(
         child: mainWidgetScreen,
         onTap: () {
           setState(() {
@@ -285,9 +279,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
             mainWidgetScreen = appWidget(context);
           });
         },
-      ),
-      onWillPop: () => exitMessage(context),
-    );
+      );
   }
 
   ButtonTheme buttonNumbers(String number, BuildContext context) {

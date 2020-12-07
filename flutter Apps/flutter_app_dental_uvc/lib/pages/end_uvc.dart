@@ -246,6 +246,8 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
     );
   }
 
+  BuildContext myContext;
+
   @override
   Widget build(BuildContext context) {
     endUVCClassData = endUVCClassData.isNotEmpty ? endUVCClassData : ModalRoute.of(context).settings.arguments;
@@ -260,12 +262,17 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
       csvDataFile();
       mainWidgetScreen = appWidget(context);
       screenSleep(context);
+      myContext = context;
     }
 
     return GestureDetector(
       child: mainWidgetScreen,
       onTap: () {
-        alertSecurity(context);
+        setState(() {
+          if (timeToSleep <= 0) {
+            alertSecurity(context);
+          }
+        });
       },
     );
   }
@@ -397,7 +404,7 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
               Navigator.pop(context);
               setState(() {
                 timeToSleep = timeSleep;
-                mainWidgetScreen = appWidget(context);
+                mainWidgetScreen = appWidget(myContext);
               });
             } else {
               myUvcToast.setToastDuration(3);
