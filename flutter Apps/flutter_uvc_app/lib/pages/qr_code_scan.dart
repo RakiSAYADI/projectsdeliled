@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutteruvcapp/services/bleDeviceClass.dart';
 import 'package:flutteruvcapp/services/uvcClass.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
@@ -645,13 +646,36 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
         });
   }
 
-  Future<void> _ackAlert(String qrCodeData, BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
+  Future<void> waitingWidget() async {
+    //double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return showDialog<void>(
-      context: context,
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Connexion en cours'),
+            content: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SpinKitCircle(
+                  color: Colors.blue[600],
+                  size: screenHeight * 0.1,
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  Future<void> _ackAlert(String qrCodeData, BuildContext myContext) {
+    double screenWidth = MediaQuery.of(myContext).size.width;
+    double screenHeight = MediaQuery.of(myContext).size.height;
+    return showDialog<void>(
+      context: myContext,
       barrierDismissible: false,
-      builder: (BuildContext context) {
+      builder: (BuildContext myContext) {
         return AlertDialog(
           title: Text('Connexion en cours'),
           content: Column(
@@ -673,6 +697,8 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () async {
+                Navigator.of(myContext).pop();
+                waitingWidget();
                 qrCodeScanAccess = false;
                 animationRefreshIcon.repeat();
                 await Future.delayed(const Duration(milliseconds: 400));
@@ -682,38 +708,42 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                 myUvcToast.setToastMessage('Autorisation de connexion validée !');
                 myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
                 // stop scanning and start connecting
-                await myDevice.connect(false);
-                Future.delayed(const Duration(seconds: 2), () async {
-                  // Stop uvc treatment if it's on
-                  String message = 'STOP : ON';
-                  await myDevice.writeCharacteristic(2, 0, message);
-                  // Read data from robot
-                  await myDevice.readCharacteristic(2, 0);
-                  Map<String, dynamic> dataRead;
-                  dataRead = jsonDecode(myDevice.getReadCharMessage());
-                  Navigator.of(context).pop();
-                  // clear the remaining toast message
-                  myUvcToast.clearAllToast();
-                  try {
-                    switch (int.parse(dataRead['Version'].toString())) {
-                      case 0:
-                        break;
-                      case 1:
-                        break;
-                      default:
-                        break;
+                bool connexion = await myDevice.connect(false);
+                if (connexion) {
+                  Future.delayed(const Duration(seconds: 2), () async {
+                    // Stop uvc treatment if it's on
+                    String message = 'STOP : ON';
+                    await myDevice.writeCharacteristic(2, 0, message);
+                    // Read data from robot
+                    await myDevice.readCharacteristic(2, 0);
+                    Map<String, dynamic> dataRead;
+                    dataRead = jsonDecode(myDevice.getReadCharMessage());
+                    // clear the remaining toast message
+                    myUvcToast.clearAllToast();
+                    try {
+                      Navigator.of(context).pop();
+                      switch (int.parse(dataRead['Version'].toString())) {
+                        case 0:
+                          break;
+                        case 1:
+                          break;
+                        default:
+                          break;
+                      }
+                      int.parse(dataRead['Version'].toString());
+                      print('Version detected');
+                      await scanQrCodeDATA();
+                    } catch (e) {
+                      print('No version detected');
+                      Navigator.pushNamed(myContext, '/profiles', arguments: {
+                        'myDevice': myDevice,
+                        'dataRead': myDevice.getReadCharMessage(),
+                      });
                     }
-                    int.parse(dataRead['Version'].toString());
-                    print('Version detected');
-                    await scanQrCodeDATA();
-                  } catch (e) {
-                    print('No version detected');
-                    Navigator.pushNamed(context, '/profiles', arguments: {
-                      'myDevice': myDevice,
-                      'dataRead': myDevice.getReadCharMessage(),
-                    });
-                  }
-                });
+                  });
+                } else {
+
+                }
               },
             ),
             FlatButton(
@@ -724,7 +754,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
               onPressed: () {
                 _controller.resume();
                 qrCodeScanAccess = false;
-                Navigator.of(context).pop();
+                Navigator.of(myContext).pop();
               },
             ),
           ],

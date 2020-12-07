@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
@@ -13,7 +14,7 @@ class Device {
 
   bool _readIsReady = false;
 
-  Future<void> connect(bool autoConnection) async {
+  Future<bool> connect(bool autoConnection) async {
     // Not available for reading
     _readIsReady = false;
     //defining the methods
@@ -47,18 +48,31 @@ class Device {
       print('the mtu is changed');
     }
 
-    // connect
-    await device.connect(autoConnect: autoConnection);
-    //Discover services
-    _services = await device.discoverServices();
-    // setting MTU
-    await mtuRequest();
-    //setting connection state after 1 second
-    Future.delayed(const Duration(seconds: 1), () async {
+    try {
+      // connect
+      await device.connect(autoConnect: autoConnection, timeout: Duration(seconds: 3));
       checkConnectionState();
-      // Not available for reading
-      _readIsReady = true;
-    });
+      await Future.delayed(const Duration(milliseconds: 100));
+      if (_connectionState == BluetoothDeviceState.connected.index) {
+        //Discover services
+        _services = await device.discoverServices();
+        // setting MTU
+        await mtuRequest();
+        //setting connection state after 1 second
+        await Future.delayed(const Duration(seconds: 1), () async {
+          // Not available for reading
+          _readIsReady = true;
+        });
+        return true;
+      } else {
+        return false;
+      }
+    } on TimeoutException catch(e) {
+      print('this should not be reached if the exception is raised');
+    } on Exception catch(e) {
+      print('exception: $e');
+    }
+    return false;
   }
 
   bool getConnectionState() {

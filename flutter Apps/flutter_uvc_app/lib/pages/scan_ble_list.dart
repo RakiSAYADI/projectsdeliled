@@ -68,7 +68,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
       // do something with scan results
       for (ScanResult r in results) {
         print('${r.device.name} found! mac: ${r.device.id.toString()}');
-        if(r.device.name.contains(robotUVCName)){
+        if (r.device.name.contains(robotUVCName)) {
           if (scanIdentifiers.isEmpty) {
             scanIdentifiers.add(r.device.id.toString());
             setState(() {
@@ -174,18 +174,26 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                       myUvcToast.setToastMessage('Connexion en cours');
                       myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
                       // stop scanning and start connecting
-                      await myDevice.connect(false);
-                      Future.delayed(const Duration(seconds: 2), () async {
-                        // Stop uvc treatment if it's on
-                        String message = 'STOP : ON';
-                        await myDevice.writeCharacteristic(0, 0, message);
-                        // Read data from robot
-                        await myDevice.readCharacteristic(0, 0);
-                        // clear the remaining toast message
-                        myUvcToast.clearAllToast();
-                        flutterBlue.stopScan();
-                        startScan(context);
-                      });
+                      bool connexion = await myDevice.connect(false);
+                      if (connexion) {
+                        Future.delayed(const Duration(seconds: 2), () async {
+                          // Stop uvc treatment if it's on
+                          String message = 'STOP : ON';
+                          await myDevice.writeCharacteristic(0, 0, message);
+                          // Read data from robot
+                          await myDevice.readCharacteristic(0, 0);
+                          // clear the remaining toast message
+                          myUvcToast.clearAllToast();
+                          flutterBlue.stopScan();
+                          startScan(context);
+                        });
+                      } else {
+                        myUvcToast.setToastDuration(5);
+                        myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
+                        myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+                        myDevice.disconnect();
+                        Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
+                      }
                     }))
                 .toList()),
       ),

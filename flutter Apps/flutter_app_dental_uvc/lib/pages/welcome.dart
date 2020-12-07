@@ -69,6 +69,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       myDevice = Device(device: scanDevices.elementAt(devicesPosition));
       myUvcToast.setToastMessage('Veuillez associer un dispositif UV-C dans la page \'Réglages\' !');
       myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+      await ledControl.setLedColor('ORANGE');
       Future.delayed(Duration(seconds: 1), () async {
         Navigator.pushReplacementNamed(context, '/pin_access', arguments: {
           'myDevice': myDevice,
@@ -115,6 +116,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
         myUvcToast
             .setToastMessage('Le dispositif UV-C enregistré n\'est pas détecté !\n Veuillez le mettre sous tension et redémarrer l\'application.');
         myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+        await ledControl.setLedColor('ORANGE');
         Navigator.pushReplacementNamed(context, '/pin_access');
       }
     }
