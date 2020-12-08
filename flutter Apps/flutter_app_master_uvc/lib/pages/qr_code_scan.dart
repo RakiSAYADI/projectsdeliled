@@ -6,6 +6,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_app_master_uvc/services/bleDeviceClass.dart';
 import 'package:flutter_app_master_uvc/services/uvcClass.dart';
 import 'package:flutter_app_master_uvc/services/uvcToast.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:qrcode_flutter/qrcode_flutter.dart';
 
 class QrCodeScan extends StatefulWidget {
@@ -30,69 +31,9 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
   AnimationController animationController;
   AnimationController animationRefreshIcon;
 
-  final String uvcSecurityWebPage = 'https://qrgo.page.link/hYgXu';
-
   UvcLight myUvcLight;
 
-  bool qrCodeConnectionOrSecurity = false;
-  bool qrCodeValidOrNot = false;
-  bool qrCodeSettings = false;
-
   Map qrCodeClassData = {};
-
-  Map<String, dynamic> dataRead;
-  Map<String, dynamic> dataUVC;
-
-  String myName = '';
-  String myCompany = '';
-  String myRoom = '';
-  int extinctionTime;
-  int activationTime;
-
-  List<String> myExtinctionTimeMinute = [
-    ' 30 sec',
-    '  1 min',
-    '  2 min',
-    '  5 min',
-    ' 10 min',
-    ' 15 min',
-    ' 20 min',
-    ' 25 min',
-    ' 30 min',
-    ' 35 min',
-    ' 40 min',
-    ' 45 min',
-    ' 50 min',
-    ' 55 min',
-    ' 60 min',
-    ' 65 min',
-    ' 70 min',
-    ' 75 min',
-    ' 80 min',
-    ' 85 min',
-    ' 90 min',
-    ' 95 min',
-    '100 min',
-    '105 min',
-    '110 min',
-    '115 min',
-    '120 min',
-  ];
-
-  List<String> myActivationTimeMinute = [
-    ' 10 sec',
-    ' 20 sec',
-    ' 30 sec',
-    ' 40 sec',
-    ' 50 sec',
-    ' 60 sec',
-    ' 70 sec',
-    ' 80 sec',
-    ' 90 sec',
-    '100 sec',
-    '110 sec',
-    '120 sec',
-  ];
 
   @override
   void initState() {
@@ -131,7 +72,6 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
 
     if (Platform.isAndroid) {
       scanDevices = qrCodeClassData['scanDevices'];
-      _controller.resume();
       _controller.onCapture((data) {
         print('onCapture----$data');
         if (data.isNotEmpty && !qrCodeScanAccess) {
@@ -165,7 +105,6 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     }
     if (Platform.isIOS) {
       myDevice = qrCodeClassData['myDevice'];
-      _controller.resume();
       _controller.onCapture((data) {
         print('onCapture----$data');
         if (data.isNotEmpty && !qrCodeScanAccess) {
@@ -307,13 +246,36 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       });
   }
 
-  Future<void> _ackAlert(String qrCodeData, BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
+  Future<void> waitingWidget() async {
+    //double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return showDialog<void>(
-      context: context,
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Connexion en cours'),
+            content: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SpinKitCircle(
+                  color: Colors.blue[600],
+                  size: screenHeight * 0.1,
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  Future<void> _ackAlert(String qrCodeData, BuildContext myContext) {
+    double screenWidth = MediaQuery.of(myContext).size.width;
+    double screenHeight = MediaQuery.of(myContext).size.height;
+    return showDialog<void>(
+      context: myContext,
       barrierDismissible: false,
-      builder: (BuildContext context) {
+      builder: (BuildContext myContext) {
         return AlertDialog(
           title: Text('Connexion en cours'),
           content: Column(
@@ -335,6 +297,8 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () async {
+                Navigator.of(myContext).pop();
+                waitingWidget();
                 qrCodeScanAccess = false;
                 animationRefreshIcon.repeat();
                 await Future.delayed(const Duration(milliseconds: 400));
@@ -348,6 +312,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                 Future.delayed(const Duration(seconds: 2), () async {
                   // Read data from robot
                   await myDevice.readCharacteristic(2, 0);
+                  Navigator.of(context).pop();
                   myUvcToast.clearAllToast();
                   Navigator.pushNamed(context, '/home', arguments: {
                     'myDevice': myDevice,

@@ -195,9 +195,7 @@ class _HomeState extends State<Home> {
                                     Padding(
                                       padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5),
                                       child: IconButton(
-                                        onPressed: () async {
-                                          changeFunctionMode(context);
-                                        },
+                                        onPressed: () => infoMode(context, 'type de pilotage'),
                                         icon: Padding(
                                           padding: const EdgeInsets.all(1.0),
                                           child: Icon(
@@ -284,9 +282,7 @@ class _HomeState extends State<Home> {
                                     Padding(
                                       padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5),
                                       child: IconButton(
-                                        onPressed: () async {
-                                          changeFunctionMode(context);
-                                        },
+                                        onPressed: () => infoMode(context, 'qr code de security'),
                                         icon: Padding(
                                           padding: const EdgeInsets.all(1.0),
                                           child: Icon(
@@ -380,7 +376,6 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                           ),
-                          SizedBox(height: screenHeight * 0.01),
                           Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: Container(
@@ -469,6 +464,58 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Future<void> infoMode(BuildContext context, String infoType) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    String popUpMessage;
+
+    switch (infoType) {
+      case 'type de pilotage':
+        popUpMessage = 'En cliquant sur \"Changer\", le dispositif UV-C passera soit en mode Manuel soit en mode Automatique. \n'
+            'Manuel : configurez manuellement les données de désinfection (entreprise, opérateur, durée de désinfection). \n'
+            'Automatique : permet de lire des QR codes contenant des données de désinfection pré-configurées. ';
+        break;
+      case 'qr code de security':
+        popUpMessage = 'En cliquant sur \"Changer\", le dispositif UV-C passera soit en mode Activé ou Désactivé. \n'
+            'Activé : le QR code de sécurité vous sera demandé à chaque fois. \n'
+            'Désactivé : le QR code de sécurité ne vous sera plus jamais demandé. ';
+        break;
+    }
+
+    return showDialog<void>(
+      context: context,
+      builder: (c) => AlertDialog(
+        title: Text(
+          'Information:',
+          style: TextStyle(
+            color: hardPink,
+          ),
+        ),
+        content: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(width: screenWidth * 0.1),
+              Text(
+                popUpMessage,
+                textAlign: TextAlign.justify,
+                style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.045),
+              ),
+              SizedBox(width: screenWidth * 0.1),
+            ],
+          ),
+        ),
+        actions: [
+          FlatButton(
+            child: Text('OK'),
+            onPressed: () => Navigator.pop(c, true),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> changeFunctionMode(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -476,7 +523,12 @@ class _HomeState extends State<Home> {
     return showDialog<void>(
       context: context,
       builder: (c) => AlertDialog(
-        title: Text('Type de pilotage:'),
+        title: Text(
+          'Type de pilotage:',
+          style: TextStyle(
+            color: hardPink,
+          ),
+        ),
         content: Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -577,13 +629,33 @@ class _HomeState extends State<Home> {
     return showDialog<void>(
       context: context,
       builder: (c) => AlertDialog(
-        title: Text('Scan QrCode Securité:'),
+        title: Text(
+          'Scan QrCode Securité:',
+          style: TextStyle(
+            color: hardPink,
+          ),
+        ),
         content: Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
               SizedBox(width: screenWidth * 0.1),
+              Text(
+                'Attention : désactiver le QR code de sécurité peut entraîner des risques et engage votre responsabilité. '
+                'Il vous appartient de notifier les utilisateurs finaux des solutions UV-C DEEPLIGHT® de la désactivation de ce paramètre. ',
+                textAlign: TextAlign.justify,
+                style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.045, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(width: screenWidth * 0.05),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Divider(
+                  thickness: 2.0,
+                  color: hardPink,
+                ),
+              ),
+              SizedBox(width: screenWidth * 0.05),
               FlatButton.icon(
                 color: Colors.grey[200],
                 shape: RoundedRectangleBorder(
@@ -675,7 +747,12 @@ class _HomeState extends State<Home> {
     return showDialog<bool>(
       context: context,
       builder: (c) => AlertDialog(
-        title: Text('Attention'),
+        title: Text(
+          'Attention',
+          style: TextStyle(
+            color: hardPink,
+          ),
+        ),
         content: Text('Voulez-vous vraiment quitter la page Réglages dispositif ?'),
         actions: [
           FlatButton(

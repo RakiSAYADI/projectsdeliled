@@ -70,17 +70,6 @@ class _WarningState extends State<Warning> {
                         ),
                       ),
                     ),
-/*                    Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Text(
-                        'Cette application ne fonctionne pas sur ce dispositif UV-C, veuillez contacter DeliTech Medical® pour plus d\'informations !',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.05,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),*/
                     SizedBox(height: screenHeight * 0.02),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 30),
