@@ -3,8 +3,11 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutteruvcapp/services/httpRequests.dart';
+import 'package:flutteruvcapp/services/uvcToast.dart';
+import 'package:location_permissions/location_permissions.dart';
 import 'package:package_info/package_info.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -15,8 +18,15 @@ class Welcome extends StatefulWidget {
 
 class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   AnimationController controller;
+  ToastyMessage myUvcToast;
 
   DataBaseRequests dataBaseRequests = DataBaseRequests();
+
+  FlutterBlue flutterBlue = FlutterBlue.instance;
+
+  List<BluetoothDevice> scanDevices = [];
+
+  PermissionStatus _permissionStatus = PermissionStatus.unknown;
 
   void wakeLock() async {
     await Wakelock.enable();
@@ -26,6 +36,53 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       Wakelock.toggle(enable: true);
     }
     print('screen lock is disabled');
+  }
+
+  void scanForDevices() async {
+    // Start scanning
+    flutterBlue.startScan(timeout: Duration(seconds: 5));
+    // Listen to scan results
+    flutterBlue.scanResults.listen((results) {
+      scanDevices.clear();
+      // do something with scan results
+      for (ScanResult r in results) {
+        print('${r.device.name} found! mac: ${r.device.id.toString()}');
+        if (scanDevices.isEmpty) {
+          scanDevices.add(r.device);
+        } else {
+          if (!scanDevices.contains(r.device)) {
+            scanDevices.add(r.device);
+          }
+        }
+      }
+    });
+  }
+
+  void _listenForPermissionStatus() {
+    final Future<PermissionStatus> statusFuture = LocationPermissions().checkPermissionStatus();
+
+    statusFuture.then((PermissionStatus status) {
+      setState(() {
+        _permissionStatus = status;
+        if (_permissionStatus.index != 2) {
+          myUvcToast.setToastDuration(5);
+          myUvcToast.setToastMessage('La localisation n\'est pas activée sur votre téléphone !');
+          myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+        } else {
+          checkServiceStatus(context);
+        }
+      });
+    });
+  }
+
+  void checkServiceStatus(BuildContext context) {
+    LocationPermissions().checkServiceStatus().then((ServiceStatus serviceStatus) {
+      if (serviceStatus.index != 2) {
+        myUvcToast.setToastDuration(5);
+        myUvcToast.setToastMessage('La localisation n\'est pas activée sur votre téléphone !');
+        myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+      }
+    });
   }
 
   @override
@@ -62,8 +119,33 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       print('macos');
     }
 
-    Future.delayed(Duration(seconds: 5), () async {
-      Navigator.pushReplacementNamed(context, '/check_permissions');
+    myUvcToast = ToastyMessage(toastContext: context);
+
+    bool checkingBLEAndLocal = true;
+
+    flutterBlue.state.listen((state) {
+      if (checkingBLEAndLocal) {
+        checkingBLEAndLocal = false;
+        if (state == BluetoothState.off) {
+          //Alert user to turn on bluetooth.
+          if (Platform.isAndroid) {
+            _listenForPermissionStatus();
+          }
+          Future.delayed(Duration(seconds: 5), () async {
+            Navigator.pushReplacementNamed(context, '/check_permissions');
+          });
+        } else if (state == BluetoothState.on) {
+          //if bluetooth is enabled then go ahead.
+          //Make sure user's device gps is on.
+          scanForDevices();
+          Future.delayed(Duration(seconds: 5), () async {
+            Navigator.pushReplacementNamed(context, '/qr_code_scan', arguments: {
+              'scanDevices': scanDevices,
+              'qrCodeConnectionOrSecurity': false,
+            });
+          });
+        }
+      }
     });
 
     super.initState();

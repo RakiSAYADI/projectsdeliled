@@ -68,7 +68,7 @@ class Device {
         return false;
       }
     } on TimeoutException catch(e) {
-      print('this should not be reached if the exception is raised');
+      print('this should not be reached if the exception is raised $e');
     } on Exception catch(e) {
       print('exception: $e');
     }

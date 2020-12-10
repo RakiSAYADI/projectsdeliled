@@ -182,7 +182,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                 });
                 if (deviceExistOrNot) {
                   try {
-                    var dataRead = json.decode(data) as Map<String, dynamic>;
+                    json.decode(data) as Map<String, dynamic>;
                     print('The provided string is a valid JSON');
                     connectingWithQrCode(data);
                   } on FormatException catch (e) {
@@ -223,36 +223,47 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                 });
                 if (deviceExistOrNot) {
                   qrCodeScanAccess = false;
-                  Future.delayed(const Duration(seconds: 2), () async {
-                    // Stop uvc treatment if it's on
-                    String message = 'STOP : ON';
-                    await myDevice.writeCharacteristic(0, 0, message);
-                    // Read data from robot
-                    await myDevice.readCharacteristic(0, 0);
-                    Map<String, dynamic> dataRead;
-                    dataRead = jsonDecode(myDevice.getReadCharMessage());
-                    // clear the remaining toast message
-                    myUvcToast.clearAllToast();
-                    try {
-                      switch (int.parse(dataRead['Version'].toString())) {
-                        case 0:
-                          break;
-                        case 1:
-                          break;
-                        default:
-                          break;
+                  try {
+                    json.decode(data) as Map<String, dynamic>;
+                    print('The provided string is a valid JSON');
+                    connectingWithQrCode(data);
+                  } on FormatException catch (e) {
+                    print('The provided string is not valid JSON : ${e.toString()}');
+                    Future.delayed(const Duration(seconds: 2), () async {
+                      // Stop uvc treatment if it's on
+                      String message = 'STOP : ON';
+                      await myDevice.writeCharacteristic(0, 0, message);
+                      // Read data from robot
+                      await myDevice.readCharacteristic(0, 0);
+                      Map<String, dynamic> dataRead;
+                      dataRead = jsonDecode(myDevice.getReadCharMessage());
+                      // clear the remaining toast message
+                      myUvcToast.clearAllToast();
+                      try {
+                        switch (int.parse(dataRead['Version'].toString())) {
+                          case 0:
+                            Navigator.pushNamed(context, '/profiles', arguments: {
+                              'myDevice': myDevice,
+                              'dataRead': myDevice.getReadCharMessage(),
+                            });
+                            break;
+                          case 1:
+                            int.parse(dataRead['Version'].toString());
+                            print('Version detected');
+                            await scanQrCodeDATA();
+                            break;
+                          default:
+                            break;
+                        }
+                      } catch (e) {
+                        print('No version detected');
+                        Navigator.pushNamed(context, '/profiles', arguments: {
+                          'myDevice': myDevice,
+                          'dataRead': myDevice.getReadCharMessage(),
+                        });
                       }
-                      int.parse(dataRead['Version'].toString());
-                      print('Version detected');
-                      await scanQrCodeDATA();
-                    } catch (e) {
-                      print('No version detected');
-                      Navigator.pushNamed(context, '/profiles', arguments: {
-                        'myDevice': myDevice,
-                        'dataRead': myDevice.getReadCharMessage(),
-                      });
-                    }
-                  });
+                    });
+                  }
                 }
               }
             }
@@ -396,7 +407,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           ),
         ),
       ),
-      onWillPop: () => _ackDisconnect(context),
+      onWillPop: () => stopActivity(context),
     );
   }
 
@@ -409,46 +420,71 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       roomName = dataQrCode['RoomName'];
       userName = dataQrCode['UserName'];
       pin = dataQrCode['PIN'];
-/*    macAddress = dataQrCode['MAC'];
-    nameAddress = dataQrCode['NAME'];*/
-      myDevice = Device(device: scanDevices.elementAt(devicesPosition));
-      // stop scanning and start connecting
-      bool connexion = await myDevice.connect(false);
+      macAddress = dataQrCode['MAC'];
+      nameAddress = dataQrCode['NAME'];
+      bool connexion;
+      if (Platform.isIOS) {
+        connexion = myDevice.getConnectionState();
+      } else {
+        myDevice = Device(device: scanDevices.elementAt(devicesPosition));
+        // stop scanning and start connecting
+        connexion = await myDevice.connect(false);
+      }
+
       if (connexion) {
         Future.delayed(const Duration(seconds: 2), () async {
           // Stop uvc treatment if it's on
           String message = 'STOP : ON';
-          await myDevice.writeCharacteristic(2, 0, message);
+          if (Platform.isIOS) {
+            await myDevice.writeCharacteristic(0, 0, message);
+          } else {
+            await myDevice.writeCharacteristic(2, 0, message);
+          }
           // Read data from robot
-          await myDevice.readCharacteristic(2, 0);
-          Map<String, dynamic> dataRead;
-          dataRead = jsonDecode(myDevice.getReadCharMessage());
-          await myDevice.writeCharacteristic(2, 0,
-              '{\"data\":[\"$myCompany\",\"$userName\",\"$roomName\",${_stringListAsciiToListInt(dataQrCode['TimeData'].toString().codeUnits)[0]},${_stringListAsciiToListInt(dataQrCode['TimeData'].toString().codeUnits)[1]}]}');
+          if (Platform.isIOS) {
+            await myDevice.readCharacteristic(0, 0);
+          } else {
+            await myDevice.readCharacteristic(2, 0);
+          }
+          int activationTimePosition, infectionTimePosition;
+          activationTimePosition = _stringListAsciiToListInt(dataQrCode['TimeData'].toString().codeUnits)[0];
+          infectionTimePosition = _stringListAsciiToListInt(dataQrCode['TimeData'].toString().codeUnits)[1];
+          if (Platform.isIOS) {
+            await myDevice.writeCharacteristic(
+                0, 0, '{\"data\":[\"$myCompany\",\"$userName\",\"$roomName\",$activationTimePosition,$infectionTimePosition]}');
+          } else {
+            await myDevice.writeCharacteristic(
+                2, 0, '{\"data\":[\"$myCompany\",\"$userName\",\"$roomName\",$activationTimePosition,$infectionTimePosition]}');
+          }
+          myUvcLight = UvcLight();
+          myUvcLight.setCompanyName(myCompany);
+          myUvcLight.setOperatorName(userName);
+          myUvcLight.setRoomName(roomName);
+          myUvcLight.setActivationTime(myActivationTimeMinute.elementAt(activationTimePosition));
+          myUvcLight.setInfectionTime(myExtinctionTimeMinute.elementAt(infectionTimePosition));
+          myUvcLight.setMachineMac(macAddress);
+          myUvcLight.setMachineName(nameAddress);
           if (pin == null) {
-            print('no pin');
-            myUvcLight = UvcLight();
-            myUvcLight.setCompanyName(myCompany);
-            myUvcLight.setOperatorName(userName);
-            myUvcLight.setRoomName(roomName);
             Navigator.pushNamed(context, '/warnings', arguments: {
               'myDevice': myDevice,
               'myUvcLight': myUvcLight,
             });
           } else {
             Navigator.of(context).pop();
-            final key = Key.fromUtf8('my 3fqzfmy 3fqzfmy 3fqzfmy 3fqzf');
+
+            final key = Key.fromUtf8('deeplightsolutionsdedesinfection');
             final iv = IV.fromLength(16);
+            print(pin);
 
             final encrypter = Encrypter(AES(key, mode: AESMode.cbc));
-
             final encrypted = encrypter.encrypt(pin, iv: iv);
-            final decrypted = encrypter.decrypt(encrypted, iv: iv);
+
+            print(encrypted.base16);
+            print(encrypted.base64);
+            final decrypted = encrypter.decrypt16(encrypted.base16, iv: iv);
 
             print(decrypted);
-            print(encrypted.base64);
-            await pinAccess(pin);
-            print('pin');
+            await pinAccess(decrypted);
           }
         });
       } else {
@@ -469,7 +505,6 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
 
   Future<void> pinAccess(String pinAccessCode) async {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
     return showDialog<void>(
         context: context,
         barrierDismissible: false,
@@ -509,7 +544,18 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                     style: TextStyle(color: Colors.green),
                   ),
                   onPressed: () {
-
+                    if (pinCode == pinAccessCode) {
+                      Navigator.pushNamed(context, '/warnings', arguments: {
+                        'myDevice': myDevice,
+                        'myUvcLight': myUvcLight,
+                      });
+                    } else {
+                      _pinPutController.text = '';
+                      pinCode = '';
+                      myUvcToast.setToastDuration(2);
+                      myUvcToast.setToastMessage('Code Pin Incorrecte !');
+                      myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+                    }
                   }),
               FlatButton(
                   child: Text(
@@ -524,13 +570,29 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
         });
   }
 
-  Future<bool> _ackDisconnect(BuildContext context) async {
-    if (myDevice != null) {
-      myDevice.disconnect();
-    }
-
-    Navigator.pop(context, true);
-    return true;
+  Future<void> stopActivity(BuildContext context) {
+    return showDialog<bool>(
+      context: context,
+      builder: (c) => AlertDialog(
+        title: Text('Attention'),
+        content: Text('Voulez-vous vraiment quitter l\'application ?'),
+        actions: [
+          FlatButton(
+            child: Text('Oui'),
+            onPressed: () {
+              if (myDevice != null) {
+                myDevice.disconnect();
+              }
+              Navigator.pop(c, true);
+            },
+          ),
+          FlatButton(
+            child: Text('Non'),
+            onPressed: () => Navigator.pop(c, false),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildToolBar() {
@@ -868,15 +930,17 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                       Navigator.of(context).pop();
                       switch (int.parse(dataRead['Version'].toString())) {
                         case 0:
+                          Navigator.pushNamed(myContext, '/profiles', arguments: {
+                            'myDevice': myDevice,
+                            'dataRead': myDevice.getReadCharMessage(),
+                          });
                           break;
                         case 1:
+                          await scanQrCodeDATA();
                           break;
                         default:
                           break;
                       }
-                      int.parse(dataRead['Version'].toString());
-                      print('Version detected');
-                      await scanQrCodeDATA();
                     } catch (e) {
                       print('No version detected');
                       Navigator.pushNamed(myContext, '/profiles', arguments: {

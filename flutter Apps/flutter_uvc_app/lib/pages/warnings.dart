@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutteruvcapp/services/bleDeviceClass.dart';
 import 'package:flutteruvcapp/services/uvcClass.dart';
@@ -185,16 +188,36 @@ class _WarningsState extends State<Warnings> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       FlatButton(
-                        onPressed: () {
-                          if (myDevice.getConnectionState()) {
-                            startScan(context);
-                          } else {
-                            myUvcToast = ToastyMessage(toastContext: context);
-                            myUvcToast.setToastDuration(5);
-                            myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
-                            myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-                            myDevice.disconnect();
-                            Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
+                        onPressed: () async{
+                          final String dataRead = myDevice.getReadCharMessage();
+                          try {
+                            Map<String, dynamic> dataMap = json.decode(dataRead);
+                            int qrCodeSecurity = int.parse(dataMap['security'].toString());
+                            if (qrCodeSecurity == 0) {
+                              startScan(context);
+                            } else {
+                              String message = 'UVCTreatement : ON';
+                              if (Platform.isIOS) {
+                                await myDevice.writeCharacteristic(0, 0, message);
+                              } else {
+                                await myDevice.writeCharacteristic(2, 0, message);
+                              }
+                              Navigator.pushNamed(context, '/uvc', arguments: {
+                                'uvclight': myUvcLight,
+                                'myDevice': myDevice,
+                              });
+                            }
+                          } catch (e) {
+                            if (myDevice.getConnectionState()) {
+                              startScan(context);
+                            } else {
+                              myUvcToast = ToastyMessage(toastContext: context);
+                              myUvcToast.setToastDuration(5);
+                              myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
+                              myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+                              myDevice.disconnect();
+                              Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
+                            }
                           }
                         },
                         child: Text(
