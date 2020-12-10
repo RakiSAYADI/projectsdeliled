@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:encrypt/encrypt.dart';
+import 'package:flutter/cupertino.dart' hide Key;
+import 'package:flutter/material.dart' hide Key;
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutteruvcapp/services/bleDeviceClass.dart';
 import 'package:flutteruvcapp/services/uvcClass.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
+import 'package:pinput/pin_put/pin_put.dart';
 import 'package:qrcode_flutter/qrcode_flutter.dart';
 
 class QrCodeScan extends StatefulWidget {
@@ -17,6 +19,7 @@ class QrCodeScan extends StatefulWidget {
 
 class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
   QRCaptureController _controller = QRCaptureController();
+  final TextEditingController _pinPutController = TextEditingController();
   bool _isTorchOn = false;
   String qrCodeMessage = '';
   Color colorMessage;
@@ -52,6 +55,8 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
   int activationTime;
 
   bool changeModeFloatButton = false;
+
+  String pinCode;
 
   List<String> myExtinctionTimeMinute = [
     ' 30 sec',
@@ -97,6 +102,13 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     '110 sec',
     '120 sec',
   ];
+
+  BoxDecoration get _pinPutDecoration {
+    return BoxDecoration(
+      border: Border.all(color: Colors.blue, width: 3),
+      borderRadius: BorderRadius.circular(15),
+    );
+  }
 
   @override
   void initState() {
@@ -169,7 +181,14 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                   }
                 });
                 if (deviceExistOrNot) {
-                  _ackAlert(data, context);
+                  try {
+                    var dataRead = json.decode(data) as Map<String, dynamic>;
+                    print('The provided string is a valid JSON');
+                    connectingWithQrCode(data);
+                  } on FormatException catch (e) {
+                    print('The provided string is not valid JSON : ${e.toString()}');
+                    _ackAlert(data, context);
+                  }
                 }
               }
             }
@@ -313,6 +332,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
 
     return WillPopScope(
       child: Scaffold(
+        resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           title: const Text('Scanner le QR code'),
           centerTitle: true,
@@ -378,6 +398,130 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       ),
       onWillPop: () => _ackDisconnect(context),
     );
+  }
+
+  void connectingWithQrCode(String data) async {
+    waitingWidget();
+    try {
+      var dataQrCode = json.decode(data) as Map<String, dynamic>;
+      String myCompany, roomName, userName, pin, macAddress, nameAddress;
+      myCompany = dataQrCode['Company'];
+      roomName = dataQrCode['RoomName'];
+      userName = dataQrCode['UserName'];
+      pin = dataQrCode['PIN'];
+/*    macAddress = dataQrCode['MAC'];
+    nameAddress = dataQrCode['NAME'];*/
+      myDevice = Device(device: scanDevices.elementAt(devicesPosition));
+      // stop scanning and start connecting
+      bool connexion = await myDevice.connect(false);
+      if (connexion) {
+        Future.delayed(const Duration(seconds: 2), () async {
+          // Stop uvc treatment if it's on
+          String message = 'STOP : ON';
+          await myDevice.writeCharacteristic(2, 0, message);
+          // Read data from robot
+          await myDevice.readCharacteristic(2, 0);
+          Map<String, dynamic> dataRead;
+          dataRead = jsonDecode(myDevice.getReadCharMessage());
+          await myDevice.writeCharacteristic(2, 0,
+              '{\"data\":[\"$myCompany\",\"$userName\",\"$roomName\",${_stringListAsciiToListInt(dataQrCode['TimeData'].toString().codeUnits)[0]},${_stringListAsciiToListInt(dataQrCode['TimeData'].toString().codeUnits)[1]}]}');
+          if (pin == null) {
+            print('no pin');
+            myUvcLight = UvcLight();
+            myUvcLight.setCompanyName(myCompany);
+            myUvcLight.setOperatorName(userName);
+            myUvcLight.setRoomName(roomName);
+            Navigator.pushNamed(context, '/warnings', arguments: {
+              'myDevice': myDevice,
+              'myUvcLight': myUvcLight,
+            });
+          } else {
+            Navigator.of(context).pop();
+            final key = Key.fromUtf8('my 3fqzfmy 3fqzfmy 3fqzfmy 3fqzf');
+            final iv = IV.fromLength(16);
+
+            final encrypter = Encrypter(AES(key, mode: AESMode.cbc));
+
+            final encrypted = encrypter.encrypt(pin, iv: iv);
+            final decrypted = encrypter.decrypt(encrypted, iv: iv);
+
+            print(decrypted);
+            print(encrypted.base64);
+            await pinAccess(pin);
+            print('pin');
+          }
+        });
+      } else {
+        myUvcToast.setToastDuration(5);
+        myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
+        myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+        myDevice.disconnect();
+        Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+      }
+    } catch (e) {
+      myUvcToast.setToastDuration(5);
+      myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
+      myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+      myDevice.disconnect();
+      Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+    }
+  }
+
+  Future<void> pinAccess(String pinAccessCode) async {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Entrer le code Pin:'),
+            content: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                PinPut(
+                  fieldsCount: 4,
+                  onSubmit: (String pin) {
+                    if (pin.length <= 4) {
+                      pinCode = pin;
+                    }
+                    print(pinCode);
+                  },
+                  controller: _pinPutController,
+                  textStyle: TextStyle(
+                    color: Colors.black,
+                    fontSize: screenWidth * 0.04,
+                  ),
+                  submittedFieldDecoration: _pinPutDecoration.copyWith(borderRadius: BorderRadius.circular(20)),
+                  selectedFieldDecoration: _pinPutDecoration,
+                  followingFieldDecoration: _pinPutDecoration.copyWith(
+                    borderRadius: BorderRadius.circular(5),
+                    border: Border.all(color: Colors.grey[600].withOpacity(.5), width: 3),
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              FlatButton(
+                  child: Text(
+                    'Valider',
+                    style: TextStyle(color: Colors.green),
+                  ),
+                  onPressed: () {
+
+                  }),
+              FlatButton(
+                  child: Text(
+                    'Annuler',
+                    style: TextStyle(color: Colors.green),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+            ],
+          );
+        });
   }
 
   Future<bool> _ackDisconnect(BuildContext context) async {
@@ -625,7 +769,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Scanner le QR-CODE sur la porte'),
+            title: Text('Scannez le QR de données'),
             actions: [
               FlatButton(
                   child: Text(
@@ -741,9 +885,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                       });
                     }
                   });
-                } else {
-
-                }
+                } else {}
               },
             ),
             FlatButton(

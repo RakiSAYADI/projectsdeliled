@@ -39,6 +39,7 @@ dependencies:
   location_permissions: ^3.0.0+1
   introduction_screen: ^1.0.9
   wakelock: ^0.2.1
+  encrypt: ^4.1.0
 
   #mysql1: ^0.17.1
 

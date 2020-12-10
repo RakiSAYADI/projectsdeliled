@@ -227,7 +227,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     // loop from 0 frame to 29 frame
     gifController.repeat(min: 0, max: 11, period: Duration(milliseconds: 1000));
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () => exitMessage(context),
       child: Scaffold(
         backgroundColor: Colors.blue[400],
         body: Center(
