@@ -196,17 +196,33 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           ),
         ),
       ),
-      onWillPop: () => _ackDisconnect(context),
+      onWillPop: () => stopActivity(context),
     );
   }
 
-  Future<bool> _ackDisconnect(BuildContext context) async {
-    if (myDevice != null) {
-      myDevice.disconnect();
-    }
-
-    Navigator.pop(context, true);
-    return true;
+  Future<void> stopActivity(BuildContext context) {
+    return showDialog<bool>(
+      context: context,
+      builder: (c) => AlertDialog(
+        title: Text('Attention'),
+        content: Text('Voulez-vous vraiment quitter l\'application ?'),
+        actions: [
+          FlatButton(
+            child: Text('Oui'),
+            onPressed: () {
+              if (myDevice != null) {
+                myDevice.disconnect();
+              }
+              Navigator.pop(c, true);
+            },
+          ),
+          FlatButton(
+            child: Text('Non'),
+            onPressed: () => Navigator.pop(c, false),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildToolBar() {
