@@ -126,14 +126,20 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     flutterBlue.state.listen((state) {
       if (checkingBLEAndLocal) {
         checkingBLEAndLocal = false;
+        if (Platform.isAndroid) {
+          _listenForPermissionStatus();
+        }
         if (state == BluetoothState.off) {
           //Alert user to turn on bluetooth.
-          if (Platform.isAndroid) {
-            _listenForPermissionStatus();
+          if (Platform.isAndroid && _permissionStatus.index != 2) {
+            Future.delayed(Duration(seconds: 5), () async {
+              Navigator.pushReplacementNamed(context, '/check_permissions');
+            });
+          } else {
+            Future.delayed(Duration(seconds: 5), () async {
+              Navigator.pushReplacementNamed(context, '/check_permissions');
+            });
           }
-          Future.delayed(Duration(seconds: 5), () async {
-            Navigator.pushReplacementNamed(context, '/check_permissions');
-          });
         } else if (state == BluetoothState.on) {
           //if bluetooth is enabled then go ahead.
           //Make sure user's device gps is on.
