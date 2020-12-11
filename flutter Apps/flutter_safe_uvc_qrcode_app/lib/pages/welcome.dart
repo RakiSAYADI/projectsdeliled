@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_safe_uvc_qrcode_app/services/httpRequests.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:package_info/package_info.dart';
 
@@ -13,6 +14,20 @@ class Welcome extends StatefulWidget {
 class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   AnimationController controller;
 
+  DataBaseRequests dataBaseRequests = DataBaseRequests();
+
+  void checkingConnection() async {
+    if (await dataBaseRequests.checkInternetConnection()) {
+      Future.delayed(Duration(seconds: 5), () async {
+        Navigator.pushReplacementNamed(context, '/Qr_code_Generate');
+      });
+    } else {
+      Future.delayed(Duration(seconds: 5), () async {
+        Navigator.pushReplacementNamed(context, '/check_permissions');
+      });
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -21,6 +36,8 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
+    checkingConnection();
 
     controller = AnimationController(
       vsync: this,
@@ -42,10 +59,6 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     if (Platform.isMacOS) {
       print('macos');
     }
-
-    Future.delayed(Duration(seconds: 5), () async {
-      Navigator.pushReplacementNamed(context, '/check_permissions');
-    });
 
     super.initState();
   }
@@ -102,12 +115,12 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
                       String version = snapshot.data.version;
                       return Center(
                           child: Text(
-                            '$version',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: screenWidth * 0.04,
-                            ),
-                          ));
+                        '$version',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: screenWidth * 0.04,
+                        ),
+                      ));
                     } else {
                       return Center(
                         child: CircularProgressIndicator(),
