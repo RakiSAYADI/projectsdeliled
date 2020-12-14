@@ -28,6 +28,8 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
 
   PermissionStatus _permissionStatus = PermissionStatus.unknown;
 
+  int loadingSeconds = 3;
+
   void wakeLock() async {
     await Wakelock.enable();
     bool wakelockEnabled = await Wakelock.enabled;
@@ -40,7 +42,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
 
   void scanForDevices() async {
     // Start scanning
-    flutterBlue.startScan(timeout: Duration(seconds: 5));
+    flutterBlue.startScan(timeout: Duration(seconds: loadingSeconds));
     // Listen to scan results
     flutterBlue.scanResults.listen((results) {
       scanDevices.clear();
@@ -125,31 +127,35 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
 
     flutterBlue.state.listen((state) {
       if (checkingBLEAndLocal) {
-        checkingBLEAndLocal = false;
         if (Platform.isAndroid) {
           _listenForPermissionStatus();
         }
         if (state == BluetoothState.off) {
+          checkingBLEAndLocal = false;
           //Alert user to turn on bluetooth.
           if (Platform.isAndroid && _permissionStatus.index != 2) {
-            Future.delayed(Duration(seconds: 5), () async {
+            Future.delayed(Duration(seconds: loadingSeconds), () async {
               Navigator.pushReplacementNamed(context, '/check_permissions');
             });
           } else {
-            Future.delayed(Duration(seconds: 5), () async {
+            Future.delayed(Duration(seconds: loadingSeconds), () async {
               Navigator.pushReplacementNamed(context, '/check_permissions');
             });
           }
         } else if (state == BluetoothState.on) {
+          checkingBLEAndLocal = false;
           //if bluetooth is enabled then go ahead.
           //Make sure user's device gps is on.
           scanForDevices();
-          Future.delayed(Duration(seconds: 5), () async {
-            Navigator.pushReplacementNamed(context, '/qr_code_scan', arguments: {
-              'scanDevices': scanDevices,
-              'qrCodeConnectionOrSecurity': false,
+          if (Platform.isAndroid) {
+            Future.delayed(Duration(seconds: loadingSeconds), () async {
+              startScan(context);
             });
-          });
+          } else {
+            Future.delayed(Duration(seconds: loadingSeconds), () async {
+              Navigator.pushReplacementNamed(context, '/scan_ble_list');
+            });
+          }
         }
       }
     });
@@ -228,6 +234,46 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Future<void> startScan(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    return showDialog<bool>(
+      context: context,
+      builder: (c) => AlertDialog(
+        content: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Scanner le QR code du dispositif UV-C DEEPLIGHT.'),
+            Image.asset(
+              'assets/scan_qr_code.gif',
+              height: screenHeight * 0.3,
+              width: screenWidth * 0.8,
+            ),
+          ],
+        ),
+        actions: [
+          FlatButton(
+            child: Text('OK'),
+            onPressed: () async {
+              Navigator.pop(c, true);
+              // Start scanning
+              flutterBlue.startScan(timeout: Duration(seconds: loadingSeconds));
+              Navigator.pushNamed(context, '/qr_code_scan', arguments: {
+                'scanDevices': scanDevices,
+                'qrCodeConnectionOrSecurity': false,
+              });
+            },
+          ),
+          FlatButton(
+            child: Text('Annuler'),
+            onPressed: () => Navigator.pop(c, false),
+          ),
+        ],
       ),
     );
   }

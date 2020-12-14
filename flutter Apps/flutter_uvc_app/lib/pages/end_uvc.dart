@@ -165,7 +165,7 @@ class _EndUVCState extends State<EndUVC> {
                   FlatButton(
                     onPressed: () {
                       myDevice.disconnect();
-                      Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
+                      Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
                     },
                     child: Text(
                       'Nouvelle désinfection',
@@ -204,7 +204,7 @@ class _EndUVCState extends State<EndUVC> {
   }
 
   Future<bool> exitApp(BuildContext context) async {
-    Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
+    Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
     return true;
   }
 }
