@@ -30,6 +30,9 @@ dependencies:
   flutter_spinkit: ^4.1.2+1
   qr_flutter: ^3.2.0
   flutter_speed_dial: ^1.2.5
+  qrcode_flutter: ^1.0.8
+  pinput: ^0.2.6
+  encrypt: ^4.1.0
   mailer: ^3.2.1
 
   # The following adds the Cupertino Icons font to your application.

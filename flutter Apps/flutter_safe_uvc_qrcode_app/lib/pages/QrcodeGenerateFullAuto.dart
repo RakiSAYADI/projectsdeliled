@@ -1,20 +1,23 @@
-import 'package:flutter/material.dart';
+import 'package:encrypt/encrypt.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/material.dart' hide Key;
 import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
 import 'package:mailer/mailer.dart';
+import 'package:pinput/pin_put/pin_put.dart';
 
-class QrCodeGenerator extends StatefulWidget {
+class QrCodeGeneratorFullAuto extends StatefulWidget {
   @override
-  _QrCodeGeneratorState createState() => _QrCodeGeneratorState();
+  _QrCodeGeneratorFullAutoState createState() => _QrCodeGeneratorFullAutoState();
 }
 
-class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderStateMixin {
+class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with TickerProviderStateMixin {
   ToastyMessage myUvcToast;
   AnimationController animationRefreshIcon;
 
   final myCompany = TextEditingController();
   final myName = TextEditingController();
   final myRoomName = TextEditingController();
+  final TextEditingController _pinPutController = TextEditingController();
 
   String myExtinctionTimeMinuteData = ' 30 sec';
   String myActivationTimeMinuteData = ' 10 sec';
@@ -26,6 +29,10 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
 
   Map qrCodeGeneratorClassData = {};
   List<Attachment> qrCodeList = [];
+
+  String uvcName;
+  String macAddress;
+  String pinCode;
 
   List<String> myExtinctionTimeMinute = [
     ' 30 sec',
@@ -76,8 +83,12 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
   Widget build(BuildContext context) {
     try {
       qrCodeGeneratorClassData = qrCodeGeneratorClassData.isNotEmpty ? qrCodeGeneratorClassData : ModalRoute.of(context).settings.arguments;
+      uvcName = qrCodeGeneratorClassData['uvcName'];
+      macAddress = qrCodeGeneratorClassData['macAddress'];
       qrCodeList = qrCodeGeneratorClassData['myQrcodeListFile'];
-      firstDisplayMainWidget = true;
+      if (qrCodeList.isEmpty) {
+        firstDisplayMainWidget = true;
+      }
     } catch (e) {
       firstDisplayMainWidget = false;
     }
@@ -100,6 +111,20 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   SizedBox(height: screenHeight * 0.01),
+                  Image.asset(
+                    'assets/robot_machine.png',
+                    height: screenHeight * 0.09,
+                    width: screenWidth * 0.5,
+                  ),
+                  SizedBox(height: screenHeight * 0.01),
+                  Text(
+                    uvcName,
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.04,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.05),
                   Image.asset(
                     'assets/etablissement_logo.png',
                     height: screenHeight * 0.09,
@@ -250,30 +275,90 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
                       }).toList(),
                     ),
                   ),
+                  SizedBox(height: screenHeight * 0.03),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                      margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
+                      shape: RoundedRectangleBorder(side: new BorderSide(color: Colors.grey, width: 2.0), borderRadius: BorderRadius.circular(4.0)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(height: screenHeight * 0.01),
+                          Text(
+                            'Code PIN :',
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.06,
+                              color: Colors.black,
+                            ),
+                          ),
+                          SizedBox(height: screenHeight * 0.03),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: PinPut(
+                              fieldsCount: 4,
+                              onSubmit: (String pin) => pinCode = pin,
+                              controller: _pinPutController,
+                              textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: screenWidth * 0.04,
+                              ),
+                              submittedFieldDecoration: _pinPutDecoration.copyWith(borderRadius: BorderRadius.circular(20)),
+                              selectedFieldDecoration: _pinPutDecoration,
+                              followingFieldDecoration: _pinPutDecoration.copyWith(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(color: Colors.grey[600].withOpacity(.5), width: 3),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                   SizedBox(height: screenHeight * 0.04),
                   FlatButton(
                     onPressed: () async {
                       SystemChannels.textInput.invokeMethod('TextInput.hide');
-                      animationRefreshIcon.repeat();
-                      myUvcToast.setAnimationIcon(animationRefreshIcon);
-                      myUvcToast.setToastDuration(10);
-                      myUvcToast.setToastMessage('Génération en cours !');
-                      myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
-                      String qrCodeFileName = 'QrCode_${myCompany.text}_${myName.text}_${myRoomName.text}.png';
-                      String qrCodeData =
-                          '{\"Company\":\"${myCompany.text}\",\"UserName\":\"${myName.text}\",\"RoomName\":\"${myRoomName.text}\",\"TimeData\":[$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition]}';
-                      await Future.delayed(Duration(seconds: 5), () async {
-                        myUvcToast.clearAllToast();
-                        if (!firstDisplayMainWidget) {
-                          firstDisplayMainWidget = true;
+                      if (_pinPutController.text.isNotEmpty && _pinPutController.text.length < 4) {
+                        myUvcToast.setToastDuration(3);
+                        myUvcToast.setToastMessage('Veuillez mettre un code PIN à 4 chiffres !');
+                        myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                        _pinPutController.text = '';
+                        pinCode = '';
+                      } else {
+                        animationRefreshIcon.repeat();
+                        myUvcToast.setAnimationIcon(animationRefreshIcon);
+                        myUvcToast.setToastDuration(10);
+                        myUvcToast.setToastMessage('Génération en cours !');
+                        myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
+                        String qrCodeFileName = 'QrCodeFullAuto_${myCompany.text}_${myName.text}_${myRoomName.text}.png';
+                        String qrCodeData;
+                        if (_pinPutController.text.isEmpty) {
+                          qrCodeData =
+                              '{\"Company\":\"${myCompany.text}\",\"UserName\":\"${myName.text}\",\"RoomName\":\"${myRoomName.text}\",\"TimeData\":[$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition],\"MAC\":\"$macAddress\",\"NAME\":\"$uvcName\"}';
+                        } else {
+                          final key = Key.fromUtf8('deeplightsolutionsdedesinfection');
+                          final iv = IV.fromLength(16);
+                          final encrypter = Encrypter(AES(key, mode: AESMode.cbc));
+                          final encrypted = encrypter.encrypt(pinCode, iv: iv);
+                          qrCodeData =
+                              '{\"Company\":\"${myCompany.text}\",\"UserName\":\"${myName.text}\",\"RoomName\":\"${myRoomName.text}\",\"TimeData\":[$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition],\"PIN\":\"${encrypted.base16}\",\"MAC\":\"$macAddress\",\"NAME\":\"$uvcName\"}';
                         }
-                        Navigator.pushReplacementNamed(context, '/Qr_code_Display', arguments: {
-                          'myQrcodeListFile': qrCodeList,
-                          'myQrcodeFileName': qrCodeFileName,
-                          'myRoomName': myRoomName.text,
-                          'myQrcodeData': qrCodeData,
+                        await Future.delayed(Duration(seconds: 5), () async {
+                          myUvcToast.clearAllToast();
+                          if (!firstDisplayMainWidget) {
+                            firstDisplayMainWidget = true;
+                          }
+                          Navigator.pushReplacementNamed(context, '/Qr_code_Display_Full_Auto', arguments: {
+                            'myQrcodeListFile': qrCodeList,
+                            'myQrcodeFileName': qrCodeFileName,
+                            'myRoomName': myRoomName.text,
+                            'myQrcodeData': qrCodeData,
+                            'uvcName': uvcName,
+                            'macAddress': macAddress,
+                          });
                         });
-                      });
+                      }
                     },
                     child: Text(
                       'Générer',
@@ -313,6 +398,13 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
           ),
         ],
       ),
+    );
+  }
+
+  BoxDecoration get _pinPutDecoration {
+    return BoxDecoration(
+      border: Border.all(color: Colors.blue, width: 3),
+      borderRadius: BorderRadius.circular(15),
     );
   }
 
