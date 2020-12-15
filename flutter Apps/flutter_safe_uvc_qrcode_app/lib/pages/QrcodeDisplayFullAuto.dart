@@ -75,53 +75,61 @@ class _QrCodeDisplayFullAutoState extends State<QrCodeDisplayFullAuto> {
           title: Text('Votre QR code'),
         ),
         body: Container(
-          decoration: BoxDecoration(color: Colors.grey[200]),
+          decoration: BoxDecoration(color: Colors.white),
           child: Center(
             child: SingleChildScrollView(
               child: RepaintBoundary(
                 key: globalKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/delitech.png',
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Divider(
-                        thickness: 2.0,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    Text(
-                      'QR CODE RAPIDE',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.06),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Divider(
-                        thickness: 2.0,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    QrImage(
-                      data: myQrCodeData,
-                    ),
-                    Container(
-                      alignment: Alignment.bottomCenter, // align the row
-                      padding: EdgeInsets.all(16.0),
-                      child: Text(
-                        myRoomName,
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.06,
+                child: Container(
+                  decoration: BoxDecoration(color: Colors.white),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/delitech.png',
                         ),
-                      ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
+                          child: Divider(
+                            thickness: 2.0,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        Text(
+                          'QR CODE RAPIDE',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.06),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
+                          child: Divider(
+                            thickness: 2.0,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        QrImage(
+                          data: myQrCodeData,
+                        ),
+                        Container(
+                          alignment: Alignment.bottomCenter, // align the row
+                          padding: EdgeInsets.all(16.0),
+                          child: Text(
+                            myRoomName,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                              fontSize: screenWidth * 0.06,
+                            ),
+                          ),
+                        ),
+                        Image.asset(
+                          'assets/texte-deeplight.png',
+                        ),
+                      ],
                     ),
-                    Image.asset(
-                      'assets/texte-deeplight.png',
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -212,7 +220,7 @@ class _QrCodeDisplayFullAutoState extends State<QrCodeDisplayFullAuto> {
     myEmail.text = userEmail;
     return showDialog<void>(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext myContext) {
         return AlertDialog(
           content: Column(
             mainAxisAlignment: MainAxisAlignment.center,
