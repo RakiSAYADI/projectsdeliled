@@ -129,7 +129,7 @@ int InitLoadCfg() {
 		ESP_LOGI(NVS_TAG, "Unit Config Loading OK");
 		//checking the data storage health
 		if (!(strContains(UnitCfg.FLASH_MEMORY, "OK") == 1)) {
-			ESP_LOGI(NVS_TAG, "Saving the default configuration ..");
+			ESP_LOGE(NVS_TAG, "Saving the default configuration ..");
 			Default_saving();
 		}
 
@@ -153,6 +153,12 @@ void Default_saving() {
 
 	UnitCfg.UVCTimeExecution = 0;
 	UnitCfg.UVCLifeTime = 32400000;
+
+	UnitCfg.NumberOfDisinfection = 0;
+
+	UnitCfg.SecurityCodeDismiss = false;
+
+	sprintf(UnitCfg.FirmwareVersion, FIRMWAREVERSIONNAME);
 
 	UnitCfg.Version = VERSION;
 

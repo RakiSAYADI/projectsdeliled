@@ -1,4 +1,5 @@
-set(COMPONENT_SRCS "ledc_example_main.c")
-set(COMPONENT_ADD_INCLUDEDIRS ".")
-
-register_component()
+#set(COMPONENT_SRCS "pwm_capture.c")
+#set(COMPONENT_ADD_INCLUDEDIRS ".")
+idf_component_register(SRCS "pwm_capture.c"
+                    INCLUDE_DIRS "")
+#register_component()

@@ -5,7 +5,8 @@
  *      Author: raki
  */
 
-#define UVCROBOTNAME "DEEPLIGHT-A037"
+#define UVCROBOTNAME "DEEPLIGHT-A044"
+#define FIRMWAREVERSIONNAME "3.0.0"
 #define PASSWORD "123456789"
 #define VERSION 0
 
@@ -41,6 +42,9 @@ typedef struct {
 	uint8_t ActivationTime;
 	int UVCTimeExecution;
 	int UVCLifeTime;
+	int NumberOfDisinfection;
+	bool SecurityCodeDismiss;
+	char FirmwareVersion[7];
 	char FLASH_MEMORY[3];
 } UnitConfig_Typedef;
 

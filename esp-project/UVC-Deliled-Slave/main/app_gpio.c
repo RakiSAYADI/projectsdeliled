@@ -176,42 +176,42 @@ int set_relay_state(int relay, uint32_t level) {
 }
 
 void generate_json() {
-	int i;
-	char buf[4];
-	cJSON *root, *info, *relays;
-	root = cJSON_CreateObject();
-	struct timeval now;
-	gettimeofday(&now, NULL);
-
-	cJSON_AddItemToObject(root, "info", info = cJSON_CreateObject());
-	cJSON_AddItemToObject(root, "relays", relays = cJSON_CreateObject());
-
-	cJSON_AddStringToObject(info, "ssid", "dummy");
-	cJSON_AddNumberToObject(info, "heap", esp_get_free_heap_size());
-	cJSON_AddStringToObject(info, "sdk", esp_get_idf_version());
-	cJSON_AddNumberToObject(info, "time", (now.tv_sec * 1000000 + now.tv_usec));
-
-	for (i = 0; i < 4; i++) {
-		sprintf(buf, "RELAY%d", i); // Relay name.
-		cJSON_AddNumberToObject(relays, buf, cntrl_states[i]);
-	}
-	gettimeofday(&now, NULL);
-	cJSON_ReplaceItemInObject(info, "heap",
-			cJSON_CreateNumber(esp_get_free_heap_size()));
-	cJSON_ReplaceItemInObject(info, "time",
-			cJSON_CreateNumber((now.tv_sec * 1000000 + now.tv_usec)));
-	cJSON_ReplaceItemInObject(info, "sdk",
-			cJSON_CreateString(esp_get_idf_version()));
-
-	for (i = 0; i < 4; i++) {
-		sprintf(buf, "RELAY%d", i); // Relay name.
-		cJSON_ReplaceItemInObject(relays, buf,
-				cJSON_CreateNumber(cntrl_states[i]));
-	}
-
-	json_unformatted = cJSON_PrintUnformatted(root);
-
-	cJSON_Delete(root);
+//	int i;
+//	char buf[4];
+//	cJSON *root, *info, *relays;
+//	root = cJSON_CreateObject();
+//	struct timeval now;
+//	gettimeofday(&now, NULL);
+//
+//	cJSON_AddItemToObject(root, "info", info = cJSON_CreateObject());
+//	cJSON_AddItemToObject(root, "relays", relays = cJSON_CreateObject());
+//
+//	cJSON_AddStringToObject(info, "ssid", "dummy");
+//	cJSON_AddNumberToObject(info, "heap", esp_get_free_heap_size());
+//	cJSON_AddStringToObject(info, "sdk", esp_get_idf_version());
+//	cJSON_AddNumberToObject(info, "time", (now.tv_sec * 1000000 + now.tv_usec));
+//
+//	for (i = 0; i < 4; i++) {
+//		sprintf(buf, "RELAY%d", i); // Relay name.
+//		cJSON_AddNumberToObject(relays, buf, cntrl_states[i]);
+//	}
+//	gettimeofday(&now, NULL);
+//	cJSON_ReplaceItemInObject(info, "heap",
+//			cJSON_CreateNumber(esp_get_free_heap_size()));
+//	cJSON_ReplaceItemInObject(info, "time",
+//			cJSON_CreateNumber((now.tv_sec * 1000000 + now.tv_usec)));
+//	cJSON_ReplaceItemInObject(info, "sdk",
+//			cJSON_CreateString(esp_get_idf_version()));
+//
+//	for (i = 0; i < 4; i++) {
+//		sprintf(buf, "RELAY%d", i); // Relay name.
+//		cJSON_ReplaceItemInObject(relays, buf,
+//				cJSON_CreateNumber(cntrl_states[i]));
+//	}
+//
+//	json_unformatted = cJSON_PrintUnformatted(root);
+//
+//	cJSON_Delete(root);
 
 }
 

@@ -35,18 +35,21 @@
 									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/driver/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/soc/esp32/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/nvs_flash/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/newlib/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/esp_event/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/lwip/lwip/src/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/tcpip_adapter/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/esp_adc_cal/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/bt/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/bt/bluedroid/api/include/api&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/esp-tls&quot;"/>
 									<listOptionValue builtIn="false" value="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
 									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/json/cJSON&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/esp_http_server/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/xtensa/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/newlib/platform_include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/esp_system/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/driver/esp32/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/nghttp/nghttp2/third-party/mruby/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/newlib/include&quot;"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1905172127" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -71,4 +74,9 @@
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Default">
+			<resource resourceType="PROJECT" workspacePath="/pwm_capture"/>
+		</configuration>
+	</storageModule>
 </cproject>

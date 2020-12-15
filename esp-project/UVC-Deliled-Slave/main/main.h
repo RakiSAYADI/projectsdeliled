@@ -5,8 +5,9 @@
  *      Author: raki
  */
 
-#define UVCROBOTNAME "DEEPLIGHT-B001"
-#define SSIDNAME "DEEPLIGHT-A037"
+#define UVCROBOTNAME "DEEPLIGHT-L001"
+#define SSIDNAME "DEEPLIGHT-K001"
+#define FIRMWAREVERSIONNAME "2.0.0"
 #define PASSWORD "123456789"
 
 void LedStatInit();
@@ -37,6 +38,7 @@ typedef struct {
 	char RoomName[64];
 	uint8_t DisinfictionTime;
 	uint8_t ActivationTime;
+	char FirmwareVersion[7];
 	char FLASH_MEMORY[3];
 } UnitConfig_Typedef;
 

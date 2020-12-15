@@ -320,7 +320,36 @@ void MilightApplyConfig(uint8_t r, uint8_t g, uint8_t b, uint8_t w, uint8_t ww,
 	}
 }
 
-static void gpio_task(void* arg) {
+uint16_t Last_Red = 0, Last_Green = 0, Last_Blue = 0, Last_White = 0,
+		Last_WarmWhite = 0;
+
+bool startcounter = false;
+
+uint8_t selZone = 0, counter = 0;
+
+void gpio_task_delay(void* arg) {
+
+	while (1) {
+		if (startcounter) {
+			MilightApplyConfig(Gpio_Red.binEq, Gpio_Green.binEq,
+					Gpio_Blue.binEq, Gpio_White.binEq, Gpio_WarmWhite.binEq,
+					~selZone & 0x0F);
+			Last_Red = Gpio_Red.binEq;
+			Last_Green = Gpio_Green.binEq;
+			Last_Blue = Gpio_Blue.binEq;
+			Last_White = Gpio_White.binEq;
+			Last_WarmWhite = Gpio_WarmWhite.binEq;
+			counter++;
+			if (counter >= 50) {
+				counter = 0;
+				startcounter = false;
+			}
+		}
+		vTaskDelay(50 / portTICK_RATE_MS);
+	}
+}
+
+void gpio_task(void* arg) {
 
 	while (1) {
 
@@ -330,12 +359,20 @@ static void gpio_task(void* arg) {
 		ExtractSigProp(&Gpio_White);
 		ExtractSigProp(&Gpio_WarmWhite);
 
-		uint8_t selZone = ((gpio_get_level(GPIO_ZONE_3) << 3)
+		selZone = ((gpio_get_level(GPIO_ZONE_3) << 3)
 				| (gpio_get_level(GPIO_ZONE_2) << 2)
 				| (gpio_get_level(GPIO_ZONE_1) << 1)
 				| gpio_get_level(GPIO_ZONE_0));
-		MilightApplyConfig(Gpio_Red.binEq, Gpio_Green.binEq, Gpio_Blue.binEq,
-				Gpio_White.binEq, Gpio_WarmWhite.binEq, ~selZone & 0x0F);
+
+		if ((Last_Red != Gpio_Red.binEq) || (Last_Green != Gpio_Green.binEq)
+				|| (Last_Blue != Gpio_Blue.binEq)
+				|| (Last_White != Gpio_White.binEq)
+				|| (Last_WarmWhite != Gpio_WarmWhite.binEq)) {
+			startcounter = true;
+			counter = 0;
+		} else {
+			startcounter = false;
+		}
 
 		printf("sn %08lld R %03u G %03u B %03u W %03u WW %03u \n", SampleNum,
 				Gpio_Red.binEq, Gpio_Green.binEq, Gpio_Blue.binEq,
@@ -371,6 +408,9 @@ void app_main() {
 
 	//start gpio task
 	xTaskCreate(gpio_task, "gpio_task", 2048, NULL, 10, NULL);
+
+	//start gpio task
+	xTaskCreate(gpio_task_delay, "gpio_task_delay", 2048, NULL, 10, NULL);
 
 	//install gpio isr service
 	gpio_install_isr_service(ESP_INTR_FLAG_DEFAULT);

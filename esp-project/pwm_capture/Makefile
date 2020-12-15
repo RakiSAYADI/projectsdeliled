@@ -3,7 +3,6 @@
 # project subdirectory.
 #
 
-PROJECT_NAME := ledc
+PROJECT_NAME := DMX-robot
 
 include $(IDF_PATH)/make/project.mk
-

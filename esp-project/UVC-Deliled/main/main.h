@@ -6,6 +6,7 @@
  */
 
 #define UVCROBOTNAME "DEEPLIGHT-G005"
+#define FIRMWAREVERSIONNAME "3.0.0"
 #define VERSION 0
 
 void bt_main();
@@ -39,6 +40,9 @@ typedef struct {
 	uint8_t ActivationTime;
 	int UVCTimeExecution;
 	int UVCLifeTime;
+	int NumberOfDisinfection;
+	bool SecurityCodeDismiss;
+	char FirmwareVersion[7];
 	char FLASH_MEMORY[3];
 } UnitConfig_Typedef;
 

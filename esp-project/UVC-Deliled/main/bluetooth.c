@@ -148,12 +148,84 @@ struct gatts_char_inst {
 
 static struct gatts_char_inst LIST_CHAR_READ[GATTS_CHAR_NUM_READ] = { //SERVICE READ
 		{ .char_uuid.len = ESP_UUID_LEN_16, .char_uuid.uuid.uuid16 =
-				GATTS_UUID_TEST_READ_Total, .char_perm = ESP_GATT_PERM_READ
+		GATTS_UUID_TEST_READ_Total, .char_perm = ESP_GATT_PERM_READ
 				| ESP_GATT_PERM_WRITE, .char_property =
-				ESP_GATT_CHAR_PROP_BIT_WRITE | ESP_GATT_CHAR_PROP_BIT_READ,
+		ESP_GATT_CHAR_PROP_BIT_WRITE | ESP_GATT_CHAR_PROP_BIT_READ,
 				.char_control = NULL, .char_handle = 0, .char_val = &TOTAL,
 				.char_read_callback = char_total_read_handler,
 				.char_write_callback = char_total_write_handler, } };
+
+int jsonparse(char *src, char *dst, char *label, unsigned short arrayindex) {
+	char *sp = 0, *ep = 0, *ic = 0;
+	char tmp[64];
+
+	sp = strstr(src, label);
+
+	if (sp == NULL) {
+		//ESP_LOGE(GATTS_TAG, "label %s not found",label);
+		return (-1);
+	}
+
+	sp = strchr(sp, ':');
+	if (sp == NULL) {
+		ESP_LOGE(GATTS_TAG, "value start not found");
+		return (-1);
+	}
+
+	if (sp[1] == '"') {
+		sp++;
+		ep = strchr(sp + 1, '"');
+		ic = strchr(sp + 1, ',');
+		if ((ep == NULL) || ((ep > ic) && (ic != NULL))) {
+			ESP_LOGE(GATTS_TAG, "type string parsing error");
+			return (-1);
+		}
+	} else if (sp[1] == '[') {
+		sp++;
+		ep = strchr(sp + 1, ']');
+		ic = strchr(sp + 1, ':');
+		if ((ep == NULL) || ((ep > ic) && (ic != NULL))) {
+			ESP_LOGE(GATTS_TAG, "type array parsing error");
+			return (-1);
+		}
+
+		ic = strchr(sp + 1, ',');
+		if ((ic < ep) && (ic != NULL))
+			ep = ic;
+
+		for (int i = 0; i < arrayindex; i++) {
+			sp = ep;
+			ep = strchr(sp + 1, ',');
+
+			if (ep == NULL) {
+				ic = strchr(sp + 1, ']');
+				ep = ic;
+			}
+		}
+
+		if (sp[1] == '"') {
+			sp++;
+			ep = strchr(sp + 1, '"');
+		}
+	} else {
+		ep = strchr(sp + 1, ',');
+		if (ep == NULL)
+			ep = strchr(sp + 1, '}');
+		ic = strchr(sp + 1, ':');
+		if ((ep == NULL) || ((ep > ic) && (ic != NULL))) {
+			ESP_LOGE(GATTS_TAG, "type int parsing error");
+			return (-1);
+		}
+	}
+
+	strncpy(tmp, sp + 1, ep - sp - 1);
+	tmp[ep - sp - 1] = 0;
+
+	memset(dst, 0x00, strlen(tmp) + 1);
+	memcpy(dst, tmp, strlen(tmp));
+
+	return (0);
+}
 
 void gatts_check_callback(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 		esp_ble_gatts_cb_param_t *param) {
@@ -259,6 +331,7 @@ cJSON *dataStorage;
 cJSON *timeArray;
 
 char *config_json;
+char tmp[64];
 
 cJSON *messageJson, *jsonData;
 
@@ -272,9 +345,12 @@ void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 			esp_get_free_heap_size());
 
 	sprintf((char*) total,
-			"{\"Company\":\"%s\",\"UserName\":\"%s\",\"Detection\":%d,\"RoomName\":\"%s\",\"Version\":%d,\"TimeData\":[%d,%d],\"UVCTimeData\":[%d,%d]}",
+			"{\"Company\":\"%s\",\"UserName\":\"%s\",\"Detection\":%d,\"RoomName\":\"%s\",\"security\":%d,\"Version\":%d,\"FirmwareVersion\":\"%s\",\"TimeData\":[%d,%d],\"UVCTimeData\":[%d,%d,%d]}",
 			UnitCfg.Company, UnitCfg.OperatorName, detectionTriggered,
-			UnitCfg.RoomName,UnitCfg.Version, UnitCfg.DisinfictionTime, UnitCfg.ActivationTime,UnitCfg.UVCLifeTime,UnitCfg.UVCTimeExecution);
+			UnitCfg.RoomName,UnitCfg.SecurityCodeDismiss, UnitCfg.Version, UnitCfg.FirmwareVersion,
+			UnitCfg.DisinfictionTime, UnitCfg.ActivationTime,
+			UnitCfg.UVCLifeTime, UnitCfg.UVCTimeExecution,
+			UnitCfg.NumberOfDisinfection);
 
 	TOTAL.attr_len = strlen((char *) total);
 
@@ -312,10 +388,6 @@ void char_total_write_handler(esp_gatts_cb_event_t event,
 		for (uint32_t pos = 0; pos < param->write.len; pos++) {
 			LIST_CHAR_READ[0].char_val->attr_value[pos] =
 					param->write.value[pos];
-		}
-		if (strncmp((const char *) LIST_CHAR_READ[0].char_val->attr_value, "1*",
-				2) == 0) {
-
 		}
 		ESP_LOGD(GATTS_TAG, "char_light_write_handler = %.*s\n",
 				LIST_CHAR_READ[0].char_val->attr_len,
@@ -365,23 +437,24 @@ void char_total_write_handler(esp_gatts_cb_event_t event,
 
 		cJSON_Delete(messageJson);
 
-	} else if (strContains(config_json, "(SetVersion : ") == 1) {
-		char *version;
-		version = strtok(config_json, "(SetVersion : "); // find the first double quote
-		version = strtok(NULL, ")");   // find the second double quote
-		UnitCfg.Version = atoi(version);
-		ESP_LOGI(GATTS_TAG, "Setting version to %d  ",UnitCfg.Version);
-		free(version);
+	} else if (jsonparse(config_json, tmp, "SetVersion", 0) == 0) {
+		UnitCfg.Version = atoi(tmp);
+		ESP_LOGI(GATTS_TAG, "Setting version to %d  ", UnitCfg.Version);
 		savenvsFlag = true;
-	} else if (strContains(config_json, "(SetUVCLIFETIME : ") == 1) {
-		char *uvcLifeTime;
-		uvcLifeTime = strtok(config_json, "(SetVersion : "); // find the first double quote
-		uvcLifeTime = strtok(NULL, ")");   // find the second double quote
-		UnitCfg.UVCLifeTime = atoi(uvcLifeTime);
-		ESP_LOGI(GATTS_TAG, "Setting uvc life time to %d  ",UnitCfg.UVCLifeTime);
-		free(uvcLifeTime);
+	} else if (strContains(config_json, "(SetUVCLIFETIME : 0)") == 1) {
+		UnitCfg.UVCTimeExecution = 0;
+		UnitCfg.NumberOfDisinfection = 0;
+		ESP_LOGI(GATTS_TAG, "Setting uvc life time to %d  ",
+				UnitCfg.UVCTimeExecution);
 		savenvsFlag = true;
-	}else {
+	} else if (jsonparse(config_json, tmp, "SetUVCLIFESecurity", 0) == 0) {
+		UnitCfg.SecurityCodeDismiss = atoi(tmp);
+		if (UnitCfg.SecurityCodeDismiss)
+			ESP_LOGI(GATTS_TAG, "Circadien cycle Enabled");
+		else
+			ESP_LOGI(GATTS_TAG, "Circadien cycle Disabled");
+		savenvsFlag = true;
+	} else {
 		ESP_LOGE(GATTS_TAG, "BAD MESSAGE");
 	}
 
@@ -394,7 +467,7 @@ char *light_json;
 
 char *config_json;
 
-static void gap_event_handler(esp_gap_ble_cb_event_t event,
+void gap_event_handler(esp_gap_ble_cb_event_t event,
 		esp_ble_gap_cb_param_t *param) {
 	switch (event) {
 
@@ -439,7 +512,7 @@ static void gap_event_handler(esp_gap_ble_cb_event_t event,
 	}
 }
 
-static void gatts_profile_read_event_handler(esp_gatts_cb_event_t event,
+void gatts_profile_read_event_handler(esp_gatts_cb_event_t event,
 		esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param) {
 	switch (event) {
 	case ESP_GATTS_REG_EVT:
@@ -581,8 +654,8 @@ static void gatts_profile_read_event_handler(esp_gatts_cb_event_t event,
 	}
 }
 
-static void gatts_event_handler(esp_gatts_cb_event_t event,
-		esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param) {
+void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
+		esp_ble_gatts_cb_param_t *param) {
 	/* If event is register event, store the gatts_if for each profile */
 	if (event == ESP_GATTS_REG_EVT) {
 		if (param->reg.status == ESP_GATT_OK) {
