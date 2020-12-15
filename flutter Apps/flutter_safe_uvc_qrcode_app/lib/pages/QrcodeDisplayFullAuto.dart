@@ -71,6 +71,7 @@ class _QrCodeDisplayFullAutoState extends State<QrCodeDisplayFullAuto> {
       onWillPop: () => stopActivity(context),
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.blue[400],
           centerTitle: true,
           title: Text('Votre QR code'),
         ),

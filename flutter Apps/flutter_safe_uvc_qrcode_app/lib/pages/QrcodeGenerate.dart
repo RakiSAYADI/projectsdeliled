@@ -89,6 +89,7 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
       child: Scaffold(
         backgroundColor: Colors.blue[400],
         appBar: AppBar(
+          backgroundColor: Colors.blue[400],
           centerTitle: true,
           title: Text('Informations'),
         ),
