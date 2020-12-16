@@ -13,7 +13,7 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
       child: Scaffold(
         backgroundColor: Colors.blue[400],
         appBar: AppBar(
-          title: const Text('Choisir votre Type de QR code'),
+          title: const Text('Type de QR code'),
           centerTitle: true,
         ),
         body: Container(
