@@ -875,11 +875,11 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
         });
   }
 
-  Future<void> _ackAlert(String qrCodeData, BuildContext myContext) {
-    double screenWidth = MediaQuery.of(myContext).size.width;
-    double screenHeight = MediaQuery.of(myContext).size.height;
+  Future<void> _ackAlert(String qrCodeData, BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return showDialog<void>(
-      context: myContext,
+      context: context,
       barrierDismissible: false,
       builder: (BuildContext myContext) {
         return AlertDialog(
@@ -927,10 +927,10 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                     // clear the remaining toast message
                     myUvcToast.clearAllToast();
                     try {
-                      Navigator.of(context).pop();
+                      Navigator.of(myContext).pop();
                       switch (int.parse(dataRead['Version'].toString())) {
                         case 0:
-                          Navigator.pushNamed(myContext, '/profiles', arguments: {
+                          Navigator.pushNamed(context, '/profiles', arguments: {
                             'myDevice': myDevice,
                             'dataRead': myDevice.getReadCharMessage(),
                           });
@@ -943,7 +943,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                       }
                     } catch (e) {
                       print('No version detected');
-                      Navigator.pushNamed(myContext, '/profiles', arguments: {
+                      Navigator.pushNamed(context, '/profiles', arguments: {
                         'myDevice': myDevice,
                         'dataRead': myDevice.getReadCharMessage(),
                       });

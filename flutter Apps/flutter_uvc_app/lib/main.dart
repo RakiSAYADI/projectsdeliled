@@ -7,6 +7,7 @@ import 'package:flutteruvcapp/pages/profils.dart';
 import 'package:flutteruvcapp/pages/qr_code_scan.dart';
 import 'package:flutteruvcapp/pages/send_email.dart';
 import 'package:flutteruvcapp/pages/settings.dart';
+import 'package:flutteruvcapp/pages/tutorial_view.dart';
 import 'package:flutteruvcapp/pages/uvc.dart';
 import 'package:flutteruvcapp/pages/warnings.dart';
 import 'package:flutteruvcapp/pages/scan_ble_list.dart';
@@ -80,6 +81,7 @@ void main() async {
     routes: {
       '/': (context) => Welcome(),
       '/check_permissions': (context) => CheckPermissions(),
+      '/tutorial_view': (context) => TutorialView(),
       '/profiles': (context) => Profiles(),
       '/DataCSVView': (context) => DataCSVView(),
       '/send_email': (context) => SendEmail(),

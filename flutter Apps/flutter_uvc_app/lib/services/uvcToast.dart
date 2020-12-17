@@ -100,16 +100,24 @@ class ToastyMessage {
   }
 
   void clearAllToast() {
-    this.flutterToast.removeQueuedCustomToasts();
-    if (animationRefreshIcon != null) {
-      this.animationRefreshIcon.stop();
+    try {
+      this.flutterToast.removeQueuedCustomToasts();
+      if (animationRefreshIcon != null) {
+        this.animationRefreshIcon.stop();
+      }
+    } catch (e) {
+      print('error detected');
     }
   }
 
   void clearCurrentToast() {
-    if (animationRefreshIcon != null) {
-      this.animationRefreshIcon.stop();
+    try {
+      if (animationRefreshIcon != null) {
+        this.animationRefreshIcon.stop();
+      }
+      this.flutterToast.removeCustomToast();
+    } catch (e) {
+      print('error detected');
     }
-    this.flutterToast.removeCustomToast();
   }
 }

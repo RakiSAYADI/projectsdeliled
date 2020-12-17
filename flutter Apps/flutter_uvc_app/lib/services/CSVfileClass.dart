@@ -61,6 +61,18 @@ class UVCDataFile {
     }
   }
 
+  Future<bool> fileExist(String path) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/$path');
+      await file.readAsString();
+      return true;
+    } catch (e) {
+      print("Couldn't read file");
+      return false;
+    }
+  }
+
   Future<void> saveStringUVCDATA(String uvcData) async {
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/$_uvcDataFileName');
