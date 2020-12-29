@@ -43,10 +43,9 @@ class _TutorialViewState extends State<TutorialView> {
   }
 
   Widget _buildImage(String assetName) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    //double screenHeight = MediaQuery.of(context).size.height;
     return Align(
-      child: Image.asset('assets/$assetName', width: screenWidth*0.8),
+      child: Image.asset('assets/$assetName'),
       alignment: Alignment.bottomCenter,
     );
   }
@@ -71,7 +70,7 @@ class _TutorialViewState extends State<TutorialView> {
     });
   }
 
-  void _listenForPermissionStatusAndAppName() async{
+  void _listenForPermissionStatusAndAppName() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     appName = packageInfo.appName;
 
@@ -126,6 +125,8 @@ class _TutorialViewState extends State<TutorialView> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     const bodyStyle = TextStyle(fontSize: 19.0);
     const pageDecoration = const PageDecoration(
       titleTextStyle: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
@@ -190,10 +191,10 @@ class _TutorialViewState extends State<TutorialView> {
                 skip: const Text('Passer'),
                 next: const Icon(Icons.arrow_forward),
                 done: const Text('COMPRIS', style: TextStyle(fontWeight: FontWeight.w600)),
-                dotsDecorator: const DotsDecorator(
-                  size: Size(10.0, 10.0),
+                dotsDecorator: DotsDecorator(
+                  size: Size(screenWidth * 0.01, screenHeight*0.01),
                   color: Color(0xFFBDBDBD),
-                  activeSize: Size(22.0, 10.0),
+                  activeSize: Size(screenWidth * 0.022, screenHeight*0.010),
                   activeShape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(25.0)),
                   ),

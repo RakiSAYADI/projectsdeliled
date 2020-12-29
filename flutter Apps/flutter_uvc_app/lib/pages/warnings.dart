@@ -188,7 +188,7 @@ class _WarningsState extends State<Warnings> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       FlatButton(
-                        onPressed: () async{
+                        onPressed: () async {
                           final String dataRead = myDevice.getReadCharMessage();
                           try {
                             Map<String, dynamic> dataMap = json.decode(dataRead);
