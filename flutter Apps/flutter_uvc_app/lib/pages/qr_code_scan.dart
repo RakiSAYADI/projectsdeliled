@@ -481,7 +481,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
 
             print(encrypted.base16);
             print(encrypted.base64);
-            final decrypted = encrypter.decrypt16(encrypted.base16, iv: iv);
+            final decrypted = encrypter.decrypt16(pin, iv: iv);
 
             print(decrypted);
             await pinAccess(decrypted);
@@ -926,8 +926,9 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                     dataRead = jsonDecode(myDevice.getReadCharMessage());
                     // clear the remaining toast message
                     myUvcToast.clearAllToast();
+                    print(myDevice.getReadCharMessage());
                     try {
-                      Navigator.of(myContext).pop();
+                      Navigator.of(context).pop();
                       switch (int.parse(dataRead['Version'].toString())) {
                         case 0:
                           Navigator.pushNamed(context, '/profiles', arguments: {
