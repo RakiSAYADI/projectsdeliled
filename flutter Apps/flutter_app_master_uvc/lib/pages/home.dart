@@ -61,12 +61,12 @@ class _HomeState extends State<Home> {
       Map<String, dynamic> data = jsonDecode(dataRobotUVC);
       print(data.toString());
       List<int> lifeCycleUVCList = [];
-      if ((data['FirmwareVersion'] != null) || (data['Version'] != null) || (data['Security'] != null)) {
+      if ((data['FirmwareVersion'] != null) || (data['Version'] != null) || (data['security'] != null)) {
         switch (data['FirmwareVersion']) {
           case '3.0.0':
             try {
               variableUVCMode = data['Version'];
-              if (data['Security'] == 0) {
+              if (data['security'] == 0) {
                 securityAccess = false;
                 qrCodeScanMessage = 'activé';
               } else {

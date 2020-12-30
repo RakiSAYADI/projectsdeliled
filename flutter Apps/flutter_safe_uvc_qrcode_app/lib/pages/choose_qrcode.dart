@@ -13,7 +13,7 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
       child: Scaffold(
         backgroundColor: Colors.blue[400],
         appBar: AppBar(
-          title: const Text('Type de QR code'),
+          title: const Text('Choisir votre Type de QR code'),
           centerTitle: true,
         ),
         body: Container(
@@ -43,7 +43,7 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
                                   child: FlatButton(
                                     onPressed: () => null,
                                     child: Text(
-                                      'QR code Classique',
+                                      'QR code Data',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: screenWidth * 0.05,
@@ -74,7 +74,7 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
                                     '- l\'établissement\n'
                                     '- l\'opérateur\n'
                                     '- la pièce\n'
-                                    '- le délais d\"allumage\n'
+                                    '- le préavis d\'allumage\n'
                                     '- la durée de désinfection \n',
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
@@ -106,7 +106,7 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
                                   child: FlatButton(
                                     onPressed: () => null,
                                     child: Text(
-                                      'QR code Rapide',
+                                      'QR code OneClick',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: screenWidth * 0.05,
@@ -121,7 +121,7 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                    'Le QR code rapide permet de lancer la désinfection plus apidement dans SAFE UVC (moins d\'étapes).',
+                                    'Ce QR code permet de lancer la désinfection plus rapidement dans SAFE UVC (moins d\'étapes).',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: Colors.black,
@@ -152,9 +152,9 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                    '- les informations du QR code classique\n'
+                                    '- les informations du QR code Data\n'
                                     '+\n'
-                                    '- Un code PIN\n',
+                                    '- Un code PIN (optionnel)\n',
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                       color: Colors.black,
