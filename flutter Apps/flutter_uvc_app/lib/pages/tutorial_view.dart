@@ -22,8 +22,6 @@ class _TutorialViewState extends State<TutorialView> {
 
   PermissionStatus _permissionStatus = PermissionStatus.unknown;
 
-  String appName;
-
   final introKey = GlobalKey<IntroductionScreenState>();
 
   void _onIntroEnd(context) {
@@ -71,11 +69,7 @@ class _TutorialViewState extends State<TutorialView> {
   }
 
   void _listenForPermissionStatusAndAppName() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    appName = packageInfo.appName;
-
     final Future<PermissionStatus> statusFuture = LocationPermissions().checkPermissionStatus();
-
     statusFuture.then((PermissionStatus status) {
       setState(() {
         _permissionStatus = status;
@@ -151,7 +145,27 @@ class _TutorialViewState extends State<TutorialView> {
                 pages: [
                   PageViewModel(
                     image: _buildImage('TUTO-01.png'),
-                    title: "Merci d’avoir installé l’application $appName !",
+                    titleWidget: FutureBuilder(
+                        future: PackageInfo.fromPlatform(),
+                        builder: (BuildContext context, snapshot) {
+                          if (snapshot.hasData) {
+                            String data = "Merci d’avoir installé l’application ${snapshot.data.appName} !";
+                            return Center(
+                                child: Text(
+                              '$data',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: screenWidth * 0.06 + screenHeight * 0.012,
+                              ),
+                            ));
+                          } else {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                        }),
                     body: "Nous allons vous montrer comment vous en servir en toute sécurité.",
                     decoration: pageDecoration,
                   ),
@@ -192,9 +206,9 @@ class _TutorialViewState extends State<TutorialView> {
                 next: const Icon(Icons.arrow_forward),
                 done: const Text('COMPRIS', style: TextStyle(fontWeight: FontWeight.w600)),
                 dotsDecorator: DotsDecorator(
-                  size: Size(screenWidth * 0.01, screenHeight*0.01),
+                  size: Size(screenWidth * 0.01, screenHeight * 0.01),
                   color: Color(0xFFBDBDBD),
-                  activeSize: Size(screenWidth * 0.022, screenHeight*0.010),
+                  activeSize: Size(screenWidth * 0.022, screenHeight * 0.010),
                   activeShape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(25.0)),
                   ),

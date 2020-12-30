@@ -145,7 +145,7 @@ packages:
       name: flutter_blue
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.2"
+    version: "0.7.3"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -159,14 +159,14 @@ packages:
       name: flutter_local_notifications
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.1"
+    version: "3.0.2"
   flutter_local_notifications_platform_interface:
     dependency: transitive
     description:
       name: flutter_local_notifications_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.0+1"
   flutter_spinkit:
     dependency: "direct main"
     description:
@@ -190,7 +190,7 @@ packages:
       name: fluttertoast
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "7.1.1"
+    version: "7.1.6"
   html:
     dependency: transitive
     description:
@@ -309,7 +309,7 @@ packages:
       name: path_provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.22"
+    version: "1.6.24"
   path_provider_linux:
     dependency: transitive
     description:
@@ -400,7 +400,7 @@ packages:
       name: qrcode_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.8"
+    version: "2.0.0"
   rxdart:
     dependency: "direct main"
     description:
