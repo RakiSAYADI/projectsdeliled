@@ -676,6 +676,8 @@ class _UVCAutoState extends State<UVCAuto> {
                     myUvcToast.setToastDuration(3);
                     myUvcToast.setToastMessage('Configuration Sauvegardée !');
                     myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+                    print(autoUVCService.getUVCAutoServiceState());
+                    Navigator.pop(context, true);
                     if (!autoUVCService.getUVCAutoServiceState()) {
                       autoUVCService.startUVCService();
                     } else {
