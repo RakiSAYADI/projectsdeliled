@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutteruvcapp/pages/check_permissions.dart';
 import 'package:flutteruvcapp/pages/data_view.dart';
+import 'package:flutteruvcapp/pages/data_view_qrcode.dart';
 import 'package:flutteruvcapp/pages/end_uvc.dart';
 import 'package:flutteruvcapp/pages/profils.dart';
 import 'package:flutteruvcapp/pages/qr_code_scan.dart';
 import 'package:flutteruvcapp/pages/send_email.dart';
+import 'package:flutteruvcapp/pages/send_file_qrcode.dart';
 import 'package:flutteruvcapp/pages/settings.dart';
 import 'package:flutteruvcapp/pages/tutorial_view.dart';
 import 'package:flutteruvcapp/pages/uvc.dart';
@@ -84,7 +86,9 @@ void main() async {
       '/tutorial_view': (context) => TutorialView(),
       '/profiles': (context) => Profiles(),
       '/DataCSVView': (context) => DataCSVView(),
+      '/DataCSVViewQrCode': (context) => DataCSVViewQrCode(),
       '/send_email': (context) => SendEmail(),
+      '/send_email_qr_code': (context) => SendEmailQrCode(),
       '/scan_ble_list': (context) => ScanListBle(),
       '/qr_code_scan': (context) => QrCodeScan(),
       '/settings': (context) => Settings(),

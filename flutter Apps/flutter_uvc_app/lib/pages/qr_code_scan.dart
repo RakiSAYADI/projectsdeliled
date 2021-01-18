@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart' hide Key;
 import 'package:flutter/material.dart' hide Key;
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutteruvcapp/services/CSVfileClass.dart';
 import 'package:flutteruvcapp/services/bleDeviceClass.dart';
 import 'package:flutteruvcapp/services/uvcClass.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
@@ -182,9 +183,13 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                 });
                 if (deviceExistOrNot) {
                   try {
-                    json.decode(data) as Map<String, dynamic>;
+                    Map<String, dynamic> qrCodeData = json.decode(data);
                     print('The provided string is a valid JSON');
-                    connectingWithQrCode(data);
+                    if (qrCodeData['SAFEUVCDATA'].toString().isNotEmpty) {
+                      rapportCSV(data);
+                    } else {
+                      connectingWithQrCode(data);
+                    }
                   } on FormatException catch (e) {
                     print('The provided string is not valid JSON : ${e.toString()}');
                     _ackAlert(data, context);
@@ -570,29 +575,22 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
         });
   }
 
-  Future<void> stopActivity(BuildContext context) {
-    return showDialog<bool>(
-      context: context,
-      builder: (c) => AlertDialog(
-        title: Text('Attention'),
-        content: Text('Voulez-vous vraiment quitter l\'application ?'),
-        actions: [
-          FlatButton(
-            child: Text('Oui'),
-            onPressed: () {
-              if (myDevice != null) {
-                myDevice.disconnect();
-              }
-              Navigator.pop(c, true);
-            },
-          ),
-          FlatButton(
-            child: Text('Non'),
-            onPressed: () => Navigator.pop(c, false),
-          ),
-        ],
-      ),
-    );
+  void rapportCSV(String data) async {
+    List<List<String>> uvcData;
+    var dataQrCode = json.decode(data) as Map<String, dynamic>;
+    UVCDataFile uvcDataFile = UVCDataFile();
+    uvcData = await uvcDataFile.readUVCDATA();
+    String userEmail;
+    try {
+      userEmail = dataQrCode['SAFEUVCDATA'];
+    } catch (e) {
+      userEmail = '';
+    }
+
+    Navigator.pushNamed(context, '/DataCSVViewQrCode', arguments: {
+      'uvcData': uvcData,
+      'userEmail': userEmail,
+    });
   }
 
   Widget _buildToolBar() {
@@ -967,6 +965,31 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           ],
         );
       },
+    );
+  }
+
+  Future<void> stopActivity(BuildContext context) {
+    return showDialog<bool>(
+      context: context,
+      builder: (c) => AlertDialog(
+        title: Text('Attention'),
+        content: Text('Voulez-vous vraiment quitter l\'application ?'),
+        actions: [
+          FlatButton(
+            child: Text('Oui'),
+            onPressed: () {
+              if (myDevice != null) {
+                myDevice.disconnect();
+              }
+              Navigator.pop(c, true);
+            },
+          ),
+          FlatButton(
+            child: Text('Non'),
+            onPressed: () => Navigator.pop(c, false),
+          ),
+        ],
+      ),
     );
   }
 }
