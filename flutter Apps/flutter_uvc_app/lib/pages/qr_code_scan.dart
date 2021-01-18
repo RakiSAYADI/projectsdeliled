@@ -158,42 +158,47 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
             if (data.isNotEmpty && !qrCodeScanAccess) {
               if (!noLongerScan) {
                 print('is checking qrcode android');
-                for (int i = 0; i < scanDevices.length; i++) {
-                  if (data.contains(scanDevices.elementAt(i).id.toString())) {
-                    deviceExistOrNot = true;
-                    devicesPosition = i;
-                    _controller.pause();
+                try {
+                  Map<String, dynamic> qrCodeData = json.decode(data);
+                  //print(qrCodeData['SAFEUVCDATA'].toString());
+                  if (qrCodeData['SAFEUVCDATA'].toString() != null) {
                     noLongerScan = true;
+                    _controller.pause();
                     qrCodeScanAccess = true;
-                    break;
-                  } else {
-                    deviceExistOrNot = false;
+                    rapportCSV(data);
                   }
-                }
-                setState(() {
-                  if (deviceExistOrNot) {
-                    qrCodeMessage = 'Accès valide';
-                    colorMessage = Colors.green;
-                    qrCodeScanAccess = true;
-                  } else {
-                    qrCodeMessage = 'Accès non valide';
-                    colorMessage = Colors.red;
-                    qrCodeScanAccess = false;
-                  }
-                });
-                if (deviceExistOrNot) {
-                  try {
-                    Map<String, dynamic> qrCodeData = json.decode(data);
-                    print('The provided string is a valid JSON');
-                    print(qrCodeData['SAFEUVCDATA'].toString());
-                    if (qrCodeData['SAFEUVCDATA'].toString() == null) {
-                      rapportCSV(data);
+                } catch (e) {
+                  for (int i = 0; i < scanDevices.length; i++) {
+                    if (data.contains(scanDevices.elementAt(i).id.toString())) {
+                      deviceExistOrNot = true;
+                      devicesPosition = i;
+                      _controller.pause();
+                      noLongerScan = true;
+                      qrCodeScanAccess = true;
+                      break;
                     } else {
-                      connectingWithQrCode(data);
+                      deviceExistOrNot = false;
                     }
-                  } on FormatException catch (e) {
-                    print('The provided string is not valid JSON : ${e.toString()}');
-                    _ackAlert(data, context);
+                  }
+                  setState(() {
+                    if (deviceExistOrNot) {
+                      qrCodeMessage = 'Accès valide';
+                      colorMessage = Colors.green;
+                      qrCodeScanAccess = true;
+                    } else {
+                      qrCodeMessage = 'Accès non valide';
+                      colorMessage = Colors.red;
+                      qrCodeScanAccess = false;
+                    }
+                  });
+                  if (deviceExistOrNot) {
+                    try {
+                      json.decode(data) as Map<String, dynamic>;
+                      connectingWithQrCode(data);
+                    } on FormatException catch (e) {
+                      print('The provided string is not valid JSON : ${e.toString()}');
+                      _ackAlert(data, context);
+                    }
                   }
                 }
               }

@@ -50,7 +50,7 @@ class _QrCodeGeneratorDataState extends State<QrCodeGeneratorData> with TickerPr
                 children: <Widget>[
                   SizedBox(height: screenHeight * 0.01),
                   Image.asset(
-                    'assets/etablissement_logo.png',
+                    'assets/adresse-mail-logo.png',
                     height: screenHeight * 0.09,
                     width: screenWidth * 0.5,
                   ),
