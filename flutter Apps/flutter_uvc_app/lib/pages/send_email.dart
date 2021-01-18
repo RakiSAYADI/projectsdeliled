@@ -149,7 +149,7 @@ class _SendEmailState extends State<SendEmail> {
       ..subject = 'Rapport de désinfection UVC'
       ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataFileName')))
       ..text = 'Bonjour,\n\n'
-          'Vous trouverez ci-joint le rapport concernant la désinfection éffectuée à l’aide de'
+          'Vous trouverez ci-joint le rapport concernant la désinfection effectuée à l’aide de'
           ' votre solution de désinfection DEEPLIGHT® de DeliTech Medical®.\n'
           'Cet email est envoyé automatiquement, merci de ne pas y répondre.\n\n'
           'Merci de votre confiance.';

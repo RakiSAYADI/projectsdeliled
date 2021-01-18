@@ -34,7 +34,7 @@ class Device {
     }
 
     // connect
-    await device.connect(autoConnect: autoConnection);
+    await device.connect(timeout: Duration(milliseconds: 500), autoConnect: autoConnection);
     // Discover services
     _services = await device.discoverServices();
     // setting MTU

@@ -4,7 +4,7 @@ import 'package:path_provider/path_provider.dart';
 
 class UVCDataFile {
   final String _uvcDefaultDataString =
-      'Nom du robot ;Utilisateur ;Etablissement ;Chambre ;Heure d\'activation ;Date d\'activation ;Temps de disinfection (en secondes) ;Etat \n';
+      'Nom du robot ;Utilisateur ;Etablissement ;Chambre ;Heure d\'activation ;Date d\'activation ;Temps de desinfection (en seconde) ;Etat \n';
 
   final String _uvcDataFileName = 'RapportUVC.csv';
 
@@ -16,9 +16,9 @@ class UVCDataFile {
       'Utilisateur',
       'Etablissement',
       'Chambre',
-      'Heure D\'activation',
-      'Date D\'activation',
-      'Temps de disinfection (en secondes)',
+      'Heure d\'activation',
+      'Date d\'activation',
+      'Temps de desinfection (en seconde)',
       'Etat'
     ]
   ];

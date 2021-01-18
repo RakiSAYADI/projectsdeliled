@@ -91,7 +91,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
       }
     } while (true);
     await ledControl.setLedColor('ON');
-    await Future.delayed(const Duration(milliseconds: 50));
+    await Future.delayed(const Duration(milliseconds: 500));
     await ledControl.setLedColor('BLUE');
   }
 
@@ -398,6 +398,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
             ),
             onPressed: () async {
               //Stop UVC processing
+              alertOrUVC = true;
               treatmentIsStopped = true;
               treatmentIsOnProgress = false;
               treatmentIsSuccessful = false;

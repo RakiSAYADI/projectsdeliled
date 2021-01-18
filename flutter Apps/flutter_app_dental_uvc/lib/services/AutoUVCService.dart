@@ -98,10 +98,16 @@ class AutoUVCService {
               await Future.delayed(const Duration(milliseconds: 200));
               String message = 'UVCTreatement : ON';
               await _myDevice.writeCharacteristic(2, 0, message);
-              Navigator.pushNamed(_buildContext, '/uvc', arguments: {
-                'uvclight': _myUVCLight,
-                'myDevice': _myDevice,
-              });
+              try {
+                Navigator.pushNamed(_buildContext, '/uvc', arguments: {
+                  'uvclight': _myUVCLight,
+                  'myDevice': _myDevice,
+                });
+              } catch (e) {
+                _myUvcToast.setToastDuration(5);
+                _myUvcToast.setToastMessage('Execution d\'une desinfection automatique !');
+                _myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+              }
             } else {
               _myUvcToast.setToastDuration(3);
               _myUvcToast.setToastMessage('La désinfection est ignorée car le dispositif UV-C n\'est pas connecté !');

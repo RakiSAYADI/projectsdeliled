@@ -49,7 +49,7 @@ class LedControl {
         process.stdin.writeln('$_commandOperation $colorHex $_packageName');
         process.stdin.writeln(_exitCommand);
       });
-      await Future.delayed(const Duration(milliseconds: 50));
+      await Future.delayed(const Duration(milliseconds: 200));
       return true;
     } catch (e) {
       return false;

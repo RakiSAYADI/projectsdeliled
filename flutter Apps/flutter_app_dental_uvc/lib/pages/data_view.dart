@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
+import 'package:flutterappdentaluvc/services/httpRequests.dart';
 import 'package:flutterappdentaluvc/services/uvcClass.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:mailer/mailer.dart';
@@ -27,6 +28,8 @@ class _DataCSVViewState extends State<DataCSVView> {
 
   UVCDataFile uvcDataFile;
   String userEmail;
+
+  DataBaseRequests dataBaseRequests = DataBaseRequests();
 
   bool firstDisplayMainWidget = true;
 
@@ -147,10 +150,16 @@ class _DataCSVViewState extends State<DataCSVView> {
               onPressed: () async {
                 Navigator.pop(context, false);
                 await uvcDataFile.saveStringUVCEmailDATA(myEmail.text);
-                myUvcToast.setToastDuration(60);
-                myUvcToast.setToastMessage('Envoi en cours !');
-                myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
-                await sendEmail(myEmail.text);
+                if (await dataBaseRequests.checkConnection()) {
+                  myUvcToast.setToastDuration(60);
+                  myUvcToast.setToastMessage('Envoi en cours !');
+                  myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
+                  await sendEmail(myEmail.text);
+                } else {
+                  myUvcToast.setToastDuration(3);
+                  myUvcToast.setToastMessage('Veuillez connecter votre tablette sur internet !');
+                  myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                }
               },
             ),
             FlatButton(
