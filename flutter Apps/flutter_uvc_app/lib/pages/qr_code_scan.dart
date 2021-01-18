@@ -185,7 +185,8 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                   try {
                     Map<String, dynamic> qrCodeData = json.decode(data);
                     print('The provided string is a valid JSON');
-                    if (qrCodeData['SAFEUVCDATA'].toString().isNotEmpty) {
+                    print(qrCodeData['SAFEUVCDATA'].toString());
+                    if (qrCodeData['SAFEUVCDATA'].toString() == null) {
                       rapportCSV(data);
                     } else {
                       connectingWithQrCode(data);
@@ -452,14 +453,14 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
             await myDevice.readCharacteristic(2, 0);
           }
           int activationTimePosition, infectionTimePosition;
-          activationTimePosition = _stringListAsciiToListInt(dataQrCode['TimeData'].toString().codeUnits)[0];
-          infectionTimePosition = _stringListAsciiToListInt(dataQrCode['TimeData'].toString().codeUnits)[1];
+          infectionTimePosition = _stringListAsciiToListInt(dataQrCode['TimeData'].toString().codeUnits)[0];
+          activationTimePosition = _stringListAsciiToListInt(dataQrCode['TimeData'].toString().codeUnits)[1];
           if (Platform.isIOS) {
             await myDevice.writeCharacteristic(
-                0, 0, '{\"data\":[\"$myCompany\",\"$userName\",\"$roomName\",$activationTimePosition,$infectionTimePosition]}');
+                0, 0, '{\"data\":[\"$myCompany\",\"$userName\",\"$roomName\",$infectionTimePosition,$activationTimePosition]}');
           } else {
             await myDevice.writeCharacteristic(
-                2, 0, '{\"data\":[\"$myCompany\",\"$userName\",\"$roomName\",$activationTimePosition,$infectionTimePosition]}');
+                2, 0, '{\"data\":[\"$myCompany\",\"$userName\",\"$roomName\",$infectionTimePosition,$activationTimePosition]}');
           }
           myUvcLight = UvcLight();
           myUvcLight.setCompanyName(myCompany);

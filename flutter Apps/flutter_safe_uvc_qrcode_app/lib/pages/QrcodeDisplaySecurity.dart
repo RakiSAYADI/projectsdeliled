@@ -48,24 +48,30 @@ class _QrCodeDisplaySecurityState extends State<QrCodeDisplaySecurity> {
             child: SingleChildScrollView(
               child: RepaintBoundary(
                 key: globalKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/delitech.png',
+                child: Container(
+                  decoration: BoxDecoration(color: Colors.white),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/delitech.png',
+                        ),
+                        QrImage(
+                          data: 'https://qrgo.page.link/hYgXu',
+                        ),
+                        Container(
+                          alignment: Alignment.bottomCenter, // align the row
+                          padding: EdgeInsets.all(16.0),
+                          child: Text('QrCode de Sécurité'),
+                        ),
+                        Image.asset(
+                          'assets/texte-deeplight.png',
+                        ),
+                      ],
                     ),
-                    QrImage(
-                      data: 'https://qrgo.page.link/hYgXu',
-                    ),
-                    Container(
-                      alignment: Alignment.bottomCenter, // align the row
-                      padding: EdgeInsets.all(16.0),
-                      child: Text('QrCode de Sécurité'),
-                    ),
-                    Image.asset(
-                      'assets/texte-deeplight.png',
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -122,7 +128,7 @@ class _QrCodeDisplaySecurityState extends State<QrCodeDisplaySecurity> {
       ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
       Uint8List pngBytes = byteData.buffer.asUint8List();
       final tempDir = await getTemporaryDirectory();
-      final file = await new File('${tempDir.path}/securityQrCode').create();
+      final file = await new File('${tempDir.path}/securityQrCode.png').create();
       await file.writeAsBytes(pngBytes);
       qrCodeList.add(new FileAttachment(file));
     } catch (e) {
@@ -138,7 +144,7 @@ class _QrCodeDisplaySecurityState extends State<QrCodeDisplaySecurity> {
     myEmail.text = userEmail;
     return showDialog<void>(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext c) {
         return AlertDialog(
           content: Column(
             mainAxisAlignment: MainAxisAlignment.center,

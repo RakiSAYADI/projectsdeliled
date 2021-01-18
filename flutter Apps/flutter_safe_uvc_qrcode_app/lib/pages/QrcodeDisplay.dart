@@ -58,24 +58,30 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
             child: SingleChildScrollView(
               child: RepaintBoundary(
                 key: globalKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/delitech.png',
+                child: Container(
+                  decoration: BoxDecoration(color: Colors.white),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/delitech.png',
+                        ),
+                        QrImage(
+                          data: myQrCodeData,
+                        ),
+                        Container(
+                          alignment: Alignment.bottomCenter, // align the row
+                          padding: EdgeInsets.all(16.0),
+                          child: Text(myRoomName),
+                        ),
+                        Image.asset(
+                          'assets/texte-deeplight.png',
+                        ),
+                      ],
                     ),
-                    QrImage(
-                      data: myQrCodeData,
-                    ),
-                    Container(
-                      alignment: Alignment.bottomCenter, // align the row
-                      padding: EdgeInsets.all(16.0),
-                      child: Text(myRoomName),
-                    ),
-                    Image.asset(
-                      'assets/texte-deeplight.png',
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -164,7 +170,7 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
     myEmail.text = userEmail;
     return showDialog<void>(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext c) {
         return AlertDialog(
           content: Column(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -58,24 +58,30 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
             child: SingleChildScrollView(
               child: RepaintBoundary(
                 key: globalKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/delitech.png',
+                child: Container(
+                  decoration: BoxDecoration(color: Colors.white),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/delitech.png',
+                        ),
+                        QrImage(
+                          data: myQrCodeData,
+                        ),
+                        Container(
+                          alignment: Alignment.bottomCenter, // align the row
+                          padding: EdgeInsets.all(16.0),
+                          child: Text(myEmail),
+                        ),
+                        Image.asset(
+                          'assets/texte-deeplight.png',
+                        ),
+                      ],
                     ),
-                    QrImage(
-                      data: myQrCodeData,
-                    ),
-                    Container(
-                      alignment: Alignment.bottomCenter, // align the row
-                      padding: EdgeInsets.all(16.0),
-                      child: Text(myEmail),
-                    ),
-                    Image.asset(
-                      'assets/texte-deeplight.png',
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -116,7 +122,7 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
               onTap: () async {
                 SystemChannels.textInput.invokeMethod('TextInput.hide');
                 await captureQrCodePNG();
-                Navigator.pushReplacementNamed(context, '/Qr_code_Generate', arguments: {
+                Navigator.pushReplacementNamed(context, '/Qr_code_Generate_Data', arguments: {
                   'myQrcodeListFile': qrCodeList,
                 });
               },
@@ -164,7 +170,7 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
     myEmail.text = userEmail;
     return showDialog<void>(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext c) {
         return AlertDialog(
           content: Column(
             mainAxisAlignment: MainAxisAlignment.center,

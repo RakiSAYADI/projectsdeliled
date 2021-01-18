@@ -67,7 +67,7 @@ class _QrCodeGeneratorDataState extends State<QrCodeGeneratorData> with TickerPr
                         color: Colors.grey[800],
                       ),
                       decoration: InputDecoration(
-                          hintText: 'Établissement',
+                          hintText: 'Adresse Email',
                           hintStyle: TextStyle(
                             color: Colors.grey,
                           )),

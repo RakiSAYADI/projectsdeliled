@@ -91,6 +91,7 @@ class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with 
         firstDisplayMainWidget = true;
       }
     } catch (e) {
+      print(e);
       firstDisplayMainWidget = false;
     }
 
@@ -337,14 +338,14 @@ class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with 
                         String qrCodeData;
                         if (_pinPutController.text.isEmpty) {
                           qrCodeData =
-                              '{\"Company\":\"${myCompany.text}\",\"UserName\":\"${myName.text}\",\"RoomName\":\"${myRoomName.text}\",\"TimeData\":[$myActivationTimeMinutePosition,$myExtinctionTimeMinutePosition],\"MAC\":\"$macAddress\",\"NAME\":\"$uvcName\"}';
+                              '{\"Company\":\"${myCompany.text}\",\"UserName\":\"${myName.text}\",\"RoomName\":\"${myRoomName.text}\",\"TimeData\":[$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition],\"MAC\":\"$macAddress\",\"NAME\":\"$uvcName\"}';
                         } else {
                           final key = Key.fromUtf8('deeplightsolutionsdedesinfection');
                           final iv = IV.fromLength(16);
                           final encrypter = Encrypter(AES(key, mode: AESMode.cbc));
                           final encrypted = encrypter.encrypt(pinCode, iv: iv);
                           qrCodeData =
-                              '{\"Company\":\"${myCompany.text}\",\"UserName\":\"${myName.text}\",\"RoomName\":\"${myRoomName.text}\",\"TimeData\":[$myActivationTimeMinutePosition,$myExtinctionTimeMinutePosition],\"PIN\":\"${encrypted.base16}\",\"MAC\":\"$macAddress\",\"NAME\":\"$uvcName\"}';
+                              '{\"Company\":\"${myCompany.text}\",\"UserName\":\"${myName.text}\",\"RoomName\":\"${myRoomName.text}\",\"TimeData\":[$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition],\"PIN\":\"${encrypted.base16}\",\"MAC\":\"$macAddress\",\"NAME\":\"$uvcName\"}';
                         }
                         await Future.delayed(Duration(seconds: 5), () async {
                           myUvcToast.clearAllToast();

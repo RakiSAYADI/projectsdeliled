@@ -48,11 +48,11 @@ class _QrCodeDisplayFullAutoState extends State<QrCodeDisplayFullAuto> {
     myRoomName = qrCodeDisplayClassData['myRoomName'];
     qrCodeList = qrCodeDisplayClassData['myQrcodeListFile'];
 
-    try{
-      if(qrCodeList.isEmpty){
+    try {
+      if (qrCodeList.isEmpty) {
         print(qrCodeList);
       }
-    }catch(e){
+    } catch (e) {
       qrCodeList = [new FileAttachment(File('path'))];
       qrCodeList.length = 0;
     }
@@ -208,6 +208,7 @@ class _QrCodeDisplayFullAutoState extends State<QrCodeDisplayFullAuto> {
       final file = await new File('${tempDir.path}/$myQrCodeName').create();
       await file.writeAsBytes(pngBytes);
       qrCodeList.add(new FileAttachment(file));
+      print('qrcode list is : $qrCodeList');
     } catch (e) {
       print(e.toString());
     }
