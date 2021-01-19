@@ -166,40 +166,11 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                     _controller.pause();
                     qrCodeScanAccess = true;
                     rapportCSV(data);
+                  } else {
+                    connectingToRobotAndroid(data,noLongerScan);
                   }
                 } catch (e) {
-                  for (int i = 0; i < scanDevices.length; i++) {
-                    if (data.contains(scanDevices.elementAt(i).id.toString())) {
-                      deviceExistOrNot = true;
-                      devicesPosition = i;
-                      _controller.pause();
-                      noLongerScan = true;
-                      qrCodeScanAccess = true;
-                      break;
-                    } else {
-                      deviceExistOrNot = false;
-                    }
-                  }
-                  setState(() {
-                    if (deviceExistOrNot) {
-                      qrCodeMessage = 'Accès valide';
-                      colorMessage = Colors.green;
-                      qrCodeScanAccess = true;
-                    } else {
-                      qrCodeMessage = 'Accès non valide';
-                      colorMessage = Colors.red;
-                      qrCodeScanAccess = false;
-                    }
-                  });
-                  if (deviceExistOrNot) {
-                    try {
-                      json.decode(data) as Map<String, dynamic>;
-                      connectingWithQrCode(data);
-                    } on FormatException catch (e) {
-                      print('The provided string is not valid JSON : ${e.toString()}');
-                      _ackAlert(data, context);
-                    }
-                  }
+                  connectingToRobotAndroid(data,noLongerScan);
                 }
               }
             }
@@ -213,69 +184,21 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
             if (data.isNotEmpty && !qrCodeScanAccess) {
               print('is checking qrcode ios');
               if (!noLongerScan) {
-                if (data.contains(myDevice.device.name)) {
-                  deviceExistOrNot = true;
-                  _controller.pause();
-                  noLongerScan = true;
-                  qrCodeScanAccess = true;
-                } else {
-                  deviceExistOrNot = false;
-                }
-                setState(() {
-                  if (deviceExistOrNot) {
-                    qrCodeMessage = 'Accès valide';
-                    colorMessage = Colors.green;
+                try {
+                  var qrCodeData = json.decode(data) as Map<String, dynamic>;
+                  print(qrCodeData['SAFEUVCDATA']);
+                  if (qrCodeData['SAFEUVCDATA'] != null) {
+                    noLongerScan = true;
+                    _controller.pause();
                     qrCodeScanAccess = true;
+                    rapportCSV(data);
                   } else {
-                    qrCodeMessage = 'Accès non valide';
-                    colorMessage = Colors.red;
-                    qrCodeScanAccess = false;
+                    connectingToRobotIOS(data,noLongerScan);
                   }
-                });
-                if (deviceExistOrNot) {
-                  qrCodeScanAccess = false;
-                  try {
-                    json.decode(data) as Map<String, dynamic>;
-                    print('The provided string is a valid JSON');
-                    connectingWithQrCode(data);
-                  } on FormatException catch (e) {
-                    print('The provided string is not valid JSON : ${e.toString()}');
-                    Future.delayed(const Duration(seconds: 2), () async {
-                      // Stop uvc treatment if it's on
-                      String message = 'STOP : ON';
-                      await myDevice.writeCharacteristic(0, 0, message);
-                      // Read data from robot
-                      await myDevice.readCharacteristic(0, 0);
-                      Map<String, dynamic> dataRead;
-                      dataRead = jsonDecode(myDevice.getReadCharMessage());
-                      // clear the remaining toast message
-                      myUvcToast.clearAllToast();
-                      try {
-                        switch (int.parse(dataRead['Version'].toString())) {
-                          case 0:
-                            Navigator.pushNamed(context, '/profiles', arguments: {
-                              'myDevice': myDevice,
-                              'dataRead': myDevice.getReadCharMessage(),
-                            });
-                            break;
-                          case 1:
-                            int.parse(dataRead['Version'].toString());
-                            print('Version detected');
-                            await scanQrCodeDATA();
-                            break;
-                          default:
-                            break;
-                        }
-                      } catch (e) {
-                        print('No version detected');
-                        Navigator.pushNamed(context, '/profiles', arguments: {
-                          'myDevice': myDevice,
-                          'dataRead': myDevice.getReadCharMessage(),
-                        });
-                      }
-                    });
-                  }
+                } catch (e) {
+                  connectingToRobotIOS(data,noLongerScan);
                 }
+
               }
             }
           });
@@ -420,6 +343,107 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       ),
       onWillPop: () => stopActivity(context),
     );
+  }
+
+  void connectingToRobotIOS(String data, bool noLongerScan) {
+    if (data.contains(myDevice.device.name)) {
+      deviceExistOrNot = true;
+      _controller.pause();
+      noLongerScan = true;
+      qrCodeScanAccess = true;
+    } else {
+      deviceExistOrNot = false;
+    }
+    setState(() {
+      if (deviceExistOrNot) {
+        qrCodeMessage = 'Accès valide';
+        colorMessage = Colors.green;
+        qrCodeScanAccess = true;
+      } else {
+        qrCodeMessage = 'Accès non valide';
+        colorMessage = Colors.red;
+        qrCodeScanAccess = false;
+      }
+    });
+    if (deviceExistOrNot) {
+      qrCodeScanAccess = false;
+      try {
+        json.decode(data) as Map<String, dynamic>;
+        print('The provided string is a valid JSON');
+        connectingWithQrCode(data);
+      } on FormatException catch (e) {
+        print('The provided string is not valid JSON : ${e.toString()}');
+        Future.delayed(const Duration(seconds: 2), () async {
+          // Stop uvc treatment if it's on
+          String message = 'STOP : ON';
+          await myDevice.writeCharacteristic(0, 0, message);
+          // Read data from robot
+          await myDevice.readCharacteristic(0, 0);
+          Map<String, dynamic> dataRead;
+          dataRead = jsonDecode(myDevice.getReadCharMessage());
+          // clear the remaining toast message
+          myUvcToast.clearAllToast();
+          try {
+            switch (int.parse(dataRead['Version'].toString())) {
+              case 0:
+                Navigator.pushNamed(context, '/profiles', arguments: {
+                  'myDevice': myDevice,
+                  'dataRead': myDevice.getReadCharMessage(),
+                });
+                break;
+              case 1:
+                int.parse(dataRead['Version'].toString());
+                print('Version detected');
+                await scanQrCodeDATA();
+                break;
+              default:
+                break;
+            }
+          } catch (e) {
+            print('No version detected');
+            Navigator.pushNamed(context, '/profiles', arguments: {
+              'myDevice': myDevice,
+              'dataRead': myDevice.getReadCharMessage(),
+            });
+          }
+        });
+      }
+    }
+  }
+
+  void connectingToRobotAndroid(String data, bool noLongerScan) {
+    for (int i = 0; i < scanDevices.length; i++) {
+      if (data.contains(scanDevices.elementAt(i).id.toString())) {
+        deviceExistOrNot = true;
+        devicesPosition = i;
+        _controller.pause();
+        noLongerScan = true;
+        qrCodeScanAccess = true;
+        break;
+      } else {
+        deviceExistOrNot = false;
+      }
+    }
+    setState(() {
+      if (deviceExistOrNot) {
+        qrCodeMessage = 'Accès valide';
+        colorMessage = Colors.green;
+        qrCodeScanAccess = true;
+      } else {
+        qrCodeMessage = 'Accès non valide';
+        colorMessage = Colors.red;
+        qrCodeScanAccess = false;
+      }
+    });
+    if (deviceExistOrNot) {
+      try {
+        json.decode(data) as Map<String, dynamic>;
+        connectingWithQrCode(data);
+      } on FormatException catch (e) {
+        print('The provided string is not valid JSON : ${e.toString()}');
+        _ackAlert(data, context);
+      }
+    }
   }
 
   void connectingWithQrCode(String data) async {
