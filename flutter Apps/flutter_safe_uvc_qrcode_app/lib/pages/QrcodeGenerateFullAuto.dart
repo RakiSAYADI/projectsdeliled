@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart' hide Key;
@@ -27,7 +29,7 @@ class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with 
 
   bool firstDisplayMainWidget = false;
 
-  Map qrCodeGeneratorClassData = {};
+  Map qrCodeGeneratorFullAutoClassData = {};
   List<Attachment> qrCodeList = [];
 
   String uvcName;
@@ -81,14 +83,19 @@ class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with 
 
   @override
   Widget build(BuildContext context) {
+    qrCodeGeneratorFullAutoClassData =
+        qrCodeGeneratorFullAutoClassData.isNotEmpty ? qrCodeGeneratorFullAutoClassData : ModalRoute.of(context).settings.arguments;
+    uvcName = qrCodeGeneratorFullAutoClassData['uvcName'];
+    macAddress = qrCodeGeneratorFullAutoClassData['macAddress'];
     try {
-      qrCodeGeneratorClassData = qrCodeGeneratorClassData.isNotEmpty ? qrCodeGeneratorClassData : ModalRoute.of(context).settings.arguments;
-      uvcName = qrCodeGeneratorClassData['uvcName'];
-      macAddress = qrCodeGeneratorClassData['macAddress'];
-      qrCodeList = qrCodeGeneratorClassData['myQrcodeListFile'];
-
+      qrCodeList = qrCodeGeneratorFullAutoClassData['myQrcodeListFile'];
+      if (qrCodeList.isEmpty) {}
+      print('second');
       firstDisplayMainWidget = true;
     } catch (e) {
+      print('first');
+      qrCodeList = [new FileAttachment(File('path'))];
+      qrCodeList.length = 0;
       firstDisplayMainWidget = false;
     }
 
@@ -349,6 +356,7 @@ class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with 
                           if (!firstDisplayMainWidget) {
                             firstDisplayMainWidget = true;
                           }
+                          print(qrCodeList);
                           Navigator.pushReplacementNamed(context, '/Qr_code_Display_Full_Auto', arguments: {
                             'myQrcodeListFile': qrCodeList,
                             'myQrcodeFileName': qrCodeFileName,

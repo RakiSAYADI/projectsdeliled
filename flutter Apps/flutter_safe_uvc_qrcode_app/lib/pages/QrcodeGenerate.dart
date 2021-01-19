@@ -77,8 +77,10 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
     try {
       qrCodeGeneratorClassData = qrCodeGeneratorClassData.isNotEmpty ? qrCodeGeneratorClassData : ModalRoute.of(context).settings.arguments;
       qrCodeList = qrCodeGeneratorClassData['myQrcodeListFile'];
+      print('second');
       firstDisplayMainWidget = true;
     } catch (e) {
+      print('first');
       firstDisplayMainWidget = false;
     }
 

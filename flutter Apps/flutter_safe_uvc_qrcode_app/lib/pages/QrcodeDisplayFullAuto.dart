@@ -19,7 +19,7 @@ class QrCodeDisplayFullAuto extends StatefulWidget {
 }
 
 class _QrCodeDisplayFullAutoState extends State<QrCodeDisplayFullAuto> {
-  Map qrCodeDisplayClassData = {};
+  Map qrCodeDisplayFullAutoClassData = {};
   String myQrCodeData;
   String myQrCodeName;
   List<Attachment> qrCodeList = [new FileAttachment(File('path'))];
@@ -40,13 +40,14 @@ class _QrCodeDisplayFullAutoState extends State<QrCodeDisplayFullAuto> {
 
   @override
   Widget build(BuildContext context) {
-    qrCodeDisplayClassData = qrCodeDisplayClassData.isNotEmpty ? qrCodeDisplayClassData : ModalRoute.of(context).settings.arguments;
-    uvcName = qrCodeDisplayClassData['uvcName'];
-    macAddress = qrCodeDisplayClassData['macAddress'];
-    myQrCodeData = qrCodeDisplayClassData['myQrcodeData'];
-    myQrCodeName = qrCodeDisplayClassData['myQrcodeFileName'];
-    myRoomName = qrCodeDisplayClassData['myRoomName'];
-    qrCodeList = qrCodeDisplayClassData['myQrcodeListFile'];
+    qrCodeDisplayFullAutoClassData =
+        qrCodeDisplayFullAutoClassData.isNotEmpty ? qrCodeDisplayFullAutoClassData : ModalRoute.of(context).settings.arguments;
+    uvcName = qrCodeDisplayFullAutoClassData['uvcName'];
+    macAddress = qrCodeDisplayFullAutoClassData['macAddress'];
+    myQrCodeData = qrCodeDisplayFullAutoClassData['myQrcodeData'];
+    myQrCodeName = qrCodeDisplayFullAutoClassData['myQrcodeFileName'];
+    myRoomName = qrCodeDisplayFullAutoClassData['myRoomName'];
+    qrCodeList = qrCodeDisplayFullAutoClassData['myQrcodeListFile'];
 
     double screenWidth = MediaQuery.of(context).size.width;
 
