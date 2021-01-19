@@ -159,9 +159,9 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
               if (!noLongerScan) {
                 print('is checking qrcode android');
                 try {
-                  Map<String, dynamic> qrCodeData = json.decode(data);
-                  //print(qrCodeData['SAFEUVCDATA'].toString());
-                  if (qrCodeData['SAFEUVCDATA'].toString() != null) {
+                  var qrCodeData = json.decode(data) as Map<String, dynamic>;
+                  print(qrCodeData['SAFEUVCDATA']);
+                  if (qrCodeData['SAFEUVCDATA'] != null) {
                     noLongerScan = true;
                     _controller.pause();
                     qrCodeScanAccess = true;

@@ -42,10 +42,14 @@ class _SendEmailQrCodeState extends State<SendEmailQrCode> {
 
   void readUserEmailFile() async {
     if (firstDisplayMainWidget) {
-      firstDisplayMainWidget = false;
       uvcDataFile = UVCDataFile();
-      userEmail = await uvcDataFile.readUserEmailDATA();
-      myEmail.text = userEmail;
+      firstDisplayMainWidget = false;
+      if (userEmail.isEmpty) {
+        userEmail = await uvcDataFile.readUserEmailDATA();
+        myEmail.text = userEmail;
+      } else {
+        myEmail.text = userEmail;
+      }
     }
   }
 
@@ -53,15 +57,8 @@ class _SendEmailQrCodeState extends State<SendEmailQrCode> {
   Widget build(BuildContext context) {
     sendEmailQrCodeClassData = sendEmailQrCodeClassData.isNotEmpty ? sendEmailQrCodeClassData : ModalRoute.of(context).settings.arguments;
     uvcData = sendEmailQrCodeClassData['uvcData'];
-
-    try {
-      userEmail = sendEmailQrCodeClassData['userEmail'];
-      if (userEmail.isEmpty) {
-        print('no email found in qrcode');
-      }
-    } catch (e) {
-      readUserEmailFile();
-    }
+    userEmail = sendEmailQrCodeClassData['userEmail'];
+    readUserEmailFile();
 
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;

@@ -48,23 +48,6 @@ class _QrCodeDisplayFullAutoState extends State<QrCodeDisplayFullAuto> {
     myRoomName = qrCodeDisplayClassData['myRoomName'];
     qrCodeList = qrCodeDisplayClassData['myQrcodeListFile'];
 
-    try {
-      if (qrCodeList.isEmpty) {
-        print(qrCodeList);
-      }
-    } catch (e) {
-      qrCodeList = [new FileAttachment(File('path'))];
-      qrCodeList.length = 0;
-    }
-
-    print(uvcName);
-    print(macAddress);
-    print(myQrCodeData);
-    print(myQrCodeName);
-    print(myRoomName);
-
-    print(qrCodeList);
-
     double screenWidth = MediaQuery.of(context).size.width;
 
     return WillPopScope(

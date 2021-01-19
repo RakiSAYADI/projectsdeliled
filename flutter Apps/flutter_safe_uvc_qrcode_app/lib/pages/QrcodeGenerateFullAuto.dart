@@ -86,12 +86,9 @@ class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with 
       uvcName = qrCodeGeneratorClassData['uvcName'];
       macAddress = qrCodeGeneratorClassData['macAddress'];
       qrCodeList = qrCodeGeneratorClassData['myQrcodeListFile'];
-      print(qrCodeList);
-      if (qrCodeList.isEmpty) {
-        firstDisplayMainWidget = true;
-      }
+
+      firstDisplayMainWidget = true;
     } catch (e) {
-      print(e);
       firstDisplayMainWidget = false;
     }
 
@@ -424,6 +421,7 @@ class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with 
 
   @override
   void dispose() {
+    _pinPutController.dispose();
     animationRefreshIcon.dispose();
     myCompany.dispose();
     myName.dispose();
