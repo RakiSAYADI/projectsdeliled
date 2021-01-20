@@ -731,7 +731,7 @@ class _HomeState extends State<Home> {
                   size: screenHeight * 0.035,
                 ),
                 label: Text(
-                  'Désctivée',
+                  'Désactivée',
                   style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.045),
                 ),
               ),
