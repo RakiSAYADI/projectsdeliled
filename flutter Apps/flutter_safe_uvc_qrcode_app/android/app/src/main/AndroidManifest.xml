@@ -2,6 +2,7 @@
     package="deliled.applications.safeuvcqrcodeapp">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 
    <application
         android:label="SAFE UVC QR CODE"
