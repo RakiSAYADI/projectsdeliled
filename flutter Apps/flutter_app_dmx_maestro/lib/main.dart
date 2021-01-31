@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_dmx_maestro/pages/alarm_settings.dart';
+import 'package:flutter_app_dmx_maestro/pages/settings.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutterappmicromaestro/pages/home.dart';
-import 'package:flutterappmicromaestro/pages/scan_qrcode.dart';
-import 'package:flutterappmicromaestro/pages/scan_ble_list.dart';
-import 'package:flutterappmicromaestro/pages/welcome.dart';
+import 'package:flutter_app_dmx_maestro/pages/home.dart';
+import 'package:flutter_app_dmx_maestro/pages/scan_qrcode.dart';
+import 'package:flutter_app_dmx_maestro/pages/scan_ble_list.dart';
+import 'package:flutter_app_dmx_maestro/pages/welcome.dart';
 import 'package:rxdart/subjects.dart';
+import 'package:wakelock/wakelock.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -57,13 +60,22 @@ void main() async {
         badge: true,
         sound: true,
       );
+  Wakelock.enable();
+  bool wakelockEnabled = await Wakelock.enabled;
+  if (wakelockEnabled) {
+    // The following statement disables the wakelock.
+    Wakelock.toggle(enable: true);
+  }
   runApp(MaterialApp(
+    title: 'Maestro DmX',
     initialRoute: '/',
     routes: {
-      '/': (context) => Welcome(),
+      '/': (context) => Home(), //Welcome(),
       '/scan_ble_list': (context) => ScanListBle(),
       '/scan_qrcode': (context) => ScanQrCode(),
       '/home': (context) => Home(),
+      '/settings': (context) => Settings(),
+      '/alarm_settings': (context) => AlarmClock(),
     },
   ));
 }
