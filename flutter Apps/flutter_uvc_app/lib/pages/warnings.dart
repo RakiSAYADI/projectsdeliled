@@ -19,6 +19,8 @@ class _WarningsState extends State<Warnings> {
 
   ToastyMessage myUvcToast;
 
+  bool nextButtonPressedOnce = false;
+
   @override
   Widget build(BuildContext context) {
     warningsClassData = warningsClassData.isNotEmpty ? warningsClassData : ModalRoute.of(context).settings.arguments;
@@ -189,34 +191,37 @@ class _WarningsState extends State<Warnings> {
                     children: [
                       FlatButton(
                         onPressed: () async {
-                          final String dataRead = myDevice.getReadCharMessage();
-                          try {
-                            Map<String, dynamic> dataMap = json.decode(dataRead);
-                            int qrCodeSecurity = int.parse(dataMap['security'].toString());
-                            if (qrCodeSecurity == 0) {
-                              startScan(context);
-                            } else {
-                              String message = 'UVCTreatement : ON';
-                              if (Platform.isIOS) {
-                                await myDevice.writeCharacteristic(0, 0, message);
+                          if (!nextButtonPressedOnce) {
+                            nextButtonPressedOnce = true;
+                            final String dataRead = myDevice.getReadCharMessage();
+                            try {
+                              Map<String, dynamic> dataMap = json.decode(dataRead);
+                              int qrCodeSecurity = int.parse(dataMap['security'].toString());
+                              if (qrCodeSecurity == 0) {
+                                startScan(context);
                               } else {
-                                await myDevice.writeCharacteristic(2, 0, message);
+                                String message = 'UVCTreatement : ON';
+                                if (Platform.isIOS) {
+                                  await myDevice.writeCharacteristic(0, 0, message);
+                                } else {
+                                  await myDevice.writeCharacteristic(2, 0, message);
+                                }
+                                Navigator.pushNamed(context, '/uvc', arguments: {
+                                  'uvclight': myUvcLight,
+                                  'myDevice': myDevice,
+                                });
                               }
-                              Navigator.pushNamed(context, '/uvc', arguments: {
-                                'uvclight': myUvcLight,
-                                'myDevice': myDevice,
-                              });
-                            }
-                          } catch (e) {
-                            if (myDevice.getConnectionState()) {
-                              startScan(context);
-                            } else {
-                              myUvcToast = ToastyMessage(toastContext: context);
-                              myUvcToast.setToastDuration(5);
-                              myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
-                              myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-                              myDevice.disconnect();
-                              Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
+                            } catch (e) {
+                              if (myDevice.getConnectionState()) {
+                                startScan(context);
+                              } else {
+                                myUvcToast = ToastyMessage(toastContext: context);
+                                myUvcToast.setToastDuration(5);
+                                myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
+                                myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+                                myDevice.disconnect();
+                                Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
+                              }
                             }
                           }
                         },
