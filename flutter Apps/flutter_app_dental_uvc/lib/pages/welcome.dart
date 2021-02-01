@@ -93,23 +93,32 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
         myUvcToast.setToastMessage('Autorisation de connexion validée !');
         myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
         // stop scanning and start connecting
-        try {
-          await myDevice.connect(false);
-        } catch (e) {
-          myDevice.disconnect();
-          await myDevice.connect(false);
+        while (true) {
+          try {
+            myDevice.connect(false);
+          } catch (e) {
+            myDevice.disconnect();
+            myDevice.connect(false);
+          }
+          await Future.delayed(const Duration(seconds: 2));
+          if (myDevice.getConnectionState()) {
+            // clear the remaining toast message
+            myUvcToast.clearAllToast();
+            myDevice.readCharacteristic(2, 0);
+            if (myDevice.getReadCharMessage().isNotEmpty) {
+              Future.delayed(Duration(seconds: 1), () async {
+                Navigator.pushReplacementNamed(context, '/pin_access', arguments: {
+                  'myDevice': myDevice,
+                  'dataRead': myDevice.getReadCharMessage(),
+                });
+              });
+              break;
+            } else {
+              myDevice.disconnect();
+            }
+          }
+          await Future.delayed(const Duration(seconds: 2));
         }
-        Future.delayed(const Duration(seconds: 2), () async {
-          // clear the remaining toast message
-          myUvcToast.clearAllToast();
-          await myDevice.readCharacteristic(2, 0);
-          Future.delayed(Duration(seconds: 1), () async {
-            Navigator.pushReplacementNamed(context, '/pin_access', arguments: {
-              'myDevice': myDevice,
-              'dataRead': myDevice.getReadCharMessage(),
-            });
-          });
-        });
       } else {
         myUvcToast.setToastDuration(10);
         myDevice = Device(device: scanDevices.elementAt(devicesPosition));
@@ -204,15 +213,15 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     checkServiceStatus(context);
     final Future<PermissionStatus> statusFuture = LocationPermissions().checkPermissionStatus();
 
-    statusFuture.then((PermissionStatus status) async{
-        _permissionStatus = status;
-        if (_permissionStatus.index != 2) {
-          myUvcToast.setToastDuration(5);
-          myUvcToast.setToastMessage('La Localisation n\'est pas autorisée sur votre téléphone !');
-          myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-        } else {
-          checkServiceStatus(context);
-        }
+    statusFuture.then((PermissionStatus status) async {
+      _permissionStatus = status;
+      if (_permissionStatus.index != 2) {
+        myUvcToast.setToastDuration(5);
+        myUvcToast.setToastMessage('La Localisation n\'est pas autorisée sur votre téléphone !');
+        myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+      } else {
+        checkServiceStatus(context);
+      }
     });
   }
 
@@ -246,7 +255,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       scanDevices.clear();
       // do something with scan results
       for (ScanResult r in results) {
-        if(firstTime){
+        if (firstTime) {
           firstTime = false;
           readUVCDevice();
         }
