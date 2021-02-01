@@ -30,6 +30,7 @@ dependencies:
   flutter_spinkit: ^4.1.2+1
   package_info: ^0.4.3+4
   hsl_colorpicker: ^1.0.2
+  flutter_xlider: ^3.4.0
   wakelock: ^0.2.1
 
 

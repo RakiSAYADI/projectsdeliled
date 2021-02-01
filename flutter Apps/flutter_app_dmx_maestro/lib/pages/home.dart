@@ -53,26 +53,64 @@ class _HomeState extends State<Home> {
       child: Scaffold(
         backgroundColor: Colors.white,
         bottomNavigationBar: BottomAppBar(
-          color: color,
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              IconButton(
-                icon: Icon(Icons.alarm),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/alarm_settings');
-                },
+          notchMargin: 10.0,
+          color: Colors.grey[200],
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Divider(
+                  thickness: 1.0,
+                  color: Colors.grey[600],
+                ),
               ),
-              Text(
-                'Télécommande',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              IntrinsicHeight(
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    VerticalDivider(
+                      thickness: 1.0,
+                      color: Colors.grey[600],
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.alarm),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/alarm_settings');
+                      },
+                    ),
+                    VerticalDivider(
+                      thickness: 1.0,
+                      color: Colors.grey[600],
+                    ),
+                    Text(
+                      'Télécommande',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    VerticalDivider(
+                      thickness: 1.0,
+                      color: Colors.grey[600],
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.settings),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/settings');
+                      },
+                    ),
+                    VerticalDivider(
+                      thickness: 1.0,
+                      color: Colors.grey[600],
+                    ),
+                  ],
+                ),
               ),
-              IconButton(
-                icon: Icon(Icons.settings),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/settings');
-                },
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Divider(
+                  thickness: 1.0,
+                  color: Colors.grey[600],
+                ),
               ),
             ],
           ),
@@ -177,7 +215,7 @@ class _HomeState extends State<Home> {
                     centerColorIndicatorSize: 80,
                     initialColor: Colors.blueAccent,
                   ),
-                 // bigCircle(200.0, 200.0),
+                  // bigCircle(200.0, 200.0),
                 ],
               ),
               SizedBox(
