@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_dmx_maestro/services/uvcToast.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -12,8 +13,8 @@ class _SettingsState extends State<Settings> {
 
   Map bleDeviceData = {};
 
-  //BluetoothCharacteristic characteristicMaestro;
-  //BluetoothDevice myDevice;
+  BluetoothCharacteristic characteristicMaestro;
+  BluetoothDevice myDevice;
 
   List<bool> zoneStates;
   String zonesInHex;
@@ -34,9 +35,9 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    // bleDeviceData = bleDeviceData.isNotEmpty ? bleDeviceData : ModalRoute.of(context).settings.arguments;
-    // myDevice = bleDeviceData['bleDevice'];
-    // characteristicMaestro = bleDeviceData['bleCharacteristic'];
+    bleDeviceData = bleDeviceData.isNotEmpty ? bleDeviceData : ModalRoute.of(context).settings.arguments;
+    myDevice = bleDeviceData['bleDevice'];
+    characteristicMaestro = bleDeviceData['bleCharacteristic'];
 
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
@@ -117,9 +118,8 @@ class _SettingsState extends State<Settings> {
                       children: [
                         FlatButton(
                           onPressed: () async {
-                            // write the new ble device name
-                            print('{\"dname\":\"${myBleDeviceName.text}\"}');
-                            //characteristicMaestro.write('{\"dname\":\"${myBleDeviceName.text}\"}'.codeUnits);
+                            // write the associate command
+                            await characteristicMaestro.write('{\"light\":[5,1,\"$zonesInHex \"]}'.codeUnits);
                           },
                           child: Text(
                             'Associer',
@@ -133,9 +133,8 @@ class _SettingsState extends State<Settings> {
                         SizedBox(width: screenWidth * 0.03),
                         FlatButton(
                           onPressed: () async {
-                            // write the new ble device name
-                            print('{\"dname\":\"${myBleDeviceName.text}\"}');
-                            //characteristicMaestro.write('{\"dname\":\"${myBleDeviceName.text}\"}'.codeUnits);
+                            // write the dissociate command
+                            await characteristicMaestro.write('{\"light\":[5,0,\"$zonesInHex \"]}'.codeUnits);
                           },
                           child: Text(
                             'Dissocier',
@@ -151,9 +150,9 @@ class _SettingsState extends State<Settings> {
                     SizedBox(width: screenHeight * 0.03),
                     FlatButton(
                       onPressed: () async {
-                        // write the new ble device name
-                        print('{\"dname\":\"${myBleDeviceName.text}\"}');
-                        //characteristicMaestro.write('{\"dname\":\"${myBleDeviceName.text}\"}'.codeUnits);
+                        // write the new zone names
+                        //String zoneNames = "{\"zones\":[" + Zone_1 + "," + Zone_2 + "," + Zone_3 + "," + Zone_4 + "]}";
+                        //await characteristicMaestro.write(zoneNames.codeUnits);
                       },
                       child: Text(
                         'Renommer',
@@ -177,7 +176,7 @@ class _SettingsState extends State<Settings> {
                       onPressed: () async {
                         // write the new ble device name
                         print('{\"dname\":\"${myBleDeviceName.text}\"}');
-                        //characteristicMaestro.write('{\"dname\":\"${myBleDeviceName.text}\"}'.codeUnits);
+                        await characteristicMaestro.write('{\"dname\":\"${myBleDeviceName.text}\"}'.codeUnits);
                         myUvcToast.setToastDuration(5);
                         myUvcToast.setToastMessage('Nom de carte modifié !');
                         myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);

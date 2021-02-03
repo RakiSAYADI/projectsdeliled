@@ -24,12 +24,12 @@ class DeviceCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Text(
-              deviceName,
+              device.device.id.toString(),
               style: TextStyle(fontSize: 10.0, color: Colors.grey[600]),
             ),
             SizedBox(height: 2.0),
             Text(
-              device.device.id.toString(),
+              deviceName,
               style: TextStyle(fontSize: 16.0, color: Colors.grey[800]),
             ),
             SizedBox(height: 8.0),

@@ -11,8 +11,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   Map bleDeviceData = {};
 
-  //BluetoothCharacteristic characteristicMaestro;
-  //BluetoothDevice myDevice;
+  BluetoothCharacteristic characteristicMaestro;
+  BluetoothDevice myDevice;
 
   List<bool> zoneStates;
   String zonesInHex;
@@ -42,9 +42,9 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    // bleDeviceData = bleDeviceData.isNotEmpty ? bleDeviceData : ModalRoute.of(context).settings.arguments;
-    // myDevice = bleDeviceData['bleDevice'];
-    // characteristicMaestro = bleDeviceData['bleCharacteristic'];
+    bleDeviceData = bleDeviceData.isNotEmpty ? bleDeviceData : ModalRoute.of(context).settings.arguments;
+    myDevice = bleDeviceData['bleDevice'];
+    characteristicMaestro = bleDeviceData['bleCharacteristic'];
 
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
@@ -77,7 +77,10 @@ class _HomeState extends State<Home> {
                     IconButton(
                       icon: Icon(Icons.alarm),
                       onPressed: () {
-                        Navigator.pushNamed(context, '/alarm_settings');
+                        Navigator.pushNamed(context, '/alarm_settings', arguments: {
+                          'bleCharacteristic': characteristicMaestro,
+                          'bleDevice': myDevice,
+                        });
                       },
                     ),
                     VerticalDivider(
@@ -95,7 +98,10 @@ class _HomeState extends State<Home> {
                     IconButton(
                       icon: Icon(Icons.settings),
                       onPressed: () {
-                        Navigator.pushNamed(context, '/settings');
+                        Navigator.pushNamed(context, '/settings', arguments: {
+                          'bleCharacteristic': characteristicMaestro,
+                          'bleDevice': myDevice,
+                        });
                       },
                     ),
                     VerticalDivider(
@@ -125,8 +131,9 @@ class _HomeState extends State<Home> {
                 children: <Widget>[
                   IconButton(
                     icon: Icon(Icons.close, color: Colors.red, size: 35),
-                    onPressed: () {
+                    onPressed: () async {
                       print('{\"light\": 1,0,\"F\"}');
+                      await characteristicMaestro.write('{\"light\": 1,0,\"F\"}'.codeUnits);
                     },
                   ),
                   SizedBox(
@@ -134,8 +141,9 @@ class _HomeState extends State<Home> {
                   ),
                   IconButton(
                     icon: Icon(Icons.power_settings_new, color: Colors.green, size: 35),
-                    onPressed: () {
+                    onPressed: () async {
                       print('{\"light\": 1,1,\"F\"}');
+                      await characteristicMaestro.write('{\"light\": 1,1,\"F\"}'.codeUnits);
                     },
                   ),
                 ],
@@ -162,19 +170,19 @@ class _HomeState extends State<Home> {
                   switch (index) {
                     case 0:
                       print('{\"light\": 1,$zoneState,\"1\"}');
-                      //await characteristicMaestro.write('{\"light\": 1,$zoneState,\"1\"}'.codeUnits);
+                      await characteristicMaestro.write('{\"light\": 1,$zoneState,\"1\"}'.codeUnits);
                       break;
                     case 1:
                       print('{\"light\": 1,$zoneState,\"2\"}');
-                      //await characteristicMaestro.write('{\"light\": 1,$zoneState,\"2\"}'.codeUnits);
+                      await characteristicMaestro.write('{\"light\": 1,$zoneState,\"2\"}'.codeUnits);
                       break;
                     case 2:
                       print('{\"light\": 1,$zoneState,\"3\"}');
-                      //await characteristicMaestro.write('{\"light\": 1,$zoneState,\"4\"}'.codeUnits);
+                      await characteristicMaestro.write('{\"light\": 1,$zoneState,\"4\"}'.codeUnits);
                       break;
                     case 3:
                       print('{\"light\": 1,$zoneState,\"4\"}');
-                      //await characteristicMaestro.write('{\"light\": 1,$zoneState,\"8\"}'.codeUnits);
+                      await characteristicMaestro.write('{\"light\": 1,$zoneState,\"8\"}'.codeUnits);
                       break;
                   }
                 },
@@ -202,9 +210,9 @@ class _HomeState extends State<Home> {
                         color = colorSelected.toColor();
                         print(
                             '{\"hue\":${color.toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")},\"zone\":\"$zonesInHex\"}');
-                        //characteristicMaestro.write(
-                        //   '{\"hue\":${color.toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")},\"zone\":\"$zonesInHex\"}'
-                        //      .codeUnits);
+                        characteristicMaestro.write(
+                            '{\"hue\":${color.toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")},\"zone\":\"$zonesInHex\"}'
+                                .codeUnits);
                       });
                     },
                     size: widthScreen * 0.3 + heightScreen * 0.2,
@@ -226,8 +234,9 @@ class _HomeState extends State<Home> {
                 children: <Widget>[
                   IconButton(
                     icon: Icon(Icons.timelapse, color: Colors.red, size: 35),
-                    onPressed: () {
+                    onPressed: () async {
                       print('{\"light\": 4,0,\"$zonesInHex\"}');
+                      await characteristicMaestro.write('{\"light\": 4,0,\"$zonesInHex\"}'.codeUnits);
                     },
                   ),
                   SizedBox(
@@ -236,6 +245,7 @@ class _HomeState extends State<Home> {
                   FlatButton(
                     onPressed: () async {
                       print('{\"light\": 4,2,\"$zonesInHex\"}');
+                      await characteristicMaestro.write('{\"light\": 4,2,\"$zonesInHex\"}'.codeUnits);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
@@ -254,8 +264,9 @@ class _HomeState extends State<Home> {
                   ),
                   IconButton(
                     icon: Icon(Icons.more_time, color: Colors.green, size: 35),
-                    onPressed: () {
+                    onPressed: () async {
                       print('{\"light\": 4,1,\"$zonesInHex\"}');
+                      await characteristicMaestro.write('{\"light\": 4,1,\"$zonesInHex\"}'.codeUnits);
                     },
                   ),
                 ],
@@ -273,7 +284,7 @@ class _HomeState extends State<Home> {
             FlatButton(
                 child: Text('Oui'),
                 onPressed: () {
-                  //myDevice.disconnect();
+                  myDevice.disconnect();
                   Navigator.pop(c, true);
                   Navigator.pushNamedAndRemoveUntil(context, "/scan_ble_list", (r) => false);
                 }),

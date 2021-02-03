@@ -70,7 +70,7 @@ void main() async {
     title: 'Maestro DmX',
     initialRoute: '/',
     routes: {
-      '/': (context) => Home(), //Welcome(),
+      '/': (context) => Welcome(),
       '/scan_ble_list': (context) => ScanListBle(),
       '/scan_qrcode': (context) => ScanQrCode(),
       '/home': (context) => Home(),
