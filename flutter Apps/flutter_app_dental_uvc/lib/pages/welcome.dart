@@ -42,6 +42,10 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
 
   PermissionStatus _permissionStatus = PermissionStatus.unknown;
 
+  bool enableResetButton = false;
+
+  int enableResetButtonCounter = 0;
+
   void ledInit() async {
     ledControl = LedControl();
     await ledControl.setLedColor('ON');
@@ -87,8 +91,9 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
         }
       }
       if (deviceExistOrNot) {
+        await Future.delayed(const Duration(milliseconds: 500));
         myUvcToast.setAnimationIcon(animationRefreshIcon);
-        myUvcToast.setToastDuration(60);
+        myUvcToast.setToastDuration(5);
         myDevice = Device(device: scanDevices.elementAt(devicesPosition));
         myUvcToast.setToastMessage('Autorisation de connexion validée !');
         myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
@@ -97,25 +102,40 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
           try {
             myDevice.connect(false);
           } catch (e) {
+            print(e);
             myDevice.disconnect();
             myDevice.connect(false);
           }
-          await Future.delayed(const Duration(seconds: 2));
+          await Future.delayed(const Duration(seconds: 4));
           if (myDevice.getConnectionState()) {
             // clear the remaining toast message
             myUvcToast.clearAllToast();
-            myDevice.readCharacteristic(2, 0);
-            if (myDevice.getReadCharMessage().isNotEmpty) {
-              Future.delayed(Duration(seconds: 1), () async {
-                Navigator.pushReplacementNamed(context, '/pin_access', arguments: {
-                  'myDevice': myDevice,
-                  'dataRead': myDevice.getReadCharMessage(),
+            await myDevice.readCharacteristic(2, 0);
+            await Future.delayed(const Duration(seconds: 1));
+            try {
+              if (myDevice.getReadCharMessage().isNotEmpty) {
+                Future.delayed(Duration(seconds: 1), () async {
+                  Navigator.pushReplacementNamed(context, '/pin_access', arguments: {
+                    'myDevice': myDevice,
+                    'dataRead': myDevice.getReadCharMessage(),
+                  });
                 });
-              });
-              break;
-            } else {
+                break;
+              } else {
+                myDevice.disconnect();
+              }
+            } catch (e) {
+              print(e);
               myDevice.disconnect();
             }
+          }
+          enableResetButtonCounter++;
+          if (enableResetButtonCounter == 10) {
+            print('reset');
+            setState(() {
+              enableResetButton = true;
+            });
+            break;
           }
           await Future.delayed(const Duration(seconds: 2));
         }
@@ -278,6 +298,21 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     print('width : $widthScreen and height : $heightScreen');
     return Scaffold(
       backgroundColor: Colors.indigo[700],
+      floatingActionButton: Visibility(
+        visible: enableResetButton,
+        child: FloatingActionButton.extended(
+          onPressed: () {
+            myDevice.disconnect();
+            Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+          },
+          label: Text('Reset Scan'),
+          icon: Icon(
+            Icons.refresh,
+            color: Colors.white,
+          ),
+          backgroundColor: Colors.blue[400],
+        ),
+      ),
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
