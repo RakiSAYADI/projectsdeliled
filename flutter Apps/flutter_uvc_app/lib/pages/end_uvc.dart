@@ -184,6 +184,7 @@ class _EndUVCState extends State<EndUVC> {
   }
 
   Future<bool> exitApp(BuildContext context) async {
+    myDevice.disconnect();
     Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
     return true;
   }
