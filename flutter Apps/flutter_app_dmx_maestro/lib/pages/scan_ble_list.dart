@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_app_dmx_maestro/services/bleDeviceClass.dart';
 import 'package:flutter_app_dmx_maestro/services/deviceBleWidget.dart';
 import 'package:flutter_app_dmx_maestro/services/uvcToast.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 
 class ScanListBle extends StatefulWidget {
   @override
@@ -28,20 +28,17 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
 
   @override
   void initState() {
-    super.initState();
-
+    myUvcToast = ToastyMessage(toastContext: context);
     // initialise the animation
     animationRefreshIcon = new AnimationController(
       vsync: this,
       duration: new Duration(seconds: 3),
     );
-
     //checks bluetooth current state
     flutterBlue.state.listen((state) {
       if (state == BluetoothState.off) {
         //Alert user to turn on bluetooth.
         print("Bluetooth is off");
-        myUvcToast = ToastyMessage(toastContext: context);
         myUvcToast.setToastDuration(5);
         myUvcToast.setToastMessage('Le Bluetooth (BLE) sur votre téléphone n\'est pas activé !');
         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
@@ -53,6 +50,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
         scanForDevices();
       }
     });
+    super.initState();
   }
 
   List<String> scanIdentifiers = [];
@@ -139,10 +137,14 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                       });
                       // display Toast message
                       animationRefreshIcon.repeat();
-                      myUvcToast = ToastyMessage(toastContext: context);
+                      try {
+                        myUvcToast.clearAllToast();
+                      } catch (e) {
+                        print(e);
+                      }
+                      String deviceName = myDevice.name;
                       myUvcToast.setAnimationIcon(animationRefreshIcon);
                       myUvcToast.setToastDuration(60);
-                      String deviceName = myDevice.name;
                       myUvcToast.setToastMessage('Connecting to $deviceName !');
                       myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
                       // stop scanning and start connecting
@@ -163,7 +165,11 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                         //print('get the ${device.getConnectionState()}');
                         // clear the remaining toast message
                         myUvcToast.clearCurrentToast();
-                        Navigator.pushNamed(context, '/scan_qrcode', arguments: {
+                        /*Navigator.pushNamed(context, '/scan_qrcode', arguments: {
+                          'bleCharacteristic': characteristicRelays,
+                          'bleDevice': myDevice,
+                        });*/
+                        Navigator.pushNamed(context, '/home', arguments: {
                           'bleCharacteristic': characteristicRelays,
                           'bleDevice': myDevice,
                         });

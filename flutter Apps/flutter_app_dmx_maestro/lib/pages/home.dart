@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:flutter_app_dmx_maestro/services/bleDeviceClass.dart';
+import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:hsl_colorpicker/HSLColorPicker.dart';
 
 class Home extends StatefulWidget {
@@ -14,18 +16,24 @@ class _HomeState extends State<Home> {
   BluetoothCharacteristic characteristicMaestro;
   BluetoothDevice myDevice;
 
-  List<bool> zoneStates;
-  String zonesInHex;
+  final String zonesInHex = 'F';
 
   final myBleDeviceName = TextEditingController();
+
+  HSLColor hslColor = HSLColor.fromColor(Colors.blue);
+  Color color = Colors.blue;
+
+  int boolToInt(bool a) => a == true ? 1 : 0;
+
+  double _lowerValue = 50;
+
+  Color trackBarColor = Colors.black;
 
   @override
   void initState() {
     // TODO: implement initState
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     super.initState();
-    zoneStates = [false, false, false, false];
-    zonesInHex = ((boolToInt(zoneStates[0])) + (boolToInt(zoneStates[1]) * 2) + (boolToInt(zoneStates[2]) * 4) + (boolToInt(zoneStates[3]) * 8))
-        .toRadixString(16);
   }
 
   @override
@@ -34,11 +42,6 @@ class _HomeState extends State<Home> {
     super.dispose();
     myBleDeviceName.dispose();
   }
-
-  HSLColor hslColor = HSLColor.fromColor(Colors.blue);
-  Color color = Colors.blue;
-
-  int boolToInt(bool a) => a == true ? 1 : 0;
 
   @override
   Widget build(BuildContext context) {
@@ -129,76 +132,30 @@ class _HomeState extends State<Home> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.close, color: Colors.red, size: 35),
-                    onPressed: () async {
-                      print('{\"light\": 1,0,\"F\"}');
-                      await characteristicMaestro.write('{\"light\": 1,0,\"F\"}'.codeUnits);
-                    },
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+                    child: IconButton(
+                      icon: Icon(Icons.power_settings_new, color: Colors.green, size: widthScreen * 0.03 + heightScreen * 0.02),
+                      onPressed: () async {
+                        print('{\"light\": 1,1,\"F\"}');
+                        await characteristicMaestro.write('{\"light\": 1,1,\"$zonesInHex\"}'.codeUnits);
+                      },
+                    ),
                   ),
                   SizedBox(
-                    width: 30,
+                    width: widthScreen * 0.1,
                   ),
-                  IconButton(
-                    icon: Icon(Icons.power_settings_new, color: Colors.green, size: 35),
-                    onPressed: () async {
-                      print('{\"light\": 1,1,\"F\"}');
-                      await characteristicMaestro.write('{\"light\": 1,1,\"F\"}'.codeUnits);
-                    },
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+                    child: IconButton(
+                      icon: Icon(Icons.close, color: Colors.red, size: widthScreen * 0.03 + heightScreen * 0.02),
+                      onPressed: () async {
+                        print('{\"light\": 1,0,\"F\"}');
+                        await characteristicMaestro.write('{\"light\": 1,0,\"$zonesInHex\"}'.codeUnits);
+                      },
+                    ),
                   ),
                 ],
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              ToggleButtons(
-                borderRadius: BorderRadius.circular(18.0),
-                isSelected: zoneStates,
-                onPressed: (int index) async {
-                  setState(() {
-                    zoneStates[index] = !zoneStates[index];
-                  });
-                  // Writes to a characteristic
-                  int zoneState = boolToInt(zoneStates[index]);
-
-                  zonesInHex =
-                      ((boolToInt(zoneStates[0])) + (boolToInt(zoneStates[1]) * 2) + (boolToInt(zoneStates[2]) * 4) + (boolToInt(zoneStates[3]) * 8))
-                          .toRadixString(16);
-
-                  print(zonesInHex);
-
-                  switch (index) {
-                    case 0:
-                      print('{\"light\": 1,$zoneState,\"1\"}');
-                      await characteristicMaestro.write('{\"light\": 1,$zoneState,\"1\"}'.codeUnits);
-                      break;
-                    case 1:
-                      print('{\"light\": 1,$zoneState,\"2\"}');
-                      await characteristicMaestro.write('{\"light\": 1,$zoneState,\"2\"}'.codeUnits);
-                      break;
-                    case 2:
-                      print('{\"light\": 1,$zoneState,\"3\"}');
-                      await characteristicMaestro.write('{\"light\": 1,$zoneState,\"4\"}'.codeUnits);
-                      break;
-                    case 3:
-                      print('{\"light\": 1,$zoneState,\"4\"}');
-                      await characteristicMaestro.write('{\"light\": 1,$zoneState,\"8\"}'.codeUnits);
-                      break;
-                  }
-                },
-                children: [
-                  Text('  Zone 1  ', style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.02)),
-                  Text('  Zone 2  ', style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.02)),
-                  Text('  Zone 3  ', style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.02)),
-                  Text('  Zone 4  ', style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.02)),
-                ],
-                borderWidth: 2,
-                color: Colors.grey,
-                selectedBorderColor: Colors.black,
-                selectedColor: Colors.green,
-              ),
-              SizedBox(
-                height: 30,
               ),
               Stack(
                 alignment: Alignment.center,
@@ -215,32 +172,55 @@ class _HomeState extends State<Home> {
                                 .codeUnits);
                       });
                     },
-                    size: widthScreen * 0.3 + heightScreen * 0.2,
-                    strokeWidth: 5,
-                    thumbSize: 9,
-                    thumbStrokeSize: 3,
+                    size: widthScreen * 0.4 + heightScreen * 0.1,
+                    strokeWidth: widthScreen * 0.1,
+                    thumbSize: 0.00001,
+                    thumbStrokeSize: widthScreen * 0.005 + heightScreen * 0.005,
                     showCenterColorIndicator: true,
-                    centerColorIndicatorSize: 80,
-                    initialColor: Colors.blueAccent,
+                    centerColorIndicatorSize: widthScreen * 0.005 + heightScreen * 0.005,
+                    initialColor: Colors.blue[900],
                   ),
-                  // bigCircle(200.0, 200.0),
+                  bigCircle(widthScreen * 0.4, heightScreen * 0.15),
                 ],
               ),
-              SizedBox(
-                height: 30,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16.0,0,16.0,0),
+                child: FlutterSlider(
+                  values: [_lowerValue],
+                  max: 100,
+                  min: 0,
+                  centeredOrigin: true,
+                  handlerAnimation:
+                      FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
+                  onDragging: (handlerIndex, lowerValue, upperValue) {
+                    _lowerValue = lowerValue;
+                    if (_lowerValue > (100 - 0) / 2) {
+                      trackBarColor = Colors.yellowAccent;
+                    } else {
+                      trackBarColor = Colors.blueAccent;
+                    }
+                    characteristicMaestro.write('{\"light\":[8,${_lowerValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                  },
+                  handler: FlutterSliderHandler(child: Icon(Icons.code)),
+                  trackBar: FlutterSliderTrackBar(activeTrackBar: BoxDecoration(color: trackBarColor),activeTrackBarHeight: 20,inactiveTrackBarHeight: 20),
+                  hatchMark: FlutterSliderHatchMark(
+                    density: 0.5, // means 50 lines, from 0 to 100 percent
+                    labels: [
+                      FlutterSliderHatchMarkLabel(percent: 0, label: Icon(Icons.ac_unit,size: 40)),
+                      FlutterSliderHatchMarkLabel(percent: 100, label: Icon(Icons.wb_sunny,size: 40)),
+                    ],
+                  ),
+                ),
               ),
-              Row(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   IconButton(
-                    icon: Icon(Icons.timelapse, color: Colors.red, size: 35),
+                    icon: Icon(Icons.more_time, color: Colors.green, size: widthScreen * 0.025 + heightScreen * 0.015),
                     onPressed: () async {
-                      print('{\"light\": 4,0,\"$zonesInHex\"}');
-                      await characteristicMaestro.write('{\"light\": 4,0,\"$zonesInHex\"}'.codeUnits);
+                      print('{\"light\": 4,1,\"$zonesInHex\"}');
+                      await characteristicMaestro.write('{\"light\": 4,1,\"$zonesInHex\"}'.codeUnits);
                     },
-                  ),
-                  SizedBox(
-                    width: 30,
                   ),
                   FlatButton(
                     onPressed: () async {
@@ -250,8 +230,8 @@ class _HomeState extends State<Home> {
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Text(
-                        'Modes',
-                        style: TextStyle(color: Colors.white, fontSize: 15),
+                        'Mode',
+                        style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.01 + heightScreen * 0.015),
                       ),
                     ),
                     color: Colors.blue[400],
@@ -259,18 +239,49 @@ class _HomeState extends State<Home> {
                       borderRadius: BorderRadius.circular(18.0),
                     ),
                   ),
-                  SizedBox(
-                    width: 30,
-                  ),
                   IconButton(
-                    icon: Icon(Icons.more_time, color: Colors.green, size: 35),
+                    icon: Icon(Icons.timelapse, color: Colors.red, size: widthScreen * 0.025 + heightScreen * 0.015),
                     onPressed: () async {
-                      print('{\"light\": 4,1,\"$zonesInHex\"}');
-                      await characteristicMaestro.write('{\"light\": 4,1,\"$zonesInHex\"}'.codeUnits);
+                      print('{\"light\": 4,0,\"$zonesInHex\"}');
+                      await characteristicMaestro.write('{\"light\": 4,0,\"$zonesInHex\"}'.codeUnits);
                     },
                   ),
                 ],
               ),
+              IntrinsicHeight(
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    verticalDivider(),
+                    zoneOnOff(context, 'Zone 1', '1'),
+                    verticalDivider(),
+                    zoneOnOff(context, 'Zone 2', '2'),
+                    verticalDivider(),
+                    zoneOnOff(context, 'Zone 3', '4'),
+                    verticalDivider(),
+                    zoneOnOff(context, 'Zone 4', '8'),
+                    verticalDivider(),
+                  ],
+                ),
+              ),
+/*              IntrinsicHeight(
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    verticalDivider(),
+                    zoneOnOff(context, 'Zone 5', '10'),
+                    verticalDivider(),
+                    zoneOnOff(context, 'Zone 6', '20'),
+                    verticalDivider(),
+                    zoneOnOff(context, 'Zone 7', '40'),
+                    verticalDivider(),
+                    zoneOnOff(context, 'Zone 8', '80'),
+                    verticalDivider(),
+                  ],
+                ),
+              ),*/
             ],
           ),
         ),
@@ -295,6 +306,36 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget verticalDivider() {
+    return VerticalDivider(
+      thickness: 1.0,
+      color: Colors.grey[600],
+    );
+  }
+
+  Widget zoneOnOff(BuildContext context, String zoneName, String zoneNumber) {
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        IconButton(
+          icon: Icon(Icons.power_settings_new, color: Colors.green, size: widthScreen * 0.025 + heightScreen * 0.015),
+          onPressed: () async {
+            await characteristicMaestro.write('{\"light\": 1,1,\"$zoneNumber\"}'.codeUnits);
+          },
+        ),
+        Text(zoneName, style: TextStyle(fontSize: widthScreen * 0.012 + heightScreen * 0.009)),
+        IconButton(
+          icon: Icon(Icons.close, color: Colors.red, size: widthScreen * 0.025 + heightScreen * 0.015),
+          onPressed: () async {
+            await characteristicMaestro.write('{\"light\": 1,0,\"$zoneNumber\"}'.codeUnits);
+          },
+        ),
+      ],
     );
   }
 
