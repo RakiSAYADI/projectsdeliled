@@ -289,7 +289,26 @@ class _UVCAutoState extends State<UVCAuto> {
           activationButtonColor[i] = Colors.red;
         }
       }
+      if (daysStates[0]) {
+        activationButtonText = 'Activé';
+        activationButtonColor[0] = Colors.green;
+      } else {
+        activationButtonText = 'Désactivé';
+        activationButtonColor[0] = Colors.red;
+      }
     });
+
+    myTimeHoursPosition = hourList[0];
+    myTimeMinutesPosition = minutesList[0];
+    myTimeSecondsPosition = secondsList[0];
+    myActivationTimeMinutePosition = delayList[0];
+    myExtinctionTimeMinutePosition = durationList[0];
+
+    myTimeHoursData = myTimeHours.elementAt(myTimeHoursPosition);
+    myTimeMinutesData = myTimeMinutes.elementAt(myTimeMinutesPosition);
+    myTimeSecondsData = myTimeSeconds.elementAt(myTimeSecondsPosition);
+    myActivationTimeMinuteData = myActivationTimeMinute.elementAt(myActivationTimeMinutePosition);
+    myExtinctionTimeMinuteData = myExtinctionTimeMinute.elementAt(myExtinctionTimeMinutePosition);
   }
 
   @override

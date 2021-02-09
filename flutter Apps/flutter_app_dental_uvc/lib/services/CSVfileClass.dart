@@ -54,10 +54,12 @@ class UVCDataFile {
         }
       }
       print("uvc csv file Readed");
+      print(textuvc);
       return textuvc;
     } catch (e) {
       print("Couldn't read file");
       await saveStringUVCDATA(_uvcDefaultDataString);
+      print(_uvcDefaultDataString);
       return _uvcDefaultData;
     }
   }

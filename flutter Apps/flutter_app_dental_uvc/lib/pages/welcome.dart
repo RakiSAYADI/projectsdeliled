@@ -67,7 +67,6 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     bool deviceExistOrNot = false;
     macRobotUVC = await uvcDataFile.readUVCDevice();
     await Future.delayed(const Duration(seconds: 3));
-    //myDevice.disconnect();
     if (macRobotUVC.isEmpty) {
       myUvcToast.setToastDuration(10);
       myDevice = Device(device: scanDevices.elementAt(devicesPosition));
@@ -100,10 +99,13 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
         // stop scanning and start connecting
         while (true) {
           try {
+            myDevice.disconnect();
+            await Future.delayed(const Duration(milliseconds: 500));
             myDevice.connect(false);
           } catch (e) {
             print(e);
             myDevice.disconnect();
+            await Future.delayed(const Duration(milliseconds: 500));
             myDevice.connect(false);
           }
           await Future.delayed(const Duration(seconds: 4));
@@ -115,6 +117,9 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
             try {
               if (myDevice.getReadCharMessage().isNotEmpty) {
                 Future.delayed(Duration(seconds: 1), () async {
+                  flutterBlue.stopScan();
+                  enableResetButtonCounter = 0;
+                  await Future.delayed(const Duration(milliseconds: 500));
                   Navigator.pushReplacementNamed(context, '/pin_access', arguments: {
                     'myDevice': myDevice,
                     'dataRead': myDevice.getReadCharMessage(),
@@ -131,7 +136,8 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
           }
           enableResetButtonCounter++;
           if (enableResetButtonCounter == 10) {
-            print('reset');
+            enableResetButtonCounter = 0;
+            flutterBlue.stopScan();
             setState(() {
               enableResetButton = true;
             });
@@ -268,7 +274,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
 
   void scanForDevices() {
     // Start scanning
-    flutterBlue.startScan(timeout: Duration(seconds: 5));
+    flutterBlue.startScan(timeout: Duration(seconds: 30));
     // Listen to scan results
     bool firstTime = true;
     flutterBlue.scanResults.listen((results) {
