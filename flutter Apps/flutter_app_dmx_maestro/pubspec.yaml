@@ -25,6 +25,7 @@ dependencies:
     sdk: flutter
   qrcode: ^1.0.4
   flutter_local_notifications: ^4.0.0
+  location_permissions: ^3.0.0+1
   flutter_blue: ^0.7.2
   fluttertoast: ^6.0.0
   flutter_spinkit: ^4.1.2+1
@@ -41,6 +42,17 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  flutter_launcher_icons: ^0.8.1
+
+  #flutter pub pub run flutter_launcher_icons:main#
+
+flutter_icons:
+  #  image_path: "assets/images/icon-128x128.png"
+  image_path_android: "assets/ic_launcher_App.png"
+  image_path_ios: "assets/My-Launcher-Icon-App.jpg"
+  android: true # can specify file name here e.g. "ic_launcher"
+  ios: true # can specify file name here e.g. "My-Launcher-Icon"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

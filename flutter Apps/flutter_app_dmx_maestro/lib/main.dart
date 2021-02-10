@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_dmx_maestro/pages/alarm_settings.dart';
+import 'package:flutter_app_dmx_maestro/pages/check_permissions.dart';
 import 'package:flutter_app_dmx_maestro/pages/settings.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_app_dmx_maestro/pages/home.dart';
@@ -71,6 +72,7 @@ void main() async {
     initialRoute: '/',
     routes: {
       '/': (context) => Welcome(),
+      '/check_permissions': (context) => CheckPermissions(),
       '/scan_ble_list': (context) => ScanListBle(),
       '/scan_qrcode': (context) => ScanQrCode(),
       '/home': (context) => Home(),

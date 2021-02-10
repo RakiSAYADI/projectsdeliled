@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:package_info/package_info.dart';
 
@@ -16,6 +17,8 @@ class _WelcomeState extends State<Welcome> {
   String appPackageName;
   String appVersion;
   String appBuildNumber;
+
+  FlutterBlue flutterBlue = FlutterBlue.instance;
 
   @override
   void initState() {
@@ -40,9 +43,25 @@ class _WelcomeState extends State<Welcome> {
 
     gettingAppInfo();
 
-    Future.delayed(Duration(seconds: 5), () {
-      Navigator.pushReplacementNamed(context, '/scan_ble_list');
+    flutterBlue.state.listen((state) {
+      if (state == BluetoothState.off) {
+        //Alert user to turn on bluetooth.
+        print("Bluetooth is off");
+        Future.delayed(Duration(seconds: 5), () {
+          Navigator.pushReplacementNamed(context, '/check_permissions');
+        });
+      } else if (state == BluetoothState.on) {
+        //if bluetooth is enabled then go ahead.
+        //Make sure user's device gps is on.
+        flutterBlue = FlutterBlue.instance;
+        print("Bluetooth is on");
+        Future.delayed(Duration(seconds: 5), () {
+          Navigator.pushReplacementNamed(context, '/scan_ble_list');
+        });
+      }
     });
+
+
   }
 
   void gettingAppInfo() async {

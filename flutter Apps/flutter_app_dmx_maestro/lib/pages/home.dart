@@ -137,7 +137,6 @@ class _HomeState extends State<Home> {
                     child: IconButton(
                       icon: Icon(Icons.power_settings_new, color: Colors.green, size: widthScreen * 0.03 + heightScreen * 0.02),
                       onPressed: () async {
-                        print('{\"light\": 1,1,\"F\"}');
                         await characteristicMaestro.write('{\"light\": 1,1,\"$zonesInHex\"}'.codeUnits);
                       },
                     ),
@@ -150,7 +149,6 @@ class _HomeState extends State<Home> {
                     child: IconButton(
                       icon: Icon(Icons.close, color: Colors.red, size: widthScreen * 0.03 + heightScreen * 0.02),
                       onPressed: () async {
-                        print('{\"light\": 1,0,\"F\"}');
                         await characteristicMaestro.write('{\"light\": 1,0,\"$zonesInHex\"}'.codeUnits);
                       },
                     ),
@@ -162,25 +160,21 @@ class _HomeState extends State<Home> {
                 children: [
                   HSLColorPicker(
                     onChanged: (colorSelected) {
-                      setState(() {
-                        hslColor = colorSelected;
-                        color = colorSelected.toColor();
-                        print(
-                            '{\"hue\":${color.toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")},\"zone\":\"$zonesInHex\"}');
-                        characteristicMaestro.write(
-                            '{\"hue\":${color.toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")},\"zone\":\"$zonesInHex\"}'
-                                .codeUnits);
-                      });
+                      hslColor = colorSelected;
+                      color = colorSelected.toColor();
+                      characteristicMaestro.write(
+                          '{\"hue\":${color.toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")},\"zone\":\"$zonesInHex\"}'
+                              .codeUnits);
                     },
                     size: widthScreen * 0.4 + heightScreen * 0.1,
-                    strokeWidth: widthScreen * 0.1,
+                    strokeWidth: widthScreen * 0.04,
                     thumbSize: 0.00001,
                     thumbStrokeSize: widthScreen * 0.005 + heightScreen * 0.005,
                     showCenterColorIndicator: true,
                     centerColorIndicatorSize: widthScreen * 0.005 + heightScreen * 0.005,
                     initialColor: Colors.blue[900],
                   ),
-                  bigCircle(widthScreen * 0.4, heightScreen * 0.15),
+                  bigCircle(widthScreen * 0.2, heightScreen * 0.1),
                 ],
               ),
               Padding(
@@ -199,54 +193,62 @@ class _HomeState extends State<Home> {
                     } else {
                       trackBarColor = Colors.blueAccent;
                     }
+                    setState(() {});
                     characteristicMaestro.write('{\"light\":[8,${_lowerValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
                   },
                   handler: FlutterSliderHandler(child: Icon(Icons.code)),
-                  trackBar: FlutterSliderTrackBar(activeTrackBar: BoxDecoration(color: trackBarColor),activeTrackBarHeight: 20,inactiveTrackBarHeight: 20),
+                  trackBar: FlutterSliderTrackBar(
+                      activeTrackBar: BoxDecoration(color: trackBarColor), activeTrackBarHeight: 12, inactiveTrackBarHeight: 12),
                   hatchMark: FlutterSliderHatchMark(
                     density: 0.5, // means 50 lines, from 0 to 100 percent
                     labels: [
-                      FlutterSliderHatchMarkLabel(percent: 0, label: Icon(Icons.ac_unit,size: 40)),
-                      FlutterSliderHatchMarkLabel(percent: 100, label: Icon(Icons.wb_sunny,size: 40)),
+                      FlutterSliderHatchMarkLabel(percent: 0, label: Icon(Icons.ac_unit, size: 30)),
+                      FlutterSliderHatchMarkLabel(percent: 100, label: Icon(Icons.wb_sunny, size: 30)),
                     ],
                   ),
                 ),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.more_time, color: Colors.green, size: widthScreen * 0.025 + heightScreen * 0.015),
-                    onPressed: () async {
-                      print('{\"light\": 4,1,\"$zonesInHex\"}');
-                      await characteristicMaestro.write('{\"light\": 4,1,\"$zonesInHex\"}'.codeUnits);
-                    },
-                  ),
-                  FlatButton(
-                    onPressed: () async {
-                      print('{\"light\": 4,2,\"$zonesInHex\"}');
-                      await characteristicMaestro.write('{\"light\": 4,2,\"$zonesInHex\"}'.codeUnits);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Text(
-                        'Mode',
-                        style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.01 + heightScreen * 0.015),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 16.0, 0),
+                      child: IconButton(
+                        icon: Icon(Icons.more_time, color: Colors.green, size: widthScreen * 0.025 + heightScreen * 0.015),
+                        onPressed: () async {
+                          await characteristicMaestro.write('{\"light\": 4,1,\"$zonesInHex\"}'.codeUnits);
+                        },
                       ),
                     ),
-                    color: Colors.blue[400],
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                    FlatButton(
+                      onPressed: () async {
+                        await characteristicMaestro.write('{\"light\": 4,2,\"$zonesInHex\"}'.codeUnits);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          'Mode',
+                          style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.01 + heightScreen * 0.015),
+                        ),
+                      ),
+                      color: Colors.blue[400],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.timelapse, color: Colors.red, size: widthScreen * 0.025 + heightScreen * 0.015),
-                    onPressed: () async {
-                      print('{\"light\": 4,0,\"$zonesInHex\"}');
-                      await characteristicMaestro.write('{\"light\": 4,0,\"$zonesInHex\"}'.codeUnits);
-                    },
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16.0, 0, 0, 0),
+                      child: IconButton(
+                        icon: Icon(Icons.timelapse, color: Colors.red, size: widthScreen * 0.025 + heightScreen * 0.015),
+                        onPressed: () async {
+                          await characteristicMaestro.write('{\"light\": 4,0,\"$zonesInHex\"}'.codeUnits);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
               IntrinsicHeight(
                 child: Row(
