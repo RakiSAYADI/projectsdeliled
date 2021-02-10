@@ -14,9 +14,11 @@
 #include "freertos/task.h"
 #include "driver/ledc.h"
 #include "esp_err.h"
+#include "esp_attr.h"
 #include "driver/gpio.h"
 #include "freertos/queue.h"
 #include "xtensa/core-macros.h"
+#include "esp32/rom/gpio.h"
 #include "esp_log.h"
 
 #include "sdkconfig.h"
@@ -109,19 +111,27 @@ void GpioIntStateMachine(GpioIntRegister *gpio) {
 	}
 }
 
-static void IRAM_ATTR gpio_isr_handler(void* arg)
-{
+void IRAM_ATTR gpio_isr_handler(void* arg) {
 	uint32_t gpio_num = (uint32_t) arg;
 
-	switch (gpio_num)
-	{
-		case GPIO_INPUT_RED : GpioIntStateMachine(&Gpio_Red);break;
-		case GPIO_INPUT_GREEN : GpioIntStateMachine(&Gpio_Green);break;
-		case GPIO_INPUT_BLUE : GpioIntStateMachine(&Gpio_Blue);break;
-		case GPIO_INPUT_WHITE : GpioIntStateMachine(&Gpio_White);break;
-		case GPIO_INPUT_WARM_WHITE : GpioIntStateMachine(&Gpio_WarmWhite);break;
+	switch (gpio_num) {
+	case GPIO_INPUT_RED:
+		GpioIntStateMachine(&Gpio_Red);
+		break;
+	case GPIO_INPUT_GREEN:
+		GpioIntStateMachine(&Gpio_Green);
+		break;
+	case GPIO_INPUT_BLUE:
+		GpioIntStateMachine(&Gpio_Blue);
+		break;
+	case GPIO_INPUT_WHITE:
+		GpioIntStateMachine(&Gpio_White);
+		break;
+	case GPIO_INPUT_WARM_WHITE:
+		GpioIntStateMachine(&Gpio_WarmWhite);
+		break;
 
-		default:
+	default:
 		break;
 	}
 
@@ -183,84 +193,6 @@ void ExtractSigProp(GpioIntRegister *gpio) {
 	}
 
 	//printf("sn %lld (%s) cnt: UP %lld PRD %lld frq:%0.2f dc %0.2f\n", SampleNum,chn,NlvlCount,gpio->PprdCount,frq,dcyc);
-
-}
-
-typedef struct {
-	uint8_t Hue;
-	uint8_t Sat;
-	uint8_t Bri;
-} HSLStruct;
-
-void RgbToHSL(uint32_t rgb, HSLStruct *tmp) {
-
-	float R = 0, G = 0, B = 0;
-	;
-	uint8_t r = 0, g = 0, b = 0;
-
-	r = rgb >> 16;
-	g = rgb >> 8;
-	b = rgb;
-
-	R = r / 255.0;
-	G = g / 255.0;
-	B = b / 255.0;
-
-	float min = 1000, max = 0;
-	char cmax = 'R';
-
-	if (max < R) {
-		max = R;
-		cmax = 'R';
-	}
-	if (max < G) {
-		max = G;
-		cmax = 'G';
-	}
-	if (max < B) {
-		max = B;
-		cmax = 'B';
-	}
-
-	if (min > R)
-		min = R;
-	if (min > G)
-		min = G;
-	if (min > B)
-		min = B;
-
-	float Hue = 0;
-
-	switch (cmax) {
-	case 'R':
-		Hue = (G - B) / (max - min);
-		break;
-	case 'G':
-		Hue = 2.0 + (B - R) / (max - min);
-		break;
-	case 'B':
-		Hue = 4.0 + (R - G) / (max - min);
-		break;
-	}
-
-	Hue *= 60;
-	if (Hue < 0)
-		Hue += 360;
-
-	Hue /= 360;
-
-	tmp->Hue = (uint8_t) round(255.0 * Hue);
-
-	float lum = ((min + max) / 2) * 100;
-	tmp->Bri = (uint8_t) round(lum);
-
-	float sat = 0;
-	if (lum > 50)
-		sat = (max - min) / (2.0 - max - min);
-	else
-		sat = (max - min) / (max + min);
-	sat *= 100;
-	tmp->Sat = (uint8_t) round(sat);
 
 }
 
@@ -374,16 +306,32 @@ void gpio_task(void* arg) {
 			startcounter = false;
 		}
 
-		printf("sn %08lld R %03u G %03u B %03u W %03u WW %03u \n", SampleNum,
-				Gpio_Red.binEq, Gpio_Green.binEq, Gpio_Blue.binEq,
-				Gpio_White.binEq, Gpio_WarmWhite.binEq);
+//		printf("sn %08lld R %03u G %03u B %03u W %03u WW %03u \n", SampleNum,
+//				Gpio_Red.binEq, Gpio_Green.binEq, Gpio_Blue.binEq,
+//				Gpio_White.binEq, Gpio_WarmWhite.binEq);
 
 		vTaskDelay(100 / portTICK_RATE_MS);
 	}
 }
 
-void app_main() {
+void pwmTask(){
 
+	while (1) {
+		if (gpio_get_level(GPIO_INPUT_PAIR) == 0) {
+			uint8_t selZone = ((gpio_get_level(GPIO_ZONE_3) << 3)
+					| (gpio_get_level(GPIO_ZONE_2) << 2)
+					| (gpio_get_level(GPIO_ZONE_1) << 1)
+					| gpio_get_level(GPIO_ZONE_0));
+			MilightHandler(LCMD_PAIRING, LSUBCMD_PAIR, ~selZone & 0x0F);
+			ESP_LOGI("PWM", "Light control cmd %d subcmd %d zone %d",
+					LCMD_PAIRING, LSUBCMD_PAIR, ~selZone & 0x0F);
+		}
+
+		vTaskDelay(10 / portTICK_RATE_MS);
+	}
+}
+
+void pwm_main() {
 	gpio_config_t io_conf;
 
 	//interrupt of rising edge
@@ -432,18 +380,7 @@ void app_main() {
 
 	lightControl_Init();
 
-	while (1) {
-		if (gpio_get_level(GPIO_INPUT_PAIR) == 0) {
-			uint8_t selZone = ((gpio_get_level(GPIO_ZONE_3) << 3)
-					| (gpio_get_level(GPIO_ZONE_2) << 2)
-					| (gpio_get_level(GPIO_ZONE_1) << 1)
-					| gpio_get_level(GPIO_ZONE_0));
-			MilightHandler(LCMD_PAIRING, LSUBCMD_PAIR, ~selZone & 0x0F);
-			ESP_LOGI("PWM", "Light control cmd %d subcmd %d zone %d",
-					LCMD_PAIRING, LSUBCMD_PAIR, ~selZone & 0x0F);
-		}
-
-		vTaskDelay(10 / portTICK_RATE_MS);
-	}
+	//start pwm task
+	xTaskCreate(pwmTask, "pwmTask", 2048, NULL, 10, NULL);
 
 }

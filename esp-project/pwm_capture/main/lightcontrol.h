@@ -11,6 +11,16 @@
 
 #include <stdint.h>
 
+typedef struct {
+	uint8_t Hue;
+	uint8_t Sat;
+	uint8_t Bri;
+} HSLStruct;
+
+void RgbToHSL(uint32_t rgb, HSLStruct *tmp);
+
+uint8_t strContains(char* string, char* toFind);
+
 #define USE_RADIO
 #define USE_0_10V
 
