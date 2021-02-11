@@ -42,6 +42,10 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
 
   PermissionStatus _permissionStatus = PermissionStatus.unknown;
 
+  bool enableResetButton = false;
+
+  int enableResetButtonCounter = 0;
+
   void ledInit() async {
     ledControl = LedControl();
     await ledControl.setLedColor('ON');
@@ -63,7 +67,6 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     bool deviceExistOrNot = false;
     macRobotUVC = await uvcDataFile.readUVCDevice();
     await Future.delayed(const Duration(seconds: 3));
-    //myDevice.disconnect();
     if (macRobotUVC.isEmpty) {
       myUvcToast.setToastDuration(10);
       myDevice = Device(device: scanDevices.elementAt(devicesPosition));
@@ -87,29 +90,61 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
         }
       }
       if (deviceExistOrNot) {
+        await Future.delayed(const Duration(milliseconds: 500));
         myUvcToast.setAnimationIcon(animationRefreshIcon);
-        myUvcToast.setToastDuration(60);
+        myUvcToast.setToastDuration(5);
         myDevice = Device(device: scanDevices.elementAt(devicesPosition));
         myUvcToast.setToastMessage('Autorisation de connexion validée !');
         myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
         // stop scanning and start connecting
-        try {
-          await myDevice.connect(false);
-        } catch (e) {
-          myDevice.disconnect();
-          await myDevice.connect(false);
-        }
-        Future.delayed(const Duration(seconds: 2), () async {
-          // clear the remaining toast message
-          myUvcToast.clearAllToast();
-          await myDevice.readCharacteristic(2, 0);
-          Future.delayed(Duration(seconds: 1), () async {
-            Navigator.pushReplacementNamed(context, '/pin_access', arguments: {
-              'myDevice': myDevice,
-              'dataRead': myDevice.getReadCharMessage(),
+        while (true) {
+          try {
+            myDevice.disconnect();
+            await Future.delayed(const Duration(milliseconds: 500));
+            myDevice.connect(false);
+          } catch (e) {
+            print(e);
+            myDevice.disconnect();
+            await Future.delayed(const Duration(milliseconds: 500));
+            myDevice.connect(false);
+          }
+          await Future.delayed(const Duration(seconds: 4));
+          if (myDevice.getConnectionState()) {
+            // clear the remaining toast message
+            myUvcToast.clearAllToast();
+            await myDevice.readCharacteristic(2, 0);
+            await Future.delayed(const Duration(seconds: 1));
+            try {
+              if (myDevice.getReadCharMessage().isNotEmpty) {
+                Future.delayed(Duration(seconds: 1), () async {
+                  flutterBlue.stopScan();
+                  enableResetButtonCounter = 0;
+                  await Future.delayed(const Duration(milliseconds: 500));
+                  Navigator.pushReplacementNamed(context, '/pin_access', arguments: {
+                    'myDevice': myDevice,
+                    'dataRead': myDevice.getReadCharMessage(),
+                  });
+                });
+                break;
+              } else {
+                myDevice.disconnect();
+              }
+            } catch (e) {
+              print(e);
+              myDevice.disconnect();
+            }
+          }
+          enableResetButtonCounter++;
+          if (enableResetButtonCounter == 10) {
+            enableResetButtonCounter = 0;
+            flutterBlue.stopScan();
+            setState(() {
+              enableResetButton = true;
             });
-          });
-        });
+            break;
+          }
+          await Future.delayed(const Duration(seconds: 2));
+        }
       } else {
         myUvcToast.setToastDuration(10);
         myDevice = Device(device: scanDevices.elementAt(devicesPosition));
@@ -204,15 +239,15 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     checkServiceStatus(context);
     final Future<PermissionStatus> statusFuture = LocationPermissions().checkPermissionStatus();
 
-    statusFuture.then((PermissionStatus status) async{
-        _permissionStatus = status;
-        if (_permissionStatus.index != 2) {
-          myUvcToast.setToastDuration(5);
-          myUvcToast.setToastMessage('La Localisation n\'est pas autorisée sur votre téléphone !');
-          myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-        } else {
-          checkServiceStatus(context);
-        }
+    statusFuture.then((PermissionStatus status) async {
+      _permissionStatus = status;
+      if (_permissionStatus.index != 2) {
+        myUvcToast.setToastDuration(5);
+        myUvcToast.setToastMessage('La Localisation n\'est pas autorisée sur votre téléphone !');
+        myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+      } else {
+        checkServiceStatus(context);
+      }
     });
   }
 
@@ -239,14 +274,14 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
 
   void scanForDevices() {
     // Start scanning
-    flutterBlue.startScan(timeout: Duration(seconds: 5));
+    flutterBlue.startScan(timeout: Duration(seconds: 30));
     // Listen to scan results
     bool firstTime = true;
     flutterBlue.scanResults.listen((results) {
       scanDevices.clear();
       // do something with scan results
       for (ScanResult r in results) {
-        if(firstTime){
+        if (firstTime) {
           firstTime = false;
           readUVCDevice();
         }
@@ -269,6 +304,21 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     print('width : $widthScreen and height : $heightScreen');
     return Scaffold(
       backgroundColor: Colors.indigo[700],
+      floatingActionButton: Visibility(
+        visible: enableResetButton,
+        child: FloatingActionButton.extended(
+          onPressed: () {
+            myDevice.disconnect();
+            Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+          },
+          label: Text('Reset Scan'),
+          icon: Icon(
+            Icons.refresh,
+            color: Colors.white,
+          ),
+          backgroundColor: Colors.blue[400],
+        ),
+      ),
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(

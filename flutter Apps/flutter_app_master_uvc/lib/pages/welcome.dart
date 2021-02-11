@@ -119,37 +119,42 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
 
     bool checkingBLEAndLocal = true;
 
-    flutterBlue.state.listen((state) {
-      if (checkingBLEAndLocal) {
-        checkingBLEAndLocal = false;
-        if (Platform.isAndroid) {
-          _listenForPermissionStatus();
-        }
-        if (state == BluetoothState.off) {
-          //Alert user to turn on bluetooth.
-          if (Platform.isAndroid && _permissionStatus.index != 2) {
+    try{
+      flutterBlue.state.listen((state) {
+        if (checkingBLEAndLocal) {
+          checkingBLEAndLocal = false;
+          if (Platform.isAndroid) {
+            _listenForPermissionStatus();
+          }
+          if (state == BluetoothState.off) {
+            //Alert user to turn on bluetooth.
+            if (Platform.isAndroid && _permissionStatus.index != 2) {
+              Future.delayed(Duration(seconds: 5), () async {
+                Navigator.pushReplacementNamed(context, '/check_permissions');
+              });
+            } else {
+              Future.delayed(Duration(seconds: 5), () async {
+                Navigator.pushReplacementNamed(context, '/check_permissions');
+              });
+            }
+          } else if (state == BluetoothState.on) {
+            //if bluetooth is enabled then go ahead.
+            //Make sure user's device gps is on.
+            scanForDevices();
             Future.delayed(Duration(seconds: 5), () async {
-              Navigator.pushReplacementNamed(context, '/check_permissions');
-            });
-          } else {
-            Future.delayed(Duration(seconds: 5), () async {
-              Navigator.pushReplacementNamed(context, '/check_permissions');
+              Navigator.pushReplacementNamed(context, '/qr_code_scan', arguments: {
+                'scanDevices': scanDevices,
+                'qrCodeConnectionOrSecurity': false,
+              });
             });
           }
-        } else if (state == BluetoothState.on) {
-          //if bluetooth is enabled then go ahead.
-          //Make sure user's device gps is on.
-          scanForDevices();
-          Future.delayed(Duration(seconds: 5), () async {
-            Navigator.pushReplacementNamed(context, '/qr_code_scan', arguments: {
-              'scanDevices': scanDevices,
-              'qrCodeConnectionOrSecurity': false,
-            });
-          });
         }
-      }
-    });
-
+      });
+    }catch(e){
+      myUvcToast.setToastDuration(5);
+      myUvcToast.setToastMessage('App not working !');
+      myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+    }
     super.initState();
   }
 

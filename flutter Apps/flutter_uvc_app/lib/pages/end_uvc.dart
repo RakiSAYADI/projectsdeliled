@@ -165,7 +165,7 @@ class _EndUVCState extends State<EndUVC> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      /*floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.pushNamed(context, '/DataCSVView', arguments: {
             'isTreatmentCompleted': isTreatmentCompleted,
@@ -179,11 +179,12 @@ class _EndUVCState extends State<EndUVC> {
           color: Colors.white,
         ),
         backgroundColor: Colors.blue[400],
-      ),
+      ),*/
     );
   }
 
   Future<bool> exitApp(BuildContext context) async {
+    myDevice.disconnect();
     Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
     return true;
   }

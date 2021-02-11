@@ -21,6 +21,7 @@
 #include <esp_system.h>
 #include <esp_event_loop.h>
 #include "esp_wifi.h"
+#include "math.h"
 #include <nvs.h>
 #include <nvs_flash.h>
 #include <driver/gpio.h>
@@ -57,7 +58,7 @@ char MI_SPEEDDW[] = { 0x31, 0x00, 0x00, 0x08, 0x04, 0x04, 0x00, 0x00, 0x00 };
 char TxBuffer[] = { 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00 };
 
-static void rx_task() {
+void rx_task() {
 	static const char *RX_TASK_TAG = "RX_TASK";
 	esp_log_level_set(RX_TASK_TAG, ESP_LOG_INFO);
 	uint8_t* data = (uint8_t*) malloc(RX_BUF_SIZE + 1);
@@ -336,6 +337,105 @@ void MilightHandler(uint8_t cmd, uint8_t subcmd, uint8_t zonecode) {
 		if (zone == 0)
 			return;
 	}
+}
+
+void RgbToHSL(uint32_t rgb, HSLStruct *tmp) {
+
+	float R = 0, G = 0, B = 0;
+	;
+	uint8_t r = 0, g = 0, b = 0;
+
+	r = rgb >> 16;
+	g = rgb >> 8;
+	b = rgb;
+
+	R = r / 255.0;
+	G = g / 255.0;
+	B = b / 255.0;
+
+	float min = 1000, max = 0;
+	char cmax = 'R';
+
+	if (max < R) {
+		max = R;
+		cmax = 'R';
+	}
+	if (max < G) {
+		max = G;
+		cmax = 'G';
+	}
+	if (max < B) {
+		max = B;
+		cmax = 'B';
+	}
+
+	if (min > R)
+		min = R;
+	if (min > G)
+		min = G;
+	if (min > B)
+		min = B;
+
+	float Hue = 0;
+
+	switch (cmax) {
+	case 'R':
+		Hue = (G - B) / (max - min);
+		break;
+	case 'G':
+		Hue = 2.0 + (B - R) / (max - min);
+		break;
+	case 'B':
+		Hue = 4.0 + (R - G) / (max - min);
+		break;
+	}
+
+	Hue *= 60;
+	if (Hue < 0)
+		Hue += 360;
+
+	Hue /= 360;
+
+	tmp->Hue = (uint8_t) round(255.0 * Hue);
+
+	float lum = ((min + max) / 2) * 100;
+	tmp->Bri = (uint8_t) round(lum);
+
+	float sat = 0;
+	if (lum > 50)
+		sat = (max - min) / (2.0 - max - min);
+	else
+		sat = (max - min) / (max + min);
+	sat *= 100;
+	tmp->Sat = (uint8_t) round(sat);
+
+}
+
+uint8_t strContains(char* string, char* toFind) {
+	uint8_t slen = strlen(string);
+	uint8_t tFlen = strlen(toFind);
+	uint8_t found = 0;
+
+	if (slen >= tFlen) {
+		for (uint8_t s = 0, t = 0; s < slen; s++) {
+			do {
+
+				if (string[s] == toFind[t]) {
+					if (++found == tFlen)
+						return 1;
+					s++;
+					t++;
+				} else {
+					s -= found;
+					found = 0;
+					t = 0;
+				}
+
+			} while (found);
+		}
+		return 0;
+	} else
+		return -1;
 }
 
 void SimLightCommand() {

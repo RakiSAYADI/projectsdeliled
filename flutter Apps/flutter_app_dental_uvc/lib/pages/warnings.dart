@@ -13,6 +13,8 @@ class _WarningsState extends State<Warnings> {
   Device myDevice;
   UvcLight myUvcLight;
 
+  bool nextButtonPressedOnce = false;
+
   @override
   Widget build(BuildContext context) {
     warningsClassData = warningsClassData.isNotEmpty ? warningsClassData : ModalRoute.of(context).settings.arguments;
@@ -150,7 +152,7 @@ class _WarningsState extends State<Warnings> {
                         child: Center(
                             child: Text(
                           '3',
-                          style: TextStyle(color: Colors.white, fontSize:widthScreen * 0.04),
+                          style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.04),
                         )),
                       ),
                       decoration: BoxDecoration(
@@ -179,12 +181,15 @@ class _WarningsState extends State<Warnings> {
                   children: [
                     FlatButton(
                       onPressed: () async {
-                        String message = 'UVCTreatement : ON';
-                        await myDevice.writeCharacteristic(2, 0, message);
-                        Navigator.pushNamed(context, '/uvc', arguments: {
-                          'uvclight': myUvcLight,
-                          'myDevice': myDevice,
-                        });
+                        if (!nextButtonPressedOnce) {
+                          nextButtonPressedOnce = true;
+                          String message = 'UVCTreatement : ON';
+                          await myDevice.writeCharacteristic(2, 0, message);
+                          Navigator.pushNamed(context, '/uvc', arguments: {
+                            'uvclight': myUvcLight,
+                            'myDevice': myDevice,
+                          });
+                        }
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),

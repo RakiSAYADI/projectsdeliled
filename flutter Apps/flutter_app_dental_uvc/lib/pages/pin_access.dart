@@ -3,11 +3,11 @@ import 'dart:io' as io;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutterappdentaluvc/services/AutoUVCService.dart';
 import 'package:flutterappdentaluvc/services/NFCManagerClass.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
-import 'package:flutterappdentaluvc/services/lifeCycleWidget.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pinput/pin_put/pin_put.dart';
@@ -340,7 +340,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
               if (myDevice != null) {
                 myDevice.disconnect();
               }
-              Navigator.pop(c, true);
+              SystemChannels.platform.invokeMethod('SystemNavigator.pop');
             },
           ),
           FlatButton(

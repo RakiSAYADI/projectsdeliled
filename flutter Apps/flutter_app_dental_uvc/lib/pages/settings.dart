@@ -13,6 +13,8 @@ class _SettingsState extends State<Settings> {
 
   UvcLight myUvcLight;
 
+  bool nextButtonPressedOnce = false;
+
   String myExtinctionTimeMinuteData = ' 30 sec';
   String myActivationTimeMinuteData = ' 10 sec';
 
@@ -190,7 +192,10 @@ class _SettingsState extends State<Settings> {
                 SizedBox(height: heightScreen * 0.1),
                 FlatButton(
                   onPressed: () {
-                    alertSecurity(context);
+                    if (!nextButtonPressedOnce) {
+                      nextButtonPressedOnce = true;
+                      alertSecurity(context);
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -357,6 +362,7 @@ class _SettingsState extends State<Settings> {
                 style: TextStyle(color: Colors.green, fontSize: widthScreen * 0.02),
               ),
               onPressed: () {
+                nextButtonPressedOnce = false;
                 Navigator.of(context).pop();
               },
             ),

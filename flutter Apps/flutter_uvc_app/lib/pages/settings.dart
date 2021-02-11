@@ -16,6 +16,8 @@ class _SettingsState extends State<Settings> {
 
   UvcLight myUvcLight;
 
+  bool nextButtonPressedOnce = false;
+
   ToastyMessage myUvcToast;
 
   String myExtinctionTimeMinuteData = ' 30 sec';
@@ -183,15 +185,18 @@ class _SettingsState extends State<Settings> {
                   SizedBox(height: screenHeight * 0.04),
                   FlatButton(
                     onPressed: () {
-                      if (myDevice.getConnectionState()) {
-                        alertSecurity(context);
-                      } else {
-                        myUvcToast = ToastyMessage(toastContext: context);
-                        myUvcToast.setToastDuration(5);
-                        myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
-                        myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-                        myDevice.disconnect();
-                        Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
+                      if (!nextButtonPressedOnce) {
+                        nextButtonPressedOnce = true;
+                        if (myDevice.getConnectionState()) {
+                          alertSecurity(context);
+                        } else {
+                          myUvcToast = ToastyMessage(toastContext: context);
+                          myUvcToast.setToastDuration(5);
+                          myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
+                          myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+                          myDevice.disconnect();
+                          Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
+                        }
                       }
                     },
                     child: Text(
@@ -361,6 +366,7 @@ class _SettingsState extends State<Settings> {
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () {
+                nextButtonPressedOnce = false;
                 Navigator.of(context).pop();
               },
             ),
