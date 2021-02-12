@@ -32,7 +32,7 @@ typedef struct {
 	time_t autoTrigTime;
 	uint8_t duration;
 	char hue[8];
-	char zones[3];
+	char zones[4];
 	uint8_t startLumVal;
 	uint8_t finishLumVal;
 } AlarmDay_Typedef;
@@ -45,6 +45,7 @@ typedef struct {
 typedef struct {
 	char name[10];
 	char Hue[8];
+	uint8_t Blanche;
 } ColortrProfile_Typedef;
 
 typedef struct {
@@ -58,7 +59,7 @@ typedef struct {
 	char FirmwareVersion[7];
 	Zones_Typedef Zones;
 	WifiConfig_Typedef WifiCfg;
-	ColortrProfile_Typedef Colorprofile[4];
+	ColortrProfile_Typedef ColortrProfile[4];
 	Alarm_Typedef AlarmClock;
 	char FLASH_MEMORY[3];
 } UnitConfig_Typedef;

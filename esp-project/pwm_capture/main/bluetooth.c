@@ -400,13 +400,17 @@ void char_total_write_handler(esp_gatts_cb_event_t event,
 	esp_ble_gatts_send_response(gatts_if, param->write.conn_id,
 			param->write.trans_id, ESP_GATT_OK, NULL);
 }
+uint8_t cmd = 0, subcmd = 0, subcmdhue = 0, subcmdlum = 0, subcmdstab = 0,
+		subcmdhueold = 0, subcmdlumold = 0, subcmdstabold = 0, zone = 0;
 
 void readingData(char * jsonData) {
-	uint8_t cmd = 0, subcmd = 0, zone = 0;
+
 	HSLStruct HSLtmp;
 
 	time_t t = 0;
 	uint32_t tz = 0;
+
+	savenvsFlag = false;
 
 	//Zones Names
 
@@ -511,32 +515,142 @@ void readingData(char * jsonData) {
 
 		// apply hue
 		cmd = 3;
-		subcmd = HSLtmp.Hue;
-		MilightHandler(cmd, subcmd, zone & 0xF);
-		ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d zone %d", cmd,
-				subcmd, zone);
+		subcmdhue = HSLtmp.Hue;
+
+		if (subcmdhue != subcmdhueold) {
+			MilightHandler(cmd, subcmdhue, zone & 0xF);
+			ESP_LOGI(GATTS_TAG,
+					"Light control cmd %d subcmd %d subcmdold %d zone %d", cmd,
+					subcmdhue, subcmdhueold, zone);
+			subcmdhueold = subcmdhue;
+		}
+
 		// apply brightness
 		cmd = 7;
-		subcmd = HSLtmp.Bri;
-		MilightHandler(cmd, subcmd, zone);
-		ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d zone %d", cmd,
-				subcmd, zone);
+		subcmdlum = HSLtmp.Bri;
+		if (subcmdlum != subcmdlumold) {
+			MilightHandler(cmd, subcmdlum, zone);
+			ESP_LOGI(GATTS_TAG,
+					"Light control cmd %d subcmd %d subcmdold %d zone %d", cmd,
+					subcmdlum, subcmdlumold, zone);
+			subcmdlumold = subcmdlum;
+		}
 
 		// apply saturation
 		cmd = 9;
-		subcmd = HSLtmp.Sat;
-		MilightHandler(cmd, subcmd, zone);
-		ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d zone %d", cmd,
-				subcmd, zone);
+		subcmdstab = HSLtmp.Sat;
+		if (subcmdstab != subcmdstabold) {
+			MilightHandler(cmd, subcmdstab, zone);
+			ESP_LOGI(GATTS_TAG,
+					"Light control cmd %d subcmd %d subcmdold %d zone %d", cmd,
+					subcmdstab, subcmdstabold, zone);
+			subcmdstabold = subcmdstab;
+		}
+
+	} else
+
+	if (jsonparse(jsonData, UnitCfg.ColortrProfile[0].name, "couleur1", 0)
+			== 0) {
+
+		//Couleur 1
+
+		ESP_LOGI(GATTS_TAG, "Profile Color name set %s",
+				UnitCfg.ColortrProfile[0].name);
+		savenvsFlag = true;
+		if (jsonparse(jsonData, UnitCfg.ColortrProfile[0].Hue, "couleur1", 1)
+				== 0) {
+			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s",
+					UnitCfg.ColortrProfile[0].Hue);
+			savenvsFlag = true;
+
+		}
+		if (jsonparse(jsonData, tmp, "couleur1", 2) == 0) {
+			UnitCfg.ColortrProfile[0].Blanche = atoi(tmp);
+			ESP_LOGI(GATTS_TAG, "Profile Color Blanche set %d",
+					UnitCfg.ColortrProfile[0].Blanche);
+			savenvsFlag = true;
+
+		}
+
+	} else
+
+	if (jsonparse(jsonData, UnitCfg.ColortrProfile[1].name, "couleur2", 0)
+			== 0) {
+
+		//Couleur 2
+
+		ESP_LOGI(GATTS_TAG, "Profile Color name set %s",
+				UnitCfg.ColortrProfile[1].name);
+		savenvsFlag = true;
+		if (jsonparse(jsonData, UnitCfg.ColortrProfile[1].Hue, "couleur2", 1)
+				== 0) {
+			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s",
+					UnitCfg.ColortrProfile[1].Hue);
+			savenvsFlag = true;
+
+		}
+		if (jsonparse(jsonData, tmp, "couleur2", 2) == 0) {
+			UnitCfg.ColortrProfile[1].Blanche = atoi(tmp);
+			ESP_LOGI(GATTS_TAG, "Profile Color Blanche set %d",
+					UnitCfg.ColortrProfile[1].Blanche);
+			savenvsFlag = true;
+
+		}
+
+	} else
+
+	if (jsonparse(jsonData, UnitCfg.ColortrProfile[2].name, "couleur3", 0)
+			== 0) {
+
+		//Couleur 3
+
+		ESP_LOGI(GATTS_TAG, "Profile Color name set %s",
+				UnitCfg.ColortrProfile[2].name);
+		savenvsFlag = true;
+		if (jsonparse(jsonData, UnitCfg.ColortrProfile[2].Hue, "couleur3", 1)
+				== 0) {
+			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s",
+					UnitCfg.ColortrProfile[2].Hue);
+			savenvsFlag = true;
+
+		}
+		if (jsonparse(jsonData, tmp, "couleur3", 2) == 0) {
+			UnitCfg.ColortrProfile[2].Blanche = atoi(tmp);
+			ESP_LOGI(GATTS_TAG, "Profile Color Blanche set %d",
+					UnitCfg.ColortrProfile[2].Blanche);
+			savenvsFlag = true;
+
+		}
+
+	} else
+
+	if (jsonparse(jsonData, UnitCfg.ColortrProfile[3].name, "couleur4", 0)
+			== 0) {
+
+		//Couleur 4
+
+		ESP_LOGI(GATTS_TAG, "Profile Color name set %s",
+				UnitCfg.ColortrProfile[3].name);
+		savenvsFlag = true;
+		if (jsonparse(jsonData, UnitCfg.ColortrProfile[3].Hue, "couleur4", 1)
+				== 0) {
+			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s",
+					UnitCfg.ColortrProfile[3].Hue);
+			savenvsFlag = true;
+
+		}
+		if (jsonparse(jsonData, tmp, "couleur4", 2) == 0) {
+			UnitCfg.ColortrProfile[3].Blanche = atoi(tmp);
+			ESP_LOGI(GATTS_TAG, "Profile Color Blanche set %d",
+					UnitCfg.ColortrProfile[3].Blanche);
+			savenvsFlag = true;
+
+		}
 
 	} else {
 		ESP_LOGE(GATTS_TAG, "BAD MESSAGE");
 	}
 }
-
-char *light_json;
-
-char *config_json;
 
 void gap_event_handler(esp_gap_ble_cb_event_t event,
 		esp_ble_gap_cb_param_t *param) {
