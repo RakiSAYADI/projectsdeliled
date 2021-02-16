@@ -21,7 +21,6 @@ class _HomeState extends State<Home> {
   final myBleDeviceName = TextEditingController();
 
   HSLColor hslColor = HSLColor.fromColor(Colors.blue);
-  Color color = Colors.blue;
 
   int boolToInt(bool a) => a == true ? 1 : 0;
 
@@ -37,9 +36,17 @@ class _HomeState extends State<Home> {
   double opacityLevelRemoteControl = 1.0;
   double opacityLevelAmbiances = 0.0;
 
+  List<String> ambiance1, ambiance2, ambiance3, ambiance4, ambiance5, ambiance6;
+
   @override
   void initState() {
     // TODO: implement initState
+    ambiance1 = ['1', 'Ambiance 1', 'FF0000'];
+    ambiance2 = ['2', 'Ambiance 2', '000000'];
+    ambiance3 = ['3', 'Ambiance 3', '00FF00'];
+    ambiance4 = ['4', 'Ambiance 4', '0000FF'];
+    ambiance5 = ['5', 'Ambiance 5', 'FFFF00'];
+    ambiance6 = ['6', 'Ambiance 6', '00FFFF'];
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     super.initState();
   }
@@ -63,6 +70,7 @@ class _HomeState extends State<Home> {
 
     return WillPopScope(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         bottomNavigationBar: BottomAppBar(
           notchMargin: 10.0,
@@ -104,12 +112,8 @@ class _HomeState extends State<Home> {
                         ),
                       ],
                     ),
-                    GestureDetector(
-                      child: Text(
-                        bottomBarTitle,
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      onTap: () {
+                    FlatButton(
+                      onPressed: () {
                         setState(() {
                           if (bottomBarTitleState) {
                             bottomBarTitle = 'Télécommande';
@@ -122,6 +126,17 @@ class _HomeState extends State<Home> {
                         });
                         print(bottomBarTitle);
                       },
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          bottomBarTitle,
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                      ),
+                      color: Colors.grey[200],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
                     ),
                     Row(
                       mainAxisSize: MainAxisSize.max,
@@ -221,30 +236,12 @@ class _HomeState extends State<Home> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Ambiance 1',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      ambianceCircleDisplay(context, 'FF0000'),
-                    ],
-                  ),
+                  padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                  child: ambianceDisplayWidget(context, ambiance1),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Ambiance 2',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      ambianceCircleDisplay(context, '000000'),
-                    ],
-                  ),
+                  padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                  child: ambianceDisplayWidget(context, ambiance2),
                 ),
               ],
             ),
@@ -253,30 +250,12 @@ class _HomeState extends State<Home> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Ambiance 3',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      ambianceCircleDisplay(context, '00FF00'),
-                    ],
-                  ),
+                  padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                  child: ambianceDisplayWidget(context, ambiance3),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Ambiance 4',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      ambianceCircleDisplay(context, '0000FF'),
-                    ],
-                  ),
+                  padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                  child: ambianceDisplayWidget(context, ambiance4),
                 ),
               ],
             ),
@@ -285,53 +264,42 @@ class _HomeState extends State<Home> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Ambiance 5',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      ambianceCircleDisplay(context, 'FFFF00'),
-                    ],
-                  ),
+                  padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                  child: ambianceDisplayWidget(context, ambiance5),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Ambiance 6',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      ambianceCircleDisplay(context, '00FFFF'),
-                    ],
-                  ),
+                  padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                  child: ambianceDisplayWidget(context, ambiance6),
                 ),
               ],
-            ),
-            FlatButton(
-              onPressed: () async {
-                if (bottomBarTitleState) {
-                  await characteristicMaestro.write('{\"niger\": 4,2,\"$zonesInHex\"}'.codeUnits);
-                }
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(
-                  'Réglages',
-                  style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.01 + heightScreen * 0.015),
-                ),
-              ),
-              color: Colors.blue[400],
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
-              ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget ambianceDisplayWidget(BuildContext context, List<String> ambiance) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            ambiance[1],
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+          ),
+          IconButton(
+            onPressed: () async {
+              if (bottomBarTitleState) {
+                ambianceSettingWidget(context, ambiance);
+              }
+            },
+            icon: Icon(Icons.settings),
+            color: Colors.blue[400],
+          ),
+          ambianceCircleDisplay(context, ambiance[2]),
+        ],
       ),
     );
   }
@@ -379,10 +347,9 @@ class _HomeState extends State<Home> {
             HSLColorPicker(
               onChanged: (colorSelected) {
                 hslColor = colorSelected;
-                color = colorSelected.toColor();
                 if (!bottomBarTitleState) {
                   characteristicMaestro.write(
-                      '{\"hue\":${color.toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")},\"zone\":\"$zonesInHex\"}'
+                      '{\"hue\":${colorSelected.toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")},\"zone\":\"$zonesInHex\"}'
                           .codeUnits);
                 }
               },
@@ -404,11 +371,12 @@ class _HomeState extends State<Home> {
             max: 100,
             min: 0,
             centeredOrigin: true,
+            disabled: bottomBarTitleState,
             handlerAnimation:
                 FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
             onDragging: (handlerIndex, lowerValue, upperValue) {
               _lowerValue = lowerValue;
-              if (_lowerValue > (100 - 0) / 2) {
+              if (_lowerValue > 50) {
                 trackBarColor = Colors.yellowAccent;
               } else {
                 trackBarColor = Colors.blueAccent;
@@ -516,6 +484,96 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Future<void> ambianceSettingWidget(BuildContext context, List<String> ambiance) async {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    final ambianceNameEditor = TextEditingController();
+    final color = StringBuffer();
+    if (ambiance[2].length == 6 || ambiance[2].length == 7) color.write('ff');
+    color.write(ambiance[2].replaceFirst('#', ''));
+    ambianceNameEditor.text = ambiance[1];
+    String colorHue;
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Changer votre Ambiance'),
+          content: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('Nom de votre ambiance:'),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    maxLength: 10,
+                    controller: ambianceNameEditor,
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.04,
+                      color: Colors.grey[800],
+                    ),
+                    decoration: InputDecoration(
+                        hintText: 'exp:amb123',
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
+                  ),
+                ),
+                Text('Couleur de votre ambiance:'),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: HSLColorPicker(
+                    onChanged: (colorSelected) {
+                      hslColor = colorSelected;
+                      colorHue = colorSelected.toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "");
+                      print(colorHue);
+                    },
+                    size: screenWidth * 0.4 + screenHeight * 0.1,
+                    strokeWidth: screenWidth * 0.04,
+                    thumbSize: 0.00001,
+                    thumbStrokeSize: screenWidth * 0.005 + screenHeight * 0.005,
+                    showCenterColorIndicator: true,
+                    centerColorIndicatorSize: screenWidth * 0.05 + screenHeight * 0.05,
+                    initialColor: Color(int.parse(color.toString(), radix: 16)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'Sauvgarder',
+                style: TextStyle(color: Colors.green),
+              ),
+              onPressed: () async {
+                setState(() {
+                  ambiance[1] = ambianceNameEditor.text;
+                  ambiance[2] = colorHue;
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text(
+                'Annuler',
+                style: TextStyle(color: Colors.green),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget zoneOnOff(BuildContext context, String zoneName, String zoneNumber) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
@@ -546,9 +604,9 @@ class _HomeState extends State<Home> {
   Widget ambianceCircleDisplay(BuildContext context, String ambianceColor) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
-    final buffer = StringBuffer();
-    if (ambianceColor.length == 6 || ambianceColor.length == 7) buffer.write('ff');
-    buffer.write(ambianceColor.replaceFirst('#', ''));
+    final color = StringBuffer();
+    if (ambianceColor.length == 6 || ambianceColor.length == 7) color.write('ff');
+    color.write(ambianceColor.replaceFirst('#', ''));
     return GestureDetector(
       onTap: () async {
         if (bottomBarTitleState) {
@@ -556,10 +614,10 @@ class _HomeState extends State<Home> {
         }
       },
       child: Container(
-        width: widthScreen * 0.2,
-        height: heightScreen * 0.2,
+        width: widthScreen * 0.15,
+        height: heightScreen * 0.15,
         decoration: new BoxDecoration(
-          color: Color(int.parse(buffer.toString(), radix: 16)),
+          color: Color(int.parse(color.toString(), radix: 16)),
           shape: BoxShape.circle,
         ),
       ),

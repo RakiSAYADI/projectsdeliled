@@ -16,7 +16,10 @@ class _SettingsState extends State<Settings> {
   BluetoothCharacteristic characteristicMaestro;
   BluetoothDevice myDevice;
 
+  bool firstDisplayMainWidget = true;
+
   List<bool> zoneStates;
+  List<String> zonesNamesList;
   String zonesInHex;
 
   final myBleDeviceName = TextEditingController();
@@ -27,6 +30,7 @@ class _SettingsState extends State<Settings> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    zonesNamesList = ['  Zone 1  ', '  Zone 2  ', '  Zone 3  ', '  Zone 4  '];
     myUvcToast = ToastyMessage(toastContext: context);
     zoneStates = [false, false, false, false];
     zonesInHex = ((boolToInt(zoneStates[0])) + (boolToInt(zoneStates[1]) * 2) + (boolToInt(zoneStates[2]) * 4) + (boolToInt(zoneStates[3]) * 8))
@@ -38,6 +42,11 @@ class _SettingsState extends State<Settings> {
     bleDeviceData = bleDeviceData.isNotEmpty ? bleDeviceData : ModalRoute.of(context).settings.arguments;
     myDevice = bleDeviceData['bleDevice'];
     characteristicMaestro = bleDeviceData['bleCharacteristic'];
+
+    if (firstDisplayMainWidget) {
+      myBleDeviceName.text = myDevice.name;
+      firstDisplayMainWidget = false;
+    }
 
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
@@ -58,11 +67,13 @@ class _SettingsState extends State<Settings> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'Nom de HuBBox Maestro :',
-                      style: TextStyle(fontSize: (screenWidth * 0.05)),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Nom de HuBBox Maestro :',
+                        style: TextStyle(fontSize: (screenWidth * 0.05)),
+                      ),
                     ),
-                    SizedBox(height: screenHeight * 0.05),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
                       child: TextField(
@@ -80,12 +91,37 @@ class _SettingsState extends State<Settings> {
                             )),
                       ),
                     ),
-                    SizedBox(height: screenHeight * 0.05),
-                    Text(
-                      'Vos Zones :',
-                      style: TextStyle(fontSize: (screenWidth * 0.05)),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: FlatButton(
+                        onPressed: () async {
+                          // write the new ble device name
+                          print('{\"dname\":\"${myBleDeviceName.text}\"}');
+                          await characteristicMaestro.write('{\"dname\":\"${myBleDeviceName.text}\"}'.codeUnits);
+                          myUvcToast.setToastDuration(5);
+                          myUvcToast.setToastMessage('Nom de carte modifié !');
+                          myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+                        },
+                        child: Text(
+                          'Changer le nom',
+                          style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        color: Colors.blue[400],
+                      ),
                     ),
-                    SizedBox(height: screenHeight * 0.05),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        'Vos Zones :',
+                        style: TextStyle(fontSize: (screenWidth * 0.05)),
+                      ),
+                    ),
                     ToggleButtons(
                       borderRadius: BorderRadius.circular(18.0),
                       isSelected: zoneStates,
@@ -102,10 +138,22 @@ class _SettingsState extends State<Settings> {
                         print(zonesInHex);
                       },
                       children: [
-                        Text('  Zone 1  ', style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
-                        Text('  Zone 2  ', style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
-                        Text('  Zone 3  ', style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
-                        Text('  Zone 4  ', style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                          child: Text(zonesNamesList[0], style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                          child: Text(zonesNamesList[1], style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                          child: Text(zonesNamesList[2], style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                          child: Text(zonesNamesList[3], style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
+                        ),
                       ],
                       borderWidth: 2,
                       color: Colors.grey,
@@ -116,79 +164,58 @@ class _SettingsState extends State<Settings> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        FlatButton(
-                          onPressed: () async {
-                            // write the associate command
-                            await characteristicMaestro.write('{\"light\":[5,1,\"$zonesInHex \"]}'.codeUnits);
-                          },
-                          child: Text(
-                            'Associer',
-                            style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FlatButton(
+                            onPressed: () async {
+                              // write the associate command
+                              await characteristicMaestro.write('{\"light\":[5,1,\"$zonesInHex \"]}'.codeUnits);
+                            },
+                            child: Text(
+                              'Associer',
+                              style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            ),
+                            color: Colors.green[400],
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                          color: Colors.green[400],
                         ),
-                        SizedBox(width: screenWidth * 0.03),
-                        FlatButton(
-                          onPressed: () async {
-                            // write the dissociate command
-                            await characteristicMaestro.write('{\"light\":[5,0,\"$zonesInHex \"]}'.codeUnits);
-                          },
-                          child: Text(
-                            'Dissocier',
-                            style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FlatButton(
+                            onPressed: () async {
+                              // write the dissociate command
+                              await characteristicMaestro.write('{\"light\":[5,0,\"$zonesInHex \"]}'.codeUnits);
+                            },
+                            child: Text(
+                              'Dissocier',
+                              style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            ),
+                            color: Colors.red[400],
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                          color: Colors.red[400],
                         ),
                       ],
                     ),
-                    SizedBox(width: screenHeight * 0.03),
-                    FlatButton(
-                      onPressed: () async {
-                        // write the new zone names
-                        //String zoneNames = "{\"zones\":[" + Zone_1 + "," + Zone_2 + "," + Zone_3 + "," + Zone_4 + "]}";
-                        //await characteristicMaestro.write(zoneNames.codeUnits);
-                      },
-                      child: Text(
-                        'Renommer',
-                        style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      color: Colors.grey[400],
-                    ),
-                    SizedBox(height: screenHeight * 0.04),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Divider(
-                        thickness: 1.0,
-                        color: Colors.grey[600],
+                      padding: const EdgeInsets.all(8.0),
+                      child: FlatButton(
+                        onPressed: () {
+                          // write the new zone names
+                          zoneNamesSettingsWidget(context);
+                        },
+                        child: Text(
+                          'Renommer',
+                          style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        color: Colors.grey[400],
                       ),
-                    ),
-                    SizedBox(height: screenHeight * 0.04),
-                    FlatButton(
-                      onPressed: () async {
-                        // write the new ble device name
-                        print('{\"dname\":\"${myBleDeviceName.text}\"}');
-                        await characteristicMaestro.write('{\"dname\":\"${myBleDeviceName.text}\"}'.codeUnits);
-                        myUvcToast.setToastDuration(5);
-                        myUvcToast.setToastMessage('Nom de carte modifié !');
-                        myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
-                      },
-                      child: Text(
-                        'Appliquer',
-                        style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      color: Colors.blue[400],
                     ),
                   ],
                 ),
@@ -198,5 +225,177 @@ class _SettingsState extends State<Settings> {
         ),
       ),
     );
+  }
+
+  Future<void> zoneNamesSettingsWidget(BuildContext context) async {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    final zone1NameEditor = TextEditingController();
+    final zone2NameEditor = TextEditingController();
+    final zone3NameEditor = TextEditingController();
+    final zone4NameEditor = TextEditingController();
+    zone1NameEditor.text = zonesNamesList[0];
+    zone2NameEditor.text = zonesNamesList[1];
+    zone3NameEditor.text = zonesNamesList[2];
+    zone4NameEditor.text = zonesNamesList[3];
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Changer les noms de vos zones:'),
+          content: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(flex: 1, child: Text('Zone 1 :', style: TextStyle(fontSize: 14))),
+                    Expanded(
+                      flex: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          maxLength: 10,
+                          controller: zone1NameEditor,
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.04,
+                            color: Colors.grey[800],
+                          ),
+                          decoration: InputDecoration(
+                              hintText: 'exp:chamb123',
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              )),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(flex: 1, child: Text('Zone 2 :', style: TextStyle(fontSize: 14))),
+                    Expanded(
+                      flex: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          maxLength: 10,
+                          controller: zone2NameEditor,
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.04,
+                            color: Colors.grey[800],
+                          ),
+                          decoration: InputDecoration(
+                              hintText: 'exp:chamb123',
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              )),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(flex: 1, child: Text('Zone 3 :', style: TextStyle(fontSize: 14))),
+                    Expanded(
+                      flex: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          maxLength: 10,
+                          controller: zone3NameEditor,
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.04,
+                            color: Colors.grey[800],
+                          ),
+                          decoration: InputDecoration(
+                              hintText: 'exp:chamb123',
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              )),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(flex: 1, child: Text('Zone 4 :', style: TextStyle(fontSize: 14))),
+                    Expanded(
+                      flex: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          maxLength: 10,
+                          controller: zone4NameEditor,
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.04,
+                            color: Colors.grey[800],
+                          ),
+                          decoration: InputDecoration(
+                              hintText: 'exp:chamb123',
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              )),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'Renommer',
+                style: TextStyle(color: Colors.green),
+              ),
+              onPressed: () async {
+                zonesNamesList[0] = zone1NameEditor.text;
+                zonesNamesList[1] = zone2NameEditor.text;
+                zonesNamesList[2] = zone3NameEditor.text;
+                zonesNamesList[3] = zone4NameEditor.text;
+                String zoneNames = "{\"zones\":[${zonesNamesList[0]},${zonesNamesList[1]},${zonesNamesList[2]},${zonesNamesList[3]}]}";
+                await characteristicMaestro.write(zoneNames.codeUnits);
+                setState(() {});
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text(
+                'Annuler',
+                style: TextStyle(color: Colors.green),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 }
