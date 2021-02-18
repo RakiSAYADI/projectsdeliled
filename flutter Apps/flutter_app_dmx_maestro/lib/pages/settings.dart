@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_dmx_maestro/services/uvcToast.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -14,6 +17,7 @@ class _SettingsState extends State<Settings> {
   Map bleDeviceData = {};
 
   BluetoothCharacteristic characteristicMaestro;
+  BluetoothCharacteristic characteristicWifi;
   BluetoothDevice myDevice;
 
   bool firstDisplayMainWidget = true;
@@ -22,6 +26,11 @@ class _SettingsState extends State<Settings> {
   List<String> zonesNamesList;
   String zonesInHex;
 
+  List<String> wifiModems = [];
+  String wifiModemsData = '';
+  int wifiModemsPosition = 0;
+
+  final passwordEditor = TextEditingController();
   final myBleDeviceName = TextEditingController();
 
   int boolToInt(bool a) => a == true ? 1 : 0;
@@ -30,7 +39,7 @@ class _SettingsState extends State<Settings> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    zonesNamesList = ['  Zone 1  ', '  Zone 2  ', '  Zone 3  ', '  Zone 4  '];
+    zonesNamesList = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4'];
     myUvcToast = ToastyMessage(toastContext: context);
     zoneStates = [false, false, false, false];
     zonesInHex = ((boolToInt(zoneStates[0])) + (boolToInt(zoneStates[1]) * 2) + (boolToInt(zoneStates[2]) * 4) + (boolToInt(zoneStates[3]) * 8))
@@ -41,7 +50,8 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     bleDeviceData = bleDeviceData.isNotEmpty ? bleDeviceData : ModalRoute.of(context).settings.arguments;
     myDevice = bleDeviceData['bleDevice'];
-    characteristicMaestro = bleDeviceData['bleCharacteristic'];
+    characteristicMaestro = bleDeviceData['characteristicMaestro'];
+    characteristicWifi = bleDeviceData['characteristicWifi'];
 
     if (firstDisplayMainWidget) {
       myBleDeviceName.text = myDevice.name;
@@ -51,7 +61,6 @@ class _SettingsState extends State<Settings> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text('Réglages'),
         centerTitle: true,
@@ -99,7 +108,7 @@ class _SettingsState extends State<Settings> {
                           print('{\"dname\":\"${myBleDeviceName.text}\"}');
                           await characteristicMaestro.write('{\"dname\":\"${myBleDeviceName.text}\"}'.codeUnits);
                           myUvcToast.setToastDuration(5);
-                          myUvcToast.setToastMessage('Nom de carte modifié !');
+                          myUvcToast.setToastMessage('Nom de carte modifié , faudrais redémarrer la carte pour appliquer cette modification !');
                           myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
                         },
                         child: Text(
@@ -113,7 +122,11 @@ class _SettingsState extends State<Settings> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Divider(
+                        thickness: 3.0,
+                        color: Colors.grey[600],
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -130,9 +143,9 @@ class _SettingsState extends State<Settings> {
                           zoneStates[index] = !zoneStates[index];
                         });
                         zonesInHex = ((boolToInt(zoneStates[0])) +
-                                (boolToInt(zoneStates[1]) * 2) +
-                                (boolToInt(zoneStates[2]) * 4) +
-                                (boolToInt(zoneStates[3]) * 8))
+                            (boolToInt(zoneStates[1]) * 2) +
+                            (boolToInt(zoneStates[2]) * 4) +
+                            (boolToInt(zoneStates[3]) * 8))
                             .toRadixString(16);
 
                         print(zonesInHex);
@@ -217,6 +230,184 @@ class _SettingsState extends State<Settings> {
                         color: Colors.grey[400],
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Divider(
+                        thickness: 3.0,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        'Sélectionner votre modem :',
+                        style: TextStyle(fontSize: (screenWidth * 0.05)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
+                      child: DropdownButton<String>(
+                        value: wifiModemsData,
+                        icon: Icon(Icons.arrow_drop_down),
+                        iconSize: 24,
+                        elevation: 16,
+                        style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                        underline: Container(
+                          height: 2,
+                          color: Colors.blue[300],
+                        ),
+                        onChanged: (String data) {
+                          setState(() {
+                            wifiModemsData = data;
+                            wifiModemsPosition = wifiModems.indexOf(data);
+                          });
+                        },
+                        items: wifiModems.map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: FlatButton(
+                        onPressed: () async {
+                          waitingWidget();
+                          // write the dissociate command
+                          try {
+                            await characteristicWifi.write('{\"SCAN\":1}'.codeUnits);
+                            await Future.delayed(Duration(milliseconds: 500));
+                            String wifiScanningState = String.fromCharCodes(await characteristicMaestro.read());
+                            var parsedJson = json.decode(wifiScanningState);
+                            while (parsedJson['scanResult'] == '0') {
+                              //SCR
+                              wifiScanningState = String.fromCharCodes(await characteristicMaestro.read());
+                              parsedJson = json.decode(wifiScanningState);
+                              print(wifiScanningState);
+                              await Future.delayed(Duration(seconds: 1));
+                            }
+                            String wifiScanningResult = String.fromCharCodes(await characteristicWifi.read());
+                            parsedJson = json.decode(wifiScanningResult);
+                            List<dynamic> modems = parsedJson['AP_RECORDS'];
+                            wifiModems = List<String>.from(modems);
+                            print(wifiModems);
+                            wifiModemsData = wifiModems[0];
+                          } catch (e) {
+                            print('error in esp32 Communication');
+                            myUvcToast.setToastDuration(5);
+                            myUvcToast.setToastMessage('Erreur de communication !');
+                            myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                          }
+                          Navigator.pop(context, false);
+                          setState(() {});
+                        },
+                        child: Text(
+                          'Scanner',
+                          style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        color: Colors.grey[400],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        'Mot de passe :',
+                        style: TextStyle(fontSize: (screenWidth * 0.05)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
+                      child: TextField(
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        maxLength: 10,
+                        controller: passwordEditor,
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.04,
+                          color: Colors.grey[800],
+                        ),
+                        decoration: InputDecoration(
+                            hintText: 'exp:pass123',
+                            hintStyle: TextStyle(
+                              color: Colors.grey,
+                            )),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: FlatButton(
+                        onPressed: () async {
+                          // write the new access point and it's password
+                          await characteristicMaestro.write('{\"wa\":\"$wifiModemsData\",\"wp\":\"${passwordEditor.text}\"}'.codeUnits);
+                          myUvcToast.setToastDuration(5);
+                          myUvcToast.setToastMessage('Connexion en cours avec le modem séléctionné !');
+                          myUvcToast.showToast(Colors.orange, Icons.info, Colors.white);
+                          //connectingToAccessPoint();
+                        },
+                        child: Text(
+                          'Connecter',
+                          style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        color: Colors.grey[400],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Divider(
+                        thickness: 3.0,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FlatButton(
+                            onPressed: () async {
+                              // write the restart command
+                              characteristicMaestro.write('{\"system\":1}'.codeUnits);
+                              myDevice.disconnect();
+                              Navigator.pushNamedAndRemoveUntil(context, "/scan_ble_list", (r) => false);
+                            },
+                            child: Text(
+                              'Redémarrage',
+                              style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            ),
+                            color: Colors.blue[400],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FlatButton(
+                            onPressed: () async {
+                              // write the reset command
+                              await characteristicMaestro.write('{\"system\":0}'.codeUnits);
+                              restartAlertWidget(context);
+                            },
+                            child: Text(
+                              'Configuration par défault',
+                              style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            ),
+                            color: Colors.blue[400],
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ],
@@ -225,6 +416,86 @@ class _SettingsState extends State<Settings> {
         ),
       ),
     );
+  }
+
+  void connectingToAccessPoint() async {
+    await Future.delayed(Duration(seconds: 1));
+    try {
+      String wifiState = String.fromCharCodes(await characteristicMaestro.read());
+      var parsedJson = json.decode(wifiState);
+      while (parsedJson['wifiSt'] == '0') {
+        wifiState = String.fromCharCodes(await characteristicMaestro.read());
+        parsedJson = json.decode(wifiState);
+        await Future.delayed(Duration(seconds: 1));
+      }
+      myUvcToast.setToastDuration(5);
+      myUvcToast.setToastMessage('Connection à $wifiModemsData est établi avec succès !');
+      myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+    } catch (e) {
+      print('error in esp32 Communication');
+      myUvcToast.setToastDuration(5);
+      myUvcToast.setToastMessage('Erreur de communication !');
+      myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+    }
+  }
+
+  Future<void> restartAlertWidget(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Attention'),
+          content: Text('Voulez vous redemarrer la carte pour assurer ces modifications?'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'Oui',
+                style: TextStyle(color: Colors.green),
+              ),
+              onPressed: () async {
+                characteristicMaestro.write('{\"system\":1}'.codeUnits);
+                myDevice.disconnect();
+                Navigator.pushNamedAndRemoveUntil(context, "/scan_ble_list", (r) => false);
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text(
+                'Non',
+                style: TextStyle(color: Colors.green),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> waitingWidget() async {
+    //double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Scanner les modems à proximité'),
+            content: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SpinKitCircle(
+                  color: Colors.blue[600],
+                  size: screenHeight * 0.1,
+                ),
+              ],
+            ),
+          );
+        });
   }
 
   Future<void> zoneNamesSettingsWidget(BuildContext context) async {

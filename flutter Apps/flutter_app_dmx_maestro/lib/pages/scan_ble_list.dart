@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app_dmx_maestro/services/bleDeviceClass.dart';
 import 'package:flutter_app_dmx_maestro/services/deviceBleWidget.dart';
@@ -23,7 +25,8 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
   BluetoothDeviceState deviceState;
   FlutterBlue flutterBlue = FlutterBlue.instance;
   BluetoothDevice myDeviceBluetooth;
-  BluetoothCharacteristic characteristicRelays;
+  BluetoothCharacteristic characteristicMaestro;
+  BluetoothCharacteristic characteristicWifi;
 
   AnimationController animationRefreshIcon;
 
@@ -122,80 +125,84 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
         child: Column(
             children: devices
                 .map((device) => DeviceCard(
-                    device: device,
-                    connect: () async {
+                device: device,
+                connect: () async {
+                  setState(() {
+                    myDeviceBluetooth = device.device;
+                  });
+                  // display Toast message
+                  animationRefreshIcon.repeat();
+                  myDevice = Device(device: myDeviceBluetooth);
+                  try {
+                    myUvcToast.clearAllToast();
+                  } catch (e) {
+                    print(e);
+                  }
+                  waitingWidget();
+                  String deviceName = myDeviceBluetooth.name;
+                  // stop scanning and start connecting
+                  await flutterBlue.stopScan();
+                  bool resultConnection = false;
+                  int connectionReset = 0;
+                  while (true) {
+                    myDevice.connect(false);
+                    await Future.delayed(Duration(seconds: 1));
+                    resultConnection = myDevice.getConnectionState();
+                    connectionReset++;
+                    if (resultConnection) {
+                      break;
+                    }
+                    if (connectionReset == 5) {
+                      Navigator.pop(context, false);
+                      scanIdentifiers.clear();
                       setState(() {
-                        myDeviceBluetooth = device.device;
+                        devices.clear();
                       });
-                      // display Toast message
-                      animationRefreshIcon.repeat();
-                      myDevice = Device(device: myDeviceBluetooth);
-                      try {
-                        myUvcToast.clearAllToast();
-                      } catch (e) {
-                        print(e);
-                      }
-                      waitingWidget();
-                      String deviceName = myDeviceBluetooth.name;
-                      // stop scanning and start connecting
-                      await flutterBlue.stopScan();
-                      bool resultConnection = false;
-                      int connectionReset = 0;
-                      while (true) {
-                        myDevice.connect(false);
-                        await Future.delayed(Duration(seconds: 1));
-                        resultConnection = myDevice.getConnectionState();
-                        connectionReset++;
-                        if (resultConnection) {
-                          break;
-                        }
-                        if (connectionReset == 5) {
-                          Navigator.pop(context, false);
-                          scanIdentifiers.clear();
-                          setState(() {
-                            devices.clear();
-                          });
-                          flutterBlue.startScan(timeout: Duration(seconds: 4));
-                        }
-                        print('result of trying connection is $resultConnection');
-                        myDevice.disconnect();
-                        await Future.delayed(Duration(seconds: 2));
-                      }
+                      flutterBlue.startScan(timeout: Duration(seconds: 4));
+                    }
+                    print('result of trying connection is $resultConnection');
+                    myDevice.disconnect();
+                    await Future.delayed(Duration(seconds: 2));
+                  }
 
-                      myUvcToast.setAnimationIcon(animationRefreshIcon);
-                      myUvcToast.setToastDuration(60);
-                      myUvcToast.setToastMessage('Connecting to $deviceName !');
-                      myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
-                      if (resultConnection) {
-                        //Discover services
-                        List<BluetoothService> services = await myDeviceBluetooth.discoverServices();
+                  myUvcToast.setAnimationIcon(animationRefreshIcon);
+                  myUvcToast.setToastDuration(60);
+                  myUvcToast.setToastMessage('Connecting to $deviceName !');
+                  myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
+                  if (resultConnection) {
+                    //Discover services
+                    List<BluetoothService> services = await myDeviceBluetooth.discoverServices();
                         BluetoothService service;
                         service = services.elementAt(2);
                         // Read the first characteristic
-                        characteristicRelays = service.characteristics[0];
+                        characteristicMaestro = service.characteristics[0];
+                        // Read the second characteristic
+                        characteristicWifi = service.characteristics[1];
                         // reading the characteristic after 1 second
                         Future.delayed(const Duration(seconds: 1), () async {
-                          List<int> relaysValues = await characteristicRelays.read();
-                          print(String.fromCharCodes(relaysValues));
+                          String dataMaestro = String.fromCharCodes(await characteristicMaestro.read());
+                          print(dataMaestro);
                           // clear the remaining toast message
                           myUvcToast.clearCurrentToast();
                           DateTime dateTime = DateTime.now();
-                          print(dateTime.millisecondsSinceEpoch~/1000);
+                          print(dateTime.millisecondsSinceEpoch ~/ 1000);
                           print(dateTime.timeZoneName);
                           print(dateTime.timeZoneOffset.inSeconds);
-                          await characteristicRelays
-                              .write('{\"Time\": ${dateTime.millisecondsSinceEpoch~/1000},${dateTime.timeZoneOffset.inSeconds}}'.codeUnits);
+                          await characteristicMaestro
+                              .write('{\"Time\": [${dateTime.millisecondsSinceEpoch ~/ 1000},${dateTime.timeZoneOffset.inSeconds}]}'.codeUnits);
                           /*Navigator.pushNamed(context, '/scan_qrcode', arguments: {
                           'bleCharacteristic': characteristicRelays,
                           'bleDevice': myDevice,
                         });*/
                           Navigator.pushNamed(context, '/home', arguments: {
-                            'bleCharacteristic': characteristicRelays,
+                            'characteristicMaestro': characteristicMaestro,
+                            'characteristicWifi': characteristicWifi,
                             'bleDevice': myDeviceBluetooth,
+                            'dataMaestro': dataMaestro,
                           });
                         });
-                      }
-                    }))
+                  }
+                }))
                 .toList()),
       ),
     );

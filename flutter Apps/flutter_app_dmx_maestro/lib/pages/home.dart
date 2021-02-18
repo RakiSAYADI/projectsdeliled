@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +16,7 @@ class _HomeState extends State<Home> {
   Map bleDeviceData = {};
 
   BluetoothCharacteristic characteristicMaestro;
+  BluetoothCharacteristic characteristicWifi;
   BluetoothDevice myDevice;
 
   final String zonesInHex = 'F';
@@ -38,15 +41,11 @@ class _HomeState extends State<Home> {
 
   List<String> ambiance1, ambiance2, ambiance3, ambiance4, ambiance5, ambiance6;
 
+  String dataMaestro;
+
   @override
   void initState() {
     // TODO: implement initState
-    ambiance1 = ['1', 'Ambiance 1', 'FF0000'];
-    ambiance2 = ['2', 'Ambiance 2', '000000'];
-    ambiance3 = ['3', 'Ambiance 3', '00FF00'];
-    ambiance4 = ['4', 'Ambiance 4', '0000FF'];
-    ambiance5 = ['5', 'Ambiance 5', 'FFFF00'];
-    ambiance6 = ['6', 'Ambiance 6', '00FFFF'];
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     super.initState();
   }
@@ -62,9 +61,28 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     bleDeviceData = bleDeviceData.isNotEmpty ? bleDeviceData : ModalRoute.of(context).settings.arguments;
     myDevice = bleDeviceData['bleDevice'];
-    characteristicMaestro = bleDeviceData['bleCharacteristic'];
+    characteristicMaestro = bleDeviceData['characteristicMaestro'];
+    characteristicWifi = bleDeviceData['characteristicWifi'];
+    dataMaestro = bleDeviceData['dataMaestro'];
 
     if (firstDisplayMainWidget) {
+      try {
+        var parsedJson = json.decode(dataMaestro);
+        ambiance1 = List<String>.from(parsedJson['Amb1']);
+        ambiance2 = List<String>.from(parsedJson['Amb2']);
+        ambiance3 = List<String>.from(parsedJson['Amb3']);
+        ambiance4 = List<String>.from(parsedJson['Amb4']);
+        ambiance5 = List<String>.from(parsedJson['Amb5']);
+        ambiance6 = List<String>.from(parsedJson['Amb6']);
+      } catch (e) {
+        print('erreur');
+        ambiance1 = ['Ambiance 1', 'FF0000'];
+        ambiance2 = ['Ambiance 2', '000000'];
+        ambiance3 = ['Ambiance 3', '00FF00'];
+        ambiance4 = ['Ambiance 4', '0000FF'];
+        ambiance5 = ['Ambiance 5', 'FFFF00'];
+        ambiance6 = ['Ambiance 6', '00FFFF'];
+      }
       firstDisplayMainWidget = false;
     }
 
@@ -149,7 +167,8 @@ class _HomeState extends State<Home> {
                           icon: Icon(Icons.settings),
                           onPressed: () {
                             Navigator.pushNamed(context, '/settings', arguments: {
-                              'bleCharacteristic': characteristicMaestro,
+                              'characteristicMaestro': characteristicMaestro,
+                              'characteristicWifi': characteristicWifi,
                               'bleDevice': myDevice,
                             });
                           },
@@ -237,11 +256,11 @@ class _HomeState extends State<Home> {
               children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                  child: ambianceDisplayWidget(context, ambiance1),
+                  child: ambianceDisplayWidget(context, ambiance1, 1),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-                  child: ambianceDisplayWidget(context, ambiance2),
+                  child: ambianceDisplayWidget(context, ambiance2, 2),
                 ),
               ],
             ),
@@ -251,11 +270,11 @@ class _HomeState extends State<Home> {
               children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                  child: ambianceDisplayWidget(context, ambiance3),
+                  child: ambianceDisplayWidget(context, ambiance3, 3),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-                  child: ambianceDisplayWidget(context, ambiance4),
+                  child: ambianceDisplayWidget(context, ambiance4, 4),
                 ),
               ],
             ),
@@ -265,11 +284,11 @@ class _HomeState extends State<Home> {
               children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                  child: ambianceDisplayWidget(context, ambiance5),
+                  child: ambianceDisplayWidget(context, ambiance5, 5),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-                  child: ambianceDisplayWidget(context, ambiance6),
+                  child: ambianceDisplayWidget(context, ambiance6, 6),
                 ),
               ],
             ),
@@ -279,26 +298,26 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget ambianceDisplayWidget(BuildContext context, List<String> ambiance) {
+  Widget ambianceDisplayWidget(BuildContext context, List<String> ambiance, int ambianceID) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            ambiance[1],
+            ambiance[0],
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
           ),
           IconButton(
             onPressed: () async {
               if (bottomBarTitleState) {
-                ambianceSettingWidget(context, ambiance);
+                ambianceSettingWidget(context, ambiance, ambianceID);
               }
             },
             icon: Icon(Icons.settings),
             color: Colors.blue[400],
           ),
-          ambianceCircleDisplay(context, ambiance[2]),
+          ambianceCircleDisplay(context, ambiance[1], ambianceID),
         ],
       ),
     );
@@ -484,15 +503,15 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Future<void> ambianceSettingWidget(BuildContext context, List<String> ambiance) async {
+  Future<void> ambianceSettingWidget(BuildContext context, List<String> ambiance, int ambianceID) async {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     final ambianceNameEditor = TextEditingController();
     final color = StringBuffer();
-    if (ambiance[2].length == 6 || ambiance[2].length == 7) color.write('ff');
-    color.write(ambiance[2].replaceFirst('#', ''));
-    ambianceNameEditor.text = ambiance[1];
-    String colorHue;
+    if (ambiance[1].length == 6 || ambiance[1].length == 7) color.write('ff');
+    color.write(ambiance[1].replaceFirst('#', ''));
+    ambianceNameEditor.text = ambiance[0];
+    String colorHue = ambiance[1];
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -553,9 +572,12 @@ class _HomeState extends State<Home> {
               ),
               onPressed: () async {
                 setState(() {
-                  ambiance[1] = ambianceNameEditor.text;
-                  ambiance[2] = colorHue;
+                  ambiance[0] = ambianceNameEditor.text;
+                  ambiance[1] = colorHue;
                 });
+                if (bottomBarTitleState) {
+                  await characteristicMaestro.write('{\"couleur$ambianceID\":[${ambiance[0]},${ambiance[1]}]}'.codeUnits);
+                }
                 Navigator.of(context).pop();
               },
             ),
@@ -601,7 +623,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget ambianceCircleDisplay(BuildContext context, String ambianceColor) {
+  Widget ambianceCircleDisplay(BuildContext context, String ambianceColor, int ambianceID) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
     final color = StringBuffer();
@@ -610,7 +632,7 @@ class _HomeState extends State<Home> {
     return GestureDetector(
       onTap: () async {
         if (bottomBarTitleState) {
-          await characteristicMaestro.write('{\"hue\":$ambianceColor,\"zone\":\"$zonesInHex\"}'.codeUnits);
+          await characteristicMaestro.write('{\"Favoris\":\"Ambiance $ambianceID\"}'.codeUnits);
         }
       },
       child: Container(
