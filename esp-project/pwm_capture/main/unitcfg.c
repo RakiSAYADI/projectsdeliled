@@ -147,8 +147,22 @@ void Default_saving() {
 	sprintf(UnitCfg.Zones.ZONE3, "Zone 3");
 	sprintf(UnitCfg.Zones.ZONE4, "Zone 4");
 
+	sprintf(UnitCfg.ColortrProfile[0].name, "Ambiance 1");
+	sprintf(UnitCfg.ColortrProfile[0].Hue, "000000");
+	sprintf(UnitCfg.ColortrProfile[1].name, "Ambiance 2");
+	sprintf(UnitCfg.ColortrProfile[1].Hue, "000000");
+	sprintf(UnitCfg.ColortrProfile[2].name, "Ambiance 3");
+	sprintf(UnitCfg.ColortrProfile[2].Hue, "000000");
+	sprintf(UnitCfg.ColortrProfile[3].name, "Ambiance 4");
+	sprintf(UnitCfg.ColortrProfile[3].Hue, "000000");
+	sprintf(UnitCfg.ColortrProfile[4].name, "Ambiance 5");
+	sprintf(UnitCfg.ColortrProfile[4].Hue, "000000");
+	sprintf(UnitCfg.ColortrProfile[5].name, "Ambiance 6");
+	sprintf(UnitCfg.ColortrProfile[5].Hue, "000000");
+
 	sprintf(UnitCfg.WifiCfg.WIFI_SSID, "ssid");
 	sprintf(UnitCfg.WifiCfg.WIFI_PASS, "password");
+	UnitCfg.WifiCfg.stateConnection = false;
 
 	UnitCfg.Version = VERSION;
 
@@ -185,11 +199,11 @@ void syncTime(time_t t, uint32_t tzone) {
 	tzc = tzone / 3600;
 
 	if (tzc == 0)
-		sprintf(tz, "GMT0");
+	sprintf(tz, "GMT0");
 	else if (tzc < 0)
-		sprintf(tz, "<GMT%" PRIi8 ">%" PRIi8 "", abs(tzc), abs(tzc));
+	sprintf(tz, "<GMT%" PRIi8 ">%" PRIi8 "", abs(tzc), abs(tzc));
 	else
-		sprintf(tz, "<GMT+%" PRIi8 ">-%" PRIi8 "", abs(tzc), abs(tzc));
+	sprintf(tz, "<GMT+%" PRIi8 ">-%" PRIi8 "", abs(tzc), abs(tzc));
 
 	setenv("TZ", tz, 1);
 	tzset();

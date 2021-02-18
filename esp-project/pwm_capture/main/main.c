@@ -20,22 +20,28 @@
 
 #include "main.h"
 
-#include "webservice.h"
+#include "scanwifi.h"
+#include "wificonnect.h"
 #include "unitcfg.h"
 #include "pwm_capture.h"
 #include "base_mac_address.h"
 #include "bluetooth.h"
 
-char* TAG = "app_main";
+char* MAIN_TAG = "app_main";
 
 int app_main(void) {
 
+	// Initiate ESP32 SYSTEM
 	ESP_ERROR_CHECK(nvs_flash_init());
+	tcpip_adapter_init();
+	ESP_ERROR_CHECK(esp_event_loop_create_default());
 
-	// Initialize Base Mac Address.
+	ESP_LOGI(MAIN_TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
+
+	// Initiate Base Mac Address.
 	BaseMacInit();
 
-	// Initialize and restore the storage data
+	// Initiate and restore the storage data
 	if (InitLoadCfg() != 0) {
 		return -1;
 	}
@@ -43,13 +49,14 @@ int app_main(void) {
 	// Initiate reading PWM signal.
 	pwm_main();
 
-	ESP_LOGI(TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
-
 	// Initiate Bluetooth services.
 	bt_main();
 
-	// Initiate connect to Web service.
-	WebService_Init();
+	// Initiate scan WIFI devices.
+	scanWIFITask();
+
+	// Initiate connecting WIFI.
+	connectWIFITask();
 
 	return 0;
 }

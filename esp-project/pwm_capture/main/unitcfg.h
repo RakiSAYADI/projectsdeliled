@@ -19,6 +19,7 @@
 #define UVCROBOTNAME "DEEPLIGHT-G005"
 #define FIRMWAREVERSIONNAME "3.0.0"
 #define VERSION 0
+#define delay(ms) (vTaskDelay(ms/portTICK_RATE_MS))
 
 typedef struct {
 	char ZONE1[10];
@@ -43,14 +44,14 @@ typedef struct {
 } Alarm_Typedef;
 
 typedef struct {
-	char name[10];
+	char name[12];
 	char Hue[8];
-	uint8_t Blanche;
 } ColortrProfile_Typedef;
 
 typedef struct {
 	char WIFI_SSID[64];
 	char WIFI_PASS[64];
+	bool stateConnection;
 } WifiConfig_Typedef;
 
 typedef struct {
@@ -59,7 +60,7 @@ typedef struct {
 	char FirmwareVersion[7];
 	Zones_Typedef Zones;
 	WifiConfig_Typedef WifiCfg;
-	ColortrProfile_Typedef ColortrProfile[4];
+	ColortrProfile_Typedef ColortrProfile[6];
 	Alarm_Typedef AlarmClock;
 	char FLASH_MEMORY[3];
 } UnitConfig_Typedef;

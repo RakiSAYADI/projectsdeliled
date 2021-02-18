@@ -9,9 +9,9 @@
 #define MAIN_BLUETOOTH_H_
 
 void readingData(char * jsonData);
+void readingWifi(char * jsonData);
+void transitionAmbianceProcess(int ambianceId);
 
 void bt_main();
-
-#define delay(ms) (vTaskDelay(ms/portTICK_RATE_MS))
 
 #endif /* MAIN_BLUETOOTH_H_ */

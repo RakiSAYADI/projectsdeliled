@@ -5,8 +5,8 @@
  *      Author: mdt
  */
 
-#ifndef MAIN_WEBSERVICE_H_
-#define MAIN_WEBSERVICE_H_
+#ifndef MAIN_SCANWIFI_H_
+#define MAIN_SCANWIFI_H_
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -21,8 +21,15 @@
 #include "lwip/err.h"
 #include "lwip/sys.h"
 
-extern bool WifiConnectedFlag;
+#define MAX_APs 10
+typedef struct {
+	char ap_records[33];
+} apRecords_Typedef;
 
-void WebService_Init(void);
+uint16_t ap_num;
+bool scanResult;
+apRecords_Typedef stationRecords[MAX_APs];
+
+void scanWIFITask(void);
 
 #endif /* MAIN_WEBSERVICE_H_ */
