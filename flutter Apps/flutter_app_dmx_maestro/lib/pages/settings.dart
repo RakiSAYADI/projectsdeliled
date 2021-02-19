@@ -23,12 +23,14 @@ class _SettingsState extends State<Settings> {
   bool firstDisplayMainWidget = true;
 
   List<bool> zoneStates;
-  List<String> zonesNamesList;
+  List<String> zonesNamesList = ['', '', '', ''];
   String zonesInHex;
 
   List<String> wifiModems = [];
   String wifiModemsData = '';
   int wifiModemsPosition = 0;
+
+  String dataMaestro;
 
   final passwordEditor = TextEditingController();
   final myBleDeviceName = TextEditingController();
@@ -39,7 +41,6 @@ class _SettingsState extends State<Settings> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    zonesNamesList = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4'];
     myUvcToast = ToastyMessage(toastContext: context);
     zoneStates = [false, false, false, false];
     zonesInHex = ((boolToInt(zoneStates[0])) + (boolToInt(zoneStates[1]) * 2) + (boolToInt(zoneStates[2]) * 4) + (boolToInt(zoneStates[3]) * 8))
@@ -52,9 +53,20 @@ class _SettingsState extends State<Settings> {
     myDevice = bleDeviceData['bleDevice'];
     characteristicMaestro = bleDeviceData['characteristicMaestro'];
     characteristicWifi = bleDeviceData['characteristicWifi'];
+    dataMaestro = bleDeviceData['dataMaestro'];
 
     if (firstDisplayMainWidget) {
       myBleDeviceName.text = myDevice.name;
+      try {
+        var parsedJson = json.decode('{\"zone\":[\"raki\",\"pierre\",\"guillaume\",\"theo\"]}');
+        zonesNamesList[0] = parsedJson['zone'][0];
+        zonesNamesList[1] = parsedJson['zone'][1];
+        zonesNamesList[2] = parsedJson['zone'][2];
+        zonesNamesList[3] = parsedJson['zone'][3];
+      } catch (e) {
+        print('erreur');
+        zonesNamesList = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4'];
+      }
       firstDisplayMainWidget = false;
     }
 
@@ -325,7 +337,7 @@ class _SettingsState extends State<Settings> {
                       child: TextField(
                         textAlign: TextAlign.center,
                         maxLines: 1,
-                        maxLength: 10,
+                        maxLength: 64,
                         controller: passwordEditor,
                         style: TextStyle(
                           fontSize: screenWidth * 0.04,

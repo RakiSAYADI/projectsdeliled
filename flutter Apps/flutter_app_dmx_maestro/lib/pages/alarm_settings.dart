@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_dmx_maestro/services/uvcToast.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:hsl_colorpicker/HSLColorPicker.dart';
 
 class AlarmClock extends StatefulWidget {
@@ -34,6 +35,9 @@ class _AlarmClockState extends State<AlarmClock> {
   List<int> minutesList = [0, 0, 0, 0, 0, 0, 0];
   List<int> secondsList = [0, 0, 0, 0, 0, 0, 0];
 
+  List<int> luminosityMinList = [0, 0, 0, 0, 0, 0, 0];
+  List<int> luminosityMaxList = [50, 50, 50, 50, 50, 50, 50];
+
   String myTimeHoursData = '00';
   String myTimeMinutesData = '00';
   String myTimeSecondsData = '00';
@@ -44,8 +48,6 @@ class _AlarmClockState extends State<AlarmClock> {
 
   Map bleDeviceData = {};
   ToastyMessage myUvcToast;
-
-  Color hueOfTheDay;
 
   List<String> myTimeHours = [
     '00',
@@ -263,9 +265,20 @@ class _AlarmClockState extends State<AlarmClock> {
     if (day[3].length == 6 || day[3].length == 7) color.write('ff');
     color.write(day[3].replaceFirst('#', ''));
     hueInitial[dayID] = Color(int.parse(color.toString(), radix: 16));
+    luminosityMinList[dayID] = day[4];
+    luminosityMaxList[dayID] = day[5];
+    if (daysStates[dayID]) {
+      activationButtonText = 'Activé';
+      activationButtonColor[dayID] = Colors.green;
+    } else {
+      activationButtonText = 'Désactivé';
+      activationButtonColor[dayID] = Colors.red;
+    }
   }
 
   bool intToBool(int a) => a == 0 ? false : true;
+
+  int boolToInt(bool a) => a == true ? 1 : 0;
 
   @override
   Widget build(BuildContext context) {
@@ -276,22 +289,29 @@ class _AlarmClockState extends State<AlarmClock> {
     characteristicMaestro = bleDeviceData['characteristicMaestro'];
     characteristicWifi = bleDeviceData['characteristicWifi'];
     dataMaestro = bleDeviceData['dataMaestro'];
-    try {
-      var parsedJson = json.decode('{\"lum\":[0,1400,1,\"FFFFFF\"],'
-          '\"mar\":[1,11400,2,\"00FFFF\"],\"mer\":[0,21400,3,\"0000FF\"],'
-          '\"jeu\":[1,31400,4,\"000000\"],\"ven\":[0,41400,5,\"FF0000\"],'
-          '\"sam\":[1,51400,6,\"FFFF00\"],\"dim\":[0,61400,7,\"FFFFFF\"]}');
-      readWakeUpDataPerDay(parsedJson['lum'], 0);
-      readWakeUpDataPerDay(parsedJson['mar'], 1);
-      readWakeUpDataPerDay(parsedJson['mer'], 2);
-      readWakeUpDataPerDay(parsedJson['jeu'], 3);
-      readWakeUpDataPerDay(parsedJson['ven'], 4);
-      readWakeUpDataPerDay(parsedJson['sam'], 5);
-      readWakeUpDataPerDay(parsedJson['dim'], 6);
-    } catch (e) {
-      print('erreur');
-    }
     if (firstDisplayMainWidget) {
+      try {
+        var parsedJson = json.decode('{\"lun\":[0,1400,1,\"FFFFFF\",0,80],'
+            '\"mar\":[1,11400,2,\"00FFFF\",40,50],\"mer\":[0,21400,3,\"0000FF\",10,50],'
+            '\"jeu\":[1,31400,4,\"000000\",30,90],\"ven\":[0,41400,5,\"FF0000\",20,40],'
+            '\"sam\":[1,51400,6,\"FFFF00\",5,40],\"dim\":[0,61400,7,\"FFFFFF\",80,100]}');
+        readWakeUpDataPerDay(parsedJson['lun'], 0);
+        readWakeUpDataPerDay(parsedJson['mar'], 1);
+        readWakeUpDataPerDay(parsedJson['mer'], 2);
+        readWakeUpDataPerDay(parsedJson['jeu'], 3);
+        readWakeUpDataPerDay(parsedJson['ven'], 4);
+        readWakeUpDataPerDay(parsedJson['sam'], 5);
+        readWakeUpDataPerDay(parsedJson['dim'], 6);
+        if (daysStates[0]) {
+          activationButtonText = 'Activé';
+          activationButtonColor[day] = Colors.green;
+        } else {
+          activationButtonText = 'Désactivé';
+          activationButtonColor[day] = Colors.red;
+        }
+      } catch (e) {
+        print('erreur');
+      }
       firstDisplayMainWidget = false;
     }
     return Scaffold(
@@ -327,6 +347,15 @@ class _AlarmClockState extends State<AlarmClock> {
                       setState(() {
                         saveButtonColor = Colors.blue[400];
                       });
+                      print('{\"lun\":[${alarmDayData(0)}],'
+                          '\"mar\":[${alarmDayData(1)}],\"mer\":[${alarmDayData(2)}],'
+                          '\"jeu\":[${alarmDayData(3)}],\"ven\":[${alarmDayData(4)}],'
+                          '\"sam\":[${alarmDayData(5)}],\"dim\":[${alarmDayData(6)}]}');
+/*                      await characteristicMaestro.write('{\"lun\":[${alarmDayData(0)}],'
+                              '\"mar\":[${alarmDayData(1)}],\"mer\":[${alarmDayData(2)}],'
+                              '\"jeu\":[${alarmDayData(3)}],\"ven\":[${alarmDayData(4)}],'
+                              '\"sam\":[${alarmDayData(5)}],\"dim\":[${alarmDayData(6)}]}'
+                          .codeUnits);*/
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
@@ -391,7 +420,7 @@ class _AlarmClockState extends State<AlarmClock> {
                             activationButtonText = 'Désactivé';
                             activationButtonColor[day] = Colors.red;
                           }
-                          hueOfTheDay = hueInitial[day];
+                          hueInitial[day] = hueInitial[day];
                         });
 
                         myTimeHoursPosition = hourList[day];
@@ -649,29 +678,28 @@ class _AlarmClockState extends State<AlarmClock> {
                 color: Colors.grey[600],
               ),
             ),
-            Text(
-              'Séléctionner votre couleur :',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.black,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: HSLColorPicker(
-                onChanged: (colorSelected) {
-                  hueInitial[day] = colorSelected.toColor();
-
-                  hueOfTheDay = colorSelected.toColor();
-                },
-                size: widthScreen * 0.3 + heightScreen * 0.1,
-                strokeWidth: 5,
-                thumbSize: 9,
-                thumbStrokeSize: 3,
-                showCenterColorIndicator: true,
-                centerColorIndicatorSize: 50,
-                initialColor: hueOfTheDay,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  'Votre couleur :',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
+                ),
+                bigCircle(50, 50),
+                IconButton(
+                  icon: Icon(Icons.settings),
+                  onPressed: () async {
+                    await colorSettingWidget(context);
+                    setState(() {
+                      hueInitial[day] = hueInitial[day];
+                    });
+                  },
+                  color: Colors.black,
+                ),
+              ],
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -680,9 +708,121 @@ class _AlarmClockState extends State<AlarmClock> {
                 color: Colors.grey[600],
               ),
             ),
+            Text(
+              'Séléctionner minimum et maximum de luminosité :',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.black,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+              child: FlutterSlider(
+                values: [luminosityMinList[day].toDouble(), luminosityMaxList[day].toDouble()],
+                max: 100,
+                min: 0,
+                rangeSlider: true,
+                handlerAnimation:
+                    FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
+                onDragging: (handlerIndex, lowerValue, upperValue) {
+                  setState(() {});
+                },
+                trackBar: FlutterSliderTrackBar(
+                    activeTrackBar: BoxDecoration(color: Colors.grey[700]), activeTrackBarHeight: 12, inactiveTrackBarHeight: 12),
+                hatchMark: FlutterSliderHatchMark(
+                  density: 0.5, // means 50 lines, from 0 to 100 percent
+                  labels: [
+                    FlutterSliderHatchMarkLabel(percent: 0, label: Text('0%')),
+                    FlutterSliderHatchMarkLabel(percent: 100, label: Text('100%')),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Widget bigCircle(double width, double height) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+      child: Container(
+        width: width,
+        height: height,
+        decoration: new BoxDecoration(
+          color: hueInitial[day],
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(color: Colors.black, spreadRadius: 3),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> colorSettingWidget(BuildContext context) async {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Changer votre Ambiance'),
+          content: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: HSLColorPicker(
+                    onChanged: (colorSelected) {
+                      hueInitial[day] = colorSelected.toColor();
+                    },
+                    size: screenWidth * 0.4 + screenHeight * 0.1,
+                    strokeWidth: screenWidth * 0.04,
+                    thumbSize: 0.00001,
+                    thumbStrokeSize: screenWidth * 0.005 + screenHeight * 0.005,
+                    showCenterColorIndicator: true,
+                    centerColorIndicatorSize: screenWidth * 0.05 + screenHeight * 0.05,
+                    initialColor: hueInitial[day],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'Sauvgarder',
+                style: TextStyle(color: Colors.green),
+              ),
+              onPressed: () async {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text(
+                'Annuler',
+                style: TextStyle(color: Colors.green),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  String alarmDayData(int dayID) {
+    return '${boolToInt(daysStates[dayID])},${(hourList[dayID] * 3600) + (minutesList[dayID] * 60) + (secondsList[dayID])},'
+        '${myAlarmTimeMinuteList[dayID]},\"${hueInitial[dayID].toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")}\",'
+        '${luminosityMinList[dayID]},${luminosityMaxList[dayID]}';
   }
 }

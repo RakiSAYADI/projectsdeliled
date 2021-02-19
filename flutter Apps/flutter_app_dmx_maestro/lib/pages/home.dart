@@ -119,7 +119,9 @@ class _HomeState extends State<Home> {
                           icon: Icon(Icons.alarm),
                           onPressed: () {
                             Navigator.pushNamed(context, '/alarm_settings', arguments: {
-                              'bleCharacteristic': characteristicMaestro,
+                              'characteristicMaestro': characteristicMaestro,
+                              'characteristicWifi': characteristicWifi,
+                              'dataMaestro': dataMaestro,
                               'bleDevice': myDevice,
                             });
                           },
@@ -169,6 +171,7 @@ class _HomeState extends State<Home> {
                             Navigator.pushNamed(context, '/settings', arguments: {
                               'characteristicMaestro': characteristicMaestro,
                               'characteristicWifi': characteristicWifi,
+                              'dataMaestro': dataMaestro,
                               'bleDevice': myDevice,
                             });
                           },
