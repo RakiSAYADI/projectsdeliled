@@ -140,29 +140,30 @@ int InitLoadCfg() {
 
 void Default_saving() {
 
-	sprintf(UnitCfg.UnitName, UVCROBOTNAME);
+	sprintf(UnitCfg.UnitName, ROBOTNAME);
 
 	sprintf(UnitCfg.Zones.ZONE1, "Zone 1");
 	sprintf(UnitCfg.Zones.ZONE2, "Zone 2");
 	sprintf(UnitCfg.Zones.ZONE3, "Zone 3");
 	sprintf(UnitCfg.Zones.ZONE4, "Zone 4");
 
-	sprintf(UnitCfg.ColortrProfile[0].name, "Ambiance 1");
-	sprintf(UnitCfg.ColortrProfile[0].Hue, "000000");
-	sprintf(UnitCfg.ColortrProfile[1].name, "Ambiance 2");
-	sprintf(UnitCfg.ColortrProfile[1].Hue, "000000");
-	sprintf(UnitCfg.ColortrProfile[2].name, "Ambiance 3");
-	sprintf(UnitCfg.ColortrProfile[2].Hue, "000000");
-	sprintf(UnitCfg.ColortrProfile[3].name, "Ambiance 4");
-	sprintf(UnitCfg.ColortrProfile[3].Hue, "000000");
-	sprintf(UnitCfg.ColortrProfile[4].name, "Ambiance 5");
-	sprintf(UnitCfg.ColortrProfile[4].Hue, "000000");
-	sprintf(UnitCfg.ColortrProfile[5].name, "Ambiance 6");
-	sprintf(UnitCfg.ColortrProfile[5].Hue, "000000");
+	for (int i = 0; i < 7; i++) {
+		UnitCfg.alarmDay[i].state = false;
+		UnitCfg.alarmDay[i].autoTrigTime = 0;
+		UnitCfg.alarmDay[i].duration = 0;
+		sprintf(UnitCfg.alarmDay[i].hue, "00A6FF");
+		sprintf(UnitCfg.alarmDay[i].zones, "F");
+		UnitCfg.alarmDay[i].startLumVal = 0;
+		UnitCfg.alarmDay[i].finishLumVal = 0;
+	}
+
+	for (int i = 0; i < 6; i++) {
+		sprintf(UnitCfg.ColortrProfile[i].name, "Ambiance %d", i + 1);
+		sprintf(UnitCfg.ColortrProfile[i].Hue, "00A6FF");
+	}
 
 	sprintf(UnitCfg.WifiCfg.WIFI_SSID, "ssid");
 	sprintf(UnitCfg.WifiCfg.WIFI_PASS, "password");
-	UnitCfg.WifiCfg.stateConnection = false;
 
 	UnitCfg.Version = VERSION;
 
@@ -198,12 +199,13 @@ void syncTime(time_t t, uint32_t tzone) {
 
 	tzc = tzone / 3600;
 
-	if (tzc == 0)
-	sprintf(tz, "GMT0");
-	else if (tzc < 0)
-	sprintf(tz, "<GMT%" PRIi8 ">%" PRIi8 "", abs(tzc), abs(tzc));
-	else
-	sprintf(tz, "<GMT+%" PRIi8 ">-%" PRIi8 "", abs(tzc), abs(tzc));
+	if (tzc == 0) {
+		sprintf(tz, "CET0");
+	} else if (tzc < 0) {
+		sprintf(tz, "CET%d", tzc);
+	} else {
+		sprintf(tz, "CET-%d", tzc);
+	}
 
 	setenv("TZ", tz, 1);
 	tzset();

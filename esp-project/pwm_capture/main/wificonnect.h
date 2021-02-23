@@ -23,4 +23,6 @@
 
 void connectWIFITask(void);
 
+extern bool stateConnection;
+
 #endif /* MAIN_WEBSERVICE_H_ */

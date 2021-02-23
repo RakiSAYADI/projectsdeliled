@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_dmx_maestro/pages/home.dart';
+import 'package:flutter_app_dmx_maestro/services/bleDeviceClass.dart';
 import 'package:flutter_app_dmx_maestro/services/uvcToast.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -18,9 +20,11 @@ class _SettingsState extends State<Settings> {
 
   BluetoothCharacteristic characteristicMaestro;
   BluetoothCharacteristic characteristicWifi;
-  BluetoothDevice myDevice;
+  Device myDevice;
 
   bool firstDisplayMainWidget = true;
+
+  bool displayModems = false;
 
   List<bool> zoneStates;
   List<String> zonesNamesList = ['', '', '', ''];
@@ -29,8 +33,6 @@ class _SettingsState extends State<Settings> {
   List<String> wifiModems = [];
   String wifiModemsData = '';
   int wifiModemsPosition = 0;
-
-  String dataMaestro;
 
   final passwordEditor = TextEditingController();
   final myBleDeviceName = TextEditingController();
@@ -47,6 +49,30 @@ class _SettingsState extends State<Settings> {
         .toRadixString(16);
   }
 
+  void readDataMaestro() async {
+    myBleDeviceName.text = myDevice.device.name;
+    try {
+      var parsedJson = json.decode(dataMaestro);
+      zonesNamesList[0] = parsedJson['zone'][0];
+      zonesNamesList[1] = parsedJson['zone'][1];
+      zonesNamesList[2] = parsedJson['zone'][2];
+      zonesNamesList[3] = parsedJson['zone'][3];
+      await Future.delayed(Duration(seconds: 2));
+      if (parsedJson['wifiSt'] == '0') {
+        myUvcToast.setToastDuration(5);
+        myUvcToast.setToastMessage('Votre carte n\'est pas connecté avec votre modem !');
+        myUvcToast.showToast(Colors.red, Icons.info, Colors.white);
+      } else {
+        myUvcToast.setToastDuration(5);
+        myUvcToast.setToastMessage('Votre carte est bien connecté avec votre modem !');
+        myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+      }
+    } catch (e) {
+      print('erreur');
+      zonesNamesList = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4'];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     bleDeviceData = bleDeviceData.isNotEmpty ? bleDeviceData : ModalRoute.of(context).settings.arguments;
@@ -56,17 +82,7 @@ class _SettingsState extends State<Settings> {
     dataMaestro = bleDeviceData['dataMaestro'];
 
     if (firstDisplayMainWidget) {
-      myBleDeviceName.text = myDevice.name;
-      try {
-        var parsedJson = json.decode('{\"zone\":[\"raki\",\"pierre\",\"guillaume\",\"theo\"]}');
-        zonesNamesList[0] = parsedJson['zone'][0];
-        zonesNamesList[1] = parsedJson['zone'][1];
-        zonesNamesList[2] = parsedJson['zone'][2];
-        zonesNamesList[3] = parsedJson['zone'][3];
-      } catch (e) {
-        print('erreur');
-        zonesNamesList = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4'];
-      }
+      readDataMaestro();
       firstDisplayMainWidget = false;
     }
 
@@ -117,7 +133,6 @@ class _SettingsState extends State<Settings> {
                       child: FlatButton(
                         onPressed: () async {
                           // write the new ble device name
-                          print('{\"dname\":\"${myBleDeviceName.text}\"}');
                           await characteristicMaestro.write('{\"dname\":\"${myBleDeviceName.text}\"}'.codeUnits);
                           myUvcToast.setToastDuration(5);
                           myUvcToast.setToastMessage('Nom de carte modifié , faudrais redémarrer la carte pour appliquer cette modification !');
@@ -159,8 +174,6 @@ class _SettingsState extends State<Settings> {
                             (boolToInt(zoneStates[2]) * 4) +
                             (boolToInt(zoneStates[3]) * 8))
                             .toRadixString(16);
-
-                        print(zonesInHex);
                       },
                       children: [
                         Padding(
@@ -195,6 +208,9 @@ class _SettingsState extends State<Settings> {
                             onPressed: () async {
                               // write the associate command
                               await characteristicMaestro.write('{\"light\":[5,1,\"$zonesInHex \"]}'.codeUnits);
+                              myUvcToast.setToastDuration(5);
+                              myUvcToast.setToastMessage('Votre carte n\'est pas connecté avec votre modem !');
+                              myUvcToast.showToast(Colors.red, Icons.info, Colors.white);
                             },
                             child: Text(
                               'Associer',
@@ -256,30 +272,33 @@ class _SettingsState extends State<Settings> {
                         style: TextStyle(fontSize: (screenWidth * 0.05)),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
-                      child: DropdownButton<String>(
-                        value: wifiModemsData,
-                        icon: Icon(Icons.arrow_drop_down),
-                        iconSize: 24,
-                        elevation: 16,
-                        style: TextStyle(color: Colors.grey[800], fontSize: 18),
-                        underline: Container(
-                          height: 2,
-                          color: Colors.blue[300],
+                    Visibility(
+                      visible: displayModems,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
+                        child: DropdownButton<String>(
+                          value: wifiModemsData,
+                          icon: Icon(Icons.arrow_drop_down),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.blue[300],
+                          ),
+                          onChanged: (String data) {
+                            setState(() {
+                              wifiModemsData = data;
+                              wifiModemsPosition = wifiModems.indexOf(data);
+                            });
+                          },
+                          items: wifiModems.map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
                         ),
-                        onChanged: (String data) {
-                          setState(() {
-                            wifiModemsData = data;
-                            wifiModemsPosition = wifiModems.indexOf(data);
-                          });
-                        },
-                        items: wifiModems.map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
                       ),
                     ),
                     Padding(
@@ -288,32 +307,32 @@ class _SettingsState extends State<Settings> {
                         onPressed: () async {
                           waitingWidget();
                           // write the dissociate command
-                          try {
-                            await characteristicWifi.write('{\"SCAN\":1}'.codeUnits);
-                            await Future.delayed(Duration(milliseconds: 500));
-                            String wifiScanningState = String.fromCharCodes(await characteristicMaestro.read());
-                            var parsedJson = json.decode(wifiScanningState);
-                            while (parsedJson['scanResult'] == '0') {
-                              //SCR
-                              wifiScanningState = String.fromCharCodes(await characteristicMaestro.read());
-                              parsedJson = json.decode(wifiScanningState);
-                              print(wifiScanningState);
-                              await Future.delayed(Duration(seconds: 1));
+                          if (myDevice.getConnectionState()) {
+                            try {
+                              await characteristicWifi.write('{\"SCAN\":1}'.codeUnits);
+                              await Future.delayed(Duration(milliseconds: 500));
+                              String wifiScanningState = String.fromCharCodes(await characteristicMaestro.read());
+                              var parsedJson = json.decode(wifiScanningState);
+                              while (parsedJson['SCR'] == '0') {
+                                wifiScanningState = String.fromCharCodes(await characteristicMaestro.read());
+                                parsedJson = json.decode(wifiScanningState);
+                                await Future.delayed(Duration(seconds: 1));
+                              }
+                              String wifiScanningResult = String.fromCharCodes(await characteristicWifi.read());
+                              parsedJson = json.decode(wifiScanningResult);
+                              List<dynamic> modems = parsedJson['AP_RECORDS'];
+                              wifiModems = List<String>.from(modems);
+                              wifiModemsData = wifiModems[0];
+                            } catch (e) {
+                              print('error in esp32 Communication');
+                              myUvcToast.setToastDuration(5);
+                              myUvcToast.setToastMessage('Erreur de communication !');
+                              myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
                             }
-                            String wifiScanningResult = String.fromCharCodes(await characteristicWifi.read());
-                            parsedJson = json.decode(wifiScanningResult);
-                            List<dynamic> modems = parsedJson['AP_RECORDS'];
-                            wifiModems = List<String>.from(modems);
-                            print(wifiModems);
-                            wifiModemsData = wifiModems[0];
-                          } catch (e) {
-                            print('error in esp32 Communication');
-                            myUvcToast.setToastDuration(5);
-                            myUvcToast.setToastMessage('Erreur de communication !');
-                            myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                            Navigator.pop(context, false);
+                            displayModems = true;
+                            setState(() {});
                           }
-                          Navigator.pop(context, false);
-                          setState(() {});
                         },
                         child: Text(
                           'Scanner',
@@ -356,10 +375,7 @@ class _SettingsState extends State<Settings> {
                         onPressed: () async {
                           // write the new access point and it's password
                           await characteristicMaestro.write('{\"wa\":\"$wifiModemsData\",\"wp\":\"${passwordEditor.text}\"}'.codeUnits);
-                          myUvcToast.setToastDuration(5);
-                          myUvcToast.setToastMessage('Connexion en cours avec le modem séléctionné !');
-                          myUvcToast.showToast(Colors.orange, Icons.info, Colors.white);
-                          //connectingToAccessPoint();
+                          restartAlertWidget(context, 'Voulez vous redemarrer la carte pour assurer la connection avec votre modem ?');
                         },
                         child: Text(
                           'Connecter',
@@ -406,7 +422,7 @@ class _SettingsState extends State<Settings> {
                             onPressed: () async {
                               // write the reset command
                               await characteristicMaestro.write('{\"system\":0}'.codeUnits);
-                              restartAlertWidget(context);
+                              restartAlertWidget(context, 'Voulez vous redemarrer la carte pour assurer ces modifications?');
                             },
                             child: Text(
                               'Configuration par défault',
@@ -430,7 +446,7 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-  void connectingToAccessPoint() async {
+/*  void connectingToAccessPoint() async {
     await Future.delayed(Duration(seconds: 1));
     try {
       String wifiState = String.fromCharCodes(await characteristicMaestro.read());
@@ -449,9 +465,9 @@ class _SettingsState extends State<Settings> {
       myUvcToast.setToastMessage('Erreur de communication !');
       myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
     }
-  }
+  }*/
 
-  Future<void> restartAlertWidget(BuildContext context) {
+  Future<void> restartAlertWidget(BuildContext context, String widgetMessage) {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -477,7 +493,9 @@ class _SettingsState extends State<Settings> {
                 'Non',
                 style: TextStyle(color: Colors.green),
               ),
-              onPressed: () {
+              onPressed: () async {
+                await Future.delayed(Duration(seconds: 1));
+                dataMaestro = String.fromCharCodes(await characteristicMaestro.read());
                 Navigator.of(context).pop();
               },
             ),
@@ -512,7 +530,7 @@ class _SettingsState extends State<Settings> {
 
   Future<void> zoneNamesSettingsWidget(BuildContext context) async {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    //double screenHeight = MediaQuery.of(context).size.height;
     final zone1NameEditor = TextEditingController();
     final zone2NameEditor = TextEditingController();
     final zone3NameEditor = TextEditingController();

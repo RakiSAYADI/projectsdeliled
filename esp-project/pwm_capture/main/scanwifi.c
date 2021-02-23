@@ -25,16 +25,20 @@
 #include "wificonnect.h"
 #include "unitcfg.h"
 
-EventGroupHandle_t s_wifi_event_group;
+wifi_ap_record_t ap_records[MAX_APs];
+wifi_scan_time_t scanningTime;
+wifi_scan_config_t scan_config;
+wifi_active_scan_time_t activeScanning;
 
 const char *SCAN_TAG = "WEB_SERVICE";
 
-void removeSpaces(char *str1)
-{
-    char *str2;
-    str2=str1;
-    while (*str2==' ') str2++;
-    if (str2!=str1) memmove(str1,str2,strlen(str2)+1);
+void removeSpaces(char *str1) {
+	char *str2;
+	str2 = str1;
+	while (*str2 == ' ')
+		str2++;
+	if (str2 != str1)
+		memmove(str1, str2, strlen(str2) + 1);
 }
 char* getAuthModeName(wifi_auth_mode_t auth_mode) {
 
@@ -46,30 +50,26 @@ char* getAuthModeName(wifi_auth_mode_t auth_mode) {
 void scanWIFITask() {
 	// WIFI Init State
 	scanResult = false;
-	s_wifi_event_group = xEventGroupCreate();
-
-	ESP_LOGI(SCAN_TAG, "ACTIVATING WIFI SCANNING \n");
-	// configure, initialize and start the wifi driver
-	wifi_init_config_t wifi_config = WIFI_INIT_CONFIG_DEFAULT()
-	;
-	ESP_ERROR_CHECK(esp_wifi_init(&wifi_config));
-	ESP_ERROR_CHECK(esp_wifi_set_storage(WIFI_STORAGE_RAM));
-	ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
-	ESP_ERROR_CHECK(esp_wifi_start());
 
 	// Scan WIFI Modems
 	ap_num = MAX_APs;
-	wifi_scan_time_t scanningTime;
-	wifi_active_scan_time_t activeScanning = { .min = 500, .max = 1000 };
+
+	activeScanning.min = 500;
+	activeScanning.max = 1000;
+
 	scanningTime.active = activeScanning;
-	wifi_scan_config_t scan_config = { .ssid = 0, .bssid = 0, .channel = 0,
-			.scan_time = scanningTime, .show_hidden = true };
+
+	scan_config.ssid = 0;
+	scan_config.bssid = 0;
+	scan_config.channel = 0;
+	scan_config.scan_time = scanningTime;
+	scan_config.show_hidden = true;
+
 	printf("Start scanning…");
 	ESP_ERROR_CHECK(esp_wifi_scan_start(&scan_config, true));
 	printf(" completed!\n");
 	printf("\n");
 
-	wifi_ap_record_t ap_records[MAX_APs];
 	ESP_ERROR_CHECK(esp_wifi_scan_get_ap_records(&ap_num, ap_records));
 
 	printf("Found %d access points:\n", ap_num);

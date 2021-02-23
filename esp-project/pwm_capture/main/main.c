@@ -22,21 +22,19 @@
 
 #include "scanwifi.h"
 #include "wificonnect.h"
+#include "autolight.h"
 #include "unitcfg.h"
 #include "pwm_capture.h"
 #include "base_mac_address.h"
 #include "bluetooth.h"
+#include "system_init.h"
 
 char* MAIN_TAG = "app_main";
 
 int app_main(void) {
 
 	// Initiate ESP32 SYSTEM
-	ESP_ERROR_CHECK(nvs_flash_init());
-	tcpip_adapter_init();
-	ESP_ERROR_CHECK(esp_event_loop_create_default());
-
-	ESP_LOGI(MAIN_TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
+	systemInit();
 
 	// Initiate Base Mac Address.
 	BaseMacInit();
@@ -52,11 +50,11 @@ int app_main(void) {
 	// Initiate Bluetooth services.
 	bt_main();
 
-	// Initiate scan WIFI devices.
-	scanWIFITask();
-
 	// Initiate connecting WIFI.
 	connectWIFITask();
+
+	// Initiate Wake Up Program.
+	autoLight();
 
 	return 0;
 }

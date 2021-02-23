@@ -25,6 +25,7 @@
 #include "unitcfg.h"
 #include "scanwifi.h"
 #include "lightcontrol.h"
+#include "wificonnect.h"
 
 #include <stdint.h>
 #include <inttypes.h>
@@ -338,19 +339,48 @@ void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 	ESP_LOGI(GATTS_TAG, "[APP] Free memory: %d bytes",
 			esp_get_free_heap_size());
 
-	sprintf((char*) total, "{\"Ver\":%d,\"FirmV\":\"%s\",\"SCR\":%d,"
-			"\"Amb1\":[\"%s\",\"%s\"],\"Amb2\":[\"%s\",\"%s\"],"
-			"\"Amb3\":[\"%s\",\"%s\"],\"Amb4\":[\"%s\",\"%s\"],"
-			"\"Amb5\":[\"%s\",\"%s\"],\"Amb6\":[\"%s\",\"%s\"],"
-			"\"zone\":[\"%s\",\"%s\",\"%s\",\"%s\"]}", UnitCfg.Version,
-			UnitCfg.FirmwareVersion, scanResult, UnitCfg.ColortrProfile[0].name,
-			UnitCfg.ColortrProfile[0].Hue, UnitCfg.ColortrProfile[1].name,
-			UnitCfg.ColortrProfile[1].Hue, UnitCfg.ColortrProfile[2].name,
-			UnitCfg.ColortrProfile[2].Hue, UnitCfg.ColortrProfile[3].name,
-			UnitCfg.ColortrProfile[3].Hue, UnitCfg.ColortrProfile[4].name,
-			UnitCfg.ColortrProfile[4].Hue, UnitCfg.ColortrProfile[5].name,
-			UnitCfg.ColortrProfile[5].Hue, UnitCfg.Zones.ZONE1,
-			UnitCfg.Zones.ZONE2, UnitCfg.Zones.ZONE3, UnitCfg.Zones.ZONE4);
+	sprintf((char*) total,
+			"{\"Ver\":%d,\"FirmV\":\"%s\",\"SCR\":%d,"
+					"\"Amb1\":[\"%s\",\"%s\"],\"Amb2\":[\"%s\",\"%s\"],"
+					"\"Amb3\":[\"%s\",\"%s\"],\"Amb4\":[\"%s\",\"%s\"],"
+					"\"Amb5\":[\"%s\",\"%s\"],\"Amb6\":[\"%s\",\"%s\"],\"wifiSt\":%d,"
+					"\"zone\":[\"%s\",\"%s\",\"%s\",\"%s\"],\"lun\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],"
+					"\"mar\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],\"mer\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],"
+					"\"jeu\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],\"ven\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],"
+					"\"sam\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],\"dim\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"]}",
+			UnitCfg.Version, UnitCfg.FirmwareVersion, scanResult,
+			UnitCfg.ColortrProfile[0].name, UnitCfg.ColortrProfile[0].Hue,
+			UnitCfg.ColortrProfile[1].name, UnitCfg.ColortrProfile[1].Hue,
+			UnitCfg.ColortrProfile[2].name, UnitCfg.ColortrProfile[2].Hue,
+			UnitCfg.ColortrProfile[3].name, UnitCfg.ColortrProfile[3].Hue,
+			UnitCfg.ColortrProfile[4].name, UnitCfg.ColortrProfile[4].Hue,
+			UnitCfg.ColortrProfile[5].name, UnitCfg.ColortrProfile[5].Hue,
+			stateConnection, UnitCfg.Zones.ZONE1, UnitCfg.Zones.ZONE2,
+			UnitCfg.Zones.ZONE3, UnitCfg.Zones.ZONE4, UnitCfg.alarmDay[1].state,
+			UnitCfg.alarmDay[1].autoTrigTime, UnitCfg.alarmDay[1].duration,
+			UnitCfg.alarmDay[1].hue, UnitCfg.alarmDay[1].startLumVal,
+			UnitCfg.alarmDay[1].finishLumVal, UnitCfg.alarmDay[1].zones,
+			UnitCfg.alarmDay[2].state, UnitCfg.alarmDay[2].autoTrigTime,
+			UnitCfg.alarmDay[2].duration, UnitCfg.alarmDay[2].hue,
+			UnitCfg.alarmDay[2].startLumVal, UnitCfg.alarmDay[2].finishLumVal,
+			UnitCfg.alarmDay[2].zones, UnitCfg.alarmDay[3].state,
+			UnitCfg.alarmDay[3].autoTrigTime, UnitCfg.alarmDay[3].duration,
+			UnitCfg.alarmDay[3].hue, UnitCfg.alarmDay[3].startLumVal,
+			UnitCfg.alarmDay[3].finishLumVal, UnitCfg.alarmDay[3].zones,
+			UnitCfg.alarmDay[4].state, UnitCfg.alarmDay[4].autoTrigTime,
+			UnitCfg.alarmDay[4].duration, UnitCfg.alarmDay[4].hue,
+			UnitCfg.alarmDay[4].startLumVal, UnitCfg.alarmDay[4].finishLumVal,
+			UnitCfg.alarmDay[4].zones, UnitCfg.alarmDay[5].state,
+			UnitCfg.alarmDay[5].autoTrigTime, UnitCfg.alarmDay[5].duration,
+			UnitCfg.alarmDay[5].hue, UnitCfg.alarmDay[5].startLumVal,
+			UnitCfg.alarmDay[5].finishLumVal, UnitCfg.alarmDay[5].zones,
+			UnitCfg.alarmDay[6].state, UnitCfg.alarmDay[6].autoTrigTime,
+			UnitCfg.alarmDay[6].duration, UnitCfg.alarmDay[6].hue,
+			UnitCfg.alarmDay[6].startLumVal, UnitCfg.alarmDay[6].finishLumVal,
+			UnitCfg.alarmDay[6].zones, UnitCfg.alarmDay[0].state,
+			UnitCfg.alarmDay[0].autoTrigTime, UnitCfg.alarmDay[0].duration,
+			UnitCfg.alarmDay[0].hue, UnitCfg.alarmDay[0].startLumVal,
+			UnitCfg.alarmDay[0].finishLumVal, UnitCfg.alarmDay[0].zones);
 
 	TOTAL.attr_len = strlen((char *) total);
 
@@ -512,9 +542,81 @@ void readingWifi(char * jsonData) {
 	}
 }
 
+bool readAlertMessage(char * jsonData, char day[4], int dayID) {
+	char tmp[64];
+	bool stateFlag = false;
+
+	if (jsonparse(jsonData, tmp, day, 0) == 0) {
+
+		UnitCfg.alarmDay[dayID].state = atoi(tmp);
+
+		if (UnitCfg.alarmDay[dayID].state) {
+			ESP_LOGI(GATTS_TAG, "%s is selected !", day);
+		} else {
+			ESP_LOGI(GATTS_TAG, "%s is not selected !", day);
+		}
+		stateFlag = true;
+
+		if (jsonparse(jsonData, tmp, day, 1) == 0) {
+			UnitCfg.alarmDay[dayID].autoTrigTime = atoi(tmp);
+
+			ESP_LOGI(GATTS_TAG, "%s time is %ld", day,
+					UnitCfg.alarmDay[dayID].autoTrigTime);
+			stateFlag = true;
+
+		}
+		if (jsonparse(jsonData, tmp, day, 2) == 0) {
+			UnitCfg.alarmDay[dayID].duration = atoi(tmp);
+
+			ESP_LOGI(GATTS_TAG, "%s duration is %d", day,
+					UnitCfg.alarmDay[dayID].duration);
+			stateFlag = true;
+
+		}
+		if (jsonparse(jsonData, UnitCfg.alarmDay[dayID].hue, day, 3) == 0) {
+
+			ESP_LOGI(GATTS_TAG, "%s hue is %s", day,
+					UnitCfg.alarmDay[dayID].hue);
+			stateFlag = true;
+
+		}
+		if (jsonparse(jsonData, tmp, day, 4) == 0) {
+			UnitCfg.alarmDay[dayID].startLumVal = atoi(tmp);
+			ESP_LOGI(GATTS_TAG, "%s start lum is %d", day,
+					UnitCfg.alarmDay[dayID].startLumVal);
+			stateFlag = true;
+
+		}
+		if (jsonparse(jsonData, tmp, day, 5) == 0) {
+			UnitCfg.alarmDay[dayID].finishLumVal = atoi(tmp);
+			ESP_LOGI(GATTS_TAG, "%s start lum is %d", day,
+					UnitCfg.alarmDay[dayID].finishLumVal);
+			stateFlag = true;
+
+		}
+		if (jsonparse(jsonData, UnitCfg.alarmDay[dayID].zones, day, 6) == 0) {
+			ESP_LOGI(GATTS_TAG, "%s zone is %s\n", day,
+					UnitCfg.alarmDay[dayID].zones);
+			stateFlag = true;
+
+		}
+	}
+	return stateFlag;
+}
+
 void readingData(char * jsonData) {
 	char tmp[64];
 	savenvsFlag = false;
+
+	//wakeup DATA
+
+	savenvsFlag = readAlertMessage(jsonData, "lun", 1);
+	savenvsFlag = readAlertMessage(jsonData, "mar", 2);
+	savenvsFlag = readAlertMessage(jsonData, "mer", 3);
+	savenvsFlag = readAlertMessage(jsonData, "jeu", 4);
+	savenvsFlag = readAlertMessage(jsonData, "ven", 5);
+	savenvsFlag = readAlertMessage(jsonData, "sam", 6);
+	savenvsFlag = readAlertMessage(jsonData, "dim", 0);
 
 	//Zones Names
 
@@ -607,6 +709,7 @@ void readingData(char * jsonData) {
 				tz = atoi(tmp);
 				ESP_LOGI(GATTS_TAG, "Time zone %d", tz / 3600);
 				syncTime(t, tz);
+				UnitCfg.timeZone = tz / 3600;
 				savenvsFlag = true;
 			}
 		} else
@@ -848,10 +951,10 @@ void transitionAmbianceProcess(int ambianceId) {
 			MilightHandler(cmd, transOutHue, zone);
 			cmd = 7;
 			transOutLum = (penteTransLum * progressTime) + subcmdlumold;
-			MilightHandler(cmd, transOutHue, zone);
+			MilightHandler(cmd, transOutLum, zone);
 			cmd = 9;
 			transOutStab = (penteTransStab * progressTime) + subcmdstabold;
-			MilightHandler(cmd, transOutHue, zone);
+			MilightHandler(cmd, transOutStab, zone);
 			progressTime += 50;
 			delay(50);
 			ESP_LOGI(GATTS_TAG, "Light control hue %d lum %d stab %d zone %d",

@@ -16,7 +16,7 @@
 #ifndef MAIN_UNITCFG_H_
 #define MAIN_UNITCFG_H_
 
-#define UVCROBOTNAME "DEEPLIGHT-G005"
+#define ROBOTNAME "MAESTRO DMX"
 #define FIRMWAREVERSIONNAME "3.0.0"
 #define VERSION 0
 #define delay(ms) (vTaskDelay(ms/portTICK_RATE_MS))
@@ -36,11 +36,6 @@ typedef struct {
 	char zones[4];
 	uint8_t startLumVal;
 	uint8_t finishLumVal;
-} AlarmDay_Typedef;
-
-typedef struct {
-	char Days[3];
-	AlarmDay_Typedef alarmDay[7];
 } Alarm_Typedef;
 
 typedef struct {
@@ -51,17 +46,17 @@ typedef struct {
 typedef struct {
 	char WIFI_SSID[64];
 	char WIFI_PASS[64];
-	bool stateConnection;
 } WifiConfig_Typedef;
 
 typedef struct {
 	char UnitName[64];
 	uint8_t Version;
 	char FirmwareVersion[7];
+	int8_t timeZone;
 	Zones_Typedef Zones;
 	WifiConfig_Typedef WifiCfg;
 	ColortrProfile_Typedef ColortrProfile[6];
-	Alarm_Typedef AlarmClock;
+	Alarm_Typedef alarmDay[7];
 	char FLASH_MEMORY[3];
 } UnitConfig_Typedef;
 

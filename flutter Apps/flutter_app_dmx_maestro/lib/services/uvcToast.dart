@@ -9,7 +9,7 @@ class ToastyMessage {
   String toastMessage;
   int toastDuration;
 
-  ToastyMessage({this.toastContext});
+  ToastyMessage({@required this.toastContext});
 
   void setToastMessage(String message) {
     this.toastMessage = message;
@@ -38,16 +38,17 @@ class ToastyMessage {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-                child: new AnimatedBuilder(
-              animation: animationRefreshIcon,
-              child: Icon(messageIcon, color: Colors.white),
-              builder: (BuildContext context, Widget _widget) {
-                return new Transform.rotate(
-                  angle: animationRefreshIcon.value * 6.3,
-                  child: _widget,
-                );
-              },
-            )),
+              child: new AnimatedBuilder(
+                animation: animationRefreshIcon,
+                child: Icon(messageIcon, color: Colors.white),
+                builder: (BuildContext context, Widget _widget) {
+                  return new Transform.rotate(
+                    angle: animationRefreshIcon.value * 6.3,
+                    child: _widget,
+                  );
+                },
+              ),
+            ),
             SizedBox(
               width: 12.0,
             ),
@@ -91,19 +92,31 @@ class ToastyMessage {
       );
     }
     this.flutterToast.showToast(
-          child: toast,
-          gravity: ToastGravity.BOTTOM,
-          toastDuration: Duration(seconds: this.toastDuration),
-        );
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: this.toastDuration),
+    );
   }
 
   void clearAllToast() {
-    this.flutterToast.removeQueuedCustomToasts();
-    this.animationRefreshIcon.stop();
+    try {
+      this.flutterToast.removeQueuedCustomToasts();
+      if (animationRefreshIcon != null) {
+        this.animationRefreshIcon.stop();
+      }
+    } catch (e) {
+      print('error detected');
+    }
   }
 
   void clearCurrentToast() {
-    this.animationRefreshIcon.stop();
-    this.flutterToast.removeCustomToast();
+    try {
+      if (animationRefreshIcon != null) {
+        this.animationRefreshIcon.stop();
+      }
+      this.flutterToast.removeCustomToast();
+    } catch (e) {
+      print('error detected');
+    }
   }
 }

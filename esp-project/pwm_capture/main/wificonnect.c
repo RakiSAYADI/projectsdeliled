@@ -26,6 +26,8 @@
 
 EventGroupHandle_t s_wifi_event_group;
 
+bool stateConnection;
+
 const char *CONNECT_TAG = "WEB_SERVICE";
 
 esp_err_t event_handler(void *ctx, system_event_t *event) {
@@ -43,15 +45,14 @@ esp_err_t event_handler(void *ctx, system_event_t *event) {
 		ESP_LOGI(CONNECT_TAG, "GATEWAY: %s\r",
 				ip4addr_ntoa(&event->event_info.got_ip.ip_info.gw));
 
-		UnitCfg.WifiCfg.stateConnection = true;
-		saveDataTask(true);
+		stateConnection = true;
 
 		break;
 	case SYSTEM_EVENT_STA_DISCONNECTED: {
 		esp_wifi_connect();
 		xEventGroupClearBits(s_wifi_event_group, BIT0);
 		ESP_LOGI(CONNECT_TAG, "retry to connect to the AP");
-		UnitCfg.WifiCfg.stateConnection = false;
+		stateConnection = false;
 		break;
 	}
 	default:
@@ -61,15 +62,15 @@ esp_err_t event_handler(void *ctx, system_event_t *event) {
 }
 
 void connectWIFITask() {
-	// WIFI Init State
 	s_wifi_event_group = xEventGroupCreate();
-
-	// configure, initialize and start the wifi driver
-	wifi_init_config_t wifi_config = WIFI_INIT_CONFIG_DEFAULT()
-	;
-	ESP_ERROR_CHECK(esp_wifi_init(&wifi_config));
-	ESP_ERROR_CHECK(esp_wifi_set_storage(WIFI_STORAGE_RAM));
 	// Connecting WIFI
+	ESP_ERROR_CHECK(esp_event_loop_init(event_handler, NULL));
+
+	wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT()
+	;
+	ESP_ERROR_CHECK(esp_wifi_init(&cfg));
+
+	ESP_ERROR_CHECK(esp_wifi_set_storage(WIFI_STORAGE_RAM));
 
 	wifi_config_t wifiConfigConnect;
 
