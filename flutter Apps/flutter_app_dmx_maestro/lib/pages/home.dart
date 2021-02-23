@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app_dmx_maestro/services/bleDeviceClass.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:hsl_colorpicker/HSLColorPicker.dart';
@@ -12,12 +13,14 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
+String dataMaestro;
+
 class _HomeState extends State<Home> {
   Map bleDeviceData = {};
 
   BluetoothCharacteristic characteristicMaestro;
   BluetoothCharacteristic characteristicWifi;
-  BluetoothDevice myDevice;
+  Device myDevice;
 
   final String zonesInHex = 'F';
 
@@ -40,8 +43,6 @@ class _HomeState extends State<Home> {
   double opacityLevelAmbiances = 0.0;
 
   List<String> ambiance1, ambiance2, ambiance3, ambiance4, ambiance5, ambiance6;
-
-  String dataMaestro;
 
   @override
   void initState() {
@@ -245,8 +246,8 @@ class _HomeState extends State<Home> {
   }
 
   Widget ambianceWidget(BuildContext context) {
-    double widthScreen = MediaQuery.of(context).size.width;
-    double heightScreen = MediaQuery.of(context).size.height;
+    //double widthScreen = MediaQuery.of(context).size.width;
+    //double heightScreen = MediaQuery.of(context).size.height;
     return Center(
       child: IntrinsicHeight(
         child: Column(
@@ -341,8 +342,10 @@ class _HomeState extends State<Home> {
               child: IconButton(
                 icon: Icon(Icons.power_settings_new, color: Colors.green, size: widthScreen * 0.03 + heightScreen * 0.02),
                 onPressed: () async {
-                  if (!bottomBarTitleState) {
-                    await characteristicMaestro.write('{\"light\": 1,1,\"$zonesInHex\"}'.codeUnits);
+                  if (myDevice.getConnectionState()) {
+                    if (!bottomBarTitleState) {
+                      await characteristicMaestro.write('{\"light\": 1,1,\"$zonesInHex\"}'.codeUnits);
+                    }
                   }
                 },
               ),
@@ -355,8 +358,10 @@ class _HomeState extends State<Home> {
               child: IconButton(
                 icon: Icon(Icons.close, color: Colors.red, size: widthScreen * 0.03 + heightScreen * 0.02),
                 onPressed: () async {
-                  if (!bottomBarTitleState) {
-                    await characteristicMaestro.write('{\"light\": 1,0,\"$zonesInHex\"}'.codeUnits);
+                  if (myDevice.getConnectionState()) {
+                    if (!bottomBarTitleState) {
+                      await characteristicMaestro.write('{\"light\": 1,0,\"$zonesInHex\"}'.codeUnits);
+                    }
                   }
                 },
               ),
@@ -369,10 +374,12 @@ class _HomeState extends State<Home> {
             HSLColorPicker(
               onChanged: (colorSelected) {
                 hslColor = colorSelected;
-                if (!bottomBarTitleState) {
-                  characteristicMaestro.write(
-                      '{\"hue\":${colorSelected.toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")},\"zone\":\"$zonesInHex\"}'
-                          .codeUnits);
+                if (myDevice.getConnectionState()) {
+                  if (!bottomBarTitleState) {
+                    characteristicMaestro.write(
+                        '{\"hue\":${colorSelected.toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")},\"zone\":\"$zonesInHex\"}'
+                            .codeUnits);
+                  }
                 }
               },
               size: widthScreen * 0.4 + heightScreen * 0.1,
@@ -404,8 +411,10 @@ class _HomeState extends State<Home> {
                 trackBarColor = Colors.blueAccent;
               }
               setState(() {});
-              if (!bottomBarTitleState) {
-                characteristicMaestro.write('{\"light\":[8,${_lowerValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+              if (myDevice.getConnectionState()) {
+                if (!bottomBarTitleState) {
+                  characteristicMaestro.write('{\"light\":[8,${_lowerValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                }
               }
             },
             handler: FlutterSliderHandler(child: Icon(Icons.code)),
@@ -430,16 +439,20 @@ class _HomeState extends State<Home> {
                 child: IconButton(
                   icon: Icon(Icons.more_time, color: Colors.green, size: widthScreen * 0.025 + heightScreen * 0.015),
                   onPressed: () async {
-                    if (!bottomBarTitleState) {
-                      await characteristicMaestro.write('{\"light\": 4,1,\"$zonesInHex\"}'.codeUnits);
+                    if (myDevice.getConnectionState()) {
+                      if (!bottomBarTitleState) {
+                        await characteristicMaestro.write('{\"light\": 4,1,\"$zonesInHex\"}'.codeUnits);
+                      }
                     }
                   },
                 ),
               ),
               FlatButton(
                 onPressed: () async {
-                  if (!bottomBarTitleState) {
-                    await characteristicMaestro.write('{\"light\": 4,2,\"$zonesInHex\"}'.codeUnits);
+                  if (myDevice.getConnectionState()) {
+                    if (!bottomBarTitleState) {
+                      await characteristicMaestro.write('{\"light\": 4,2,\"$zonesInHex\"}'.codeUnits);
+                    }
                   }
                 },
                 child: Padding(
@@ -459,8 +472,10 @@ class _HomeState extends State<Home> {
                 child: IconButton(
                   icon: Icon(Icons.timelapse, color: Colors.red, size: widthScreen * 0.025 + heightScreen * 0.015),
                   onPressed: () async {
-                    if (!bottomBarTitleState) {
-                      await characteristicMaestro.write('{\"light\": 4,0,\"$zonesInHex\"}'.codeUnits);
+                    if (myDevice.getConnectionState()) {
+                      if (!bottomBarTitleState) {
+                        await characteristicMaestro.write('{\"light\": 4,0,\"$zonesInHex\"}'.codeUnits);
+                      }
                     }
                   },
                 ),
@@ -608,8 +623,10 @@ class _HomeState extends State<Home> {
         IconButton(
           icon: Icon(Icons.power_settings_new, color: Colors.green, size: widthScreen * 0.025 + heightScreen * 0.015),
           onPressed: () async {
-            if (!bottomBarTitleState) {
-              await characteristicMaestro.write('{\"light\": 1,1,\"$zoneNumber\"}'.codeUnits);
+            if (myDevice.getConnectionState()) {
+              if (!bottomBarTitleState) {
+                await characteristicMaestro.write('{\"light\": 1,1,\"$zoneNumber\"}'.codeUnits);
+              }
             }
           },
         ),
@@ -617,8 +634,10 @@ class _HomeState extends State<Home> {
         IconButton(
           icon: Icon(Icons.close, color: Colors.red, size: widthScreen * 0.025 + heightScreen * 0.015),
           onPressed: () async {
-            if (!bottomBarTitleState) {
-              await characteristicMaestro.write('{\"light\": 1,0,\"$zoneNumber\"}'.codeUnits);
+            if (myDevice.getConnectionState()) {
+              if (!bottomBarTitleState) {
+                await characteristicMaestro.write('{\"light\": 1,0,\"$zoneNumber\"}'.codeUnits);
+              }
             }
           },
         ),
@@ -634,8 +653,10 @@ class _HomeState extends State<Home> {
     color.write(ambianceColor.replaceFirst('#', ''));
     return GestureDetector(
       onTap: () async {
-        if (bottomBarTitleState) {
-          await characteristicMaestro.write('{\"Favoris\":\"Ambiance $ambianceID\"}'.codeUnits);
+        if (myDevice.getConnectionState()) {
+          if (bottomBarTitleState) {
+            await characteristicMaestro.write('{\"Favoris\":\"Ambiance $ambianceID\"}'.codeUnits);
+          }
         }
       },
       child: Container(
@@ -643,7 +664,10 @@ class _HomeState extends State<Home> {
         height: heightScreen * 0.15,
         decoration: new BoxDecoration(
           color: Color(int.parse(color.toString(), radix: 16)),
-          shape: BoxShape.circle,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(color: Colors.black, spreadRadius: 3),
+          ],
         ),
       ),
     );

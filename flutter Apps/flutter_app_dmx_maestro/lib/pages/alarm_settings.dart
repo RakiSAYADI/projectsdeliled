@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app_dmx_maestro/pages/home.dart';
+import 'package:flutter_app_dmx_maestro/services/bleDeviceClass.dart';
 import 'package:flutter_app_dmx_maestro/services/uvcToast.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
@@ -37,6 +39,7 @@ class _AlarmClockState extends State<AlarmClock> {
 
   List<int> luminosityMinList = [0, 0, 0, 0, 0, 0, 0];
   List<int> luminosityMaxList = [50, 50, 50, 50, 50, 50, 50];
+  List<String> dayZones = ['F', 'F', 'F', 'F', 'F', 'F', 'F'];
 
   String myTimeHoursData = '00';
   String myTimeMinutesData = '00';
@@ -241,9 +244,7 @@ class _AlarmClockState extends State<AlarmClock> {
 
   BluetoothCharacteristic characteristicMaestro;
   BluetoothCharacteristic characteristicWifi;
-  BluetoothDevice myDevice;
-
-  String dataMaestro;
+  Device myDevice;
 
   bool firstDisplayMainWidget = true;
 
@@ -267,6 +268,7 @@ class _AlarmClockState extends State<AlarmClock> {
     hueInitial[dayID] = Color(int.parse(color.toString(), radix: 16));
     luminosityMinList[dayID] = day[4];
     luminosityMaxList[dayID] = day[5];
+    dayZones[dayID] = day[6];
     if (daysStates[dayID]) {
       activationButtonText = 'Activé';
       activationButtonColor[dayID] = Colors.green;
@@ -283,7 +285,7 @@ class _AlarmClockState extends State<AlarmClock> {
   @override
   Widget build(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
-    double heightScreen = MediaQuery.of(context).size.height;
+    //double heightScreen = MediaQuery.of(context).size.height;
     bleDeviceData = bleDeviceData.isNotEmpty ? bleDeviceData : ModalRoute.of(context).settings.arguments;
     myDevice = bleDeviceData['bleDevice'];
     characteristicMaestro = bleDeviceData['characteristicMaestro'];
@@ -291,10 +293,7 @@ class _AlarmClockState extends State<AlarmClock> {
     dataMaestro = bleDeviceData['dataMaestro'];
     if (firstDisplayMainWidget) {
       try {
-        var parsedJson = json.decode('{\"lun\":[0,1400,1,\"FFFFFF\",0,80],'
-            '\"mar\":[1,11400,2,\"00FFFF\",40,50],\"mer\":[0,21400,3,\"0000FF\",10,50],'
-            '\"jeu\":[1,31400,4,\"000000\",30,90],\"ven\":[0,41400,5,\"FF0000\",20,40],'
-            '\"sam\":[1,51400,6,\"FFFF00\",5,40],\"dim\":[0,61400,7,\"FFFFFF\",80,100]}');
+        var parsedJson = json.decode(dataMaestro);
         readWakeUpDataPerDay(parsedJson['lun'], 0);
         readWakeUpDataPerDay(parsedJson['mar'], 1);
         readWakeUpDataPerDay(parsedJson['mer'], 2);
@@ -302,13 +301,24 @@ class _AlarmClockState extends State<AlarmClock> {
         readWakeUpDataPerDay(parsedJson['ven'], 4);
         readWakeUpDataPerDay(parsedJson['sam'], 5);
         readWakeUpDataPerDay(parsedJson['dim'], 6);
-        if (daysStates[0]) {
+        day = 0;
+        if (daysStates[day]) {
           activationButtonText = 'Activé';
           activationButtonColor[day] = Colors.green;
         } else {
           activationButtonText = 'Désactivé';
           activationButtonColor[day] = Colors.red;
         }
+        myTimeHoursPosition = hourList[day];
+        myTimeMinutesPosition = minutesList[day];
+        myTimeSecondsPosition = secondsList[day];
+        myAlarmTimeMinutePosition = myAlarmTimeMinuteList[day];
+
+        myTimeHoursData = myTimeHours.elementAt(myTimeHoursPosition);
+        myTimeMinutesData = myTimeMinutes.elementAt(myTimeMinutesPosition);
+        myTimeSecondsData = myTimeSeconds.elementAt(myTimeSecondsPosition);
+
+        myAlarmTimeMinuteData = myAlarmTimeMinute.elementAt(myAlarmTimeMinutePosition);
       } catch (e) {
         print('erreur');
       }
@@ -347,15 +357,15 @@ class _AlarmClockState extends State<AlarmClock> {
                       setState(() {
                         saveButtonColor = Colors.blue[400];
                       });
-                      print('{\"lun\":[${alarmDayData(0)}],'
-                          '\"mar\":[${alarmDayData(1)}],\"mer\":[${alarmDayData(2)}],'
-                          '\"jeu\":[${alarmDayData(3)}],\"ven\":[${alarmDayData(4)}],'
-                          '\"sam\":[${alarmDayData(5)}],\"dim\":[${alarmDayData(6)}]}');
-/*                      await characteristicMaestro.write('{\"lun\":[${alarmDayData(0)}],'
-                              '\"mar\":[${alarmDayData(1)}],\"mer\":[${alarmDayData(2)}],'
-                              '\"jeu\":[${alarmDayData(3)}],\"ven\":[${alarmDayData(4)}],'
-                              '\"sam\":[${alarmDayData(5)}],\"dim\":[${alarmDayData(6)}]}'
-                          .codeUnits);*/
+                      if (myDevice.getConnectionState()) {
+                        await characteristicMaestro.write('{\"lun\":[${alarmDayData(0)}],'
+                                '\"mar\":[${alarmDayData(1)}],\"mer\":[${alarmDayData(2)}],'
+                                '\"jeu\":[${alarmDayData(3)}],\"ven\":[${alarmDayData(4)}],'
+                                '\"sam\":[${alarmDayData(5)}],\"dim\":[${alarmDayData(6)}]}'
+                            .codeUnits);
+                        await Future.delayed(Duration(seconds: 1));
+                        dataMaestro = String.fromCharCodes(await characteristicMaestro.read());
+                      }
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
@@ -726,6 +736,8 @@ class _AlarmClockState extends State<AlarmClock> {
                 handlerAnimation:
                     FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
                 onDragging: (handlerIndex, lowerValue, upperValue) {
+                  luminosityMinList[day] = lowerValue.toInt();
+                  luminosityMaxList[day] = upperValue.toInt();
                   setState(() {});
                 },
                 trackBar: FlutterSliderTrackBar(
@@ -823,6 +835,6 @@ class _AlarmClockState extends State<AlarmClock> {
   String alarmDayData(int dayID) {
     return '${boolToInt(daysStates[dayID])},${(hourList[dayID] * 3600) + (minutesList[dayID] * 60) + (secondsList[dayID])},'
         '${myAlarmTimeMinuteList[dayID]},\"${hueInitial[dayID].toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")}\",'
-        '${luminosityMinList[dayID]},${luminosityMaxList[dayID]}';
+        '${luminosityMinList[dayID]},${luminosityMaxList[dayID]},\"${dayZones[dayID]}\"';
   }
 }

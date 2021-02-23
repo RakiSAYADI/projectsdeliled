@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app_dmx_maestro/services/bleDeviceClass.dart';
 import 'package:flutter_app_dmx_maestro/services/deviceBleWidget.dart';
@@ -189,7 +187,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                           print(dateTime.timeZoneName);
                           print(dateTime.timeZoneOffset.inSeconds);
                           await characteristicMaestro
-                              .write('{\"Time\": [${dateTime.millisecondsSinceEpoch ~/ 1000},${dateTime.timeZoneOffset.inSeconds}]}'.codeUnits);
+                              .write('{\"Time\":[${dateTime.millisecondsSinceEpoch ~/ 1000},${dateTime.timeZoneOffset.inSeconds}]}'.codeUnits);
                           /*Navigator.pushNamed(context, '/scan_qrcode', arguments: {
                           'bleCharacteristic': characteristicRelays,
                           'bleDevice': myDevice,
@@ -197,7 +195,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                           Navigator.pushNamed(context, '/home', arguments: {
                             'characteristicMaestro': characteristicMaestro,
                             'characteristicWifi': characteristicWifi,
-                            'bleDevice': myDeviceBluetooth,
+                            'bleDevice': myDevice,
                             'dataMaestro': dataMaestro,
                           });
                         });
