@@ -58,7 +58,7 @@ class _SettingsState extends State<Settings> {
       zonesNamesList[2] = parsedJson['zone'][2];
       zonesNamesList[3] = parsedJson['zone'][3];
       await Future.delayed(Duration(seconds: 2));
-      if (parsedJson['wifiSt'] == '0') {
+      if (parsedJson['wifiSt'] == 0) {
         myUvcToast.setToastDuration(5);
         myUvcToast.setToastMessage('Votre carte n\'est pas connecté avec votre modem !');
         myUvcToast.showToast(Colors.red, Icons.info, Colors.white);
