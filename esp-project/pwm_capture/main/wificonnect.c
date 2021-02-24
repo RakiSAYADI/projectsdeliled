@@ -49,7 +49,7 @@ esp_err_t event_handler(void *ctx, system_event_t *event) {
 
 		break;
 	case SYSTEM_EVENT_STA_DISCONNECTED: {
-		esp_wifi_connect();
+		//esp_wifi_connect();
 		xEventGroupClearBits(s_wifi_event_group, BIT0);
 		ESP_LOGI(CONNECT_TAG, "retry to connect to the AP");
 		stateConnection = false;
