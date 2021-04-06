@@ -75,9 +75,9 @@ class _WelcomeState extends State<Welcome> {
 
   @override
   Widget build(BuildContext context) {
-    double widthScreen = MediaQuery.of(context).size.width;
-    double heightScreen = MediaQuery.of(context).size.height;
-    print('width : $widthScreen and height : $heightScreen');
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    print('width : $screenWidth and height : $screenHeight');
     return Scaffold(
       backgroundColor: Colors.indigo[700],
       body: SafeArea(
@@ -91,33 +91,65 @@ class _WelcomeState extends State<Welcome> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                'DeepLight Control System',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.grey[300],
-                  fontSize: 20.0,
+              Expanded(
+                flex: 9,
+                child: Image.asset(
+                  'assets/ic_launcher_App.png',
+                  key: Key('app_logo'),
+                  height: screenHeight * 0.15,
+                  width: screenWidth * 0.3,
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-              Image.asset(
-                'assets/logodelitechblanc.png',
-                height: MediaQuery.of(context).size.height * 0.15,
-                width: MediaQuery.of(context).size.width * 0.7,
-              ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-              SpinKitCircle(
-                color: Colors.white,
-                size: 100.0,
-              ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-              Text(
-                'Powered by deliled \n V$appVersion',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.grey[300],
-                  fontSize: 12.0,
+              Expanded(
+                flex: 3,
+                child: SpinKitCircle(
+                  key: Key('loader'),
+                  color: Colors.white,
+                  size: 100.0,
                 ),
+              ),
+              Expanded(
+                flex: 3,
+                child: Image.asset(
+                  'assets/logodelitechblanc.png',
+                  key: Key('delitech_logo'),
+                  height: screenHeight * 0.15,
+                  width: screenWidth * 0.7,
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  'Powered by DELITECH Group',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.grey[300],
+                    fontSize: screenWidth * 0.04,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: FutureBuilder(
+                    key: Key('app_version'),
+                    future: PackageInfo.fromPlatform(),
+                    builder: (BuildContext context, snapshot) {
+                      if (snapshot.hasData) {
+                        String version = snapshot.data.version;
+                        return Center(
+                            child: Text(
+                          'V$version',
+                          style: TextStyle(
+                            color: Colors.grey[300],
+                            fontSize: screenWidth * 0.04,
+                          ),
+                        ));
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    }),
               ),
             ],
           ),

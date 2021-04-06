@@ -92,7 +92,15 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     } while (true);
     await ledControl.setLedColor('ON');
     await Future.delayed(const Duration(milliseconds: 500));
-    await ledControl.setLedColor('BLUE');
+    do {
+      await ledControl.setLedColor('BLUE');
+      await Future.delayed(const Duration(seconds: 2));
+      await ledControl.setLedColor('RED');
+      await Future.delayed(const Duration(seconds: 1));
+      if (!alertOrUVC) {
+        break;
+      }
+    } while (true);
   }
 
   void readingCharacteristic() async {
@@ -330,6 +338,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                                   decoration: BoxDecoration(color: Colors.green, shape: BoxShape.circle),
                                                   onDone: () async {
                                                     treatmentIsSuccessful = true;
+                                                    alertOrUVC = false;
                                                     if ((!treatmentIsStopped) && treatmentIsOnProgress) {
                                                       print('finished activation');
                                                       treatmentIsOnProgress = false;
@@ -337,7 +346,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                                       Navigator.pushNamed(context, '/end_uvc', arguments: {
                                                         'myDevice': myDevice,
                                                         'uvclight': myUvcLight,
-                                                        'myactivationtime': (durationOfActivate.inSeconds-durationOfDisinfect.inSeconds),
+                                                        'myactivationtime': (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds),
                                                         'treatmentCompleted': treatmentIsSuccessful,
                                                       });
                                                     }
@@ -398,7 +407,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
             ),
             onPressed: () async {
               //Stop UVC processing
-              alertOrUVC = true;
+              alertOrUVC = !alertOrUVC;
               treatmentIsStopped = true;
               treatmentIsOnProgress = false;
               treatmentIsSuccessful = false;
@@ -408,7 +417,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
               Navigator.pushNamed(context, '/end_uvc', arguments: {
                 'myDevice': myDevice,
                 'uvclight': myUvcLight,
-                'myactivationtime': (durationOfActivate.inSeconds-durationOfDisinfect.inSeconds),
+                'myactivationtime': (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds),
                 'treatmentCompleted': treatmentIsSuccessful,
               });
             },

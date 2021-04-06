@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app_dmx_maestro/services/bleDeviceClass.dart';
 import 'package:flutter_app_dmx_maestro/services/deviceBleWidget.dart';
@@ -16,6 +18,9 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
   ToastyMessage myUvcToast;
 
   Device myDevice;
+
+  final String robotUVCMAC = '70:B3:D5:01:8';
+  final String robotUVCName = 'DMXLIGHT';
 
   ///Initialisation and listening to device state
 
@@ -49,7 +54,12 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
         //Make sure user's device gps is on.
         flutterBlue = FlutterBlue.instance;
         print("Bluetooth is on");
-        scanForDevices();
+        if (Platform.isAndroid) {
+          scanForDevicesAndroid();
+        }
+        if (Platform.isIOS) {
+          scanForDevicesIos();
+        }
       }
     });
     super.initState();
@@ -57,7 +67,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
 
   List<String> scanIdentifiers = [];
 
-  void scanForDevices() {
+  void scanForDevicesAndroid() {
     // Start scanning
     flutterBlue.startScan(timeout: Duration(seconds: 5));
     // Listen to scan results
@@ -65,17 +75,46 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
       // do something with scan results
       for (ScanResult r in results) {
         print('${r.device.name} found! mac: ${r.device.id.toString()}');
-        if (scanIdentifiers.isEmpty) {
-          scanIdentifiers.add(r.device.id.toString());
-          setState(() {
-            devices.add(Device(device: r.device));
-          });
-        } else {
-          if (!scanIdentifiers.contains(r.device.id.toString())) {
+        if (r.device.id.id.contains(robotUVCMAC)) {
+          if (scanIdentifiers.isEmpty) {
             scanIdentifiers.add(r.device.id.toString());
             setState(() {
               devices.add(Device(device: r.device));
             });
+          } else {
+            if (!scanIdentifiers.contains(r.device.id.toString())) {
+              scanIdentifiers.add(r.device.id.toString());
+              setState(() {
+                devices.add(Device(device: r.device));
+              });
+            }
+          }
+        }
+      }
+    });
+  }
+
+  void scanForDevicesIos() {
+    // Start scanning
+    flutterBlue.startScan(timeout: Duration(seconds: 5));
+    // Listen to scan results
+    flutterBlue.scanResults.listen((results) {
+      // do something with scan results
+      for (ScanResult r in results) {
+        print('${r.device.name} found! mac: ${r.device.id.toString()}');
+        if (r.device.name.contains(robotUVCName)) {
+          if (scanIdentifiers.isEmpty) {
+            scanIdentifiers.add(r.device.id.toString());
+            setState(() {
+              devices.add(Device(device: r.device));
+            });
+          } else {
+            if (!scanIdentifiers.contains(r.device.id.toString())) {
+              scanIdentifiers.add(r.device.id.toString());
+              setState(() {
+                devices.add(Device(device: r.device));
+              });
+            }
           }
         }
       }
@@ -91,7 +130,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text('Liste des UVC-LIGHT :'),
+        title: Text('Liste des convertisseurs DMX :', style: TextStyle(fontSize: 18), key: Key('title')),
         centerTitle: true,
         backgroundColor: Colors.indigo[700],
       ),
@@ -145,31 +184,31 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                   while (true) {
                     myDevice.connect(false);
                     await Future.delayed(Duration(seconds: 1));
-                    resultConnection = myDevice.getConnectionState();
-                    connectionReset++;
-                    if (resultConnection) {
-                      break;
-                    }
-                    if (connectionReset == 5) {
-                      Navigator.pop(context, false);
-                      scanIdentifiers.clear();
-                      setState(() {
-                        devices.clear();
-                      });
-                      flutterBlue.startScan(timeout: Duration(seconds: 4));
-                    }
-                    print('result of trying connection is $resultConnection');
-                    myDevice.disconnect();
-                    await Future.delayed(Duration(seconds: 2));
-                  }
+                        resultConnection = myDevice.getConnectionState();
+                        connectionReset++;
+                        if (resultConnection) {
+                          break;
+                        }
+                        if (connectionReset == 5) {
+                          Navigator.pop(context, false);
+                          scanIdentifiers.clear();
+                          setState(() {
+                            devices.clear();
+                          });
+                          flutterBlue.startScan(timeout: Duration(seconds: 4));
+                        }
+                        print('result of trying connection is $resultConnection');
+                        myDevice.disconnect();
+                        await Future.delayed(Duration(seconds: 2));
+                      }
 
-                  myUvcToast.setAnimationIcon(animationRefreshIcon);
-                  myUvcToast.setToastDuration(60);
-                  myUvcToast.setToastMessage('Connecting to $deviceName !');
-                  myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
-                  if (resultConnection) {
-                    //Discover services
-                    List<BluetoothService> services = await myDeviceBluetooth.discoverServices();
+                      myUvcToast.setAnimationIcon(animationRefreshIcon);
+                      myUvcToast.setToastDuration(60);
+                      myUvcToast.setToastMessage('Connexion à $deviceName !');
+                      myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
+                      if (resultConnection) {
+                        //Discover services
+                        List<BluetoothService> services = await myDeviceBluetooth.discoverServices();
                         BluetoothService service;
                         service = services.elementAt(2);
                         // Read the first characteristic
@@ -199,7 +238,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                             'dataMaestro': dataMaestro,
                           });
                         });
-                  }
+                      }
                 }))
                 .toList()),
       ),

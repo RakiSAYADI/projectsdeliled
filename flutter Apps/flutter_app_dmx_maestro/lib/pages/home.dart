@@ -200,13 +200,13 @@ class _HomeState extends State<Home> {
           child: Stack(
             children: [
               AnimatedOpacity(
-                duration: Duration(seconds: 10),
+                duration: Duration(seconds: 3),
                 curve: Curves.linear,
                 opacity: opacityLevelRemoteControl,
                 child: remoteControlWidget(context),
               ),
               AnimatedOpacity(
-                duration: Duration(seconds: 10),
+                duration: Duration(seconds: 3),
                 curve: Curves.linear,
                 opacity: opacityLevelAmbiances,
                 child: ambianceWidget(context),

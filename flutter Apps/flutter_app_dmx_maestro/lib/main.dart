@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_dmx_maestro/pages/alarm_settings.dart';
 import 'package:flutter_app_dmx_maestro/pages/check_permissions.dart';
-import 'package:flutter_app_dmx_maestro/pages/settings.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_app_dmx_maestro/pages/home.dart';
-import 'package:flutter_app_dmx_maestro/pages/scan_qrcode.dart';
 import 'package:flutter_app_dmx_maestro/pages/scan_ble_list.dart';
+import 'package:flutter_app_dmx_maestro/pages/scan_qrcode.dart';
+import 'package:flutter_app_dmx_maestro/pages/settings.dart';
 import 'package:flutter_app_dmx_maestro/pages/welcome.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -67,17 +67,28 @@ void main() async {
     // The following statement disables the wakelock.
     Wakelock.toggle(enable: true);
   }
-  runApp(MaterialApp(
-    title: 'Maestro DmX',
-    initialRoute: '/',
-    routes: {
-      '/': (context) => Welcome(),
-      '/check_permissions': (context) => CheckPermissions(),
-      '/scan_ble_list': (context) => ScanListBle(),
-      '/scan_qrcode': (context) => ScanQrCode(),
-      '/home': (context) => Home(),
-      '/settings': (context) => Settings(),
-      '/alarm_settings': (context) => AlarmClock(),
-    },
-  ));
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Maestro DmX',
+      initialRoute: '/',
+      routes: {
+        '/': (context) => Welcome(),
+        '/check_permissions': (context) => CheckPermissions(),
+        '/scan_ble_list': (context) => ScanListBle(),
+        '/scan_qrcode': (context) => ScanQrCode(),
+        '/home': (context) => Home(),
+        '/settings': (context) => Settings(),
+        '/alarm_settings': (context) => AlarmClock(),
+      },
+      theme: ThemeData(
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+    );
+  }
 }

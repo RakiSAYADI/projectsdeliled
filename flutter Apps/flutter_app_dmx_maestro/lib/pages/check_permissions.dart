@@ -84,7 +84,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
       child: Scaffold(
         backgroundColor: Colors.blue[400],
         appBar: AppBar(
-          title: const Text('Permissions'),
+          title: const Text('Permissions', key: Key('title'), style: TextStyle(fontSize: 18)),
           centerTitle: true,
         ),
         body: Container(
@@ -100,6 +100,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                       child: Text(
                         'Afin de garantir le bon fonctionnement de l\'application merci d\'activer votre Bluetooth ainsi que votre localisation.',
                         textAlign: TextAlign.center,
+                        key: Key('description'),
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: screenWidth * 0.04,
@@ -109,11 +110,13 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                     SizedBox(height: screenHeight * 0.05),
                     Image.asset(
                       'assets/loading_Bluetooth.gif',
+                      key: Key('bluetooth_gif'),
                       height: screenHeight * 0.3,
                       width: screenWidth * 0.8,
                     ),
                     SizedBox(height: screenHeight * 0.04),
                     FlatButton(
+                      key: Key('understood_key'),
                       color: Colors.blue[400],
                       child: Text(
                         'COMPRIS',
@@ -123,6 +126,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                         borderRadius: BorderRadius.circular(18.0),
                       ),
                       onPressed: () {
+                        print('understood_key is pressed');
                         if (Platform.isIOS) {
                           Navigator.pushNamed(context, '/scan_ble_list');
                         }

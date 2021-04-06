@@ -90,7 +90,7 @@ class _SettingsState extends State<Settings> {
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Réglages'),
+        title: Text('Réglages',style: TextStyle(fontSize: 18),),
         centerTitle: true,
       ),
       body: Container(
@@ -107,7 +107,7 @@ class _SettingsState extends State<Settings> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'Nom de HuBBox Maestro :',
+                        'Nom du convertisseur DMX :',
                         style: TextStyle(fontSize: (screenWidth * 0.05)),
                       ),
                     ),
@@ -268,7 +268,7 @@ class _SettingsState extends State<Settings> {
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
-                        'Sélectionner votre modem :',
+                        'Connexion WiFi :',
                         style: TextStyle(fontSize: (screenWidth * 0.05)),
                       ),
                     ),
@@ -363,7 +363,7 @@ class _SettingsState extends State<Settings> {
                           color: Colors.grey[800],
                         ),
                         decoration: InputDecoration(
-                            hintText: 'exp:pass123',
+                            hintText: 'exemple : 123',
                             hintStyle: TextStyle(
                               color: Colors.grey,
                             )),

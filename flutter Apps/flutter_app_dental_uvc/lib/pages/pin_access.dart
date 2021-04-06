@@ -90,11 +90,6 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
 
     checkAutoFileExists();
 
-/*    WidgetsBinding.instance.addObserver(LifecycleEventHandler(
-        resumeCallBack: () async => setState(() {
-              Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
-            })));*/
-
     myUvcToast = ToastyMessage(toastContext: context);
     //checks bluetooth current state
     Future.delayed(const Duration(seconds: 1), () async {

@@ -327,7 +327,7 @@ class _AlarmClockState extends State<AlarmClock> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Alarme Automatique'),
+        title: const Text('Alarme Automatique',style: TextStyle(fontSize: 18),),
         centerTitle: true,
       ),
       bottomNavigationBar: BottomAppBar(
