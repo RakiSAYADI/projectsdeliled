@@ -229,7 +229,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                   });
                 } else {
                   myUvcToast.setToastDuration(5);
-                  myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
+                  myUvcToast.setToastMessage('Le dispositif est trop loin ou éteint, merci de vérifier ce dernier');
                   myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
                   myDevice.disconnect();
                   Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
@@ -397,6 +397,10 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                 await scanQrCodeDATA();
                 break;
               default:
+                Navigator.pushNamed(context, '/profiles', arguments: {
+                  'myDevice': myDevice,
+                  'dataRead': myDevice.getReadCharMessage(),
+                });
                 break;
             }
           } catch (e) {
@@ -463,7 +467,17 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       } else {
         myDevice = Device(device: scanDevices.elementAt(devicesPosition));
         // stop scanning and start connecting
-        connexion = await myDevice.connect(false);
+        while (true) {
+          myDevice.connect(false);
+          await Future.delayed(Duration(seconds: 1));
+          if (myDevice.getConnectionState()) {
+            break;
+          }
+          print('result of trying connection is ${myDevice.getConnectionState()}');
+          myDevice.disconnect();
+          await Future.delayed(Duration(seconds: 2));
+        }
+        connexion = myDevice.getConnectionState();
       }
 
       if (connexion) {
@@ -524,14 +538,14 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
         });
       } else {
         myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
+        myUvcToast.setToastMessage('Le dispositif est trop loin ou éteint, merci de vérifier ce dernier');
         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
         myDevice.disconnect();
         Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
       }
     } catch (e) {
       myUvcToast.setToastDuration(5);
-      myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
+      myUvcToast.setToastMessage('Le dispositif est trop loin ou éteint, merci de vérifier ce dernier');
       myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
       myDevice.disconnect();
       Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
@@ -942,8 +956,17 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                 myUvcToast.setToastMessage('Autorisation de connexion validée !');
                 myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
                 // stop scanning and start connecting
-                bool connexion = await myDevice.connect(false);
-                if (connexion) {
+                while (true) {
+                  myDevice.connect(false);
+                  await Future.delayed(Duration(seconds: 1));
+                  if (myDevice.getConnectionState()) {
+                    break;
+                  }
+                  print('result of trying connection is ${myDevice.getConnectionState()}');
+                  myDevice.disconnect();
+                  await Future.delayed(Duration(seconds: 2));
+                }
+                if (myDevice.getConnectionState()) {
                   Future.delayed(const Duration(seconds: 2), () async {
                     // Stop uvc treatment if it's on
                     String message = 'STOP : ON';
@@ -968,6 +991,10 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                           await scanQrCodeDATA();
                           break;
                         default:
+                          Navigator.pushNamed(context, '/profiles', arguments: {
+                            'myDevice': myDevice,
+                            'dataRead': myDevice.getReadCharMessage(),
+                          });
                           break;
                       }
                     } catch (e) {

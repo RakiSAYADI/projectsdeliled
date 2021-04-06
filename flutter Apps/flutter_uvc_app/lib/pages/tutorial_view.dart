@@ -27,17 +27,24 @@ class _TutorialViewState extends State<TutorialView> {
   void _onIntroEnd(context) {
     // Start scanning
     flutterBlue.startScan(timeout: Duration(seconds: 5));
-    if (Platform.isIOS) {
-      Navigator.pushNamed(context, '/scan_ble_list');
-    }
-    if (Platform.isAndroid) {
-      // Start scanning
-      flutterBlue.startScan(timeout: Duration(seconds: 5));
-      Navigator.pushNamed(context, '/qr_code_scan', arguments: {
-        'scanDevices': scanDevices,
-        'qrCodeConnectionOrSecurity': false,
-      });
-    }
+    flutterBlue.state.listen((state) {
+      if (state == BluetoothState.off) {
+        Navigator.pushNamed(context, '/check_permissions');
+      }
+      if (state == BluetoothState.on) {
+        if (Platform.isIOS) {
+          Navigator.pushNamed(context, '/scan_ble_list');
+        }
+        if (Platform.isAndroid) {
+          // Start scanning
+          flutterBlue.startScan(timeout: Duration(seconds: 5));
+          Navigator.pushNamed(context, '/qr_code_scan', arguments: {
+            'scanDevices': scanDevices,
+            'qrCodeConnectionOrSecurity': false,
+          });
+        }
+      }
+    });
   }
 
   Widget _buildImage(String assetName) {

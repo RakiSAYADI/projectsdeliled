@@ -7,6 +7,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutteruvcapp/services/CSVfileClass.dart';
 import 'package:flutteruvcapp/services/httpRequests.dart';
+import 'package:flutteruvcapp/services/life_cycle_widget.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
 import 'package:location_permissions/location_permissions.dart';
 import 'package:package_info/package_info.dart';
@@ -32,6 +33,8 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   PermissionStatus _permissionStatus = PermissionStatus.unknown;
 
   int loadingSeconds = 3;
+
+  LifecycleEventHandler lifecycleEventHandler;
 
   void wakeLock() async {
     await Wakelock.enable();
@@ -133,7 +136,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       });
     } else {
       Future.delayed(Duration(seconds: loadingSeconds), () async {
-        Navigator.pushReplacementNamed(context, '/tutorial_view');
+        Navigator.pushReplacementNamed(context, '/uvc');//tutorial_view
       });
     }
   }
@@ -146,6 +149,18 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
+    lifecycleEventHandler = LifecycleEventHandler(resumeCallBack: () async {
+      print('resumed');
+    }, inactiveCallBack: () async {
+      print('inactivated');
+    }, pauseCallBack: () async {
+      print('paused');
+    }, suspendingCallBack: () async {
+      print('suspended');
+    });
+
+    WidgetsBinding.instance.addObserver(lifecycleEventHandler);
 
     wakeLock();
 

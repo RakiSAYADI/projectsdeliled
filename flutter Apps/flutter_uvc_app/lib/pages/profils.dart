@@ -227,7 +227,7 @@ class _ProfilesState extends State<Profiles> {
                         }else{
                           myUvcToast = ToastyMessage(toastContext: context);
                           myUvcToast.setToastDuration(5);
-                          myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
+                          myUvcToast.setToastMessage('Le dispositif est trop loin ou éteint, merci de vérifier ce dernier');
                           myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
                           myDevice.disconnect();
                           Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);

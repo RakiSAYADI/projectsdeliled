@@ -174,8 +174,17 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                       myUvcToast.setToastMessage('Connexion en cours');
                       myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
                       // stop scanning and start connecting
-                      bool connexion = await myDevice.connect(false);
-                      if (connexion) {
+                      while (true) {
+                        myDevice.connect(false);
+                        await Future.delayed(Duration(seconds: 1));
+                        if (myDevice.getConnectionState()) {
+                          break;
+                        }
+                        print('result of trying connection is ${myDevice.getConnectionState()}');
+                        myDevice.disconnect();
+                        await Future.delayed(Duration(seconds: 2));
+                      }
+                      if (myDevice.getConnectionState()) {
                         Future.delayed(const Duration(seconds: 2), () async {
                           // Stop uvc treatment if it's on
                           String message = 'STOP : ON';
