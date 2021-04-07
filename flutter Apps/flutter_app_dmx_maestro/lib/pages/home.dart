@@ -60,11 +60,15 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    bleDeviceData = bleDeviceData.isNotEmpty ? bleDeviceData : ModalRoute.of(context).settings.arguments;
-    myDevice = bleDeviceData['bleDevice'];
-    characteristicMaestro = bleDeviceData['characteristicMaestro'];
-    characteristicWifi = bleDeviceData['characteristicWifi'];
-    dataMaestro = bleDeviceData['dataMaestro'];
+    try {
+      bleDeviceData = bleDeviceData.isNotEmpty ? bleDeviceData : ModalRoute.of(context).settings.arguments;
+      myDevice = bleDeviceData['bleDevice'];
+      characteristicMaestro = bleDeviceData['characteristicMaestro'];
+      characteristicWifi = bleDeviceData['characteristicWifi'];
+      dataMaestro = bleDeviceData['dataMaestro'];
+    } catch (e) {
+      print('home : erreur reading DATA !');
+    }
 
     if (firstDisplayMainWidget) {
       try {
@@ -134,6 +138,7 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                     FlatButton(
+                      key: Key('bottom_bar_title'),
                       onPressed: () {
                         setState(() {
                           if (bottomBarTitleState) {
@@ -167,6 +172,7 @@ class _HomeState extends State<Home> {
                           color: Colors.grey[600],
                         ),
                         IconButton(
+                          key: Key('settings_button'),
                           icon: Icon(Icons.settings),
                           onPressed: () {
                             Navigator.pushNamed(context, '/settings', arguments: {
@@ -249,6 +255,7 @@ class _HomeState extends State<Home> {
     //double widthScreen = MediaQuery.of(context).size.width;
     //double heightScreen = MediaQuery.of(context).size.height;
     return Center(
+      key: Key('ambiance_widget'),
       child: IntrinsicHeight(
         child: Column(
           mainAxisSize: MainAxisSize.max,
@@ -331,6 +338,7 @@ class _HomeState extends State<Home> {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
     return Column(
+      key: Key('remote_control_widget'),
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -402,7 +410,7 @@ class _HomeState extends State<Home> {
             centeredOrigin: true,
             disabled: bottomBarTitleState,
             handlerAnimation:
-                FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
+            FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
             onDragging: (handlerIndex, lowerValue, upperValue) {
               _lowerValue = lowerValue;
               if (_lowerValue > 50) {
@@ -419,7 +427,7 @@ class _HomeState extends State<Home> {
             },
             handler: FlutterSliderHandler(child: Icon(Icons.code)),
             trackBar:
-                FlutterSliderTrackBar(activeTrackBar: BoxDecoration(color: trackBarColor), activeTrackBarHeight: 12, inactiveTrackBarHeight: 12),
+            FlutterSliderTrackBar(activeTrackBar: BoxDecoration(color: trackBarColor), activeTrackBarHeight: 12, inactiveTrackBarHeight: 12),
             hatchMark: FlutterSliderHatchMark(
               density: 0.5, // means 50 lines, from 0 to 100 percent
               labels: [

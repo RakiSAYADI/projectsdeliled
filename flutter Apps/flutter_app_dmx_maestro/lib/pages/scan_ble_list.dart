@@ -54,11 +54,15 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
         //Make sure user's device gps is on.
         flutterBlue = FlutterBlue.instance;
         print("Bluetooth is on");
-        if (Platform.isAndroid) {
-          scanForDevicesAndroid();
-        }
-        if (Platform.isIOS) {
-          scanForDevicesIos();
+        try {
+          if (Platform.isAndroid) {
+            scanForDevicesAndroid();
+          }
+          if (Platform.isIOS) {
+            scanForDevicesIos();
+          }
+        } catch (e) {
+          print('scan is already in progress');
         }
       }
     });
@@ -152,7 +156,11 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                     devices.clear();
                   });
                   scanIdentifiers.clear();
-                  flutterBlue.startScan(timeout: Duration(seconds: 4));
+                  try {
+                    flutterBlue.startScan(timeout: Duration(seconds: 4));
+                  } catch (e) {
+                    print('scan is already in progress');
+                  }
                 });
           }
         },

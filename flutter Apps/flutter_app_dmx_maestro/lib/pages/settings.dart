@@ -50,8 +50,8 @@ class _SettingsState extends State<Settings> {
   }
 
   void readDataMaestro() async {
-    myBleDeviceName.text = myDevice.device.name;
     try {
+      myBleDeviceName.text = myDevice.device.name;
       var parsedJson = json.decode(dataMaestro);
       zonesNamesList[0] = parsedJson['zone'][0];
       zonesNamesList[1] = parsedJson['zone'][1];
@@ -75,11 +75,15 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    bleDeviceData = bleDeviceData.isNotEmpty ? bleDeviceData : ModalRoute.of(context).settings.arguments;
-    myDevice = bleDeviceData['bleDevice'];
-    characteristicMaestro = bleDeviceData['characteristicMaestro'];
-    characteristicWifi = bleDeviceData['characteristicWifi'];
-    dataMaestro = bleDeviceData['dataMaestro'];
+    try {
+      bleDeviceData = bleDeviceData.isNotEmpty ? bleDeviceData : ModalRoute.of(context).settings.arguments;
+      myDevice = bleDeviceData['bleDevice'];
+      characteristicMaestro = bleDeviceData['characteristicMaestro'];
+      characteristicWifi = bleDeviceData['characteristicWifi'];
+      dataMaestro = bleDeviceData['dataMaestro'];
+    } catch (e) {
+      print('alarm settings : erreur reading DATA !');
+    }
 
     if (firstDisplayMainWidget) {
       readDataMaestro();
