@@ -191,6 +191,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                     noLongerScan = true;
                     _controller.pause();
                     qrCodeScanAccess = true;
+                    myDevice.disconnect(); // disconnect after checking rapport DATA
                     rapportCSV(data);
                   } else {
                     connectingToRobotIOS(data,noLongerScan);

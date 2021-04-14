@@ -81,6 +81,10 @@ class _DataCSVViewQrCodeState extends State<DataCSVViewQrCode> {
   }
 
   Future<bool> exitApp(BuildContext context) async {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
     return true;
   }

@@ -62,7 +62,8 @@ class _SendEmailQrCodeState extends State<SendEmailQrCode> {
 
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
+    return WillPopScope(
+        child: Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text('Envoi Rapport'),
@@ -125,8 +126,18 @@ class _SendEmailQrCodeState extends State<SendEmailQrCode> {
             ),
           ),
         ),
-      ),
+      ),),
+      onWillPop: () => exitApp(context),
     );
+  }
+
+  Future<bool> exitApp(BuildContext context) async {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+    Navigator.pop(context, true);
+    return true;
   }
 
   Future<void> sendEmail(String destination) async {

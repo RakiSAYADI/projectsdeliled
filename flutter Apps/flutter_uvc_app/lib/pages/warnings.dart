@@ -274,6 +274,7 @@ class _WarningsState extends State<Warnings> {
     double screenHeight = MediaQuery.of(context).size.height;
     return showDialog<bool>(
       context: context,
+      barrierDismissible: false,
       builder: (c) => AlertDialog(
         content: Column(
           mainAxisAlignment: MainAxisAlignment.center,
