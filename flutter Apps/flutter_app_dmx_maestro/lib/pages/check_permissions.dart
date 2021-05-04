@@ -95,47 +95,65 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        'Afin de garantir le bon fonctionnement de l\'application merci d\'activer votre Bluetooth ainsi que votre localisation.',
-                        textAlign: TextAlign.center,
-                        key: Key('description'),
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: screenWidth * 0.04,
+                    Expanded(
+                      flex: 2,
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            'Afin de garantir le bon fonctionnement de l\'application merci d\'activer votre Bluetooth ainsi que votre localisation.',
+                            textAlign: TextAlign.center,
+                            key: Key('description'),
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: screenWidth * 0.04,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                    SizedBox(height: screenHeight * 0.05),
-                    Image.asset(
-                      'assets/loading_Bluetooth.gif',
-                      key: Key('bluetooth_gif'),
-                      height: screenHeight * 0.3,
-                      width: screenWidth * 0.8,
-                    ),
-                    SizedBox(height: screenHeight * 0.04),
-                    FlatButton(
-                      key: Key('understood_key'),
-                      color: Colors.blue[400],
-                      child: Text(
-                        'COMPRIS',
-                        style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                    Expanded(
+                      flex: 4,
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Image.asset(
+                            'assets/loading_Bluetooth.gif',
+                            key: Key('bluetooth_gif'),
+                            height: screenHeight * 0.3,
+                            width: screenWidth * 0.8,
+                          ),
+                        ),
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      onPressed: () {
-                        print('understood_key is pressed');
-                        if (Platform.isIOS) {
-                          Navigator.pushNamed(context, '/scan_ble_list');
-                        }
-                        if (Platform.isAndroid) {
-                          Navigator.pushNamed(context, '/scan_ble_list');
-                        }
-                      },
                     ),
-                    SizedBox(height: screenHeight * 0.05),
+                    Expanded(
+                      flex: 3,
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: FlatButton(
+                            key: Key('understood_key'),
+                            color: Colors.blue[400],
+                            child: Text(
+                              'COMPRIS',
+                              style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            ),
+                            onPressed: () {
+                              print('understood_key is pressed');
+                              if (Platform.isIOS) {
+                                Navigator.pushNamed(context, '/scan_ble_list');
+                              }
+                              if (Platform.isAndroid) {
+                                Navigator.pushNamed(context, '/scan_ble_list');
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               );

@@ -92,6 +92,7 @@ class _SettingsState extends State<Settings> {
 
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    print('width : $screenWidth and height : $screenHeight');
     return Scaffold(
       appBar: AppBar(
         title: Text('Réglages',style: TextStyle(fontSize: 18),),
@@ -133,7 +134,7 @@ class _SettingsState extends State<Settings> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: FlatButton(
                         onPressed: () async {
                           // write the new ble device name
@@ -310,7 +311,7 @@ class _SettingsState extends State<Settings> {
                       child: FlatButton(
                         onPressed: () async {
                           waitingWidget();
-                          // write the dissociate command
+                          // write the scan command
                           if (myDevice.getConnectionState()) {
                             try {
                               await characteristicWifi.write('{\"SCAN\":1}'.codeUnits);
@@ -398,48 +399,7 @@ class _SettingsState extends State<Settings> {
                         color: Colors.grey[600],
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: FlatButton(
-                            onPressed: () async {
-                              // write the restart command
-                              characteristicMaestro.write('{\"system\":1}'.codeUnits);
-                              myDevice.disconnect();
-                              Navigator.pushNamedAndRemoveUntil(context, "/scan_ble_list", (r) => false);
-                            },
-                            child: Text(
-                              'Redémarrage',
-                              style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                            ),
-                            color: Colors.blue[400],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: FlatButton(
-                            onPressed: () async {
-                              // write the reset command
-                              await characteristicMaestro.write('{\"system\":0}'.codeUnits);
-                              restartAlertWidget(context, 'Voulez vous redemarrer la carte pour assurer ces modifications?');
-                            },
-                            child: Text(
-                              'Configuration par défault',
-                              style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                            ),
-                            color: Colors.blue[400],
-                          ),
-                        ),
-                      ],
-                    ),
+                    restartAndResetWidget(context),
                   ],
                 ),
               ],
@@ -448,6 +408,97 @@ class _SettingsState extends State<Settings> {
         ),
       ),
     );
+  }
+
+  Widget restartAndResetWidget(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    if (screenWidth < 480.0) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: FlatButton(
+              onPressed: () async {
+                // write the restart command
+                characteristicMaestro.write('{\"system\":1}'.codeUnits);
+                myDevice.disconnect();
+                Navigator.pushNamedAndRemoveUntil(context, "/scan_ble_list", (r) => false);
+              },
+              child: Text(
+                'Redémarrage',
+                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+              ),
+              color: Colors.blue[400],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: FlatButton(
+              onPressed: () async {
+                // write the reset command
+                await characteristicMaestro.write('{\"system\":0}'.codeUnits);
+                restartAlertWidget(context, 'Voulez vous redemarrer la carte pour assurer ces modifications?');
+              },
+              child: Text(
+                'Configuration par défault',
+                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+              ),
+              color: Colors.blue[400],
+            ),
+          ),
+        ],
+      );
+    } else {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: FlatButton(
+              onPressed: () async {
+                // write the restart command
+                characteristicMaestro.write('{\"system\":1}'.codeUnits);
+                myDevice.disconnect();
+                Navigator.pushNamedAndRemoveUntil(context, "/scan_ble_list", (r) => false);
+              },
+              child: Text(
+                'Redémarrage',
+                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+              ),
+              color: Colors.blue[400],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: FlatButton(
+              onPressed: () async {
+                // write the reset command
+                await characteristicMaestro.write('{\"system\":0}'.codeUnits);
+                restartAlertWidget(context, 'Voulez vous redemarrer la carte pour assurer ces modifications?');
+              },
+              child: Text(
+                'Configuration par défault',
+                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+              ),
+              color: Colors.blue[400],
+            ),
+          ),
+        ],
+      );
+    }
   }
 
 /*  void connectingToAccessPoint() async {

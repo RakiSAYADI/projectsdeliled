@@ -206,13 +206,13 @@ class _HomeState extends State<Home> {
           child: Stack(
             children: [
               AnimatedOpacity(
-                duration: Duration(seconds: 3),
+                duration: Duration(seconds: 1),
                 curve: Curves.linear,
                 opacity: opacityLevelRemoteControl,
                 child: remoteControlWidget(context),
               ),
               AnimatedOpacity(
-                duration: Duration(seconds: 3),
+                duration: Duration(seconds: 1),
                 curve: Curves.linear,
                 opacity: opacityLevelAmbiances,
                 child: ambianceWidget(context),
@@ -261,47 +261,56 @@ class _HomeState extends State<Home> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                  child: ambianceDisplayWidget(context, ambiance1, 1),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-                  child: ambianceDisplayWidget(context, ambiance2, 2),
-                ),
-              ],
+            Expanded(
+              flex: 2,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                    child: ambianceDisplayWidget(context, ambiance1, 1),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                    child: ambianceDisplayWidget(context, ambiance2, 2),
+                  ),
+                ],
+              ),
             ),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                  child: ambianceDisplayWidget(context, ambiance3, 3),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-                  child: ambianceDisplayWidget(context, ambiance4, 4),
-                ),
-              ],
+            Expanded(
+              flex: 2,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                    child: ambianceDisplayWidget(context, ambiance3, 3),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                    child: ambianceDisplayWidget(context, ambiance4, 4),
+                  ),
+                ],
+              ),
             ),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                  child: ambianceDisplayWidget(context, ambiance5, 5),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-                  child: ambianceDisplayWidget(context, ambiance6, 6),
-                ),
-              ],
+            Expanded(
+              flex: 2,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                    child: ambianceDisplayWidget(context, ambiance5, 5),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                    child: ambianceDisplayWidget(context, ambiance6, 6),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -342,170 +351,194 @@ class _HomeState extends State<Home> {
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-              child: IconButton(
-                icon: Icon(Icons.power_settings_new, color: Colors.green, size: widthScreen * 0.03 + heightScreen * 0.02),
-                onPressed: () async {
-                  if (myDevice.getConnectionState()) {
-                    if (!bottomBarTitleState) {
-                      await characteristicMaestro.write('{\"light\": 1,1,\"$zonesInHex\"}'.codeUnits);
-                    }
-                  }
-                },
-              ),
-            ),
-            SizedBox(
-              width: widthScreen * 0.1,
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-              child: IconButton(
-                icon: Icon(Icons.close, color: Colors.red, size: widthScreen * 0.03 + heightScreen * 0.02),
-                onPressed: () async {
-                  if (myDevice.getConnectionState()) {
-                    if (!bottomBarTitleState) {
-                      await characteristicMaestro.write('{\"light\": 1,0,\"$zonesInHex\"}'.codeUnits);
-                    }
-                  }
-                },
-              ),
-            ),
-          ],
-        ),
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            HSLColorPicker(
-              onChanged: (colorSelected) {
-                hslColor = colorSelected;
-                if (myDevice.getConnectionState()) {
-                  if (!bottomBarTitleState) {
-                    characteristicMaestro.write(
-                        '{\"hue\":${colorSelected.toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")},\"zone\":\"$zonesInHex\"}'
-                            .codeUnits);
-                  }
-                }
-              },
-              size: widthScreen * 0.4 + heightScreen * 0.1,
-              strokeWidth: widthScreen * 0.04,
-              thumbSize: 0.00001,
-              thumbStrokeSize: widthScreen * 0.005 + heightScreen * 0.005,
-              showCenterColorIndicator: true,
-              centerColorIndicatorSize: widthScreen * 0.005 + heightScreen * 0.005,
-              initialColor: Colors.blue[900],
-            ),
-            bigCircle(widthScreen * 0.2, heightScreen * 0.1),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-          child: FlutterSlider(
-            values: [_lowerValue],
-            max: 100,
-            min: 0,
-            centeredOrigin: true,
-            disabled: bottomBarTitleState,
-            handlerAnimation:
-            FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
-            onDragging: (handlerIndex, lowerValue, upperValue) {
-              _lowerValue = lowerValue;
-              if (_lowerValue > 50) {
-                trackBarColor = Colors.yellowAccent;
-              } else {
-                trackBarColor = Colors.blueAccent;
-              }
-              setState(() {});
-              if (myDevice.getConnectionState()) {
-                if (!bottomBarTitleState) {
-                  characteristicMaestro.write('{\"light\":[8,${_lowerValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
-                }
-              }
-            },
-            handler: FlutterSliderHandler(child: Icon(Icons.code)),
-            trackBar:
-            FlutterSliderTrackBar(activeTrackBar: BoxDecoration(color: trackBarColor), activeTrackBarHeight: 12, inactiveTrackBarHeight: 12),
-            hatchMark: FlutterSliderHatchMark(
-              density: 0.5, // means 50 lines, from 0 to 100 percent
-              labels: [
-                FlutterSliderHatchMarkLabel(percent: 0, label: Icon(Icons.ac_unit, size: 30)),
-                FlutterSliderHatchMarkLabel(percent: 100, label: Icon(Icons.wb_sunny, size: 30)),
-              ],
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 20.0),
+        Expanded(
+          flex: 2,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 16.0, 0),
-                child: IconButton(
-                  icon: Icon(Icons.more_time, color: Colors.green, size: widthScreen * 0.025 + heightScreen * 0.015),
-                  onPressed: () async {
-                    if (myDevice.getConnectionState()) {
-                      if (!bottomBarTitleState) {
-                        await characteristicMaestro.write('{\"light\": 4,1,\"$zonesInHex\"}'.codeUnits);
-                      }
-                    }
-                  },
-                ),
-              ),
-              FlatButton(
-                onPressed: () async {
-                  if (myDevice.getConnectionState()) {
-                    if (!bottomBarTitleState) {
-                      await characteristicMaestro.write('{\"light\": 4,2,\"$zonesInHex\"}'.codeUnits);
-                    }
-                  }
-                },
+              Expanded(
+                flex: 2,
                 child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                    'Mode',
-                    style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.01 + heightScreen * 0.015),
+                  padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+                  child: IconButton(
+                    icon: Icon(Icons.power_settings_new, color: Colors.green, size: widthScreen * 0.03 + heightScreen * 0.02),
+                    onPressed: () async {
+                      if (myDevice.getConnectionState()) {
+                        if (!bottomBarTitleState) {
+                          await characteristicMaestro.write('{\"light\": 1,1,\"$zonesInHex\"}'.codeUnits);
+                        }
+                      }
+                    },
                   ),
                 ),
-                color: Colors.blue[400],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16.0, 0, 0, 0),
-                child: IconButton(
-                  icon: Icon(Icons.timelapse, color: Colors.red, size: widthScreen * 0.025 + heightScreen * 0.015),
-                  onPressed: () async {
-                    if (myDevice.getConnectionState()) {
-                      if (!bottomBarTitleState) {
-                        await characteristicMaestro.write('{\"light\": 4,0,\"$zonesInHex\"}'.codeUnits);
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+                  child: IconButton(
+                    icon: Icon(Icons.close, color: Colors.red, size: widthScreen * 0.03 + heightScreen * 0.02),
+                    onPressed: () async {
+                      if (myDevice.getConnectionState()) {
+                        if (!bottomBarTitleState) {
+                          await characteristicMaestro.write('{\"light\": 1,0,\"$zonesInHex\"}'.codeUnits);
+                        }
                       }
-                    }
-                  },
+                    },
+                  ),
                 ),
               ),
             ],
           ),
         ),
-        IntrinsicHeight(
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              verticalDivider(),
-              zoneOnOff(context, 'Zone 1', '1'),
-              verticalDivider(),
-              zoneOnOff(context, 'Zone 2', '2'),
-              verticalDivider(),
-              zoneOnOff(context, 'Zone 3', '4'),
-              verticalDivider(),
-              zoneOnOff(context, 'Zone 4', '8'),
-              verticalDivider(),
+        Expanded(
+          flex: 5,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              HSLColorPicker(
+                onChanged: (colorSelected) {
+                  hslColor = colorSelected;
+                  if (myDevice.getConnectionState()) {
+                    if (!bottomBarTitleState) {
+                      characteristicMaestro.write(
+                          '{\"hue\":${colorSelected.toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")},\"zone\":\"$zonesInHex\"}'
+                              .codeUnits);
+                    }
+                  }
+                },
+                size: widthScreen * 0.4 + heightScreen * 0.1,
+                strokeWidth: widthScreen * 0.04,
+                thumbSize: 0.00001,
+                thumbStrokeSize: widthScreen * 0.005 + heightScreen * 0.005,
+                showCenterColorIndicator: true,
+                centerColorIndicatorSize: widthScreen * 0.005 + heightScreen * 0.005,
+                initialColor: Colors.blue[900],
+              ),
+              bigCircle(widthScreen * 0.14, heightScreen * 0.1),
             ],
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+              child: FlutterSlider(
+                values: [_lowerValue],
+                max: 100,
+                min: 0,
+                centeredOrigin: true,
+                disabled: bottomBarTitleState,
+                handlerAnimation:
+                    FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
+                onDragging: (handlerIndex, lowerValue, upperValue) {
+                  _lowerValue = lowerValue;
+                  if (_lowerValue > 50) {
+                    trackBarColor = Colors.yellowAccent;
+                  } else {
+                    trackBarColor = Colors.blueAccent;
+                  }
+                  setState(() {});
+                  if (myDevice.getConnectionState()) {
+                    if (!bottomBarTitleState) {
+                      characteristicMaestro.write('{\"light\":[8,${_lowerValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                    }
+                  }
+                },
+                handler: FlutterSliderHandler(child: Icon(Icons.code)),
+                trackBar:
+                    FlutterSliderTrackBar(activeTrackBar: BoxDecoration(color: trackBarColor), activeTrackBarHeight: 12, inactiveTrackBarHeight: 12),
+                hatchMark: FlutterSliderHatchMark(
+                  density: 0.5, // means 50 lines, from 0 to 100 percent
+                  labels: [
+                    FlutterSliderHatchMarkLabel(percent: 0, label: Icon(Icons.ac_unit, size: 30)),
+                    FlutterSliderHatchMarkLabel(percent: 100, label: Icon(Icons.wb_sunny, size: 30)),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 16.0, 0),
+                    child: IconButton(
+                      icon: Icon(Icons.more_time, color: Colors.green, size: widthScreen * 0.025 + heightScreen * 0.015),
+                      onPressed: () async {
+                        if (myDevice.getConnectionState()) {
+                          if (!bottomBarTitleState) {
+                            await characteristicMaestro.write('{\"light\": 4,1,\"$zonesInHex\"}'.codeUnits);
+                          }
+                        }
+                      },
+                    ),
+                  ),
+                  FlatButton(
+                    onPressed: () async {
+                      if (myDevice.getConnectionState()) {
+                        if (!bottomBarTitleState) {
+                          await characteristicMaestro.write('{\"light\": 4,2,\"$zonesInHex\"}'.codeUnits);
+                        }
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(
+                        'Mode',
+                        style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.01 + heightScreen * 0.015),
+                      ),
+                    ),
+                    color: Colors.blue[400],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 0, 0, 0),
+                    child: IconButton(
+                      icon: Icon(Icons.timelapse, color: Colors.red, size: widthScreen * 0.025 + heightScreen * 0.015),
+                      onPressed: () async {
+                        if (myDevice.getConnectionState()) {
+                          if (!bottomBarTitleState) {
+                            await characteristicMaestro.write('{\"light\": 4,0,\"$zonesInHex\"}'.codeUnits);
+                          }
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 5,
+          child: Center(
+            child: IntrinsicHeight(
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(flex: 1, child: verticalDivider()),
+                  Expanded(flex: 3, child: zoneOnOff(context, 'Zone 1', '1')),
+                  Expanded(flex: 1, child: verticalDivider()),
+                  Expanded(flex: 3, child: zoneOnOff(context, 'Zone 2', '2')),
+                  Expanded(flex: 1, child: verticalDivider()),
+                  Expanded(flex: 3, child: zoneOnOff(context, 'Zone 3', '4')),
+                  Expanded(flex: 1, child: verticalDivider()),
+                  Expanded(flex: 3, child: zoneOnOff(context, 'Zone 4', '8')),
+                  Expanded(flex: 1, child: verticalDivider()),
+                ],
+              ),
+            ),
           ),
         ),
 /*              IntrinsicHeight(
@@ -628,26 +661,36 @@ class _HomeState extends State<Home> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        IconButton(
-          icon: Icon(Icons.power_settings_new, color: Colors.green, size: widthScreen * 0.025 + heightScreen * 0.015),
-          onPressed: () async {
-            if (myDevice.getConnectionState()) {
-              if (!bottomBarTitleState) {
-                await characteristicMaestro.write('{\"light\": 1,1,\"$zoneNumber\"}'.codeUnits);
-              }
-            }
-          },
+        Expanded(
+          flex: 2,
+          child: Center(
+            child: IconButton(
+              icon: Icon(Icons.power_settings_new, color: Colors.green, size: widthScreen * 0.025 + heightScreen * 0.015),
+              onPressed: () async {
+                if (myDevice.getConnectionState()) {
+                  if (!bottomBarTitleState) {
+                    await characteristicMaestro.write('{\"light\": 1,1,\"$zoneNumber\"}'.codeUnits);
+                  }
+                }
+              },
+            ),
+          ),
         ),
-        Text(zoneName, style: TextStyle(fontSize: widthScreen * 0.012 + heightScreen * 0.009)),
-        IconButton(
-          icon: Icon(Icons.close, color: Colors.red, size: widthScreen * 0.025 + heightScreen * 0.015),
-          onPressed: () async {
-            if (myDevice.getConnectionState()) {
-              if (!bottomBarTitleState) {
-                await characteristicMaestro.write('{\"light\": 1,0,\"$zoneNumber\"}'.codeUnits);
-              }
-            }
-          },
+        Expanded(flex: 2, child: Center(child: Text(zoneName, style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.009)))),
+        Expanded(
+          flex: 2,
+          child: Center(
+            child: IconButton(
+              icon: Icon(Icons.close, color: Colors.red, size: widthScreen * 0.025 + heightScreen * 0.015),
+              onPressed: () async {
+                if (myDevice.getConnectionState()) {
+                  if (!bottomBarTitleState) {
+                    await characteristicMaestro.write('{\"light\": 1,0,\"$zoneNumber\"}'.codeUnits);
+                  }
+                }
+              },
+            ),
+          ),
         ),
       ],
     );
@@ -668,8 +711,8 @@ class _HomeState extends State<Home> {
         }
       },
       child: Container(
-        width: widthScreen * 0.15,
-        height: heightScreen * 0.15,
+        width: widthScreen * 0.13,
+        height: heightScreen * 0.1,
         decoration: new BoxDecoration(
           color: Color(int.parse(color.toString(), radix: 16)),
           borderRadius: BorderRadius.circular(10),
