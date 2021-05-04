@@ -136,7 +136,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       });
     } else {
       Future.delayed(Duration(seconds: loadingSeconds), () async {
-        Navigator.pushReplacementNamed(context, '/uvc');//tutorial_view
+        Navigator.pushReplacementNamed(context, '/tutorial_view');//tutorial_view
       });
     }
   }
