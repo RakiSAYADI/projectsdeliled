@@ -48,6 +48,10 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
       onWillPop: () => stopActivity(context),
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => stopGenerating(context),
+          ),
           backgroundColor: Colors.blue[400],
           centerTitle: true,
           title: Text('Votre QR code'),
@@ -274,6 +278,28 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
       myUvcToast.setToastMessage('Email n\'est pas envoyé , Verifier votre addresse email !');
       myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
     }
+  }
+
+  Future<void> stopGenerating(BuildContext context) {
+    return showDialog<bool>(
+      context: context,
+      builder: (c) => AlertDialog(
+        title: Text('Attention'),
+        content: Text('Souhaitez-vous de retourner à la page de Qr Code List ? (vous perderez tous vos qrcodes générés)'),
+        actions: [
+          FlatButton(
+            child: Text('Oui'),
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/choose_qr_code');
+            },
+          ),
+          FlatButton(
+            child: Text('Non'),
+            onPressed: () => Navigator.pop(c, false),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> stopActivity(BuildContext context) {

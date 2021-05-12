@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:encrypt/encrypt.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart' hide Key;
+import 'package:flutter/services.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
 import 'package:mailer/mailer.dart';
 import 'package:pinput/pin_put/pin_put.dart';
@@ -106,6 +106,10 @@ class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with 
       child: Scaffold(
         backgroundColor: Colors.blue[400],
         appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => stopGenerating(context),
+          ),
           backgroundColor: Colors.blue[400],
           centerTitle: true,
           title: Text('Informations'),
@@ -383,6 +387,28 @@ class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with 
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Future<void> stopGenerating(BuildContext context) {
+    return showDialog<bool>(
+      context: context,
+      builder: (c) => AlertDialog(
+        title: Text('Attention'),
+        content: Text('Souhaitez-vous de retourner à la page de Qr Code List ? (vous perderez tous vos qrcodes générés)'),
+        actions: [
+          FlatButton(
+            child: Text('Oui'),
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/choose_qr_code');
+            },
+          ),
+          FlatButton(
+            child: Text('Non'),
+            onPressed: () => Navigator.pop(c, false),
+          ),
+        ],
       ),
     );
   }

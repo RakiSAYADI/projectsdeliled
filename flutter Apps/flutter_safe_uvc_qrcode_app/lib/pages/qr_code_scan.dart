@@ -115,6 +115,10 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => stopGenerating(context),
+          ),
           backgroundColor: Colors.blue[400],
           title: const Text('Scanner le QR code'),
           centerTitle: true,
@@ -214,6 +218,28 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           ),
         ),
       ],
+    );
+  }
+
+  Future<void> stopGenerating(BuildContext context) {
+    return showDialog<bool>(
+      context: context,
+      builder: (c) => AlertDialog(
+        title: Text('Attention'),
+        content: Text('Souhaitez-vous de retourner à la page de Qr Code List ?'),
+        actions: [
+          FlatButton(
+            child: Text('Oui'),
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/choose_qr_code');
+            },
+          ),
+          FlatButton(
+            child: Text('Non'),
+            onPressed: () => Navigator.pop(c, false),
+          ),
+        ],
+      ),
     );
   }
 

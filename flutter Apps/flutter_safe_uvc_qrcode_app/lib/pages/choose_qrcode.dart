@@ -42,7 +42,6 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
                           buttonText: 'Ce QR code permet de lancer la désinfection plus rapidement dans SAFE UVC (moins d\'étapes).',
                           buttonDescription1: 'Créer un QR code contenant :',
                           buttonDescription2: '- les informations du QR code Data\n'
-                              '+\n'
                               '- Un code PIN (optionnel)\n'),
                       qrCodeGeneratorSecond(
                           context: context,
