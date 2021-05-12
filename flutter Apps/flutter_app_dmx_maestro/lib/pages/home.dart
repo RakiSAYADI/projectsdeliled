@@ -365,7 +365,7 @@ class _HomeState extends State<Home> {
                     onPressed: () async {
                       if (myDevice.getConnectionState()) {
                         if (!bottomBarTitleState) {
-                          await characteristicMaestro.write('{\"light\": 1,1,\"$zonesInHex\"}'.codeUnits);
+                          await characteristicMaestro.write('{\"light\":[1,0,\"$zonesInHex\"]}'.codeUnits);
                         }
                       }
                     },
@@ -381,7 +381,7 @@ class _HomeState extends State<Home> {
                     onPressed: () async {
                       if (myDevice.getConnectionState()) {
                         if (!bottomBarTitleState) {
-                          await characteristicMaestro.write('{\"light\": 1,0,\"$zonesInHex\"}'.codeUnits);
+                          await characteristicMaestro.write('{\"light\":[1,1,\"$zonesInHex\"]}'.codeUnits);
                         }
                       }
                     },
@@ -475,7 +475,7 @@ class _HomeState extends State<Home> {
                       onPressed: () async {
                         if (myDevice.getConnectionState()) {
                           if (!bottomBarTitleState) {
-                            await characteristicMaestro.write('{\"light\": 4,1,\"$zonesInHex\"}'.codeUnits);
+                            await characteristicMaestro.write('{\"light\":[4,1,\"$zonesInHex\"]}'.codeUnits);
                           }
                         }
                       },
@@ -485,7 +485,7 @@ class _HomeState extends State<Home> {
                     onPressed: () async {
                       if (myDevice.getConnectionState()) {
                         if (!bottomBarTitleState) {
-                          await characteristicMaestro.write('{\"light\": 4,2,\"$zonesInHex\"}'.codeUnits);
+                          await characteristicMaestro.write('{\"light\":[4,2,\"$zonesInHex\"]}'.codeUnits);
                         }
                       }
                     },
@@ -508,7 +508,7 @@ class _HomeState extends State<Home> {
                       onPressed: () async {
                         if (myDevice.getConnectionState()) {
                           if (!bottomBarTitleState) {
-                            await characteristicMaestro.write('{\"light\": 4,0,\"$zonesInHex\"}'.codeUnits);
+                            await characteristicMaestro.write('{\"light\":[4,0,\"$zonesInHex\"]}'.codeUnits);
                           }
                         }
                       },
@@ -669,7 +669,7 @@ class _HomeState extends State<Home> {
               onPressed: () async {
                 if (myDevice.getConnectionState()) {
                   if (!bottomBarTitleState) {
-                    await characteristicMaestro.write('{\"light\": 1,1,\"$zoneNumber\"}'.codeUnits);
+                    await characteristicMaestro.write('{\"light\":[1,0,\"$zoneNumber\"]}'.codeUnits);
                   }
                 }
               },
@@ -685,7 +685,7 @@ class _HomeState extends State<Home> {
               onPressed: () async {
                 if (myDevice.getConnectionState()) {
                   if (!bottomBarTitleState) {
-                    await characteristicMaestro.write('{\"light\": 1,0,\"$zoneNumber\"}'.codeUnits);
+                    await characteristicMaestro.write('{\"light\":[1,1,\"$zoneNumber\"]}'.codeUnits);
                   }
                 }
               },
