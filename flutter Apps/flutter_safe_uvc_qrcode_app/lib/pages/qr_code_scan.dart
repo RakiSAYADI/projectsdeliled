@@ -226,7 +226,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       context: context,
       builder: (c) => AlertDialog(
         title: Text('Attention'),
-        content: Text('Souhaitez-vous de retourner à la page de Qr Code List ?'),
+        content: Text('Souhaitez-vous retourner à la liste des QR codes ? Vous perdrez tous vos QR codes non enregistrés.'),
         actions: [
           FlatButton(
             child: Text('Oui'),

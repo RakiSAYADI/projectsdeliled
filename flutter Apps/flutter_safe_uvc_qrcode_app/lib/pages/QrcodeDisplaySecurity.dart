@@ -158,7 +158,7 @@ class _QrCodeDisplaySecurityState extends State<QrCodeDisplaySecurity> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Entrer votre Adresse Email :',
+                    'Entrez votre adresse e-mail :',
                     style: TextStyle(fontSize: (widthScreen * 0.05)),
                   ),
                   SizedBox(height: heightScreen * 0.05),
@@ -234,22 +234,22 @@ class _QrCodeDisplaySecurityState extends State<QrCodeDisplaySecurity> {
       ..subject = 'Votre QR code'
       ..attachments = qrCodeList
       ..text = 'Bonjour,\n\n'
-          'Veuillez trouver ci-joint le QRcode généré grâce à l\'application QRCODE UVC de DeliTech Medical®.\n'
+          'Veuillez trouver ci-joint le QRcode généré grâce à l\'application QRCODE UVC de DEEPLIGHT®.\n'
           'Cet email est envoyé automatiquement, merci de ne pas y répondre.\n\n'
           'Merci de votre confiance,\n'
-          'L\'équipe DeliTech Medical.';
+          'L\'équipe DEEPLIGHT®.';
 
     try {
       await send(message, serverSMTPDeepLight);
       myUvcToast.clearAllToast();
       myUvcToast.setToastDuration(3);
-      myUvcToast.setToastMessage('Email bien envoyé , Verifier votre boite de reception !');
+      myUvcToast.setToastMessage('E-mail envoyé, vérifiez votre boîte de réception');
       myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
     } on MailerException catch (e) {
       print(e.message);
       myUvcToast.clearAllToast();
       myUvcToast.setToastDuration(3);
-      myUvcToast.setToastMessage('Email n\'est pas envoyé , Verifier votre addresse email !');
+      myUvcToast.setToastMessage('E-mail non envoyé, vérifiez votre adresse e-mail');
       myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
     }
   }
@@ -259,7 +259,7 @@ class _QrCodeDisplaySecurityState extends State<QrCodeDisplaySecurity> {
       context: context,
       builder: (c) => AlertDialog(
         title: Text('Attention'),
-        content: Text('Souhaitez-vous de retourner à la page de Qr Code List ? (vous perderez tous vos qrcodes générés)'),
+        content: Text('Souhaitez-vous retourner à la liste des QR codes ? Vous perdrez tous vos QR codes non enregistrés.'),
         actions: [
           FlatButton(
             child: Text('Oui'),

@@ -28,7 +28,7 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
                           context: context,
                           destination: "/Qr_code_Generate",
                           buttonTitle: 'QR code Data',
-                          buttonText: 'Ce QR code de sécurité pour les robots UV-C',
+                          buttonText: 'Ce QR code permet de préenregistrer les informations de désinfection.',
                           buttonDescription1: 'Créer un QR code contenant :',
                           buttonDescription2: '- l\'établissement\n'
                               '- l\'opérateur\n'

@@ -396,7 +396,7 @@ class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with 
       context: context,
       builder: (c) => AlertDialog(
         title: Text('Attention'),
-        content: Text('Souhaitez-vous de retourner à la page de Qr Code List ? (vous perderez tous vos qrcodes générés)'),
+        content: Text('Souhaitez-vous retourner à la liste des QR codes ? Vous perdrez tous vos QR codes non enregistrés.'),
         actions: [
           FlatButton(
             child: Text('Oui'),
