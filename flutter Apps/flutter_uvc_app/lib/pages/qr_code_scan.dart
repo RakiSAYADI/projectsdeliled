@@ -846,6 +846,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
               ),
               onPressed: () async {
                 Navigator.of(context).pop();
+                _controller.pause();
                 Navigator.pushNamed(context, '/warnings', arguments: {
                   'myDevice': myDevice,
                   'myUvcLight': myUvcLight,

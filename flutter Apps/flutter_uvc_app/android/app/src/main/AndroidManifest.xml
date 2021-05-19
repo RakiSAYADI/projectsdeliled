@@ -13,7 +13,7 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="SAFE UVC"
+        android:label="Safe UVC"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

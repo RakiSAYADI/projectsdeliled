@@ -212,56 +212,94 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image.asset(
-                'assets/logo_uv_c.png',
-                height: screenHeight * 0.15,
-                width: screenWidth * 0.7,
-              ),
-              SizedBox(height: screenHeight * 0.02),
-              Image.asset(
-                'assets/logo_deeplight.png',
-                height: screenHeight * 0.15,
-                width: screenWidth * 0.7,
-              ),
-              SizedBox(height: screenHeight * 0.1),
-              SpinKitCircle(
-                color: Colors.white,
-                size: screenHeight * 0.1,
-              ),
-              SizedBox(height: screenHeight * 0.1),
-              Image.asset(
-                'assets/logodelitechblanc.png',
-                height: screenHeight * 0.15,
-                width: screenWidth * 0.7,
-              ),
-              SizedBox(height: screenHeight * 0.05),
-              Text(
-                'Powered by DELITECH Group',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.grey[300],
-                  fontSize: screenWidth * 0.04,
+              Expanded(
+                flex: 4,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/ic_launcher_UVC.png',
+                      height: screenHeight * 0.15,
+                      width: screenWidth * 0.7,
+                    ),
+                    SizedBox(height: screenHeight * 0.015),
+                    Text(
+                      'SAFE UVC',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[300],
+                        fontSize: screenWidth * 0.07,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              FutureBuilder(
-                  future: PackageInfo.fromPlatform(),
-                  builder: (BuildContext context, snapshot) {
-                    if (snapshot.hasData) {
-                      String version = snapshot.data.version;
-                      return Center(
-                          child: Text(
-                        '$version',
-                        style: TextStyle(
-                          color: Colors.grey[300],
-                          fontSize: screenWidth * 0.04,
-                        ),
-                      ));
-                    } else {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  }),
+              Expanded(
+                flex: 3,
+                child: SpinKitCircle(
+                  color: Colors.white,
+                  size: screenHeight * 0.2,
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/logo_deeplight.png',
+                      height: screenHeight * 0.1,
+                      width: screenWidth * 0.7,
+                    ),
+                    Text(
+                      'Solutions de désinfection par UV-C',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[300],
+                        fontSize: screenWidth * 0.05,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'Powered by DELITECH Group',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.grey[300],
+                        fontSize: screenWidth * 0.04,
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.01),
+                    FutureBuilder(
+                        future: PackageInfo.fromPlatform(),
+                        builder: (BuildContext context, snapshot) {
+                          if (snapshot.hasData) {
+                            String version = snapshot.data.version;
+                            return Center(
+                                child: Text(
+                              '$version',
+                              style: TextStyle(
+                                color: Colors.grey[300],
+                                fontSize: screenWidth * 0.04,
+                              ),
+                            ));
+                          } else {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                        }),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

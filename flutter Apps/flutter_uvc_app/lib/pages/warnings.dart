@@ -305,7 +305,10 @@ class _WarningsState extends State<Warnings> {
           ),
           FlatButton(
             child: Text('Annuler'),
-            onPressed: () => Navigator.pop(c, false),
+            onPressed: () {
+              Navigator.pop(c, false);
+              nextButtonPressedOnce = true;
+            },
           ),
         ],
       ),

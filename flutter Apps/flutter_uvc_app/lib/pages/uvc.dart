@@ -62,7 +62,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     var iOSPlatformChannelSpecifics = IOSNotificationDetails(presentAlert: true, presentBadge: true, presentSound: true, badgeNumber: 1);
     var platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin
-        .show(0, 'Félicitation', 'La désinfection de la pièce a été réalisée avec succés !', platformChannelSpecifics, payload: 'item x');
+        .show(0, 'Félicitations', 'Désinfection réalisée avec succès !', platformChannelSpecifics, payload: 'item x');
   }
 
   @override
@@ -117,12 +117,15 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
       } else {
         myDevice.connect(false);
         myUvcToast = ToastyMessage(toastContext: context);
-        myUvcToast.setToastDuration(5);
+        myUvcToast.setToastDuration(3);
         myUvcToast.setToastMessage('Le dispositif est trop loin ou éteint, merci de vérifier ce dernier');
         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-        myDevice.disconnect();
-        Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
-        break;
+        await Future.delayed(const Duration(seconds: 4));
+        if (!myDevice.getConnectionState()) {
+          myDevice.disconnect();
+        }
+        //Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
+        //break;
       }
       await Future.delayed(const Duration(seconds: 1));
     } while (true);
@@ -137,7 +140,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     if (firstDisplayMainWidget) {
       durationOfDisinfect = Duration(seconds: myUvcLight.getActivationTime());
       if (myUvcLight.infectionTime.contains('sec')) {
-      durationOfActivate = Duration(minutes:myUvcLight.getActivationTime() + myUvcLight.getInfectionTime());
+        durationOfActivate = Duration(seconds: myUvcLight.getActivationTime() + myUvcLight.getInfectionTime());
       } else {
         durationOfActivate = Duration(minutes: myUvcLight.getInfectionTime(), seconds: myUvcLight.getActivationTime());
       }
@@ -175,8 +178,8 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
               SizedBox(height: screenHeight * 0.05),
               Image.asset(
                 'assets/logo_deeplight.png',
-                height: screenHeight * 0.05,
-                width: screenWidth * 0.5,
+                height: screenHeight * 0.1,
+                width: screenWidth * 0.8,
               ),
               AnimatedBuilder(
                 animation: controllerAnimationTimeBackground,
@@ -347,12 +350,6 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                   );
                 },
               ),
-              Image.asset(
-                'assets/logodelitechblanc.png',
-                height: screenHeight * 0.05,
-                width: screenWidth * 0.7,
-              ),
-              SizedBox(height: screenHeight * 0.05),
             ],
           ),
         ),
@@ -372,6 +369,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
             child: Text('Oui'),
             onPressed: () async {
               //Stop UVC processing
+              stopReading = true;
               treatmentIsStopped = true;
               treatmentIsOnProgress = false;
               treatmentIsSuccessful = false;
