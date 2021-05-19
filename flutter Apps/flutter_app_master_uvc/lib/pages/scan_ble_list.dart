@@ -174,15 +174,27 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                   myUvcToast.setToastMessage('Connexion en cours');
                   myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
                   // stop scanning and start connecting
-                  await myDevice.connect(false);
-                  Future.delayed(const Duration(seconds: 2), () async {
-                    // Read data from robot
-                    await myDevice.readCharacteristic(0, 0);
-                    // clear the remaining toast message
-                    myUvcToast.clearAllToast();
-                    flutterBlue.stopScan();
-                    startScan(context);
-                  });
+                  while (true) {
+                    myDevice.connect(false);
+                    await Future.delayed(Duration(milliseconds: 2200));
+                    print('result of trying connection is ${myDevice.getConnectionState()}');
+                    if (myDevice.getConnectionState()) {
+                      break;
+                    } else {
+                      myDevice.disconnect();
+                      await Future.delayed(Duration(milliseconds: 2200));
+                    }
+                  }
+                  if (myDevice.getConnectionState()) {
+                    Future.delayed(const Duration(seconds: 2), () async {
+                      // Read data from robot
+                      await myDevice.readCharacteristic(0, 0);
+                      // clear the remaining toast message
+                      myUvcToast.clearAllToast();
+                      flutterBlue.stopScan();
+                      startScan(context);
+                    });
+                  }
                 }))
                 .toList()),
       ),

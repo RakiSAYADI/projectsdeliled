@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_app_master_uvc/services/bleDeviceClass.dart';
 import 'package:flutter_app_master_uvc/services/uvcClass.dart';
 import 'package:flutter_app_master_uvc/services/uvcToast.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:qrcode_flutter/qrcode_flutter.dart';
 
@@ -324,17 +324,29 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                 myUvcToast.setToastMessage('Autorisation de connexion validée !');
                 myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
                 // stop scanning and start connecting
-                await myDevice.connect(false);
-                Future.delayed(const Duration(seconds: 2), () async {
-                  // Read data from robot
-                  await myDevice.readCharacteristic(2, 0);
-                  Navigator.of(context).pop();
-                  myUvcToast.clearAllToast();
-                  Navigator.pushNamed(context, '/home', arguments: {
-                    'myDevice': myDevice,
-                    'dataRead': myDevice.getReadCharMessage(),
+                while (true) {
+                  myDevice.connect(false);
+                  await Future.delayed(Duration(milliseconds: 2200));
+                  print('result of trying connection is ${myDevice.getConnectionState()}');
+                  if (myDevice.getConnectionState()) {
+                    break;
+                  } else {
+                    myDevice.disconnect();
+                    await Future.delayed(Duration(milliseconds: 2200));
+                  }
+                }
+                if (myDevice.getConnectionState()) {
+                  Future.delayed(const Duration(seconds: 2), () async {
+                    // Read data from robot
+                    await myDevice.readCharacteristic(2, 0);
+                    Navigator.of(context).pop();
+                    myUvcToast.clearAllToast();
+                    Navigator.pushNamed(context, '/home', arguments: {
+                      'myDevice': myDevice,
+                      'dataRead': myDevice.getReadCharMessage(),
+                    });
                   });
-                });
+                }
               },
             ),
             FlatButton(

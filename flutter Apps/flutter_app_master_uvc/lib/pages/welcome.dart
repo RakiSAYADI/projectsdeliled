@@ -192,13 +192,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
                 color: Color(0xFF554c9a),
                 size: screenHeight * 0.1,
               ),
-              SizedBox(height: screenHeight * 0.1),
-              Image.asset(
-                'assets/logodelitechblanc.png',
-                height: screenHeight * 0.15,
-                width: screenWidth * 0.7,
-              ),
-              SizedBox(height: screenHeight * 0.05),
+              SizedBox(height: screenHeight * 0.2),
               Text(
                 'Powered by DELITECH Group',
                 textAlign: TextAlign.center,
