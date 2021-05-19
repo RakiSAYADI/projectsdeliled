@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/LEDControl.dart';
-import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
-import 'package:flutterappdentaluvc/services/uvcClass.dart';
+import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -18,37 +17,25 @@ class EndUVC extends StatefulWidget {
 }
 
 class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
-  Device myDevice;
-  bool isTreatmentCompleted;
 
   final TextEditingController _pinPutController = TextEditingController();
 
   String pinCodeAccess = '';
-
   String pinCode;
   String myPinCode = '';
 
-  Map endUVCClassData = {};
-
   UVCDataFile uvcDataFile;
 
-  UvcLight myUvcLight;
-
-  List<List<String>> uvcData;
-
-  bool firstDisplayMainWidget = true;
   LedControl ledControl;
-
-  int activationTime;
 
   GifController gifController;
 
   Widget mainWidgetScreen;
 
-  final int timeSleep = 30000;
-
+  bool firstDisplayMainWidget = true;
   bool widgetIsInactive = false;
 
+  final int timeSleep = 30000;
   int timeToSleep;
 
   ToastyMessage myUvcToast;
@@ -205,8 +192,8 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
                   SizedBox(height: heightScreen * 0.05),
                   FlatButton(
                     onPressed: () {
-                      myDevice.disconnect();
-                      Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+                      //myDevice.disconnect();
+                      Navigator.pushNamedAndRemoveUntil(context, "/pin_access", (r) => false);
                     },
                     child: Text(
                       'Nouvelle désinfection',
@@ -228,11 +215,7 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
             widgetIsInactive = false;
-            Navigator.pushNamed(context, '/DataCSVView', arguments: {
-              'isTreatmentCompleted': isTreatmentCompleted,
-              'uvclight': myUvcLight,
-              'uvcData': uvcData,
-            });
+            Navigator.pushNamed(context, '/DataCSVView');
           },
           label: Text('Rapport'),
           icon: Icon(
@@ -250,11 +233,6 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    endUVCClassData = endUVCClassData.isNotEmpty ? endUVCClassData : ModalRoute.of(context).settings.arguments;
-    isTreatmentCompleted = endUVCClassData['treatmentCompleted'];
-    activationTime = endUVCClassData['myactivationtime'];
-    myDevice = endUVCClassData['myDevice'];
-    myUvcLight = endUVCClassData['uvclight'];
 
     if (firstDisplayMainWidget) {
       firstDisplayMainWidget = false;
@@ -433,8 +411,8 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
 
   Future<bool> exitApp(BuildContext context) async {
     widgetIsInactive = false;
-    myDevice.disconnect();
-    Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+    //myDevice.disconnect();
+    Navigator.pushNamedAndRemoveUntil(context, "/pin_access", (r) => false);
     return true;
   }
 }

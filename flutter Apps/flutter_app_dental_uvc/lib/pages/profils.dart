@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcClass.dart';
+import 'package:flutterappdentaluvc/services/DataVariables.dart';
 
 class Profiles extends StatefulWidget {
   @override
@@ -10,26 +10,20 @@ class Profiles extends StatefulWidget {
 }
 
 class _ProfilesState extends State<Profiles> {
-  UvcLight myUvcLight;
 
   final myCompany = TextEditingController();
   final myName = TextEditingController();
   final myRoomName = TextEditingController();
 
-  Map profilesClassData = {};
-
-  Device myDevice;
-
   String dataRobotUVC = '';
 
   bool firstDisplayMainWidget = true;
 
-  int myExtinctionTimeMinutePosition = 0;
-  int myActivationTimeMinutePosition = 0;
-
   @override
   void initState() {
     // TODO: implement initState
+    myExtinctionTimeMinutePosition = 0;
+    myActivationTimeMinutePosition = 0;
     super.initState();
   }
 
@@ -70,9 +64,7 @@ class _ProfilesState extends State<Profiles> {
 
   @override
   Widget build(BuildContext context) {
-    profilesClassData = profilesClassData.isNotEmpty ? profilesClassData : ModalRoute.of(context).settings.arguments;
-    myDevice = profilesClassData['myDevice'];
-    dataRobotUVC = profilesClassData['dataRead'];
+    dataRobotUVC = myDevice.getReadCharMessage();
     print(dataRobotUVC);
     if (dataRobotUVC == null) {
       dataRobotUVC = '{\"Company\":\"Votre entreprise\",\"UserName\":\"Utilisateur\",\"Detection\":0,\"RoomName\":\"Chambre 1\",\"TimeData\":[0,0]}';
@@ -235,12 +227,7 @@ class _ProfilesState extends State<Profiles> {
                           company: myCompany.text,
                           operatorName: myName.text,
                           roomName: myRoomName.text);
-                      Navigator.pushNamed(context, '/settings', arguments: {
-                        'myDevice': myDevice,
-                        'myUvcLight': myUvcLight,
-                        'disinfectionTime': myExtinctionTimeMinutePosition,
-                        'activationTime': myActivationTimeMinutePosition,
-                      });
+                      Navigator.pushNamed(context, '/settings');
                       //alertSecurity(context);
                     },
                     child: Padding(
@@ -291,8 +278,8 @@ class _ProfilesState extends State<Profiles> {
             ),
             onPressed: () {
               Navigator.pop(c, true);
-              myDevice.disconnect();
-              Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+              //myDevice.disconnect();
+              Navigator.pushNamedAndRemoveUntil(context, "/pin_access", (r) => false);
             },
           ),
           FlatButton(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
-import 'package:flutterappdentaluvc/services/uvcClass.dart';
+import 'package:flutterappdentaluvc/services/DataVariables.dart';
 
 class Warnings extends StatefulWidget {
   @override
@@ -8,18 +7,10 @@ class Warnings extends StatefulWidget {
 }
 
 class _WarningsState extends State<Warnings> {
-  Map warningsClassData = {};
-
-  Device myDevice;
-  UvcLight myUvcLight;
-
   bool nextButtonPressedOnce = false;
 
   @override
   Widget build(BuildContext context) {
-    warningsClassData = warningsClassData.isNotEmpty ? warningsClassData : ModalRoute.of(context).settings.arguments;
-    myDevice = warningsClassData['myDevice'];
-    myUvcLight = warningsClassData['myUvcLight'];
 
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
@@ -185,10 +176,7 @@ class _WarningsState extends State<Warnings> {
                           nextButtonPressedOnce = true;
                           String message = 'UVCTreatement : ON';
                           await myDevice.writeCharacteristic(2, 0, message);
-                          Navigator.pushNamed(context, '/uvc', arguments: {
-                            'uvclight': myUvcLight,
-                            'myDevice': myDevice,
-                          });
+                          Navigator.pushNamed(context, '/uvc');
                         }
                       },
                       child: Padding(

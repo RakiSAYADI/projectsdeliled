@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
-import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
+import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pinput/pin_put/pin_put.dart';
@@ -14,11 +14,6 @@ class AdvancedSettings extends StatefulWidget {
 
 class _AdvancedSettingsState extends State<AdvancedSettings> {
   final TextEditingController _pinPutController = TextEditingController();
-  Map advancedSettingsData = {};
-
-  String pinCodeAccess = '';
-
-  Device myDevice;
 
   String pinCode;
   String myPinCode = '';
@@ -39,9 +34,6 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
 
-    advancedSettingsData = advancedSettingsData.isNotEmpty ? advancedSettingsData : ModalRoute.of(context).settings.arguments;
-    pinCodeAccess = advancedSettingsData['pinCodeAccess'];
-    myDevice = advancedSettingsData['myDevice'];
     return Container(
       child: Scaffold(
         appBar: AppBar(
@@ -58,9 +50,7 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                   SizedBox(height: heightScreen * 0.05),
                   FlatButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/pin_settings', arguments: {
-                        'pinCodeAccess': pinCodeAccess,
-                      });
+                      Navigator.pushNamed(context, '/pin_settings');
                     },
                     child: Text(
                       'Changer le mot de passe',
@@ -256,16 +246,11 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
               Navigator.pop(context);
               switch (accessPath) {
                 case 'scanlist':
-                  Navigator.pushNamed(context, '/scan_ble_list', arguments: {
-                    'pinCodeAccess': pinCodeAccess,
-                    'myDevice': myDevice,
-                  });
+                  Navigator.pushNamed(context, '/scan_ble_list');
                   break;
                 case 'autouvc':
                   if (myDevice != null) {
-                    Navigator.pushNamed(context, '/auto_uvc', arguments: {
-                      'pinCodeAccess': pinCodeAccess,
-                    });
+                    Navigator.pushNamed(context, '/auto_uvc');
                   } else {
                     myUvcToast.setToastDuration(3);
                     myUvcToast.setToastMessage('Veuillez associer un dispositif UV-C !');

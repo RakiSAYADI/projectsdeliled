@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
-import 'package:flutterappdentaluvc/services/uvcClass.dart';
+import 'package:flutterappdentaluvc/services/DataVariables.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -8,20 +7,12 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  Map settingsClassData = {};
-  Device myDevice;
-
-  UvcLight myUvcLight;
-
   bool nextButtonPressedOnce = false;
 
   String myExtinctionTimeMinuteData = ' 30 sec';
   String myActivationTimeMinuteData = ' 10 sec';
 
   bool firstDisplayMainWidget = true;
-
-  int myExtinctionTimeMinutePosition = 0;
-  int myActivationTimeMinutePosition = 0;
 
   List<String> myExtinctionTimeMinute = [
     ' 30 sec',
@@ -70,12 +61,7 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    settingsClassData = settingsClassData.isNotEmpty ? settingsClassData : ModalRoute.of(context).settings.arguments;
-    myDevice = settingsClassData['myDevice'];
-    myUvcLight = settingsClassData['myUvcLight'];
     if (firstDisplayMainWidget) {
-      myExtinctionTimeMinutePosition = settingsClassData['disinfectionTime'];
-      myActivationTimeMinutePosition = settingsClassData['activationTime'];
       firstDisplayMainWidget = false;
       myExtinctionTimeMinuteData = myExtinctionTimeMinute.elementAt(myExtinctionTimeMinutePosition);
       myActivationTimeMinuteData = myActivationTimeMinute.elementAt(myActivationTimeMinutePosition);
@@ -350,10 +336,7 @@ class _SettingsState extends State<Settings> {
               ),
               onPressed: () async {
                 Navigator.of(context).pop();
-                Navigator.pushNamed(context, '/warnings', arguments: {
-                  'myDevice': myDevice,
-                  'myUvcLight': myUvcLight,
-                });
+                Navigator.pushNamed(context, '/warnings');
               },
             ),
             FlatButton(

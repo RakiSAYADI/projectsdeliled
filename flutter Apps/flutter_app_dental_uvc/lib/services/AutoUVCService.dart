@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcClass.dart';
+import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 
 class AutoUVCService {
@@ -99,10 +100,9 @@ class AutoUVCService {
               String message = 'UVCTreatement : ON';
               await _myDevice.writeCharacteristic(2, 0, message);
               try {
-                Navigator.pushNamed(_buildContext, '/uvc', arguments: {
-                  'uvclight': _myUVCLight,
-                  'myDevice': _myDevice,
-                });
+                myDevice = _myDevice;
+                myUvcLight = _myUVCLight;
+                Navigator.pushNamed(_buildContext, '/uvc');
               } catch (e) {
                 _myUvcToast.setToastDuration(5);
                 _myUvcToast.setToastMessage('Execution d\'une desinfection automatique !');

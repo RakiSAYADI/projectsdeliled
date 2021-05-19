@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
+import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:path_provider/path_provider.dart';
 
 class PinSettings extends StatefulWidget {
@@ -11,9 +12,6 @@ class PinSettings extends StatefulWidget {
 }
 
 class _PinSettingsState extends State<PinSettings> {
-  Map pinSettingsData = {};
-
-  String pinCodeAccess = '';
 
   final myOldPinCode = TextEditingController();
   final myNewPinCode = TextEditingController();
@@ -39,8 +37,6 @@ class _PinSettingsState extends State<PinSettings> {
 
   @override
   Widget build(BuildContext context) {
-    pinSettingsData = pinSettingsData.isNotEmpty ? pinSettingsData : ModalRoute.of(context).settings.arguments;
-    pinCodeAccess = pinSettingsData['pinCodeAccess'];
 
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;

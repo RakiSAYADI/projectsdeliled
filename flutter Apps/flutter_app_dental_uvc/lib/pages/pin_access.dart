@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutterappdentaluvc/services/AutoUVCService.dart';
+import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:flutterappdentaluvc/services/NFCManagerClass.dart';
-import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pinput/pin_put/pin_put.dart';
@@ -28,7 +28,6 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   final TextEditingController _pinPutController = TextEditingController();
 
   String pinCode;
-  String pinCodeAccess = '';
   String myPinCode = '';
 
   ToastyMessage myUvcToast;
@@ -36,8 +35,6 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   Animation colorInfoQrCode;
 
   GifController gifController;
-
-  Device myDevice;
 
   Widget mainWidgetScreen;
 
@@ -91,7 +88,8 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     checkAutoFileExists();
 
     myUvcToast = ToastyMessage(toastContext: context);
-    //checks bluetooth current state
+
+    pinCodeAccess = '';
     Future.delayed(const Duration(seconds: 1), () async {
       pinCodeAccess = await _readPINFile();
     });
@@ -101,12 +99,15 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
     try {
-      pinAccessClassData = pinAccessClassData.isNotEmpty ? pinAccessClassData : ModalRoute.of(context).settings.arguments;
-      myDevice = pinAccessClassData['myDevice'];
-      dataRobotUVC = pinAccessClassData['dataRead'];
+      if (myDevice.getReadCharMessage().isNotEmpty) {
+        dataRobotUVC = myDevice.getReadCharMessage();
+      } else {
+        dataRobotUVC = '';
+      }
       autoUVCService.setUVCDevice(myDevice);
     } catch (e) {
       print('its empty');
+      dataRobotUVC = '';
     }
 
     return WillPopScope(
@@ -199,10 +200,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
             widgetIsInactive = true;
-            Navigator.pushNamed(context, '/advanced_settings', arguments: {
-              'pinCodeAccess': pinCodeAccess,
-              'myDevice': myDevice,
-            });
+            Navigator.pushNamed(context, '/advanced_settings');
           },
           label: Text('Réglages'),
           icon: Icon(
@@ -409,10 +407,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
             myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
           } else {
             if (myDevice != null) {
-              Navigator.pushNamed(context, '/profiles', arguments: {
-                'myDevice': myDevice,
-                'dataRead': myDevice.getReadCharMessage(),
-              });
+              Navigator.pushNamed(context, '/profiles');
             }
           }
         }

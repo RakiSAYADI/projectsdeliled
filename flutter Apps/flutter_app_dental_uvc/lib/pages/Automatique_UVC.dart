@@ -326,398 +326,400 @@ class _UVCAutoState extends State<UVCAuto> {
         decoration: BoxDecoration(color: Colors.grey[200]),
         child: Builder(builder: (context) {
           return Container(
-            child: Column(
-              children: [
-                SizedBox(height: heightScreen * 0.05),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      ToggleButtons(
-                        isSelected: days,
-                        onPressed: (int index) async {
-                          day = index;
-                          setState(() {
-                            days[day] = !days[day];
-                            for (int buttonIndex = 0; buttonIndex < days.length; buttonIndex++) {
-                              if (buttonIndex == day) {
-                                days[buttonIndex] = true;
-                              } else {
-                                days[buttonIndex] = false;
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(height: heightScreen * 0.05),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        ToggleButtons(
+                          isSelected: days,
+                          onPressed: (int index) async {
+                            day = index;
+                            setState(() {
+                              days[day] = !days[day];
+                              for (int buttonIndex = 0; buttonIndex < days.length; buttonIndex++) {
+                                if (buttonIndex == day) {
+                                  days[buttonIndex] = true;
+                                } else {
+                                  days[buttonIndex] = false;
+                                }
                               }
-                            }
-                          });
+                            });
 
-                          setState(() {
-                            if (daysStates[day]) {
-                              activationButtonText = 'Activé';
-                              activationButtonColor[day] = Colors.green;
-                            } else {
-                              activationButtonText = 'Désactivé';
-                              activationButtonColor[day] = Colors.red;
-                            }
-                          });
+                            setState(() {
+                              if (daysStates[day]) {
+                                activationButtonText = 'Activé';
+                                activationButtonColor[day] = Colors.green;
+                              } else {
+                                activationButtonText = 'Désactivé';
+                                activationButtonColor[day] = Colors.red;
+                              }
+                            });
 
-                          myTimeHoursPosition = hourList[day];
-                          myTimeMinutesPosition = minutesList[day];
-                          myTimeSecondsPosition = secondsList[day];
-                          myActivationTimeMinutePosition = delayList[day];
-                          myExtinctionTimeMinutePosition = durationList[day];
+                            myTimeHoursPosition = hourList[day];
+                            myTimeMinutesPosition = minutesList[day];
+                            myTimeSecondsPosition = secondsList[day];
+                            myActivationTimeMinutePosition = delayList[day];
+                            myExtinctionTimeMinutePosition = durationList[day];
 
-                          myTimeHoursData = myTimeHours.elementAt(myTimeHoursPosition);
-                          myTimeMinutesData = myTimeMinutes.elementAt(myTimeMinutesPosition);
-                          myTimeSecondsData = myTimeSeconds.elementAt(myTimeSecondsPosition);
-                          myActivationTimeMinuteData = myActivationTimeMinute.elementAt(myActivationTimeMinutePosition);
-                          myExtinctionTimeMinuteData = myExtinctionTimeMinute.elementAt(myExtinctionTimeMinutePosition);
-                        },
+                            myTimeHoursData = myTimeHours.elementAt(myTimeHoursPosition);
+                            myTimeMinutesData = myTimeMinutes.elementAt(myTimeMinutesPosition);
+                            myTimeSecondsData = myTimeSeconds.elementAt(myTimeSecondsPosition);
+                            myActivationTimeMinuteData = myActivationTimeMinute.elementAt(myActivationTimeMinutePosition);
+                            myExtinctionTimeMinuteData = myExtinctionTimeMinute.elementAt(myExtinctionTimeMinutePosition);
+                          },
+                          children: [
+                            Container(
+                                width: (widthScreen - 84) / 7,
+                                child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                  new SizedBox(width: 4.0),
+                                  new Text("Lundi", style: TextStyle(fontSize: 15, color: activationButtonColor[0], fontWeight: FontWeight.bold))
+                                ])),
+                            Container(
+                                width: (widthScreen - 84) / 7,
+                                child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                  new SizedBox(width: 4.0),
+                                  new Text("Mardi", style: TextStyle(fontSize: 15, color: activationButtonColor[1], fontWeight: FontWeight.bold))
+                                ])),
+                            Container(
+                                width: (widthScreen - 84) / 7,
+                                child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                  new SizedBox(width: 4.0),
+                                  new Text("Mercredi", style: TextStyle(fontSize: 15, color: activationButtonColor[2], fontWeight: FontWeight.bold))
+                                ])),
+                            Container(
+                                width: (widthScreen - 84) / 7,
+                                child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                  new SizedBox(width: 4.0),
+                                  new Text("Jeudi", style: TextStyle(fontSize: 15, color: activationButtonColor[3], fontWeight: FontWeight.bold))
+                                ])),
+                            Container(
+                                width: (widthScreen - 84) / 7,
+                                child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                  new SizedBox(width: 4.0),
+                                  new Text("Vendredi", style: TextStyle(fontSize: 15, color: activationButtonColor[4], fontWeight: FontWeight.bold))
+                                ])),
+                            Container(
+                                width: (widthScreen - 84) / 7,
+                                child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                  new SizedBox(width: 4.0),
+                                  new Text("Samedi", style: TextStyle(fontSize: 15, color: activationButtonColor[5], fontWeight: FontWeight.bold))
+                                ])),
+                            Container(
+                                width: (widthScreen - 84) / 7,
+                                child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                  new SizedBox(width: 4.0),
+                                  new Text("Dimanche", style: TextStyle(fontSize: 15, color: activationButtonColor[6], fontWeight: FontWeight.bold))
+                                ])),
+                          ],
+                          borderWidth: 2,
+                          color: Colors.grey,
+                          selectedBorderColor: Colors.black,
+                          selectedColor: Colors.blue,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: heightScreen * 0.02),
+                  FlatButton(
+                    onPressed: () {
+                      activationButtonState = daysStates[day];
+                      activationButtonState = !activationButtonState;
+                      setState(() {
+                        saveButtonColor = Colors.grey[400];
+                        if (activationButtonState) {
+                          activationButtonText = 'Activé';
+                          activationButtonColor[day] = Colors.green;
+                        } else {
+                          activationButtonText = 'Désactivé';
+                          activationButtonColor[day] = Colors.red;
+                        }
+                      });
+                      daysStates[day] = activationButtonState;
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(
+                        activationButtonText,
+                        style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.02),
+                      ),
+                    ),
+                    color: activationButtonColor[day],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                  ),
+                  SizedBox(height: heightScreen * 0.02),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'Heure d\'activation :',
+                        style: TextStyle(
+                          fontSize: widthScreen * 0.03,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: heightScreen * 0.02),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                              width: (widthScreen - 84) / 7,
-                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                                new SizedBox(width: 4.0),
-                                new Text("Lundi", style: TextStyle(fontSize: 15, color: activationButtonColor[0], fontWeight: FontWeight.bold))
-                              ])),
-                          Container(
-                              width: (widthScreen - 84) / 7,
-                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                                new SizedBox(width: 4.0),
-                                new Text("Mardi", style: TextStyle(fontSize: 15, color: activationButtonColor[1], fontWeight: FontWeight.bold))
-                              ])),
-                          Container(
-                              width: (widthScreen - 84) / 7,
-                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                                new SizedBox(width: 4.0),
-                                new Text("Mercredi", style: TextStyle(fontSize: 15, color: activationButtonColor[2], fontWeight: FontWeight.bold))
-                              ])),
-                          Container(
-                              width: (widthScreen - 84) / 7,
-                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                                new SizedBox(width: 4.0),
-                                new Text("Jeudi", style: TextStyle(fontSize: 15, color: activationButtonColor[3], fontWeight: FontWeight.bold))
-                              ])),
-                          Container(
-                              width: (widthScreen - 84) / 7,
-                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                                new SizedBox(width: 4.0),
-                                new Text("Vendredi", style: TextStyle(fontSize: 15, color: activationButtonColor[4], fontWeight: FontWeight.bold))
-                              ])),
-                          Container(
-                              width: (widthScreen - 84) / 7,
-                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                                new SizedBox(width: 4.0),
-                                new Text("Samedi", style: TextStyle(fontSize: 15, color: activationButtonColor[5], fontWeight: FontWeight.bold))
-                              ])),
-                          Container(
-                              width: (widthScreen - 84) / 7,
-                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                                new SizedBox(width: 4.0),
-                                new Text("Dimanche", style: TextStyle(fontSize: 15, color: activationButtonColor[6], fontWeight: FontWeight.bold))
-                              ])),
+                          DropdownButton<String>(
+                            value: myTimeHoursData,
+                            icon: Icon(Icons.arrow_drop_down),
+                            iconSize: 24,
+                            elevation: 16,
+                            style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                            onChanged: (String data) {
+                              setState(() {
+                                saveButtonColor = Colors.grey[400];
+                                myTimeHoursData = data;
+                                myTimeHoursPosition = myTimeHours.indexOf(data);
+                                hourList[day] = myTimeHoursPosition;
+                              });
+                            },
+                            items: myTimeHours.map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: TextStyle(
+                                    fontSize: widthScreen * 0.03,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                          Text(
+                            ' : ',
+                            style: TextStyle(
+                              fontSize: widthScreen * 0.03,
+                              color: Colors.black,
+                            ),
+                          ),
+                          DropdownButton<String>(
+                            value: myTimeMinutesData,
+                            icon: Icon(Icons.arrow_drop_down),
+                            iconSize: 24,
+                            elevation: 16,
+                            style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                            onChanged: (String data) {
+                              setState(() {
+                                saveButtonColor = Colors.grey[400];
+                                myTimeMinutesData = data;
+                                myTimeMinutesPosition = myTimeMinutes.indexOf(data);
+                                minutesList[day] = myTimeMinutesPosition;
+                              });
+                            },
+                            items: myTimeMinutes.map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: TextStyle(
+                                    fontSize: widthScreen * 0.03,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                          Text(
+                            ' : ',
+                            style: TextStyle(
+                              fontSize: widthScreen * 0.03,
+                              color: Colors.black,
+                            ),
+                          ),
+                          DropdownButton<String>(
+                            value: myTimeSecondsData,
+                            icon: Icon(Icons.arrow_drop_down),
+                            iconSize: 24,
+                            elevation: 16,
+                            style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                            onChanged: (String data) {
+                              setState(() {
+                                saveButtonColor = Colors.grey[400];
+                                myTimeSecondsData = data;
+                                myTimeSecondsPosition = myTimeSeconds.indexOf(data);
+                                secondsList[day] = myTimeSecondsPosition;
+                              });
+                            },
+                            items: myTimeMinutes.map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: TextStyle(
+                                    fontSize: widthScreen * 0.03,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
                         ],
-                        borderWidth: 2,
-                        color: Colors.grey,
-                        selectedBorderColor: Colors.black,
-                        selectedColor: Colors.blue,
                       ),
                     ],
                   ),
-                ),
-                SizedBox(height: heightScreen * 0.02),
-                FlatButton(
-                  onPressed: () {
-                    activationButtonState = daysStates[day];
-                    activationButtonState = !activationButtonState;
-                    setState(() {
-                      saveButtonColor = Colors.grey[400];
-                      if (activationButtonState) {
-                        activationButtonText = 'Activé';
-                        activationButtonColor[day] = Colors.green;
-                      } else {
-                        activationButtonText = 'Désactivé';
-                        activationButtonColor[day] = Colors.red;
-                      }
-                    });
-                    daysStates[day] = activationButtonState;
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      activationButtonText,
-                      style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.02),
+                  SizedBox(height: heightScreen * 0.04),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(height: heightScreen * 0.04),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/delais_logo.png',
+                                height: heightScreen * 0.09,
+                                width: widthScreen * 0.5,
+                              ),
+                              SizedBox(height: heightScreen * 0.03),
+                              Text(
+                                'Délais avant allumage :',
+                                style: TextStyle(
+                                  fontSize: widthScreen * 0.03,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              DropdownButton<String>(
+                                value: myActivationTimeMinuteData,
+                                icon: Icon(Icons.arrow_drop_down),
+                                iconSize: 24,
+                                elevation: 16,
+                                style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                                onChanged: (String data) {
+                                  setState(() {
+                                    saveButtonColor = Colors.grey[400];
+                                    myActivationTimeMinuteData = data;
+                                    myActivationTimeMinutePosition = myActivationTimeMinute.indexOf(data);
+                                    delayList[day] = myActivationTimeMinutePosition;
+                                  });
+                                },
+                                items: myActivationTimeMinute.map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(
+                                      value,
+                                      style: TextStyle(
+                                        fontSize: widthScreen * 0.03,
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Image.asset(
+                                'assets/duree_logo.png',
+                                height: heightScreen * 0.09,
+                                width: widthScreen * 0.5,
+                              ),
+                              SizedBox(height: heightScreen * 0.03),
+                              Text(
+                                'Durée de la désinfection :',
+                                style: TextStyle(
+                                  fontSize: widthScreen * 0.03,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              DropdownButton<String>(
+                                value: myExtinctionTimeMinuteData,
+                                icon: Icon(Icons.arrow_drop_down),
+                                iconSize: 24,
+                                elevation: 16,
+                                style: TextStyle(color: Colors.grey[800], fontSize: widthScreen * 0.04),
+                                onChanged: (String data) {
+                                  setState(() {
+                                    saveButtonColor = Colors.grey[400];
+                                    myExtinctionTimeMinuteData = data;
+                                    myExtinctionTimeMinutePosition = myExtinctionTimeMinute.indexOf(data);
+                                    durationList[day] = myExtinctionTimeMinutePosition;
+                                  });
+                                },
+                                items: myExtinctionTimeMinute.map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(
+                                      value,
+                                      style: TextStyle(
+                                        fontSize: widthScreen * 0.03,
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: heightScreen * 0.04),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Divider(
+                      thickness: 1.0,
+                      color: Colors.grey[600],
                     ),
                   ),
-                  color: activationButtonColor[day],
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                  ),
-                ),
-                SizedBox(height: heightScreen * 0.02),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      'Heure d\'activation :',
-                      style: TextStyle(
-                        fontSize: widthScreen * 0.03,
-                        color: Colors.black,
+                  SizedBox(height: heightScreen * 0.04),
+                  FlatButton(
+                    onPressed: () async {
+                      setState(() {
+                        saveButtonColor = Colors.blue[400];
+                      });
+                      String uvcAutoData = '{'
+                          '\"Monday\":[${boolToInt(daysStates[0])},${hourList[0]},${minutesList[0]},${secondsList[0]},${delayList[0]},${durationList[0]}],'
+                          '\"Tuesday\":[${boolToInt(daysStates[1])},${hourList[1]},${minutesList[1]},${secondsList[1]},${delayList[1]},${durationList[1]}],'
+                          '\"Wednesday\":[${boolToInt(daysStates[2])},${hourList[2]},${minutesList[2]},${secondsList[2]},${delayList[2]},${durationList[2]}],'
+                          '\"Thursday\":[${boolToInt(daysStates[3])},${hourList[3]},${minutesList[3]},${secondsList[3]},${delayList[3]},${durationList[3]}],'
+                          '\"Friday\":[${boolToInt(daysStates[4])},${hourList[4]},${minutesList[4]},${secondsList[4]},${delayList[4]},${durationList[4]}],'
+                          '\"Saturday\":[${boolToInt(daysStates[5])},${hourList[5]},${minutesList[5]},${secondsList[5]},${delayList[5]},${durationList[5]}],'
+                          '\"Sunday\":[${boolToInt(daysStates[6])},${hourList[6]},${minutesList[6]},${secondsList[6]},${delayList[6]},${durationList[6]}]'
+                          '}';
+                      await uvcDataFile.saveUVCAutoData(uvcAutoData);
+                      myUvcToast.setToastDuration(3);
+                      myUvcToast.setToastMessage('Configuration Sauvegardée !');
+                      myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+                      print(autoUVCService.getUVCAutoServiceState());
+                      Navigator.pop(context, true);
+                      if (!autoUVCService.getUVCAutoServiceState()) {
+                        autoUVCService.startUVCService();
+                      } else {
+                        autoUVCService.stopUVCAutoService();
+                        await Future.delayed(const Duration(seconds: 2));
+                        autoUVCService.startUVCService();
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(
+                        'Enregistrer',
+                        style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.02),
                       ),
                     ),
-                    SizedBox(height: heightScreen * 0.02),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        DropdownButton<String>(
-                          value: myTimeHoursData,
-                          icon: Icon(Icons.arrow_drop_down),
-                          iconSize: 24,
-                          elevation: 16,
-                          style: TextStyle(color: Colors.grey[800], fontSize: 18),
-                          onChanged: (String data) {
-                            setState(() {
-                              saveButtonColor = Colors.grey[400];
-                              myTimeHoursData = data;
-                              myTimeHoursPosition = myTimeHours.indexOf(data);
-                              hourList[day] = myTimeHoursPosition;
-                            });
-                          },
-                          items: myTimeHours.map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: TextStyle(
-                                  fontSize: widthScreen * 0.03,
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                        Text(
-                          ' : ',
-                          style: TextStyle(
-                            fontSize: widthScreen * 0.03,
-                            color: Colors.black,
-                          ),
-                        ),
-                        DropdownButton<String>(
-                          value: myTimeMinutesData,
-                          icon: Icon(Icons.arrow_drop_down),
-                          iconSize: 24,
-                          elevation: 16,
-                          style: TextStyle(color: Colors.grey[800], fontSize: 18),
-                          onChanged: (String data) {
-                            setState(() {
-                              saveButtonColor = Colors.grey[400];
-                              myTimeMinutesData = data;
-                              myTimeMinutesPosition = myTimeMinutes.indexOf(data);
-                              minutesList[day] = myTimeMinutesPosition;
-                            });
-                          },
-                          items: myTimeMinutes.map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: TextStyle(
-                                  fontSize: widthScreen * 0.03,
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                        Text(
-                          ' : ',
-                          style: TextStyle(
-                            fontSize: widthScreen * 0.03,
-                            color: Colors.black,
-                          ),
-                        ),
-                        DropdownButton<String>(
-                          value: myTimeSecondsData,
-                          icon: Icon(Icons.arrow_drop_down),
-                          iconSize: 24,
-                          elevation: 16,
-                          style: TextStyle(color: Colors.grey[800], fontSize: 18),
-                          onChanged: (String data) {
-                            setState(() {
-                              saveButtonColor = Colors.grey[400];
-                              myTimeSecondsData = data;
-                              myTimeSecondsPosition = myTimeSeconds.indexOf(data);
-                              secondsList[day] = myTimeSecondsPosition;
-                            });
-                          },
-                          items: myTimeMinutes.map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: TextStyle(
-                                  fontSize: widthScreen * 0.03,
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: heightScreen * 0.04),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(height: heightScreen * 0.04),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/delais_logo.png',
-                              height: heightScreen * 0.09,
-                              width: widthScreen * 0.5,
-                            ),
-                            SizedBox(height: heightScreen * 0.03),
-                            Text(
-                              'Délais avant allumage :',
-                              style: TextStyle(
-                                fontSize: widthScreen * 0.03,
-                                color: Colors.black,
-                              ),
-                            ),
-                            DropdownButton<String>(
-                              value: myActivationTimeMinuteData,
-                              icon: Icon(Icons.arrow_drop_down),
-                              iconSize: 24,
-                              elevation: 16,
-                              style: TextStyle(color: Colors.grey[800], fontSize: 18),
-                              onChanged: (String data) {
-                                setState(() {
-                                  saveButtonColor = Colors.grey[400];
-                                  myActivationTimeMinuteData = data;
-                                  myActivationTimeMinutePosition = myActivationTimeMinute.indexOf(data);
-                                  delayList[day] = myActivationTimeMinutePosition;
-                                });
-                              },
-                              items: myActivationTimeMinute.map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                    style: TextStyle(
-                                      fontSize: widthScreen * 0.03,
-                                      color: Colors.grey[600],
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Image.asset(
-                              'assets/duree_logo.png',
-                              height: heightScreen * 0.09,
-                              width: widthScreen * 0.5,
-                            ),
-                            SizedBox(height: heightScreen * 0.03),
-                            Text(
-                              'Durée de la désinfection :',
-                              style: TextStyle(
-                                fontSize: widthScreen * 0.03,
-                                color: Colors.black,
-                              ),
-                            ),
-                            DropdownButton<String>(
-                              value: myExtinctionTimeMinuteData,
-                              icon: Icon(Icons.arrow_drop_down),
-                              iconSize: 24,
-                              elevation: 16,
-                              style: TextStyle(color: Colors.grey[800], fontSize: widthScreen * 0.04),
-                              onChanged: (String data) {
-                                setState(() {
-                                  saveButtonColor = Colors.grey[400];
-                                  myExtinctionTimeMinuteData = data;
-                                  myExtinctionTimeMinutePosition = myExtinctionTimeMinute.indexOf(data);
-                                  durationList[day] = myExtinctionTimeMinutePosition;
-                                });
-                              },
-                              items: myExtinctionTimeMinute.map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                    style: TextStyle(
-                                      fontSize: widthScreen * 0.03,
-                                      color: Colors.grey[600],
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: heightScreen * 0.04),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Divider(
-                    thickness: 1.0,
-                    color: Colors.grey[600],
-                  ),
-                ),
-                SizedBox(height: heightScreen * 0.04),
-                FlatButton(
-                  onPressed: () async {
-                    setState(() {
-                      saveButtonColor = Colors.blue[400];
-                    });
-                    String uvcAutoData = '{'
-                        '\"Monday\":[${boolToInt(daysStates[0])},${hourList[0]},${minutesList[0]},${secondsList[0]},${delayList[0]},${durationList[0]}],'
-                        '\"Tuesday\":[${boolToInt(daysStates[1])},${hourList[1]},${minutesList[1]},${secondsList[1]},${delayList[1]},${durationList[1]}],'
-                        '\"Wednesday\":[${boolToInt(daysStates[2])},${hourList[2]},${minutesList[2]},${secondsList[2]},${delayList[2]},${durationList[2]}],'
-                        '\"Thursday\":[${boolToInt(daysStates[3])},${hourList[3]},${minutesList[3]},${secondsList[3]},${delayList[3]},${durationList[3]}],'
-                        '\"Friday\":[${boolToInt(daysStates[4])},${hourList[4]},${minutesList[4]},${secondsList[4]},${delayList[4]},${durationList[4]}],'
-                        '\"Saturday\":[${boolToInt(daysStates[5])},${hourList[5]},${minutesList[5]},${secondsList[5]},${delayList[5]},${durationList[5]}],'
-                        '\"Sunday\":[${boolToInt(daysStates[6])},${hourList[6]},${minutesList[6]},${secondsList[6]},${delayList[6]},${durationList[6]}]'
-                        '}';
-                    await uvcDataFile.saveUVCAutoData(uvcAutoData);
-                    myUvcToast.setToastDuration(3);
-                    myUvcToast.setToastMessage('Configuration Sauvegardée !');
-                    myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
-                    print(autoUVCService.getUVCAutoServiceState());
-                    Navigator.pop(context, true);
-                    if (!autoUVCService.getUVCAutoServiceState()) {
-                      autoUVCService.startUVCService();
-                    } else {
-                      autoUVCService.stopUVCAutoService();
-                      await Future.delayed(const Duration(seconds: 2));
-                      autoUVCService.startUVCService();
-                    }
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      'Enregistrer',
-                      style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.02),
+                    color: saveButtonColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
                     ),
                   ),
-                  color: saveButtonColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         }),

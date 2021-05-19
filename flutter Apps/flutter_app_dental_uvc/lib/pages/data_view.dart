@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/httpRequests.dart';
-import 'package:flutterappdentaluvc/services/uvcClass.dart';
+import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
@@ -16,11 +16,6 @@ class DataCSVView extends StatefulWidget {
 }
 
 class _DataCSVViewState extends State<DataCSVView> {
-  Map endUVCClassData = {};
-  List<List<String>> uvcData;
-
-  bool isTreatmentCompleted;
-  UvcLight myUvcLight;
 
   ToastyMessage myUvcToast;
 
@@ -50,11 +45,6 @@ class _DataCSVViewState extends State<DataCSVView> {
 
   @override
   Widget build(BuildContext context) {
-    endUVCClassData = endUVCClassData.isNotEmpty ? endUVCClassData : ModalRoute.of(context).settings.arguments;
-    isTreatmentCompleted = endUVCClassData['isTreatmentCompleted'];
-    myUvcLight = endUVCClassData['myUvcLight'];
-    uvcData = endUVCClassData['uvcData'];
-
     readUserEmailFile();
 
     double widthScreen = MediaQuery.of(context).size.width;

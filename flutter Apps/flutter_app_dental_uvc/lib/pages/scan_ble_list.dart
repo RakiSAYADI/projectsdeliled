@@ -5,6 +5,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
+import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:flutterappdentaluvc/services/deviceBleWidget.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 
@@ -15,8 +16,6 @@ class ScanListBle extends StatefulWidget {
 
 class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStateMixin {
   List<Device> devices = [];
-
-  Device myDevice;
 
   ToastyMessage myUvcToast;
 
@@ -31,8 +30,6 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
   BluetoothCharacteristic characteristicRelays;
 
   AnimationController animationRefreshIcon;
-
-  Map scanUVCDevicesData = {};
 
   @override
   void initState() {
@@ -126,8 +123,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
   Future<void> startBind(BuildContext context, String uvcDeviceMac) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    scanUVCDevicesData = scanUVCDevicesData.isNotEmpty ? scanUVCDevicesData : ModalRoute.of(context).settings.arguments;
-    myDevice = scanUVCDevicesData['myDevice'];
+
     return showDialog<bool>(
       context: context,
       builder: (c) => AlertDialog(

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
+import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:flutterappdentaluvc/services/LEDControl.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
@@ -35,8 +36,6 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
 
   AnimationController animationRefreshIcon;
   AnimationController animationController;
-
-  Device myDevice;
 
   FlutterBlue flutterBlue = FlutterBlue.instance;
 
@@ -74,10 +73,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
       await ledControl.setLedColor('ORANGE');
       Future.delayed(Duration(seconds: 1), () async {
-        Navigator.pushReplacementNamed(context, '/pin_access', arguments: {
-          'myDevice': myDevice,
-          'dataRead': '',
-        });
+        Navigator.pushReplacementNamed(context, '/pin_access');
       });
     } else {
       for (int i = 0; i < scanDevices.length; i++) {
@@ -98,17 +94,17 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
         myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
         // stop scanning and start connecting
         while (true) {
-          try {
-            myDevice.disconnect();
-            await Future.delayed(const Duration(milliseconds: 500));
+          while (true) {
             myDevice.connect(false);
-          } catch (e) {
-            print(e);
-            myDevice.disconnect();
-            await Future.delayed(const Duration(milliseconds: 500));
-            myDevice.connect(false);
+            await Future.delayed(Duration(milliseconds: 2200));
+            print('result of trying connection is ${myDevice.getConnectionState()}');
+            if (myDevice.getConnectionState()) {
+              break;
+            } else {
+              myDevice.disconnect();
+              await Future.delayed(Duration(milliseconds: 2200));
+            }
           }
-          await Future.delayed(const Duration(seconds: 4));
           if (myDevice.getConnectionState()) {
             // clear the remaining toast message
             myUvcToast.clearAllToast();
@@ -120,10 +116,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
                   flutterBlue.stopScan();
                   enableResetButtonCounter = 0;
                   await Future.delayed(const Duration(milliseconds: 500));
-                  Navigator.pushReplacementNamed(context, '/pin_access', arguments: {
-                    'myDevice': myDevice,
-                    'dataRead': myDevice.getReadCharMessage(),
-                  });
+                  Navigator.pushReplacementNamed(context, '/pin_access');
                 });
                 break;
               } else {
@@ -135,7 +128,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
             }
           }
           enableResetButtonCounter++;
-          if (enableResetButtonCounter == 10) {
+          if (enableResetButtonCounter == 5) {
             enableResetButtonCounter = 0;
             flutterBlue.stopScan();
             setState(() {
@@ -330,57 +323,67 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image.asset(
-                'assets/logo_uv_c.png',
-                height: heightScreen * 0.15,
-                width: widthScreen * 0.7,
-              ),
-              SizedBox(height: heightScreen * 0.02),
-              Image.asset(
-                'assets/logo_deeplight.png',
-                height: heightScreen * 0.15,
-                width: widthScreen * 0.7,
-              ),
-              SizedBox(height: heightScreen * 0.05),
-              SpinKitCircle(
-                color: Colors.white,
-                size: heightScreen * 0.1,
-              ),
-              SizedBox(height: heightScreen * 0.05),
-              Image.asset(
-                'assets/logodelitechblanc.png',
-                height: heightScreen * 0.15,
-                width: widthScreen * 0.7,
-              ),
-              SizedBox(height: heightScreen * 0.05),
-              Text(
-                'Powered by DELITECH Group',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.grey[300],
-                  fontSize: widthScreen * 0.02,
+              Expanded(
+                flex: 3,
+                child: Image.asset(
+                  'assets/logo_uv_c.png',
+                  height: heightScreen * 0.2,
+                  width: widthScreen * 0.7,
                 ),
               ),
-              FutureBuilder(
-                future: PackageInfo.fromPlatform(),
-                builder: (BuildContext context, snapshot) {
-                  if (snapshot.hasData) {
-                    String version = snapshot.data.version;
-                    return Center(
-                      child: Text(
-                        '$version',
-                        style: TextStyle(
-                          color: Colors.grey[300],
-                          fontSize: widthScreen * 0.02,
-                        ),
-                      ),
-                    );
-                  } else {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                },
+              Expanded(
+                flex: 5,
+                child: SpinKitCircle(
+                  color: Colors.white,
+                  size: heightScreen * 0.1,
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Image.asset(
+                  'assets/logo_deeplight.png',
+                  height: heightScreen * 0.15,
+                  width: widthScreen * 0.7,
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Center(
+                  child: Text(
+                    'Powered by DELITECH Group',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.grey[300],
+                      fontSize: widthScreen * 0.02,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Center(
+                  child: FutureBuilder(
+                    future: PackageInfo.fromPlatform(),
+                    builder: (BuildContext context, snapshot) {
+                      if (snapshot.hasData) {
+                        String version = snapshot.data.version;
+                        return Center(
+                          child: Text(
+                            '$version',
+                            style: TextStyle(
+                              color: Colors.grey[300],
+                              fontSize: widthScreen * 0.02,
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    },
+                  ),
+                ),
               ),
             ],
           ),

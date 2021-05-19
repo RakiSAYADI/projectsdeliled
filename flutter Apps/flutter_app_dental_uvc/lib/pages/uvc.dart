@@ -3,10 +3,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:flutterappdentaluvc/services/LEDControl.dart';
-import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/custum_timer_painter.dart';
-import 'package:flutterappdentaluvc/services/uvcClass.dart';
 import 'package:slide_countdown_clock/slide_countdown_clock.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -23,11 +22,6 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
 
   Duration durationOfDisinfect;
   Duration durationOfActivate;
-
-  Map uvcClassData = {};
-  UvcLight myUvcLight;
-
-  Device myDevice;
 
   double opacityLevelDisinfection = 0.0;
   double opacityLevelActivation = 1.0;
@@ -120,12 +114,9 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
           print('detection captured , STOP EVERYTHING !');
           treatmentIsOnProgress = false;
           treatmentIsSuccessful = false;
-          Navigator.pushNamed(context, '/end_uvc', arguments: {
-            'myactivationtime': (durationOfActivate.inSeconds-durationOfDisinfect.inSeconds),
-            'treatmentCompleted': treatmentIsSuccessful,
-            'uvclight': myUvcLight,
-            'myDevice': myDevice,
-          });
+          activationTime = (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds);
+          isTreatmentCompleted = treatmentIsSuccessful;
+          Navigator.pushNamed(context, '/end_uvc');
           break;
         }
         await Future.delayed(const Duration(seconds: 1));
@@ -137,9 +128,6 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    uvcClassData = uvcClassData.isNotEmpty ? uvcClassData : ModalRoute.of(context).settings.arguments;
-    myUvcLight = uvcClassData['uvclight'];
-    myDevice = uvcClassData['myDevice'];
 
     durationOfDisinfect = Duration(seconds: myUvcLight.getActivationTime());
     if (myUvcLight.infectionTime.contains('sec')) {
@@ -170,7 +158,8 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Désinfection en cours'),
+          backgroundColor: Colors.red,
+          title: Text('Désinfection en cours', style: TextStyle(fontSize: widthScreen * 0.04)),
           centerTitle: true,
         ),
         body: Container(
@@ -183,20 +172,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
           ),
           child: Container(
             child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Image.asset(
-                      'assets/logo_deeplight.png',
-                      height: heightScreen * 0.05,
-                      width: widthScreen * 0.5,
-                    ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: AnimatedBuilder(
+              child: AnimatedBuilder(
                       animation: controllerAnimationTimeBackground,
                       builder: (context, child) {
                         return Align(
@@ -341,15 +317,12 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                                     alertOrUVC = false;
                                                     if ((!treatmentIsStopped) && treatmentIsOnProgress) {
                                                       print('finished activation');
-                                                      treatmentIsOnProgress = false;
-                                                      _getNotification();
-                                                      Navigator.pushNamed(context, '/end_uvc', arguments: {
-                                                        'myDevice': myDevice,
-                                                        'uvclight': myUvcLight,
-                                                        'myactivationtime': (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds),
-                                                        'treatmentCompleted': treatmentIsSuccessful,
-                                                      });
-                                                    }
+                                                treatmentIsOnProgress = false;
+                                                _getNotification();
+                                                activationTime = (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds);
+                                                isTreatmentCompleted = treatmentIsSuccessful;
+                                                Navigator.pushNamed(context, '/end_uvc');
+                                              }
                                                   },
                                                 ),
                                               ),
@@ -367,17 +340,6 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                       },
                     ),
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: Image.asset(
-                      'assets/logodelitechblanc.png',
-                      height: heightScreen * 0.1,
-                      width: widthScreen * 0.8,
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ),
         ),
       ),
@@ -414,12 +376,9 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
               String message = 'STOP : ON';
               await myDevice.writeCharacteristic(2, 0, message);
               Navigator.pop(c, true);
-              Navigator.pushNamed(context, '/end_uvc', arguments: {
-                'myDevice': myDevice,
-                'uvclight': myUvcLight,
-                'myactivationtime': (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds),
-                'treatmentCompleted': treatmentIsSuccessful,
-              });
+              activationTime = (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds);
+              isTreatmentCompleted = treatmentIsSuccessful;
+              Navigator.pushNamed(context, '/end_uvc');
             },
           ),
           FlatButton(
