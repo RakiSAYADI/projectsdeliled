@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutteruvcapp/services/DataVariables.dart';
 
 class DataCSVViewQrCode extends StatefulWidget {
   @override
@@ -7,9 +8,6 @@ class DataCSVViewQrCode extends StatefulWidget {
 }
 
 class _DataCSVViewQrCodeState extends State<DataCSVViewQrCode> {
-  Map dataCSVQRCodeClassData = {};
-  List<List<String>> uvcData;
-  String userEmail;
 
   @override
   void initState() {
@@ -23,12 +21,7 @@ class _DataCSVViewQrCodeState extends State<DataCSVViewQrCode> {
 
   @override
   Widget build(BuildContext context) {
-    dataCSVQRCodeClassData = dataCSVQRCodeClassData.isNotEmpty ? dataCSVQRCodeClassData : ModalRoute.of(context).settings.arguments;
-    uvcData = dataCSVQRCodeClassData['uvcData'];
-    userEmail = dataCSVQRCodeClassData['userEmail'];
-
     double screenWidth = MediaQuery.of(context).size.width;
-
     return WillPopScope(
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
@@ -64,10 +57,7 @@ class _DataCSVViewQrCodeState extends State<DataCSVViewQrCode> {
           ),
         ),
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () =>     Navigator.pushNamed(context, "/send_email_qr_code", arguments: {
-            'userEmail': userEmail,
-            'uvcData': uvcData,
-          }),
+          onPressed: () =>     Navigator.pushNamed(context, "/send_email_qr_code"),
           label: Text('Envoi'),
           icon: Icon(
             Icons.send,

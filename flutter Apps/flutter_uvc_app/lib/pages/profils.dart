@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutteruvcapp/services/bleDeviceClass.dart';
+import 'package:flutteruvcapp/services/DataVariables.dart';
 import 'package:flutteruvcapp/services/uvcClass.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
 
@@ -11,24 +11,15 @@ class Profiles extends StatefulWidget {
 }
 
 class _ProfilesState extends State<Profiles> {
-  UvcLight myUvcLight;
-
   ToastyMessage myUvcToast;
 
   final myCompany = TextEditingController();
   final myName = TextEditingController();
   final myRoomName = TextEditingController();
 
-  Map profilesClassData = {};
-
-  Device myDevice;
-
   String dataRobotUVC = '';
 
   bool firstDisplayMainWidget = true;
-
-  int myExtinctionTimeMinutePosition = 0;
-  int myActivationTimeMinutePosition = 0;
 
   @override
   void dispose() {
@@ -79,9 +70,7 @@ class _ProfilesState extends State<Profiles> {
 
   @override
   Widget build(BuildContext context) {
-    profilesClassData = profilesClassData.isNotEmpty ? profilesClassData : ModalRoute.of(context).settings.arguments;
-    myDevice = profilesClassData['myDevice'];
-    dataRobotUVC = profilesClassData['dataRead'];
+    dataRobotUVC = myDevice.getReadCharMessage();
     if (dataRobotUVC == null) {
       dataRobotUVC = '{\"Company\":\"Votre entreprise\",\"UserName\":\"Utilisateur\",\"Detection\":0,\"RoomName\":\"Chambre 1\",\"TimeData\":[0,0]}';
     }
@@ -218,12 +207,7 @@ class _ProfilesState extends State<Profiles> {
                               company: myCompany.text,
                               operatorName: myName.text,
                               roomName: myRoomName.text);
-                          Navigator.pushNamed(context, '/settings', arguments: {
-                            'myDevice': myDevice,
-                            'myUvcLight': myUvcLight,
-                            'disinfectionTime': myExtinctionTimeMinutePosition,
-                            'activationTime': myActivationTimeMinutePosition,
-                          });
+                          Navigator.pushNamed(context, '/settings');
                         }else{
                           myUvcToast = ToastyMessage(toastContext: context);
                           myUvcToast.setToastDuration(5);

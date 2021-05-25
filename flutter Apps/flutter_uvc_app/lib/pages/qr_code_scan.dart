@@ -4,9 +4,9 @@ import 'dart:io';
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter/cupertino.dart' hide Key;
 import 'package:flutter/material.dart' hide Key;
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutteruvcapp/services/CSVfileClass.dart';
+import 'package:flutteruvcapp/services/DataVariables.dart';
 import 'package:flutteruvcapp/services/bleDeviceClass.dart';
 import 'package:flutteruvcapp/services/uvcClass.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
@@ -28,8 +28,6 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
 
   ToastyMessage myUvcToast;
 
-  List<BluetoothDevice> scanDevices = [];
-  Device myDevice;
   int devicesPosition = 0;
   bool deviceExistOrNot = false;
 
@@ -38,13 +36,8 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
 
   final String uvcSecurityWebPage = 'https://qrgo.page.link/hYgXu';
 
-  UvcLight myUvcLight;
-
-  bool qrCodeConnectionOrSecurity = false;
   bool qrCodeValidOrNot = false;
   bool qrCodeSettings = false;
-
-  Map qrCodeClassData = {};
 
   Map<String, dynamic> dataRead;
   Map<String, dynamic> dataUVC;
@@ -144,15 +137,11 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     double cameraViewHeight = screenHeight * 0.60;
-    qrCodeClassData = qrCodeClassData.isNotEmpty ? qrCodeClassData : ModalRoute.of(context).settings.arguments;
-
-    qrCodeConnectionOrSecurity = qrCodeClassData['qrCodeConnectionOrSecurity'];
 
     if (!qrCodeSettings) {
       if (!qrCodeConnectionOrSecurity) {
         if (Platform.isAndroid) {
           bool noLongerScan = false;
-          scanDevices = qrCodeClassData['scanDevices'];
           _controller.onCapture((data) {
             print('onCapture----$data');
             if (data.isNotEmpty && !qrCodeScanAccess) {
@@ -177,7 +166,6 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           });
         }
         if (Platform.isIOS) {
-          myDevice = qrCodeClassData['myDevice'];
           bool noLongerScan = false;
           _controller.onCapture((data) {
             print('onCapture----$data');
@@ -206,8 +194,6 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
         }
       } else {
         bool noLongerScan = false;
-        myDevice = qrCodeClassData['myDevice'];
-        myUvcLight = qrCodeClassData['myUvcLight'];
         _controller.onCapture((data) async {
           print('onCapture----$data');
           if (data.isNotEmpty) {
@@ -224,10 +210,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                   } else {
                     await myDevice.writeCharacteristic(2, 0, message);
                   }
-                  Navigator.pushNamed(context, '/uvc', arguments: {
-                    'uvclight': myUvcLight,
-                    'myDevice': myDevice,
-                  });
+                  Navigator.pushNamed(context, '/uvc');
                 } else {
                   myUvcToast.setToastDuration(5);
                   myUvcToast.setToastMessage('Le dispositif est trop loin ou éteint, merci de vérifier ce dernier');
@@ -332,10 +315,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           visible: changeModeFloatButton,
           child: FloatingActionButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/profiles', arguments: {
-                'myDevice': myDevice,
-                'dataRead': myDevice.getReadCharMessage(),
-              });
+              Navigator.pushNamed(context, '/profiles');
             },
             child: Icon(Icons.assignment),
             backgroundColor: Colors.blue,
@@ -387,10 +367,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           try {
             switch (int.parse(dataRead['Version'].toString())) {
               case 0:
-                Navigator.pushNamed(context, '/profiles', arguments: {
-                  'myDevice': myDevice,
-                  'dataRead': myDevice.getReadCharMessage(),
-                });
+                Navigator.pushNamed(context, '/profiles');
                 break;
               case 1:
                 int.parse(dataRead['Version'].toString());
@@ -398,18 +375,12 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                 await scanQrCodeDATA();
                 break;
               default:
-                Navigator.pushNamed(context, '/profiles', arguments: {
-                  'myDevice': myDevice,
-                  'dataRead': myDevice.getReadCharMessage(),
-                });
+                Navigator.pushNamed(context, '/profiles');
                 break;
             }
           } catch (e) {
             print('No version detected');
-            Navigator.pushNamed(context, '/profiles', arguments: {
-              'myDevice': myDevice,
-              'dataRead': myDevice.getReadCharMessage(),
-            });
+            Navigator.pushNamed(context, '/profiles');
           }
         });
       }
@@ -515,10 +486,8 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           myUvcLight.setMachineMac(macAddress);
           myUvcLight.setMachineName(nameAddress);
           if (pin == null) {
-            Navigator.pushNamed(context, '/warnings', arguments: {
-              'myDevice': myDevice,
-              'myUvcLight': myUvcLight,
-            });
+            startWithOutSettings = true;
+            Navigator.pushNamed(context, '/warnings');
           } else {
             Navigator.of(context).pop();
 
@@ -595,10 +564,8 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                   ),
                   onPressed: () {
                     if (pinCode == pinAccessCode) {
-                      Navigator.pushNamed(context, '/warnings', arguments: {
-                        'myDevice': myDevice,
-                        'myUvcLight': myUvcLight,
-                      });
+                      startWithOutSettings = true;
+                      Navigator.pushNamed(context, '/warnings');
                     } else {
                       _pinPutController.text = '';
                       pinCode = '';
@@ -621,21 +588,16 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
   }
 
   void rapportCSV(String data) async {
-    List<List<String>> uvcData;
     var dataQrCode = json.decode(data) as Map<String, dynamic>;
     UVCDataFile uvcDataFile = UVCDataFile();
     uvcData = await uvcDataFile.readUVCDATA();
-    String userEmail;
     try {
       userEmail = dataQrCode['SAFEUVCDATA'];
     } catch (e) {
       userEmail = '';
     }
 
-    Navigator.pushNamed(context, '/DataCSVViewQrCode', arguments: {
-      'uvcData': uvcData,
-      'userEmail': userEmail,
-    });
+    Navigator.pushNamed(context, '/DataCSVViewQrCode');
   }
 
   Widget _buildToolBar() {
@@ -847,10 +809,8 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
               onPressed: () async {
                 Navigator.of(context).pop();
                 _controller.pause();
-                Navigator.pushNamed(context, '/warnings', arguments: {
-                  'myDevice': myDevice,
-                  'myUvcLight': myUvcLight,
-                });
+                startWithOutSettings = true;
+                Navigator.pushNamed(context, '/warnings');
               },
             ),
             FlatButton(
@@ -984,27 +944,18 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                       Navigator.of(context).pop();
                       switch (int.parse(dataRead['Version'].toString())) {
                         case 0:
-                          Navigator.pushNamed(context, '/profiles', arguments: {
-                            'myDevice': myDevice,
-                            'dataRead': myDevice.getReadCharMessage(),
-                          });
+                          Navigator.pushNamed(context, '/profiles');
                           break;
                         case 1:
                           await scanQrCodeDATA();
                           break;
                         default:
-                          Navigator.pushNamed(context, '/profiles', arguments: {
-                            'myDevice': myDevice,
-                            'dataRead': myDevice.getReadCharMessage(),
-                          });
+                          Navigator.pushNamed(context, '/profiles');
                           break;
                       }
                     } catch (e) {
                       print('No version detected');
-                      Navigator.pushNamed(context, '/profiles', arguments: {
-                        'myDevice': myDevice,
-                        'dataRead': myDevice.getReadCharMessage(),
-                      });
+                      Navigator.pushNamed(context, '/profiles');
                     }
                   });
                 } else {}
@@ -1040,7 +991,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
               if (myDevice != null) {
                 myDevice.disconnect();
               }
-              Navigator.pop(c, true);
+              Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
             },
           ),
           FlatButton(

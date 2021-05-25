@@ -3,9 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutteruvcapp/services/bleDeviceClass.dart';
+import 'package:flutteruvcapp/services/DataVariables.dart';
 import 'package:flutteruvcapp/services/custum_timer_painter.dart';
-import 'package:flutteruvcapp/services/uvcClass.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
 import 'package:slide_countdown_clock/slide_countdown_clock.dart';
 
@@ -24,12 +23,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
   Duration durationOfDisinfect;
   Duration durationOfActivate;
 
-  Map uvcClassData = {};
-  UvcLight myUvcLight;
-
   ToastyMessage myUvcToast;
-
-  Device myDevice;
 
   double opacityLevelDisinfection = 0.0;
   double opacityLevelActivation = 1.0;
@@ -102,13 +96,9 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
             print('detection captured , STOP EVERYTHING !');
             treatmentIsOnProgress = false;
             treatmentIsSuccessful = false;
-            Navigator.pushNamed(context, '/end_uvc', arguments: {
-              'myUvcLight': myUvcLight,
-              'myactivationtime': (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds),
-              'treatmentIsSuccessful': treatmentIsSuccessful,
-              'dataRead': dataRobotUVC,
-              'myDevice': myDevice,
-            });
+            activationTime = (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds);
+            isTreatmentCompleted = treatmentIsSuccessful;
+            Navigator.pushNamed(context, '/end_uvc');
             break;
           }
         } else {
@@ -133,10 +123,6 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    uvcClassData = uvcClassData.isNotEmpty ? uvcClassData : ModalRoute.of(context).settings.arguments;
-    myUvcLight = uvcClassData['uvclight'];
-    myDevice = uvcClassData['myDevice'];
-
     if (firstDisplayMainWidget) {
       durationOfDisinfect = Duration(seconds: myUvcLight.getActivationTime());
       if (myUvcLight.infectionTime.contains('sec')) {
@@ -325,13 +311,9 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                                   treatmentIsOnProgress = false;
                                                   _getNotification();
                                                   stopReading = true;
-                                                  Navigator.pushNamed(context, '/end_uvc', arguments: {
-                                                    'myactivationtime': (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds),
-                                                    'myDevice': myDevice,
-                                                    'myUvcLight': myUvcLight,
-                                                    'dataRead':dataRobotUVC,
-                                                    'treatmentIsSuccessful': treatmentIsSuccessful,
-                                                  });
+                                                  activationTime = (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds);
+                                                  isTreatmentCompleted = treatmentIsSuccessful;
+                                                  Navigator.pushNamed(context, '/end_uvc');
                                                 }
                                               },
                                             ),
@@ -380,13 +362,9 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                 await myDevice.writeCharacteristic(2, 0, message);
               }
               Navigator.pop(c, true);
-              Navigator.pushNamed(context, '/end_uvc', arguments: {
-                'myactivationtime': (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds),
-                'myDevice': myDevice,
-                'myUvcLight': myUvcLight,
-                'dataRead':dataRobotUVC,
-                'treatmentIsSuccessful': treatmentIsSuccessful,
-              });
+              activationTime = (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds);
+              isTreatmentCompleted = treatmentIsSuccessful;
+              Navigator.pushNamed(context, '/end_uvc');
             },
           ),
           FlatButton(

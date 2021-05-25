@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutteruvcapp/services/DataVariables.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
 import 'package:location_permissions/location_permissions.dart';
 
@@ -14,7 +15,6 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
   ToastyMessage myUvcToast;
 
   FlutterBlue flutterBlue = FlutterBlue.instance;
-  List<BluetoothDevice> scanDevices = [];
 
   bool firstDisplayMainWidget = true;
 
@@ -244,11 +244,9 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
             onPressed: () async {
               Navigator.pop(c, true);
               // Start scanning
+              qrCodeConnectionOrSecurity = false;
               flutterBlue.startScan(timeout: Duration(seconds: 5));
-              Navigator.pushNamed(context, '/qr_code_scan', arguments: {
-                'scanDevices': scanDevices,
-                'qrCodeConnectionOrSecurity': false,
-              });
+              Navigator.pushNamed(context, '/qr_code_scan');
             },
           ),
           FlatButton(

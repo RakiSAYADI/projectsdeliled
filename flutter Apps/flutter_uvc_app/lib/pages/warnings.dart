@@ -2,8 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutteruvcapp/services/bleDeviceClass.dart';
-import 'package:flutteruvcapp/services/uvcClass.dart';
+import 'package:flutteruvcapp/services/DataVariables.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
 
 class Warnings extends StatefulWidget {
@@ -12,21 +11,12 @@ class Warnings extends StatefulWidget {
 }
 
 class _WarningsState extends State<Warnings> {
-  Map warningsClassData = {};
-
-  Device myDevice;
-  UvcLight myUvcLight;
-
   ToastyMessage myUvcToast;
 
   bool nextButtonPressedOnce = false;
 
   @override
   Widget build(BuildContext context) {
-    warningsClassData = warningsClassData.isNotEmpty ? warningsClassData : ModalRoute.of(context).settings.arguments;
-    myDevice = warningsClassData['myDevice'];
-    myUvcLight = warningsClassData['myUvcLight'];
-
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
@@ -207,10 +197,7 @@ class _WarningsState extends State<Warnings> {
                                   } else {
                                     await myDevice.writeCharacteristic(2, 0, message);
                                   }
-                                  Navigator.pushNamed(context, '/uvc', arguments: {
-                                    'uvclight': myUvcLight,
-                                    'myDevice': myDevice,
-                                  });
+                                  Navigator.pushNamed(context, '/uvc');
                                 }
                               } catch (e) {
                                 if (myDevice.getConnectionState()) {
@@ -238,8 +225,12 @@ class _WarningsState extends State<Warnings> {
                         SizedBox(width: screenWidth * 0.09),
                         FlatButton(
                           onPressed: () {
-                            myDevice.disconnect();
-                            Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+                            if (startWithOutSettings) {
+                              myDevice.disconnect();
+                              Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+                            } else {
+                              Navigator.pop(context, false);
+                            }
                           },
                           child: Text(
                             'ANNULER',
@@ -264,14 +255,19 @@ class _WarningsState extends State<Warnings> {
   }
 
   Future<bool> exitApp(BuildContext context) async {
-    myDevice.disconnect();
-    Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+    if (startWithOutSettings) {
+      myDevice.disconnect();
+      Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+    } else {
+      Navigator.pop(context, false);
+    }
     return true;
   }
 
   Future<void> startScan(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    nextButtonPressedOnce = false;
     return showDialog<bool>(
       context: context,
       barrierDismissible: false,
@@ -296,18 +292,14 @@ class _WarningsState extends State<Warnings> {
             child: Text('OK'),
             onPressed: () async {
               Navigator.pop(c, true);
-              Navigator.pushNamed(context, '/qr_code_scan', arguments: {
-                'myDevice': myDevice,
-                'myUvcLight': myUvcLight,
-                'qrCodeConnectionOrSecurity': true,
-              });
+              qrCodeConnectionOrSecurity = true;
+              Navigator.pushNamed(context, '/qr_code_scan');
             },
           ),
           FlatButton(
             child: Text('Annuler'),
             onPressed: () {
               Navigator.pop(c, false);
-              nextButtonPressedOnce = true;
             },
           ),
         ],

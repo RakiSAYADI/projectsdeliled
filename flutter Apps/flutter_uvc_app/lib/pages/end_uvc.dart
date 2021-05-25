@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutteruvcapp/services/CSVfileClass.dart';
-import 'package:flutteruvcapp/services/bleDeviceClass.dart';
-import 'package:flutteruvcapp/services/uvcClass.dart';
+import 'package:flutteruvcapp/services/DataVariables.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
@@ -12,22 +11,10 @@ class EndUVC extends StatefulWidget {
 }
 
 class _EndUVCState extends State<EndUVC> {
-  Device myDevice;
-  bool isTreatmentCompleted;
-
-  String dataRobotUVC = '';
-
-  Map endUVCClassData = {};
 
   UVCDataFile uvcDataFile;
 
-  UvcLight myUvcLight;
-
-  List<List<String>> uvcData;
-
   bool firstDisplayMainWidget = true;
-
-  int activationTime;
 
   void csvDataFile() async {
     uvcDataFile = UVCDataFile();
@@ -74,11 +61,6 @@ class _EndUVCState extends State<EndUVC> {
 
   @override
   Widget build(BuildContext context) {
-    endUVCClassData = endUVCClassData.isNotEmpty ? endUVCClassData : ModalRoute.of(context).settings.arguments;
-    isTreatmentCompleted = endUVCClassData['treatmentIsSuccessful'];
-    activationTime = endUVCClassData['myactivationtime'];
-    myDevice = endUVCClassData['myDevice'];
-    myUvcLight = endUVCClassData['myUvcLight'];
 
     if (firstDisplayMainWidget) {
       firstDisplayMainWidget = false;

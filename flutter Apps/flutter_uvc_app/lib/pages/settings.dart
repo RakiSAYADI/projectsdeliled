@@ -1,8 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutteruvcapp/services/bleDeviceClass.dart';
-import 'package:flutteruvcapp/services/uvcClass.dart';
+import 'package:flutteruvcapp/services/DataVariables.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
 
 class Settings extends StatefulWidget {
@@ -11,11 +10,6 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  Map settingsClassData = {};
-  Device myDevice;
-
-  UvcLight myUvcLight;
-
   bool nextButtonPressedOnce = false;
 
   ToastyMessage myUvcToast;
@@ -24,9 +18,6 @@ class _SettingsState extends State<Settings> {
   String myActivationTimeMinuteData = ' 10 sec';
 
   bool firstDisplayMainWidget = true;
-
-  int myExtinctionTimeMinutePosition = 0;
-  int myActivationTimeMinutePosition = 0;
 
   List<String> myExtinctionTimeMinute = [
     ' 30 sec',
@@ -74,13 +65,16 @@ class _SettingsState extends State<Settings> {
   ];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    myExtinctionTimeMinutePosition = 0;
+    myActivationTimeMinutePosition = 0;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    settingsClassData = settingsClassData.isNotEmpty ? settingsClassData : ModalRoute.of(context).settings.arguments;
-    myDevice = settingsClassData['myDevice'];
-    myUvcLight = settingsClassData['myUvcLight'];
     if (firstDisplayMainWidget) {
-      myExtinctionTimeMinutePosition = settingsClassData['disinfectionTime'];
-      myActivationTimeMinutePosition = settingsClassData['activationTime'];
       firstDisplayMainWidget = false;
       myExtinctionTimeMinuteData = myExtinctionTimeMinute.elementAt(myExtinctionTimeMinutePosition);
       myActivationTimeMinuteData = myActivationTimeMinute.elementAt(myActivationTimeMinutePosition);
@@ -220,6 +214,7 @@ class _SettingsState extends State<Settings> {
   Future<void> alertSecurity(BuildContext context) async {
     myUvcLight.setInfectionTime(myExtinctionTimeMinuteData);
     myUvcLight.setActivationTime(myActivationTimeMinuteData);
+    nextButtonPressedOnce = false;
     if (Platform.isIOS) {
       await myDevice.writeCharacteristic(0, 0,
           '{\"data\":[\"${myUvcLight.getCompanyName()}\",\"${myUvcLight.getOperatorName()}\",\"${myUvcLight.getRoomName()}\",$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition]}');
@@ -354,10 +349,8 @@ class _SettingsState extends State<Settings> {
               ),
               onPressed: () async {
                 Navigator.of(context).pop();
-                Navigator.pushNamed(context, '/warnings', arguments: {
-                  'myDevice': myDevice,
-                  'myUvcLight': myUvcLight,
-                });
+                startWithOutSettings = false;
+                Navigator.pushNamed(context, '/warnings');
               },
             ),
             FlatButton(
@@ -366,7 +359,6 @@ class _SettingsState extends State<Settings> {
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () {
-                nextButtonPressedOnce = false;
                 Navigator.of(context).pop();
               },
             ),

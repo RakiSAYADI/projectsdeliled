@@ -5,6 +5,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:location_permissions/location_permissions.dart';
+import 'package:flutteruvcapp/services/DataVariables.dart';
 import 'package:package_info/package_info.dart';
 
 class TutorialView extends StatefulWidget {
@@ -16,7 +17,6 @@ class _TutorialViewState extends State<TutorialView> {
   ToastyMessage myUvcToast;
 
   FlutterBlue flutterBlue = FlutterBlue.instance;
-  List<BluetoothDevice> scanDevices = [];
 
   bool firstDisplayMainWidget = true;
 
@@ -38,10 +38,8 @@ class _TutorialViewState extends State<TutorialView> {
         if (Platform.isAndroid) {
           // Start scanning
           flutterBlue.startScan(timeout: Duration(seconds: 5));
-          Navigator.pushNamed(context, '/qr_code_scan', arguments: {
-            'scanDevices': scanDevices,
-            'qrCodeConnectionOrSecurity': false,
-          });
+          qrCodeConnectionOrSecurity = false;
+          Navigator.pushNamed(context, '/qr_code_scan');
         }
       }
     });

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutteruvcapp/services/CSVfileClass.dart';
+import 'package:flutteruvcapp/services/DataVariables.dart';
 import 'package:flutteruvcapp/services/httpRequests.dart';
 import 'package:flutteruvcapp/services/life_cycle_widget.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
@@ -27,8 +28,6 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   UVCDataFile uvcDataFile = UVCDataFile();
 
   FlutterBlue flutterBlue = FlutterBlue.instance;
-
-  List<BluetoothDevice> scanDevices = [];
 
   PermissionStatus _permissionStatus = PermissionStatus.unknown;
 
@@ -121,10 +120,8 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
             if (Platform.isAndroid) {
               Future.delayed(Duration(seconds: loadingSeconds), () async {
                 flutterBlue.startScan(timeout: Duration(seconds: loadingSeconds));
-                Navigator.pushNamed(context, '/qr_code_scan', arguments: {
-                  'scanDevices': scanDevices,
-                  'qrCodeConnectionOrSecurity': false,
-                });
+                qrCodeConnectionOrSecurity = false;
+                Navigator.pushNamed(context, '/qr_code_scan');
               });
             } else {
               Future.delayed(Duration(seconds: loadingSeconds), () async {
@@ -149,6 +146,8 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
+    scanDevices = [];
 
     lifecycleEventHandler = LifecycleEventHandler(resumeCallBack: () async {
       print('resumed');

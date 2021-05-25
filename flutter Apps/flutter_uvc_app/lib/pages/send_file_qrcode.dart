@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutteruvcapp/services/CSVfileClass.dart';
+import 'package:flutteruvcapp/services/DataVariables.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
@@ -16,16 +17,11 @@ class SendEmailQrCode extends StatefulWidget {
 class _SendEmailQrCodeState extends State<SendEmailQrCode> {
   ToastyMessage myUvcToast;
 
-  Map sendEmailQrCodeClassData = {};
-
   final String _uvcDataFileName = 'RapportUVC.csv';
 
   final myEmail = TextEditingController();
 
-  List<List<String>> uvcData;
-
   UVCDataFile uvcDataFile;
-  String userEmail;
 
   bool firstDisplayMainWidget = true;
 
@@ -55,31 +51,28 @@ class _SendEmailQrCodeState extends State<SendEmailQrCode> {
 
   @override
   Widget build(BuildContext context) {
-    sendEmailQrCodeClassData = sendEmailQrCodeClassData.isNotEmpty ? sendEmailQrCodeClassData : ModalRoute.of(context).settings.arguments;
-    uvcData = sendEmailQrCodeClassData['uvcData'];
-    userEmail = sendEmailQrCodeClassData['userEmail'];
     readUserEmailFile();
 
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return WillPopScope(
         child: Scaffold(
-      resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        title: Text('Envoi Rapport'),
-        centerTitle: true,
-      ),
-      body: Container(
-        decoration: BoxDecoration(color: Colors.grey[200]),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+        resizeToAvoidBottomPadding: false,
+        appBar: AppBar(
+          title: Text('Envoi Rapport'),
+          centerTitle: true,
+        ),
+        body: Container(
+          decoration: BoxDecoration(color: Colors.grey[200]),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
                     Text(
                       'Entrer votre adresse email :',
                       style: TextStyle(fontSize: (screenWidth * 0.05)),
@@ -116,17 +109,18 @@ class _SendEmailQrCodeState extends State<SendEmailQrCode> {
                         style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
                       ),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        color: Colors.blue[400],
                       ),
-                      color: Colors.blue[400],
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      ),),
+      ),
       onWillPop: () => exitApp(context),
     );
   }
