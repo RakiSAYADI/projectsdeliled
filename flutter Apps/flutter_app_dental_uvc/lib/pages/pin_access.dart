@@ -22,8 +22,6 @@ class AlwaysDisabledFocusNode extends FocusNode {
   bool get hasFocus => false;
 }
 
-AutoUVCService autoUVCService = AutoUVCService();
-
 class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   final TextEditingController _pinPutController = TextEditingController();
 
@@ -38,15 +36,9 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
 
   Widget mainWidgetScreen;
 
-  final int timeSleep = 120000;
-
   bool widgetIsInactive = false;
 
-  int timeToSleep;
-
   bool firstDisplayMainWidget = true;
-
-  Map pinAccessClassData = {};
 
   String dataRobotUVC = '';
 

@@ -28,15 +28,10 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
 
   LedControl ledControl;
 
-  GifController gifController;
-
   Widget mainWidgetScreen;
 
   bool firstDisplayMainWidget = true;
   bool widgetIsInactive = false;
-
-  final int timeSleep = 30000;
-  int timeToSleep;
 
   ToastyMessage myUvcToast;
 

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutterappdentaluvc/services/AutoUVCService.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
@@ -27,6 +28,7 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
     // TODO: implement initState
     super.initState();
     myUvcToast = ToastyMessage(toastContext: context);
+    autoUVCService.setContext(context);
   }
 
   @override

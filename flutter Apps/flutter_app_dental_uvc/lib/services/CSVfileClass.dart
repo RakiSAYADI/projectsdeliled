@@ -136,7 +136,7 @@ class UVCDataFile {
       final directory = await getApplicationDocumentsDirectory();
       final file = File('${directory.path}/$_uvcAutoDataFileName');
       String uvcAutoData = await file.readAsString();
-      print("uvc auto file Readed");
+      print('uvc auto file Readed');
       return uvcAutoData;
     } catch (e) {
       print("Couldn't read file");
@@ -158,6 +158,6 @@ class UVCDataFile {
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/$_uvcAutoDataFileName');
     await file.writeAsString(uvcAutoData);
-    print('saveUVCAutoData : saved');
+    print('saveUVCAutoData saved');
   }
 }

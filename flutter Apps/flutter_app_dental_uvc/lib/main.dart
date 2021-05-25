@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutterappdentaluvc/pages/Automatique_UVC.dart';
 import 'package:flutterappdentaluvc/pages/advanced_settings.dart';
 import 'package:flutterappdentaluvc/pages/data_view.dart';
@@ -13,6 +12,7 @@ import 'package:flutterappdentaluvc/pages/settings.dart';
 import 'package:flutterappdentaluvc/pages/uvc.dart';
 import 'package:flutterappdentaluvc/pages/warnings.dart';
 import 'package:flutterappdentaluvc/pages/welcome.dart';
+import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:rxdart/subjects.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -66,27 +66,40 @@ void main() async {
         badge: true,
         sound: true,
       );
-  runApp(
-    Phoenix(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'GLOBAL UVC',
-        initialRoute: '/',
-        routes: {
-          '/': (context) => Welcome(),
-          '/pin_access': (context) => AccessPin(),
-          '/advanced_settings': (context) => AdvancedSettings(),
-          '/scan_ble_list': (context) => ScanListBle(),
-          '/auto_uvc': (context) => UVCAuto(),
-          '/DataCSVView': (context) => DataCSVView(),
-          '/pin_settings': (context) => PinSettings(),
-          '/profiles': (context) => Profiles(),
-          '/settings': (context) => Settings(),
-          '/warnings': (context) => Warnings(),
-          '/uvc': (context) => UVC(),
-          '/end_uvc': (context) => EndUVC(),
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: GestureDetector(
+        child: MaterialApp(
+          navigatorKey: navigatorKey,
+          debugShowCheckedModeBanner: false,
+          title: 'GLOBAL UVC',
+          initialRoute: '/',
+          routes: {
+            '/': (context) => Welcome(),
+            '/pin_access': (context) => AccessPin(),
+            '/advanced_settings': (context) => AdvancedSettings(),
+            '/scan_ble_list': (context) => ScanListBle(),
+            '/auto_uvc': (context) => UVCAuto(),
+            '/DataCSVView': (context) => DataCSVView(),
+            '/pin_settings': (context) => PinSettings(),
+            '/profiles': (context) => Profiles(),
+            '/settings': (context) => Settings(),
+            '/warnings': (context) => Warnings(),
+            '/uvc': (context) => UVC(),
+            '/end_uvc': (context) => EndUVC(),
+          },
+        ),
+        onTap: () {
+          print('tap is detected');
         },
       ),
-    ),
-  );
+    );
+  }
 }

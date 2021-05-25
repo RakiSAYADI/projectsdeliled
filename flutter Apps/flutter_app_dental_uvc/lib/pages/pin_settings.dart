@@ -110,7 +110,7 @@ class _PinSettingsState extends State<PinSettings> {
                   ),
                   SizedBox(height: heightScreen * 0.1),
                   Text(
-                    'Rentrer le nouveau code de sécurité : ',
+                    'Vérifiez le nouveau code de sécurité : ',
                     style: TextStyle(fontSize: (widthScreen * 0.02)),
                   ),
                   SizedBox(height: heightScreen * 0.05),
@@ -162,7 +162,7 @@ class _PinSettingsState extends State<PinSettings> {
                           if(myNewPinCode.text == myRenewPinCode.text){
                             _savePINFile(myNewPinCode.text);
                             myUvcToast.setToastDuration(2);
-                            myUvcToast.setToastMessage('Merci, Le changement de mot de passe a été pris en compte !');
+                            myUvcToast.setToastMessage('Le changement de mot de passe a été pris en compte !');
                             myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
                             myOldPinCode.text = '';
                             myNewPinCode.text = '';

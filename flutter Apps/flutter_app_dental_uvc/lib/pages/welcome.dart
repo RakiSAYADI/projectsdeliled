@@ -88,7 +88,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       if (deviceExistOrNot) {
         await Future.delayed(const Duration(milliseconds: 500));
         myUvcToast.setAnimationIcon(animationRefreshIcon);
-        myUvcToast.setToastDuration(5);
+        myUvcToast.setToastDuration(120);
         myDevice = Device(device: scanDevices.elementAt(devicesPosition));
         myUvcToast.setToastMessage('Autorisation de connexion validée !');
         myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
@@ -96,18 +96,15 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
         while (true) {
           while (true) {
             myDevice.connect(false);
-            await Future.delayed(Duration(milliseconds: 2200));
+            await Future.delayed(Duration(seconds: 3));
             print('result of trying connection is ${myDevice.getConnectionState()}');
             if (myDevice.getConnectionState()) {
               break;
             } else {
               myDevice.disconnect();
-              await Future.delayed(Duration(milliseconds: 2200));
             }
           }
           if (myDevice.getConnectionState()) {
-            // clear the remaining toast message
-            myUvcToast.clearAllToast();
             await myDevice.readCharacteristic(2, 0);
             await Future.delayed(const Duration(seconds: 1));
             try {
@@ -116,6 +113,8 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
                   flutterBlue.stopScan();
                   enableResetButtonCounter = 0;
                   await Future.delayed(const Duration(milliseconds: 500));
+                  // clear the remaining toast message
+                  myUvcToast.clearAllToast();
                   Navigator.pushReplacementNamed(context, '/pin_access');
                 });
                 break;
@@ -136,7 +135,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
             });
             break;
           }
-          await Future.delayed(const Duration(seconds: 2));
+          await Future.delayed(const Duration(seconds: 1));
         }
       } else {
         myUvcToast.setToastDuration(10);
@@ -326,7 +325,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
               Expanded(
                 flex: 3,
                 child: Image.asset(
-                  'assets/logo_uv_c.png',
+                  'assets/ic_launcher_UVC.png',
                   height: heightScreen * 0.2,
                   width: widthScreen * 0.7,
                 ),
@@ -339,11 +338,33 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
                 ),
               ),
               Expanded(
-                flex: 2,
-                child: Image.asset(
-                  'assets/logo_deeplight.png',
-                  height: heightScreen * 0.15,
-                  width: widthScreen * 0.7,
+                flex: 3,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      flex: 3,
+                      child: Image.asset(
+                        'assets/logo_deeplight.png',
+                        height: heightScreen * 0.1,
+                        width: widthScreen * 0.7,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Center(
+                        child: Text(
+                          'Solutions de désinfection par UV-C',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[300],
+                            fontSize: widthScreen * 0.03,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Expanded(

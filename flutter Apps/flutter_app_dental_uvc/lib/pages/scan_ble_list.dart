@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
@@ -161,8 +160,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
               Navigator.pop(c, true);
               UVCDataFile uvcDataFile = UVCDataFile();
               uvcDataFile.saveUVCDevice(uvcDeviceMac);
-              Phoenix.rebirth(context);
-              //Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+              Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
             },
           ),
           FlatButton(

@@ -7,6 +7,8 @@ import 'package:flutterappdentaluvc/services/uvcClass.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 
+AutoUVCService autoUVCService = AutoUVCService();
+
 class AutoUVCService {
   Device _myDevice;
   BuildContext _buildContext;
@@ -22,57 +24,11 @@ class AutoUVCService {
   List<int> _delayList = [0, 0, 0, 0, 0, 0, 0];
   List<int> _durationList = [0, 0, 0, 0, 0, 0, 0];
 
-  List<String> myExtinctionTimeMinute = [
-    ' 30 sec',
-    '  1 min',
-    '  2 min',
-    '  5 min',
-    ' 10 min',
-    ' 15 min',
-    ' 20 min',
-    ' 25 min',
-    ' 30 min',
-    ' 35 min',
-    ' 40 min',
-    ' 45 min',
-    ' 50 min',
-    ' 55 min',
-    ' 60 min',
-    ' 65 min',
-    ' 70 min',
-    ' 75 min',
-    ' 80 min',
-    ' 85 min',
-    ' 90 min',
-    ' 95 min',
-    '100 min',
-    '105 min',
-    '110 min',
-    '115 min',
-    '120 min',
-  ];
-
-  List<String> myActivationTimeMinute = [
-    ' 10 sec',
-    ' 20 sec',
-    ' 30 sec',
-    ' 40 sec',
-    ' 50 sec',
-    ' 60 sec',
-    ' 70 sec',
-    ' 80 sec',
-    ' 90 sec',
-    '100 sec',
-    '110 sec',
-    '120 sec',
-  ];
-
   void startUVCService() async {
     //initialize the service
     _serviceState = true;
     await _readUVCAuto();
     DateTime date = DateTime.now();
-    _myUvcToast = ToastyMessage(toastContext: _buildContext);
     do {
       if (_serviceState) {
         //service functionality
@@ -92,23 +48,19 @@ class AutoUVCService {
                   company: user['Company'],
                   operatorName: user['UserName'],
                   roomName: user['RoomName']);
-              _myUVCLight.setInfectionTime(myExtinctionTimeMinute[_delayList[i]]);
-              _myUVCLight.setActivationTime(myActivationTimeMinute[_durationList[i]]);
+              _myUVCLight.setInfectionTime(myExtinctionTimeMinute[_durationList[i]]);
+              _myUVCLight.setActivationTime(myActivationTimeMinute[_delayList[i]]);
               await _myDevice.writeCharacteristic(2, 0,
-                  '{\"data\":[\"${_myUVCLight.getCompanyName()}\",\"${_myUVCLight.getOperatorName()}\",\"${_myUVCLight.getRoomName()}\",${_delayList[i]},${_durationList[i]}]}');
+                  '{\"data\":[\"${_myUVCLight.getCompanyName()}\",\"${_myUVCLight.getOperatorName()}\",'
+                      '\"${_myUVCLight.getRoomName()}\",${_durationList[i]},${_delayList[i]}]}');
               await Future.delayed(const Duration(milliseconds: 200));
               String message = 'UVCTreatement : ON';
               await _myDevice.writeCharacteristic(2, 0, message);
-              try {
-                myDevice = _myDevice;
-                myUvcLight = _myUVCLight;
-                Navigator.pushNamed(_buildContext, '/uvc');
-              } catch (e) {
-                _myUvcToast.setToastDuration(5);
-                _myUvcToast.setToastMessage('Execution d\'une desinfection automatique !');
-                _myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
-              }
+              myDevice = _myDevice;
+              myUvcLight = _myUVCLight;
+              navigatorKey.currentState.pushNamed('/uvc');
             } else {
+              _myUvcToast = ToastyMessage(toastContext: _buildContext);
               _myUvcToast.setToastDuration(3);
               _myUvcToast.setToastMessage('La désinfection est ignorée car le dispositif UV-C n\'est pas connecté !');
               _myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);

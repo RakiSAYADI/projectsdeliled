@@ -14,51 +14,6 @@ class _SettingsState extends State<Settings> {
 
   bool firstDisplayMainWidget = true;
 
-  List<String> myExtinctionTimeMinute = [
-    ' 30 sec',
-    '  1 min',
-    '  2 min',
-    '  5 min',
-    ' 10 min',
-    ' 15 min',
-    ' 20 min',
-    ' 25 min',
-    ' 30 min',
-    ' 35 min',
-    ' 40 min',
-    ' 45 min',
-    ' 50 min',
-    ' 55 min',
-    ' 60 min',
-    ' 65 min',
-    ' 70 min',
-    ' 75 min',
-    ' 80 min',
-    ' 85 min',
-    ' 90 min',
-    ' 95 min',
-    '100 min',
-    '105 min',
-    '110 min',
-    '115 min',
-    '120 min',
-  ];
-
-  List<String> myActivationTimeMinute = [
-    ' 10 sec',
-    ' 20 sec',
-    ' 30 sec',
-    ' 40 sec',
-    ' 50 sec',
-    ' 60 sec',
-    ' 70 sec',
-    ' 80 sec',
-    ' 90 sec',
-    '100 sec',
-    '110 sec',
-    '120 sec',
-  ];
-
   @override
   Widget build(BuildContext context) {
     if (firstDisplayMainWidget) {
@@ -208,8 +163,6 @@ class _SettingsState extends State<Settings> {
     double heightScreen = MediaQuery.of(context).size.height;
     myUvcLight.setInfectionTime(myExtinctionTimeMinuteData);
     myUvcLight.setActivationTime(myActivationTimeMinuteData);
-    print(myExtinctionTimeMinutePosition);
-    print(myActivationTimeMinutePosition);
     await myDevice.writeCharacteristic(2, 0,
         '{\"data\":[\"${myUvcLight.getCompanyName()}\",\"${myUvcLight.getOperatorName()}\",\"${myUvcLight.getRoomName()}\",$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition]}');
     return showDialog<void>(
