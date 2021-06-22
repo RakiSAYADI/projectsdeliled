@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
@@ -14,7 +15,7 @@ class Device {
 
   bool _readIsReady = false;
 
-  Future<bool> connect(bool autoConnection) async {
+  Future<bool> connect({bool autoConnection}) async {
     // Not available for reading
     _readIsReady = false;
     //defining the methods
@@ -50,9 +51,9 @@ class Device {
 
     try {
       // connect
-      await device.connect(autoConnect: autoConnection, timeout: Duration(seconds: 3));
+      await device.connect(autoConnect: autoConnection);
       checkConnectionState();
-      await Future.delayed(const Duration(milliseconds: 100));
+      await Future.delayed(const Duration(milliseconds: 500));
       if (_connectionState == BluetoothDeviceState.connected.index) {
         //Discover services
         _services = await device.discoverServices();
@@ -83,9 +84,9 @@ class Device {
     }
   }
 
-  void disconnect() {
+  Future<void> disconnect() async {
     // disconnect
-    device.disconnect();
+    await device.disconnect();
     // Not available for reading
     _readIsReady = false;
   }

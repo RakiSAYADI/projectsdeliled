@@ -38,7 +38,7 @@ class _AlarmClockState extends State<AlarmClock> {
   List<int> secondsList = [0, 0, 0, 0, 0, 0, 0];
 
   List<int> luminosityMinList = [0, 0, 0, 0, 0, 0, 0];
-  List<int> luminosityMaxList = [50, 50, 50, 50, 50, 50, 50];
+  List<int> luminosityMaxList = [100, 100, 100, 100, 100, 100, 100];
   List<String> dayZones = ['F', 'F', 'F', 'F', 'F', 'F', 'F'];
 
   String myTimeHoursData = '00';
@@ -285,7 +285,7 @@ class _AlarmClockState extends State<AlarmClock> {
   @override
   Widget build(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
-    //double heightScreen = MediaQuery.of(context).size.height;
+    double heightScreen = MediaQuery.of(context).size.height;
     bleDeviceData = bleDeviceData.isNotEmpty ? bleDeviceData : ModalRoute.of(context).settings.arguments;
     myDevice = bleDeviceData['bleDevice'];
     characteristicMaestro = bleDeviceData['characteristicMaestro'];
@@ -327,7 +327,10 @@ class _AlarmClockState extends State<AlarmClock> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Alarme Automatique',style: TextStyle(fontSize: 18),),
+        title: const Text(
+          'Planning d\'ambiances',
+          style: TextStyle(fontSize: 18),
+        ),
         centerTitle: true,
       ),
       bottomNavigationBar: BottomAppBar(
@@ -499,10 +502,6 @@ class _AlarmClockState extends State<AlarmClock> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Divider(
-                thickness: 1.0,
-                color: Colors.grey[600],
-              ),
             ),
             FlatButton(
               onPressed: () {
@@ -532,199 +531,269 @@ class _AlarmClockState extends State<AlarmClock> {
                 borderRadius: BorderRadius.circular(18.0),
               ),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Heure d\'activation :',
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+                    child: Image.asset(
+                      'assets/reveil-dmx.png',
+                      height: heightScreen * 0.1,
+                      width: widthScreen * 0.2,
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Heure d\'activation :',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          DropdownButton<String>(
+                            value: myTimeHoursData,
+                            icon: Icon(Icons.arrow_drop_down),
+                            iconSize: 24,
+                            elevation: 16,
+                            style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                            onChanged: (String data) {
+                              setState(() {
+                                saveButtonColor = Colors.grey[400];
+                                myTimeHoursData = data;
+                                myTimeHoursPosition = myTimeHours.indexOf(data);
+                                hourList[day] = myTimeHoursPosition;
+                              });
+                            },
+                            items: myTimeHours.map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                          Text(
+                            ' : ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
+                          ),
+                          DropdownButton<String>(
+                            value: myTimeMinutesData,
+                            icon: Icon(Icons.arrow_drop_down),
+                            iconSize: 24,
+                            elevation: 16,
+                            style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                            onChanged: (String data) {
+                              setState(() {
+                                saveButtonColor = Colors.grey[400];
+                                myTimeMinutesData = data;
+                                myTimeMinutesPosition = myTimeMinutes.indexOf(data);
+                                minutesList[day] = myTimeMinutesPosition;
+                              });
+                            },
+                            items: myTimeMinutes.map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                          Text(
+                            ' : ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
+                          ),
+                          DropdownButton<String>(
+                            value: myTimeSecondsData,
+                            icon: Icon(Icons.arrow_drop_down),
+                            iconSize: 24,
+                            elevation: 16,
+                            style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                            onChanged: (String data) {
+                              setState(() {
+                                saveButtonColor = Colors.grey[400];
+                                myTimeSecondsData = data;
+                                myTimeSecondsPosition = myTimeSeconds.indexOf(data);
+                                secondsList[day] = myTimeSecondsPosition;
+                              });
+                            },
+                            items: myTimeMinutes.map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  bigCircle(50, 50),
+                  Text(
+                    'Couleur \n à appliquer',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.black,
                     ),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    DropdownButton<String>(
-                      value: myTimeHoursData,
-                      icon: Icon(Icons.arrow_drop_down),
-                      iconSize: 24,
-                      elevation: 16,
-                      style: TextStyle(color: Colors.grey[800], fontSize: 18),
-                      onChanged: (String data) {
-                        setState(() {
-                          saveButtonColor = Colors.grey[400];
-                          myTimeHoursData = data;
-                          myTimeHoursPosition = myTimeHours.indexOf(data);
-                          hourList[day] = myTimeHoursPosition;
-                        });
-                      },
-                      items: myTimeHours.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                    Text(
-                      ' : ',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
-                      ),
-                    ),
-                    DropdownButton<String>(
-                      value: myTimeMinutesData,
-                      icon: Icon(Icons.arrow_drop_down),
-                      iconSize: 24,
-                      elevation: 16,
-                      style: TextStyle(color: Colors.grey[800], fontSize: 18),
-                      onChanged: (String data) {
-                        setState(() {
-                          saveButtonColor = Colors.grey[400];
-                          myTimeMinutesData = data;
-                          myTimeMinutesPosition = myTimeMinutes.indexOf(data);
-                          minutesList[day] = myTimeMinutesPosition;
-                        });
-                      },
-                      items: myTimeMinutes.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                    Text(
-                      ' : ',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
-                      ),
-                    ),
-                    DropdownButton<String>(
-                      value: myTimeSecondsData,
-                      icon: Icon(Icons.arrow_drop_down),
-                      iconSize: 24,
-                      elevation: 16,
-                      style: TextStyle(color: Colors.grey[800], fontSize: 18),
-                      onChanged: (String data) {
-                        setState(() {
-                          saveButtonColor = Colors.grey[400];
-                          myTimeSecondsData = data;
-                          myTimeSecondsPosition = myTimeSeconds.indexOf(data);
-                          secondsList[day] = myTimeSecondsPosition;
-                        });
-                      },
-                      items: myTimeMinutes.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Text(
-              'Durée d\'activation :',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.black,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.1)),
-              child: DropdownButton<String>(
-                value: myAlarmTimeMinuteData,
-                icon: Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                elevation: 16,
-                style: TextStyle(color: Colors.grey[800], fontSize: 18),
-                underline: Container(
-                  height: 2,
-                  color: Colors.blue[300],
-                ),
-                onChanged: (String data) {
-                  setState(() {
-                    myAlarmTimeMinuteData = data;
-                    myAlarmTimeMinutePosition = myAlarmTimeMinute.indexOf(data);
-                    myAlarmTimeMinuteList[day] = myAlarmTimeMinutePosition;
-                  });
-                },
-                items: myAlarmTimeMinute.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+                  IconButton(
+                    icon: Icon(Icons.settings),
+                    onPressed: () async {
+                      await colorSettingWidget(context);
+                      setState(() {
+                        hueInitial[day] = hueInitial[day];
+                      });
+                    },
+                    color: Colors.black,
+                  ),
+                ],
               ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Divider(
-                thickness: 1.0,
+                thickness: 3.0,
                 color: Colors.grey[600],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+                    child: Image.asset(
+                      'assets/sablier-dmx.png',
+                      height: heightScreen * 0.15,
+                      width: widthScreen * 0.2,
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Durée d\'activation :',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.1)),
+                        child: DropdownButton<String>(
+                          value: myAlarmTimeMinuteData,
+                          icon: Icon(Icons.arrow_drop_down),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.blue[300],
+                          ),
+                          onChanged: (String data) {
+                            setState(() {
+                              myAlarmTimeMinuteData = data;
+                              myAlarmTimeMinutePosition = myAlarmTimeMinute.indexOf(data);
+                              myAlarmTimeMinuteList[day] = myAlarmTimeMinutePosition;
+                            });
+                          },
+                          items: myAlarmTimeMinute.map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Votre couleur :',
+                  'Séléctionner la luminosité ',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.black,
                   ),
                 ),
-                bigCircle(50, 50),
-                IconButton(
-                  icon: Icon(Icons.settings),
-                  onPressed: () async {
-                    await colorSettingWidget(context);
-                    setState(() {
-                      hueInitial[day] = hueInitial[day];
-                    });
-                  },
-                  color: Colors.black,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'de départ ',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Image.asset(
+                      'assets/arrivee.png',
+                      height: heightScreen * 0.05,
+                      width: widthScreen * 0.05,
+                    ),
+                    Text(
+                      ' d\'arrivée',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Image.asset(
+                      'assets/depart.png',
+                      height: heightScreen * 0.05,
+                      width: widthScreen * 0.05,
+                    ),
+                  ],
                 ),
               ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Divider(
-                thickness: 1.0,
-                color: Colors.grey[600],
-              ),
-            ),
-            Text(
-              'Séléctionner minimum et maximum de luminosité :',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.black,
-              ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
@@ -740,8 +809,24 @@ class _AlarmClockState extends State<AlarmClock> {
                   luminosityMaxList[day] = upperValue.toInt();
                   setState(() {});
                 },
+                handler: FlutterSliderHandler(
+                  decoration: BoxDecoration(),
+                  child: Image.asset(
+                    'assets/arrivee.png',
+                    height: heightScreen * 0.1,
+                    width: widthScreen * 0.1,
+                  ),
+                ),
+                rightHandler: FlutterSliderHandler(
+                  decoration: BoxDecoration(),
+                  child: Image.asset(
+                    'assets/depart.png',
+                    height: heightScreen * 0.1,
+                    width: widthScreen * 0.1,
+                  ),
+                ),
                 trackBar: FlutterSliderTrackBar(
-                    activeTrackBar: BoxDecoration(color: Colors.grey[700]), activeTrackBarHeight: 12, inactiveTrackBarHeight: 12),
+                    activeTrackBar: BoxDecoration(color: Colors.grey[700]), activeTrackBarHeight: 15, inactiveTrackBarHeight: 15),
                 hatchMark: FlutterSliderHatchMark(
                   density: 0.5, // means 50 lines, from 0 to 100 percent
                   labels: [

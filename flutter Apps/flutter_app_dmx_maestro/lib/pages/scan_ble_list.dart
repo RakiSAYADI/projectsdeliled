@@ -188,22 +188,12 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                   // stop scanning and start connecting
                   await flutterBlue.stopScan();
                   bool resultConnection = false;
-                  int connectionReset = 0;
                   while (true) {
-                    myDevice.connect(false);
+                    myDevice.connect(autoConnection: false);
                     await Future.delayed(Duration(seconds: 1));
                         resultConnection = myDevice.getConnectionState();
-                        connectionReset++;
                         if (resultConnection) {
                           break;
-                        }
-                        if (connectionReset == 5) {
-                          Navigator.pop(context, false);
-                          scanIdentifiers.clear();
-                          setState(() {
-                            devices.clear();
-                          });
-                          flutterBlue.startScan(timeout: Duration(seconds: 4));
                         }
                         print('result of trying connection is $resultConnection');
                         myDevice.disconnect();

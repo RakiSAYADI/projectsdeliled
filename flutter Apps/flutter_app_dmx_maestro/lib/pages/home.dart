@@ -34,7 +34,7 @@ class _HomeState extends State<Home> {
 
   Color trackBarColor = Colors.black;
 
-  String bottomBarTitle = 'Télécommande';
+  String bottomBarTitle = 'Ambiances';
   bool bottomBarTitleState = false;
 
   bool firstDisplayMainWidget = true;
@@ -43,6 +43,8 @@ class _HomeState extends State<Home> {
   double opacityLevelAmbiances = 0.0;
 
   List<String> ambiance1, ambiance2, ambiance3, ambiance4, ambiance5, ambiance6;
+
+  List<bool> remoteAndAmbVisibility = [true, false];
 
   @override
   void initState() {
@@ -142,13 +144,15 @@ class _HomeState extends State<Home> {
                       onPressed: () {
                         setState(() {
                           if (bottomBarTitleState) {
-                            bottomBarTitle = 'Télécommande';
-                          } else {
                             bottomBarTitle = 'Ambiances';
+                          } else {
+                            bottomBarTitle = 'Télécommande';
                           }
                           bottomBarTitleState = !bottomBarTitleState;
                           opacityLevelAmbiances = opacityLevelAmbiances == 0 ? 1.0 : 0.0;
                           opacityLevelRemoteControl = opacityLevelRemoteControl == 0 ? 1.0 : 0.0;
+                          remoteAndAmbVisibility[0] = !remoteAndAmbVisibility[0];
+                          remoteAndAmbVisibility[1] = !remoteAndAmbVisibility[1];
                         });
                         print(bottomBarTitle);
                       },
@@ -209,13 +213,13 @@ class _HomeState extends State<Home> {
                 duration: Duration(seconds: 1),
                 curve: Curves.linear,
                 opacity: opacityLevelRemoteControl,
-                child: remoteControlWidget(context),
+                child: Visibility(visible: remoteAndAmbVisibility[0], child: remoteControlWidget(context)),
               ),
               AnimatedOpacity(
                 duration: Duration(seconds: 1),
                 curve: Curves.linear,
                 opacity: opacityLevelAmbiances,
-                child: ambianceWidget(context),
+                child: Visibility(visible: remoteAndAmbVisibility[1], child: ambianceWidget(context)),
               ),
             ],
           ),
@@ -225,12 +229,12 @@ class _HomeState extends State<Home> {
         context: context,
         builder: (c) => AlertDialog(
           title: Text('Attention'),
-          content: Text('Voulez-vous rescanner votre qrcode ?'),
+          content: Text('Êtes-vous sûr de vouloir revenir à la page de sélection des cartes Maestro™ ?'),
           actions: [
             FlatButton(
                 child: Text('Oui'),
-                onPressed: () {
-                  myDevice.disconnect();
+                onPressed: () async {
+                  await myDevice.disconnect();
                   Navigator.pop(c, true);
                   Navigator.pushNamedAndRemoveUntil(context, "/scan_ble_list", (r) => false);
                 }),
@@ -576,7 +580,7 @@ class _HomeState extends State<Home> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Changer votre Ambiance'),
+          title: Text('Modifier l’ambiance'),
           content: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
@@ -626,7 +630,7 @@ class _HomeState extends State<Home> {
           actions: <Widget>[
             FlatButton(
               child: Text(
-                'Sauvgarder',
+                'Sauvegarder',
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () async {

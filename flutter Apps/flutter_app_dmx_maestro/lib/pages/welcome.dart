@@ -60,8 +60,6 @@ class _WelcomeState extends State<Welcome> {
         });
       }
     });
-
-
   }
 
   void gettingAppInfo() async {

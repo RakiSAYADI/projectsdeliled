@@ -60,11 +60,11 @@ class _SettingsState extends State<Settings> {
       await Future.delayed(Duration(seconds: 2));
       if (parsedJson['wifiSt'] == 0) {
         myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('Votre carte n\'est pas connecté avec votre modem !');
+        myUvcToast.setToastMessage('Votre carte n\'est pas connectée avec votre modem !');
         myUvcToast.showToast(Colors.red, Icons.info, Colors.white);
       } else {
         myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('Votre carte est bien connecté avec votre modem !');
+        myUvcToast.setToastMessage('Votre carte est bien connectée avec votre modem !');
         myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
       }
     } catch (e) {
@@ -214,7 +214,7 @@ class _SettingsState extends State<Settings> {
                               // write the associate command
                               await characteristicMaestro.write('{\"light\":[5,1,\"$zonesInHex \"]}'.codeUnits);
                               myUvcToast.setToastDuration(5);
-                              myUvcToast.setToastMessage('Votre carte n\'est pas connecté avec votre modem !');
+                              myUvcToast.setToastMessage('Votre carte n\'est pas connectée avec votre modem !');
                               myUvcToast.showToast(Colors.red, Icons.info, Colors.white);
                             },
                             child: Text(
@@ -529,24 +529,24 @@ class _SettingsState extends State<Settings> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Attention'),
-          content: Text('Voulez vous redemarrer la carte pour assurer ces modifications?'),
+          content: Text('La carte DMX va redémarrer afin de finaliser la connexion au WiFi'),
           actions: <Widget>[
             FlatButton(
               child: Text(
-                'Oui',
+                'OK',
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () async {
                 characteristicMaestro.write('{\"system\":1}'.codeUnits);
                 myDevice.disconnect();
-                Navigator.pushNamedAndRemoveUntil(context, "/scan_ble_list", (r) => false);
                 Navigator.of(context).pop();
+                Navigator.pushNamedAndRemoveUntil(context, "/scan_ble_list", (r) => false);
               },
             ),
             FlatButton(
               child: Text(
-                'Non',
-                style: TextStyle(color: Colors.green),
+                'Annuler',
+                style: TextStyle(color: Colors.red),
               ),
               onPressed: () async {
                 await Future.delayed(Duration(seconds: 1));
@@ -568,7 +568,7 @@ class _SettingsState extends State<Settings> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Scanner les modems à proximité'),
+            title: Text('Recherche des réseaux WiFi disponibles'),
             content: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
