@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/EMAILfileClass.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -21,106 +22,115 @@ class QrCodeDisplaySecurity extends StatefulWidget {
 class _QrCodeDisplaySecurityState extends State<QrCodeDisplaySecurity> {
   ToastyMessage myUvcToast;
   GlobalKey globalKey = new GlobalKey();
-  List<Attachment> qrCodeList = [new FileAttachment(File('path'))];
   EmailDataFile emailDataFile = EmailDataFile();
+  bool saveQrCodeData = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     myUvcToast = ToastyMessage(toastContext: context);
-    qrCodeList.length = 0;
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () => stopActivity(context),
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => stopGenerating(context),
-          ),
-          backgroundColor: Colors.blue[400],
-          centerTitle: true,
-          title: Text('Votre QR code'),
-        ),
-        body: Container(
-          decoration: BoxDecoration(color: Colors.grey[200]),
-          child: Center(
-            child: SingleChildScrollView(
-              child: RepaintBoundary(
-                key: globalKey,
-                child: Container(
-                  decoration: BoxDecoration(color: Colors.white),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/delitech.png',
-                        ),
-                        QrImage(
-                          data: 'https://qrgo.page.link/hYgXu',
-                        ),
-                        Container(
-                          alignment: Alignment.bottomCenter, // align the row
-                          padding: EdgeInsets.all(16.0),
-                          child: Text('QrCode de Sécurité'),
-                        ),
-                        Image.asset(
-                          'assets/texte-deeplight.png',
-                        ),
-                      ],
-                    ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue[400],
+        centerTitle: true,
+        title: Text('Votre QR code'),
+      ),
+      body: Container(
+        decoration: BoxDecoration(color: Colors.grey[200]),
+        child: Center(
+          child: SingleChildScrollView(
+            child: RepaintBoundary(
+              key: globalKey,
+              child: Container(
+                decoration: BoxDecoration(color: Colors.white),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/delitech.png',
+                      ),
+                      QrImage(
+                        data: 'https://qrgo.page.link/hYgXu',
+                      ),
+                      Container(
+                        alignment: Alignment.bottomCenter, // align the row
+                        padding: EdgeInsets.all(16.0),
+                        child: Text('QrCode de Sécurité'),
+                      ),
+                      Image.asset(
+                        'assets/texte-deeplight.png',
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
           ),
         ),
-        floatingActionButton: SpeedDial(
-          // both default to 16
-          marginRight: 18,
-          marginBottom: 20,
-          animatedIcon: AnimatedIcons.menu_close,
-          animatedIconTheme: IconThemeData(size: 22.0),
-          // this is ignored if animatedIcon is non null
-          // child: Icon(Icons.add),
+      ),
+      floatingActionButton: SpeedDial(
+        // both default to 16
+        marginRight: 18,
+        marginBottom: 20,
+        animatedIcon: AnimatedIcons.menu_close,
+        animatedIconTheme: IconThemeData(size: 22.0),
+        // this is ignored if animatedIcon is non null
+        // child: Icon(Icons.add),
 
-          // If true user is forced to close dial manually
-          // by tapping main button and overlay is not rendered.
-          closeManually: false,
-          curve: Curves.bounceIn,
-          overlayColor: Colors.black,
-          overlayOpacity: 0.5,
+        // If true user is forced to close dial manually
+        // by tapping main button and overlay is not rendered.
+        closeManually: false,
+        curve: Curves.bounceIn,
+        overlayColor: Colors.black,
+        overlayOpacity: 0.5,
 /*          onOpen: () => print('OPENING DIAL'),
-          onClose: () => print('DIAL CLOSED'),*/
-          tooltip: 'Menu',
+        onClose: () => print('DIAL CLOSED'),*/
+        tooltip: 'Menu',
 /*          heroTag: 'speed-dial-hero-tag',*/
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
-          elevation: 8.0,
-          shape: CircleBorder(),
-          children: [
-            SpeedDialChild(
-              child: Icon(
-                Icons.send,
-                color: Colors.white,
-              ),
-              backgroundColor: Colors.blue,
-              label: 'Envoi par email',
-              labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () async {
-                SystemChannels.textInput.invokeMethod('TextInput.hide');
-                await captureQrCodePNG();
-                await dataEmailSending(context);
-              },
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 8.0,
+        shape: CircleBorder(),
+        children: [
+          SpeedDialChild(
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
             ),
-          ],
-        ),
+            backgroundColor: Colors.green,
+            label: 'Ajouter un autre QR code',
+            labelStyle: TextStyle(fontSize: 18.0),
+            onTap: () async {
+              SystemChannels.textInput.invokeMethod('TextInput.hide');
+              await captureQrCodePNG();
+              Navigator.pushNamedAndRemoveUntil(context, "/choose_qr_code", (r) => false);
+            },
+          ),
+          SpeedDialChild(
+            child: Icon(
+              Icons.send,
+              color: Colors.white,
+            ),
+            backgroundColor: Colors.blue,
+            label: 'Envoi par email',
+            labelStyle: TextStyle(fontSize: 18.0),
+            onTap: () async {
+              SystemChannels.textInput.invokeMethod('TextInput.hide');
+              if (!saveQrCodeData) {
+                await captureQrCodePNG();
+                saveQrCodeData = true;
+              }
+              await displayQrCodeDATA(context);
+            },
+          ),
+        ],
       ),
     );
   }
@@ -135,12 +145,13 @@ class _QrCodeDisplaySecurityState extends State<QrCodeDisplaySecurity> {
       final file = await new File('${tempDir.path}/securityQrCode.png').create();
       await file.writeAsBytes(pngBytes);
       qrCodeList.add(new FileAttachment(file));
+      qrCodeImageList.add(file);
     } catch (e) {
       print(e.toString());
     }
   }
 
-  Future<void> dataEmailSending(BuildContext context) async {
+  Future<void> dataEmailSending() async {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
     final myEmail = TextEditingController();
@@ -196,7 +207,10 @@ class _QrCodeDisplaySecurityState extends State<QrCodeDisplaySecurity> {
                 myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
                 if (await checkInternetConnection()) {
                   await sendEmail(myEmail.text);
-                  Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+                  qrCodeList = [new FileAttachment(File('path'))];
+                  qrCodeList.length = 0;
+                  qrCodeImageList.length = 0;
+                  Navigator.pushNamedAndRemoveUntil(context, "/choose_qr_code", (r) => false);
                 } else {
                   myUvcToast.clearAllToast();
                   myUvcToast.setToastDuration(3);
@@ -213,6 +227,52 @@ class _QrCodeDisplaySecurityState extends State<QrCodeDisplaySecurity> {
               onPressed: () {
                 myEmail.text = '';
                 Navigator.pop(context, false);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> displayQrCodeDATA(BuildContext context) async {
+    myQrCodes.length = 0;
+    listQrCodes.length = 0;
+    for (int i = 0; i < qrCodeImageList.length; i++) {
+      listQrCodes.add(TableRow(children: [
+        Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [Image.file(qrCodeImageList[i], width: 100, height: 100), Text(qrCodeList[i].fileName)])
+      ]));
+    }
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Vos QRcodes'),
+          content: SingleChildScrollView(
+            child: Table(
+                border: TableBorder.all(color: Colors.black), defaultVerticalAlignment: TableCellVerticalAlignment.middle, children: listQrCodes),
+          ),
+          actions: [
+            FlatButton(
+              child: Text(
+                'OK',
+                style: TextStyle(color: Colors.green),
+              ),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await dataEmailSending();
+              },
+            ),
+            FlatButton(
+              child: Text(
+                'Annuler',
+                style: TextStyle(color: Colors.green),
+              ),
+              onPressed: () async {
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -252,50 +312,6 @@ class _QrCodeDisplaySecurityState extends State<QrCodeDisplaySecurity> {
       myUvcToast.setToastMessage('E-mail non envoyé, vérifiez votre adresse e-mail');
       myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
     }
-  }
-
-  Future<void> stopGenerating(BuildContext context) {
-    return showDialog<bool>(
-      context: context,
-      builder: (c) => AlertDialog(
-        title: Text('Attention'),
-        content: Text('Souhaitez-vous retourner à la liste des QR codes ? Vous perdrez tous vos QR codes non enregistrés.'),
-        actions: [
-          FlatButton(
-            child: Text('Oui'),
-            onPressed: () {
-              Navigator.pushReplacementNamed(context, '/choose_qr_code');
-            },
-          ),
-          FlatButton(
-            child: Text('Non'),
-            onPressed: () => Navigator.pop(c, false),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> stopActivity(BuildContext context) {
-    return showDialog<bool>(
-      context: context,
-      builder: (c) => AlertDialog(
-        title: Text('Attention'),
-        content: Text('Voulez-vous vraiment quitter l\'application ?'),
-        actions: [
-          FlatButton(
-            child: Text('Oui'),
-            onPressed: () {
-              Navigator.pop(c, true);
-            },
-          ),
-          FlatButton(
-            child: Text('Non'),
-            onPressed: () => Navigator.pop(c, false),
-          ),
-        ],
-      ),
-    );
   }
 
   Future<bool> checkInternetConnection() async {

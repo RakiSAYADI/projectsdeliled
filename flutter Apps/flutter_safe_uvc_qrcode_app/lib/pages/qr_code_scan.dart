@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:qrcode_flutter/qrcode_flutter.dart';
@@ -22,9 +23,6 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
 
   AnimationController animationController;
   AnimationController animationRefreshIcon;
-
-  String uvcName;
-  String macAddress;
 
   int startIndex;
   int endIndex;
@@ -104,93 +102,61 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
         });
         if (deviceExistOrNot) {
           _controller.pause();
-          Navigator.pushReplacementNamed(context, "/Qr_code_Generate_Full_Auto", arguments: {
-            'uvcName': uvcName,
-            'macAddress': macAddress,
-          });
+          Navigator.pushNamed(context, "/Qr_code_Generate_Full_Auto");
         }
       }
     });
 
-    return WillPopScope(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => stopGenerating(context),
-          ),
-          backgroundColor: Colors.blue[400],
-          title: const Text('Scanner le QR code'),
-          centerTitle: true,
-        ),
-        body: Container(
-          decoration: BoxDecoration(color: Colors.grey[200]),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Align(
-                alignment: Alignment.topCenter,
-                child: Text(
-                  '',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: screenWidth * 0.04,
-                  ),
-                ),
-              ),
-              SizedBox(height: screenHeight * 0.02),
-              Container(
-                width: screenWidth,
-                height: cameraViewHeight,
-                child: QRCaptureView(
-                  controller: _controller,
-                ),
-              ),
-              SizedBox(height: screenHeight * 0.02),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    SizedBox(height: screenHeight * 0.02),
-                    Text(
-                      qrCodeMessage,
-                      style: TextStyle(
-                        color: colorMessage,
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.02),
-                    _buildToolBar(),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue[400],
+        title: const Text('Scanner le QR code'),
+        centerTitle: true,
       ),
-      onWillPop: () => stopActivity(context),
-    );
-  }
-
-  Future<void> stopActivity(BuildContext context) {
-    return showDialog<bool>(
-      context: context,
-      builder: (c) => AlertDialog(
-        title: Text('Attention'),
-        content: Text('Voulez-vous vraiment quitter l\'application ?'),
-        actions: [
-          FlatButton(
-            child: Text('Oui'),
-            onPressed: () {
-              Navigator.pop(c, true);
-            },
-          ),
-          FlatButton(
-            child: Text('Non'),
-            onPressed: () => Navigator.pop(c, false),
-          ),
-        ],
+      body: Container(
+        decoration: BoxDecoration(color: Colors.grey[200]),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Align(
+              alignment: Alignment.topCenter,
+              child: Text(
+                '',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: screenWidth * 0.04,
+                ),
+              ),
+            ),
+            SizedBox(height: screenHeight * 0.02),
+            Container(
+              width: screenWidth,
+              height: cameraViewHeight,
+              child: QRCaptureView(
+                controller: _controller,
+              ),
+            ),
+            SizedBox(height: screenHeight * 0.02),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  SizedBox(height: screenHeight * 0.02),
+                  Text(
+                    qrCodeMessage,
+                    style: TextStyle(
+                      color: colorMessage,
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.02),
+                  _buildToolBar(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -218,28 +184,6 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           ),
         ),
       ],
-    );
-  }
-
-  Future<void> stopGenerating(BuildContext context) {
-    return showDialog<bool>(
-      context: context,
-      builder: (c) => AlertDialog(
-        title: Text('Attention'),
-        content: Text('Souhaitez-vous retourner à la liste des QR codes ? Vous perdrez tous vos QR codes non enregistrés.'),
-        actions: [
-          FlatButton(
-            child: Text('Oui'),
-            onPressed: () {
-              Navigator.pushReplacementNamed(context, '/choose_qr_code');
-            },
-          ),
-          FlatButton(
-            child: Text('Non'),
-            onPressed: () => Navigator.pop(c, false),
-          ),
-        ],
-      ),
     );
   }
 

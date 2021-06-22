@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
+import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
 
 class ChooseQrCode extends StatefulWidget {
   @override
@@ -6,63 +9,128 @@ class ChooseQrCode extends StatefulWidget {
 }
 
 class _ChooseQrCodeState extends State<ChooseQrCode> {
+  ToastyMessage myUvcToast;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      child: Scaffold(
-        backgroundColor: Colors.blue[400],
-        appBar: AppBar(
-          title: const Text('Choisir votre Type de QR code'),
-          centerTitle: true,
-        ),
-        body: Container(
-          decoration: BoxDecoration(color: Colors.grey[200]),
-          child: Builder(
-            builder: (context) {
-              return Center(
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      qrCodeGenerator(
-                          context: context,
-                          destination: "/Qr_code_Generate",
-                          buttonTitle: 'QR code Data',
-                          buttonText: 'Ce QR code permet de préenregistrer les informations de désinfection.',
-                          buttonDescription1: 'Créer un QR code contenant :',
-                          buttonDescription2: '- l\'établissement\n'
-                              '- l\'opérateur\n'
-                              '- la pièce\n'
-                              '- le préavis d\'allumage\n'
-                              '- la durée de désinfection \n'),
-                      qrCodeGenerator(
-                          context: context,
-                          destination: "/qr_code_scan",
-                          buttonTitle: 'QR code OneClick',
-                          buttonText: 'Ce QR code permet de lancer la désinfection plus rapidement dans SAFE UVC (moins d\'étapes).',
-                          buttonDescription1: 'Créer un QR code contenant :',
-                          buttonDescription2: '- les informations du QR code Data\n'
-                              '- Un code PIN (optionnel)\n'),
-                      qrCodeGeneratorSecond(
-                          context: context,
-                          destination: "/Qr_code_Generate_Data",
-                          buttonTitle: 'QR code Rapport',
-                          buttonText:
-                              'Ce QR code permet d\'afficher et d\'envoyer le rapport des désinfections par mail à un adresse préenregistrée.'),
-                      qrCodeGeneratorSecond(
-                          context: context,
-                          destination: "/Qr_code_Display_Security",
-                          buttonTitle: 'QR code Sécurité',
-                          buttonText: 'Ce QR code permet de créer un QR code de sécurité.'),
-                    ],
+    return Scaffold(
+      backgroundColor: Colors.blue[400],
+      appBar: AppBar(
+        title: const Text('Choix des QRcodes'),
+        centerTitle: true,
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.all(10.0),
+            child: GestureDetector(
+              onTap: () async {
+                await displayQrCodeDATA(context);
+              },
+              child: Stack(
+                alignment: AlignmentDirectional.center,
+                children: <Widget>[
+                  Container(
+                    width: 50,
+                    height: 50,
+                    decoration: new BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
                   ),
-                ),
-              );
-            },
+                  Icon(Icons.article, color: Colors.blue[400]),
+                ],
+              ),
+            ),
           ),
+        ],
+      ),
+      body: Container(
+        decoration: BoxDecoration(color: Colors.grey[200]),
+        child: Builder(
+          builder: (context) {
+            return Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    qrCodeGenerator(
+                        context: context,
+                        destination: "/Qr_code_Generate",
+                        buttonTitle: 'QR code Data',
+                        buttonText: 'Ce QR code permet de préenregistrer les informations de désinfection.',
+                        buttonDescription1: 'Créer un QR code contenant :',
+                        buttonDescription2: '- l\'établissement\n'
+                            '- l\'opérateur\n'
+                            '- la pièce\n'
+                            '- le préavis d\'allumage\n'
+                            '- la durée de désinfection \n'),
+                    qrCodeGenerator(
+                        context: context,
+                        destination: "/qr_code_scan",
+                        buttonTitle: 'QR code OneClick',
+                        buttonText: 'Ce QR code permet de lancer la désinfection plus rapidement dans SAFE UVC (moins d\'étapes).',
+                        buttonDescription1: 'Créer un QR code contenant :',
+                        buttonDescription2: '- les informations du QR code Data\n'
+                            '- Un code PIN (optionnel)\n'),
+                    qrCodeGeneratorSecond(
+                        context: context,
+                        destination: "/Qr_code_Generate_Data",
+                        buttonTitle: 'QR code Rapport',
+                        buttonText: 'Ce QR code permet d\'afficher et d\'envoyer le rapport des désinfections par mail à un adresse préenregistrée.'),
+                    qrCodeGeneratorSecond(
+                        context: context,
+                        destination: "/Qr_code_Display_Security",
+                        buttonTitle: 'QR code Sécurité',
+                        buttonText: 'Ce QR code permet de créer un QR code de sécurité.'),
+                  ],
+                ),
+              ),
+            );
+          },
         ),
       ),
-      onWillPop: () => stopActivity(context),
+    );
+  }
+
+  Future<void> displayQrCodeDATA(BuildContext context) async {
+    myQrCodes.length = 0;
+    listQrCodes.length = 0;
+    double widthScreen = MediaQuery.of(context).size.width;
+    for (int i = 0; i < qrCodeImageList.length; i++) {
+      listQrCodes.add(TableRow(children: [
+        Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [Image.file(qrCodeImageList[i], width: 100, height: 100), Text(qrCodeList[i].fileName)])
+      ]));
+    }
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Vos QRcodes'),
+          content: SingleChildScrollView(
+            child: Table(
+                border: TableBorder.all(color: Colors.black), defaultVerticalAlignment: TableCellVerticalAlignment.middle, children: listQrCodes),
+          ),
+          actions: [
+            FlatButton(
+              child: Text(
+                'OK',
+                style: TextStyle(color: Colors.green),
+              ),
+              onPressed: () async {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -71,7 +139,7 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
     double screenWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
-        Navigator.pushReplacementNamed(context, destination);
+        Navigator.pushNamed(context, destination);
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -84,7 +152,7 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
               Padding(
                 padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
                 child: FlatButton(
-                  onPressed: () => Navigator.pushReplacementNamed(context, destination),
+                  onPressed: () => Navigator.pushNamed(context, destination),
                   child: Text(
                     buttonTitle,
                     style: TextStyle(
@@ -151,7 +219,7 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
     double screenWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
-        Navigator.pushReplacementNamed(context, destination);
+        Navigator.pushNamed(context, destination);
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -164,7 +232,7 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
               Padding(
                 padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
                 child: FlatButton(
-                  onPressed: () => Navigator.pushReplacementNamed(context, destination),
+                  onPressed: () => Navigator.pushNamed(context, destination),
                   child: Text(
                     buttonTitle,
                     style: TextStyle(
@@ -192,28 +260,6 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Future<void> stopActivity(BuildContext context) {
-    return showDialog<bool>(
-      context: context,
-      builder: (c) => AlertDialog(
-        title: Text('Attention'),
-        content: Text('Voulez-vous vraiment quitter l\'application ?'),
-        actions: [
-          FlatButton(
-            child: Text('Oui'),
-            onPressed: () {
-              Navigator.pop(c, true);
-            },
-          ),
-          FlatButton(
-            child: Text('Non'),
-            onPressed: () => Navigator.pop(c, false),
-          ),
-        ],
       ),
     );
   }
