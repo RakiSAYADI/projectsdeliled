@@ -2,10 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_master_uvc/services/DataVariables.dart';
 import 'package:flutter_app_master_uvc/services/bleDeviceClass.dart';
-import 'package:flutter_app_master_uvc/services/uvcClass.dart';
 import 'package:flutter_app_master_uvc/services/uvcToast.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:qrcode_flutter/qrcode_flutter.dart';
 
@@ -23,17 +22,11 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
 
   ToastyMessage myUvcToast;
 
-  List<BluetoothDevice> scanDevices = [];
-  Device myDevice;
   int devicesPosition = 0;
   bool deviceExistOrNot = false;
 
   AnimationController animationController;
   AnimationController animationRefreshIcon;
-
-  UvcLight myUvcLight;
-
-  Map qrCodeClassData = {};
 
   @override
   void initState() {
@@ -68,10 +61,8 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     double cameraViewHeight = screenHeight * 0.60;
-    qrCodeClassData = qrCodeClassData.isNotEmpty ? qrCodeClassData : ModalRoute.of(context).settings.arguments;
 
     if (Platform.isAndroid) {
-      scanDevices = qrCodeClassData['scanDevices'];
       _controller.onCapture((data) {
         print('onCapture----$data');
         if (data.isNotEmpty && !qrCodeScanAccess) {
@@ -104,7 +95,6 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       });
     }
     if (Platform.isIOS) {
-      myDevice = qrCodeClassData['myDevice'];
       _controller.onCapture((data) {
         print('onCapture----$data');
         if (data.isNotEmpty && !qrCodeScanAccess) {
@@ -133,10 +123,8 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
               await myDevice.readCharacteristic(0, 0);
               // clear the remaining toast message
               myUvcToast.clearAllToast();
-              Navigator.pushNamed(context, '/home', arguments: {
-                'myDevice': myDevice,
-                'dataRead': myDevice.getReadCharMessage(),
-              });
+              dataRobotUVC = myDevice.getReadCharMessage();
+              Navigator.pushNamed(context, '/home');
             });
           }
         }
@@ -341,10 +329,8 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                     await myDevice.readCharacteristic(2, 0);
                     Navigator.of(context).pop();
                     myUvcToast.clearAllToast();
-                    Navigator.pushNamed(context, '/home', arguments: {
-                      'myDevice': myDevice,
-                      'dataRead': myDevice.getReadCharMessage(),
-                    });
+                    dataRobotUVC = myDevice.getReadCharMessage();
+                    Navigator.pushNamed(context, '/home');
                   });
                 }
               },

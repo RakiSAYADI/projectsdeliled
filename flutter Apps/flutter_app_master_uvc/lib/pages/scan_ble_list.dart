@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_master_uvc/services/DataVariables.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_app_master_uvc/services/bleDeviceClass.dart';
 import 'package:flutter_app_master_uvc/services/deviceBleWidget.dart';
@@ -11,8 +12,6 @@ class ScanListBle extends StatefulWidget {
 
 class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStateMixin {
   List<Device> devices = [];
-
-  Device myDevice;
 
   ToastyMessage myUvcToast;
 
@@ -110,10 +109,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
             child: Text('OK'),
             onPressed: () async {
               Navigator.pop(c, true);
-              Navigator.pushNamed(context, '/qr_code_scan', arguments: {
-                'myDevice': myDevice,
-                'qrCodeConnectionOrSecurity': false,
-              });
+              Navigator.pushNamed(context, '/qr_code_scan');
             },
           ),
           FlatButton(

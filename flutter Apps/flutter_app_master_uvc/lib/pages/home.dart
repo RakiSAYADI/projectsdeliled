@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app_master_uvc/services/DataVariables.dart';
 import 'package:flutter_app_master_uvc/services/bleDeviceClass.dart';
 import 'package:flutter_app_master_uvc/services/uvcToast.dart';
 
@@ -12,18 +13,16 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   ToastyMessage myUvcToast;
-  Map homeClassData = {};
-  Device myDevice;
-  bool firstDisplayMainWidget = true;
 
-  String dataRobotUVC = '';
+  bool firstDisplayMainWidget = true;
+  bool securityAccess = false;
+
   String durationUVC = '122 heures';
   String numberOfUVC = '1 fois';
   String typeOfDisinfectionMessage = '';
   String qrCodeScanMessage = '';
 
   int variableUVCMode = 0;
-  bool securityAccess = false;
 
   final Color hardPink = Color(0xFF554c9a);
   final Color softPink = Color(0xFF784886);
@@ -49,9 +48,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    homeClassData = homeClassData.isNotEmpty ? homeClassData : ModalRoute.of(context).settings.arguments;
-    myDevice = homeClassData['myDevice'];
-    dataRobotUVC = homeClassData['dataRead'];
 
     if (dataRobotUVC == null) {
       dataRobotUVC = '{\"Company\":\"Votre entreprise\",\"UserName\":\"Utilisateur\",\"Detection\":0,\"RoomName\":\"Chambre 1\",\"TimeData\":[0,0]}';
@@ -142,7 +138,7 @@ class _HomeState extends State<Home> {
                             child: Padding(
                               padding: const EdgeInsets.all(5.0),
                               child: Text(
-                                'Paramétrages de l\'application',
+                                'Paramètres du dispositif UV-C',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: screenWidth * 0.05,
@@ -417,28 +413,7 @@ class _HomeState extends State<Home> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 30),
                       child: FlatButton(
-                        onPressed: () async {
-                          if (myDevice.getConnectionState()) {
-                            if (Platform.isIOS) {
-                              await myDevice.writeCharacteristic(0, 0, '(SetUVCLIFETIME : 0)');
-                            } else {
-                              await myDevice.writeCharacteristic(2, 0, '(SetUVCLIFETIME : 0)');
-                            }
-                            myUvcToast.setToastDuration(2);
-                            myUvcToast.setToastMessage('Confuguration sauvegardée !');
-                            myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
-                            setState(() {
-                              durationUVC = '0 secondes';
-                              numberOfUVC = '0 fois';
-                            });
-                          } else {
-                            myUvcToast.setToastDuration(5);
-                            myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
-                            myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-                            myDevice.disconnect();
-                            Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
-                          }
-                        },
+                        onPressed: () => resetRobot(context),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
@@ -464,6 +439,49 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Future<void> resetRobot(BuildContext context) {
+    return showDialog<bool>(
+      context: context,
+      builder: (c) => AlertDialog(
+        title: Text(
+          'Attention',
+          style: TextStyle(
+            color: hardPink,
+          ),
+        ),
+        content: Text('Êtes-vous sûr de vouloir remettre à zéro ces données ?'),
+        actions: [
+          FlatButton(
+            child: Text('Oui'),
+            onPressed: () async {
+              Navigator.pop(c, false);
+              if (myDevice.getConnectionState()) {
+                if (Platform.isIOS) {
+                  await myDevice.writeCharacteristic(0, 0, '(SetUVCLIFETIME : 0)');
+                } else {
+                  await myDevice.writeCharacteristic(2, 0, '(SetUVCLIFETIME : 0)');
+                }
+                myUvcToast.setToastDuration(2);
+                myUvcToast.setToastMessage('Confuguration sauvegardée !');
+                myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+                setState(() {
+                  durationUVC = '0 secondes';
+                  numberOfUVC = '0 fois';
+                });
+              } else {
+                lostConnection(context, myDevice);
+              }
+            },
+          ),
+          FlatButton(
+            child: Text('Non'),
+            onPressed: () => Navigator.pop(c, false),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> infoMode(BuildContext context, String infoType) {
     double screenWidth = MediaQuery.of(context).size.width;
 
@@ -471,13 +489,13 @@ class _HomeState extends State<Home> {
 
     switch (infoType) {
       case 'type de pilotage':
-        popUpMessage = 'En cliquant sur \"Changer\", le dispositif UV-C passera soit en mode Manuel soit en mode Automatique. \n'
-            'Manuel : configurez manuellement les données de désinfection (entreprise, opérateur, durée de désinfection). \n'
+        popUpMessage = 'En cliquant sur \"Changer\", le dispositif UV-C passera soit en mode Manuel soit en mode Automatique. \n\n'
+            'Manuel : configurez manuellement les données de désinfection (entreprise, opérateur, durée de désinfection). \n\n'
             'Automatique : permet de lire des QR codes contenant des données de désinfection pré-configurées. ';
         break;
       case 'qr code de security':
-        popUpMessage = 'En cliquant sur \"Changer\", le dispositif UV-C passera soit en mode Activé ou Désactivé. \n'
-            'Activé : le QR code de sécurité vous sera demandé à chaque fois. \n'
+        popUpMessage = 'En cliquant sur \"Changer\", le dispositif UV-C passera soit en mode Activé ou Désactivé. \n\n'
+            'Activé : le QR code de sécurité vous sera demandé à chaque fois. \n\n'
             'Désactivé : le QR code de sécurité ne vous sera plus jamais demandé. ';
         break;
     }
@@ -500,7 +518,7 @@ class _HomeState extends State<Home> {
               Text(
                 popUpMessage,
                 textAlign: TextAlign.justify,
-                style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.045),
+                style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.035),
               ),
               SizedBox(width: screenWidth * 0.1),
             ],
@@ -557,11 +575,7 @@ class _HomeState extends State<Home> {
                       typeOfDisinfectionMessage = 'automatique';
                     });
                   } else {
-                    myUvcToast.setToastDuration(5);
-                    myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
-                    myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-                    myDevice.disconnect();
-                    Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
+                    lostConnection(context, myDevice);
                   }
                 },
                 icon: Icon(
@@ -597,11 +611,7 @@ class _HomeState extends State<Home> {
                       typeOfDisinfectionMessage = 'manuel';
                     });
                   } else {
-                    myUvcToast.setToastDuration(5);
-                    myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
-                    myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-                    myDevice.disconnect();
-                    Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
+                    lostConnection(context, myDevice);
                   }
                 },
                 icon: Icon(
@@ -645,7 +655,7 @@ class _HomeState extends State<Home> {
                 'Attention : désactiver le QR code de sécurité peut entraîner des risques et engage votre responsabilité. '
                 'Il vous appartient de notifier les utilisateurs finaux des solutions UV-C DEEPLIGHT® de la désactivation de ce paramètre. ',
                 textAlign: TextAlign.justify,
-                style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.045, fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.035, fontWeight: FontWeight.bold),
               ),
               SizedBox(width: screenWidth * 0.05),
               Padding(
@@ -678,11 +688,7 @@ class _HomeState extends State<Home> {
                       qrCodeScanMessage = 'activé';
                     });
                   } else {
-                    myUvcToast.setToastDuration(5);
-                    myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
-                    myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-                    myDevice.disconnect();
-                    Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
+                    lostConnection(context, myDevice);
                   }
                 },
                 icon: Icon(
@@ -718,11 +724,7 @@ class _HomeState extends State<Home> {
                       qrCodeScanMessage = 'désactivé';
                     });
                   } else {
-                    myUvcToast.setToastDuration(5);
-                    myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
-                    myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-                    myDevice.disconnect();
-                    Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
+                    lostConnection(context, myDevice);
                   }
                 },
                 icon: Icon(
@@ -743,6 +745,14 @@ class _HomeState extends State<Home> {
     );
   }
 
+  void lostConnection(BuildContext context, Device device) {
+    myUvcToast.setToastDuration(5);
+    myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
+    myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+    device.disconnect();
+    Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
+  }
+
   Future<void> disconnection(BuildContext context) {
     return showDialog<bool>(
       context: context,
@@ -753,7 +763,7 @@ class _HomeState extends State<Home> {
             color: hardPink,
           ),
         ),
-        content: Text('Voulez-vous vraiment quitter la page Réglages dispositif ?'),
+        content: Text('Voulez-vous quitter cette page ?'),
         actions: [
           FlatButton(
             child: Text('Oui'),
