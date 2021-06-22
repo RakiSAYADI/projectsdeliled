@@ -2,11 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutteruvcapp/services/DataVariables.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:location_permissions/location_permissions.dart';
-import 'package:flutteruvcapp/services/DataVariables.dart';
-import 'package:package_info/package_info.dart';
 
 class TutorialView extends StatefulWidget {
   @override
@@ -150,27 +149,17 @@ class _TutorialViewState extends State<TutorialView> {
                 pages: [
                   PageViewModel(
                     image: _buildImage('TUTO-01.png'),
-                    titleWidget: FutureBuilder(
-                        future: PackageInfo.fromPlatform(),
-                        builder: (BuildContext context, snapshot) {
-                          if (snapshot.hasData) {
-                            String data = "Merci d’avoir installé l’application ${snapshot.data.appName} !";
-                            return Center(
-                                child: Text(
-                              '$data',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: screenWidth * 0.06 + screenHeight * 0.012,
-                              ),
-                            ));
-                          } else {
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                        }),
+                    titleWidget: Center(
+                      child: Text(
+                        "Merci d’avoir installé l’application $appName !",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          fontSize: screenWidth * 0.06 + screenHeight * 0.012,
+                        ),
+                      ),
+                    ),
                     body: "Nous allons vous montrer comment vous en servir en toute sécurité.",
                     decoration: pageDecoration,
                   ),

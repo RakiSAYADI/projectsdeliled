@@ -223,7 +223,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
                     ),
                     SizedBox(height: screenHeight * 0.015),
                     Text(
-                      'SAFE UVC',
+                      appName,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,

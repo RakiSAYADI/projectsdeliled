@@ -2,6 +2,8 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutteruvcapp/services/bleDeviceClass.dart';
 import 'package:flutteruvcapp/services/uvcClass.dart';
 
+final String appName = 'SAFE UVC';
+
 Device myDevice;
 
 UvcLight myUvcLight;
