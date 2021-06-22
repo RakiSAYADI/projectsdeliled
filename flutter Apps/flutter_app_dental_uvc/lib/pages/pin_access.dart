@@ -36,7 +36,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
 
   Widget mainWidgetScreen;
 
-  bool widgetIsInactive = false;
+  int timeToSleep;
 
   bool firstDisplayMainWidget = true;
 
@@ -191,7 +191,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            widgetIsInactive = true;
+            sleepIsInactivePinAccess = true;
             Navigator.pushNamed(context, '/advanced_settings');
           },
           label: Text('Réglages'),
@@ -231,19 +231,26 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   void screenSleep(BuildContext context) async {
     timeToSleep = timeSleep;
     do {
-      timeToSleep -= 1000;
-      if (timeToSleep == 0) {
-        setState(() {
-          mainWidgetScreen = sleepWidget(context);
-        });
-      }
+      if (sleepIsInactivePinAccess) {
+        timeToSleep = timeSleep;
+      } else {
+        timeToSleep -= 1000;
+        if (timeToSleep == 0) {
+          try {
+            setState(() {
+              mainWidgetScreen = sleepWidget(context);
+            });
+          } catch (e) {
+            print(e.message);
+            break;
+          }
+        }
 
-      if (timeToSleep < 0) {
-        timeToSleep = (-1000);
-      }
+        if (timeToSleep < 0) {
+          timeToSleep = (-1000);
+        }
 
-      if (widgetIsInactive) {
-        break;
+        print(timeToSleep);
       }
       await Future.delayed(Duration(seconds: 1));
     } while (true);
@@ -252,6 +259,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     if (firstDisplayMainWidget) {
+      print('build sleep page');
       mainWidgetScreen = appWidget(context);
       screenSleep(context);
       firstDisplayMainWidget = false;
@@ -286,6 +294,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
           borderRadius: BorderRadius.circular(18.0),
         ),
         onPressed: () async {
+          timeToSleep = timeSleep;
           myPinCode += number;
           _pinPutController.text += '*';
           if (_pinPutController.text.length == 4) {
@@ -392,13 +401,13 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
       backgroundColor: messageColor,
       onVisible: () async {
         if (pin == pinCodeAccess && pin.isNotEmpty) {
-          widgetIsInactive = true;
           if (dataRobotUVC.isEmpty) {
             myUvcToast.setToastDuration(3);
             myUvcToast.setToastMessage('Veuillez selectionner un dispositif UV-C dans la page \'Réglages\' !');
             myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
           } else {
             if (myDevice != null) {
+              sleepIsInactivePinAccess = true;
               Navigator.pushNamed(context, '/profiles');
             }
           }

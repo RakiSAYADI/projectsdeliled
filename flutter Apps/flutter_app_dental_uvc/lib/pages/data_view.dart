@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
-import 'package:flutterappdentaluvc/services/httpRequests.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
+import 'package:flutterappdentaluvc/services/httpRequests.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
@@ -49,45 +49,54 @@ class _DataCSVViewState extends State<DataCSVView> {
 
     double widthScreen = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('rapport CSV'),
-        centerTitle: true,
-      ),
-      body: Container(
-        decoration: BoxDecoration(color: Colors.grey[200]),
-        child: SingleChildScrollView(
-          child: Table(
-            border: TableBorder.all(width: 2.0),
-            children: uvcData.map((item) {
-              return TableRow(
-                  children: item.map((row) {
-                return Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      row.toString(),
-                      style: TextStyle(
-                        fontSize: widthScreen * 0.015,
+    return WillPopScope(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('rapport CSV'),
+          centerTitle: true,
+        ),
+        body: Container(
+          decoration: BoxDecoration(color: Colors.grey[200]),
+          child: SingleChildScrollView(
+            child: Table(
+              border: TableBorder.all(width: 2.0),
+              children: uvcData.map((item) {
+                return TableRow(
+                    children: item.map((row) {
+                  return Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        row.toString(),
+                        style: TextStyle(
+                          fontSize: widthScreen * 0.015,
+                        ),
                       ),
                     ),
-                  ),
-                );
-              }).toList());
-            }).toList(),
+                  );
+                }).toList());
+              }).toList(),
+            ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => dataEmailSending(context),
-        label: Text('Envoi'),
-        icon: Icon(
-          Icons.send,
-          color: Colors.white,
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () => dataEmailSending(context),
+          label: Text('Envoi'),
+          icon: Icon(
+            Icons.send,
+            color: Colors.white,
+          ),
+          backgroundColor: Colors.blue[400],
         ),
-        backgroundColor: Colors.blue[400],
       ),
+      onWillPop: () => activatingSleep(context),
     );
+  }
+
+  Future<bool> activatingSleep(BuildContext context) async {
+    sleepIsInactiveEndUVC = false;
+    Navigator.pop(context, true);
+    return true;
   }
 
   Future<void> dataEmailSending(BuildContext context) async {
@@ -138,13 +147,13 @@ class _DataCSVViewState extends State<DataCSVView> {
                 style: TextStyle(fontSize: (widthScreen * 0.02)),
               ),
               onPressed: () async {
-                Navigator.pop(context, false);
                 await uvcDataFile.saveStringUVCEmailDATA(myEmail.text);
                 if (await dataBaseRequests.checkConnection()) {
                   myUvcToast.setToastDuration(60);
                   myUvcToast.setToastMessage('Envoi en cours !');
                   myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
                   await sendEmail(myEmail.text);
+                  Navigator.pop(context, false);
                 } else {
                   myUvcToast.setToastDuration(3);
                   myUvcToast.setToastMessage('Veuillez connecter votre tablette sur internet !');

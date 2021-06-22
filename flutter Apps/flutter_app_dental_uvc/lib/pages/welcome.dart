@@ -64,6 +64,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   void readUVCDevice() async {
     int devicesPosition = 0;
     bool deviceExistOrNot = false;
+    sleepIsInactivePinAccess = false;
     macRobotUVC = await uvcDataFile.readUVCDevice();
     await Future.delayed(const Duration(seconds: 3));
     if (macRobotUVC.isEmpty) {
@@ -331,6 +332,21 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
                 ),
               ),
               Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    appName,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[300],
+                      fontSize: widthScreen * 0.03,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
                 flex: 5,
                 child: SpinKitCircle(
                   color: Colors.white,
@@ -351,7 +367,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
                       ),
                     ),
                     Expanded(
-                      flex: 1,
+                      flex: 2,
                       child: Center(
                         child: Text(
                           'Solutions de désinfection par UV-C',

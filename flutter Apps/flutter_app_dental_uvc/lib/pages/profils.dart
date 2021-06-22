@@ -278,8 +278,7 @@ class _ProfilesState extends State<Profiles> {
             ),
             onPressed: () {
               Navigator.pop(c, true);
-              //myDevice.disconnect();
-              Navigator.pushNamedAndRemoveUntil(context, "/pin_access", (r) => false);
+              sleepIsInactivePinAccess = false;
             },
           ),
           FlatButton(

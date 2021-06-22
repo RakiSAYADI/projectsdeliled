@@ -3,13 +3,15 @@ import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcClass.dart';
 
+final String appName = 'GLOBAL UVC';
+
 final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
-bool sleepIsInactive = true;
+bool sleepIsInactivePinAccess = false;
+bool sleepIsInactiveEndUVC = false;
 GifController gifController;
 Widget mainWidgetScreen;
-int timeToSleep;
-final int timeSleep = 10000;
+final int timeSleep = 60000;
 
 Device myDevice;
 

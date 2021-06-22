@@ -116,6 +116,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
           treatmentIsSuccessful = false;
           activationTime = (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds);
           isTreatmentCompleted = treatmentIsSuccessful;
+          sleepIsInactiveEndUVC = false;
           Navigator.pushNamed(context, '/end_uvc');
           break;
         }
@@ -316,14 +317,15 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                                     treatmentIsSuccessful = true;
                                                     alertOrUVC = false;
                                                     if ((!treatmentIsStopped) && treatmentIsOnProgress) {
-                                                      print('finished activation');
+                                                print('finished activation');
                                                 treatmentIsOnProgress = false;
                                                 _getNotification();
                                                 activationTime = (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds);
                                                 isTreatmentCompleted = treatmentIsSuccessful;
+                                                sleepIsInactiveEndUVC = false;
                                                 Navigator.pushNamed(context, '/end_uvc');
                                               }
-                                                  },
+                                            },
                                                 ),
                                               ),
                                             ],
@@ -378,6 +380,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
               Navigator.pop(c, true);
               activationTime = (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds);
               isTreatmentCompleted = treatmentIsSuccessful;
+              sleepIsInactiveEndUVC = false;
               Navigator.pushNamed(context, '/end_uvc');
             },
           ),

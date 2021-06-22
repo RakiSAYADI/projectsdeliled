@@ -36,96 +36,106 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
 
-    return Container(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Paramètres'),
-          centerTitle: true,
-        ),
-        body: Container(
-          decoration: BoxDecoration(color: Colors.grey[200]),
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(height: heightScreen * 0.05),
-                  FlatButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/pin_settings');
-                    },
-                    child: Text(
-                      'Changer le mot de passe',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: widthScreen * 0.05,
+    return WillPopScope(
+      child: Container(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Paramètres'),
+            centerTitle: true,
+          ),
+          body: Container(
+            decoration: BoxDecoration(color: Colors.grey[200]),
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(height: heightScreen * 0.05),
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/pin_settings');
+                      },
+                      child: Text(
+                        'Changer le mot de passe',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: widthScreen * 0.05,
+                        ),
                       ),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                    ),
-                    color: Colors.blue[400],
-                  ),
-                  SizedBox(height: heightScreen * 0.05),
-                  FlatButton(
-                    onPressed: () {
-                      alertSecurity(context, 'scanlist');
-                    },
-                    child: Text(
-                      'Changer de dispositif UV-C',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: widthScreen * 0.05,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
                       ),
+                      color: Colors.blue[400],
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                    ),
-                    color: Colors.blue[400],
-                  ),
-                  SizedBox(height: heightScreen * 0.05),
-                  FlatButton(
-                    onPressed: () async {
-                      String macRobotUVC = '';
-                      macRobotUVC = await uvcDataFile.readUVCDevice();
-                      if (macRobotUVC.isEmpty) {
-                        myUvcToast.setToastDuration(3);
-                        myUvcToast.setToastMessage('Veuillez associer un dispositif UV-C !');
-                        myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
-                      } else {
-                        alertSecurity(context, 'autouvc');
-                      }
-                    },
-                    child: Text(
-                      'Planning de désinfection',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: widthScreen * 0.05,
+                    SizedBox(height: heightScreen * 0.05),
+                    FlatButton(
+                      onPressed: () {
+                        alertSecurity(context, 'scanlist');
+                      },
+                      child: Text(
+                        'Changer de dispositif UV-C',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: widthScreen * 0.05,
+                        ),
                       ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      color: Colors.blue[400],
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                    SizedBox(height: heightScreen * 0.05),
+                    FlatButton(
+                      onPressed: () async {
+                        String macRobotUVC = '';
+                        macRobotUVC = await uvcDataFile.readUVCDevice();
+                        if (macRobotUVC.isEmpty) {
+                          myUvcToast.setToastDuration(3);
+                          myUvcToast.setToastMessage('Veuillez associer un dispositif UV-C !');
+                          myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                        } else {
+                          alertSecurity(context, 'autouvc');
+                        }
+                      },
+                      child: Text(
+                        'Planning de désinfection',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: widthScreen * 0.05,
+                        ),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      color: Colors.blue[400],
                     ),
-                    color: Colors.blue[400],
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          label: Text('Retour'),
-          icon: Icon(
-            Icons.arrow_back_rounded,
-            color: Colors.white,
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {
+              Navigator.of(context).pop();
+              sleepIsInactivePinAccess = false;
+            },
+            label: Text('Retour'),
+            icon: Icon(
+              Icons.arrow_back_rounded,
+              color: Colors.white,
+            ),
+            backgroundColor: Colors.blue[400],
           ),
-          backgroundColor: Colors.blue[400],
         ),
       ),
+      onWillPop: () => activatingSleep(context),
     );
+  }
+
+  Future<bool> activatingSleep(BuildContext context) async {
+    sleepIsInactivePinAccess = false;
+    Navigator.pop(context, true);
+    return true;
   }
 
   Future<void> alertSecurity(BuildContext context, String accessPath) async {

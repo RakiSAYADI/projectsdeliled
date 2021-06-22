@@ -31,7 +31,8 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
   Widget mainWidgetScreen;
 
   bool firstDisplayMainWidget = true;
-  bool widgetIsInactive = false;
+
+  int timeToSleep;
 
   ToastyMessage myUvcToast;
 
@@ -122,19 +123,23 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
   void screenSleep(BuildContext context) async {
     timeToSleep = timeSleep;
     do {
-      timeToSleep -= 1000;
-      if (timeToSleep == 0) {
-        setState(() {
-          mainWidgetScreen = sleepWidget(context);
-        });
-      }
-
-      if (timeToSleep < 0) {
-        timeToSleep = (-1000);
-      }
-
-      if (widgetIsInactive) {
-        break;
+      if (sleepIsInactiveEndUVC) {
+        timeToSleep = timeSleep;
+      } else {
+        timeToSleep -= 1000;
+        if (timeToSleep == 0) {
+          try {
+            setState(() {
+              mainWidgetScreen = sleepWidget(context);
+            });
+          } catch (e) {
+            print(e.message);
+            break;
+          }
+        }
+        if (timeToSleep < 0) {
+          timeToSleep = (-1000);
+        }
       }
       await Future.delayed(Duration(seconds: 1));
     } while (true);
@@ -209,7 +214,7 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            widgetIsInactive = false;
+            sleepIsInactiveEndUVC = false;
             Navigator.pushNamed(context, '/DataCSVView');
           },
           label: Text('Rapport'),
@@ -405,8 +410,7 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
   }
 
   Future<bool> exitApp(BuildContext context) async {
-    widgetIsInactive = false;
-    //myDevice.disconnect();
+    sleepIsInactiveEndUVC = false;
     Navigator.pushNamedAndRemoveUntil(context, "/pin_access", (r) => false);
     return true;
   }
