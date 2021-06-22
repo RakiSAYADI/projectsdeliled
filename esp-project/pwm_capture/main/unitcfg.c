@@ -154,7 +154,7 @@ void Default_saving() {
 		sprintf(UnitCfg.alarmDay[i].hue, "00A6FF");
 		sprintf(UnitCfg.alarmDay[i].zones, "F");
 		UnitCfg.alarmDay[i].startLumVal = 0;
-		UnitCfg.alarmDay[i].finishLumVal = 0;
+		UnitCfg.alarmDay[i].finishLumVal = 100;
 	}
 
 	for (int i = 0; i < 6; i++) {
