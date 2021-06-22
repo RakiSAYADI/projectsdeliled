@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutterappmicromaestro/pages/home.dart';
+import 'package:flutterappmicromaestro/pages/pair_device.dart';
 import 'package:flutterappmicromaestro/pages/scan_qrcode.dart';
 import 'package:flutterappmicromaestro/pages/scan_ble_list.dart';
 import 'package:flutterappmicromaestro/pages/welcome.dart';
@@ -61,6 +62,7 @@ void main() async {
     initialRoute: '/',
     routes: {
       '/': (context) => Welcome(),
+      '/pairing_device':(context) => PairingDevice(),
       '/scan_ble_list': (context) => ScanListBle(),
       '/scan_qrcode': (context) => ScanQrCode(),
       '/home': (context) => Home(),

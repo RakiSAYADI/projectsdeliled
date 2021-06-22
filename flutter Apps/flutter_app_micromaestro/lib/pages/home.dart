@@ -185,8 +185,8 @@ class _HomeState extends State<Home> {
           actions: [
             FlatButton(
                 child: Text('Oui'),
-                onPressed: () {
-                  myDevice.disconnect();
+                onPressed: () async{
+                  await myDevice.disconnect();
                   Navigator.pop(c, true);
                   Navigator.pushNamedAndRemoveUntil(
                       context, "/scan_ble_list", (r) => false);

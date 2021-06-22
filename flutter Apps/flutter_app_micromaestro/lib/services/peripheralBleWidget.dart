@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ble_lib/flutter_ble_lib.dart';
 
-import 'bleDeviceClass.dart';
-
-class DeviceCard extends StatelessWidget {
-  final Device device;
+class PeripheralCard extends StatelessWidget {
+  final Peripheral peripheral;
   final Function connect;
 
-  DeviceCard({this.device, this.connect});
+  PeripheralCard({this.peripheral, this.connect});
 
   @override
   Widget build(BuildContext context) {
     String deviceName;
-    if ((device.device.name == null)||(device.device.name.isEmpty)) {
+    if ((peripheral.name == null)||(peripheral.name.isEmpty)) {
       deviceName = 'Appareil sans nom';
     } else {
-      deviceName = device.device.name;
+      deviceName = peripheral.name;
     }
     return Card(
       margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
@@ -30,7 +28,7 @@ class DeviceCard extends StatelessWidget {
             ),
             SizedBox(height: 2.0),
             Text(
-              device.device.id.toString(),
+              peripheral.identifier,
               style: TextStyle(fontSize: 16.0, color: Colors.grey[800]),
             ),
             SizedBox(height: 8.0),

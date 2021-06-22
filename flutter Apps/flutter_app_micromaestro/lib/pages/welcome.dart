@@ -41,7 +41,7 @@ class _WelcomeState extends State<Welcome> {
     gettingAppInfo();
 
     Future.delayed(Duration(seconds: 5), () {
-      Navigator.pushReplacementNamed(context, '/scan_ble_list');
+      Navigator.pushReplacementNamed(context, '/scan_ble_list');//pairing_device
     });
   }
 
