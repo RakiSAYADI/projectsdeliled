@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app_dmx_maestro/services/DataVariables.dart';
 import 'package:flutter_app_dmx_maestro/services/bleDeviceClass.dart';
 import 'package:flutter_app_dmx_maestro/services/deviceBleWidget.dart';
 import 'package:flutter_app_dmx_maestro/services/uvcToast.dart';
@@ -13,23 +14,16 @@ class ScanListBle extends StatefulWidget {
 }
 
 class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStateMixin {
-  List<Device> devices = [];
 
   ToastyMessage myUvcToast;
-
-  Device myDevice;
 
   final String robotUVCMAC = '70:B3:D5:01:8';
   final String robotUVCName = 'DMXLIGHT';
 
   ///Initialisation and listening to device state
 
-  BluetoothDevice device;
-  BluetoothDeviceState deviceState;
   FlutterBlue flutterBlue = FlutterBlue.instance;
   BluetoothDevice myDeviceBluetooth;
-  BluetoothCharacteristic characteristicMaestro;
-  BluetoothCharacteristic characteristicWifi;
 
   AnimationController animationRefreshIcon;
 
@@ -215,8 +209,11 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                         characteristicWifi = service.characteristics[1];
                         // reading the characteristic after 1 second
                         Future.delayed(const Duration(seconds: 1), () async {
-                          String dataMaestro = String.fromCharCodes(await characteristicMaestro.read());
+                          dataMaestro = String.fromCharCodes(await characteristicMaestro.read());
                           print(dataMaestro);
+                          await Future.delayed(Duration(milliseconds: 500));
+                          dataMaestro2 = String.fromCharCodes(await characteristicMaestro.read());
+                          print(dataMaestro2);
                           // clear the remaining toast message
                           myUvcToast.clearCurrentToast();
                           DateTime dateTime = DateTime.now();
@@ -225,16 +222,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                           print(dateTime.timeZoneOffset.inSeconds);
                           await characteristicMaestro
                               .write('{\"Time\":[${dateTime.millisecondsSinceEpoch ~/ 1000},${dateTime.timeZoneOffset.inSeconds}]}'.codeUnits);
-                          /*Navigator.pushNamed(context, '/scan_qrcode', arguments: {
-                          'bleCharacteristic': characteristicRelays,
-                          'bleDevice': myDevice,
-                        });*/
-                          Navigator.pushNamed(context, '/home', arguments: {
-                            'characteristicMaestro': characteristicMaestro,
-                            'characteristicWifi': characteristicWifi,
-                            'bleDevice': myDevice,
-                            'dataMaestro': dataMaestro,
-                          });
+                          Navigator.pushNamed(context, '/home');
                         });
                       }
                 }))

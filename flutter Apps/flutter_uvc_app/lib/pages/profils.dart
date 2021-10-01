@@ -276,7 +276,7 @@ class _ProfilesState extends State<Profiles> {
           ],
         ),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text('Sauvegarder et redemarrer'),
             onPressed: () {
               Navigator.pop(c, true);
@@ -284,7 +284,7 @@ class _ProfilesState extends State<Profiles> {
               Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
             },
           ),
-          FlatButton(
+          TextButton(
             child: Text('Annuler'),
             onPressed: () => Navigator.pop(c, false),
           ),
@@ -300,7 +300,7 @@ class _ProfilesState extends State<Profiles> {
         title: Text('Attention'),
         content: Text('Voulez-vous vraiment quitter la page profil ?'),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text('Oui'),
             onPressed: () {
               Navigator.pop(c, true);
@@ -308,7 +308,7 @@ class _ProfilesState extends State<Profiles> {
               Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
             },
           ),
-          FlatButton(
+          TextButton(
             child: Text('Non'),
             onPressed: () => Navigator.pop(c, false),
           ),

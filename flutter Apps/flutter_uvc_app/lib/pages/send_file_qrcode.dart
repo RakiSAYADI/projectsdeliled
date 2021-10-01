@@ -57,7 +57,7 @@ class _SendEmailQrCodeState extends State<SendEmailQrCode> {
     double screenWidth = MediaQuery.of(context).size.width;
     return WillPopScope(
         child: Scaffold(
-        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text('Envoi Rapport'),
           centerTitle: true,

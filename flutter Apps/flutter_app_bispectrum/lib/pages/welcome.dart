@@ -3,7 +3,10 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app_bispectrum/pages/Home.dart';
+import 'package:flutter_app_bispectrum/pages/check_permissions.dart';
 import 'package:flutter_app_bispectrum/services/DataVariables.dart';
+import 'package:flutter_app_bispectrum/services/animation_between_pages.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:package_info/package_info.dart';
@@ -53,7 +56,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
         //Alert user to turn on bluetooth.
         print("Bluetooth is off");
         Future.delayed(Duration(seconds: 5), () {
-          Navigator.pushReplacementNamed(context, '/check_permissions');
+          createReplacementRoute(context, CheckPermissions());
         });
       } else if (state == BluetoothState.on) {
         //if bluetooth is enabled then go ahead.
@@ -61,7 +64,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
         flutterBlue = FlutterBlue.instance;
         print("Bluetooth is on");
         Future.delayed(Duration(seconds: 5), () {
-          Navigator.pushReplacementNamed(context, '/home'); //scan_ble_list
+          createReplacementRoute(context, Home()); //ScanListBle()
         });
       }
     });

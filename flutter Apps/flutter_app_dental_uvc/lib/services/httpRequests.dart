@@ -19,7 +19,8 @@ class DataBaseRequests {
   final String _idUvcState = 'etat';
 
   void createUserInDataBase(String email, String robotName) async {
-    final response = await http.post(_insertDataLink, body: {
+    Uri insertDataLink = Uri(path: _insertDataLink);
+    final response = await http.post(insertDataLink, body: {
       _idMail: email,
       _idNomRobot: robotName,
     });
@@ -43,7 +44,8 @@ class DataBaseRequests {
 
   void sendUVCDataToDataBase(
       String robotName, String user, String enterprise, String room, String startHour, String startDate, String startDuration, String state) async {
-    final response = await http.post(_insertUVCDataLink, body: {
+    Uri insertUCDataLink = Uri(path: _insertUVCDataLink);
+    final response = await http.post(insertUCDataLink, body: {
       _idRobotName: robotName,
       _idUser: user,
       _idEnterprise: enterprise,

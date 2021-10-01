@@ -13,6 +13,7 @@ import 'package:flutterappdentaluvc/pages/uvc.dart';
 import 'package:flutterappdentaluvc/pages/warnings.dart';
 import 'package:flutterappdentaluvc/pages/welcome.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
+import 'package:get/get.dart';
 import 'package:rxdart/subjects.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -76,25 +77,27 @@ class MyApp extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.ltr,
       child: GestureDetector(
-        child: MaterialApp(
-          navigatorKey: navigatorKey,
-          debugShowCheckedModeBanner: false,
-          title: 'GLOBAL UVC',
-          initialRoute: '/',
-          routes: {
-            '/': (context) => Welcome(),
-            '/pin_access': (context) => AccessPin(),
-            '/advanced_settings': (context) => AdvancedSettings(),
-            '/scan_ble_list': (context) => ScanListBle(),
-            '/auto_uvc': (context) => UVCAuto(),
-            '/DataCSVView': (context) => DataCSVView(),
-            '/pin_settings': (context) => PinSettings(),
-            '/profiles': (context) => Profiles(),
-            '/settings': (context) => Settings(),
-            '/warnings': (context) => Warnings(),
-            '/uvc': (context) => UVC(),
-            '/end_uvc': (context) => EndUVC(),
-          },
+        child: GetMaterialApp(
+          home: MaterialApp(
+            navigatorKey: navigatorKey,
+            debugShowCheckedModeBanner: false,
+            title: 'GLOBAL UVC',
+            initialRoute: '/',
+            routes: {
+              '/': (context) => Welcome(),
+              '/pin_access': (context) => AccessPin(),
+              '/advanced_settings': (context) => AdvancedSettings(),
+              '/scan_ble_list': (context) => ScanListBle(),
+              '/auto_uvc': (context) => UVCAuto(),
+              '/DataCSVView': (context) => DataCSVView(),
+              '/pin_settings': (context) => PinSettings(),
+              '/profiles': (context) => Profiles(),
+              '/settings': (context) => Settings(),
+              '/warnings': (context) => Warnings(),
+              '/uvc': (context) => UVC(),
+              '/end_uvc': (context) => EndUVC(),
+            },
+          ),
         ),
         onTap: () {
           print('tap is detected');

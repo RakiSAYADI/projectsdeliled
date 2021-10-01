@@ -1,11 +1,8 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_dmx_maestro/pages/home.dart';
-import 'package:flutter_app_dmx_maestro/services/bleDeviceClass.dart';
+import 'package:flutter_app_dmx_maestro/services/DataVariables.dart';
 import 'package:flutter_app_dmx_maestro/services/uvcToast.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class Settings extends StatefulWidget {
@@ -15,12 +12,6 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   ToastyMessage myUvcToast;
-
-  Map bleDeviceData = {};
-
-  BluetoothCharacteristic characteristicMaestro;
-  BluetoothCharacteristic characteristicWifi;
-  Device myDevice;
 
   bool firstDisplayMainWidget = true;
 
@@ -75,15 +66,6 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    try {
-      bleDeviceData = bleDeviceData.isNotEmpty ? bleDeviceData : ModalRoute.of(context).settings.arguments;
-      myDevice = bleDeviceData['bleDevice'];
-      characteristicMaestro = bleDeviceData['characteristicMaestro'];
-      characteristicWifi = bleDeviceData['characteristicWifi'];
-      dataMaestro = bleDeviceData['dataMaestro'];
-    } catch (e) {
-      print('alarm settings : erreur reading DATA !');
-    }
 
     if (firstDisplayMainWidget) {
       readDataMaestro();
@@ -531,7 +513,7 @@ class _SettingsState extends State<Settings> {
           title: Text('Attention'),
           content: Text('La carte DMX va redémarrer afin de finaliser la connexion au WiFi'),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text(
                 'OK',
                 style: TextStyle(color: Colors.green),
@@ -543,14 +525,16 @@ class _SettingsState extends State<Settings> {
                 Navigator.pushNamedAndRemoveUntil(context, "/scan_ble_list", (r) => false);
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text(
                 'Annuler',
                 style: TextStyle(color: Colors.red),
               ),
               onPressed: () async {
-                await Future.delayed(Duration(seconds: 1));
+                await Future.delayed(Duration(milliseconds: 500));
                 dataMaestro = String.fromCharCodes(await characteristicMaestro.read());
+                await Future.delayed(Duration(milliseconds: 500));
+                dataMaestro2 = String.fromCharCodes(await characteristicMaestro.read());
                 Navigator.of(context).pop();
               },
             ),
@@ -718,7 +702,7 @@ class _SettingsState extends State<Settings> {
             ),
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text(
                 'Renommer',
                 style: TextStyle(color: Colors.green),
@@ -734,7 +718,7 @@ class _SettingsState extends State<Settings> {
                 Navigator.of(context).pop();
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text(
                 'Annuler',
                 style: TextStyle(color: Colors.green),

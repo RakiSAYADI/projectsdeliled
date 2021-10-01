@@ -90,6 +90,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
         await Future.delayed(const Duration(milliseconds: 500));
         myUvcToast.setAnimationIcon(animationRefreshIcon);
         myUvcToast.setToastDuration(120);
+        savedDevice = scanDevices.elementAt(devicesPosition);
         myDevice = Device(device: scanDevices.elementAt(devicesPosition));
         myUvcToast.setToastMessage('Autorisation de connexion validée !');
         myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);

@@ -53,7 +53,7 @@ class _SendEmailState extends State<SendEmail> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text('Envoi Rapport'),
         centerTitle: true,

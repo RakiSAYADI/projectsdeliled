@@ -168,7 +168,7 @@ class _SettingsState extends State<Settings> {
     return showDialog<void>(
       barrierDismissible: false,
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext buildContext) {
         return AlertDialog(
           content: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -282,24 +282,24 @@ class _SettingsState extends State<Settings> {
             ],
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text(
                 'OK',
                 style: TextStyle(color: Colors.green, fontSize: widthScreen * 0.02),
               ),
               onPressed: () async {
-                Navigator.of(context).pop();
+                Navigator.of(buildContext).pop();
                 Navigator.pushNamed(context, '/warnings');
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text(
                 'Annuler',
                 style: TextStyle(color: Colors.green, fontSize: widthScreen * 0.02),
               ),
               onPressed: () {
                 nextButtonPressedOnce = false;
-                Navigator.of(context).pop();
+                Navigator.of(buildContext).pop();
               },
             ),
           ],

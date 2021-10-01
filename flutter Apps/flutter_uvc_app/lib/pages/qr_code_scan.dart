@@ -261,7 +261,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
 
     return WillPopScope(
       child: Scaffold(
-        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text('Scanner le QR code'),
           centerTitle: true,
@@ -356,34 +356,59 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
         print('The provided string is not valid JSON : ${e.toString()}');
         Future.delayed(const Duration(seconds: 2), () async {
           // Stop uvc treatment if it's on
-          String message = 'STOP : ON';
-          await myDevice.writeCharacteristic(0, 0, message);
+          //String message = 'STOP : ON';
+          //await myDevice.writeCharacteristic(0, 0, message);
           // Read data from robot
           await myDevice.readCharacteristic(0, 0);
           Map<String, dynamic> dataRead;
           dataRead = jsonDecode(myDevice.getReadCharMessage());
           // clear the remaining toast message
           myUvcToast.clearAllToast();
+
+          /// add the check state process
           try {
-            switch (int.parse(dataRead['Version'].toString())) {
+            switch (int.parse(dataRead['uvcSt'].toString())) {
               case 0:
-                Navigator.pushNamed(context, '/profiles');
+                print('ok');
+                checkVersion(dataRead);
                 break;
               case 1:
-                int.parse(dataRead['Version'].toString());
-                print('Version detected');
-                await scanQrCodeDATA();
+                print('in progress');
+                await stopDisinfection(context, dataRead);
+                break;
+              case 2:
+                print('error');
+                await restartDisinfection(context, dataRead);
                 break;
               default:
-                Navigator.pushNamed(context, '/profiles');
+                checkVersion(dataRead);
                 break;
             }
           } catch (e) {
             print('No version detected');
-            Navigator.pushNamed(context, '/profiles');
+            checkVersion(dataRead);
           }
         });
       }
+    }
+  }
+
+  void checkVersion(Map<String, dynamic> dataRead) {
+    try {
+      switch (int.parse(dataRead['Version'].toString())) {
+        case 0:
+          Navigator.pushNamed(context, '/profiles');
+          break;
+        case 1:
+          scanQrCodeDATA();
+          break;
+        default:
+          Navigator.pushNamed(context, '/profiles');
+          break;
+      }
+    } catch (e) {
+      print('No version detected');
+      Navigator.pushNamed(context, '/profiles');
     }
   }
 
@@ -425,14 +450,6 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
   void connectingWithQrCode(String data) async {
     waitingWidget();
     try {
-      var dataQrCode = json.decode(data) as Map<String, dynamic>;
-      String myCompany, roomName, userName, pin, macAddress, nameAddress;
-      myCompany = dataQrCode['Company'];
-      roomName = dataQrCode['RoomName'];
-      userName = dataQrCode['UserName'];
-      pin = dataQrCode['PIN'];
-      macAddress = dataQrCode['MAC'];
-      nameAddress = dataQrCode['NAME'];
       bool connexion;
       if (Platform.isIOS) {
         connexion = myDevice.getConnectionState();
@@ -454,56 +471,36 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
 
       if (connexion) {
         Future.delayed(const Duration(seconds: 2), () async {
-          // Stop uvc treatment if it's on
-          String message = 'STOP : ON';
-          if (Platform.isIOS) {
-            await myDevice.writeCharacteristic(0, 0, message);
-          } else {
-            await myDevice.writeCharacteristic(2, 0, message);
-          }
           // Read data from robot
           if (Platform.isIOS) {
             await myDevice.readCharacteristic(0, 0);
           } else {
             await myDevice.readCharacteristic(2, 0);
           }
-          int activationTimePosition, infectionTimePosition;
-          infectionTimePosition = _stringListAsciiToListInt(dataQrCode['TimeData'].toString().codeUnits)[0];
-          activationTimePosition = _stringListAsciiToListInt(dataQrCode['TimeData'].toString().codeUnits)[1];
-          if (Platform.isIOS) {
-            await myDevice.writeCharacteristic(
-                0, 0, '{\"data\":[\"$myCompany\",\"$userName\",\"$roomName\",$infectionTimePosition,$activationTimePosition]}');
-          } else {
-            await myDevice.writeCharacteristic(
-                2, 0, '{\"data\":[\"$myCompany\",\"$userName\",\"$roomName\",$infectionTimePosition,$activationTimePosition]}');
-          }
-          myUvcLight = UvcLight();
-          myUvcLight.setCompanyName(myCompany);
-          myUvcLight.setOperatorName(userName);
-          myUvcLight.setRoomName(roomName);
-          myUvcLight.setActivationTime(myActivationTimeMinute.elementAt(activationTimePosition));
-          myUvcLight.setInfectionTime(myExtinctionTimeMinute.elementAt(infectionTimePosition));
-          myUvcLight.setMachineMac(macAddress);
-          myUvcLight.setMachineName(nameAddress);
-          if (pin == null) {
-            startWithOutSettings = true;
-            Navigator.pushNamed(context, '/warnings');
-          } else {
-            Navigator.of(context).pop();
-
-            final key = Key.fromUtf8('deeplightsolutionsdedesinfection');
-            final iv = IV.fromLength(16);
-            print(pin);
-
-            final encrypter = Encrypter(AES(key, mode: AESMode.cbc));
-            final encrypted = encrypter.encrypt(pin, iv: iv);
-
-            print(encrypted.base16);
-            print(encrypted.base64);
-            final decrypted = encrypter.decrypt16(pin, iv: iv);
-
-            print(decrypted);
-            await pinAccess(decrypted);
+          Map<String, dynamic> dataRead;
+          dataRead = jsonDecode(myDevice.getReadCharMessage());
+          /// add the check state process
+          try {
+            switch (int.parse(dataRead['uvcSt'].toString())) {
+              case 0:
+                print('ok');
+                pinCodeAccessProcess(data);
+                break;
+              case 1:
+                print('in progress');
+                await stopDisinfection(context, dataRead);
+                break;
+              case 2:
+                print('error');
+                await restartDisinfection(context, dataRead);
+                break;
+              default:
+                pinCodeAccessProcess(data);
+                break;
+            }
+          } catch (e) {
+            print('No version detected');
+            pinCodeAccessProcess(data);
           }
         });
       } else {
@@ -519,6 +516,55 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
       myDevice.disconnect();
       Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+    }
+  }
+
+  Future<void> pinCodeAccessProcess(String data) async {
+    var dataQrCode = json.decode(data) as Map<String, dynamic>;
+    String myCompany, roomName, userName, pin, macAddress, nameAddress;
+    myCompany = dataQrCode['Company'];
+    roomName = dataQrCode['RoomName'];
+    userName = dataQrCode['UserName'];
+    pin = dataQrCode['PIN'];
+    macAddress = dataQrCode['MAC'];
+    nameAddress = dataQrCode['NAME'];
+    int activationTimePosition, infectionTimePosition;
+    infectionTimePosition = _stringListAsciiToListInt(dataQrCode['TimeData'].toString().codeUnits)[0];
+    activationTimePosition = _stringListAsciiToListInt(dataQrCode['TimeData'].toString().codeUnits)[1];
+    if (Platform.isIOS) {
+      await myDevice.writeCharacteristic(
+          0, 0, '{\"data\":[\"$myCompany\",\"$userName\",\"$roomName\",$infectionTimePosition,$activationTimePosition]}');
+    } else {
+      await myDevice.writeCharacteristic(
+          2, 0, '{\"data\":[\"$myCompany\",\"$userName\",\"$roomName\",$infectionTimePosition,$activationTimePosition]}');
+    }
+    myUvcLight = UvcLight();
+    myUvcLight.setCompanyName(myCompany);
+    myUvcLight.setOperatorName(userName);
+    myUvcLight.setRoomName(roomName);
+    myUvcLight.setActivationTime(myActivationTimeMinute.elementAt(activationTimePosition));
+    myUvcLight.setInfectionTime(myExtinctionTimeMinute.elementAt(infectionTimePosition));
+    myUvcLight.setMachineMac(macAddress);
+    myUvcLight.setMachineName(nameAddress);
+    if (pin == null) {
+      startWithOutSettings = true;
+      Navigator.pushNamed(context, '/warnings');
+    } else {
+      Navigator.of(context).pop();
+
+      final key = Key.fromUtf8('deeplightsolutionsdedesinfection');
+      final iv = IV.fromLength(16);
+      print(pin);
+
+      final encrypter = Encrypter(AES(key, mode: AESMode.cbc));
+      final encrypted = encrypter.encrypt(pin, iv: iv);
+
+      print(encrypted.base16);
+      print(encrypted.base64);
+      final decrypted = encrypter.decrypt16(pin, iv: iv);
+
+      print(decrypted);
+      await pinAccess(decrypted);
     }
   }
 
@@ -557,7 +603,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
               ],
             ),
             actions: [
-              FlatButton(
+              TextButton(
                   child: Text(
                     'Valider',
                     style: TextStyle(color: Colors.green),
@@ -574,7 +620,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                       myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
                     }
                   }),
-              FlatButton(
+              TextButton(
                   child: Text(
                     'Annuler',
                     style: TextStyle(color: Colors.green),
@@ -605,7 +651,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             if (_isTorchOn) {
               _controller.torchMode = CaptureTorchMode.off;
@@ -680,6 +726,8 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     } else {
       await myDevice.writeCharacteristic(2, 0, '{\"data\":[\"$company\",\"$userName\",\"$room\",$extinction,$activation]}');
     }
+
+    /// add the check state and read process
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -801,7 +849,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
             ],
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text(
                 'OK',
                 style: TextStyle(color: Colors.green),
@@ -813,7 +861,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                 Navigator.pushNamed(context, '/warnings');
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text(
                 'Annuler',
                 style: TextStyle(color: Colors.green),
@@ -837,7 +885,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           return AlertDialog(
             title: Text('Scannez le QR de données'),
             actions: [
-              FlatButton(
+              TextButton(
                   child: Text(
                     'OK',
                     style: TextStyle(color: Colors.green),
@@ -901,7 +949,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
             ],
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text(
                 'OK',
                 style: TextStyle(color: Colors.green),
@@ -931,8 +979,8 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                 if (myDevice.getConnectionState()) {
                   Future.delayed(const Duration(seconds: 2), () async {
                     // Stop uvc treatment if it's on
-                    String message = 'STOP : ON';
-                    await myDevice.writeCharacteristic(2, 0, message);
+                    //String message = 'STOP : ON';
+                    //await myDevice.writeCharacteristic(2, 0, message);
                     // Read data from robot
                     await myDevice.readCharacteristic(2, 0);
                     Map<String, dynamic> dataRead;
@@ -940,28 +988,36 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                     // clear the remaining toast message
                     myUvcToast.clearAllToast();
                     print(myDevice.getReadCharMessage());
+
+                    /// add the check state process
                     try {
                       Navigator.of(context).pop();
-                      switch (int.parse(dataRead['Version'].toString())) {
+                      switch (int.parse(dataRead['uvcSt'].toString())) {
                         case 0:
-                          Navigator.pushNamed(context, '/profiles');
+                          print('ok');
+                          checkVersion(dataRead);
                           break;
                         case 1:
-                          await scanQrCodeDATA();
+                          print('in progress');
+                          await stopDisinfection(context, dataRead);
+                          break;
+                        case 2:
+                          print('error');
+                          await restartDisinfection(context, dataRead);
                           break;
                         default:
-                          Navigator.pushNamed(context, '/profiles');
+                          checkVersion(dataRead);
                           break;
                       }
                     } catch (e) {
                       print('No version detected');
-                      Navigator.pushNamed(context, '/profiles');
+                      checkVersion(dataRead);
                     }
                   });
                 } else {}
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text(
                 'Annuler',
                 style: TextStyle(color: Colors.green),
@@ -978,14 +1034,79 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     );
   }
 
+  Future<void> restartDisinfection(BuildContext context, Map<String, dynamic> dataRead) {
+    String timeDataList = dataRead['TimeData'].toString();
+    myExtinctionTimeMinutePosition = _stringListAsciiToListInt(timeDataList.codeUnits)[0];
+    myActivationTimeMinutePosition = _stringListAsciiToListInt(timeDataList.codeUnits)[1];
+
+    myUvcLight = UvcLight();
+    myUvcLight.setCompanyName(dataRead['Company']);
+    myUvcLight.setOperatorName(dataRead['UserName']);
+    myUvcLight.setRoomName(dataRead['RoomName']);
+    myUvcLight.setActivationTime(myActivationTimeMinute.elementAt(myActivationTimeMinutePosition));
+    myUvcLight.setInfectionTime(myExtinctionTimeMinute.elementAt(myExtinctionTimeMinutePosition));
+    myUvcLight.setMachineMac(myDevice.device.id.id);
+    myUvcLight.setMachineName(myDevice.device.name);
+
+    return showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (c) => AlertDialog(
+        title: Text('Attention'),
+        content: Text('Problème lors de la précédente désinfection, veuillez la recommencer'),
+        actions: [
+          TextButton(
+            child: Text('Oui'),
+            onPressed: () {
+              myDevice.writeCharacteristic(2, 0, 'UVCTreatement : ON');
+              Navigator.pushNamed(context, '/uvc');
+            },
+          ),
+          TextButton(
+            child: Text('Non'),
+            onPressed: () {
+              checkVersion(dataRead);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> stopDisinfection(BuildContext context, Map<String, dynamic> dataRead) {
+    return showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (c) => AlertDialog(
+        title: Text('Attention'),
+        content: Text('Une désinfection est en cours, afin que SAFE UVC fonctionne correctement la désinfection va être stoppée.'),
+        actions: [
+          TextButton(
+            child: Text('Compris'),
+            onPressed: () {
+              if (Platform.isAndroid) {
+                myDevice.writeCharacteristic(2, 0, 'STOP : ON');
+              }
+              if (Platform.isIOS) {
+                myDevice.writeCharacteristic(0, 0, 'STOP : ON');
+              }
+              checkVersion(dataRead);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> stopActivity(BuildContext context) {
     return showDialog<bool>(
       context: context,
+      barrierDismissible: false,
       builder: (c) => AlertDialog(
         title: Text('Attention'),
         content: Text('Voulez-vous vraiment quitter l\'application ?'),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text('Oui'),
             onPressed: () {
               if (myDevice != null) {
@@ -994,7 +1115,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
               Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
             },
           ),
-          FlatButton(
+              TextButton(
             child: Text('Non'),
             onPressed: () => Navigator.pop(c, false),
           ),

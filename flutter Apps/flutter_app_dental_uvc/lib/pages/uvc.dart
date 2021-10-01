@@ -103,10 +103,12 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     int detectionResult = 0;
     do {
       if (treatmentIsOnProgress) {
-        await myDevice.readCharacteristic(2, 0);
-        dataRobotUVC = myDevice.getReadCharMessage();
-        dataRead = jsonDecode(dataRobotUVC);
-        detectionResult = int.parse(dataRead['Detection'].toString());
+        if (myDevice.getConnectionState()) {
+          await myDevice.readCharacteristic(2, 0);
+          dataRobotUVC = myDevice.getReadCharMessage();
+          dataRead = jsonDecode(dataRobotUVC);
+          detectionResult = int.parse(dataRead['Detection'].toString());
+        }
         // detectionResult = 0 ;
         if (detectionResult == 0) {
           print('No detection , KEEP THE TREATMENT PROCESS !');
@@ -120,10 +122,10 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
           Navigator.pushNamed(context, '/end_uvc');
           break;
         }
-        await Future.delayed(const Duration(seconds: 1));
       } else {
         break;
       }
+      await Future.delayed(const Duration(seconds: 1));
     } while (true);
   }
 

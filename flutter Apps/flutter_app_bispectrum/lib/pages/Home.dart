@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app_bispectrum/pages/Curves_paint.dart';
 import 'package:flutter_app_bispectrum/services/DataVariables.dart';
+import 'package:flutter_app_bispectrum/services/animation_between_pages.dart';
 import 'package:flutter_app_bispectrum/services/bleDeviceClass.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
@@ -16,7 +18,6 @@ class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
-
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   BluetoothCharacteristic characteristicMaestro;
   BluetoothCharacteristic characteristicWifi;
@@ -27,11 +28,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   int boolToInt(bool a) => a == true ? 1 : 0;
 
   bool firstDisplayMainWidget = true;
-  String carbonStateOnSleepGif;
+  String carbonStateOnSleepGif = "assets/fond-vert-veille.gif";
   String carbonStateOnHome = "assets/personnage-vert.png";
-
-  List<double> opacityLevelWidgets = [1.0, 0.0, 0.0, 0.0, 0.0, 0.0];
-  List<bool> appVisibility = [true, false, false, false, false, false];
+  String carbonLastStateOnHome = "assets/personnage-vert.png";
 
   GifController gifController;
 
@@ -42,7 +41,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     // TODO: implement initState
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     gifController = GifController(vsync: this);
-    //gifController.repeat(min: 0, max: 20, period: Duration(seconds: 2));
+    gifController.repeat(min: 0, max: 55, period: Duration(seconds: 2));
     super.initState();
   }
 
@@ -121,36 +120,41 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         carbonStateOnSleepGif = "assets/fond-vert-veille.gif";
         carbonStateOnHome = "assets/personnage-vert.png";
       }
-      co2Value += 10;
 
-      timeToSleep -= 1000;
-      if (timeToSleep <= 0) {
-        try {
-          setState(() {
-            mainWidgetScreen = sleepWidget(context);
-          });
-          await Future.delayed(Duration(milliseconds: 50));
-        } catch (e) {
-          print(e.message);
-          break;
-        }
-        timeToSleep = (-1000);
-      } else {
-        try {
-          setState(() {
-            mainWidgetScreen = appWidget(context);
-          });
-          await Future.delayed(Duration(milliseconds: 50));
-        } catch (e) {
-          print(e.message);
-          break;
-        }
-      }
-
-      print(timeToSleep);
       if (deactivateSleepAndReadingProcess) {
         break;
       }
+
+      if ((carbonLastStateOnHome != carbonStateOnHome) | (timeToSleep == 0)) {
+        print("change state co2 = $co2Value");
+
+        if (timeToSleep <= 0) {
+          // mainWidgetScreen = sleepWidget(context);
+        } else {
+          mainWidgetScreen = appWidget(context);
+        }
+        carbonLastStateOnHome = carbonStateOnHome;
+      }
+
+      try {
+        setState(() {
+          mainWidgetScreen = appWidget(context);
+        });
+      } catch (e) {
+        print(e.message);
+        break;
+      }
+
+      /// test co2 and temperature rising
+      temperatureValue++;
+      co2Value += 10;
+
+      if (timeToSleep <= 0) {
+        timeToSleep = (-1000);
+      } else {
+        timeToSleep -= 1000;
+      }
+      print(timeToSleep);
     } while (true);
   }
 
@@ -165,6 +169,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     if (firstDisplayMainWidget) {
       try {
+        deactivateSleepAndReadingProcess = false;
         appGetGeolocation();
         appRefreshData(context);
       } catch (e) {
@@ -223,237 +228,201 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           ),
         ),
         child: Center(
-          child: Stack(
-            children: [
-              AnimatedOpacity(
-                duration: Duration(seconds: 1),
-                curve: Curves.linear,
-                opacity: opacityLevelWidgets[0],
-                child: Visibility(visible: appVisibility[0], child: homeWidget(context)),
-              ),
-/*                  AnimatedOpacity(
-                  duration: Duration(seconds: 1),
-                  curve: Curves.linear,
-                  opacity: opacityLevelWidgets[1],
-                  child: Visibility(visible: appVisibility[1]),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                ToggleButtons(
+                  borderRadius: BorderRadius.circular(18.0),
+                  isSelected: [true, true, true, true, true],
+                  onPressed: (int index) async {
+                    if (index == 0) {
+                      createRoute(context, CurveShow());
+                    }
+                  },
+                  children: [
+                    Container(
+                        width: (widthScreen - 80) / 5,
+                        height: (heightScreen - 80) / 5,
+                        child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                          new SizedBox(width: 4.0),
+                          new Text("Température\n$temperatureValue °C", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
+                        ])),
+                    Container(
+                        width: (widthScreen - 80) / 5,
+                        height: (heightScreen - 80) / 5,
+                        child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                          new SizedBox(width: 4.0),
+                          new Text("Humidité\n$humidityValue %", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
+                        ])),
+                    Container(
+                        width: (widthScreen - 80) / 5,
+                        height: (heightScreen - 80) / 5,
+                        child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                          new SizedBox(width: 4.0),
+                          new Text("CO2\n$co2Value ppm", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
+                        ])),
+                    Container(
+                        width: (widthScreen - 80) / 5,
+                        height: (heightScreen - 80) / 5,
+                        child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                          new SizedBox(width: 4.0),
+                          new Text("TVOC\n$tvocValue mg/m3", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
+                        ])),
+                    Container(
+                        width: (widthScreen - 80) / 5,
+                        height: (heightScreen - 80) / 5,
+                        child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                          new SizedBox(width: 4.0),
+                          new Text("ICONE\n$iconeValue", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
+                        ])),
+                  ],
+                  borderWidth: 2,
+                  selectedColor: Colors.white,
+                  selectedBorderColor: Colors.black,
+                  fillColor: Color(0xFF264eb6),
                 ),
-                AnimatedOpacity(
-                  duration: Duration(seconds: 1),
-                  curve: Curves.linear,
-                  opacity: opacityLevelWidgets[2],
-                  child: Visibility(visible: appVisibility[2]),
-                ),
-                AnimatedOpacity(
-                  duration: Duration(seconds: 1),
-                  curve: Curves.linear,
-                  opacity: opacityLevelWidgets[3],
-                  child: Visibility(visible: appVisibility[3]),
-                ),
-                AnimatedOpacity(
-                  duration: Duration(seconds: 1),
-                  curve: Curves.linear,
-                  opacity: opacityLevelWidgets[4],
-                  child: Visibility(visible: appVisibility[4]),
-                ),
-                AnimatedOpacity(
-                  duration: Duration(seconds: 1),
-                  curve: Curves.linear,
-                  opacity: opacityLevelWidgets[5],
-                  child: Visibility(visible: appVisibility[5]),
-                ),*/
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget homeWidget(BuildContext context) {
-    double widthScreen = MediaQuery.of(context).size.width;
-    double heightScreen = MediaQuery.of(context).size.height;
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          ToggleButtons(
-            borderRadius: BorderRadius.circular(18.0),
-            isSelected: [true, true, true, true, true],
-            onPressed: (int index) async {},
-            children: [
-              Container(
-                  width: (widthScreen - 80) / 5,
-                  child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                    new SizedBox(width: 4.0),
-                    new Text("Température\n$temperatureValue °C", style: TextStyle(fontSize: 15), textAlign: TextAlign.center)
-                  ])),
-              Container(
-                  width: (widthScreen - 80) / 5,
-                  child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                    new SizedBox(width: 4.0),
-                    new Text("Humidité\n$humidityValue %", style: TextStyle(fontSize: 15), textAlign: TextAlign.center)
-                  ])),
-              Container(
-                  width: (widthScreen - 80) / 5,
-                  child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                    new SizedBox(width: 4.0),
-                    new Text("CO2\n$co2Value ppm", style: TextStyle(fontSize: 15), textAlign: TextAlign.center)
-                  ])),
-              Container(
-                  width: (widthScreen - 80) / 5,
-                  child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                    new SizedBox(width: 4.0),
-                    new Text("TVOC\n$tvocValue mg/m3", style: TextStyle(fontSize: 15), textAlign: TextAlign.center)
-                  ])),
-              Container(
-                  width: (widthScreen - 80) / 5,
-                  child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                    new SizedBox(width: 4.0),
-                    new Text("ICONE\n$iconeValue", style: TextStyle(fontSize: 15), textAlign: TextAlign.center)
-                  ])),
-            ],
-            borderWidth: 2,
-            selectedColor: Colors.white,
-            selectedBorderColor: Colors.black,
-            fillColor: Color(0xFF264eb6),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18.0),
-                    color: Color(0xFFFFFFF0),
-                    shape: BoxShape.rectangle,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(18.0),
+                          color: Color(0xFFFFFFF0),
+                          shape: BoxShape.rectangle,
+                        ),
+                        width: widthScreen * 0.8,
+                        height: heightScreen * 0.25,
+                        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 16.0, 0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'QUALITÉ DE L\'AIR :',
+                                      style: TextStyle(
+                                        color: Color(0xFF264eb6),
+                                        fontWeight: FontWeight.bold,
+                                        decoration: TextDecoration.underline,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    Text(
+                                      'BON',
+                                      style: TextStyle(
+                                        color: Color(0xFF264eb6),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 40,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Image.asset(
+                            carbonStateOnHome,
+                            height: heightScreen * 0.4,
+                            width: widthScreen * 0.5,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  width: widthScreen * 0.8,
-                  height: heightScreen * 0.25,
-                  padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 16.0, 0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'QUALITÉ DE L\'AIR :',
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(18.0),
+                          color: Color(0xFF264eb6),
+                          shape: BoxShape.rectangle,
+                        ),
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          appTime,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 40,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(18.0),
+                          color: Color(0xFF264eb6),
+                          shape: BoxShape.rectangle,
+                        ),
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 8.0, 0),
+                              child: Transform.scale(
+                                scale: 1.2,
+                                child: SvgPicture.asset("assets/meteo/$weatherState.svg"),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
+                              child: Text(
+                                '$temperatureMeteoValue °C',
                                 style: TextStyle(
-                                  color: Color(0xFF264eb6),
+                                  color: Colors.white,
                                   fontWeight: FontWeight.bold,
-                                  decoration: TextDecoration.underline,
                                   fontSize: 20,
                                 ),
                               ),
-                              Text(
-                                'BON',
-                                style: TextStyle(
-                                  color: Color(0xFF264eb6),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 40,
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                    Image.asset(
-                      carbonStateOnHome,
-                      height: heightScreen * 0.4,
-                      width: widthScreen * 0.5,
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+                      child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(18.0),
+                            color: Color(0xFF264eb6),
+                            shape: BoxShape.rectangle,
+                          ),
+                          padding: const EdgeInsets.all(2.0),
+                          child: IconButton(
+                              onPressed: null,
+                              icon: Icon(
+                                Icons.settings,
+                                color: Colors.white,
+                              ))),
                     ),
                   ],
                 ),
               ],
             ),
           ),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18.0),
-                    color: Color(0xFF264eb6),
-                    shape: BoxShape.rectangle,
-                  ),
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    appTime,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 40,
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18.0),
-                    color: Color(0xFF264eb6),
-                    shape: BoxShape.rectangle,
-                  ),
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 8.0, 0),
-                        child: Transform.scale(
-                          scale: 1.2,
-                          child: SvgPicture.asset("assets/meteo/$weatherState.svg"),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
-                        child: Text(
-                          '$temperatureMeteoValue °C',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(18.0),
-                      color: Color(0xFF264eb6),
-                      shape: BoxShape.rectangle,
-                    ),
-                    padding: const EdgeInsets.all(2.0),
-                    child: IconButton(
-                        onPressed: null,
-                        icon: Icon(
-                          Icons.settings,
-                          color: Colors.white,
-                        ))),
-              ),
-            ],
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -461,8 +430,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   Widget sleepWidget(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
-    // loop from 0 frame to 29 frame
-    gifController.repeat(min: 0, max: 11, period: Duration(milliseconds: 1000));
     return Scaffold(
       backgroundColor: Colors.blue[400],
       body: Center(

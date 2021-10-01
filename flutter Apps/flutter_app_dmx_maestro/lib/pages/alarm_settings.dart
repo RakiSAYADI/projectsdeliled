@@ -1,10 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app_dmx_maestro/pages/home.dart';
-import 'package:flutter_app_dmx_maestro/services/bleDeviceClass.dart';
+import 'package:flutter_app_dmx_maestro/services/DataVariables.dart';
 import 'package:flutter_app_dmx_maestro/services/uvcToast.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:hsl_colorpicker/HSLColorPicker.dart';
 
@@ -23,16 +21,6 @@ class _AlarmClockState extends State<AlarmClock> {
   List<bool> daysStates = [false, false, false, false, false, false, false];
   int day = 0;
 
-  List<Color> hueInitial = [
-    Colors.blueAccent,
-    Colors.blueAccent,
-    Colors.blueAccent,
-    Colors.blueAccent,
-    Colors.blueAccent,
-    Colors.blueAccent,
-    Colors.blueAccent
-  ];
-
   List<int> hourList = [0, 0, 0, 0, 0, 0, 0];
   List<int> minutesList = [0, 0, 0, 0, 0, 0, 0];
   List<int> secondsList = [0, 0, 0, 0, 0, 0, 0];
@@ -49,204 +37,23 @@ class _AlarmClockState extends State<AlarmClock> {
   int myTimeMinutesPosition = 0;
   int myTimeSecondsPosition = 0;
 
-  Map bleDeviceData = {};
   ToastyMessage myUvcToast;
-
-  List<String> myTimeHours = [
-    '00',
-    '01',
-    '02',
-    '03',
-    '04',
-    '05',
-    '06',
-    '07',
-    '08',
-    '09',
-    '10',
-    '11',
-    '12',
-    '13',
-    '14',
-    '15',
-    '16',
-    '17',
-    '18',
-    '19',
-    '20',
-    '21',
-    '22',
-    '23'
-  ];
-
-  List<String> myTimeMinutes = [
-    '00',
-    '01',
-    '02',
-    '03',
-    '04',
-    '05',
-    '06',
-    '07',
-    '08',
-    '09',
-    '10',
-    '11',
-    '12',
-    '13',
-    '14',
-    '15',
-    '16',
-    '17',
-    '18',
-    '19',
-    '20',
-    '21',
-    '22',
-    '23',
-    '24',
-    '25',
-    '26',
-    '27',
-    '28',
-    '29',
-    '30',
-    '31',
-    '32',
-    '33',
-    '34',
-    '35',
-    '36',
-    '37',
-    '38',
-    '39',
-    '40',
-    '41',
-    '42',
-    '43',
-    '44',
-    '45',
-    '46',
-    '47',
-    '48',
-    '49',
-    '50',
-    '51',
-    '52',
-    '53',
-    '54',
-    '55',
-    '56',
-    '57',
-    '58',
-    '59'
-  ];
-
-  List<String> myTimeSeconds = [
-    '00',
-    '01',
-    '02',
-    '03',
-    '04',
-    '05',
-    '06',
-    '07',
-    '08',
-    '09',
-    '10',
-    '11',
-    '12',
-    '13',
-    '14',
-    '15',
-    '16',
-    '17',
-    '18',
-    '19',
-    '20',
-    '21',
-    '22',
-    '23',
-    '24',
-    '25',
-    '26',
-    '27',
-    '28',
-    '29',
-    '30',
-    '31',
-    '32',
-    '33',
-    '34',
-    '35',
-    '36',
-    '37',
-    '38',
-    '39',
-    '40',
-    '41',
-    '42',
-    '43',
-    '44',
-    '45',
-    '46',
-    '47',
-    '48',
-    '49',
-    '50',
-    '51',
-    '52',
-    '53',
-    '54',
-    '55',
-    '56',
-    '57',
-    '58',
-    '59'
-  ];
 
   String myAlarmTimeMinuteData = '  5 sec';
   List<int> myAlarmTimeMinuteList = [0, 0, 0, 0, 0, 0, 0];
   int myAlarmTimeMinutePosition = 0;
 
-  List<String> myAlarmTimeMinute = [
-    '  5 sec',
-    ' 10 sec',
-    ' 20 sec',
-    ' 30 sec',
-    '  1 min',
-    '  2 min',
-    '  5 min',
-    ' 10 min',
-    ' 15 min',
-    ' 20 min',
-    ' 25 min',
-    ' 30 min',
-    ' 35 min',
-    ' 40 min',
-    ' 45 min',
-    ' 50 min',
-    ' 55 min',
-    ' 60 min',
-    ' 65 min',
-    ' 70 min',
-    ' 75 min',
-    ' 80 min',
-    ' 85 min',
-    ' 90 min',
-    ' 95 min',
-    '100 min',
-    '105 min',
-    '110 min',
-    '115 min',
-    '120 min',
-  ];
-
-  BluetoothCharacteristic characteristicMaestro;
-  BluetoothCharacteristic characteristicWifi;
-  Device myDevice;
-
   bool firstDisplayMainWidget = true;
+
+  List<Color> hueInitial = [
+    Colors.blueAccent,
+    Colors.blueAccent,
+    Colors.blueAccent,
+    Colors.blueAccent,
+    Colors.blueAccent,
+    Colors.blueAccent,
+    Colors.blueAccent
+  ];
 
   @override
   void initState() {
@@ -286,14 +93,9 @@ class _AlarmClockState extends State<AlarmClock> {
   Widget build(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
-    bleDeviceData = bleDeviceData.isNotEmpty ? bleDeviceData : ModalRoute.of(context).settings.arguments;
-    myDevice = bleDeviceData['bleDevice'];
-    characteristicMaestro = bleDeviceData['characteristicMaestro'];
-    characteristicWifi = bleDeviceData['characteristicWifi'];
-    dataMaestro = bleDeviceData['dataMaestro'];
     if (firstDisplayMainWidget) {
       try {
-        var parsedJson = json.decode(dataMaestro);
+        var parsedJson = json.decode(dataMaestro2);
         readWakeUpDataPerDay(parsedJson['lun'], 0);
         readWakeUpDataPerDay(parsedJson['mar'], 1);
         readWakeUpDataPerDay(parsedJson['mer'], 2);
@@ -366,8 +168,10 @@ class _AlarmClockState extends State<AlarmClock> {
                                 '\"jeu\":[${alarmDayData(3)}],\"ven\":[${alarmDayData(4)}],'
                                 '\"sam\":[${alarmDayData(5)}],\"dim\":[${alarmDayData(6)}]}'
                             .codeUnits);
-                        await Future.delayed(Duration(seconds: 1));
+                        await Future.delayed(Duration(milliseconds: 500));
                         dataMaestro = String.fromCharCodes(await characteristicMaestro.read());
+                        await Future.delayed(Duration(milliseconds: 500));
+                        dataMaestro2 = String.fromCharCodes(await characteristicMaestro.read());
                       }
                     },
                     child: Padding(

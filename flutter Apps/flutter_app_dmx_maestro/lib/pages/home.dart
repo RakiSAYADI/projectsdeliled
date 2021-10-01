@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_dmx_maestro/services/bleDeviceClass.dart';
-import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_app_dmx_maestro/services/DataVariables.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:hsl_colorpicker/HSLColorPicker.dart';
 
@@ -13,14 +12,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-String dataMaestro;
-
 class _HomeState extends State<Home> {
-  Map bleDeviceData = {};
-
-  BluetoothCharacteristic characteristicMaestro;
-  BluetoothCharacteristic characteristicWifi;
-  Device myDevice;
 
   final String zonesInHex = 'F';
 
@@ -62,15 +54,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    try {
-      bleDeviceData = bleDeviceData.isNotEmpty ? bleDeviceData : ModalRoute.of(context).settings.arguments;
-      myDevice = bleDeviceData['bleDevice'];
-      characteristicMaestro = bleDeviceData['characteristicMaestro'];
-      characteristicWifi = bleDeviceData['characteristicWifi'];
-      dataMaestro = bleDeviceData['dataMaestro'];
-    } catch (e) {
-      print('home : erreur reading DATA !');
-    }
 
     if (firstDisplayMainWidget) {
       try {
@@ -125,12 +108,7 @@ class _HomeState extends State<Home> {
                         IconButton(
                           icon: Icon(Icons.alarm),
                           onPressed: () {
-                            Navigator.pushNamed(context, '/alarm_settings', arguments: {
-                              'characteristicMaestro': characteristicMaestro,
-                              'characteristicWifi': characteristicWifi,
-                              'dataMaestro': dataMaestro,
-                              'bleDevice': myDevice,
-                            });
+                            Navigator.pushNamed(context, '/alarm_settings');
                           },
                         ),
                         VerticalDivider(
@@ -179,12 +157,7 @@ class _HomeState extends State<Home> {
                           key: Key('settings_button'),
                           icon: Icon(Icons.settings),
                           onPressed: () {
-                            Navigator.pushNamed(context, '/settings', arguments: {
-                              'characteristicMaestro': characteristicMaestro,
-                              'characteristicWifi': characteristicWifi,
-                              'dataMaestro': dataMaestro,
-                              'bleDevice': myDevice,
-                            });
+                            Navigator.pushNamed(context, '/settings');
                           },
                         ),
                         VerticalDivider(

@@ -24,7 +24,7 @@ class _DataCSVViewQrCodeState extends State<DataCSVViewQrCode> {
     double screenWidth = MediaQuery.of(context).size.width;
     return WillPopScope(
       child: Scaffold(
-        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text('Rapports de désinfection'),
           centerTitle: true,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcClass.dart';
@@ -14,6 +15,7 @@ Widget mainWidgetScreen;
 final int timeSleep = 60000;
 
 Device myDevice;
+BluetoothDevice savedDevice;
 
 UvcLight myUvcLight;
 

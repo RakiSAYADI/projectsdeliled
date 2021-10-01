@@ -19,11 +19,11 @@ class DataBaseRequests {
   final String _idUvcState = 'etat';
 
   void createUserInDataBase(String email, String robotName) async {
-    final response = await http.post(_insertDataLink, body: {
+/*    final response = await http.post(_insertDataLink, body: {
       _idMail: email,
       _idNomRobot: robotName,
     });
-    print(response.body);
+    print(response.body);*/
   }
 
   Future<bool> checkInternetConnection() async {
@@ -43,7 +43,7 @@ class DataBaseRequests {
 
   void sendUVCDataToDataBase(
       String robotName, String user, String enterprise, String room, String startHour, String startDate, String startDuration, String state) async {
-    final response = await http.post(_insertUVCDataLink, body: {
+/*    final response = await http.post(_insertUVCDataLink, body: {
       _idRobotName: robotName,
       _idUser: user,
       _idEnterprise: enterprise,
@@ -53,7 +53,7 @@ class DataBaseRequests {
       _idStartDuration: startDuration,
       _idUvcState: state,
     });
-    print(response.body);
+    print(response.body);*/
   }
 
 /*  void sqlConnection() async {

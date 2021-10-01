@@ -25,7 +25,7 @@ class _DataCSVViewState extends State<DataCSVView> {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text('Rapports de désinfection'),
         centerTitle: true,

@@ -342,7 +342,7 @@ class _SettingsState extends State<Settings> {
             ],
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text(
                 'OK',
                 style: TextStyle(color: Colors.green),
@@ -353,7 +353,7 @@ class _SettingsState extends State<Settings> {
                 Navigator.pushNamed(context, '/warnings');
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text(
                 'Annuler',
                 style: TextStyle(color: Colors.green),

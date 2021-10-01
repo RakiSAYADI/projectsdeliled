@@ -42,7 +42,7 @@ class LedControl {
         break;
     }
     try {
-      await Process.start(_processName, []).then((Process process) {
+      Process.start(_processName, []).then((Process process) {
         process.stdout.transform(utf8.decoder).listen((data) {
           print(data);
         });

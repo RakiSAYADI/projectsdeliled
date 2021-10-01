@@ -1,6 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutterappdentaluvc/services/DataVariables.dart';
+import 'package:flutterappdentaluvc/services/uvcClass.dart';
+import 'package:get/get.dart';
 
 class Device {
   BluetoothDevice device;
@@ -12,6 +18,11 @@ class Device {
   String _readCharMessage;
 
   bool _readIsReady = false;
+  bool _connectionError = false;
+  bool _connectionOnce = true;
+
+  FlutterBlue _flutterBlue = FlutterBlue.instance;
+  List<BluetoothDevice> _scanDevices = [];
 
   Future<void> connect(bool autoConnection) async {
     // Not available for reading
@@ -23,16 +34,6 @@ class Device {
       });
     }
 
-    Future<void> mtuRequest() async {
-      if (Platform.isAndroid) {
-        final mtu = await device.mtu.first;
-        if (mtu < 512) {
-          await device.requestMtu(512);
-        }
-      }
-      print('the mtu is changed');
-    }
-
     // connect
     await device.connect(autoConnect: autoConnection);
     // Discover services
@@ -40,28 +41,28 @@ class Device {
     // setting MTU
     await mtuRequest();
     // setting connection state after 1 second
+    checkConnectionState();
     Future.delayed(const Duration(seconds: 1), () async {
-      checkConnectionState();
       // available for reading
       _readIsReady = true;
+      _connectionError = true;
       // listen if the state connexion is changed or not
-      device.state.listen((event) {
-        switch (event) {
-          case BluetoothDeviceState.connected:
-            print('connected');
-            break;
-          case BluetoothDeviceState.disconnected:
-            print('disconnected');
-            break;
-          case BluetoothDeviceState.connecting:
-            print('connecting');
-            break;
-          case BluetoothDeviceState.disconnecting:
-            print('disconnecting');
-            break;
-        }
-      });
+      if (_connectionOnce) {
+        _checkBLEConnectionState(device);
+        _connectionOnce = false;
+      }
     });
+  }
+
+  Future<void> mtuRequest() async {
+    if (Platform.isAndroid) {
+      final mtu = await device.mtu.first;
+      print(mtu);
+      if (mtu < 512) {
+        await device.requestMtu(512);
+      }
+    }
+    print('the mtu is changed');
   }
 
   bool getConnectionState() {
@@ -77,6 +78,7 @@ class Device {
     device.disconnect();
     // Not available for reading
     _readIsReady = false;
+    _connectionError = false;
   }
 
   String getReadCharMessage() {
@@ -132,6 +134,269 @@ class Device {
       }
     } else {
       return -2;
+    }
+  }
+
+  void _checkBLEConnectionState(BluetoothDevice blueDevice) {
+    blueDevice.state.listen((event) async {
+      switch (event) {
+        case BluetoothDeviceState.connected:
+          print('connected');
+
+          /// add the check state process
+          Map<String, dynamic> dataRead;
+          await readCharacteristic(2, 0);
+          try {
+            dataRead = jsonDecode(_readCharMessage);
+            switch (int.parse(dataRead['uvcSt'].toString())) {
+              case 0:
+                print('ok');
+                break;
+              case 1:
+                print('in progress');
+                _stopDisinfection(dataRead);
+                break;
+              case 2:
+                print('error');
+                _restartDisinfection(dataRead);
+                break;
+              default:
+                break;
+            }
+          } catch (e) {
+            print('No version detected');
+          }
+          break;
+        case BluetoothDeviceState.disconnected:
+          print('disconnected');
+          if (_connectionError) {
+            Get.defaultDialog(
+              title: 'Attention',
+              barrierDismissible: false,
+              content: Text('La connexion est perdue avec votre dispositif, vous allez être reconnecté',
+                  style: TextStyle(
+                    fontSize: 14,
+                  )),
+              actions: [
+                TextButton(
+                  child: Text(
+                    'Compris',
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                  onPressed: () async {
+                    Get.back();
+                    print(savedDevice.id.id);
+                    _connectionError = false;
+                    _scanForDevices();
+                  },
+                ),
+              ],
+            );
+          }
+          break;
+        case BluetoothDeviceState.connecting:
+          print('connecting');
+          break;
+        case BluetoothDeviceState.disconnecting:
+          print('disconnecting');
+          break;
+      }
+    });
+  }
+
+  void _restartDisinfection(Map<String, dynamic> dataRead) {
+    String timeDataList = dataRead['TimeData'].toString();
+    myExtinctionTimeMinutePosition = _stringListAsciiToListInt(timeDataList.codeUnits)[0];
+    myActivationTimeMinutePosition = _stringListAsciiToListInt(timeDataList.codeUnits)[1];
+
+    myUvcLight = UvcLight();
+    myUvcLight.setCompanyName(dataRead['Company']);
+    myUvcLight.setOperatorName(dataRead['UserName']);
+    myUvcLight.setRoomName(dataRead['RoomName']);
+    myUvcLight.setActivationTime(myActivationTimeMinute.elementAt(myActivationTimeMinutePosition));
+    myUvcLight.setInfectionTime(myExtinctionTimeMinute.elementAt(myExtinctionTimeMinutePosition));
+    myUvcLight.setMachineMac(myDevice.device.id.id);
+    myUvcLight.setMachineName(myDevice.device.name);
+
+    Get.defaultDialog(
+      title: 'Attention',
+      content: Text('Problème lors de la précédente désinfection, veuillez la recommencer'),
+      actions: [
+        TextButton(
+          child: Text('Oui'),
+          onPressed: () {
+            writeCharacteristic(2, 0, 'UVCTreatement : ON');
+            Get.toNamed('/uvc');
+          },
+        ),
+        TextButton(
+          child: Text('Non'),
+          onPressed: () {
+            Get.back();
+          },
+        ),
+      ],
+    );
+  }
+
+  void _stopDisinfection(Map<String, dynamic> dataRead) {
+    Get.defaultDialog(
+      title: 'Attention',
+      content: Text('Une désinfection est en cours, afin que SAFE UVC fonctionne correctement la désinfection va être stoppée.'),
+      actions: [
+        TextButton(
+          child: Text('Compris'),
+          onPressed: () {
+            if (Platform.isAndroid) {
+              writeCharacteristic(2, 0, 'STOP : ON');
+            }
+            if (Platform.isIOS) {
+              writeCharacteristic(0, 0, 'STOP : ON');
+            }
+            Get.back();
+          },
+        ),
+      ],
+    );
+  }
+
+  void _scanForDevices() async {
+    Get.defaultDialog(
+      title: 'Rechercher votre dispositif UV-C',
+      barrierDismissible: false,
+      content: SpinKitCircle(
+        color: Colors.green,
+        size: 100,
+      ),
+    );
+    // Start scanning
+    _flutterBlue.startScan(timeout: Duration(seconds: 10));
+    // Listen to scan results
+    _flutterBlue.scanResults.listen((results) {
+      _scanDevices.clear();
+      // do something with scan results
+      for (ScanResult r in results) {
+        print('${r.device.name} found! mac: ${r.device.id.toString()}');
+        if (_scanDevices.isEmpty) {
+          _scanDevices.add(r.device);
+        } else {
+          if (!_scanDevices.contains(r.device)) {
+            _scanDevices.add(r.device);
+          }
+        }
+      }
+    });
+    await Future.delayed(const Duration(seconds: 10));
+    _flutterBlue.isScanning.listen((state) {
+      // do something with scan results
+      if (state) {
+        print('scanning !');
+      } else {
+        print('we have result !');
+        _deviceState();
+      }
+    }, onDone: () {
+      print('Scan is Done !');
+    });
+  }
+
+  void _deviceState() {
+    int devicesPosition = 0;
+    bool deviceExistOrNot = false;
+    for (int i = 0; i < _scanDevices.length; i++) {
+      if (_scanDevices.elementAt(i).id.toString().contains(savedDevice.id.id)) {
+        deviceExistOrNot = true;
+        devicesPosition = i;
+        break;
+      } else {
+        deviceExistOrNot = false;
+      }
+    }
+    Get.back();
+    if (deviceExistOrNot) {
+      Get.snackbar('Félicitation', 'on a trouvé votre dispostif', icon: Icon(Icons.assignment_turned_in, color: Colors.green));
+      _connectUVCDevice(devicesPosition);
+    } else {
+      Get.snackbar('Félicitation', 'on n\'a trouvé votre dispostif', icon: Icon(Icons.assignment_late, color: Colors.red));
+      //_scanForDevices();
+    }
+  }
+
+  void _connectUVCDevice(int devicesPosition) async {
+    await Future.delayed(const Duration(seconds: 2));
+    Get.defaultDialog(
+      title: 'Connexion avec votre dispositif UV-C',
+      barrierDismissible: false,
+      content: SpinKitCircle(
+        color: Colors.green,
+        size: 100,
+      ),
+    );
+    myDevice.disconnect();
+    savedDevice = _scanDevices.elementAt(devicesPosition);
+    myDevice = Device(device: _scanDevices.elementAt(devicesPosition));
+    // stop scanning and start connecting
+    while (true) {
+      while (true) {
+        myDevice.connect(false);
+        await Future.delayed(Duration(seconds: 3));
+        print('result of trying connection is ${myDevice.getConnectionState()}');
+        if (myDevice.getConnectionState()) {
+          break;
+        } else {
+          myDevice.disconnect();
+        }
+      }
+      if (myDevice.getConnectionState()) {
+        await myDevice.readCharacteristic(2, 0);
+        await Future.delayed(const Duration(seconds: 1));
+        try {
+          if (myDevice.getReadCharMessage().isNotEmpty) {
+            Future.delayed(Duration(seconds: 1), () async {
+              _flutterBlue.stopScan();
+              Get.back();
+              await Future.delayed(const Duration(milliseconds: 500));
+              Get.snackbar('Félicitation', 'Connexion établi avec votre téléphone !', icon: Icon(Icons.assignment_turned_in, color: Colors.green));
+              _connectionError = true;
+            });
+            break;
+          } else {
+            myDevice.disconnect();
+          }
+        } catch (e) {
+          print(e);
+          myDevice.disconnect();
+        }
+      }
+      await Future.delayed(const Duration(seconds: 1));
+    }
+  }
+
+  List<int> _stringListAsciiToListInt(List<int> listInt) {
+    List<int> ourListInt = [0];
+    int listIntLength = listInt.length;
+    int intNumber = (listIntLength / 4).round();
+    ourListInt.length = intNumber;
+    int listCounter;
+    int listIntCounter = 0;
+    String numberString = '';
+    if (listInt.first == 91 && listInt.last == 93) {
+      for (listCounter = 0; listCounter < listIntLength - 1; listCounter++) {
+        if (!((listInt[listCounter] == 91) || (listInt[listCounter] == 93) || (listInt[listCounter] == 32) || (listInt[listCounter] == 44))) {
+          numberString = '';
+          do {
+            numberString += String.fromCharCode(listInt[listCounter]);
+            listCounter++;
+          } while (!((listInt[listCounter] == 44) || (listInt[listCounter] == 93)));
+          ourListInt[listIntCounter] = int.parse(numberString);
+          listIntCounter++;
+        }
+      }
+      return ourListInt;
+    } else {
+      return [0];
     }
   }
 }

@@ -250,7 +250,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
           timeToSleep = (-1000);
         }
 
-        print(timeToSleep);
+        //print(timeToSleep);
       }
       await Future.delayed(Duration(seconds: 1));
     } while (true);
