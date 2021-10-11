@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_bispectrum/services/bleDeviceClass.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 
 final String appName = 'Bispectrum';
@@ -7,17 +8,24 @@ final String appName = 'Bispectrum';
 final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
 bool deactivateSleepAndReadingProcess = false;
-GifController gifController;
 Widget mainWidgetScreen;
 final int timeSleep = 60000;
 
 Device myDevice;
+BluetoothCharacteristic characteristicSensors;
+BluetoothCharacteristic characteristicData;
 
-double temperatureValue = 28.7;
+String dataChar1 = '';
+String dataChar2 = '';
+
+int deviceTimeValue = 1000000;
+int detectionTimeValue = 0;
+int temperatureValue = 28;
 int humidityValue = 50;
+int lightValue = 20;
 int co2Value = 500;
 int tvocValue = 750;
-int iconeValue = 0;
+bool deviceWifiState = false;
 
 String appTime = '00:00';
 int temperatureMeteoValue = 28;

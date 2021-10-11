@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_bispectrum/pages/Home.dart';
 import 'package:flutter_app_bispectrum/pages/check_permissions.dart';
+import 'package:flutter_app_bispectrum/pages/scan_ble_list.dart';
 import 'package:flutter_app_bispectrum/services/DataVariables.dart';
 import 'package:flutter_app_bispectrum/services/animation_between_pages.dart';
 import 'package:flutter_blue/flutter_blue.dart';
@@ -64,7 +64,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
         flutterBlue = FlutterBlue.instance;
         print("Bluetooth is on");
         Future.delayed(Duration(seconds: 5), () {
-          createReplacementRoute(context, Home()); //ScanListBle()
+          createReplacementRoute(context, ScanListBle());
         });
       }
     });

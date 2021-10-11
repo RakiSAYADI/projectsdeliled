@@ -13,7 +13,7 @@ class Device {
 
   bool _readIsReady = false;
 
-  Future<void> connect(bool autoConnection) async {
+  Future<void> connect({bool autoConnection}) async {
     // Not available for reading
     _readIsReady = false;
     // defining the methods

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app_bispectrum/pages/Home.dart';
+import 'package:flutter_app_bispectrum/pages/scan_ble_list.dart';
 import 'package:flutter_app_bispectrum/services/animation_between_pages.dart';
 import 'package:flutter_app_bispectrum/services/uvcToast.dart';
 import 'package:flutter_blue/flutter_blue.dart';
@@ -167,7 +167,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                             ),
                             onPressed: () {
                               print('understood_key is pressed');
-                              createRoute(context, Home()); // ScanListBle()
+                              createRoute(context, ScanListBle());
                             },
                           ),
                         ),

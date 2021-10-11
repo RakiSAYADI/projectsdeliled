@@ -1,4 +1,4 @@
-package deliled.applications.flutter_app_bispectrum
+package deliled.applications.lumiairlite
 
 import io.flutter.embedding.android.FlutterActivity
 

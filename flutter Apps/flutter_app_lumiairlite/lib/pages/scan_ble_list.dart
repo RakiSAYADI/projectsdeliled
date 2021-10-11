@@ -1,22 +1,21 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app_bispectrum/pages/Home.dart';
+import 'package:flutter_app_bispectrum/services/DataVariables.dart';
+import 'package:flutter_app_bispectrum/services/animation_between_pages.dart';
 import 'package:flutter_app_bispectrum/services/bleDeviceClass.dart';
 import 'package:flutter_app_bispectrum/services/deviceBleWidget.dart';
-import 'package:flutter_app_bispectrum/services/uvcToast.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class ScanListBle extends StatefulWidget {
   @override
   _ScanListBleState createState() => _ScanListBleState();
 }
 
-class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStateMixin {
+class _ScanListBleState extends State<ScanListBle> {
   List<Device> devices = [];
-
-  final bool appTest = true;
-
-  ToastyMessage myUvcToast;
 
   final String robotUVCMAC = '70:B3:D5:01:8';
   final String robotUVCName = 'DEEPLIGHT';
@@ -25,40 +24,29 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
 
   ///Initialisation and listening to device state
 
-  BluetoothDevice device;
-  BluetoothDeviceState deviceState;
   FlutterBlue flutterBlue = FlutterBlue.instance;
-  BluetoothCharacteristic characteristicRelays;
 
   @override
   void initState() {
     super.initState();
     //checks bluetooth current state
-    if (appTest) {
-      devices.add(Device());
-    } else {
-      flutterBlue.state.listen((state) {
-        if (state == BluetoothState.off) {
-          //Alert user to turn on bluetooth.
-          print("Bluetooth is off");
-          myUvcToast = ToastyMessage(toastContext: context);
-          myUvcToast.setToastDuration(5);
-          myUvcToast.setToastMessage('Le Bluetooth (BLE) n\'est pas activé sur votre téléphone !');
-          myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-        } else if (state == BluetoothState.on) {
-          //if bluetooth is enabled then go ahead.
-          //Make sure user's device gps is on.
-          flutterBlue = FlutterBlue.instance;
-          print("Bluetooth is on");
-          if (Platform.isAndroid) {
-            scanForDevicesAndroid();
-          }
-          if (Platform.isIOS) {
-            scanForDevicesIos();
-          }
+    flutterBlue.state.listen((state) {
+      if (state == BluetoothState.off) {
+        //Alert user to turn on bluetooth.
+        print("Bluetooth is off");
+      } else if (state == BluetoothState.on) {
+        //if bluetooth is enabled then go ahead.
+        //Make sure user's device gps is on.
+        flutterBlue = FlutterBlue.instance;
+        print("Bluetooth is on");
+        if (Platform.isAndroid) {
+          scanForDevicesAndroid();
         }
-      });
-    }
+        if (Platform.isIOS) {
+          scanForDevicesIos();
+        }
+      }
+    });
   }
 
   void scanForDevicesAndroid() {
@@ -153,11 +141,80 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
             children: devices
                 .map((device) => DeviceCard(
                     device: device,
-                    connect: () async {
-                      // startBind(context, device.device.id.id);
+                    connect: () {
+                      startConnect(context, device.device);
                     }))
                 .toList()),
       ),
     );
+  }
+
+  void startConnect(BuildContext context, BluetoothDevice thisDevice) async {
+    myDevice = Device(device: thisDevice);
+    waitingWidget();
+    // stop scanning and start connecting
+    await flutterBlue.stopScan();
+    bool resultConnection = false;
+    while (true) {
+      myDevice.connect(autoConnection: false);
+      await Future.delayed(Duration(seconds: 3));
+      resultConnection = myDevice.getConnectionState();
+      if (resultConnection) {
+        break;
+      }
+      print('result of trying connection is $resultConnection');
+      myDevice.disconnect();
+      await Future.delayed(Duration(seconds: 1));
+    }
+
+    if (resultConnection) {
+      //Discover services
+      List<BluetoothService> services = await thisDevice.discoverServices();
+      BluetoothService service;
+      service = services.elementAt(2);
+      // Read the first characteristic
+      characteristicSensors = service.characteristics[0];
+      // Read the second characteristic
+      characteristicData = service.characteristics[1];
+      // reading the characteristic after 1 second
+      Future.delayed(const Duration(seconds: 1), () async {
+        dataChar1 = String.fromCharCodes(await characteristicSensors.read());
+        print(dataChar1);
+        await Future.delayed(Duration(milliseconds: 500));
+        dataChar2 = String.fromCharCodes(await characteristicData.read());
+        print(dataChar2);
+        // delete the waiting widget
+        Navigator.of(context).pop();
+        DateTime dateTime = DateTime.now();
+        print(dateTime.millisecondsSinceEpoch ~/ 1000);
+        print(dateTime.timeZoneName);
+        print(dateTime.timeZoneOffset.inSeconds);
+        await characteristicData.write('{\"Time\":[${dateTime.millisecondsSinceEpoch ~/ 1000},${dateTime.timeZoneOffset.inSeconds}]}'.codeUnits);
+        createRoute(context, Home());
+      });
+    }
+  }
+
+  Future<void> waitingWidget() async {
+    //double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Connexion en cours'),
+            content: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SpinKitCircle(
+                  color: Colors.blue[600],
+                  size: screenHeight * 0.1,
+                ),
+              ],
+            ),
+          );
+        });
   }
 }

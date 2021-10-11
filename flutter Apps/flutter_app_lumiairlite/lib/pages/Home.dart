@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -6,31 +7,26 @@ import 'package:flutter/services.dart';
 import 'package:flutter_app_bispectrum/pages/Curves_paint.dart';
 import 'package:flutter_app_bispectrum/services/DataVariables.dart';
 import 'package:flutter_app_bispectrum/services/animation_between_pages.dart';
-import 'package:flutter_app_bispectrum/services/bleDeviceClass.dart';
-import 'package:flutter_blue/flutter_blue.dart';
-import 'package:flutter_gifimage/flutter_gifimage.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
-class _HomeState extends State<Home> with TickerProviderStateMixin {
-  BluetoothCharacteristic characteristicMaestro;
-  BluetoothCharacteristic characteristicWifi;
-  Device myDevice;
 
+class _HomeState extends State<Home> {
   int timeToSleep;
 
   int boolToInt(bool a) => a == true ? 1 : 0;
+  bool intToBool(int a) => a == 1 ? true : false;
 
   bool firstDisplayMainWidget = true;
   String carbonStateOnSleepGif = "assets/fond-vert-veille.gif";
   String carbonStateOnHome = "assets/personnage-vert.png";
   String carbonLastStateOnHome = "assets/personnage-vert.png";
+  String carbonStateOnHomeMessage = "Bon";
 
-  GifController gifController;
+  DateTime deviceDate;
 
   DateTime now;
 
@@ -38,30 +34,54 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   void initState() {
     // TODO: implement initState
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
-    gifController = GifController(vsync: this);
-    gifController.repeat(min: 0, max: 55, period: Duration(seconds: 2));
     super.initState();
   }
 
   void appRefreshData(BuildContext context) async {
     timeToSleep = timeSleep;
     mainWidgetScreen = appWidget(context);
+    Map<String, dynamic> sensorsData;
     do {
-      await Future.delayed(Duration(seconds: 5));
-      now = DateTime.now();
-      appTime = DateFormat('kk:mm').format(now);
+      if (myDevice.getConnectionState()) {
+        now = DateTime.now();
+        appTime = DateFormat('kk:mm').format(now);
+        try {
+          dataChar1 = String.fromCharCodes(await characteristicSensors.read());
+          sensorsData = jsonDecode(dataChar1);
+          String sensorsDataList = sensorsData['EnvData'].toString();
+          deviceTimeValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[0];
+          detectionTimeValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[1];
+          temperatureValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[2];
+          humidityValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[3];
+          lightValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[4];
+          co2Value = _stringListAsciiToListInt(sensorsDataList.codeUnits)[5];
+          tvocValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[6];
+          deviceWifiState = intToBool(_stringListAsciiToListInt(sensorsDataList.codeUnits)[7]);
+        } catch (e) {
+          print(e.message);
+        }
+      }
+
+      print(deviceTimeValue);
+
+      deviceDate = new DateTime.fromMillisecondsSinceEpoch(deviceTimeValue*1000);
+
+      print(DateFormat('kk:mm').format(deviceDate));
 
       if (co2Value > 2000) {
         carbonStateOnSleepGif = "assets/fond-rouge-veille.gif";
         carbonStateOnHome = "assets/personnage-rouge.png";
+        carbonStateOnHomeMessage = "Mauvais";
       }
       if ((co2Value >= 1000) & (co2Value <= 2000)) {
         carbonStateOnSleepGif = "assets/fond-orange-veille.gif";
         carbonStateOnHome = "assets/personnage-orange.png";
+        carbonStateOnHomeMessage = "Moyen";
       }
       if (co2Value < 1000) {
         carbonStateOnSleepGif = "assets/fond-vert-veille.gif";
         carbonStateOnHome = "assets/personnage-vert.png";
+        carbonStateOnHomeMessage = "Bon";
       }
 
       if (deactivateSleepAndReadingProcess) {
@@ -72,7 +92,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         print("change state co2 = $co2Value");
 
         if (timeToSleep <= 0) {
-          // mainWidgetScreen = sleepWidget(context);
+          mainWidgetScreen = sleepWidget(context);
         } else {
           mainWidgetScreen = appWidget(context);
         }
@@ -80,31 +100,25 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       }
 
       try {
-        setState(() {
-          mainWidgetScreen = appWidget(context);
-        });
+        setState(() {});
       } catch (e) {
         print(e.message);
         break;
       }
 
-      /// test co2 and temperature rising
-      //temperatureValue++;
-      //co2Value += 10;
-
       if (timeToSleep <= 0) {
         timeToSleep = (-1000);
       } else {
-        timeToSleep -= 1000;
+        timeToSleep -= 5000;
       }
       print(timeToSleep);
+      await Future.delayed(Duration(seconds: 5));
     } while (true);
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    gifController.dispose();
     super.dispose();
   }
 
@@ -202,6 +216,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         height: (heightScreen - 80) / 5,
                         child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                           new SizedBox(width: 4.0),
+                          new Text("luminosité\n$lightValue lux", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
+                        ])),
+                    Container(
+                        width: (widthScreen - 80) / 5,
+                        height: (heightScreen - 80) / 5,
+                        child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                          new SizedBox(width: 4.0),
                           new Text("CO2\n$co2Value ppm", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
                         ])),
                     Container(
@@ -210,13 +231,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                           new SizedBox(width: 4.0),
                           new Text("TVOC\n$tvocValue mg/m3", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
-                        ])),
-                    Container(
-                        width: (widthScreen - 80) / 5,
-                        height: (heightScreen - 80) / 5,
-                        child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                          new SizedBox(width: 4.0),
-                          new Text("ICONE\n$iconeValue", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
                         ])),
                   ],
                   borderWidth: 2,
@@ -263,7 +277,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                       ),
                                     ),
                                     Text(
-                                      'BON',
+                                      carbonStateOnHomeMessage,
                                       style: TextStyle(
                                         color: Color(0xFF264eb6),
                                         fontWeight: FontWeight.bold,
@@ -311,39 +325,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
                       child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18.0),
-                          color: Color(0xFF264eb6),
-                          shape: BoxShape.rectangle,
-                        ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 8.0, 0),
-                              child: Transform.scale(
-                                scale: 1.2,
-                                child: SvgPicture.asset("assets/meteo/$weatherState.svg"),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
-                              child: Text(
-                                '$temperatureMeteoValue °C',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                      child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(18.0),
                             color: Color(0xFF264eb6),
@@ -367,19 +348,39 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
   }
 
+  List<int> _stringListAsciiToListInt(List<int> listInt) {
+    List<int> ourListInt = [0];
+    int listIntLength = listInt.length;
+    int intNumber = (listIntLength / 4).round();
+    ourListInt.length = intNumber;
+    int listCounter;
+    int listIntCounter = 0;
+    String numberString = '';
+    if (listInt.first == 91 && listInt.last == 93) {
+      for (listCounter = 0; listCounter < listIntLength - 1; listCounter++) {
+        if (!((listInt[listCounter] == 91) || (listInt[listCounter] == 93) || (listInt[listCounter] == 32) || (listInt[listCounter] == 44))) {
+          numberString = '';
+          do {
+            numberString += String.fromCharCode(listInt[listCounter]);
+            listCounter++;
+          } while (!((listInt[listCounter] == 44) || (listInt[listCounter] == 93)));
+          ourListInt[listIntCounter] = int.parse(numberString);
+          listIntCounter++;
+        }
+      }
+      return ourListInt;
+    } else {
+      return [0];
+    }
+  }
+
   Widget sleepWidget(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.blue[400],
       body: Center(
-        child: GifImage(
-          controller: gifController,
-          fit: BoxFit.cover,
-          height: heightScreen,
-          width: widthScreen,
-          image: AssetImage(carbonStateOnSleepGif),
-        ),
+        child: Image.asset(carbonStateOnSleepGif, fit: BoxFit.cover, height: heightScreen, width: widthScreen),
       ),
     );
   }
