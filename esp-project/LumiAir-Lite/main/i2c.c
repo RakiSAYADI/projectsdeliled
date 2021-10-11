@@ -101,7 +101,7 @@ static esp_err_t i2c_read_IAQ_CORE_C(i2c_port_t i2c_num, IAQ_CORE_Typedef *data)
 	}
 	else
 	{
-		data->pred = 0;
+		data->pred = 500;
 		data->status = 0;
 		data->resistance = 0;
 		data->Tvoc = 0;
@@ -268,6 +268,12 @@ static void i2c_master_init()
 	i2c_driver_install(i2c_master_port, conf.mode,
 					   I2C_MASTER_RX_BUF_DISABLE,
 					   I2C_MASTER_TX_BUF_DISABLE, 0);
+	int error = i2c_set_timeout(I2C_NUM_1, 100000);
+	if (error != ESP_OK)
+	{
+		ESP_LOGI(TAG, "Failed set timeout for i2c bus: %s", esp_err_to_name(error));
+		return;
+	}
 }
 
 static void i2c_slave_init()
@@ -474,8 +480,8 @@ static void i2c_test_task(void *arg)
 
 		vTaskDelay(
 			(DELAY_TIME_BETWEEN_ITEMS_MS * (task_idx + 1)) / portTICK_RATE_MS);
-		ESP_LOGI(TAG, "IAQ_CORE_C: %f , %f , %d , %d , %d , %d \n", 
-		UnitData.Temp, UnitData.Humidity, UnitData.Als, UnitData.aq_Co2Level, UnitData.aq_Tvoc, UnitData.aq_status);
+		//ESP_LOGI(TAG, "Sensors values: %f , %f , %d , %d , %d , %d \n",
+		//		 UnitData.Temp, UnitData.Humidity, UnitData.Als, UnitData.aq_Co2Level, UnitData.aq_Tvoc, UnitData.aq_status);
 	}
 }
 

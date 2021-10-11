@@ -16,6 +16,7 @@
 #include "webservice.h"
 #include "unitcfg.h"
 #include "app_gpio.h"
+#include "sntpservice.h"
 
 #define WIFI_CONNECTED_BIT BIT0
 #define WIFI_FAIL_BIT BIT1
@@ -29,7 +30,7 @@ int s_retry_num = 0;
 bool WifiConnectedFlag = false;
 
 esp_err_t event_wifi_handler(void *arg, esp_event_base_t event_base,
-						int32_t event_id, void *event_data)
+							 int32_t event_id, void *event_data)
 {
 	if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START)
 	{
@@ -48,13 +49,17 @@ esp_err_t event_wifi_handler(void *arg, esp_event_base_t event_base,
 			xEventGroupSetBits(s_wifi_event_group, WIFI_FAIL_BIT);
 		}
 		ESP_LOGI(WEBSERVICE_TAG, "connect to the AP fail");
+		WifiConnectedFlag = false;
 	}
 	else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP)
 	{
 		ip_event_got_ip_t *event = (ip_event_got_ip_t *)event_data;
 		ESP_LOGI(WEBSERVICE_TAG, "got ip:" IPSTR, IP2STR(&event->ip_info.ip));
+		UnitSetStatus(UNIT_STATUS_WIFI_GOT_IP);
 		s_retry_num = 0;
 		WifiConnectedFlag = true;
+		// Start SNTP Task
+		xTaskCreatePinnedToCore(&sntp_task, "sntp_task", 4000, NULL, 2, NULL, 1);
 		xEventGroupSetBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
 	}
 	return ESP_OK;

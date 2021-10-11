@@ -22,8 +22,6 @@ typedef struct {
 } CcPoint_Typedef;
 
 typedef struct {
-	char profile_name[16];
-	char name[16];
 	//PIR (veille)
 	bool PIRBrEnb;
 	time_t PirTimeout;
@@ -31,7 +29,7 @@ typedef struct {
 	char PIR_zone[8];
 	//cycle
 	bool CcEnb;
-	char ZoneCc[2];
+	char ZoneCc[3];
 	CcPoint_Typedef Ccp[3];
 } LightCtrProfile_Typedef;
 
@@ -41,17 +39,12 @@ typedef struct {
 } WifiConfig_Typedef;
 
 typedef struct {
-	char name[20];
+	char zonename[20];
 } ZonesInfo_Typedef;
 
 typedef struct {
-	char name[20];
-	uint8_t Rouge;
-	uint8_t Vert;
-	uint8_t Bleu;
-	uint8_t Blanche;
-	uint8_t stabilisation;
-	uint8_t intensity;
+	char ambname[20];
+	char Hue[10];
 	char zone[2];
 } ColortrProfile_Typedef;
 
@@ -96,7 +89,9 @@ extern UnitData_Typedef UnitData;
 extern UnitConfig_Typedef UnitCfg;
 
 void Default_saving();
-int InitLoadCfg();
-int SaveNVS(UnitConfig_Typedef *data);
+bool InitLoadCfg();
+bool SaveNVS(UnitConfig_Typedef *data);
+
+void syncTime(time_t t, uint32_t tzone);
 
 #endif /* MAIN_UNITCFG_H_ */

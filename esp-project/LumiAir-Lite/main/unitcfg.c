@@ -15,6 +15,7 @@
 #include "string.h"
 #include <stdio.h>
 #include <esp_err.h>
+#include <esp_event.h>
 #include <nvs.h>
 #include <nvs_flash.h>
 #include "sdkconfig.h"
@@ -22,6 +23,8 @@
 #include "stdbool.h"
 
 #include "unitcfg.h"
+
+const char *NVS_TAG = "NVS";
 
 UnitConfig_Typedef UnitCfg;
 UnitData_Typedef UnitData;
@@ -31,7 +34,7 @@ UnitData_Typedef UnitData;
 #define KEY_VERSION "key"
 #define KEY_VERSION_VAL 0x01
 
-int SaveNVS(UnitConfig_Typedef *data)
+bool SaveNVS(UnitConfig_Typedef *data)
 {
 	nvs_handle handle;
 	esp_err_t err = ESP_FAIL;
@@ -40,8 +43,8 @@ int SaveNVS(UnitConfig_Typedef *data)
 
 	if (err != ESP_OK)
 	{
-		ESP_LOGE("NVS", "nvs_open: %x", err);
-		return -1;
+		ESP_LOGE(NVS_TAG, "nvs_open: %x", err);
+		return false;
 	}
 
 	err = nvs_set_blob(handle, KEY_CONNECTION_INFO, data,
@@ -49,37 +52,37 @@ int SaveNVS(UnitConfig_Typedef *data)
 
 	if (err != ESP_OK)
 	{
-		ESP_LOGE("NVS", "Error Setting NVS Blob (%d).", err);
+		ESP_LOGE(NVS_TAG, "Error Setting NVS Blob (%d).", err);
 		nvs_close(handle);
-		return -1;
+		return false;
 	}
 
 	err = nvs_set_u32(handle, KEY_VERSION, KEY_VERSION_VAL);
 
 	if (err != ESP_OK)
 	{
-		ESP_LOGE("NVS", "Error Setting Key version (%d).", err);
+		ESP_LOGE(NVS_TAG, "Error Setting Key version (%d).", err);
 		nvs_close(handle);
-		return -1;
+		return false;
 	}
 
 	err = nvs_commit(handle);
 
 	if (err != ESP_OK)
 	{
-		ESP_LOGE("NVS", "Error Writing NVS (%d).", err);
+		ESP_LOGE(NVS_TAG, "Error Writing NVS (%d).", err);
 		nvs_close(handle);
-		return -1;
+		return false;
 	}
 
 	nvs_close(handle);
 
-	ESP_LOGI("NVS", "Configuration saved");
+	ESP_LOGI(NVS_TAG, "Configuration saved");
 
-	return (0);
+	return true;
 }
 
-int LoadNVS(UnitConfig_Typedef *data)
+bool LoadNVS(UnitConfig_Typedef *data)
 {
 	nvs_handle handle;
 	size_t size;
@@ -90,16 +93,16 @@ int LoadNVS(UnitConfig_Typedef *data)
 
 	if (err != 0)
 	{
-		ESP_LOGE("NVS", "nvs_open: %x", err);
-		return -1;
+		ESP_LOGE(NVS_TAG, "nvs_open: %x", err);
+		return false;
 	}
 
 	err = nvs_get_u32(handle, KEY_VERSION, &version);
 	if (err != ESP_OK)
 	{
-		ESP_LOGE("NVS", "Incompatible versions (%d).", err);
+		ESP_LOGE(NVS_TAG, "Incompatible versions (%d).", err);
 		nvs_close(handle);
-		return -1;
+		return false;
 	}
 
 	size = sizeof(UnitConfig_Typedef);
@@ -107,32 +110,32 @@ int LoadNVS(UnitConfig_Typedef *data)
 
 	if (err != ESP_OK)
 	{
-		ESP_LOGE("NVS", "No Unit config record found (%d)", err);
+		ESP_LOGE(NVS_TAG, "No Unit config record found (%d)", err);
 		nvs_close(handle);
-		return -1;
+		return false;
 	}
 
 	nvs_close(handle);
 
 	//ESP_LOGI("NVS", "Configuration Loaded (%d) bytes",size);
 
-	ESP_LOGI("NVS", "Configuration Loaded (%d) bytes", sizeof(UnitCfg));
+	ESP_LOGI(NVS_TAG, "Configuration Loaded (%d) bytes", sizeof(UnitCfg));
 
-	return 0;
+	return true;
 }
 
-int InitLoadCfg()
+bool InitLoadCfg()
 {
-	if (LoadNVS(&UnitCfg) != 0)
+	if (!LoadNVS(&UnitCfg))
 	{
 		Default_saving();
 	}
 	else
 	{
-		ESP_LOGI("NVS", "Unit Config Loading OK");
+		ESP_LOGI(NVS_TAG, "Unit Config Loading OK");
 	}
 
-	return (0);
+	return true;
 }
 
 void Default_saving()
@@ -142,30 +145,23 @@ void Default_saving()
 
 	sprintf(UnitCfg.UnitName, "MAESTRO-%02X:%02X:%02X", mac[3], mac[4], mac[5]);
 
-	sprintf(UnitCfg.UserLcProfile.name, "Bureau");
-	sprintf(UnitCfg.UserLcProfile.profile_name, "PROFILE_1");
-
 	UnitCfg.UserLcProfile.CcEnb = false;
-	sprintf(UnitCfg.UserLcProfile.ZoneCc, "0");
+	sprintf(UnitCfg.UserLcProfile.ZoneCc, "F");
 
-	for (int i = 0; i < 3; i++)
-	{
-		UnitCfg.UserLcProfile.Ccp[i].CcLevel = 0;
-		UnitCfg.UserLcProfile.Ccp[i].CcTime = 0;
-	}
+	UnitCfg.UserLcProfile.Ccp[0].CcLevel = 0;
+	UnitCfg.UserLcProfile.Ccp[0].CcTime = 28800;
+	UnitCfg.UserLcProfile.Ccp[1].CcLevel = 100;
+	UnitCfg.UserLcProfile.Ccp[1].CcTime = 43200;
+	UnitCfg.UserLcProfile.Ccp[2].CcLevel = 0;
+	UnitCfg.UserLcProfile.Ccp[2].CcTime = 61200;
 
 	for (int i = 0; i < 4; i++)
 	{
-		sprintf(UnitCfg.Zones_info[i].name, "Zone %d", i + 1);
+		sprintf(UnitCfg.Zones_info[i].zonename, "Zone %d", i + 1);
 
-		sprintf(UnitCfg.ColortrProfile[i].name, "Ambiance%d", i + 1);
-		UnitCfg.ColortrProfile[i].stabilisation = 0;
-		UnitCfg.ColortrProfile[i].Rouge = 0;
-		UnitCfg.ColortrProfile[i].Vert = 0;
-		UnitCfg.ColortrProfile[i].Bleu = 0;
-		UnitCfg.ColortrProfile[i].Blanche = 0;
-		UnitCfg.ColortrProfile[i].intensity = 0;
-		sprintf(UnitCfg.ColortrProfile[i].zone, "0");
+		sprintf(UnitCfg.ColortrProfile[i].ambname, "Ambiance%d", i + 1);
+		sprintf(UnitCfg.ColortrProfile[i].Hue, "000000");
+		sprintf(UnitCfg.ColortrProfile[i].zone, "F");
 	}
 
 	UnitData.state = 0;
@@ -186,12 +182,55 @@ void Default_saving()
 
 	sprintf(UnitCfg.FLASH_MEMORY, "OK");
 
-	if (SaveNVS(&UnitCfg) == 0)
+	if (SaveNVS(&UnitCfg))
 	{
-		ESP_LOGI("NVS", "Unit Config saving OK");
+		ESP_LOGI(NVS_TAG, "Unit Config saving OK");
 	}
 	else
 	{
-		ESP_LOGE("NVS", "Unit Config saving NOT OK");
+		ESP_LOGE(NVS_TAG, "Unit Config saving NOT OK");
 	}
+}
+
+void syncTime(time_t t, uint32_t tzone)
+{
+	struct tm tm_time;
+	struct timeval tv_time;
+	time_t epoch = t;
+	char strftime_buf[64];
+
+	//set timezone
+
+	char tz[10];
+	int8_t tzc = 0;
+
+	tzc = tzone / 3600;
+
+	if (tzc == 0)
+	{
+		sprintf(tz, "CET0");
+	}
+	else if (tzc < 0)
+	{
+		sprintf(tz, "CET%d", tzc);
+	}
+	else
+	{
+		sprintf(tz, "CET-%d", tzc);
+	}
+
+	setenv("TZ", tz, 1);
+	tzset();
+
+	// set time
+	tv_time.tv_sec = epoch;
+	tv_time.tv_usec = 0;
+
+	settimeofday(&tv_time, 0);
+
+	time(&epoch);
+
+	localtime_r(&epoch, &tm_time);
+	strftime(strftime_buf, sizeof(strftime_buf), "%c", &tm_time);
+	ESP_LOGW(NVS_TAG, "The current date/time UTC is: %s", strftime_buf);
 }

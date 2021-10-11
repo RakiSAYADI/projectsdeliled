@@ -29,7 +29,7 @@
 #include "bluetooth.h"
 #include "base_mac_address.h"
 
-static const char *TAG = "MAIN";
+const char *TAG = "MAIN";
 
 void app_main() {
 	nvs_flash_init();
@@ -42,7 +42,7 @@ void app_main() {
 
 	LedStatInit();
 
-	if (InitLoadCfg() != 0) {
+	if (!InitLoadCfg()) {
 		UnitSetStatus(UNIT_STATUS_ERROR);
 		return;
 	}

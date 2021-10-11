@@ -23,9 +23,8 @@
 #include "unitcfg.h"
 #include "autolight.h"
 #include "app_gpio.h"
-
-#include <stdint.h>
-#include <inttypes.h>
+#include "webservice.h"
+#include "lightcontrol.h"
 
 #define GATTS_TAG "GATTS"
 
@@ -48,6 +47,8 @@ static void char_total2_read_handler(esp_gatts_cb_event_t event,
 
 static void char_total2_write_handler(esp_gatts_cb_event_t event,
 									  esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
+
+bool configData(char *jsonData);
 
 //Declare uuid of READ and WRITE Service
 
@@ -200,9 +201,11 @@ struct gatts_profile_inst
 };
 
 /* One gatt-based profile one app_id and one gatts_if, this array will store the gatts_if returned by ESP_GATTS_REG_EVT */
-static struct gatts_profile_inst gl_profile_tab[PROFILE_NUM] = {[SERVICE_READ] = {
-																	.gatts_cb = gatts_profile_read_event_handler, .gatts_if = ESP_GATT_IF_NONE, /* Not get the gatt_if, so initial is ESP_GATT_IF_NONE */
-																}};
+static struct gatts_profile_inst gl_profile_tab[PROFILE_NUM] =
+	{[SERVICE_READ] = {
+		 .gatts_cb = gatts_profile_read_event_handler,
+		 .gatts_if = ESP_GATT_IF_NONE, /* Not get the gatt_if, so initial is ESP_GATT_IF_NONE */
+	 }};
 
 struct gatts_char_inst
 {
@@ -244,7 +247,7 @@ static struct gatts_char_inst LIST_CHAR_READ[GATTS_CHAR_NUM_READ] = { //SERVICE 
 		.char_write_callback = char_total2_write_handler,
 	}};
 
-int jsonparse(char *src, char *dst, char *label, unsigned short arrayindex)
+bool jsonparse(char *src, char *dst, char *label, unsigned short arrayindex)
 {
 	char *sp = 0, *ep = 0, *ic = 0;
 	char tmp[64];
@@ -254,14 +257,14 @@ int jsonparse(char *src, char *dst, char *label, unsigned short arrayindex)
 	if (sp == NULL)
 	{
 		//ESP_LOGE(GATTS_TAG, "label %s not found",label);
-		return (-1);
+		return false;
 	}
 
 	sp = strchr(sp, ':');
 	if (sp == NULL)
 	{
 		ESP_LOGE(GATTS_TAG, "value start not found");
-		return (-1);
+		return false;
 	}
 
 	if (sp[1] == '"')
@@ -272,7 +275,7 @@ int jsonparse(char *src, char *dst, char *label, unsigned short arrayindex)
 		if ((ep == NULL) || ((ep > ic) && (ic != NULL)))
 		{
 			ESP_LOGE(GATTS_TAG, "type string parsing error");
-			return (-1);
+			return false;
 		}
 	}
 	else if (sp[1] == '[')
@@ -283,7 +286,7 @@ int jsonparse(char *src, char *dst, char *label, unsigned short arrayindex)
 		if ((ep == NULL) || ((ep > ic) && (ic != NULL)))
 		{
 			ESP_LOGE(GATTS_TAG, "type array parsing error");
-			return (-1);
+			return false;
 		}
 
 		ic = strchr(sp + 1, ',');
@@ -317,7 +320,7 @@ int jsonparse(char *src, char *dst, char *label, unsigned short arrayindex)
 		if ((ep == NULL) || ((ep > ic) && (ic != NULL)))
 		{
 			ESP_LOGE(GATTS_TAG, "type int parsing error");
-			return (-1);
+			return false;
 		}
 	}
 
@@ -327,7 +330,7 @@ int jsonparse(char *src, char *dst, char *label, unsigned short arrayindex)
 	memset(dst, 0x00, strlen(tmp) + 1);
 	memcpy(dst, tmp, strlen(tmp));
 
-	return (0);
+	return true;
 }
 
 void gatts_check_callback(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
@@ -446,7 +449,6 @@ bool savenvsFlag = false;
 
 void configParserTask()
 {
-
 	if (savenvsFlag)
 	{
 		SaveNVS(&UnitCfg);
@@ -454,15 +456,7 @@ void configParserTask()
 	}
 }
 
-cJSON *dataStorage;
-cJSON *timeArray;
-
-char *config_json;
 char tmp[64];
-
-cJSON *messageJson, *jsonData;
-
-uint8_t dataCharRead[GATTS_CHAR_VAL_LEN_MAX];
 
 void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 							 esp_ble_gatts_cb_param_t *param)
@@ -472,14 +466,9 @@ void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 	ESP_LOGI(GATTS_TAG, "[APP] Free memory: %d bytes",
 			 esp_get_free_heap_size());
 
-/*	sprintf((char *)total,
-			"{\"Company\":\"%s\",\"UserName\":\"%s\",\"Detection\":%d,\"RoomName\":\"%s\",\"security\":%d,\"Version\":%d,"
-			"\"FirmwareVersion\":\"%s\",\"TimeData\":[%d,%d],\"UVCTimeData\":[%d,%d,%d],\"uvcSt\":%d}",
-			UnitCfg.Company, UnitCfg.OperatorName, detectionTriggered,
-			UnitCfg.RoomName, UnitCfg.SecurityCodeDismiss, UnitCfg.Version, UnitCfg.FirmwareVersion,
-			UnitCfg.DisinfictionTime, UnitCfg.ActivationTime,
-			UnitCfg.UVCLifeTime, UnitCfg.UVCTimeExecution,
-			UnitCfg.NumberOfDisinfection, UVC_Treatement_State);*/
+	sprintf((char *)total,
+			"{\"EnvData\":[%ld,%ld,%d,%d,%d,%d,%d,%d]}", UnitData.UpdateTime, UnitData.LastDetTime, (uint8_t)UnitData.Temp, (uint8_t)UnitData.Humidity,
+			UnitData.Als, UnitData.aq_Co2Level, UnitData.aq_Tvoc, WifiConnectedFlag);
 
 	TOTAL.attr_len = strlen((char *)total);
 
@@ -527,36 +516,21 @@ void char_total_write_handler(esp_gatts_cb_event_t event,
 				 (char *)LIST_CHAR_READ[0].char_val->attr_value);
 
 		uint32_t msize = LIST_CHAR_READ[0].char_val->attr_len + 1;
-		config_json = malloc(msize);
-		if (config_json != NULL)
+		char *config_total_json;
+		config_total_json = malloc(msize);
+		if (config_total_json != NULL)
 		{
-			sprintf(config_json, "%.*s", LIST_CHAR_READ[0].char_val->attr_len,
+			sprintf(config_total_json, "%.*s", LIST_CHAR_READ[0].char_val->attr_len,
 					(char *)LIST_CHAR_READ[0].char_val->attr_value);
+			printf("%s\n", config_total_json);
+			savenvsFlag = configData(config_total_json);
+			free(config_total_json);
+			configParserTask();
 		}
 	}
 	ESP_LOGD(GATTS_TAG, "char_light_write_handler esp_gatt_rsp_t\n");
-	//printf("%s\n",light_json);
 	esp_ble_gatts_send_response(gatts_if, param->write.conn_id,
 								param->write.trans_id, ESP_GATT_OK, NULL);
-
-	printf("%s\n", config_json);
-
-	if (strContains(config_json, "UVCTreatement : ON") == 1)
-	{
-		ESP_LOGI(GATTS_TAG, "UVCTreatement is ON ");
-	}
-	else if (strContains(config_json, "STOP : ON") == 1)
-	{
-		ESP_LOGI(GATTS_TAG, "STOP is ON ");
-	}
-	else
-	{
-		ESP_LOGE(GATTS_TAG, "BAD MESSAGE");
-	}
-
-	free(config_json);
-
-	configParserTask();
 }
 
 void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
@@ -564,11 +538,15 @@ void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 {
 	ESP_LOGD(GATTS_TAG, "char_total2_read_handler %d\n", param->read.handle);
 
-	ESP_LOGI(GATTS_TAG, "[APP] Free memory: %d bytes",
-			 esp_get_free_heap_size());
+	ESP_LOGI(GATTS_TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
 
 	sprintf((char *)total2,
-			"{}" );
+			"{\"wifi\":[\"%s\",\"%s\"],\"cc\":[%d,\"%s\"],\"tabcc\":[%d,%ld,%d,%ld,%d,%ld]}",
+			UnitCfg.WifiCfg.WIFI_SSID, UnitCfg.WifiCfg.WIFI_PASS,
+			UnitCfg.UserLcProfile.CcEnb, UnitCfg.UserLcProfile.ZoneCc,
+			UnitCfg.UserLcProfile.Ccp[0].CcLevel, UnitCfg.UserLcProfile.Ccp[0].CcTime,
+			UnitCfg.UserLcProfile.Ccp[1].CcLevel, UnitCfg.UserLcProfile.Ccp[1].CcTime,
+			UnitCfg.UserLcProfile.Ccp[2].CcLevel, UnitCfg.UserLcProfile.Ccp[2].CcTime);
 
 	TOTAL2.attr_len = strlen((char *)total2);
 
@@ -616,24 +594,259 @@ void char_total2_write_handler(esp_gatts_cb_event_t event,
 				 (char *)LIST_CHAR_READ[1].char_val->attr_value);
 
 		uint32_t msize = LIST_CHAR_READ[1].char_val->attr_len + 1;
-		config_json = malloc(msize);
-		if (config_json != NULL)
+		char *config_total2_json;
+		config_total2_json = malloc(msize);
+		if (config_total2_json != NULL)
 		{
-			sprintf(config_json, "%.*s", LIST_CHAR_READ[1].char_val->attr_len,
+			sprintf(config_total2_json, "%.*s", LIST_CHAR_READ[1].char_val->attr_len,
 					(char *)LIST_CHAR_READ[1].char_val->attr_value);
+			printf("%s\n", config_total2_json);
+			savenvsFlag = configData(config_total2_json);
+			free(config_total2_json);
+			configParserTask();
 		}
 	}
 	ESP_LOGD(GATTS_TAG, "char_light_write2_handler esp_gatt_rsp_t\n");
-	//printf("%s\n",light_json);
 	esp_ble_gatts_send_response(gatts_if, param->write.conn_id,
 								param->write.trans_id, ESP_GATT_OK, NULL);
-
-	printf("%s\n", config_json);
-
-	free(config_json);
 }
 
-char *light_json;
+bool configData(char *jsonData)
+{
+	uint8_t cmd = 0, subcmd = 0, zone = 0;
+	char tmp[64];
+	bool saveFlag = false;
+
+	time_t t = 0;
+	uint32_t tz = 0;
+	//Zones Names
+
+	if (jsonparse(jsonData, UnitCfg.Zones_info[0].zonename, "zones", 0))
+	{
+
+		ESP_LOGI(GATTS_TAG, "zone 1 is %s", UnitCfg.Zones_info[0].zonename);
+		savenvsFlag = true;
+
+		if (jsonparse(jsonData, UnitCfg.Zones_info[1].zonename, "zones", 1))
+		{
+
+			ESP_LOGI(GATTS_TAG, "zone 2 is %s", UnitCfg.Zones_info[1].zonename);
+			savenvsFlag = true;
+		}
+		if (jsonparse(jsonData, UnitCfg.Zones_info[2].zonename, "zones", 2))
+		{
+
+			ESP_LOGI(GATTS_TAG, "zone 3 is %s", UnitCfg.Zones_info[2].zonename);
+			savenvsFlag = true;
+		}
+		if (jsonparse(jsonData, UnitCfg.Zones_info[3].zonename, "zones", 3))
+		{
+
+			ESP_LOGI(GATTS_TAG, "zone 4 is %s", UnitCfg.Zones_info[3].zonename);
+			savenvsFlag = true;
+		}
+	}
+	else if (jsonparse(jsonData, tmp, "system", 0))
+	{
+		//system
+		if (atoi(tmp) == 0)
+		{
+			ESP_LOGI(GATTS_TAG, "System apply default setting");
+			Default_saving();
+		}
+		else
+		{
+			ESP_LOGI(GATTS_TAG, "System restart");
+			esp_restart();
+		}
+	}
+	else if (jsonparse(jsonData, tmp, "cc", 0))
+	{
+		if (atoi(tmp) == 0)
+		{
+			ESP_LOGE(GATTS_TAG, "Circadian cycle is deactivated");
+			UnitCfg.UserLcProfile.CcEnb = false;
+		}
+		else
+		{
+			ESP_LOGI(GATTS_TAG, "Circadian cycle is activated");
+			UnitCfg.UserLcProfile.CcEnb = true;
+		}
+		savenvsFlag = true;
+	}
+	else if (jsonparse(jsonData, UnitCfg.WifiCfg.WIFI_SSID, "wa", 0))
+	{
+		ESP_LOGD(GATTS_TAG, "set ap ssid %s", UnitCfg.WifiCfg.WIFI_SSID);
+
+		if (jsonparse(jsonData, UnitCfg.WifiCfg.WIFI_PASS, "wp", 0))
+		{
+			ESP_LOGD(GATTS_TAG, "set ap password %s",
+					 UnitCfg.WifiCfg.WIFI_PASS);
+		}
+
+		savenvsFlag = true;
+	}
+	else if (jsonparse(jsonData, tmp, "light", 0))
+	{
+		//light
+		cmd = atoi(tmp);
+
+		if (jsonparse(jsonData, tmp, "light", 1))
+		{
+			subcmd = atoi(tmp);
+		}
+		if (jsonparse(jsonData, tmp, "light", 2))
+		{
+			zone = strtol(tmp, NULL, 16);
+		}
+
+		// On/Off
+
+		if ((cmd == LCMD_SWITCH_ON_OFF) && (zone != 0))
+		{
+			MilightHandler(LCMD_SWITCH_ON_OFF, subcmd, zone & 0x0F);
+		}
+		//radio
+		MilightHandler(cmd, subcmd, zone & 0x0F);
+
+		ESP_LOGI(GATTS_TAG, "Light control manu cmd %d subcmd %d zone %d", cmd,
+				 subcmd, zone);
+	}
+	else if (jsonparse(jsonData, UnitCfg.UnitName, "dname", 0))
+	{
+		ESP_LOGI(GATTS_TAG, "set device name %s", UnitCfg.UnitName);
+		savenvsFlag = true;
+	}
+	else if (jsonparse(jsonData, tmp, "Time", 0))
+	{
+
+		// time
+		time_t tl = 0;
+		struct tm ti;
+
+		time(&tl);
+		localtime_r(&tl, &ti);
+
+		if (ti.tm_year < (2016 - 1900))
+		{
+			t = atoi(tmp);
+			ESP_LOGI(GATTS_TAG, "Time sync epoch %ld", t);
+
+			if (jsonparse(jsonData, tmp, "Time", 1))
+			{
+				tz = atoi(tmp);
+				ESP_LOGI(GATTS_TAG, "Time zone %d", tz / 3600);
+				syncTime(t, tz);
+				UnitCfg.UnitTimeZone = tz / 3600;
+				savenvsFlag = true;
+			}
+		}
+		else
+			ESP_LOGE(GATTS_TAG, "Time sync ignored");
+	}
+	else if (jsonparse(jsonData, tmp, "hue", 0))
+	{
+		char tmpzone[3];
+		if (jsonparse(jsonData, tmpzone, "zone", 0))
+		{
+			// hue
+			HueToHSL(tmp, tmpzone);
+		}
+	}
+	else if (jsonparse(jsonData, UnitCfg.ColortrProfile[0].ambname, "couleur1", 0))
+	{
+
+		//Couleur 1
+
+		ESP_LOGI(GATTS_TAG, "Profile Color name set %s",
+				 UnitCfg.ColortrProfile[0].ambname);
+		savenvsFlag = true;
+		if (jsonparse(jsonData, UnitCfg.ColortrProfile[0].Hue, "couleur1", 1))
+		{
+			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s",
+					 UnitCfg.ColortrProfile[0].Hue);
+			savenvsFlag = true;
+		}
+	}
+	else if (jsonparse(jsonData, UnitCfg.ColortrProfile[1].ambname, "couleur2", 0))
+	{
+		//Couleur 2
+
+		ESP_LOGI(GATTS_TAG, "Profile Color name set %s",
+				 UnitCfg.ColortrProfile[1].ambname);
+		savenvsFlag = true;
+		if (jsonparse(jsonData, UnitCfg.ColortrProfile[1].Hue, "couleur2", 1))
+		{
+			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s",
+					 UnitCfg.ColortrProfile[1].Hue);
+			savenvsFlag = true;
+		}
+	}
+	else if (jsonparse(jsonData, UnitCfg.ColortrProfile[2].ambname, "couleur3", 0))
+	{
+
+		//Couleur 3
+
+		ESP_LOGI(GATTS_TAG, "Profile Color name set %s", UnitCfg.ColortrProfile[2].ambname);
+		savenvsFlag = true;
+		if (jsonparse(jsonData, UnitCfg.ColortrProfile[2].Hue, "couleur3", 1))
+		{
+			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s",
+					 UnitCfg.ColortrProfile[2].Hue);
+			savenvsFlag = true;
+		}
+	}
+	else
+
+		if (jsonparse(jsonData, UnitCfg.ColortrProfile[3].ambname, "couleur4", 0))
+	{
+
+		//Couleur 4
+
+		ESP_LOGI(GATTS_TAG, "Profile Color name set %s",
+				 UnitCfg.ColortrProfile[3].ambname);
+		savenvsFlag = true;
+		if (jsonparse(jsonData, UnitCfg.ColortrProfile[3].Hue, "couleur4", 1))
+		{
+			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s",
+					 UnitCfg.ColortrProfile[3].Hue);
+			savenvsFlag = true;
+		}
+	}
+	else if (jsonparse(jsonData, tmp, "Favoris", 0))
+	{
+		ESP_LOGI(GATTS_TAG, "Ambiance Color set %s", tmp);
+		if (strcmp(tmp, "Ambiance 1") == 0)
+		{
+			ESP_LOGI(GATTS_TAG, "Ambiance 1 is Selected");
+			HueToHSL(UnitCfg.ColortrProfile[0].Hue, UnitCfg.ColortrProfile[0].zone);
+		}
+		else if (strcmp(tmp, "Ambiance 2") == 0)
+		{
+			ESP_LOGI(GATTS_TAG, "Ambiance 2 is Selected");
+			HueToHSL(UnitCfg.ColortrProfile[1].Hue, UnitCfg.ColortrProfile[1].zone);
+		}
+		else if (strcmp(tmp, "Ambiance 3") == 0)
+		{
+			ESP_LOGI(GATTS_TAG, "Ambiance 3 is Selected");
+			HueToHSL(UnitCfg.ColortrProfile[2].Hue, UnitCfg.ColortrProfile[2].zone);
+		}
+		else if (strcmp(tmp, "Ambiance 4") == 0)
+		{
+			ESP_LOGI(GATTS_TAG, "Ambiance 4 is Selected");
+			HueToHSL(UnitCfg.ColortrProfile[3].Hue, UnitCfg.ColortrProfile[3].zone);
+		}
+		else
+		{
+			ESP_LOGI(GATTS_TAG, "Unknown Ambiance");
+		}
+	}
+	else
+	{
+		ESP_LOGE(GATTS_TAG, "BAD MESSAGE");
+	}
+	return saveFlag;
+}
 
 void gap_event_handler(esp_gap_ble_cb_event_t event,
 					   esp_ble_gap_cb_param_t *param)

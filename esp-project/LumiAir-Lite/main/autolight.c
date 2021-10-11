@@ -16,25 +16,17 @@
 #include <stdio.h>
 #include <esp_err.h>
 #include <esp_event.h>
-#include "esp_wifi.h"
-#include <nvs.h>
-#include <nvs_flash.h>
 #include "sdkconfig.h"
 #include <stdlib.h>
-#include <driver/dac.h>
 #include <time.h>
-#include <limits.h>
 #include "math.h"
-#include "cJSON.h"
 
 #include "autolight.h"
 #include "lightcontrol.h"
 #include "unitcfg.h"
 #include "adc.h"
 #include "i2c.h"
-#include "webservice.h"
 #include "app_gpio.h"
-#include "bluetooth.h"
 
 #define TAG "AUTOREG"
 
@@ -42,15 +34,9 @@ void Pir_MonitorTask();
 void ColorTemp_Controller();
 
 AutoLightStateDef AutoLightState = AUTOL_STATE_OFF;
-char txt0[64];
 
-time_t CurrentTime = 0;
-
-uint8_t Curday;
-uint32_t cparttime;
-
-struct timeval tv;
 struct tm now = {0};
+time_t CurrentTime = 0;
 
 void AutoLightStateMachine()
 {
@@ -63,8 +49,6 @@ void AutoLightStateMachine()
 	//dac_output_voltage(DAC_CHANNEL_1, 0);
 	//DacLightStatOn=false;
 
-	time_t nows = 0;
-
 	time(&CurrentTime);
 	localtime_r(&CurrentTime, &now);
 
@@ -75,11 +59,16 @@ void AutoLightStateMachine()
 		vTaskDelay(1000 / portTICK_PERIOD_MS);
 	}
 
-	//xTaskCreatePinnedToCore(&Pir_MonitorTask, "Pir_MonitorTask", 1024 * 2, NULL,
-	//						10, NULL, 1);
-	xTaskCreatePinnedToCore(&ColorTemp_Controller, "ColorTemp_Controller", 2048,
-							NULL, 10, NULL, 1);
+	//xTaskCreatePinnedToCore(&Pir_MonitorTask, "Pir_MonitorTask", 1024 * 2, NULL, 10, NULL, 1);
+	xTaskCreatePinnedToCore(&ColorTemp_Controller, "ColorTemp_Controller", 2048, NULL, 10, NULL, 1);
 
+	/*
+	char txt0[64];
+	uint8_t Curday;
+	uint32_t cparttime;
+	struct timeval tv;
+	time_t nows = 0;
+	
 	while (1)
 	{
 		gettimeofday(&tv, NULL);
@@ -97,6 +86,8 @@ void AutoLightStateMachine()
 
 		vTaskDelay(100 / portTICK_RATE_MS);
 	}
+	*/
+	vTaskDelete(NULL);
 }
 
 // Color temp Control routine
@@ -118,22 +109,19 @@ void ColorTemp_Controller()
 
 	while (1)
 	{
+		time(&now);
+		now = now % (3600 * 24) + (UnitCfg.UnitTimeZone * 3600);
 
-		if ((UnitCfg.UserLcProfile.CcEnb == true) && (UnitData.state == 1))
+		h1 = UnitCfg.UserLcProfile.Ccp[0].CcTime;
+		h2 = UnitCfg.UserLcProfile.Ccp[1].CcTime;
+		h3 = UnitCfg.UserLcProfile.Ccp[2].CcTime;
+
+		t1 = UnitCfg.UserLcProfile.Ccp[0].CcLevel;
+		t2 = UnitCfg.UserLcProfile.Ccp[1].CcLevel;
+		t3 = UnitCfg.UserLcProfile.Ccp[2].CcLevel;
+
+		if ((UnitCfg.UserLcProfile.CcEnb == true) && ((now >= h1) && (now <= h3)))
 		{
-
-			time(&now);
-			now = now % (3600 * 24) + (UnitCfg.UnitTimeZone * 3600);
-
-			h1 = UnitCfg.UserLcProfile.Ccp[0].CcTime;
-			h2 = UnitCfg.UserLcProfile.Ccp[1].CcTime;
-			h3 = UnitCfg.UserLcProfile.Ccp[2].CcTime;
-
-			t1 = UnitCfg.UserLcProfile.Ccp[0].CcLevel;
-			t2 = UnitCfg.UserLcProfile.Ccp[1].CcLevel;
-			t3 = UnitCfg.UserLcProfile.Ccp[2].CcLevel;
-
-			//printf("les phases activées = %d",phases);
 
 			if (h2 != h1)
 			{
@@ -184,13 +172,10 @@ void ColorTemp_Controller()
 
 			cc_zone_int = strtol(UnitCfg.UserLcProfile.ZoneCc, NULL, 16);
 
-			MilightHandler(LCMD_SET_TEMP, (uint8_t)CtempOut,
-						   cc_zone_int & 0x0F);
+			MilightHandler(LCMD_SET_TEMP, (uint8_t)CtempOut, cc_zone_int & 0x0F);
 		}
-
 		vTaskDelay(1000 / portTICK_RATE_MS);
 	}
-
 	ESP_LOGI(TAG, "ACTC TASK EXIT");
 	vTaskDelete(NULL);
 }
@@ -234,8 +219,7 @@ void Pir_MonitorTask()
 			//ESP_LOGI(TAG, "PIR Triggered + %ld",PirTimeout);
 			if (PirTimeoutTask == false)
 			{
-				xTaskCreatePinnedToCore(&PirTimeoutRoutine, "PirTimeoutRoutine",
-										2048, NULL, 5, NULL, 1);
+				xTaskCreatePinnedToCore(&PirTimeoutRoutine, "PirTimeoutRoutine", 2048, NULL, 5, NULL, 1);
 			}
 		}
 
@@ -267,8 +251,7 @@ void Co2_MonitorTask()
 				{
 					UnitData.state = 0;
 					ESP_LOGI(TAG, "Co2 zone Warning triggered");
-					MilightHandler(LCMD_SWITCH_ON_OFF, LSUBCMD_SWITCH_ON,
-								   zone & 0x0F);
+					MilightHandler(LCMD_SWITCH_ON_OFF, LSUBCMD_SWITCH_ON, zone & 0x0F);
 					vTaskDelay(50 / portTICK_RATE_MS);
 					MilightHandler(LCMD_SET_SAT, 100, zone & 0x0F);
 					vTaskDelay(50 / portTICK_RATE_MS);

@@ -36,6 +36,15 @@
 
 extern int8_t PID_Out;
 
+typedef struct {
+	uint8_t Hue;
+	uint8_t Sat;
+	uint8_t Bri;
+} HSLStruct;
+
+void RgbToHSL(uint32_t rgb, HSLStruct *tmp);
+void HueToHSL(char hueChar[64], char hueZone[3]);
+
 void Mi_mode(uint8_t id, uint8_t md);
 
 void lightControl_Init();
