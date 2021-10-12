@@ -1,10 +1,3 @@
-/*
- * adc.h
- *
- *  Created on: Jul 11, 2018
- *      Author: mdt
- */
-
 #ifndef MAIN_ADC_H_
 #define MAIN_ADC_H_
 

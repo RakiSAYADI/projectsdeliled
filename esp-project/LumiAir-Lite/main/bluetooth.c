@@ -25,28 +25,24 @@
 #include "app_gpio.h"
 #include "webservice.h"
 #include "lightcontrol.h"
+#include "scanwifi.h"
 
 #define GATTS_TAG "GATTS"
 
 #define GATTS_CHAR_NUM_READ 2
 #define GATTS_NUM_HANDLE_READ 1 + (2 * GATTS_CHAR_NUM_READ)
 
-///Declare the static function
+///Declare the functions
 
-static void gatts_profile_read_event_handler(esp_gatts_cb_event_t event,
-											 esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
+void gatts_profile_read_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
 
-static void char_total_read_handler(esp_gatts_cb_event_t event,
-									esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
+void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
 
-static void char_total_write_handler(esp_gatts_cb_event_t event,
-									 esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
+void char_total_write_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
 
-static void char_total2_read_handler(esp_gatts_cb_event_t event,
-									 esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
+void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
 
-static void char_total2_write_handler(esp_gatts_cb_event_t event,
-									  esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
+void char_total2_write_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
 
 bool configData(char *jsonData);
 
@@ -77,24 +73,22 @@ esp_gatt_char_prop_t write_property = 0;
 
 esp_attr_value_t TOTAL = {
 	.attr_max_len = GATTS_CHAR_VAL_LEN_MAX,
-	.attr_len =
-		sizeof(total),
+	.attr_len = sizeof(total),
 	.attr_value = (uint8_t *)&total,
 };
 esp_attr_value_t TOTAL2 = {
 	.attr_max_len = GATTS_CHAR_VAL_LEN_MAX,
-	.attr_len =
-		sizeof(total2),
+	.attr_len = sizeof(total2),
 	.attr_value = (uint8_t *)&total2,
 };
 
-static uint8_t adv_config_done = 0;
+uint8_t adv_config_done = 0;
 #define adv_config_flag (1 << 0)
 #define scan_rsp_config_flag (1 << 1)
 
-static uint32_t ble_add_char_pos;
+uint32_t ble_add_char_pos;
 
-static uint8_t adv_service_uuid128[32] = {
+uint8_t adv_service_uuid128[32] = {
 	/* LSB <--------------------------------------------------------------------------------> MSB */
 	//first uuid, 16bit, [12],[13] is the value
 	0xfb,
@@ -132,12 +126,11 @@ static uint8_t adv_service_uuid128[32] = {
 	0x00};
 
 // The length of adv data must be less than 31 bytes
-//static uint8_t test_manufacturer[TEST_MANUFACTURER_DATA_LEN] =  {0x12, 0x23, 0x45, 0x56};
+//uint8_t test_manufacturer[TEST_MANUFACTURER_DATA_LEN] =  {0x12, 0x23, 0x45, 0x56};
 //adv data
-static esp_ble_adv_data_t adv_data = {
+esp_ble_adv_data_t adv_data = {
 	.set_scan_rsp = false,
-	.include_name =
-		true,
+	.include_name = true,
 	.include_txpower = true,
 	.min_interval = 0x20,
 	.max_interval = 0x40,
@@ -148,11 +141,10 @@ static esp_ble_adv_data_t adv_data = {
 	.p_service_data = NULL,
 	.service_uuid_len = 32,
 	.p_service_uuid = adv_service_uuid128,
-	.flag =
-		(ESP_BLE_ADV_FLAG_GEN_DISC | ESP_BLE_ADV_FLAG_BREDR_NOT_SPT),
+	.flag = (ESP_BLE_ADV_FLAG_GEN_DISC | ESP_BLE_ADV_FLAG_BREDR_NOT_SPT),
 };
 // scan response data
-static esp_ble_adv_data_t scan_rsp_data = {
+esp_ble_adv_data_t scan_rsp_data = {
 	.set_scan_rsp = true,
 	.include_name = true,
 	.include_txpower = true,
@@ -165,19 +157,16 @@ static esp_ble_adv_data_t scan_rsp_data = {
 	.p_service_data = NULL,
 	.service_uuid_len = 32,
 	.p_service_uuid = adv_service_uuid128,
-	.flag =
-		(ESP_BLE_ADV_FLAG_GEN_DISC | ESP_BLE_ADV_FLAG_BREDR_NOT_SPT),
+	.flag = (ESP_BLE_ADV_FLAG_GEN_DISC | ESP_BLE_ADV_FLAG_BREDR_NOT_SPT),
 };
 
-static esp_ble_adv_params_t adv_params = {
+esp_ble_adv_params_t adv_params = {
 	.adv_int_min = 0x20,
-	.adv_int_max =
-		0x40,
+	.adv_int_max = 0x40,
 	.adv_type = ADV_TYPE_IND,
 	.own_addr_type = BLE_ADDR_TYPE_PUBLIC,
 	.channel_map = ADV_CHNL_ALL,
-	.adv_filter_policy =
-		ADV_FILTER_ALLOW_SCAN_ANY_CON_ANY,
+	.adv_filter_policy = ADV_FILTER_ALLOW_SCAN_ANY_CON_ANY,
 };
 
 #define PROFILE_NUM 2
@@ -201,7 +190,7 @@ struct gatts_profile_inst
 };
 
 /* One gatt-based profile one app_id and one gatts_if, this array will store the gatts_if returned by ESP_GATTS_REG_EVT */
-static struct gatts_profile_inst gl_profile_tab[PROFILE_NUM] =
+struct gatts_profile_inst gl_profile_tab[PROFILE_NUM] =
 	{[SERVICE_READ] = {
 		 .gatts_cb = gatts_profile_read_event_handler,
 		 .gatts_if = ESP_GATT_IF_NONE, /* Not get the gatt_if, so initial is ESP_GATT_IF_NONE */
@@ -219,14 +208,12 @@ struct gatts_char_inst
 	esp_gatts_cb_t char_write_callback;
 };
 
-static struct gatts_char_inst LIST_CHAR_READ[GATTS_CHAR_NUM_READ] = { //SERVICE READ
+struct gatts_char_inst LIST_CHAR_READ[GATTS_CHAR_NUM_READ] = { //SERVICE READ
 	{
 		.char_uuid.len = ESP_UUID_LEN_16,
-		.char_uuid.uuid.uuid16 =
-			GATTS_UUID_TEST_READ_Total,
+		.char_uuid.uuid.uuid16 = GATTS_UUID_TEST_READ_Total,
 		.char_perm = ESP_GATT_PERM_READ | ESP_GATT_PERM_WRITE,
-		.char_property =
-			ESP_GATT_CHAR_PROP_BIT_WRITE | ESP_GATT_CHAR_PROP_BIT_READ,
+		.char_property = ESP_GATT_CHAR_PROP_BIT_WRITE | ESP_GATT_CHAR_PROP_BIT_READ,
 		.char_control = NULL,
 		.char_handle = 0,
 		.char_val = &TOTAL,
@@ -235,11 +222,9 @@ static struct gatts_char_inst LIST_CHAR_READ[GATTS_CHAR_NUM_READ] = { //SERVICE 
 	},
 	{
 		.char_uuid.len = ESP_UUID_LEN_16,
-		.char_uuid.uuid.uuid16 =
-			GATTS_UUID_TEST_READ_Total2,
+		.char_uuid.uuid.uuid16 = GATTS_UUID_TEST_READ_Total2,
 		.char_perm = ESP_GATT_PERM_READ | ESP_GATT_PERM_WRITE,
-		.char_property =
-			ESP_GATT_CHAR_PROP_BIT_WRITE | ESP_GATT_CHAR_PROP_BIT_READ,
+		.char_property = ESP_GATT_CHAR_PROP_BIT_WRITE | ESP_GATT_CHAR_PROP_BIT_READ,
 		.char_control = NULL,
 		.char_handle = 0,
 		.char_val = &TOTAL2,
@@ -463,11 +448,11 @@ void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 {
 	ESP_LOGD(GATTS_TAG, "char_total_read_handler %d\n", param->read.handle);
 
-	ESP_LOGI(GATTS_TAG, "[APP] Free memory: %d bytes",
-			 esp_get_free_heap_size());
+	ESP_LOGI(GATTS_TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
 
 	sprintf((char *)total,
-			"{\"EnvData\":[%ld,%ld,%d,%d,%d,%d,%d,%d]}", UnitData.UpdateTime, UnitData.LastDetTime, (uint8_t)UnitData.Temp, (uint8_t)UnitData.Humidity,
+			"{\"EnvData\":[%ld,%ld,%d,%d,%d,%d,%d,%d]}",
+			UnitData.UpdateTime, UnitData.LastDetTime, (uint8_t)UnitData.Temp, (uint8_t)UnitData.Humidity,
 			UnitData.Als, UnitData.aq_Co2Level, UnitData.aq_Tvoc, WifiConnectedFlag);
 
 	TOTAL.attr_len = strlen((char *)total);
@@ -541,12 +526,28 @@ void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 	ESP_LOGI(GATTS_TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
 
 	sprintf((char *)total2,
-			"{\"wifi\":[\"%s\",\"%s\"],\"cc\":[%d,\"%s\"],\"tabcc\":[%d,%ld,%d,%ld,%d,%ld]}",
+			"{\"wifi\":[\"%s\",\"%s\"],\"cc\":[%d,\"%s\"],\"tabcc\":[%d,%ld,%d,%ld,%d,%ld],\"ZN\":[\"%s\",\"%s\",\"%s\",\"%s\"]}",
 			UnitCfg.WifiCfg.WIFI_SSID, UnitCfg.WifiCfg.WIFI_PASS,
 			UnitCfg.UserLcProfile.CcEnb, UnitCfg.UserLcProfile.ZoneCc,
 			UnitCfg.UserLcProfile.Ccp[0].CcLevel, UnitCfg.UserLcProfile.Ccp[0].CcTime,
 			UnitCfg.UserLcProfile.Ccp[1].CcLevel, UnitCfg.UserLcProfile.Ccp[1].CcTime,
-			UnitCfg.UserLcProfile.Ccp[2].CcLevel, UnitCfg.UserLcProfile.Ccp[2].CcTime);
+			UnitCfg.UserLcProfile.Ccp[2].CcLevel, UnitCfg.UserLcProfile.Ccp[2].CcTime,
+			UnitCfg.Zones_info[0].zonename, UnitCfg.Zones_info[1].zonename,
+			UnitCfg.Zones_info[2].zonename, UnitCfg.Zones_info[3].zonename);
+
+	if (scanResult)
+	{
+		sprintf((char *)total2, "{\"AP_RECORDS\":[\"%s\"", ap_info[0].ssid);
+		char apSSID[40];
+		for (int i = 1; i < ap_count; i++)
+		{
+			sprintf((char *)apSSID, ",\"%s\"", ap_info[i].ssid);
+			strcpy((char *)total2 + strlen((char *)total2), apSSID);
+		}
+		strcpy((char *)total2 + strlen((char *)total2), "]}");
+		ESP_LOGI(GATTS_TAG, "total2 = %s", (char *)total2);
+		scanResult = false;
+	}
 
 	TOTAL2.attr_len = strlen((char *)total2);
 
@@ -562,21 +563,16 @@ void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 			 pos < LIST_CHAR_READ[1].char_val->attr_len && pos < LIST_CHAR_READ[1].char_val->attr_max_len;
 			 pos++)
 		{
-			rsp.attr_value.value[pos] =
-				LIST_CHAR_READ[1].char_val->attr_value[pos];
+			rsp.attr_value.value[pos] = LIST_CHAR_READ[1].char_val->attr_value[pos];
 		}
 	}
-	ESP_LOGD(GATTS_TAG, "char_total2_read_handler = %.*s\n",
-			 LIST_CHAR_READ[1].char_val->attr_len,
-			 (char *)LIST_CHAR_READ[1].char_val->attr_value);
+	ESP_LOGD(GATTS_TAG, "char_total2_read_handler = %.*s\n", LIST_CHAR_READ[1].char_val->attr_len, (char *)LIST_CHAR_READ[1].char_val->attr_value);
 	ESP_LOGD(GATTS_TAG, "char_total2_read_handler esp_gatt_rsp_t\n");
 
-	esp_ble_gatts_send_response(gatts_if, param->read.conn_id,
-								param->read.trans_id, ESP_GATT_OK, &rsp);
+	esp_ble_gatts_send_response(gatts_if, param->read.conn_id, param->read.trans_id, ESP_GATT_OK, &rsp);
 }
 
-void char_total2_write_handler(esp_gatts_cb_event_t event,
-							   esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param)
+void char_total2_write_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param)
 {
 	ESP_LOGD(GATTS_TAG, "char_light_write2_handler %d\n", param->write.handle);
 	if (LIST_CHAR_READ[1].char_val != NULL)
@@ -660,6 +656,18 @@ bool configData(char *jsonData)
 			esp_restart();
 		}
 	}
+	else if (jsonparse(jsonData, tmp, "SCAN", 0))
+	{
+		if (atoi(tmp) == 1)
+		{
+			ESP_LOGI(GATTS_TAG, "Scan is Activated");
+			scanWIFITask();
+		}
+		else
+		{
+			ESP_LOGE(GATTS_TAG, "Scan is not activated");
+		}
+	}
 	else if (jsonparse(jsonData, tmp, "cc", 0))
 	{
 		if (atoi(tmp) == 0)
@@ -676,14 +684,12 @@ bool configData(char *jsonData)
 	}
 	else if (jsonparse(jsonData, UnitCfg.WifiCfg.WIFI_SSID, "wa", 0))
 	{
-		ESP_LOGD(GATTS_TAG, "set ap ssid %s", UnitCfg.WifiCfg.WIFI_SSID);
+		ESP_LOGI(GATTS_TAG, "set ap ssid %s", UnitCfg.WifiCfg.WIFI_SSID);
 
 		if (jsonparse(jsonData, UnitCfg.WifiCfg.WIFI_PASS, "wp", 0))
 		{
-			ESP_LOGD(GATTS_TAG, "set ap password %s",
-					 UnitCfg.WifiCfg.WIFI_PASS);
+			ESP_LOGI(GATTS_TAG, "set ap password %s", UnitCfg.WifiCfg.WIFI_PASS);
 		}
-
 		savenvsFlag = true;
 	}
 	else if (jsonparse(jsonData, tmp, "light", 0))
@@ -709,8 +715,7 @@ bool configData(char *jsonData)
 		//radio
 		MilightHandler(cmd, subcmd, zone & 0x0F);
 
-		ESP_LOGI(GATTS_TAG, "Light control manu cmd %d subcmd %d zone %d", cmd,
-				 subcmd, zone);
+		ESP_LOGI(GATTS_TAG, "Light control manu cmd %d subcmd %d zone %d", cmd, subcmd, zone);
 	}
 	else if (jsonparse(jsonData, UnitCfg.UnitName, "dname", 0))
 	{
@@ -772,13 +777,11 @@ bool configData(char *jsonData)
 	{
 		//Couleur 2
 
-		ESP_LOGI(GATTS_TAG, "Profile Color name set %s",
-				 UnitCfg.ColortrProfile[1].ambname);
+		ESP_LOGI(GATTS_TAG, "Profile Color name set %s", UnitCfg.ColortrProfile[1].ambname);
 		savenvsFlag = true;
 		if (jsonparse(jsonData, UnitCfg.ColortrProfile[1].Hue, "couleur2", 1))
 		{
-			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s",
-					 UnitCfg.ColortrProfile[1].Hue);
+			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[1].Hue);
 			savenvsFlag = true;
 		}
 	}
@@ -939,9 +942,7 @@ void gatts_profile_read_event_handler(esp_gatts_cb_event_t event,
 		}
 		adv_config_done |= scan_rsp_config_flag;
 
-		esp_ble_gatts_create_service(gatts_if,
-									 &gl_profile_tab[SERVICE_READ].service_id,
-									 GATTS_NUM_HANDLE_READ);
+		esp_ble_gatts_create_service(gatts_if, &gl_profile_tab[SERVICE_READ].service_id, GATTS_NUM_HANDLE_READ);
 
 		break;
 	case ESP_GATTS_READ_EVT:

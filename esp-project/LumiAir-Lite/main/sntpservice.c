@@ -62,7 +62,7 @@ void sntp_task()
     char tz[50];
 
     // Tunisia time zone
-    sprintf(tz, "GMT+%d", abs(UnitCfg.UnitTimeZone));
+    sprintf(tz, "UTC+%d", abs(UnitCfg.UnitTimeZone));
 
     // France time zone
     sprintf(tz, "CET-%dCEST-%d,M3.5.0/02:00:00,M10.5.0/03:00:00", abs(UnitCfg.UnitTimeZone), abs(UnitCfg.UnitTimeZone) + 1);

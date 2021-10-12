@@ -1,10 +1,3 @@
-/*
- * unitcfg.h
- *
- *  Created on: Dec 26, 2018
- *      Author: mdt
- */
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

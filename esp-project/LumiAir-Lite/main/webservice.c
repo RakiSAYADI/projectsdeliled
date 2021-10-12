@@ -21,6 +21,8 @@
 #define WIFI_CONNECTED_BIT BIT0
 #define WIFI_FAIL_BIT BIT1
 
+#define WIFI_RETRY_MAX 10
+
 EventGroupHandle_t s_wifi_event_group;
 
 const char *WEBSERVICE_TAG = "WEB_SERVICE";
@@ -38,7 +40,7 @@ esp_err_t event_wifi_handler(void *arg, esp_event_base_t event_base,
 	}
 	else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED)
 	{
-		if (s_retry_num < 10)
+		if (s_retry_num < WIFI_RETRY_MAX)
 		{
 			esp_wifi_connect();
 			s_retry_num++;

@@ -1,23 +1,11 @@
-/*
- * main.c
- *
- *  Created on: Apr 1, 2018
- *      Author: mdt
- */
-
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "esp_system.h"
 #include "esp_log.h"
 #include "string.h"
-#include <stdio.h>
-#include <esp_err.h>
-#include <esp_event.h>
-#include <nvs_flash.h>
+#include "stdio.h"
+#include "nvs_flash.h"
 #include "stdlib.h"
-#include "stdbool.h"
 
 #include "sdkconfig.h"
+
 #include "i2c.h"
 #include "adc.h"
 #include "main.h"

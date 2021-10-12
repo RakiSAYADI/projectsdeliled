@@ -1,10 +1,3 @@
-/*
- * i2c.h
- *
- *  Created on: Jul 3, 2018
- *      Author: mdt
- */
-
 #ifndef MAIN_I2C_H_
 #define MAIN_I2C_H_
 

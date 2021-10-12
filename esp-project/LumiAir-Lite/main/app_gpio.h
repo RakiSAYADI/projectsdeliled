@@ -1,10 +1,3 @@
-/*
- * gpio.h
- *
- *  Created on: Oct 10, 2018
- *      Author: mdt
- */
-
 #ifndef MAIN_APP_GPIO_H_
 #define MAIN_APP_GPIO_H_
 

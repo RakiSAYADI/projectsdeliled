@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_bispectrum/services/bleDeviceClass.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:flutter_gifimage/flutter_gifimage.dart';
 
 final String appName = 'Bispectrum';
 

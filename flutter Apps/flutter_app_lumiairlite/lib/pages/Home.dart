@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_bispectrum/pages/Curves_paint.dart';
+import 'package:flutter_app_bispectrum/pages/settings.dart';
 import 'package:flutter_app_bispectrum/services/DataVariables.dart';
 import 'package:flutter_app_bispectrum/services/animation_between_pages.dart';
 import 'package:intl/intl.dart';
@@ -18,6 +19,7 @@ class _HomeState extends State<Home> {
   int timeToSleep;
 
   int boolToInt(bool a) => a == true ? 1 : 0;
+
   bool intToBool(int a) => a == 1 ? true : false;
 
   bool firstDisplayMainWidget = true;
@@ -64,7 +66,7 @@ class _HomeState extends State<Home> {
 
       print(deviceTimeValue);
 
-      deviceDate = new DateTime.fromMillisecondsSinceEpoch(deviceTimeValue*1000);
+      deviceDate = new DateTime.fromMillisecondsSinceEpoch(deviceTimeValue * 1000);
 
       print(DateFormat('kk:mm').format(deviceDate));
 
@@ -102,8 +104,7 @@ class _HomeState extends State<Home> {
       try {
         setState(() {});
       } catch (e) {
-        print(e.message);
-        break;
+        print('set state error');
       }
 
       if (timeToSleep <= 0) {
@@ -332,7 +333,9 @@ class _HomeState extends State<Home> {
                           ),
                           padding: const EdgeInsets.all(2.0),
                           child: IconButton(
-                              onPressed: null,
+                              onPressed: () {
+                                createRoute(context, Settings());
+                              },
                               icon: Icon(
                                 Icons.settings,
                                 color: Colors.white,

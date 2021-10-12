@@ -1,10 +1,3 @@
-/*
- * uart1.c
- *
- *  Created on: Apr 1, 2018
- *      Author: mdt
- */
-
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/uart.h"

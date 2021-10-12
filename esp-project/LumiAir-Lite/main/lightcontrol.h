@@ -1,10 +1,3 @@
-/*
- * uart1.h
- *
- *  Created on: Apr 2, 2018
- *      Author: mdt
- */
-
 #ifndef MAIN_LIGHTCONTROL_H_
 #define MAIN_LIGHTCONTROL_H_
 

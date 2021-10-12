@@ -1,26 +1,13 @@
-/*
- * unitcfg.c
- *
- *  Created on: Dec 26, 2018
- *      Author: mdt
- */
-
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "esp_system.h"
 #include "esp_log.h"
-#include "driver/uart.h"
-#include "driver/gpio.h"
-#include "soc/uart_struct.h"
 #include "string.h"
-#include <stdio.h>
-#include <esp_err.h>
-#include <esp_event.h>
-#include <nvs.h>
-#include <nvs_flash.h>
+#include "stdio.h"
+#include "esp_err.h"
+#include "esp_event.h"
+#include "nvs.h"
+#include "nvs_flash.h"
+#include "stdlib.h"
+
 #include "sdkconfig.h"
-#include <stdlib.h>
-#include "stdbool.h"
 
 #include "unitcfg.h"
 
@@ -148,11 +135,11 @@ void Default_saving()
 	UnitCfg.UserLcProfile.CcEnb = false;
 	sprintf(UnitCfg.UserLcProfile.ZoneCc, "F");
 
-	UnitCfg.UserLcProfile.Ccp[0].CcLevel = 0;
+	UnitCfg.UserLcProfile.Ccp[0].CcLevel = 100;
 	UnitCfg.UserLcProfile.Ccp[0].CcTime = 28800;
-	UnitCfg.UserLcProfile.Ccp[1].CcLevel = 100;
+	UnitCfg.UserLcProfile.Ccp[1].CcLevel = 0;
 	UnitCfg.UserLcProfile.Ccp[1].CcTime = 43200;
-	UnitCfg.UserLcProfile.Ccp[2].CcLevel = 0;
+	UnitCfg.UserLcProfile.Ccp[2].CcLevel = 100;
 	UnitCfg.UserLcProfile.Ccp[2].CcTime = 61200;
 
 	for (int i = 0; i < 4; i++)

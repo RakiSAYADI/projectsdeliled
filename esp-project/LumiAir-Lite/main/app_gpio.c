@@ -1,15 +1,8 @@
-/*
- * gpio.c
- *
- *  Created on: Oct 10, 2018
- *      Author: mdt
- */
 #include <string.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/gpio.h"
 #include "driver/ledc.h"
-#include "sdkconfig.h"
 #include "freertos/event_groups.h"
 #include "esp_system.h"
 #include "esp_log.h"
@@ -17,6 +10,8 @@
 
 #include "lwip/err.h"
 #include "lwip/sys.h"
+
+#include "sdkconfig.h"
 
 #include "app_gpio.h"
 #include "webservice.h"
@@ -92,11 +87,9 @@ void RED_OFF()
 }
 void ORANGE_ON()
 {
-	ledc_set_duty(LEDC_HIGH_SPEED_MODE, LEDC_HS_CH0_CHANNEL,
-				  LEDC_GREEN_ORANGE_DUTY);
+	ledc_set_duty(LEDC_HIGH_SPEED_MODE, LEDC_HS_CH0_CHANNEL, LEDC_GREEN_ORANGE_DUTY);
 	ledc_update_duty(LEDC_HIGH_SPEED_MODE, LEDC_HS_CH0_CHANNEL);
-	ledc_set_duty(LEDC_HIGH_SPEED_MODE, LEDC_HS_CH1_CHANNEL,
-				  LEDC_RED_ORANGE_DUTY);
+	ledc_set_duty(LEDC_HIGH_SPEED_MODE, LEDC_HS_CH1_CHANNEL, LEDC_RED_ORANGE_DUTY);
 	ledc_update_duty(LEDC_HIGH_SPEED_MODE, LEDC_HS_CH1_CHANNEL);
 }
 
@@ -144,7 +137,7 @@ void LedStatusTask()
 
 	gpio_config_t io_conf;
 	//Enable interrupt on both rising and falling edges
-	io_conf.intr_type = GPIO_INTR_POSEDGE; 
+	io_conf.intr_type = GPIO_INTR_POSEDGE;
 	//bit mask of the pins
 	io_conf.pin_bit_mask = GPIO_INPUT_PIN_SEL;
 	//set as input mode
@@ -313,6 +306,5 @@ uint8_t strContains(char *string, char *toFind)
 
 void LedStatInit()
 {
-	xTaskCreatePinnedToCore(&LedStatusTask, "LedStatusTask",
-							configMINIMAL_STACK_SIZE * 3, NULL, 1, NULL, 1);
+	xTaskCreatePinnedToCore(&LedStatusTask, "LedStatusTask", configMINIMAL_STACK_SIZE * 3, NULL, 1, NULL, 1);
 }

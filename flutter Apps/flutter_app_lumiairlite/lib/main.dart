@@ -4,6 +4,7 @@ import 'package:flutter_app_bispectrum/pages/Curves_paint.dart';
 import 'package:flutter_app_bispectrum/pages/Home.dart';
 import 'package:flutter_app_bispectrum/pages/check_permissions.dart';
 import 'package:flutter_app_bispectrum/pages/scan_ble_list.dart';
+import 'package:flutter_app_bispectrum/pages/settings.dart';
 import 'package:flutter_app_bispectrum/pages/welcome.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/rxdart.dart';
@@ -89,6 +90,7 @@ class MyApp extends StatelessWidget {
         '/check_permissions': (context) => CheckPermissions(),
         '/scan_ble_list': (context) => ScanListBle(),
         '/home':(context) => Home(),
+        '/settings':(context) => Settings(),
         '/curves':(context) => CurveShow(),
       },
       theme: ThemeData(
