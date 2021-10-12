@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app_bispectrum/pages/scan_ble_list.dart';
 import 'package:flutter_app_bispectrum/services/DataVariables.dart';
+import 'package:flutter_app_bispectrum/services/animation_between_pages.dart';
 import 'package:flutter_app_bispectrum/services/uvcToast.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -74,323 +76,332 @@ class _SettingsState extends State<Settings> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     print('width : $screenWidth and height : $screenHeight');
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Réglages',
-          style: TextStyle(fontSize: 18),
+    return WillPopScope(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Réglages',
+            style: TextStyle(fontSize: 18),
+          ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: Container(
-        decoration: BoxDecoration(color: Colors.grey[200]),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Nom du convertisseur DMX :',
-                        style: TextStyle(fontSize: (screenWidth * 0.05)),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
-                      child: TextField(
-                        textAlign: TextAlign.center,
-                        controller: myBleDeviceName,
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: (screenWidth * 0.05),
-                        ),
-                        decoration: InputDecoration(
-                            hintText: 'exp:Maestro1234',
-                            hintStyle: TextStyle(
-                              fontSize: (screenWidth * 0.05),
-                              color: Colors.grey,
-                            )),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: TextButton(
-                        onPressed: () async {
-                          // write the new ble device name
-                          await characteristicData.write('{\"dname\":\"${myBleDeviceName.text}\"}'.codeUnits);
-                          myUvcToast.setToastDuration(5);
-                          myUvcToast.setToastMessage('Nom de carte modifié , faudrais redémarrer la carte pour appliquer cette modification !');
-                          myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
-                        },
+        body: Container(
+          decoration: BoxDecoration(color: Colors.grey[200]),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'Changer le nom',
-                          style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                          'Nom du convertisseur DMX :',
+                          style: TextStyle(fontSize: (screenWidth * 0.05)),
                         ),
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.red))),
-                            backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Divider(
-                        thickness: 3.0,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        'Vos Zones :',
-                        style: TextStyle(fontSize: (screenWidth * 0.05)),
-                      ),
-                    ),
-                    ToggleButtons(
-                      borderRadius: BorderRadius.circular(18.0),
-                      isSelected: zoneStates,
-                      onPressed: (int index) async {
-                        setState(() {
-                          zoneStates[index] = !zoneStates[index];
-                        });
-                        zonesInHex = ((boolToInt(zoneStates[0])) +
-                                (boolToInt(zoneStates[1]) * 2) +
-                                (boolToInt(zoneStates[2]) * 4) +
-                                (boolToInt(zoneStates[3]) * 8))
-                            .toRadixString(16);
-                      },
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                          child: Text(zonesNamesList[0], style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                          child: Text(zonesNamesList[1], style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                          child: Text(zonesNamesList[2], style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                          child: Text(zonesNamesList[3], style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
-                        ),
-                      ],
-                      borderWidth: 2,
-                      color: Colors.grey,
-                      selectedBorderColor: Colors.black,
-                      selectedColor: Colors.green,
-                    ),
-                    SizedBox(height: screenHeight * 0.05),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextButton(
-                            onPressed: () async {
-                              // write the associate command
-                              await characteristicData.write('{\"light\":[5,1,\"$zonesInHex \"]}'.codeUnits);
-                            },
-                            child: Text(
-                              'Associer',
-                              style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
-                            ),
-                            style: ButtonStyle(
-                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.red))),
-                                backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.green[400],
-                                )),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextButton(
-                            onPressed: () async {
-                              // write the dissociate command
-                              await characteristicData.write('{\"light\":[5,0,\"$zonesInHex \"]}'.codeUnits);
-                            },
-                            child: Text(
-                              'Dissocier',
-                              style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
-                            ),
-                            style: ButtonStyle(
-                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.red))),
-                                backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextButton(
-                        onPressed: () {
-                          // write the new zone names
-                          zoneNamesSettingsWidget(context);
-                        },
-                        child: Text(
-                          'Renommer',
-                          style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
-                        ),
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.red))),
-                            backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Divider(
-                        thickness: 3.0,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        'Connexion WiFi :',
-                        style: TextStyle(fontSize: (screenWidth * 0.05)),
-                      ),
-                    ),
-                    Visibility(
-                      visible: displayModems,
-                      child: Padding(
+                      Padding(
                         padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
-                        child: DropdownButton<String>(
-                          value: wifiModemsData,
-                          icon: Icon(Icons.arrow_drop_down),
-                          iconSize: 24,
-                          elevation: 16,
-                          style: TextStyle(color: Colors.grey[800], fontSize: 18),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.blue[300],
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          controller: myBleDeviceName,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: (screenWidth * 0.05),
                           ),
-                          onChanged: (String data) {
-                            setState(() {
-                              wifiModemsData = data;
-                              wifiModemsPosition = wifiModems.indexOf(data);
-                            });
+                          decoration: InputDecoration(
+                              hintText: 'exp:Maestro1234',
+                              hintStyle: TextStyle(
+                                fontSize: (screenWidth * 0.05),
+                                color: Colors.grey,
+                              )),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: TextButton(
+                          onPressed: () async {
+                            // write the new ble device name
+                            await characteristicData.write('{\"dname\":\"${myBleDeviceName.text}\"}'.codeUnits);
+                            myUvcToast.setToastDuration(5);
+                            myUvcToast.setToastMessage('Nom de carte modifié , faudrais redémarrer la carte pour appliquer cette modification !');
+                            myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
                           },
-                          items: wifiModems.map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
+                          child: Text(
+                            'Changer le nom',
+                            style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                          ),
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextButton(
-                        onPressed: () async {
-                          waitingWidget();
-                          // write the scan command
-                          if (myDevice.getConnectionState()) {
-                            try {
-                              await characteristicData.write('{\"SCAN\":1}'.codeUnits);
-                              await Future.delayed(Duration(milliseconds: 500));
-                              String wifiScanningState = String.fromCharCodes(await characteristicData.read());
-                              var parsedJson = json.decode(wifiScanningState);
-                              while (parsedJson['SCR'] == '0') {
-                                wifiScanningState = String.fromCharCodes(await characteristicData.read());
-                                parsedJson = json.decode(wifiScanningState);
-                                await Future.delayed(Duration(seconds: 1));
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Divider(
+                          thickness: 3.0,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'Vos Zones :',
+                          style: TextStyle(fontSize: (screenWidth * 0.05)),
+                        ),
+                      ),
+                      ToggleButtons(
+                        borderRadius: BorderRadius.circular(18.0),
+                        isSelected: zoneStates,
+                        onPressed: (int index) async {
+                          setState(() {
+                            zoneStates[index] = !zoneStates[index];
+                          });
+                          zonesInHex = ((boolToInt(zoneStates[0])) +
+                                  (boolToInt(zoneStates[1]) * 2) +
+                                  (boolToInt(zoneStates[2]) * 4) +
+                                  (boolToInt(zoneStates[3]) * 8))
+                              .toRadixString(16);
+                        },
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                            child: Text(zonesNamesList[0], style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                            child: Text(zonesNamesList[1], style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                            child: Text(zonesNamesList[2], style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                            child: Text(zonesNamesList[3], style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
+                          ),
+                        ],
+                        borderWidth: 2,
+                        color: Colors.grey,
+                        selectedBorderColor: Colors.black,
+                        selectedColor: Colors.green,
+                      ),
+                      SizedBox(height: screenHeight * 0.05),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextButton(
+                              onPressed: () async {
+                                // write the associate command
+                                await characteristicData.write('{\"light\":[5,1,\"$zonesInHex \"]}'.codeUnits);
+                              },
+                              child: Text(
+                                'Associer',
+                                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                              ),
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                                  backgroundColor: MaterialStateProperty.all<Color>(
+                                    Colors.green[400],
+                                  )),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextButton(
+                              onPressed: () async {
+                                // write the dissociate command
+                                await characteristicData.write('{\"light\":[5,0,\"$zonesInHex \"]}'.codeUnits);
+                              },
+                              child: Text(
+                                'Dissocier',
+                                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                              ),
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                                  backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextButton(
+                          onPressed: () {
+                            // write the new zone names
+                            zoneNamesSettingsWidget(context);
+                          },
+                          child: Text(
+                            'Renommer',
+                            style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                          ),
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Divider(
+                          thickness: 3.0,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'Connexion WiFi :',
+                          style: TextStyle(fontSize: (screenWidth * 0.05)),
+                        ),
+                      ),
+                      Visibility(
+                        visible: displayModems,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
+                          child: DropdownButton<String>(
+                            value: wifiModemsData,
+                            icon: Icon(Icons.arrow_drop_down),
+                            iconSize: 24,
+                            elevation: 16,
+                            style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                            underline: Container(
+                              height: 2,
+                              color: Colors.blue[300],
+                            ),
+                            onChanged: (String data) {
+                              setState(() {
+                                wifiModemsData = data;
+                                wifiModemsPosition = wifiModems.indexOf(data);
+                              });
+                            },
+                            items: wifiModems.map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextButton(
+                          onPressed: () async {
+                            waitingWidget();
+                            // write the scan command
+                            if (myDevice.getConnectionState()) {
+                              try {
+                                await characteristicData.write('{\"SCAN\":1}'.codeUnits);
+                                await Future.delayed(Duration(milliseconds: 500));
+                                String wifiScanningState = String.fromCharCodes(await characteristicSensors.read());
+                                var parsedJson = json.decode(wifiScanningState);
+                                while (parsedJson['SCR'] == '0') {
+                                  wifiScanningState = String.fromCharCodes(await characteristicSensors.read());
+                                  parsedJson = json.decode(wifiScanningState);
+                                  await Future.delayed(Duration(seconds: 1));
+                                }
+                                String wifiScanningResult = String.fromCharCodes(await characteristicData.read());
+                                parsedJson = json.decode(wifiScanningResult);
+                                List<dynamic> modems = parsedJson['AP_RECORDS'];
+                                wifiModems = List<String>.from(modems);
+                                wifiModemsData = wifiModems[0];
+                              } catch (e) {
+                                print('error in device Communication');
+                                myUvcToast.setToastDuration(5);
+                                myUvcToast.setToastMessage('Erreur de communication !');
+                                myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
                               }
-                              String wifiScanningResult = String.fromCharCodes(await characteristicData.read());
-                              parsedJson = json.decode(wifiScanningResult);
-                              List<dynamic> modems = parsedJson['AP_RECORDS'];
-                              wifiModems = List<String>.from(modems);
-                              wifiModemsData = wifiModems[0];
-                            } catch (e) {
-                              print('error in device Communication');
-                              myUvcToast.setToastDuration(5);
-                              myUvcToast.setToastMessage('Erreur de communication !');
-                              myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                              Navigator.pop(context, false);
+                              displayModems = true;
+                              setState(() {});
                             }
-                            Navigator.pop(context, false);
-                            displayModems = true;
-                            setState(() {});
-                          }
-                        },
+                          },
+                          child: Text(
+                            'Scanner',
+                            style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                          ),
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
                         child: Text(
-                          'Scanner',
-                          style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                          'Mot de passe :',
+                          style: TextStyle(fontSize: (screenWidth * 0.05)),
                         ),
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.red))),
-                            backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        'Mot de passe :',
-                        style: TextStyle(fontSize: (screenWidth * 0.05)),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
-                      child: TextField(
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                        maxLength: 64,
-                        controller: passwordEditor,
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.04,
-                          color: Colors.grey[800],
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          maxLength: 64,
+                          controller: passwordEditor,
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.04,
+                            color: Colors.grey[800],
+                          ),
+                          decoration: InputDecoration(
+                              hintText: 'exemple : 123',
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              )),
                         ),
-                        decoration: InputDecoration(
-                            hintText: 'exemple : 123',
-                            hintStyle: TextStyle(
-                              color: Colors.grey,
-                            )),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextButton(
-                        onPressed: () async {
-                          // write the new access point and it's password
-                          await characteristicData.write('{\"wa\":\"$wifiModemsData\",\"wp\":\"${passwordEditor.text}\"}'.codeUnits);
-                          restartAlertWidget(context, 'Voulez vous redemarrer la carte pour assurer la connection avec votre modem ?');
-                        },
-                        child: Text(
-                          'Connecter',
-                          style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextButton(
+                          onPressed: () async {
+                            // write the new access point and it's password
+                            await characteristicData.write('{\"wa\":\"$wifiModemsData\",\"wp\":\"${passwordEditor.text}\"}'.codeUnits);
+                            restartAlertWidget(context, 'Voulez vous redemarrer la carte pour assurer la connection avec votre modem ?');
+                          },
+                          child: Text(
+                            'Connecter',
+                            style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                          ),
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
                         ),
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.red))),
-                            backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Divider(
-                        thickness: 3.0,
-                        color: Colors.grey[600],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Divider(
+                          thickness: 3.0,
+                          color: Colors.grey[600],
+                        ),
                       ),
-                    ),
-                    restartAndResetWidget(context),
-                  ],
-                ),
-              ],
+                      restartAndResetWidget(context),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
+      onWillPop: () => returnButton(context),
     );
+  }
+
+  Future<bool> returnButton(BuildContext context) async {
+    stateOfSleepAndReadingProcess = 0;
+    Navigator.pop(context, true);
+    return true;
   }
 
   Widget restartAndResetWidget(BuildContext context) {
@@ -406,7 +417,7 @@ class _SettingsState extends State<Settings> {
                 // write the restart command
                 characteristicData.write('{\"system\":1}'.codeUnits);
                 myDevice.disconnect();
-                Navigator.pushNamedAndRemoveUntil(context, "/scan_ble_list", (r) => false);
+                removeReplacementRouts(context, ScanListBle());
               },
               child: Text(
                 'Redémarrage',
@@ -414,7 +425,7 @@ class _SettingsState extends State<Settings> {
               ),
               style: ButtonStyle(
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.red))),
+                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
                   backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
             ),
           ),
@@ -432,7 +443,7 @@ class _SettingsState extends State<Settings> {
               ),
               style: ButtonStyle(
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.red))),
+                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
                   backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
             ),
           ),
@@ -449,7 +460,7 @@ class _SettingsState extends State<Settings> {
                 // write the restart command
                 characteristicData.write('{\"system\":1}'.codeUnits);
                 myDevice.disconnect();
-                Navigator.pushNamedAndRemoveUntil(context, "/scan_ble_list", (r) => false);
+                removeReplacementRouts(context, ScanListBle());
               },
               child: Text(
                 'Redémarrage',
@@ -457,7 +468,7 @@ class _SettingsState extends State<Settings> {
               ),
               style: ButtonStyle(
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.red))),
+                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
                   backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
             ),
           ),
@@ -475,7 +486,7 @@ class _SettingsState extends State<Settings> {
               ),
               style: ButtonStyle(
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.red))),
+                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
                   backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
             ),
           ),
@@ -502,7 +513,7 @@ class _SettingsState extends State<Settings> {
                 characteristicData.write('{\"system\":1}'.codeUnits);
                 myDevice.disconnect();
                 Navigator.of(context).pop();
-                Navigator.pushNamedAndRemoveUntil(context, "/scan_ble_list", (r) => false);
+                removeReplacementRouts(context, ScanListBle());
               },
             ),
             TextButton(

@@ -25,12 +25,9 @@ class _HomeState extends State<Home> {
   bool firstDisplayMainWidget = true;
   String carbonStateOnSleepGif = "assets/fond-vert-veille.gif";
   String carbonStateOnHome = "assets/personnage-vert.png";
-  String carbonLastStateOnHome = "assets/personnage-vert.png";
   String carbonStateOnHomeMessage = "Bon";
 
   DateTime deviceDate;
-
-  DateTime now;
 
   @override
   void initState() {
@@ -44,32 +41,6 @@ class _HomeState extends State<Home> {
     mainWidgetScreen = appWidget(context);
     Map<String, dynamic> sensorsData;
     do {
-      if (myDevice.getConnectionState()) {
-        now = DateTime.now();
-        appTime = DateFormat('kk:mm').format(now);
-        try {
-          dataChar1 = String.fromCharCodes(await characteristicSensors.read());
-          sensorsData = jsonDecode(dataChar1);
-          String sensorsDataList = sensorsData['EnvData'].toString();
-          deviceTimeValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[0];
-          detectionTimeValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[1];
-          temperatureValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[2];
-          humidityValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[3];
-          lightValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[4];
-          co2Value = _stringListAsciiToListInt(sensorsDataList.codeUnits)[5];
-          tvocValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[6];
-          deviceWifiState = intToBool(_stringListAsciiToListInt(sensorsDataList.codeUnits)[7]);
-        } catch (e) {
-          print(e.message);
-        }
-      }
-
-      print(deviceTimeValue);
-
-      deviceDate = new DateTime.fromMillisecondsSinceEpoch(deviceTimeValue * 1000);
-
-      print(DateFormat('kk:mm').format(deviceDate));
-
       if (co2Value > 2000) {
         carbonStateOnSleepGif = "assets/fond-rouge-veille.gif";
         carbonStateOnHome = "assets/personnage-rouge.png";
@@ -85,34 +56,48 @@ class _HomeState extends State<Home> {
         carbonStateOnHome = "assets/personnage-vert.png";
         carbonStateOnHomeMessage = "Bon";
       }
+      if (stateOfSleepAndReadingProcess == 0) {
+        try {
+          if (myDevice.getConnectionState()) {
+            dataChar1 = String.fromCharCodes(await characteristicSensors.read());
+            sensorsData = jsonDecode(dataChar1);
+            String sensorsDataList = sensorsData['EnvData'].toString();
+            deviceTimeValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[0];
+            detectionTimeValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[1];
+            temperatureValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[2];
+            humidityValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[3];
+            lightValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[4];
+            co2Value = _stringListAsciiToListInt(sensorsDataList.codeUnits)[5];
+            tvocValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[6];
+            deviceWifiState = intToBool(_stringListAsciiToListInt(sensorsDataList.codeUnits)[7]);
+            deviceDate = new DateTime.fromMillisecondsSinceEpoch(deviceTimeValue * 1000);
+            appTime = DateFormat('kk:mm').format(deviceDate);
+          }
+        } catch (e) {
+          print(e.message);
+        }
+        try {
+          setState(() {
+            if (timeToSleep <= 0) {
+              mainWidgetScreen = sleepWidget(context);
+            } else {
+              mainWidgetScreen = appWidget(context);
+            }
+          });
+        } catch (e) {
+          print('setState error');
+        }
 
-      if (deactivateSleepAndReadingProcess) {
+        if (timeToSleep <= 0) {
+          timeToSleep = (-1000);
+        } else {
+          timeToSleep -= 5000;
+        }
+      }
+      if (stateOfSleepAndReadingProcess == 1) {
         break;
       }
 
-      if ((carbonLastStateOnHome != carbonStateOnHome) | (timeToSleep == 0)) {
-        print("change state co2 = $co2Value");
-
-        if (timeToSleep <= 0) {
-          mainWidgetScreen = sleepWidget(context);
-        } else {
-          mainWidgetScreen = appWidget(context);
-        }
-        carbonLastStateOnHome = carbonStateOnHome;
-      }
-
-      try {
-        setState(() {});
-      } catch (e) {
-        print('set state error');
-      }
-
-      if (timeToSleep <= 0) {
-        timeToSleep = (-1000);
-      } else {
-        timeToSleep -= 5000;
-      }
-      print(timeToSleep);
       await Future.delayed(Duration(seconds: 5));
     } while (true);
   }
@@ -127,7 +112,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     if (firstDisplayMainWidget) {
       try {
-        deactivateSleepAndReadingProcess = false;
+        stateOfSleepAndReadingProcess = 0;
         appRefreshData(context);
       } catch (e) {
         print('erreur');
@@ -156,7 +141,7 @@ class _HomeState extends State<Home> {
                   if (myDevice != null) {
                     await myDevice.disconnect();
                   }
-                  deactivateSleepAndReadingProcess = true;
+                  stateOfSleepAndReadingProcess = 1;
                   Navigator.pop(c, true);
                 }),
             TextButton(
@@ -334,6 +319,7 @@ class _HomeState extends State<Home> {
                           padding: const EdgeInsets.all(2.0),
                           child: IconButton(
                               onPressed: () {
+                                stateOfSleepAndReadingProcess = 2;
                                 createRoute(context, Settings());
                               },
                               icon: Icon(

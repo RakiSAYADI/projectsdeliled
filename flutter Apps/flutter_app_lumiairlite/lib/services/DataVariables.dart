@@ -6,7 +6,7 @@ final String appName = 'Bispectrum';
 
 final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
-bool deactivateSleepAndReadingProcess = false;
+int stateOfSleepAndReadingProcess = 0;
 Widget mainWidgetScreen;
 final int timeSleep = 60000;
 
