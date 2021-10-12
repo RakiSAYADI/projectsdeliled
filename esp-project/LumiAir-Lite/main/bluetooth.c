@@ -451,9 +451,10 @@ void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 	ESP_LOGI(GATTS_TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
 
 	sprintf((char *)total,
-			"{\"EnvData\":[%ld,%ld,%d,%d,%d,%d,%d,%d]}",
+			"{\"EnvData\":[%ld,%ld,%d,%d,%d,%d,%d,%d],\"SCR\":%d}",
 			UnitData.UpdateTime, UnitData.LastDetTime, (uint8_t)UnitData.Temp, (uint8_t)UnitData.Humidity,
-			UnitData.Als, UnitData.aq_Co2Level, UnitData.aq_Tvoc, WifiConnectedFlag);
+			UnitData.Als, UnitData.aq_Co2Level, UnitData.aq_Tvoc, WifiConnectedFlag,scanResult);
+
 
 	TOTAL.attr_len = strlen((char *)total);
 
@@ -509,8 +510,8 @@ void char_total_write_handler(esp_gatts_cb_event_t event,
 					(char *)LIST_CHAR_READ[0].char_val->attr_value);
 			printf("%s\n", config_total_json);
 			savenvsFlag = configData(config_total_json);
-			free(config_total_json);
 			configParserTask();
+			free(config_total_json);
 		}
 	}
 	ESP_LOGD(GATTS_TAG, "char_light_write_handler esp_gatt_rsp_t\n");
@@ -598,8 +599,8 @@ void char_total2_write_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_i
 					(char *)LIST_CHAR_READ[1].char_val->attr_value);
 			printf("%s\n", config_total2_json);
 			savenvsFlag = configData(config_total2_json);
-			free(config_total2_json);
 			configParserTask();
+			free(config_total2_json);
 		}
 	}
 	ESP_LOGD(GATTS_TAG, "char_light_write2_handler esp_gatt_rsp_t\n");
@@ -621,25 +622,25 @@ bool configData(char *jsonData)
 	{
 
 		ESP_LOGI(GATTS_TAG, "zone 1 is %s", UnitCfg.Zones_info[0].zonename);
-		savenvsFlag = true;
+		saveFlag = true;
 
 		if (jsonparse(jsonData, UnitCfg.Zones_info[1].zonename, "zones", 1))
 		{
 
 			ESP_LOGI(GATTS_TAG, "zone 2 is %s", UnitCfg.Zones_info[1].zonename);
-			savenvsFlag = true;
+			saveFlag = true;
 		}
 		if (jsonparse(jsonData, UnitCfg.Zones_info[2].zonename, "zones", 2))
 		{
 
 			ESP_LOGI(GATTS_TAG, "zone 3 is %s", UnitCfg.Zones_info[2].zonename);
-			savenvsFlag = true;
+			saveFlag = true;
 		}
 		if (jsonparse(jsonData, UnitCfg.Zones_info[3].zonename, "zones", 3))
 		{
 
 			ESP_LOGI(GATTS_TAG, "zone 4 is %s", UnitCfg.Zones_info[3].zonename);
-			savenvsFlag = true;
+			saveFlag = true;
 		}
 	}
 	else if (jsonparse(jsonData, tmp, "system", 0))
@@ -680,7 +681,7 @@ bool configData(char *jsonData)
 			ESP_LOGI(GATTS_TAG, "Circadian cycle is activated");
 			UnitCfg.UserLcProfile.CcEnb = true;
 		}
-		savenvsFlag = true;
+		saveFlag = true;
 	}
 	else if (jsonparse(jsonData, UnitCfg.WifiCfg.WIFI_SSID, "wa", 0))
 	{
@@ -690,7 +691,7 @@ bool configData(char *jsonData)
 		{
 			ESP_LOGI(GATTS_TAG, "set ap password %s", UnitCfg.WifiCfg.WIFI_PASS);
 		}
-		savenvsFlag = true;
+		saveFlag = true;
 	}
 	else if (jsonparse(jsonData, tmp, "light", 0))
 	{
@@ -720,7 +721,7 @@ bool configData(char *jsonData)
 	else if (jsonparse(jsonData, UnitCfg.UnitName, "dname", 0))
 	{
 		ESP_LOGI(GATTS_TAG, "set device name %s", UnitCfg.UnitName);
-		savenvsFlag = true;
+		saveFlag = true;
 	}
 	else if (jsonparse(jsonData, tmp, "Time", 0))
 	{
@@ -743,7 +744,7 @@ bool configData(char *jsonData)
 				ESP_LOGI(GATTS_TAG, "Time zone %d", tz / 3600);
 				syncTime(t, tz);
 				UnitCfg.UnitTimeZone = tz / 3600;
-				savenvsFlag = true;
+				saveFlag = true;
 			}
 		}
 		else
@@ -765,12 +766,12 @@ bool configData(char *jsonData)
 
 		ESP_LOGI(GATTS_TAG, "Profile Color name set %s",
 				 UnitCfg.ColortrProfile[0].ambname);
-		savenvsFlag = true;
+		saveFlag = true;
 		if (jsonparse(jsonData, UnitCfg.ColortrProfile[0].Hue, "couleur1", 1))
 		{
 			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s",
 					 UnitCfg.ColortrProfile[0].Hue);
-			savenvsFlag = true;
+			saveFlag = true;
 		}
 	}
 	else if (jsonparse(jsonData, UnitCfg.ColortrProfile[1].ambname, "couleur2", 0))
@@ -778,11 +779,11 @@ bool configData(char *jsonData)
 		//Couleur 2
 
 		ESP_LOGI(GATTS_TAG, "Profile Color name set %s", UnitCfg.ColortrProfile[1].ambname);
-		savenvsFlag = true;
+		saveFlag = true;
 		if (jsonparse(jsonData, UnitCfg.ColortrProfile[1].Hue, "couleur2", 1))
 		{
 			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[1].Hue);
-			savenvsFlag = true;
+			saveFlag = true;
 		}
 	}
 	else if (jsonparse(jsonData, UnitCfg.ColortrProfile[2].ambname, "couleur3", 0))
@@ -791,12 +792,12 @@ bool configData(char *jsonData)
 		//Couleur 3
 
 		ESP_LOGI(GATTS_TAG, "Profile Color name set %s", UnitCfg.ColortrProfile[2].ambname);
-		savenvsFlag = true;
+		saveFlag = true;
 		if (jsonparse(jsonData, UnitCfg.ColortrProfile[2].Hue, "couleur3", 1))
 		{
 			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s",
 					 UnitCfg.ColortrProfile[2].Hue);
-			savenvsFlag = true;
+			saveFlag = true;
 		}
 	}
 	else
@@ -808,12 +809,12 @@ bool configData(char *jsonData)
 
 		ESP_LOGI(GATTS_TAG, "Profile Color name set %s",
 				 UnitCfg.ColortrProfile[3].ambname);
-		savenvsFlag = true;
+		saveFlag = true;
 		if (jsonparse(jsonData, UnitCfg.ColortrProfile[3].Hue, "couleur4", 1))
 		{
 			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s",
 					 UnitCfg.ColortrProfile[3].Hue);
-			savenvsFlag = true;
+			saveFlag = true;
 		}
 	}
 	else if (jsonparse(jsonData, tmp, "Favoris", 0))
