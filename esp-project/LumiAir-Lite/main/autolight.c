@@ -1,10 +1,3 @@
-/*
- * autolight.c
- *
- *  Created on: Feb 12, 2019
- *      Author: mdt
- */
-
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_system.h"
@@ -120,7 +113,7 @@ void ColorTemp_Controller()
 		t2 = UnitCfg.UserLcProfile.Ccp[1].CcLevel;
 		t3 = UnitCfg.UserLcProfile.Ccp[2].CcLevel;
 
-		if ((UnitCfg.UserLcProfile.CcEnb == true) && ((now >= h1) && (now <= h3)))
+		if ((UnitCfg.UserLcProfile.CcEnb) && ((now >= h1) && (now <= h3)))
 		{
 
 			if (h2 != h1)
@@ -136,7 +129,7 @@ void ColorTemp_Controller()
 			if (h3 != h2)
 			{
 				a2 = (t3 - t2) / (h3 - h2);
-				b2 = t2 - (a2 * h1);
+				b2 = t2 - (a2 * h2);
 			}
 			else
 			{
@@ -217,7 +210,7 @@ void Pir_MonitorTask()
 				PirTimeout = 5;
 			}
 			//ESP_LOGI(TAG, "PIR Triggered + %ld",PirTimeout);
-			if (PirTimeoutTask == false)
+			if (!PirTimeoutTask)
 			{
 				xTaskCreatePinnedToCore(&PirTimeoutRoutine, "PirTimeoutRoutine", 2048, NULL, 5, NULL, 1);
 			}
@@ -239,7 +232,7 @@ void Co2_MonitorTask()
 	{
 		zone = strtol(UnitCfg.Co2LevelSelect, NULL, 16);
 		//co2
-		if (UnitCfg.Co2LevelWarEnb == true)
+		if (UnitCfg.Co2LevelWarEnb )
 		{
 			if ((iaq_data.pred > UnitCfg.Co2LevelWar) && (co2_alert_enable == 0))
 			{
@@ -247,7 +240,7 @@ void Co2_MonitorTask()
 				co2_triger_alert = true;
 				ESP_LOGI(TAG, "Co2 Warning triggered");
 				//zone
-				if (UnitCfg.Co2LevelZoneEnb == true)
+				if (UnitCfg.Co2LevelZoneEnb)
 				{
 					UnitData.state = 0;
 					ESP_LOGI(TAG, "Co2 zone Warning triggered");
@@ -264,7 +257,7 @@ void Co2_MonitorTask()
 				ESP_LOGI(TAG, "Co2 Warning off");
 				co2_alert_enable = 0;
 				co2_triger_alert = false;
-				if (UnitCfg.Co2LevelZoneEnb == true)
+				if (UnitCfg.Co2LevelZoneEnb)
 				{
 					UnitData.state = 0;
 					MilightHandler(LCMD_SET_WHITE, 0, zone & 0x0F);
