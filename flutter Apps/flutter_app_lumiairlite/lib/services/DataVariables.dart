@@ -38,6 +38,32 @@ String pinCodeAccess;
 
 List<List<String>> uvcData;
 
+List<int> stringListAsciiToListInt(List<int> listInt) {
+  List<int> ourListInt = [0];
+  int listIntLength = listInt.length;
+  int intNumber = (listIntLength / 4).round();
+  ourListInt.length = intNumber;
+  int listCounter;
+  int listIntCounter = 0;
+  String numberString = '';
+  if (listInt.first == 91 && listInt.last == 93) {
+    for (listCounter = 0; listCounter < listIntLength - 1; listCounter++) {
+      if (!((listInt[listCounter] == 91) || (listInt[listCounter] == 93) || (listInt[listCounter] == 32) || (listInt[listCounter] == 44))) {
+        numberString = '';
+        do {
+          numberString += String.fromCharCode(listInt[listCounter]);
+          listCounter++;
+        } while (!((listInt[listCounter] == 44) || (listInt[listCounter] == 93)));
+        ourListInt[listIntCounter] = int.parse(numberString);
+        listIntCounter++;
+      }
+    }
+    return ourListInt;
+  } else {
+    return [0];
+  }
+}
+
 List<String> myExtinctionTimeMinute = [
   ' 30 sec',
   '  1 min',

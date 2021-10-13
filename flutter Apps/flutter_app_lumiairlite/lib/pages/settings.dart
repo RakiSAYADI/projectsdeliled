@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_bispectrum/pages/scan_ble_list.dart';
 import 'package:flutter_app_bispectrum/services/DataVariables.dart';
@@ -30,7 +31,11 @@ class _SettingsState extends State<Settings> {
   final passwordEditor = TextEditingController();
   final myBleDeviceName = TextEditingController();
 
+  bool ccSwitchValue = false;
+
   int boolToInt(bool a) => a == true ? 1 : 0;
+
+  bool intToBool(int a) => a == 1 ? true : false;
 
   @override
   void initState() {
@@ -50,6 +55,7 @@ class _SettingsState extends State<Settings> {
       zonesNamesList[1] = parsedJson['ZN'][1];
       zonesNamesList[2] = parsedJson['ZN'][2];
       zonesNamesList[3] = parsedJson['ZN'][3];
+      ccSwitchValue = intToBool(int.parse(parsedJson['cc'][0].toString()));
       await Future.delayed(Duration(seconds: 2));
       if (deviceWifiState) {
         myUvcToast.setToastDuration(5);
@@ -62,6 +68,7 @@ class _SettingsState extends State<Settings> {
       }
     } catch (e) {
       print('erreur');
+      ccSwitchValue = false;
       zonesNamesList = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4'];
     }
   }
@@ -124,11 +131,13 @@ class _SettingsState extends State<Settings> {
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: TextButton(
                           onPressed: () async {
-                            // write the new ble device name
-                            await characteristicData.write('{\"dname\":\"${myBleDeviceName.text}\"}'.codeUnits);
-                            myUvcToast.setToastDuration(5);
-                            myUvcToast.setToastMessage('Nom de carte modifié , faudrais redémarrer la carte pour appliquer cette modification !');
-                            myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+                            if (myDevice.getConnectionState()) {
+                              // write the new ble device name
+                              await characteristicData.write('{\"dname\":\"${myBleDeviceName.text}\"}'.codeUnits);
+                              myUvcToast.setToastDuration(5);
+                              myUvcToast.setToastMessage('Nom de carte modifié , faudrais redémarrer la carte pour appliquer cette modification !');
+                              myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+                            }
                           },
                           child: Text(
                             'Changer le nom',
@@ -138,6 +147,48 @@ class _SettingsState extends State<Settings> {
                               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
                               backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Divider(
+                          thickness: 3.0,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              'Cycle Circadien :',
+                              style: TextStyle(fontSize: (screenWidth * 0.05)),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: CupertinoSwitch(
+                              value: ccSwitchValue,
+                              activeColor: Colors.green,
+                              onChanged: (value) async {
+                                setState(() {
+                                  ccSwitchValue = value;
+                                });
+                                if (myDevice.getConnectionState()) {
+                                  // write the cc command
+                                  await characteristicData.write('{\"cc\":${boolToInt(ccSwitchValue)}}'.codeUnits);
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'Modulez la luminosité tout au long de la journée en suivant le cycle du soleil',
+                          style: TextStyle(fontSize: (screenWidth * 0.03)),
                         ),
                       ),
                       Padding(
@@ -198,8 +249,10 @@ class _SettingsState extends State<Settings> {
                             padding: const EdgeInsets.all(8.0),
                             child: TextButton(
                               onPressed: () async {
-                                // write the associate command
-                                await characteristicData.write('{\"light\":[5,1,\"$zonesInHex \"]}'.codeUnits);
+                                if (myDevice.getConnectionState()) {
+                                  // write the associate command
+                                  await characteristicData.write('{\"light\":[5,1,\"$zonesInHex \"]}'.codeUnits);
+                                }
                               },
                               child: Text(
                                 'Associer',
@@ -217,8 +270,10 @@ class _SettingsState extends State<Settings> {
                             padding: const EdgeInsets.all(8.0),
                             child: TextButton(
                               onPressed: () async {
-                                // write the dissociate command
-                                await characteristicData.write('{\"light\":[5,0,\"$zonesInHex \"]}'.codeUnits);
+                                if (myDevice.getConnectionState()) {
+                                  // write the dissociate command
+                                  await characteristicData.write('{\"light\":[5,0,\"$zonesInHex \"]}'.codeUnits);
+                                }
                               },
                               child: Text(
                                 'Dissocier',
@@ -364,9 +419,11 @@ class _SettingsState extends State<Settings> {
                         padding: const EdgeInsets.all(8.0),
                         child: TextButton(
                           onPressed: () async {
-                            // write the new access point and it's password
-                            await characteristicData.write('{\"wa\":\"$wifiModemsData\",\"wp\":\"${passwordEditor.text}\"}'.codeUnits);
-                            restartAlertWidget(context, 'Voulez vous redemarrer la carte pour assurer la connection avec votre modem ?');
+                            if (myDevice.getConnectionState()) {
+                              // write the new access point and it's password
+                              await characteristicData.write('{\"wa\":\"$wifiModemsData\",\"wp\":\"${passwordEditor.text}\"}'.codeUnits);
+                              restartAlertWidget(context, 'Voulez vous redemarrer la carte pour assurer la connection avec votre modem ?');
+                            }
                           },
                           child: Text(
                             'Connecter',
@@ -414,10 +471,12 @@ class _SettingsState extends State<Settings> {
             padding: const EdgeInsets.all(4.0),
             child: TextButton(
               onPressed: () async {
-                // write the restart command
-                characteristicData.write('{\"system\":1}'.codeUnits);
-                myDevice.disconnect();
-                removeReplacementRouts(context, ScanListBle());
+                if (myDevice.getConnectionState()) {
+                  // write the restart command
+                  characteristicData.write('{\"system\":1}'.codeUnits);
+                  myDevice.disconnect();
+                  removeReplacementRouts(context, ScanListBle());
+                }
               },
               child: Text(
                 'Redémarrage',
@@ -433,9 +492,11 @@ class _SettingsState extends State<Settings> {
             padding: const EdgeInsets.all(4.0),
             child: TextButton(
               onPressed: () async {
-                // write the reset command
-                await characteristicData.write('{\"system\":0}'.codeUnits);
-                restartAlertWidget(context, 'Voulez vous redemarrer la carte pour assurer ces modifications?');
+                if (myDevice.getConnectionState()) {
+                  // write the reset command
+                  await characteristicData.write('{\"system\":0}'.codeUnits);
+                  restartAlertWidget(context, 'Voulez vous redemarrer la carte pour assurer ces modifications?');
+                }
               },
               child: Text(
                 'Configuration par défault',
@@ -457,10 +518,12 @@ class _SettingsState extends State<Settings> {
             padding: const EdgeInsets.all(4.0),
             child: TextButton(
               onPressed: () async {
-                // write the restart command
-                characteristicData.write('{\"system\":1}'.codeUnits);
-                myDevice.disconnect();
-                removeReplacementRouts(context, ScanListBle());
+                if (myDevice.getConnectionState()) {
+                  // write the restart command
+                  characteristicData.write('{\"system\":1}'.codeUnits);
+                  myDevice.disconnect();
+                  removeReplacementRouts(context, ScanListBle());
+                }
               },
               child: Text(
                 'Redémarrage',
@@ -476,9 +539,11 @@ class _SettingsState extends State<Settings> {
             padding: const EdgeInsets.all(4.0),
             child: TextButton(
               onPressed: () async {
-                // write the reset command
-                await characteristicData.write('{\"system\":0}'.codeUnits);
-                restartAlertWidget(context, 'Voulez vous redemarrer la carte pour assurer ces modifications?');
+                if (myDevice.getConnectionState()) {
+                  // write the reset command
+                  await characteristicData.write('{\"system\":0}'.codeUnits);
+                  restartAlertWidget(context, 'Voulez vous redemarrer la carte pour assurer ces modifications?');
+                }
               },
               child: Text(
                 'Configuration par défault',
@@ -510,10 +575,12 @@ class _SettingsState extends State<Settings> {
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () async {
-                characteristicData.write('{\"system\":1}'.codeUnits);
-                myDevice.disconnect();
-                Navigator.of(context).pop();
-                removeReplacementRouts(context, ScanListBle());
+                if (myDevice.getConnectionState()) {
+                  characteristicData.write('{\"system\":1}'.codeUnits);
+                  myDevice.disconnect();
+                  Navigator.of(context).pop();
+                  removeReplacementRouts(context, ScanListBle());
+                }
               },
             ),
             TextButton(
@@ -699,14 +766,16 @@ class _SettingsState extends State<Settings> {
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () async {
-                zonesNamesList[0] = zone1NameEditor.text;
-                zonesNamesList[1] = zone2NameEditor.text;
-                zonesNamesList[2] = zone3NameEditor.text;
-                zonesNamesList[3] = zone4NameEditor.text;
-                String zoneNames = "{\"zones\":[${zonesNamesList[0]},${zonesNamesList[1]},${zonesNamesList[2]},${zonesNamesList[3]}]}";
-                await characteristicData.write(zoneNames.codeUnits);
-                setState(() {});
-                Navigator.of(context).pop();
+                if (myDevice.getConnectionState()) {
+                  zonesNamesList[0] = zone1NameEditor.text;
+                  zonesNamesList[1] = zone2NameEditor.text;
+                  zonesNamesList[2] = zone3NameEditor.text;
+                  zonesNamesList[3] = zone4NameEditor.text;
+                  String zoneNames = "{\"zones\":[${zonesNamesList[0]},${zonesNamesList[1]},${zonesNamesList[2]},${zonesNamesList[3]}]}";
+                  await characteristicData.write(zoneNames.codeUnits);
+                  setState(() {});
+                  Navigator.of(context).pop();
+                }
               },
             ),
             TextButton(

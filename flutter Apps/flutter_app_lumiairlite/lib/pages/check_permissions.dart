@@ -20,6 +20,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
   FlutterBlue flutterBlue = FlutterBlue.instance;
 
   bool firstDisplayMainWidget = true;
+  bool bluetoothState = false;
 
   PermissionStatus _permissionStatus = PermissionStatus.unknown;
 
@@ -30,7 +31,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
 
   void _listenForPermissionStatus() async {
     bool connectionState = await checkConnection();
-    if (!connectionState){
+    if (!connectionState) {
       myUvcToast.setToastDuration(5);
       myUvcToast.setToastMessage('Votre téléphone n\'est pas connecté sur internet !');
       myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
@@ -75,11 +76,13 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
         myUvcToast.setToastDuration(4);
         myUvcToast.setToastMessage('Le Bluetooth (BLE) n\'est pas activé sur votre téléphone !');
         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+        bluetoothState = false;
       } else if (state == BluetoothState.on) {
         //if bluetooth is enabled then go ahead.
         //Make sure user's device gps is on.
         flutterBlue = FlutterBlue.instance;
         print("Bluetooth is on");
+        bluetoothState = true;
       }
     });
   }
@@ -156,18 +159,25 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                       child: Center(
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: FlatButton(
-                            color: Colors.blue[400],
+                          child: TextButton(
                             child: Text(
                               'COMPRIS',
                               style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.03),
                             ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
                             ),
                             onPressed: () {
                               print('understood_key is pressed');
-                              createRoute(context, ScanListBle());
+                              if (bluetoothState) {
+                                createRoute(context, ScanListBle());
+                              } else {
+                                myUvcToast.setToastDuration(4);
+                                myUvcToast.setToastMessage('Le Bluetooth (BLE) n\'est pas activé sur votre téléphone !');
+                                myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+                              }
                             },
                           ),
                         ),

@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_bispectrum/pages/Curves_paint.dart';
 import 'package:flutter_app_bispectrum/pages/settings.dart';
 import 'package:flutter_app_bispectrum/services/DataVariables.dart';
 import 'package:flutter_app_bispectrum/services/animation_between_pages.dart';
@@ -62,14 +61,14 @@ class _HomeState extends State<Home> {
             dataChar1 = String.fromCharCodes(await characteristicSensors.read());
             sensorsData = jsonDecode(dataChar1);
             String sensorsDataList = sensorsData['EnvData'].toString();
-            deviceTimeValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[0];
-            detectionTimeValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[1];
-            temperatureValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[2];
-            humidityValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[3];
-            lightValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[4];
-            co2Value = _stringListAsciiToListInt(sensorsDataList.codeUnits)[5];
-            tvocValue = _stringListAsciiToListInt(sensorsDataList.codeUnits)[6];
-            deviceWifiState = intToBool(_stringListAsciiToListInt(sensorsDataList.codeUnits)[7]);
+            deviceTimeValue = stringListAsciiToListInt(sensorsDataList.codeUnits)[0];
+            detectionTimeValue = stringListAsciiToListInt(sensorsDataList.codeUnits)[1];
+            temperatureValue = stringListAsciiToListInt(sensorsDataList.codeUnits)[2];
+            humidityValue = stringListAsciiToListInt(sensorsDataList.codeUnits)[3];
+            lightValue = stringListAsciiToListInt(sensorsDataList.codeUnits)[4];
+            co2Value = stringListAsciiToListInt(sensorsDataList.codeUnits)[5];
+            tvocValue = stringListAsciiToListInt(sensorsDataList.codeUnits)[6];
+            deviceWifiState = intToBool(stringListAsciiToListInt(sensorsDataList.codeUnits)[7]);
             deviceDate = new DateTime.fromMillisecondsSinceEpoch(deviceTimeValue * 1000);
             appTime = DateFormat('kk:mm').format(deviceDate);
           }
@@ -179,7 +178,7 @@ class _HomeState extends State<Home> {
                   isSelected: [true, true, true, true, true],
                   onPressed: (int index) async {
                     if (index == 0) {
-                      createRoute(context, CurveShow());
+                      //createRoute(context, CurveShow());
                     }
                   },
                   children: [
@@ -311,6 +310,50 @@ class _HomeState extends State<Home> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
                       child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(18.0),
+                          color: Color(0xFF264eb6),
+                          shape: BoxShape.rectangle,
+                        ),
+                        padding: const EdgeInsets.all(16.0),
+                        child: TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'Ambiances',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 35,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(18.0),
+                          color: Color(0xFF264eb6),
+                          shape: BoxShape.rectangle,
+                        ),
+                        padding: const EdgeInsets.all(16.0),
+                        child: TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'LED',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 35,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+                      child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(18.0),
                             color: Color(0xFF264eb6),
@@ -322,6 +365,7 @@ class _HomeState extends State<Home> {
                                 stateOfSleepAndReadingProcess = 2;
                                 createRoute(context, Settings());
                               },
+                              iconSize: 50.0,
                               icon: Icon(
                                 Icons.settings,
                                 color: Colors.white,
@@ -335,32 +379,6 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
-  }
-
-  List<int> _stringListAsciiToListInt(List<int> listInt) {
-    List<int> ourListInt = [0];
-    int listIntLength = listInt.length;
-    int intNumber = (listIntLength / 4).round();
-    ourListInt.length = intNumber;
-    int listCounter;
-    int listIntCounter = 0;
-    String numberString = '';
-    if (listInt.first == 91 && listInt.last == 93) {
-      for (listCounter = 0; listCounter < listIntLength - 1; listCounter++) {
-        if (!((listInt[listCounter] == 91) || (listInt[listCounter] == 93) || (listInt[listCounter] == 32) || (listInt[listCounter] == 44))) {
-          numberString = '';
-          do {
-            numberString += String.fromCharCode(listInt[listCounter]);
-            listCounter++;
-          } while (!((listInt[listCounter] == 44) || (listInt[listCounter] == 93)));
-          ourListInt[listIntCounter] = int.parse(numberString);
-          listIntCounter++;
-        }
-      }
-      return ourListInt;
-    } else {
-      return [0];
-    }
   }
 
   Widget sleepWidget(BuildContext context) {
