@@ -92,7 +92,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
               Expanded(
                 flex: 3,
                 child: Image.asset(
-                  'assets/ic_launcher_UVC.png',
+                  'assets/ic_launcher.png',
                   height: heightScreen * 0.2,
                   width: widthScreen * 0.7,
                 ),

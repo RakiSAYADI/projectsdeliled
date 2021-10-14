@@ -36,6 +36,8 @@ dependencies:
   flutter_spinkit: ^5.0.0
   flutter_svg: ^0.22.0
   fl_chart: ^0.40.0
+  hsl_colorpicker: ^1.0.2
+  pinput: ^1.2.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -51,8 +53,8 @@ dev_dependencies:
 
 flutter_icons:
   #  image_path: "assets/images/icon-128x128.png"
-  image_path_android: "assets/ic_launcher_UVC.png"
-  image_path_ios: "assets/My-Launcher-Icon-UVC.jpg"
+  image_path_android: "assets/ic_launcher.png"
+  image_path_ios: "assets/My-Launcher-Icon.jpg"
   android: true # can specify file name here e.g. "ic_launcher"
   ios: true # can specify file name here e.g. "My-Launcher-Icon"
 

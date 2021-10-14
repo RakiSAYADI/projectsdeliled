@@ -4,10 +4,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app_bispectrum/pages/ambiances.dart';
 import 'package:flutter_app_bispectrum/pages/settings.dart';
 import 'package:flutter_app_bispectrum/services/DataVariables.dart';
 import 'package:flutter_app_bispectrum/services/animation_between_pages.dart';
+import 'package:flutter_app_bispectrum/services/uvcToast.dart';
 import 'package:intl/intl.dart';
+import 'package:pinput/pin_put/pin_put.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -25,13 +28,20 @@ class _HomeState extends State<Home> {
   String carbonStateOnSleepGif = "assets/fond-vert-veille.gif";
   String carbonStateOnHome = "assets/personnage-vert.png";
   String carbonStateOnHomeMessage = "Bon";
+  String pinCode;
+  String myPinCode = '';
+
+  final TextEditingController _pinPutController = TextEditingController();
 
   DateTime deviceDate;
+
+  ToastyMessage myUvcToast;
 
   @override
   void initState() {
     // TODO: implement initState
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+    myUvcToast = ToastyMessage(toastContext: context);
     super.initState();
   }
 
@@ -40,17 +50,17 @@ class _HomeState extends State<Home> {
     mainWidgetScreen = appWidget(context);
     Map<String, dynamic> sensorsData;
     do {
-      if (co2Value > 2000) {
+      if (co2Value > 1500) {
         carbonStateOnSleepGif = "assets/fond-rouge-veille.gif";
         carbonStateOnHome = "assets/personnage-rouge.png";
         carbonStateOnHomeMessage = "Mauvais";
       }
-      if ((co2Value >= 1000) & (co2Value <= 2000)) {
+      if ((co2Value >= 800) & (co2Value <= 1500)) {
         carbonStateOnSleepGif = "assets/fond-orange-veille.gif";
         carbonStateOnHome = "assets/personnage-orange.png";
         carbonStateOnHomeMessage = "Moyen";
       }
-      if (co2Value < 1000) {
+      if (co2Value < 800) {
         carbonStateOnSleepGif = "assets/fond-vert-veille.gif";
         carbonStateOnHome = "assets/personnage-vert.png";
         carbonStateOnHomeMessage = "Bon";
@@ -317,7 +327,10 @@ class _HomeState extends State<Home> {
                         ),
                         padding: const EdgeInsets.all(16.0),
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            stateOfSleepAndReadingProcess = 2;
+                            createRoute(context, AmbiancePage());
+                          },
                           child: Text(
                             'Ambiances',
                             style: TextStyle(
@@ -332,14 +345,18 @@ class _HomeState extends State<Home> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
                       child: Container(
+                        alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18.0),
-                          color: Color(0xFF264eb6),
                           shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(18.0),
+                          gradient: LinearGradient(colors: [Colors.red, Colors.green, Colors.blue]),
                         ),
                         padding: const EdgeInsets.all(16.0),
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            //stateOfSleepAndReadingProcess = 2;
+                            //createRoute(context, LEDPage());
+                          },
                           child: Text(
                             'LED',
                             style: TextStyle(
@@ -362,8 +379,7 @@ class _HomeState extends State<Home> {
                           padding: const EdgeInsets.all(2.0),
                           child: IconButton(
                               onPressed: () {
-                                stateOfSleepAndReadingProcess = 2;
-                                createRoute(context, Settings());
+                                pinSecurity(context);
                               },
                               iconSize: 50.0,
                               icon: Icon(
@@ -378,6 +394,158 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> pinSecurity(BuildContext buildContext) async {
+    double widthScreen = MediaQuery.of(buildContext).size.width;
+    double heightScreen = MediaQuery.of(buildContext).size.height;
+    try {
+      var parsedJson = json.decode(dataChar2);
+      pinCodeAccess = parsedJson['PP'].toString();
+    } catch (e) {
+      print('erreur pin');
+      pinCodeAccess = '1234';
+    }
+    return showDialog<void>(
+        barrierDismissible: false,
+        context: buildContext,
+        builder: (BuildContext buildContext1) {
+          return AlertDialog(
+            content: Container(
+              child: Builder(
+                builder: (buildContext1) {
+                  return Center(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            'Entrer le code de sécurité :',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: widthScreen * 0.04,
+                            ),
+                          ),
+                          SizedBox(height: heightScreen * 0.05),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.01)),
+                              Expanded(
+                                flex: 3,
+                                child: Container(
+                                  margin: EdgeInsets.all(20),
+                                  padding: EdgeInsets.all(10),
+                                  child: PinPut(
+                                    fieldsCount: 4,
+                                    onSubmit: (String pin) => pinCode = pin,
+                                    focusNode: AlwaysDisabledFocusNode(),
+                                    controller: _pinPutController,
+                                    textStyle: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: widthScreen * 0.04,
+                                    ),
+                                    submittedFieldDecoration: _pinPutDecoration.copyWith(borderRadius: BorderRadius.circular(20)),
+                                    selectedFieldDecoration: _pinPutDecoration,
+                                    followingFieldDecoration: _pinPutDecoration.copyWith(
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(color: Colors.grey[600].withOpacity(.5), width: 3),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.01)),
+                            ],
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  buttonNumbers('0', buildContext1),
+                                  SizedBox(width: widthScreen * 0.003),
+                                  buttonNumbers('1', buildContext1),
+                                  SizedBox(width: widthScreen * 0.003),
+                                  buttonNumbers('2', buildContext1),
+                                  SizedBox(width: widthScreen * 0.003),
+                                  buttonNumbers('3', buildContext1),
+                                  SizedBox(width: widthScreen * 0.003),
+                                  buttonNumbers('4', buildContext1),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  buttonNumbers('5', buildContext1),
+                                  SizedBox(width: widthScreen * 0.003),
+                                  buttonNumbers('6', buildContext1),
+                                  SizedBox(width: widthScreen * 0.003),
+                                  buttonNumbers('7', buildContext1),
+                                  SizedBox(width: widthScreen * 0.003),
+                                  buttonNumbers('8', buildContext1),
+                                  SizedBox(width: widthScreen * 0.003),
+                                  buttonNumbers('9', buildContext1),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          );
+        });
+  }
+
+  ButtonTheme buttonNumbers(String number, BuildContext buildContext) {
+    double widthScreen = MediaQuery.of(buildContext).size.width;
+    double heightScreen = MediaQuery.of(buildContext).size.height;
+    return ButtonTheme(
+      minWidth: widthScreen * 0.05,
+      height: heightScreen * 0.05,
+      child: TextButton(
+        child: Text(
+          number,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: widthScreen * 0.02,
+          ),
+        ),
+        style: ButtonStyle(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.grey[400])),
+        onPressed: () async {
+          myPinCode += number;
+          _pinPutController.text += '*';
+          if (_pinPutController.text.length == 4) {
+            if (myPinCode == pinCodeAccess) {
+              Navigator.pop(buildContext);
+              stateOfSleepAndReadingProcess = 2;
+              createRoute(context, Settings());
+            } else {
+              myUvcToast.setToastDuration(3);
+              myUvcToast.setToastMessage('Code Invalide !');
+              myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+            }
+            _pinPutController.text = '';
+            myPinCode = '';
+          }
+        },
+      ),
+    );
+  }
+
+  BoxDecoration get _pinPutDecoration {
+    return BoxDecoration(
+      border: Border.all(color: Colors.blue, width: 3),
+      borderRadius: BorderRadius.circular(15),
     );
   }
 

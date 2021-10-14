@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_bispectrum/services/bleDeviceClass.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
-final String appName = 'Bispectrum';
+final String appName = 'Lumi\'air Lite';
 
 final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
@@ -62,6 +62,11 @@ List<int> stringListAsciiToListInt(List<int> listInt) {
   } else {
     return [0];
   }
+}
+
+class AlwaysDisabledFocusNode extends FocusNode {
+  @override
+  bool get hasFocus => false;
 }
 
 List<String> myExtinctionTimeMinute = [

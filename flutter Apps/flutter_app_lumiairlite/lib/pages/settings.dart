@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app_bispectrum/pages/scan_ble_list.dart';
 import 'package:flutter_app_bispectrum/services/DataVariables.dart';
 import 'package:flutter_app_bispectrum/services/animation_between_pages.dart';
@@ -30,6 +31,8 @@ class _SettingsState extends State<Settings> {
 
   final passwordEditor = TextEditingController();
   final myBleDeviceName = TextEditingController();
+  final myOldCodePIN = TextEditingController();
+  final myNewCodePIN = TextEditingController();
 
   bool ccSwitchValue = false;
 
@@ -209,9 +212,14 @@ class _SettingsState extends State<Settings> {
                         borderRadius: BorderRadius.circular(18.0),
                         isSelected: zoneStates,
                         onPressed: (int index) async {
-                          setState(() {
-                            zoneStates[index] = !zoneStates[index];
-                          });
+                          for (int buttonIndex = 0; buttonIndex < zoneStates.length; buttonIndex++) {
+                            if (buttonIndex == index) {
+                              zoneStates[buttonIndex] = true;
+                            } else {
+                              zoneStates[buttonIndex] = false;
+                            }
+                          }
+                          setState(() {});
                           zonesInHex = ((boolToInt(zoneStates[0])) +
                                   (boolToInt(zoneStates[1]) * 2) +
                                   (boolToInt(zoneStates[2]) * 4) +
@@ -251,7 +259,7 @@ class _SettingsState extends State<Settings> {
                               onPressed: () async {
                                 if (myDevice.getConnectionState()) {
                                   // write the associate command
-                                  await characteristicData.write('{\"light\":[5,1,\"$zonesInHex \"]}'.codeUnits);
+                                  await characteristicData.write('{\"light\":[5,1,\"$zonesInHex\"]}'.codeUnits);
                                 }
                               },
                               child: Text(
@@ -272,7 +280,7 @@ class _SettingsState extends State<Settings> {
                               onPressed: () async {
                                 if (myDevice.getConnectionState()) {
                                   // write the dissociate command
-                                  await characteristicData.write('{\"light\":[5,0,\"$zonesInHex \"]}'.codeUnits);
+                                  await characteristicData.write('{\"light\":[5,0,\"$zonesInHex\"]}'.codeUnits);
                                 }
                               },
                               child: Text(
@@ -296,6 +304,106 @@ class _SettingsState extends State<Settings> {
                           },
                           child: Text(
                             'Renommer',
+                            style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                          ),
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Divider(
+                          thickness: 3.0,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Ancien code PIN :',
+                          style: TextStyle(fontSize: (screenWidth * 0.05)),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          controller: myOldCodePIN,
+                          maxLines: 1,
+                          maxLength: 4,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                          style: TextStyle(
+                            fontSize: (screenWidth * 0.05),
+                          ),
+                          decoration: InputDecoration(
+                              hintText: 'exp:1234',
+                              hintStyle: TextStyle(
+                                fontSize: (screenWidth * 0.05),
+                                color: Colors.grey,
+                              )),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Nouveau code PIN :',
+                          style: TextStyle(fontSize: (screenWidth * 0.05)),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          controller: myNewCodePIN,
+                          maxLines: 1,
+                          maxLength: 4,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                          style: TextStyle(
+                            fontSize: (screenWidth * 0.05),
+                          ),
+                          decoration: InputDecoration(
+                              hintText: 'exp:1234',
+                              hintStyle: TextStyle(
+                                fontSize: (screenWidth * 0.05),
+                                color: Colors.grey,
+                              )),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: TextButton(
+                          onPressed: () async {
+                            if (myDevice.getConnectionState()) {
+                              if (pinCodeAccess == myOldCodePIN.text) {
+                                if (myNewCodePIN.text.length == 4) {
+                                  // write the new code PIN
+                                  await characteristicData.write('{\"PP\":\"${myNewCodePIN.text}\"}'.codeUnits);
+                                  myUvcToast.setToastDuration(5);
+                                  myUvcToast.setToastMessage('Code PIN Changé !');
+                                  myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+                                  await Future.delayed(Duration(milliseconds: 500));
+                                  pinCodeAccess = myNewCodePIN.text;
+                                  dataChar2 = String.fromCharCodes(await characteristicData.read());
+                                } else {
+                                  myUvcToast.setToastDuration(5);
+                                  myUvcToast.setToastMessage('Le nouveau code PIN doit être en 4 chiffres !');
+                                  myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
+                                }
+                              } else {
+                                myUvcToast.setToastDuration(5);
+                                myUvcToast.setToastMessage('L\'ancien code PIN n\'est pas correct !');
+                                myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
+                              }
+                              myNewCodePIN.text = '';
+                              myOldCodePIN.text = '';
+                            }
+                          },
+                          child: Text(
+                            'Changer le code PIN',
                             style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
                           ),
                           style: ButtonStyle(

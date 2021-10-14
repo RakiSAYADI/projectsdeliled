@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_bispectrum/pages/Curves_paint.dart';
 import 'package:flutter_app_bispectrum/pages/Home.dart';
+import 'package:flutter_app_bispectrum/pages/ambiances.dart';
 import 'package:flutter_app_bispectrum/pages/check_permissions.dart';
 import 'package:flutter_app_bispectrum/pages/scan_ble_list.dart';
 import 'package:flutter_app_bispectrum/pages/settings.dart';
@@ -91,6 +92,7 @@ class MyApp extends StatelessWidget {
         '/scan_ble_list': (context) => ScanListBle(),
         '/home':(context) => Home(),
         '/settings':(context) => Settings(),
+        '/ambiances':(context) => AmbiancePage(),
         '/curves':(context) => CurveShow(),
       },
       theme: ThemeData(
