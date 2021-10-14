@@ -268,11 +268,11 @@ void Co2_MonitorTask()
 				}
 			}
 		}
-		if (iaq_data.pred < 1699)
+		if (iaq_data.pred < 799)
 		{
 			UnitSetStatus(UNIT_STATUS_NORMAL);
 		}
-		else if (iaq_data.pred < 1999)
+		else if (iaq_data.pred < 1499)
 		{
 			UnitSetStatus(UNIT_STATUS_WARNING_CO2);
 		}

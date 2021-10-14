@@ -57,7 +57,7 @@ typedef struct {
 	int8_t UnitTimeZone;
 	ZonesInfo_Typedef Zones_info[4];
 	uint8_t Lum_10V;
-	char passBLE[16];
+	char passPIN[6];
 	char FLASH_MEMORY[3];
 } UnitConfig_Typedef;
 

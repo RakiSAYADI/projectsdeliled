@@ -144,7 +144,7 @@ void Default_saving()
 		sprintf(UnitCfg.Zones_info[i].zonename, "Zone %d", i + 1);
 
 		sprintf(UnitCfg.ColortrProfile[i].ambname, "Ambiance%d", i + 1);
-		sprintf(UnitCfg.ColortrProfile[i].Hue, "000000");
+		sprintf(UnitCfg.ColortrProfile[i].Hue, "FFFFFF");
 		sprintf(UnitCfg.ColortrProfile[i].zone, "F");
 	}
 
@@ -163,6 +163,8 @@ void Default_saving()
 
 	UnitCfg.PirSensitivity = 500;
 	UnitCfg.UnitTimeZone = 0;
+
+	sprintf(UnitCfg.passPIN, "1234");
 
 	sprintf(UnitCfg.FLASH_MEMORY, "OK");
 
