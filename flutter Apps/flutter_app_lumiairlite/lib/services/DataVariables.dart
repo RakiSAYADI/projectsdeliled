@@ -36,6 +36,10 @@ int activationTime;
 
 String pinCodeAccess;
 
+int boolToInt(bool a) => a == true ? 1 : 0;
+
+bool intToBool(int a) => a == 1 ? true : false;
+
 List<List<String>> uvcData;
 
 List<int> stringListAsciiToListInt(List<int> listInt) {

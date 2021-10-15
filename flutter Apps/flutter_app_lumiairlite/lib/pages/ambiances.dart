@@ -190,6 +190,8 @@ class _AmbiancePageState extends State<AmbiancePage> {
                 });
                 if (myDevice.getConnectionState()) {
                   await characteristicData.write('{\"couleur$ambianceID\":[${ambiance[0]},${ambiance[1]}]}'.codeUnits);
+                  await Future.delayed(Duration(milliseconds: 500));
+                  dataChar2 = String.fromCharCodes(await characteristicData.read());
                 }
                 Navigator.of(context).pop();
               },

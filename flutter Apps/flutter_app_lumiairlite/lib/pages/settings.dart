@@ -36,10 +36,6 @@ class _SettingsState extends State<Settings> {
 
   bool ccSwitchValue = false;
 
-  int boolToInt(bool a) => a == true ? 1 : 0;
-
-  bool intToBool(int a) => a == 1 ? true : false;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -109,7 +105,7 @@ class _SettingsState extends State<Settings> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'Nom du convertisseur DMX :',
+                          'Nom du HuBBox :',
                           style: TextStyle(fontSize: (screenWidth * 0.05)),
                         ),
                       ),
@@ -119,6 +115,7 @@ class _SettingsState extends State<Settings> {
                           textAlign: TextAlign.center,
                           controller: myBleDeviceName,
                           maxLines: 1,
+                          maxLength: 64,
                           style: TextStyle(
                             fontSize: (screenWidth * 0.05),
                           ),
@@ -517,7 +514,7 @@ class _SettingsState extends State<Settings> {
                             color: Colors.grey[800],
                           ),
                           decoration: InputDecoration(
-                              hintText: 'exemple : 123',
+                              hintText: 'exemple : azerty123',
                               hintStyle: TextStyle(
                                 color: Colors.grey,
                               )),
@@ -697,8 +694,6 @@ class _SettingsState extends State<Settings> {
                 style: TextStyle(color: Colors.red),
               ),
               onPressed: () async {
-                await Future.delayed(Duration(milliseconds: 500));
-                dataChar1 = String.fromCharCodes(await characteristicSensors.read());
                 await Future.delayed(Duration(milliseconds: 500));
                 dataChar2 = String.fromCharCodes(await characteristicData.read());
                 Navigator.of(context).pop();
@@ -881,6 +876,8 @@ class _SettingsState extends State<Settings> {
                   zonesNamesList[3] = zone4NameEditor.text;
                   String zoneNames = "{\"zones\":[${zonesNamesList[0]},${zonesNamesList[1]},${zonesNamesList[2]},${zonesNamesList[3]}]}";
                   await characteristicData.write(zoneNames.codeUnits);
+                  await Future.delayed(Duration(milliseconds: 500));
+                  dataChar2 = String.fromCharCodes(await characteristicData.read());
                   setState(() {});
                   Navigator.of(context).pop();
                 }

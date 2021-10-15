@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app_bispectrum/pages/LED_control.dart';
 import 'package:flutter_app_bispectrum/pages/ambiances.dart';
 import 'package:flutter_app_bispectrum/pages/settings.dart';
 import 'package:flutter_app_bispectrum/services/DataVariables.dart';
@@ -20,11 +21,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int timeToSleep;
 
-  int boolToInt(bool a) => a == true ? 1 : 0;
-
-  bool intToBool(int a) => a == 1 ? true : false;
-
   bool firstDisplayMainWidget = true;
+
   String carbonStateOnSleepGif = "assets/fond-vert-veille.gif";
   String carbonStateOnHome = "assets/personnage-vert.png";
   String carbonStateOnHomeMessage = "Bon";
@@ -354,8 +352,8 @@ class _HomeState extends State<Home> {
                         padding: const EdgeInsets.all(16.0),
                         child: TextButton(
                           onPressed: () {
-                            //stateOfSleepAndReadingProcess = 2;
-                            //createRoute(context, LEDPage());
+                            stateOfSleepAndReadingProcess = 2;
+                            createRoute(context, LEDPage());
                           },
                           child: Text(
                             'LED',
