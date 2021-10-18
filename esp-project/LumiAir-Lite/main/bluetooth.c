@@ -764,7 +764,7 @@ bool configData(char *jsonData)
 	else if (jsonparse(jsonData, tmp, "hue", 0))
 	{
 		char tmpzone[3];
-		if (jsonparse(jsonData, tmpzone, "zone", 0))
+		if (jsonparse(jsonData, tmpzone, "hue", 1))
 		{
 			// hue
 			HueToHSL(tmp, tmpzone);

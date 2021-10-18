@@ -127,24 +127,27 @@ bool InitLoadCfg()
 
 void Default_saving()
 {
-	sprintf(UnitCfg.UnitName, "Lumiair-Lite");
+	uint8_t mac[6];
+	esp_efuse_mac_get_default(mac);
+
+	sprintf(UnitCfg.UnitName, "Lumiair-Lite_%02X:%02X:%02X", mac[3], mac[4], mac[5]);
 
 	UnitCfg.UserLcProfile.CcEnb = false;
 	sprintf(UnitCfg.UserLcProfile.ZoneCc, "F");
 
-	UnitCfg.UserLcProfile.Ccp[0].CcLevel = 100;
+	UnitCfg.UserLcProfile.Ccp[0].CcLevel = 0;
 	UnitCfg.UserLcProfile.Ccp[0].CcTime = 28800;
-	UnitCfg.UserLcProfile.Ccp[1].CcLevel = 0;
+	UnitCfg.UserLcProfile.Ccp[1].CcLevel = 100;
 	UnitCfg.UserLcProfile.Ccp[1].CcTime = 43200;
-	UnitCfg.UserLcProfile.Ccp[2].CcLevel = 100;
+	UnitCfg.UserLcProfile.Ccp[2].CcLevel = 0;
 	UnitCfg.UserLcProfile.Ccp[2].CcTime = 61200;
 
-	for (int i = 0; i < 4; i++)
+	for (uint8_t i = 0; i < 4; i++)
 	{
 		sprintf(UnitCfg.Zones_info[i].zonename, "Zone %d", i + 1);
 
-		sprintf(UnitCfg.ColortrProfile[i].ambname, "Ambiance%d", i + 1);
-		sprintf(UnitCfg.ColortrProfile[i].Hue, "FFFFFF");
+		sprintf(UnitCfg.ColortrProfile[i].ambname, "Ambiance %d", i + 1);
+		sprintf(UnitCfg.ColortrProfile[i].Hue, "000000");
 		sprintf(UnitCfg.ColortrProfile[i].zone, "F");
 	}
 
