@@ -178,6 +178,8 @@ class _SettingsState extends State<Settings> {
                                 if (myDevice.getConnectionState()) {
                                   // write the cc command
                                   await characteristicData.write('{\"cc\":${boolToInt(ccSwitchValue)}}'.codeUnits);
+                                  await Future.delayed(Duration(milliseconds: 500));
+                                  dataChar2 = String.fromCharCodes(await characteristicData.read());
                                 }
                               },
                             ),
@@ -579,6 +581,7 @@ class _SettingsState extends State<Settings> {
                 if (myDevice.getConnectionState()) {
                   // write the restart command
                   characteristicData.write('{\"system\":1}'.codeUnits);
+                  homePageState = false;
                   myDevice.disconnect();
                   removeReplacementRouts(context, ScanListBle());
                 }
@@ -626,6 +629,7 @@ class _SettingsState extends State<Settings> {
                 if (myDevice.getConnectionState()) {
                   // write the restart command
                   characteristicData.write('{\"system\":1}'.codeUnits);
+                  homePageState = false;
                   myDevice.disconnect();
                   removeReplacementRouts(context, ScanListBle());
                 }
@@ -682,6 +686,7 @@ class _SettingsState extends State<Settings> {
               onPressed: () async {
                 if (myDevice.getConnectionState()) {
                   characteristicData.write('{\"system\":1}'.codeUnits);
+                  homePageState = false;
                   myDevice.disconnect();
                   Navigator.of(context).pop();
                   removeReplacementRouts(context, ScanListBle());

@@ -189,6 +189,7 @@ class _ScanListBleState extends State<ScanListBle> {
         print(dateTime.millisecondsSinceEpoch ~/ 1000);
         print(dateTime.timeZoneName);
         print(dateTime.timeZoneOffset.inSeconds);
+        homePageState = true;
         await characteristicData.write('{\"Time\":[${dateTime.millisecondsSinceEpoch ~/ 1000},${dateTime.timeZoneOffset.inSeconds}]}'.codeUnits);
         createRoute(context, Home());
       });

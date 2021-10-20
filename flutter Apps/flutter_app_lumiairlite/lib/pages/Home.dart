@@ -20,6 +20,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int timeToSleep;
+  final int dataReadDuration = 1;
 
   bool firstDisplayMainWidget = true;
 
@@ -98,14 +99,14 @@ class _HomeState extends State<Home> {
         if (timeToSleep <= 0) {
           timeToSleep = (-1000);
         } else {
-          timeToSleep -= 5000;
+          timeToSleep -= 1000 * dataReadDuration;
         }
       }
       if (stateOfSleepAndReadingProcess == 1) {
         break;
       }
 
-      await Future.delayed(Duration(seconds: 5));
+      await Future.delayed(Duration(seconds: dataReadDuration));
     } while (true);
   }
 
@@ -149,6 +150,7 @@ class _HomeState extends State<Home> {
                     await myDevice.disconnect();
                   }
                   stateOfSleepAndReadingProcess = 1;
+                  homePageState = false;
                   Navigator.pop(c, true);
                 }),
             TextButton(
@@ -175,63 +177,70 @@ class _HomeState extends State<Home> {
           ),
         ),
         child: Center(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                ToggleButtons(
-                  borderRadius: BorderRadius.circular(18.0),
-                  isSelected: [true, true, true, true, true],
-                  onPressed: (int index) async {
-                    if (index == 0) {
-                      //createRoute(context, CurveShow());
-                    }
-                  },
-                  children: [
-                    Container(
-                        width: (widthScreen - 80) / 5,
-                        height: (heightScreen - 80) / 5,
-                        child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                          new SizedBox(width: 4.0),
-                          new Text("Température\n$temperatureValue °C", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
-                        ])),
-                    Container(
-                        width: (widthScreen - 80) / 5,
-                        height: (heightScreen - 80) / 5,
-                        child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                          new SizedBox(width: 4.0),
-                          new Text("Humidité\n$humidityValue %", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
-                        ])),
-                    Container(
-                        width: (widthScreen - 80) / 5,
-                        height: (heightScreen - 80) / 5,
-                        child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                          new SizedBox(width: 4.0),
-                          new Text("luminosité\n$lightValue lux", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
-                        ])),
-                    Container(
-                        width: (widthScreen - 80) / 5,
-                        height: (heightScreen - 80) / 5,
-                        child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                          new SizedBox(width: 4.0),
-                          new Text("CO2\n$co2Value ppm", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
-                        ])),
-                    Container(
-                        width: (widthScreen - 80) / 5,
-                        height: (heightScreen - 80) / 5,
-                        child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                          new SizedBox(width: 4.0),
-                          new Text("TVOC\n$tvocValue mg/m3", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
-                        ])),
-                  ],
-                  borderWidth: 2,
-                  selectedColor: Colors.white,
-                  selectedBorderColor: Colors.black,
-                  fillColor: Color(0xFF264eb6),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10.0, 0, 10.0),
+                  child: ToggleButtons(
+                    borderRadius: BorderRadius.circular(18.0),
+                    isSelected: [true, true, true, true, true],
+                    onPressed: (int index) async {
+                      if (index == 0) {
+                        //createRoute(context, CurveShow());
+                      }
+                    },
+                    children: [
+                      Container(
+                          width: (widthScreen - 80) / 5,
+                          height: (heightScreen - 80) / 5,
+                          child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                            new SizedBox(width: 4.0),
+                            new Text("Température\n$temperatureValue °C",
+                                style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
+                          ])),
+                      Container(
+                          width: (widthScreen - 80) / 5,
+                          height: (heightScreen - 80) / 5,
+                          child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                            new SizedBox(width: 4.0),
+                            new Text("Humidité\n$humidityValue %", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
+                          ])),
+                      Container(
+                          width: (widthScreen - 80) / 5,
+                          height: (heightScreen - 80) / 5,
+                          child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                            new SizedBox(width: 4.0),
+                            new Text("luminosité\n$lightValue lux", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
+                          ])),
+                      Container(
+                          width: (widthScreen - 80) / 5,
+                          height: (heightScreen - 80) / 5,
+                          child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                            new SizedBox(width: 4.0),
+                            new Text("CO2\n$co2Value ppm", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
+                          ])),
+                      Container(
+                          width: (widthScreen - 80) / 5,
+                          height: (heightScreen - 80) / 5,
+                          child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                            new SizedBox(width: 4.0),
+                            new Text("TVOC\n$tvocValue mg/m3", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
+                          ])),
+                    ],
+                    borderWidth: 2,
+                    selectedColor: Colors.white,
+                    selectedBorderColor: Colors.black,
+                    fillColor: Color(0xFF264eb6),
+                  ),
                 ),
-                Padding(
+              ),
+              Expanded(
+                flex: 4,
+                child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Stack(
                     alignment: Alignment.center,
@@ -244,7 +253,7 @@ class _HomeState extends State<Home> {
                         ),
                         width: widthScreen * 0.8,
                         height: heightScreen * 0.25,
-                        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
+                        padding: const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 10.0),
                       ),
                       Row(
                         mainAxisSize: MainAxisSize.max,
@@ -292,103 +301,121 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                 ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18.0),
-                          color: Color(0xFF264eb6),
-                          shape: BoxShape.rectangle,
-                        ),
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          appTime,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 40,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18.0),
-                          color: Color(0xFF264eb6),
-                          shape: BoxShape.rectangle,
-                        ),
-                        padding: const EdgeInsets.all(16.0),
-                        child: TextButton(
-                          onPressed: () {
-                            stateOfSleepAndReadingProcess = 2;
-                            createRoute(context, AmbiancePage());
-                          },
-                          child: Text(
-                            'Ambiances',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 35,
+              ),
+              Expanded(
+                flex: 3,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(18.0),
+                              color: Color(0xFF264eb6),
+                              shape: BoxShape.rectangle,
                             ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                      child: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(18.0),
-                          gradient: LinearGradient(colors: [Colors.red, Colors.green, Colors.blue]),
-                        ),
-                        padding: const EdgeInsets.all(16.0),
-                        child: TextButton(
-                          onPressed: () {
-                            stateOfSleepAndReadingProcess = 2;
-                            createRoute(context, LEDPage());
-                          },
-                          child: Text(
-                            'LED',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 35,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                      child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(18.0),
-                            color: Color(0xFF264eb6),
-                            shape: BoxShape.rectangle,
-                          ),
-                          padding: const EdgeInsets.all(2.0),
-                          child: IconButton(
-                              onPressed: () {
-                                pinSecurity(context);
-                              },
-                              iconSize: 50.0,
-                              icon: Icon(
-                                Icons.settings,
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              appTime,
+                              style: TextStyle(
                                 color: Colors.white,
-                              ))),
-                    ),
-                  ],
+                                fontWeight: FontWeight.bold,
+                                fontSize: 35,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 4,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(18.0),
+                              color: Color(0xFF264eb6),
+                              shape: BoxShape.rectangle,
+                            ),
+                            padding: const EdgeInsets.all(16.0),
+                            child: TextButton(
+                              onPressed: () {
+                                stateOfSleepAndReadingProcess = 2;
+                                createRoute(context, AmbiancePage());
+                              },
+                              child: Text(
+                                'Ambiances',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 35,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(18.0),
+                              gradient: LinearGradient(colors: [Colors.red, Colors.green, Colors.blue]),
+                            ),
+                            padding: const EdgeInsets.all(16.0),
+                            child: TextButton(
+                              onPressed: () {
+                                stateOfSleepAndReadingProcess = 2;
+                                createRoute(context, LEDPage());
+                              },
+                              child: Text(
+                                'LED',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 35,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(18.0),
+                                color: Color(0xFF264eb6),
+                                shape: BoxShape.rectangle,
+                              ),
+                              padding: const EdgeInsets.all(2.0),
+                              child: IconButton(
+                                  onPressed: () {
+                                    pinSecurity(context);
+                                  },
+                                  iconSize: 50.0,
+                                  icon: Icon(
+                                    Icons.settings,
+                                    color: Colors.white,
+                                  ))),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
