@@ -58,7 +58,7 @@ class _SettingsState extends State<Settings> {
       await Future.delayed(Duration(seconds: 2));
       if (deviceWifiState) {
         myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('Votre carte est bien connectée avec votre modem !');
+        myUvcToast.setToastMessage('Le boitier HUBBOX est connecté au WiFi.');
         myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
       } else {
         myUvcToast.setToastDuration(5);
@@ -135,7 +135,7 @@ class _SettingsState extends State<Settings> {
                               // write the new ble device name
                               await characteristicData.write('{\"dname\":\"${myBleDeviceName.text}\"}'.codeUnits);
                               myUvcToast.setToastDuration(5);
-                              myUvcToast.setToastMessage('Nom de carte modifié , faudrais redémarrer la carte pour appliquer cette modification !');
+                              myUvcToast.setToastMessage('Nom modifié, veuillez redémarrer pour appliquer les changements.');
                               myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
                             }
                           },
@@ -189,7 +189,8 @@ class _SettingsState extends State<Settings> {
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Text(
-                          'Modulez la luminosité tout au long de la journée en suivant le cycle du soleil',
+                          'Modulez la luminosité tout au long de \nla journée en suivant le cycle du soleil.',
+                          textAlign: TextAlign.center,
                           style: TextStyle(fontSize: (screenWidth * 0.03)),
                         ),
                       ),
@@ -338,7 +339,7 @@ class _SettingsState extends State<Settings> {
                             fontSize: (screenWidth * 0.05),
                           ),
                           decoration: InputDecoration(
-                              hintText: 'exp:1234',
+                              hintText: 'Exemple : 1234',
                               hintStyle: TextStyle(
                                 fontSize: (screenWidth * 0.05),
                                 color: Colors.grey,
@@ -365,7 +366,7 @@ class _SettingsState extends State<Settings> {
                             fontSize: (screenWidth * 0.05),
                           ),
                           decoration: InputDecoration(
-                              hintText: 'exp:1234',
+                              hintText: 'Exemple : 1234',
                               hintStyle: TextStyle(
                                 fontSize: (screenWidth * 0.05),
                                 color: Colors.grey,
@@ -382,7 +383,7 @@ class _SettingsState extends State<Settings> {
                                   // write the new code PIN
                                   await characteristicData.write('{\"PP\":\"${myNewCodePIN.text}\"}'.codeUnits);
                                   myUvcToast.setToastDuration(5);
-                                  myUvcToast.setToastMessage('Code PIN Changé !');
+                                  myUvcToast.setToastMessage('Votre code PIN a été modifié !');
                                   myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
                                   await Future.delayed(Duration(milliseconds: 500));
                                   pinCodeAccess = myNewCodePIN.text;
@@ -676,7 +677,7 @@ class _SettingsState extends State<Settings> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Attention'),
-          content: Text('La carte DMX va redémarrer afin de finaliser la connexion au WiFi'),
+          content: Text('Le boitier HUBBOX va redémarrer afin de finaliser la connexion au WiFi'),
           actions: <Widget>[
             TextButton(
               child: Text(

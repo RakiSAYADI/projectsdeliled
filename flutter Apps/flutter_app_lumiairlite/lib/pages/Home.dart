@@ -315,6 +315,7 @@ class _HomeState extends State<Home> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
+                            alignment: Alignment.center,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(18.0),
                               color: Color(0xFF264eb6),
@@ -323,16 +324,17 @@ class _HomeState extends State<Home> {
                             padding: const EdgeInsets.all(16.0),
                             child: Text(
                               appTime,
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 35,
+                                fontSize: 45,
                               ),
                             ),
                           ),
                         ),
                       ),
-                      Expanded(
+                      /*Expanded(
                         flex: 4,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -359,9 +361,9 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                         ),
-                      ),
+                      ),*/
                       Expanded(
-                        flex: 2,
+                        flex: 4,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
@@ -369,7 +371,7 @@ class _HomeState extends State<Home> {
                             decoration: BoxDecoration(
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.circular(18.0),
-                              gradient: LinearGradient(colors: [Colors.red, Colors.green, Colors.blue]),
+                              color: Color(0xFF264eb6),
                             ),
                             padding: const EdgeInsets.all(16.0),
                             child: TextButton(
@@ -378,11 +380,12 @@ class _HomeState extends State<Home> {
                                 createRoute(context, LEDPage());
                               },
                               child: Text(
-                                'LED',
+                                'Contrôle de la lumière',
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 35,
+                                  fontSize: 30,
                                 ),
                               ),
                             ),
@@ -392,14 +395,15 @@ class _HomeState extends State<Home> {
                       Expanded(
                         flex: 1,
                         child: Padding(
-                          padding: const EdgeInsets.all(2.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: Container(
+                              alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(18.0),
                                 color: Color(0xFF264eb6),
                                 shape: BoxShape.rectangle,
                               ),
-                              padding: const EdgeInsets.all(2.0),
+                              padding: const EdgeInsets.all(8.0),
                               child: IconButton(
                                   onPressed: () {
                                     pinSecurity(context);

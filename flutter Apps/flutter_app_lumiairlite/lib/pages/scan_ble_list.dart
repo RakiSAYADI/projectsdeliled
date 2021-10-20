@@ -108,7 +108,7 @@ class _ScanListBleState extends State<ScanListBle> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text('Liste des UVC-LIGHT :'),
+        title: Text('Connectez-vous à un dispositif :'),
         centerTitle: true,
         backgroundColor: Colors.blue[400],
       ),

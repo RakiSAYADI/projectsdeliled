@@ -132,14 +132,16 @@ class _LEDPageState extends State<LEDPage> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(18.0),
                         gradient: LinearGradient(colors: [
-                          Colors.pink,
+                          Colors.purpleAccent[400],
                           Colors.red,
                           Colors.orange,
+                          Colors.yellow,
                           Colors.green,
+                          Colors.lightBlue[200],
                           Colors.lightBlue,
                           Colors.blue,
                           Colors.purple,
-                          Colors.pink
+                          Colors.purpleAccent[400],
                         ]),
                       ),
                       values: [hueValue],
