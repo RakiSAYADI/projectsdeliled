@@ -171,7 +171,12 @@ class _ScanListBleState extends State<ScanListBle> {
       //Discover services
       List<BluetoothService> services = await thisDevice.discoverServices();
       BluetoothService service;
-      service = services.elementAt(2);
+      if (Platform.isAndroid) {
+        service = services.elementAt(2);
+      }
+      if (Platform.isIOS) {
+        service = services.elementAt(0);
+      }
       // Read the first characteristic
       characteristicSensors = service.characteristics[0];
       // Read the second characteristic
