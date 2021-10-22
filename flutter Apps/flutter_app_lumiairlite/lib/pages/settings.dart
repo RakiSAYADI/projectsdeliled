@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -47,9 +48,15 @@ class _SettingsState extends State<Settings> {
   }
 
   void readDataMaestro() async {
+    var parsedJson;
     try {
       myBleDeviceName.text = myDevice.device.name;
-      var parsedJson = json.decode(dataChar2);
+      if (Platform.isAndroid) {
+        parsedJson = json.decode(dataCharAndroid2);
+      }
+      if (Platform.isIOS) {
+        parsedJson = json.decode(dataCharIOS2p2);
+      }
       zonesNamesList[0] = parsedJson['ZN'][0];
       zonesNamesList[1] = parsedJson['ZN'][1];
       zonesNamesList[2] = parsedJson['ZN'][2];
@@ -179,7 +186,14 @@ class _SettingsState extends State<Settings> {
                                   // write the cc command
                                   await characteristicData.write('{\"cc\":${boolToInt(ccSwitchValue)}}'.codeUnits);
                                   await Future.delayed(Duration(milliseconds: 500));
-                                  dataChar2 = String.fromCharCodes(await characteristicData.read());
+                                  if (Platform.isAndroid) {
+                                    dataCharAndroid2 = String.fromCharCodes(await characteristicData.read());
+                                  }
+                                  if (Platform.isIOS) {
+                                    dataCharIOS2p1 = await charDividedIOSRead(characteristicData);
+                                    dataCharIOS2p2 = await charDividedIOSRead(characteristicData);
+                                    dataCharIOS2p3 = await charDividedIOSRead(characteristicData);
+                                  }
                                 }
                               },
                             ),
@@ -387,7 +401,14 @@ class _SettingsState extends State<Settings> {
                                   myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
                                   await Future.delayed(Duration(milliseconds: 500));
                                   pinCodeAccess = myNewCodePIN.text;
-                                  dataChar2 = String.fromCharCodes(await characteristicData.read());
+                                  if (Platform.isAndroid) {
+                                    dataCharAndroid2 = String.fromCharCodes(await characteristicData.read());
+                                  }
+                                  if (Platform.isIOS) {
+                                    dataCharIOS2p1 = await charDividedIOSRead(characteristicData);
+                                    dataCharIOS2p2 = await charDividedIOSRead(characteristicData);
+                                    dataCharIOS2p3 = await charDividedIOSRead(characteristicData);
+                                  }
                                 } else {
                                   myUvcToast.setToastDuration(5);
                                   myUvcToast.setToastMessage('Le nouveau code PIN doit être en 4 chiffres !');
@@ -701,7 +722,14 @@ class _SettingsState extends State<Settings> {
               ),
               onPressed: () async {
                 await Future.delayed(Duration(milliseconds: 500));
-                dataChar2 = String.fromCharCodes(await characteristicData.read());
+                if (Platform.isAndroid) {
+                  dataCharAndroid2 = String.fromCharCodes(await characteristicData.read());
+                }
+                if (Platform.isIOS) {
+                  dataCharIOS2p1 = await charDividedIOSRead(characteristicData);
+                  dataCharIOS2p2 = await charDividedIOSRead(characteristicData);
+                  dataCharIOS2p3 = await charDividedIOSRead(characteristicData);
+                }
                 Navigator.of(context).pop();
               },
             ),
@@ -883,7 +911,14 @@ class _SettingsState extends State<Settings> {
                   String zoneNames = "{\"zones\":[${zonesNamesList[0]},${zonesNamesList[1]},${zonesNamesList[2]},${zonesNamesList[3]}]}";
                   await characteristicData.write(zoneNames.codeUnits);
                   await Future.delayed(Duration(milliseconds: 500));
-                  dataChar2 = String.fromCharCodes(await characteristicData.read());
+                  if (Platform.isAndroid) {
+                    dataCharAndroid2 = String.fromCharCodes(await characteristicData.read());
+                  }
+                  if (Platform.isIOS) {
+                    dataCharIOS2p1 = await charDividedIOSRead(characteristicData);
+                    dataCharIOS2p2 = await charDividedIOSRead(characteristicData);
+                    dataCharIOS2p3 = await charDividedIOSRead(characteristicData);
+                  }
                   setState(() {});
                   Navigator.of(context).pop();
                 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -67,8 +68,14 @@ class _HomeState extends State<Home> {
       if (stateOfSleepAndReadingProcess == 0) {
         try {
           if (myDevice.getConnectionState()) {
-            dataChar1 = String.fromCharCodes(await characteristicSensors.read());
-            sensorsData = jsonDecode(dataChar1);
+            if (Platform.isAndroid) {
+              dataCharAndroid1 = String.fromCharCodes(await characteristicSensors.read());
+              sensorsData = jsonDecode(dataCharAndroid1);
+            }
+            if (Platform.isIOS) {
+              dataCharIOS1p1 = String.fromCharCodes(await characteristicSensors.read());
+              sensorsData = jsonDecode(dataCharIOS1p1);
+            }
             String sensorsDataList = sensorsData['EnvData'].toString();
             deviceTimeValue = stringListAsciiToListInt(sensorsDataList.codeUnits)[0];
             detectionTimeValue = stringListAsciiToListInt(sensorsDataList.codeUnits)[1];
@@ -429,8 +436,14 @@ class _HomeState extends State<Home> {
   Future<void> pinSecurity(BuildContext buildContext) async {
     double widthScreen = MediaQuery.of(buildContext).size.width;
     double heightScreen = MediaQuery.of(buildContext).size.height;
+    var parsedJson;
     try {
-      var parsedJson = json.decode(dataChar2);
+      if (Platform.isAndroid) {
+        parsedJson = json.decode(dataCharAndroid2);
+      }
+      if (Platform.isIOS) {
+        parsedJson = json.decode(dataCharIOS2p3);
+      }
       pinCodeAccess = parsedJson['PP'].toString();
     } catch (e) {
       print('erreur pin');

@@ -173,31 +173,53 @@ class _ScanListBleState extends State<ScanListBle> {
       BluetoothService service;
       if (Platform.isAndroid) {
         service = services.elementAt(2);
+        // Read the first characteristic
+        characteristicSensors = service.characteristics[0];
+        // Read the second characteristic
+        characteristicData = service.characteristics[1];
+        // reading the characteristic after 1 second
+        Future.delayed(const Duration(seconds: 1), () async {
+          dataCharAndroid1 = String.fromCharCodes(await characteristicSensors.read());
+          print(dataCharAndroid1);
+          await Future.delayed(Duration(milliseconds: 500));
+          dataCharAndroid2 = String.fromCharCodes(await characteristicData.read());
+          print(dataCharAndroid2);
+          // delete the waiting widget
+          Navigator.of(context).pop();
+          DateTime dateTime = DateTime.now();
+          print(dateTime.millisecondsSinceEpoch ~/ 1000);
+          print(dateTime.timeZoneName);
+          print(dateTime.timeZoneOffset.inSeconds);
+          homePageState = true;
+          await characteristicData.write('{\"Time\":[${dateTime.millisecondsSinceEpoch ~/ 1000},${dateTime.timeZoneOffset.inSeconds}]}'.codeUnits);
+          createRoute(context, Home());
+        });
       }
       if (Platform.isIOS) {
         service = services.elementAt(0);
+        // Read the first characteristic
+        characteristicSensors = service.characteristics[0];
+        // Read the second characteristic
+        characteristicData = service.characteristics[1];
+        // reading the characteristic after 1 second
+        Future.delayed(const Duration(seconds: 1), () async {
+          await characteristicData.write('{\"IOS\":1}'.codeUnits);
+          await Future.delayed(Duration(milliseconds: 300));
+          dataCharIOS1p1 = await charDividedIOSRead(characteristicSensors);
+          dataCharIOS2p1 = await charDividedIOSRead(characteristicData);
+          dataCharIOS2p2 = await charDividedIOSRead(characteristicData);
+          dataCharIOS2p3 = await charDividedIOSRead(characteristicData);
+          // delete the waiting widget
+          Navigator.of(context).pop();
+          DateTime dateTime = DateTime.now();
+          print(dateTime.millisecondsSinceEpoch ~/ 1000);
+          print(dateTime.timeZoneName);
+          print(dateTime.timeZoneOffset.inSeconds);
+          homePageState = true;
+          await characteristicData.write('{\"Time\":[${dateTime.millisecondsSinceEpoch ~/ 1000},${dateTime.timeZoneOffset.inSeconds}]}'.codeUnits);
+          createRoute(context, Home());
+        });
       }
-      // Read the first characteristic
-      characteristicSensors = service.characteristics[0];
-      // Read the second characteristic
-      characteristicData = service.characteristics[1];
-      // reading the characteristic after 1 second
-      Future.delayed(const Duration(seconds: 1), () async {
-        dataChar1 = String.fromCharCodes(await characteristicSensors.read());
-        print(dataChar1);
-        await Future.delayed(Duration(milliseconds: 500));
-        dataChar2 = String.fromCharCodes(await characteristicData.read());
-        print(dataChar2);
-        // delete the waiting widget
-        Navigator.of(context).pop();
-        DateTime dateTime = DateTime.now();
-        print(dateTime.millisecondsSinceEpoch ~/ 1000);
-        print(dateTime.timeZoneName);
-        print(dateTime.timeZoneOffset.inSeconds);
-        homePageState = true;
-        await characteristicData.write('{\"Time\":[${dateTime.millisecondsSinceEpoch ~/ 1000},${dateTime.timeZoneOffset.inSeconds}]}'.codeUnits);
-        createRoute(context, Home());
-      });
     }
   }
 

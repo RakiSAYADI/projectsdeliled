@@ -16,8 +16,18 @@ Device myDevice;
 BluetoothCharacteristic characteristicSensors;
 BluetoothCharacteristic characteristicData;
 
-String dataChar1 = '';
-String dataChar2 = '';
+String dataCharAndroid1 = '';
+String dataCharAndroid2 = '';
+
+String dataCharIOS1p1 = '';
+String dataCharIOS1p2 = '';
+String dataCharIOS1p3 = '';
+String dataCharIOS1p4 = '';
+
+String dataCharIOS2p1 = '';
+String dataCharIOS2p2 = '';
+String dataCharIOS2p3 = '';
+String dataCharIOS2p4 = '';
 
 int deviceTimeValue = 1000000;
 int detectionTimeValue = 0;
@@ -73,6 +83,14 @@ List<int> stringListAsciiToListInt(List<int> listInt) {
 class AlwaysDisabledFocusNode extends FocusNode {
   @override
   bool get hasFocus => false;
+}
+
+Future<String> charDividedIOSRead(BluetoothCharacteristic characteristicIOS) async {
+  String data = '';
+  data = String.fromCharCodes(await characteristicIOS.read());
+  print(data);
+  await Future.delayed(Duration(milliseconds: 300));
+  return data;
 }
 
 List<String> myExtinctionTimeMinute = [

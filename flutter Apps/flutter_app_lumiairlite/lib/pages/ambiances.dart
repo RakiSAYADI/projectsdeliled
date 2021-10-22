@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app_bispectrum/services/DataVariables.dart';
@@ -19,8 +20,14 @@ class _AmbiancePageState extends State<AmbiancePage> {
   @override
   Widget build(BuildContext context) {
     if (firstDisplayMainWidget) {
+      var parsedJson;
       try {
-        var parsedJson = json.decode(dataChar2);
+        if (Platform.isAndroid) {
+          parsedJson = json.decode(dataCharAndroid2);
+        }
+        if (Platform.isIOS) {
+          parsedJson = json.decode(dataCharIOS2p3);
+        }
         ambiance1 = [parsedJson['Amb'][0].toString(), parsedJson['Amb'][1].toString()];
         ambiance2 = [parsedJson['Amb'][2].toString(), parsedJson['Amb'][3].toString()];
         ambiance3 = [parsedJson['Amb'][4].toString(), parsedJson['Amb'][5].toString()];
@@ -191,7 +198,14 @@ class _AmbiancePageState extends State<AmbiancePage> {
                 if (myDevice.getConnectionState()) {
                   await characteristicData.write('{\"couleur$ambianceID\":[${ambiance[0]},${ambiance[1]}]}'.codeUnits);
                   await Future.delayed(Duration(milliseconds: 500));
-                  dataChar2 = String.fromCharCodes(await characteristicData.read());
+                  if (Platform.isAndroid) {
+                    dataCharAndroid2 = String.fromCharCodes(await characteristicData.read());
+                  }
+                  if (Platform.isIOS) {
+                    dataCharIOS2p1 = await charDividedIOSRead(characteristicData);
+                    dataCharIOS2p2 = await charDividedIOSRead(characteristicData);
+                    dataCharIOS2p3 = await charDividedIOSRead(characteristicData);
+                  }
                 }
                 Navigator.of(context).pop();
               },
