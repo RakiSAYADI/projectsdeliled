@@ -35,6 +35,12 @@ class Device {
           await device.requestMtu(512);
         }
       }
+      if (Platform.isIOS) {
+        final mtu = await device.mtu.first;
+        if (mtu < 512) {
+          await device.requestMtu(512);
+        }
+      }
       print('the mtu is changed');
     }
 
