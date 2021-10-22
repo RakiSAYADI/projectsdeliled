@@ -10,6 +10,8 @@ int stateOfSleepAndReadingProcess = 0;
 Widget mainWidgetScreen;
 final int timeSleep = 60000;
 
+bool homePageState = false;
+
 Device myDevice;
 BluetoothCharacteristic characteristicSensors;
 BluetoothCharacteristic characteristicData;

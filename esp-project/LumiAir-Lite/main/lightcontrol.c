@@ -254,119 +254,119 @@ void Mi_spddw(uint8_t id)
 	add2buffer();
 }
 
-uint8_t LastMode = 0, lastCmd = 0, lastSubcmd = 0, lastZonecode = 0;
+//uint8_t LastMode = 0, lastCmd = 0, lastSubcmd = 0, lastZonecode = 0;
 
 /*check the type of the command */
 void MilightHandler(uint8_t cmd, uint8_t subcmd, uint8_t zonecode)
 {
-	if ((lastCmd != cmd) | (lastSubcmd != subcmd) | (lastZonecode != zonecode))
+	/*if ((lastCmd != cmd) | (lastSubcmd != subcmd) | (lastZonecode != zonecode))
 	{
 		lastCmd = cmd;
 		lastSubcmd = subcmd;
-		lastZonecode = zonecode;
+		lastZonecode = zonecode;*/
 
-		uint8_t i = 0;
-		uint8_t zone = 0;
+	uint8_t i = 0;
+	uint8_t zone = 0;
 
-		for (i = 0; i < 4; i++)
+	for (i = 0; i < 4; i++)
+	{
+
+		if (zonecode != 15)
 		{
 
-			if (zonecode != 15)
-			{
+			zone = zonecode & (1 << i);
 
-				zone = zonecode & (1 << i);
-
-				switch (zone)
-				{
-				case 1:
-					zone = 1;
-					break;
-				case 2:
-					zone = 2;
-					break;
-				case 4:
-					zone = 3;
-					break;
-				case 8:
-					zone = 4;
-					break;
-				default:
-					continue;
-				}
-			}
-			else
+			switch (zone)
 			{
-				zone = 0;
+			case 1:
+				zone = 1;
+				break;
+			case 2:
+				zone = 2;
+				break;
+			case 4:
+				zone = 3;
+				break;
+			case 8:
+				zone = 4;
+				break;
+			default:
+				continue;
 			}
-			switch (cmd)
-			{
-			case LCMD_SWITCH_ON_OFF:
-				if (subcmd == 0)
-				{
-					Mi_On(zone);
-				}
-				if (subcmd == 1)
-				{
-					Mi_Off(zone);
-				}
-				break;
-			case LCMD_SWITCH_ON:
-				if (subcmd == 0)
-				{
-					Mi_On(zone);
-				}
-				break;
-			case LCMD_SET_COLOR:
-				Mi_Color(zone, subcmd);
-				break;
-			case LCMD_MODE_SETTING:
-				if (subcmd == 0)
-				{
-					Mi_spddw(zone);
-				}
-				if (subcmd == 1)
-				{
-					Mi_spdup(zone);
-				}
-				if (subcmd == 2)
-				{
-					Mi_mode(zone, LastMode);
-					if (LastMode < 8)
-						LastMode++;
-					else
-						LastMode = 0;
-				}
-				break;
-			case LCMD_PAIRING:
-				if (subcmd == 0)
-				{
-					Mi_Unpair(zone);
-				}
-				if (subcmd == 1)
-				{
-					Mi_Pair(zone);
-				}
-				break;
-			case LCMD_SET_WHITE:
-				Mi_White(zone);
-				break;
-			case LCMD_SET_BRIGTHNESS:
-				Mi_Brighness(zone, subcmd);
-				break;
-			case LCMD_SET_TEMP:
-				Mi_kelvin(zone, (100 - subcmd));
-				break;
-			case LCMD_SET_SAT:
-				Mi_Saturation(zone, 100 - subcmd);
-				break;
-			case LCMD_SET_MODE:
-				Mi_mode(zone, subcmd);
-				break;
-			}
-			if (zone == 0)
-				return;
 		}
+		else
+		{
+			zone = 0;
+		}
+		switch (cmd)
+		{
+		case LCMD_SWITCH_ON_OFF:
+			if (subcmd == 0)
+			{
+				Mi_On(zone);
+			}
+			if (subcmd == 1)
+			{
+				Mi_Off(zone);
+			}
+			break;
+		case LCMD_SWITCH_ON:
+			if (subcmd == 0)
+			{
+				Mi_On(zone);
+			}
+			break;
+		case LCMD_SET_COLOR:
+			Mi_Color(zone, subcmd);
+			break;
+		case LCMD_MODE_SETTING:
+			if (subcmd == 0)
+			{
+				Mi_spddw(zone);
+			}
+			if (subcmd == 1)
+			{
+				Mi_spdup(zone);
+			}
+			if (subcmd == 2)
+			{
+				Mi_mode(zone, LastMode);
+				if (LastMode < 8)
+					LastMode++;
+				else
+					LastMode = 0;
+			}
+			break;
+		case LCMD_PAIRING:
+			if (subcmd == 0)
+			{
+				Mi_Unpair(zone);
+			}
+			if (subcmd == 1)
+			{
+				Mi_Pair(zone);
+			}
+			break;
+		case LCMD_SET_WHITE:
+			Mi_White(zone);
+			break;
+		case LCMD_SET_BRIGTHNESS:
+			Mi_Brighness(zone, subcmd);
+			break;
+		case LCMD_SET_TEMP:
+			Mi_kelvin(zone, (100 - subcmd));
+			break;
+		case LCMD_SET_SAT:
+			Mi_Saturation(zone, 100 - subcmd);
+			break;
+		case LCMD_SET_MODE:
+			Mi_mode(zone, subcmd);
+			break;
+		}
+		if (zone == 0)
+			return;
 	}
+	//}
 }
 
 void SimLightCommand()

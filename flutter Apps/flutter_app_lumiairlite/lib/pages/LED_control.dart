@@ -21,6 +21,7 @@ class _LEDPageState extends State<LEDPage> {
   Color trackBarColor = Colors.black;
 
   double hueValue = 0;
+  double lumValue = 50;
   double satValue = 50;
   double whiteValue = 50;
 
@@ -58,73 +59,90 @@ class _LEDPageState extends State<LEDPage> {
             ),
           ),
           child: Center(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 1.0, 8.0, 1.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.zero,
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      border: Border.all(color: Colors.black, width: 1.0),
-                      borderRadius: BorderRadius.all(Radius.circular(18.0)),
-                    ),
-                    child: ToggleButtons(
-                      borderRadius: BorderRadius.circular(18.0),
-                      isSelected: zoneStates,
-                      onPressed: (int index) async {
-                        zoneStates[index] = !zoneStates[index];
-                        setState(() {});
-                        zonesInHex = ((boolToInt(zoneStates[0])) +
-                                (boolToInt(zoneStates[1]) * 2) +
-                                (boolToInt(zoneStates[2]) * 4) +
-                                (boolToInt(zoneStates[3]) * 8))
-                            .toRadixString(16);
-                      },
-                      children: [
-                        Container(
-                            width: (widthScreen - 80) / 4,
-                            height: (heightScreen - 80) / 4,
-                            child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                              new SizedBox(width: 4.0),
-                              new Text(zonesNamesList[0], style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
-                            ])),
-                        Container(
-                            width: (widthScreen - 80) / 4,
-                            height: (heightScreen - 80) / 4,
-                            child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                              new SizedBox(width: 4.0),
-                              new Text(zonesNamesList[1], style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
-                            ])),
-                        Container(
-                            width: (widthScreen - 80) / 4,
-                            height: (heightScreen - 80) / 4,
-                            child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                              new SizedBox(width: 4.0),
-                              new Text(zonesNamesList[2], style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
-                            ])),
-                        Container(
-                            width: (widthScreen - 80) / 4,
-                            height: (heightScreen - 80) / 4,
-                            child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                              new SizedBox(width: 4.0),
-                              new Text(zonesNamesList[3], style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
-                            ])),
-                      ],
-                      borderWidth: 2,
-                      selectedColor: Colors.white,
-                      selectedBorderColor: Colors.black,
-                      fillColor: Colors.green,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 10, 16.0, 10),
+                    child: Container(
+                      padding: EdgeInsets.zero,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        border: Border.all(color: Colors.black, width: 1.0),
+                        borderRadius: BorderRadius.all(Radius.circular(18.0)),
+                      ),
+                      child: ToggleButtons(
+                        borderRadius: BorderRadius.circular(18.0),
+                        isSelected: zoneStates,
+                        onPressed: (int index) async {
+                          zoneStates[index] = !zoneStates[index];
+                          setState(() {});
+                          zonesInHex = ((boolToInt(zoneStates[0])) +
+                                  (boolToInt(zoneStates[1]) * 2) +
+                                  (boolToInt(zoneStates[2]) * 4) +
+                                  (boolToInt(zoneStates[3]) * 8))
+                              .toRadixString(16);
+                        },
+                        children: [
+                          Container(
+                              width: (widthScreen - 80) / 4,
+                              height: (heightScreen - 80) / 4,
+                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                new SizedBox(width: 4.0),
+                                new Text(zonesNamesList[0], style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
+                              ])),
+                          Container(
+                              width: (widthScreen - 80) / 4,
+                              height: (heightScreen - 80) / 4,
+                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                new SizedBox(width: 4.0),
+                                new Text(zonesNamesList[1], style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
+                              ])),
+                          Container(
+                              width: (widthScreen - 80) / 4,
+                              height: (heightScreen - 80) / 4,
+                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                new SizedBox(width: 4.0),
+                                new Text(zonesNamesList[2], style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
+                              ])),
+                          Container(
+                              width: (widthScreen - 80) / 4,
+                              height: (heightScreen - 80) / 4,
+                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                new SizedBox(width: 4.0),
+                                new Text(zonesNamesList[3], style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
+                              ])),
+                        ],
+                        borderWidth: 2,
+                        selectedColor: Colors.white,
+                        selectedBorderColor: Colors.black,
+                        fillColor: Colors.green,
+                      ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 8, 16.0, 8),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 15, 16.0, 15),
                     child: FlutterSlider(
                       decoration: BoxDecoration(
-                        borderRadius:  BorderRadius.circular(18.0),
-                        gradient: LinearGradient(colors: [Colors.red,Colors.purple, Colors.blue,Colors.lightBlue, Colors.green, Colors.yellow,Colors.red]),
+                        borderRadius: BorderRadius.circular(18.0),
+                        gradient: LinearGradient(colors: [
+                          Colors.purpleAccent[400],
+                          Colors.red,
+                          Colors.orange,
+                          Colors.yellow,
+                          Colors.green,
+                          Colors.lightBlue[200],
+                          Colors.lightBlue,
+                          Colors.blue,
+                          Colors.purple,
+                          Colors.purpleAccent[400],
+                        ]),
                       ),
                       values: [hueValue],
                       max: 255,
@@ -146,11 +164,45 @@ class _LEDPageState extends State<LEDPage> {
                           inactiveTrackBarHeight: 12),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 8, 16.0, 8),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 15, 16.0, 15),
                     child: FlutterSlider(
                       decoration: BoxDecoration(
-                        borderRadius:  BorderRadius.circular(18.0),
+                        borderRadius: BorderRadius.circular(18.0),
+                        gradient: LinearGradient(colors: [Colors.grey, Colors.white]),
+                      ),
+                      values: [lumValue],
+                      max: 100,
+                      min: 0,
+                      centeredOrigin: true,
+                      handlerAnimation: FlutterSliderHandlerAnimation(
+                          curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
+                      onDragging: (handlerIndex, lowerValue, upperValue) {
+                        lumValue = lowerValue;
+                        setState(() {});
+                        if (myDevice.getConnectionState()) {
+                          characteristicSensors.write('{\"light\":[7,${lumValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                        }
+                      },
+                      handler: FlutterSliderHandler(child: Icon(Icons.highlight)),
+                      trackBar: FlutterSliderTrackBar(
+                          inactiveTrackBar: BoxDecoration(color: Colors.transparent),
+                          activeTrackBar: BoxDecoration(color: Colors.transparent),
+                          activeTrackBarHeight: 12,
+                          inactiveTrackBarHeight: 12),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 15, 16.0, 15),
+                    child: FlutterSlider(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(18.0),
                         gradient: LinearGradient(colors: [Colors.white, Colors.black]),
                       ),
                       values: [satValue],
@@ -174,12 +226,15 @@ class _LEDPageState extends State<LEDPage> {
                           inactiveTrackBarHeight: 12),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 8, 16.0, 8),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 15, 16.0, 15),
                     child: FlutterSlider(
                       decoration: BoxDecoration(
-                        borderRadius:  BorderRadius.circular(18.0),
-                        gradient: LinearGradient(colors: [Colors.blueAccent,Colors.white, Colors.yellowAccent]),
+                        borderRadius: BorderRadius.circular(18.0),
+                        gradient: LinearGradient(colors: [Colors.blueAccent, Colors.white, Colors.yellowAccent]),
                       ),
                       values: [whiteValue],
                       max: 100,
@@ -209,8 +264,8 @@ class _LEDPageState extends State<LEDPage> {
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

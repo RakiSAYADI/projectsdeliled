@@ -9,6 +9,7 @@ import 'package:flutter_app_bispectrum/pages/scan_ble_list.dart';
 import 'package:flutter_app_bispectrum/pages/settings.dart';
 import 'package:flutter_app_bispectrum/pages/welcome.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -59,10 +60,10 @@ void main() async {
     selectNotificationSubject.add(payload);
   });
   flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()?.requestPermissions(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
+        alert: true,
+        badge: true,
+        sound: true,
+      );
 
   SystemChannels.textInput.invokeMethod('TextInput.hide');
   SystemChrome.setPreferredOrientations([
@@ -83,7 +84,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Lumi\'air Lite',
       initialRoute: '/',
       debugShowCheckedModeBanner: false,
@@ -91,11 +92,11 @@ class MyApp extends StatelessWidget {
         '/': (context) => Welcome(),
         '/check_permissions': (context) => CheckPermissions(),
         '/scan_ble_list': (context) => ScanListBle(),
-        '/home':(context) => Home(),
-        '/settings':(context) => Settings(),
-        '/ambiances':(context) => AmbiancePage(),
-        '/led':(context) => LEDPage(),
-        '/curves':(context) => CurveShow(),
+        '/home': (context) => Home(),
+        '/settings': (context) => Settings(),
+        '/ambiances': (context) => AmbiancePage(),
+        '/led': (context) => LEDPage(),
+        '/curves': (context) => CurveShow(),
       },
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,

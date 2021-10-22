@@ -108,7 +108,7 @@ class _ScanListBleState extends State<ScanListBle> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text('Liste des UVC-LIGHT :'),
+        title: Text('Connectez-vous à un dispositif :'),
         centerTitle: true,
         backgroundColor: Colors.blue[400],
       ),
@@ -189,6 +189,7 @@ class _ScanListBleState extends State<ScanListBle> {
         print(dateTime.millisecondsSinceEpoch ~/ 1000);
         print(dateTime.timeZoneName);
         print(dateTime.timeZoneOffset.inSeconds);
+        homePageState = true;
         await characteristicData.write('{\"Time\":[${dateTime.millisecondsSinceEpoch ~/ 1000},${dateTime.timeZoneOffset.inSeconds}]}'.codeUnits);
         createRoute(context, Home());
       });
