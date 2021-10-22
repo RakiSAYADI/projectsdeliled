@@ -254,7 +254,9 @@ void Mi_spddw(uint8_t id)
 	add2buffer();
 }
 
-//uint8_t LastMode = 0, lastCmd = 0, lastSubcmd = 0, lastZonecode = 0;
+//uint8_t lastCmd = 0, lastSubcmd = 0, lastZonecode = 0;
+
+uint8_t LastMode = 0;
 
 /*check the type of the command */
 void MilightHandler(uint8_t cmd, uint8_t subcmd, uint8_t zonecode)

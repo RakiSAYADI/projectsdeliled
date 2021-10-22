@@ -232,6 +232,9 @@ struct gatts_char_inst LIST_CHAR_READ[GATTS_CHAR_NUM_READ] = { //SERVICE READ
 		.char_write_callback = char_total2_write_handler,
 	}};
 
+bool deviceIsIOS = false;
+int charIOSCounter = 0;
+
 bool jsonparse(char *src, char *dst, char *label, unsigned short arrayindex)
 {
 	char *sp = 0, *ep = 0, *ic = 0;
@@ -341,8 +344,6 @@ void gatts_check_callback(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 		break;
 	}
 
-	ESP_LOGD(GATTS_TAG, "gatts_check_callback write %d num %d handle %d\n",
-			 read, GATTS_CHAR_NUM_READ, handle);
 	for (uint32_t pos = 0; pos < GATTS_CHAR_NUM_READ; pos++)
 	{
 		if (LIST_CHAR_READ[pos].char_handle == handle)
@@ -371,7 +372,6 @@ void gatts_check_callback(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 void gatts_add_char_READ()
 {
 
-	ESP_LOGD(GATTS_TAG, "gatts_add_char_READ %d\n", GATTS_CHAR_NUM_READ);
 	for (uint32_t pos = 0; pos < GATTS_CHAR_NUM_READ; pos++)
 	{
 		if (LIST_CHAR_READ[pos].char_handle == 0)
@@ -394,7 +394,6 @@ void gatts_add_char_READ()
 void gatts_check_add_char_READ(esp_bt_uuid_t char_uuid, uint16_t attr_handle)
 {
 
-	ESP_LOGD(GATTS_TAG, "gatts_check_add_char_READ %d\n", attr_handle);
 	if (attr_handle != 0)
 	{
 		if (char_uuid.len == ESP_UUID_LEN_16)
@@ -423,8 +422,6 @@ void gatts_check_add_char_READ(esp_bt_uuid_t char_uuid, uint16_t attr_handle)
 			ESP_LOGE(GATTS_TAG, "Char READ UNKNOWN LEN %d\n", char_uuid.len);
 		}
 
-		ESP_LOGD(GATTS_TAG, "FOUND Char READ pos %d handle %d\n",
-				 ble_add_char_pos, attr_handle);
 		LIST_CHAR_READ[ble_add_char_pos].char_handle = attr_handle;
 		gatts_add_char_READ();
 	}
@@ -446,15 +443,13 @@ char tmp[64];
 void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 							 esp_ble_gatts_cb_param_t *param)
 {
-	ESP_LOGD(GATTS_TAG, "char_total_read_handler %d\n", param->read.handle);
 
 	ESP_LOGI(GATTS_TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
 
 	sprintf((char *)total,
 			"{\"EnvData\":[%ld,%ld,%d,%d,%d,%d,%d,%d],\"SCR\":%d}",
 			UnitData.UpdateTime, UnitData.LastDetTime, (uint8_t)UnitData.Temp, (uint8_t)UnitData.Humidity,
-			UnitData.Als, UnitData.aq_Co2Level, UnitData.aq_Tvoc, WifiConnectedFlag,scanResult);
-
+			UnitData.Als, UnitData.aq_Co2Level, UnitData.aq_Tvoc, WifiConnectedFlag, scanResult);
 
 	TOTAL.attr_len = strlen((char *)total);
 
@@ -463,8 +458,6 @@ void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 	rsp.attr_value.handle = param->read.handle;
 	if (LIST_CHAR_READ[0].char_val != NULL)
 	{
-		ESP_LOGD(GATTS_TAG, "char_total_read_handler char_val %d\n",
-				 LIST_CHAR_READ[0].char_val->attr_len);
 		rsp.attr_value.len = LIST_CHAR_READ[0].char_val->attr_len;
 		for (uint32_t pos = 0;
 			 pos < LIST_CHAR_READ[0].char_val->attr_len && pos < LIST_CHAR_READ[0].char_val->attr_max_len;
@@ -474,10 +467,6 @@ void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 				LIST_CHAR_READ[0].char_val->attr_value[pos];
 		}
 	}
-	ESP_LOGD(GATTS_TAG, "char_total_read_handler = %.*s\n",
-			 LIST_CHAR_READ[0].char_val->attr_len,
-			 (char *)LIST_CHAR_READ[0].char_val->attr_value);
-	ESP_LOGD(GATTS_TAG, "char_total_read_handler esp_gatt_rsp_t\n");
 
 	esp_ble_gatts_send_response(gatts_if, param->read.conn_id,
 								param->read.trans_id, ESP_GATT_OK, &rsp);
@@ -486,20 +475,14 @@ void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 void char_total_write_handler(esp_gatts_cb_event_t event,
 							  esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param)
 {
-	ESP_LOGD(GATTS_TAG, "char_light_write_handler %d\n", param->write.handle);
 	if (LIST_CHAR_READ[0].char_val != NULL)
 	{
-		ESP_LOGD(GATTS_TAG, "char_light_write_handler char_val %d\n",
-				 param->write.len);
 		LIST_CHAR_READ[0].char_val->attr_len = param->write.len;
 		for (uint32_t pos = 0; pos < param->write.len; pos++)
 		{
 			LIST_CHAR_READ[0].char_val->attr_value[pos] =
 				param->write.value[pos];
 		}
-		ESP_LOGD(GATTS_TAG, "char_light_write_handler = %.*s\n",
-				 LIST_CHAR_READ[0].char_val->attr_len,
-				 (char *)LIST_CHAR_READ[0].char_val->attr_value);
 
 		uint32_t msize = LIST_CHAR_READ[0].char_val->attr_len + 1;
 		char *config_total_json;
@@ -514,7 +497,6 @@ void char_total_write_handler(esp_gatts_cb_event_t event,
 			free(config_total_json);
 		}
 	}
-	ESP_LOGD(GATTS_TAG, "char_light_write_handler esp_gatt_rsp_t\n");
 	esp_ble_gatts_send_response(gatts_if, param->write.conn_id,
 								param->write.trans_id, ESP_GATT_OK, NULL);
 }
@@ -522,25 +504,7 @@ void char_total_write_handler(esp_gatts_cb_event_t event,
 void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 							  esp_ble_gatts_cb_param_t *param)
 {
-	ESP_LOGD(GATTS_TAG, "char_total2_read_handler %d\n", param->read.handle);
-
 	ESP_LOGI(GATTS_TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
-
-	sprintf((char *)total2,
-			"{\"wifi\":[\"%s\",\"%s\"],\"cc\":[%d,\"%s\"],\"tabcc\":[%d,%ld,%d,%ld,%d,%ld],\"ZN\":[\"%s\",\"%s\",\"%s\",\"%s\"],"
-			"\"Amb\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"],\"PP\":\"%s\"}",
-			UnitCfg.WifiCfg.WIFI_SSID, UnitCfg.WifiCfg.WIFI_PASS,
-			UnitCfg.UserLcProfile.CcEnb, UnitCfg.UserLcProfile.ZoneCc,
-			UnitCfg.UserLcProfile.Ccp[0].CcLevel, UnitCfg.UserLcProfile.Ccp[0].CcTime,
-			UnitCfg.UserLcProfile.Ccp[1].CcLevel, UnitCfg.UserLcProfile.Ccp[1].CcTime,
-			UnitCfg.UserLcProfile.Ccp[2].CcLevel, UnitCfg.UserLcProfile.Ccp[2].CcTime,
-			UnitCfg.Zones_info[0].zonename, UnitCfg.Zones_info[1].zonename,
-			UnitCfg.Zones_info[2].zonename, UnitCfg.Zones_info[3].zonename,
-			UnitCfg.ColortrProfile[0].ambname,UnitCfg.ColortrProfile[0].Hue,
-			UnitCfg.ColortrProfile[1].ambname,UnitCfg.ColortrProfile[1].Hue,
-			UnitCfg.ColortrProfile[2].ambname,UnitCfg.ColortrProfile[2].Hue,
-			UnitCfg.ColortrProfile[3].ambname,UnitCfg.ColortrProfile[3].Hue,
-			UnitCfg.passPIN);
 
 	if (scanResult)
 	{
@@ -555,6 +519,59 @@ void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 		ESP_LOGI(GATTS_TAG, "total2 = %s", (char *)total2);
 		scanResult = false;
 	}
+	else
+	{
+		if (deviceIsIOS)
+		{
+			switch (charIOSCounter)
+			{
+			case 0:
+				sprintf((char *)total2,
+						"{\"wifi\":[\"%s\",\"%s\"],\"cc\":[%d,\"%s\"],\"tabcc\":[%d,%ld,%d,%ld,%d,%ld]}",
+						UnitCfg.WifiCfg.WIFI_SSID, UnitCfg.WifiCfg.WIFI_PASS,
+						UnitCfg.UserLcProfile.CcEnb, UnitCfg.UserLcProfile.ZoneCc,
+						UnitCfg.UserLcProfile.Ccp[0].CcLevel, UnitCfg.UserLcProfile.Ccp[0].CcTime,
+						UnitCfg.UserLcProfile.Ccp[1].CcLevel, UnitCfg.UserLcProfile.Ccp[1].CcTime,
+						UnitCfg.UserLcProfile.Ccp[2].CcLevel, UnitCfg.UserLcProfile.Ccp[2].CcTime);
+				charIOSCounter++;
+				break;
+			case 1:
+				sprintf((char *)total2,
+						"{\"ZN\":[\"%s\",\"%s\",\"%s\",\"%s\"]}",
+						UnitCfg.Zones_info[0].zonename, UnitCfg.Zones_info[1].zonename,
+						UnitCfg.Zones_info[2].zonename, UnitCfg.Zones_info[3].zonename);
+				charIOSCounter++;
+				break;
+			case 2:
+				sprintf((char *)total2, "{\"Amb\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"],\"PP\":\"%s\"}",
+						UnitCfg.ColortrProfile[0].ambname, UnitCfg.ColortrProfile[0].Hue,
+						UnitCfg.ColortrProfile[1].ambname, UnitCfg.ColortrProfile[1].Hue,
+						UnitCfg.ColortrProfile[2].ambname, UnitCfg.ColortrProfile[2].Hue,
+						UnitCfg.ColortrProfile[3].ambname, UnitCfg.ColortrProfile[3].Hue,
+						UnitCfg.passPIN);
+				charIOSCounter = 0;
+				break;
+			}
+		}
+		else
+		{
+			sprintf((char *)total2,
+					"{\"wifi\":[\"%s\",\"%s\"],\"cc\":[%d,\"%s\"],\"tabcc\":[%d,%ld,%d,%ld,%d,%ld],\"ZN\":[\"%s\",\"%s\",\"%s\",\"%s\"],"
+					"\"Amb\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"],\"PP\":\"%s\"}",
+					UnitCfg.WifiCfg.WIFI_SSID, UnitCfg.WifiCfg.WIFI_PASS,
+					UnitCfg.UserLcProfile.CcEnb, UnitCfg.UserLcProfile.ZoneCc,
+					UnitCfg.UserLcProfile.Ccp[0].CcLevel, UnitCfg.UserLcProfile.Ccp[0].CcTime,
+					UnitCfg.UserLcProfile.Ccp[1].CcLevel, UnitCfg.UserLcProfile.Ccp[1].CcTime,
+					UnitCfg.UserLcProfile.Ccp[2].CcLevel, UnitCfg.UserLcProfile.Ccp[2].CcTime,
+					UnitCfg.Zones_info[0].zonename, UnitCfg.Zones_info[1].zonename,
+					UnitCfg.Zones_info[2].zonename, UnitCfg.Zones_info[3].zonename,
+					UnitCfg.ColortrProfile[0].ambname, UnitCfg.ColortrProfile[0].Hue,
+					UnitCfg.ColortrProfile[1].ambname, UnitCfg.ColortrProfile[1].Hue,
+					UnitCfg.ColortrProfile[2].ambname, UnitCfg.ColortrProfile[2].Hue,
+					UnitCfg.ColortrProfile[3].ambname, UnitCfg.ColortrProfile[3].Hue,
+					UnitCfg.passPIN);
+		}
+	}
 
 	TOTAL2.attr_len = strlen((char *)total2);
 
@@ -563,8 +580,6 @@ void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 	rsp.attr_value.handle = param->read.handle;
 	if (LIST_CHAR_READ[1].char_val != NULL)
 	{
-		ESP_LOGD(GATTS_TAG, "char_total2_read_handler char_val %d\n",
-				 LIST_CHAR_READ[1].char_val->attr_len);
 		rsp.attr_value.len = LIST_CHAR_READ[1].char_val->attr_len;
 		for (uint32_t pos = 0;
 			 pos < LIST_CHAR_READ[1].char_val->attr_len && pos < LIST_CHAR_READ[1].char_val->attr_max_len;
@@ -573,28 +588,20 @@ void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 			rsp.attr_value.value[pos] = LIST_CHAR_READ[1].char_val->attr_value[pos];
 		}
 	}
-	ESP_LOGD(GATTS_TAG, "char_total2_read_handler = %.*s\n", LIST_CHAR_READ[1].char_val->attr_len, (char *)LIST_CHAR_READ[1].char_val->attr_value);
-	ESP_LOGD(GATTS_TAG, "char_total2_read_handler esp_gatt_rsp_t\n");
 
 	esp_ble_gatts_send_response(gatts_if, param->read.conn_id, param->read.trans_id, ESP_GATT_OK, &rsp);
 }
 
 void char_total2_write_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param)
 {
-	ESP_LOGD(GATTS_TAG, "char_light_write2_handler %d\n", param->write.handle);
 	if (LIST_CHAR_READ[1].char_val != NULL)
 	{
-		ESP_LOGD(GATTS_TAG, "char_light_write2_handler char_val %d\n",
-				 param->write.len);
 		LIST_CHAR_READ[1].char_val->attr_len = param->write.len;
 		for (uint32_t pos = 0; pos < param->write.len; pos++)
 		{
 			LIST_CHAR_READ[1].char_val->attr_value[pos] =
 				param->write.value[pos];
 		}
-		ESP_LOGD(GATTS_TAG, "char_light_write2_handler = %.*s\n",
-				 LIST_CHAR_READ[1].char_val->attr_len,
-				 (char *)LIST_CHAR_READ[1].char_val->attr_value);
 
 		uint32_t msize = LIST_CHAR_READ[1].char_val->attr_len + 1;
 		char *config_total2_json;
@@ -609,7 +616,6 @@ void char_total2_write_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_i
 			free(config_total2_json);
 		}
 	}
-	ESP_LOGD(GATTS_TAG, "char_light_write2_handler esp_gatt_rsp_t\n");
 	esp_ble_gatts_send_response(gatts_if, param->write.conn_id,
 								param->write.trans_id, ESP_GATT_OK, NULL);
 }
@@ -675,6 +681,19 @@ bool configData(char *jsonData)
 			ESP_LOGE(GATTS_TAG, "Scan is not activated");
 		}
 	}
+	else if (jsonparse(jsonData, tmp, "IOS", 0))
+	{
+		if (atoi(tmp) == 0)
+		{
+			ESP_LOGW(GATTS_TAG, "Device Connected is NOT AN IOS");
+			deviceIsIOS = false;
+		}
+		else
+		{
+			ESP_LOGW(GATTS_TAG, "Device Connected is AN IOS");
+			deviceIsIOS = true;
+		}
+	}
 	else if (jsonparse(jsonData, tmp, "cc", 0))
 	{
 		if (atoi(tmp) == 0)
@@ -718,12 +737,6 @@ bool configData(char *jsonData)
 			zone = strtol(tmp, NULL, 16);
 		}
 
-		// On/Off
-
-		if ((cmd == LCMD_SWITCH_ON_OFF) && (zone != 0))
-		{
-			MilightHandler(LCMD_SWITCH_ON_OFF, subcmd, zone & 0x0F);
-		}
 		//radio
 		MilightHandler(cmd, subcmd, zone & 0x0F);
 
@@ -902,14 +915,6 @@ void gap_event_handler(esp_gap_ble_cb_event_t event,
 		}
 		break;
 	case ESP_GAP_BLE_UPDATE_CONN_PARAMS_EVT:
-		ESP_LOGD(GATTS_TAG,
-				 "update connection params status = %d, min_int = %d, max_int = %d,conn_int = %d,latency = %d, timeout = %d",
-				 param->update_conn_params.status,
-				 param->update_conn_params.min_int,
-				 param->update_conn_params.max_int,
-				 param->update_conn_params.conn_int,
-				 param->update_conn_params.latency,
-				 param->update_conn_params.timeout);
 		break;
 	default:
 		break;
@@ -922,8 +927,6 @@ void gatts_profile_read_event_handler(esp_gatts_cb_event_t event,
 	switch (event)
 	{
 	case ESP_GATTS_REG_EVT:
-		ESP_LOGD(GATTS_TAG, "REGISTER_APP_EVT_READ, status %d, app_id %d\n",
-				 param->reg.status, param->reg.app_id);
 		gl_profile_tab[SERVICE_READ].service_id.is_primary = true;
 		gl_profile_tab[SERVICE_READ].service_id.id.inst_id = 0x00;
 		gl_profile_tab[SERVICE_READ].service_id.id.uuid.len = ESP_UUID_LEN_16;
@@ -1083,8 +1086,6 @@ void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 		}
 		else
 		{
-			ESP_LOGD(GATTS_TAG, "Reg app failed, app_id %04x, status %d\n",
-					 param->reg.app_id, param->reg.status);
 			return;
 		}
 	}
