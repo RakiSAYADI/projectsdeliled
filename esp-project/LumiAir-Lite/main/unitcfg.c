@@ -173,6 +173,8 @@ void Default_saving()
 
 	sprintf(UnitCfg.passPIN, "1234");
 
+	sprintf(UnitCfg.versionSystem, "1.0.0");
+
 	sprintf(UnitCfg.FLASH_MEMORY, "OK");
 
 	if (SaveNVS(&UnitCfg))

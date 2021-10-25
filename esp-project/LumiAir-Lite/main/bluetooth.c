@@ -25,6 +25,7 @@
 #include "app_gpio.h"
 #include "webservice.h"
 #include "lightcontrol.h"
+#include "https_ota.h"
 #include "scanwifi.h"
 
 #define GATTS_TAG "GATTS"
@@ -446,10 +447,16 @@ void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 
 	ESP_LOGI(GATTS_TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
 
-	sprintf((char *)total,
-			"{\"EnvData\":[%ld,%ld,%d,%d,%d,%d,%d,%d],\"SCR\":%d}",
-			UnitData.UpdateTime, UnitData.LastDetTime, (uint8_t)UnitData.Temp, (uint8_t)UnitData.Humidity,
-			UnitData.Als, UnitData.aq_Co2Level, UnitData.aq_Tvoc, WifiConnectedFlag, scanResult);
+	if (otaEnable)
+	{
+		sprintf((char *)total, "{\"ota\":[%d,%d,%d]}", otaNotNeeded, otaProgress, otaIsDone);
+	}
+	else
+	{
+		sprintf((char *)total, "{\"EnvData\":[%ld,%ld,%d,%d,%d,%d,%d,%d],\"SCR\":%d,\"ver\":\"%s\"}",
+				UnitData.UpdateTime, UnitData.LastDetTime, (uint8_t)UnitData.Temp, (uint8_t)UnitData.Humidity,
+				UnitData.Als, UnitData.aq_Co2Level, UnitData.aq_Tvoc, WifiConnectedFlag, scanResult, UnitCfg.versionSystem);
+	}
 
 	TOTAL.attr_len = strlen((char *)total);
 
@@ -671,6 +678,18 @@ bool configData(char *jsonData)
 		{
 			ESP_LOGI(GATTS_TAG, "System restart");
 			esp_restart();
+		}
+	}
+	else if (jsonparse(jsonData, tmp, "OTA", 0))
+	{
+		if (atoi(tmp) == 1)
+		{
+			ESP_LOGI(GATTS_TAG, "OTA is Activated");
+			scanWIFITask();
+		}
+		else
+		{
+			ESP_LOGE(GATTS_TAG, "OTA is not activated");
 		}
 	}
 	else if (jsonparse(jsonData, tmp, "SCAN", 0))
@@ -1058,6 +1077,7 @@ void gatts_profile_read_event_handler(esp_gatts_cb_event_t event,
 	}
 	case ESP_GATTS_DISCONNECT_EVT:
 		ESP_LOGI(GATTS_TAG, "ESP_GATTS_DISCONNECT_EVT_READ");
+		deviceIsIOS = false;
 		esp_ble_gap_start_advertising(&adv_params);
 		break;
 	case ESP_GATTS_CONF_EVT:

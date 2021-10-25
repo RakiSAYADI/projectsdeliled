@@ -17,6 +17,7 @@
 #include "unitcfg.h"
 #include "app_gpio.h"
 #include "sntpservice.h"
+#include "https_ota.h"
 
 #define WIFI_CONNECTED_BIT BIT0
 #define WIFI_FAIL_BIT BIT1
@@ -62,6 +63,8 @@ esp_err_t event_wifi_handler(void *arg, esp_event_base_t event_base,
 		WifiConnectedFlag = true;
 		// Start SNTP Task
 		xTaskCreatePinnedToCore(&sntp_task, "sntp_task", 4000, NULL, 2, NULL, 1);
+		// Start OTA Task
+		xTaskCreatePinnedToCore(&advanced_ota_task, "ota_task", 1024 * 8, NULL, 2, NULL, 1);
 		xEventGroupSetBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
 	}
 	return ESP_OK;
@@ -98,6 +101,8 @@ void WebService_Init()
 	ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
 	ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config));
 	ESP_ERROR_CHECK(esp_wifi_start());
+
+	esp_wifi_set_ps(WIFI_PS_NONE);
 
 	ESP_LOGI(WEBSERVICE_TAG, "wifi_init_sta finished.");
 
