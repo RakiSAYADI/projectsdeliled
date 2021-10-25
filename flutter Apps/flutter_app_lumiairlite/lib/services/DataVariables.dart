@@ -125,7 +125,7 @@ Future<void> savingDataWidget(BuildContext buildContext) async {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Envoie en cours'),
+          title: Text('Veuillez patienter'),
           content: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
