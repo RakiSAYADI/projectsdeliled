@@ -90,11 +90,13 @@ int8_t CtempOut = 0;
 void ColorTemp_Controller()
 {
 
-	float h1 = 0, h2 = 0, h3 = 0;
-	float t1 = 0, t2 = 0, t3 = 0;
+	float h1 = 0, h2 = 0, h3 = 0, h4 = 0, h5 = 0;
+	float t1 = 0, t2 = 0, t3 = 0, t4 = 0, t5 = 0;
 
 	float a1 = 0, b1 = 0;
 	float a2 = 0, b2 = 0;
+	float a3 = 0, b3 = 0;
+	float a4 = 0, b4 = 0;
 
 	time_t now = 0;
 
@@ -108,12 +110,16 @@ void ColorTemp_Controller()
 		h1 = UnitCfg.UserLcProfile.Ccp[0].CcTime;
 		h2 = UnitCfg.UserLcProfile.Ccp[1].CcTime;
 		h3 = UnitCfg.UserLcProfile.Ccp[2].CcTime;
+		h4 = UnitCfg.UserLcProfile.Ccp[3].CcTime;
+		h5 = UnitCfg.UserLcProfile.Ccp[4].CcTime;
 
 		t1 = UnitCfg.UserLcProfile.Ccp[0].CcLevel;
 		t2 = UnitCfg.UserLcProfile.Ccp[1].CcLevel;
 		t3 = UnitCfg.UserLcProfile.Ccp[2].CcLevel;
+		t4 = UnitCfg.UserLcProfile.Ccp[3].CcLevel;
+		t5 = UnitCfg.UserLcProfile.Ccp[4].CcLevel;
 
-		if ((UnitCfg.UserLcProfile.CcEnb) && ((now >= h1) && (now <= h3)))
+		if ((UnitCfg.UserLcProfile.CcEnb) && ((now >= h1) && (now <= h5)))
 		{
 
 			if (h2 != h1)
@@ -136,29 +142,49 @@ void ColorTemp_Controller()
 				a2 = 0;
 				b2 = t2 = UnitCfg.UserLcProfile.Ccp[1].CcLevel;
 			}
+			if (h4 != h3)
+			{
+				a3 = (t4 - t3) / (h4 - h3);
+				b3 = t3 - (a3 * h3);
+			}
+			else
+			{
+				a3 = 0;
+				b3 = t3 = UnitCfg.UserLcProfile.Ccp[2].CcLevel;
+			}
+			if (h5 != h4)
+			{
+				a4 = (t5 - t4) / (h5 - h4);
+				b4 = t4 - (a4 * h4);
+			}
+			else
+			{
+				a4 = 0;
+				b4 = t4 = UnitCfg.UserLcProfile.Ccp[3].CcLevel;
+			}
 			if ((now >= h1) && (now <= h2))
 			{
 				CtempOut = a1 * now + b1;
-				if (CtempOut > 100)
-				{
-					CtempOut = 100;
-				}
-				if (CtempOut < 0)
-				{
-					CtempOut = 0;
-				}
 			}
 			else if ((now >= h2) && (now <= h3))
 			{
 				CtempOut = a2 * now + b2;
-				if (CtempOut > 100)
-				{
-					CtempOut = 100;
-				}
-				if (CtempOut < 0)
-				{
-					CtempOut = 0;
-				}
+			}
+			else if ((now >= h3) && (now <= h4))
+			{
+				CtempOut = a3 * now + b3;
+			}
+			else if ((now >= h4) && (now <= h5))
+			{
+				CtempOut = a4 * now + b4;
+			}
+			if (CtempOut > 100)
+			{
+				CtempOut = 100;
+			}
+			if (CtempOut < 0)
+			{
+				CtempOut = 0;
 			}
 
 			ESP_LOGI(TAG, "ACTC Level %d @ %ld", CtempOut, now);
@@ -232,7 +258,7 @@ void Co2_MonitorTask()
 	{
 		zone = strtol(UnitCfg.Co2LevelSelect, NULL, 16);
 		//co2
-		if (UnitCfg.Co2LevelWarEnb )
+		if (UnitCfg.Co2LevelWarEnb)
 		{
 			if ((iaq_data.pred > UnitCfg.Co2LevelWar) && (co2_alert_enable == 0))
 			{

@@ -527,12 +527,14 @@ void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 			{
 			case 0:
 				sprintf((char *)total2,
-						"{\"wifi\":[\"%s\",\"%s\"],\"cc\":[%d,\"%s\"],\"tabcc\":[%d,%ld,%d,%ld,%d,%ld]}",
+						"{\"wifi\":[\"%s\",\"%s\"],\"cc\":[%d,\"%s\"],\"tabcc\":[%d,%ld,%d,%ld,%d,%ld,%d,%ld,%d,%ld]}",
 						UnitCfg.WifiCfg.WIFI_SSID, UnitCfg.WifiCfg.WIFI_PASS,
 						UnitCfg.UserLcProfile.CcEnb, UnitCfg.UserLcProfile.ZoneCc,
 						UnitCfg.UserLcProfile.Ccp[0].CcLevel, UnitCfg.UserLcProfile.Ccp[0].CcTime,
 						UnitCfg.UserLcProfile.Ccp[1].CcLevel, UnitCfg.UserLcProfile.Ccp[1].CcTime,
-						UnitCfg.UserLcProfile.Ccp[2].CcLevel, UnitCfg.UserLcProfile.Ccp[2].CcTime);
+						UnitCfg.UserLcProfile.Ccp[2].CcLevel, UnitCfg.UserLcProfile.Ccp[2].CcTime,
+						UnitCfg.UserLcProfile.Ccp[3].CcLevel, UnitCfg.UserLcProfile.Ccp[3].CcTime,
+						UnitCfg.UserLcProfile.Ccp[4].CcLevel, UnitCfg.UserLcProfile.Ccp[4].CcTime);
 				charIOSCounter++;
 				break;
 			case 1:
@@ -556,13 +558,15 @@ void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 		else
 		{
 			sprintf((char *)total2,
-					"{\"wifi\":[\"%s\",\"%s\"],\"cc\":[%d,\"%s\"],\"tabcc\":[%d,%ld,%d,%ld,%d,%ld],\"ZN\":[\"%s\",\"%s\",\"%s\",\"%s\"],"
+					"{\"wifi\":[\"%s\",\"%s\"],\"cc\":[%d,\"%s\"],\"tabcc\":[%d,%ld,%d,%ld,%d,%ld,%d,%ld,%d,%ld],\"ZN\":[\"%s\",\"%s\",\"%s\",\"%s\"],"
 					"\"Amb\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"],\"PP\":\"%s\"}",
 					UnitCfg.WifiCfg.WIFI_SSID, UnitCfg.WifiCfg.WIFI_PASS,
 					UnitCfg.UserLcProfile.CcEnb, UnitCfg.UserLcProfile.ZoneCc,
 					UnitCfg.UserLcProfile.Ccp[0].CcLevel, UnitCfg.UserLcProfile.Ccp[0].CcTime,
 					UnitCfg.UserLcProfile.Ccp[1].CcLevel, UnitCfg.UserLcProfile.Ccp[1].CcTime,
 					UnitCfg.UserLcProfile.Ccp[2].CcLevel, UnitCfg.UserLcProfile.Ccp[2].CcTime,
+					UnitCfg.UserLcProfile.Ccp[3].CcLevel, UnitCfg.UserLcProfile.Ccp[3].CcTime,
+					UnitCfg.UserLcProfile.Ccp[4].CcLevel, UnitCfg.UserLcProfile.Ccp[4].CcTime,
 					UnitCfg.Zones_info[0].zonename, UnitCfg.Zones_info[1].zonename,
 					UnitCfg.Zones_info[2].zonename, UnitCfg.Zones_info[3].zonename,
 					UnitCfg.ColortrProfile[0].ambname, UnitCfg.ColortrProfile[0].Hue,

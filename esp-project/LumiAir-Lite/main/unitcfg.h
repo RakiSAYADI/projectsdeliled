@@ -23,7 +23,7 @@ typedef struct {
 	//cycle
 	bool CcEnb;
 	char ZoneCc[3];
-	CcPoint_Typedef Ccp[3];
+	CcPoint_Typedef Ccp[5];
 } LightCtrProfile_Typedef;
 
 typedef struct {
