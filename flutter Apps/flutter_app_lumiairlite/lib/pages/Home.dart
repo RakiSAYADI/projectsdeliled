@@ -148,7 +148,7 @@ class _HomeState extends State<Home> {
         context: context,
         builder: (c) => AlertDialog(
           title: Text('Attention'),
-          content: Text('Êtes-vous sûr de vouloir revenir à la page de sélection des cartes Maestro™ ?'),
+          content: Text('Voulez-vous revenir à la sélection des HuBBox ?'),
           actions: [
             TextButton(
                 child: Text('Oui'),
