@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_bispectrum/services/bleDeviceClass.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 final String appName = 'Lumi\'air Lite';
 
@@ -91,6 +92,52 @@ Future<String> charDividedIOSRead(BluetoothCharacteristic characteristicIOS) asy
   print(data);
   await Future.delayed(Duration(milliseconds: 300));
   return data;
+}
+
+Future<void> waitingConnectionWidget(BuildContext buildContext) async {
+  //double screenWidth = MediaQuery.of(context).size.width;
+  double screenHeight = MediaQuery.of(buildContext).size.height;
+  return showDialog<void>(
+      context: buildContext,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Connexion en cours'),
+          content: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SpinKitCircle(
+                color: Colors.blue[600],
+                size: screenHeight * 0.1,
+              ),
+            ],
+          ),
+        );
+      });
+}
+
+Future<void> savingDataWidget(BuildContext buildContext) async {
+  //double screenWidth = MediaQuery.of(context).size.width;
+  double screenHeight = MediaQuery.of(buildContext).size.height;
+  return showDialog<void>(
+      context: buildContext,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Envoie en cours'),
+          content: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SpinKitCircle(
+                color: Colors.blue[600],
+                size: screenHeight * 0.1,
+              ),
+            ],
+          ),
+        );
+      });
 }
 
 List<String> myExtinctionTimeMinute = [

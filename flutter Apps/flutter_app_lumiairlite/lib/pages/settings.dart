@@ -61,6 +61,9 @@ class _SettingsState extends State<Settings> {
       zonesNamesList[1] = parsedJson['ZN'][1];
       zonesNamesList[2] = parsedJson['ZN'][2];
       zonesNamesList[3] = parsedJson['ZN'][3];
+      if (Platform.isIOS) {
+        parsedJson = json.decode(dataCharIOS2p1);
+      }
       ccSwitchValue = intToBool(int.parse(parsedJson['cc'][0].toString()));
       await Future.delayed(Duration(seconds: 2));
       if (deviceWifiState) {
@@ -73,7 +76,7 @@ class _SettingsState extends State<Settings> {
         myUvcToast.showToast(Colors.red, Icons.info, Colors.white);
       }
     } catch (e) {
-      print('erreur');
+      print('erreur settings');
       ccSwitchValue = false;
       zonesNamesList = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4'];
     }
@@ -190,9 +193,11 @@ class _SettingsState extends State<Settings> {
                                     dataCharAndroid2 = String.fromCharCodes(await characteristicData.read());
                                   }
                                   if (Platform.isIOS) {
+                                    await savingDataWidget(context);
                                     dataCharIOS2p1 = await charDividedIOSRead(characteristicData);
                                     dataCharIOS2p2 = await charDividedIOSRead(characteristicData);
                                     dataCharIOS2p3 = await charDividedIOSRead(characteristicData);
+                                    Navigator.of(context).pop();
                                   }
                                 }
                               },
@@ -405,9 +410,11 @@ class _SettingsState extends State<Settings> {
                                     dataCharAndroid2 = String.fromCharCodes(await characteristicData.read());
                                   }
                                   if (Platform.isIOS) {
+                                    await savingDataWidget(context);
                                     dataCharIOS2p1 = await charDividedIOSRead(characteristicData);
                                     dataCharIOS2p2 = await charDividedIOSRead(characteristicData);
                                     dataCharIOS2p3 = await charDividedIOSRead(characteristicData);
+                                    Navigator.of(context).pop();
                                   }
                                 } else {
                                   myUvcToast.setToastDuration(5);
@@ -726,9 +733,11 @@ class _SettingsState extends State<Settings> {
                   dataCharAndroid2 = String.fromCharCodes(await characteristicData.read());
                 }
                 if (Platform.isIOS) {
+                  await savingDataWidget(context);
                   dataCharIOS2p1 = await charDividedIOSRead(characteristicData);
                   dataCharIOS2p2 = await charDividedIOSRead(characteristicData);
                   dataCharIOS2p3 = await charDividedIOSRead(characteristicData);
+                  Navigator.of(context).pop();
                 }
                 Navigator.of(context).pop();
               },
@@ -915,9 +924,11 @@ class _SettingsState extends State<Settings> {
                     dataCharAndroid2 = String.fromCharCodes(await characteristicData.read());
                   }
                   if (Platform.isIOS) {
+                    await savingDataWidget(context);
                     dataCharIOS2p1 = await charDividedIOSRead(characteristicData);
                     dataCharIOS2p2 = await charDividedIOSRead(characteristicData);
                     dataCharIOS2p3 = await charDividedIOSRead(characteristicData);
+                    Navigator.of(context).pop();
                   }
                   setState(() {});
                   Navigator.of(context).pop();

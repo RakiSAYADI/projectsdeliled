@@ -33,7 +33,7 @@ class _AmbiancePageState extends State<AmbiancePage> {
         ambiance3 = [parsedJson['Amb'][4].toString(), parsedJson['Amb'][5].toString()];
         ambiance4 = [parsedJson['Amb'][6].toString(), parsedJson['Amb'][7].toString()];
       } catch (e) {
-        print('erreur');
+        print('erreur ambiance');
         ambiance1 = ['Ambiance 1', 'FF0000'];
         ambiance2 = ['Ambiance 2', '000000'];
         ambiance3 = ['Ambiance 3', '00FF00'];
@@ -202,9 +202,11 @@ class _AmbiancePageState extends State<AmbiancePage> {
                     dataCharAndroid2 = String.fromCharCodes(await characteristicData.read());
                   }
                   if (Platform.isIOS) {
+                    await savingDataWidget(context);
                     dataCharIOS2p1 = await charDividedIOSRead(characteristicData);
                     dataCharIOS2p2 = await charDividedIOSRead(characteristicData);
                     dataCharIOS2p3 = await charDividedIOSRead(characteristicData);
+                    Navigator.of(context).pop();
                   }
                 }
                 Navigator.of(context).pop();

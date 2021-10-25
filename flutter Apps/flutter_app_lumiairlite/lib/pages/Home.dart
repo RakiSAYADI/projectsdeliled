@@ -100,7 +100,7 @@ class _HomeState extends State<Home> {
             }
           });
         } catch (e) {
-          print('setState error');
+          print('setState erreur');
         }
 
         if (timeToSleep <= 0) {
@@ -130,7 +130,7 @@ class _HomeState extends State<Home> {
         stateOfSleepAndReadingProcess = 0;
         appRefreshData(context);
       } catch (e) {
-        print('erreur');
+        print('erreur home');
       }
       firstDisplayMainWidget = false;
     }

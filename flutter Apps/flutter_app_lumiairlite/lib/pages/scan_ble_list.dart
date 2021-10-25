@@ -7,7 +7,6 @@ import 'package:flutter_app_bispectrum/services/animation_between_pages.dart';
 import 'package:flutter_app_bispectrum/services/bleDeviceClass.dart';
 import 'package:flutter_app_bispectrum/services/deviceBleWidget.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class ScanListBle extends StatefulWidget {
   @override
@@ -151,7 +150,7 @@ class _ScanListBleState extends State<ScanListBle> {
 
   void startConnect(BuildContext context, BluetoothDevice thisDevice) async {
     myDevice = Device(device: thisDevice);
-    waitingWidget();
+    waitingConnectionWidget(context);
     // stop scanning and start connecting
     await flutterBlue.stopScan();
     bool resultConnection = false;
@@ -221,28 +220,5 @@ class _ScanListBleState extends State<ScanListBle> {
         });
       }
     }
-  }
-
-  Future<void> waitingWidget() async {
-    //double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    return showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Connexion en cours'),
-            content: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SpinKitCircle(
-                  color: Colors.blue[600],
-                  size: screenHeight * 0.1,
-                ),
-              ],
-            ),
-          );
-        });
   }
 }
