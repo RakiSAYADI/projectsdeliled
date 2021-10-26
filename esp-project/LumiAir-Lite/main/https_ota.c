@@ -10,7 +10,6 @@
 #include "esp_https_ota.h"
 #include "nvs.h"
 #include "nvs_flash.h"
-#include "esp_efuse.h"
 
 #include "sdkconfig.h"
 
@@ -49,13 +48,6 @@ esp_err_t validate_image_header(esp_app_desc_t *new_app_info)
     {
         ESP_LOGW(OTA_TAG, "Current running version is the same as a new. We will not continue the update.");
         otaNotNeeded = true;
-        return ESP_FAIL;
-    }
-
-    const uint32_t hw_sec_version = esp_efuse_read_secure_version();
-    if (new_app_info->secure_version < hw_sec_version)
-    {
-        ESP_LOGW(OTA_TAG, "New firmware security version is less than eFuse programmed, %d < %d", new_app_info->secure_version, hw_sec_version);
         return ESP_FAIL;
     }
 
