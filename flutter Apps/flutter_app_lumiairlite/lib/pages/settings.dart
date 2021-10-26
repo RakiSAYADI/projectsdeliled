@@ -50,7 +50,7 @@ class _SettingsState extends State<Settings> {
   void readDataMaestro() async {
     var parsedJson;
     try {
-      myBleDeviceName.text = myDevice.device.name;
+      myBleDeviceName.text = myDevice.device.name.substring(4);
       if (Platform.isAndroid) {
         parsedJson = json.decode(dataCharAndroid2);
       }
@@ -121,20 +121,31 @@ class _SettingsState extends State<Settings> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
-                        child: TextField(
-                          textAlign: TextAlign.center,
-                          controller: myBleDeviceName,
-                          maxLines: 1,
-                          maxLength: 64,
-                          style: TextStyle(
-                            fontSize: (screenWidth * 0.05),
-                          ),
-                          decoration: InputDecoration(
-                              hintText: 'exp:Maestro1234',
-                              hintStyle: TextStyle(
-                                fontSize: (screenWidth * 0.05),
-                                color: Colors.grey,
-                              )),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              myDevice.device.name.substring(0,4),
+                              style: TextStyle(fontSize: (screenWidth * 0.05)),
+                            ),
+                            Flexible(
+                              child: TextField(
+                                textAlign: TextAlign.center,
+                                controller: myBleDeviceName,
+                                maxLines: 1,
+                                maxLength: 64,
+                                style: TextStyle(
+                                  fontSize: (screenWidth * 0.05),
+                                ),
+                                decoration: InputDecoration(
+                                    hintText: 'exp:Maestro1234',
+                                    hintStyle: TextStyle(
+                                      fontSize: (screenWidth * 0.05),
+                                      color: Colors.grey,
+                                    )),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       Padding(
@@ -143,7 +154,7 @@ class _SettingsState extends State<Settings> {
                           onPressed: () async {
                             if (myDevice.getConnectionState()) {
                               // write the new ble device name
-                              await characteristicData.write('{\"dname\":\"${myBleDeviceName.text}\"}'.codeUnits);
+                              await characteristicData.write('{\"dname\":\"${myDevice.device.name.substring(0,4)}${myBleDeviceName.text}\"}'.codeUnits);
                               myUvcToast.setToastDuration(5);
                               myUvcToast.setToastMessage('Nom modifié, veuillez redémarrer pour appliquer les changements.');
                               myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
