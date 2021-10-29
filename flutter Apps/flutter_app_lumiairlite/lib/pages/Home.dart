@@ -567,8 +567,8 @@ class _HomeState extends State<Home> {
           myPinCode += number;
           _pinPutController.text += '*';
           if (_pinPutController.text.length == 4) {
+	    Navigator.pop(buildContext);
             if (myPinCode == pinCodeAccess) {
-              Navigator.pop(buildContext);
               stateOfSleepAndReadingProcess = 2;
               createRoute(context, Settings());
             } else {
