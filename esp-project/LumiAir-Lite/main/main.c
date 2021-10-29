@@ -1,8 +1,6 @@
 #include "esp_log.h"
 #include "string.h"
-#include "stdio.h"
 #include "nvs_flash.h"
-#include "stdlib.h"
 
 #include "sdkconfig.h"
 
