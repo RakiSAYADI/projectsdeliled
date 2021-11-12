@@ -109,6 +109,25 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                       ),
                       color: Colors.blue[400],
                     ),
+                    SizedBox(height: heightScreen * 0.05),
+                    FlatButton(
+                      onPressed: () async {
+                        if (myDevice.getConnectionState()) {
+                          Navigator.pushNamed(context, '/DataCSVSettingsView');
+                        }
+                      },
+                      child: Text(
+                        'Rapport Désinfection',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: widthScreen * 0.05,
+                        ),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      color: Colors.blue[400],
+                    ),
                   ],
                 ),
               ),
