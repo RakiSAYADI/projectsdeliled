@@ -10,7 +10,6 @@
 #include "nvs_flash.h"
 #include "esp_bt.h"
 #include "esp_wifi.h"
-#include <driver/dac.h>
 #include "cJSON.h"
 
 #include "esp_gap_ble_api.h"
