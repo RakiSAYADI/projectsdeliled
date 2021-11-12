@@ -50,7 +50,9 @@ void app_main() {
 
 	I2c_Init();
 	AdcInit();
+	
 	lightControl_Init();
+	
 	bt_main();
 
 	WebService_Init();
