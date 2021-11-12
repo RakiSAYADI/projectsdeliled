@@ -10,7 +10,6 @@
 #include "nvs_flash.h"
 #include "esp_bt.h"
 #include "esp_wifi.h"
-#include <driver/dac.h>
 #include "cJSON.h"
 
 #include "esp_gap_ble_api.h"
@@ -56,7 +55,7 @@ static void char_total_write_handler(esp_gatts_cb_event_t event,
 
 //characteristics values of READ profile
 
-uint8_t total[GATTS_CHAR_VAL_LEN_MAX]; //capteurs	  = {0x4e,0x4f,0x54,0x20,0x43,0x4f,0x4e,0x4e,0x45,0x43,0x54,0x45,0x44,0x4e,0x4f,0x54,0x20,0x21,0x21,0x21,0x21,0x21};
+uint8_t total[GATTS_CHAR_VAL_LEN_MAX];
 
 //property of each service
 
@@ -345,12 +344,13 @@ void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 			esp_get_free_heap_size());
 
 	sprintf((char*) total,
-			"{\"Company\":\"%s\",\"UserName\":\"%s\",\"Detection\":%d,\"RoomName\":\"%s\",\"security\":%d,\"Version\":%d,\"FirmwareVersion\":\"%s\",\"TimeData\":[%d,%d],\"UVCTimeData\":[%d,%d,%d]}",
+			"{\"Company\":\"%s\",\"UserName\":\"%s\",\"Detection\":%d,\"RoomName\":\"%s\",\"security\":%d,\"Version\":%d,"
+			"\"FirmwareVersion\":\"%s\",\"TimeData\":[%d,%d],\"UVCTimeData\":[%d,%d,%d],\"uvcSt\":%d}",
 			UnitCfg.Company, UnitCfg.OperatorName, detectionTriggered,
 			UnitCfg.RoomName,UnitCfg.SecurityCodeDismiss, UnitCfg.Version, UnitCfg.FirmwareVersion,
 			UnitCfg.DisinfictionTime, UnitCfg.ActivationTime,
 			UnitCfg.UVCLifeTime, UnitCfg.UVCTimeExecution,
-			UnitCfg.NumberOfDisinfection);
+			UnitCfg.NumberOfDisinfection,UVC_Treatement_State);
 
 	TOTAL.attr_len = strlen((char *) total);
 
@@ -695,6 +695,8 @@ void bt_main() {
 		ESP_LOGE(GATTS_TAG, "%s initialize controller failed\n", __func__);
 		return;
 	}
+
+	ESP_LOGI(GATTS_TAG, "[APP] Free memory: %d bytes",esp_get_free_heap_size());
 
 	ret = esp_bt_controller_enable(ESP_BT_MODE_BLE);
 
