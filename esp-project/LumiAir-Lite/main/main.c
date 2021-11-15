@@ -1,8 +1,6 @@
 #include "esp_log.h"
 #include "string.h"
-#include "stdio.h"
 #include "nvs_flash.h"
-#include "stdlib.h"
 
 #include "sdkconfig.h"
 
@@ -20,7 +18,15 @@
 const char *TAG = "MAIN";
 
 void app_main() {
-	nvs_flash_init();
+
+	// Initialize NVS.
+    esp_err_t err = nvs_flash_init();
+    if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        err = nvs_flash_init();
+    }
+	
+    ESP_ERROR_CHECK( err );
 
 	ESP_LOGI(TAG, "[APP] Startup..");
 	ESP_LOGI(TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
@@ -44,7 +50,9 @@ void app_main() {
 
 	I2c_Init();
 	AdcInit();
+	
 	lightControl_Init();
+	
 	bt_main();
 
 	WebService_Init();

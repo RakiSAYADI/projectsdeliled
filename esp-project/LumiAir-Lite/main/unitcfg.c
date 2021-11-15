@@ -130,7 +130,7 @@ void Default_saving()
 	uint8_t mac[6];
 	esp_efuse_mac_get_default(mac);
 
-	sprintf(UnitCfg.UnitName, "Lumiair-Lite_%02X:%02X:%02X", mac[3], mac[4], mac[5]);
+	sprintf(UnitCfg.UnitName, "HUB-%02X:%02X:%02X", mac[3], mac[4], mac[5]);
 
 	UnitCfg.UserLcProfile.CcEnb = false;
 	sprintf(UnitCfg.UserLcProfile.ZoneCc, "F");
@@ -172,6 +172,8 @@ void Default_saving()
 	UnitCfg.UnitTimeZone = 0;
 
 	sprintf(UnitCfg.passPIN, "1234");
+
+	sprintf(UnitCfg.versionSystem, "1.0.0");
 
 	sprintf(UnitCfg.FLASH_MEMORY, "OK");
 

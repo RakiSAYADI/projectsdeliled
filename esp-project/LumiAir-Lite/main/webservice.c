@@ -17,6 +17,7 @@
 #include "unitcfg.h"
 #include "app_gpio.h"
 #include "sntpservice.h"
+#include "https_ota.h"
 
 #define WIFI_CONNECTED_BIT BIT0
 #define WIFI_FAIL_BIT BIT1
@@ -60,8 +61,6 @@ esp_err_t event_wifi_handler(void *arg, esp_event_base_t event_base,
 		UnitSetStatus(UNIT_STATUS_WIFI_GOT_IP);
 		s_retry_num = 0;
 		WifiConnectedFlag = true;
-		// Start SNTP Task
-		xTaskCreatePinnedToCore(&sntp_task, "sntp_task", 4000, NULL, 2, NULL, 1);
 		xEventGroupSetBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
 	}
 	return ESP_OK;
@@ -114,6 +113,19 @@ void WebService_Init()
 	else
 	{
 		ESP_LOGE(WEBSERVICE_TAG, "UNEXPECTED EVENT");
+	}
+
+	if (WifiConnectedFlag)
+	{
+		ESP_LOGI(WEBSERVICE_TAG, "We Have a Internet Connection !");
+		// Start SNTP Task
+		xTaskCreatePinnedToCore(&sntp_task, "sntp_task", 4000, NULL, 2, NULL, 1);
+		// Start OTA Task
+		xTaskCreatePinnedToCore(&advanced_ota_task, "ota_task", 1024 * 8, NULL, 2, NULL, 1);
+	}
+	else
+	{
+		ESP_LOGE(WEBSERVICE_TAG, "No Internet , No SNTP and OTA");
 	}
 
 	/* The event will not be processed after unregister */

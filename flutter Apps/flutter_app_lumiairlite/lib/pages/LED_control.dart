@@ -141,10 +141,10 @@ class _LEDPageState extends State<LEDPage> {
                         gradient: LinearGradient(colors: [
                           Colors.purpleAccent[400],
                           Colors.red,
-                          Colors.orange,
                           Colors.yellow,
                           Colors.green,
                           Colors.lightBlue[200],
+                          Colors.lightBlue,
                           Colors.blue,
                           Colors.purple[300],
                           Colors.purple,

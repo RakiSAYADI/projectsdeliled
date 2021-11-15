@@ -5,6 +5,7 @@
  *      Author: raki
  */
 #include "string.h"
+#include "stdint.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/gpio.h"
@@ -41,6 +42,8 @@ bool buzzerEnable = false;
 uint16_t phaseTimeStep = 0;
 int32_t phaseTime = 0;
 int32_t phaseTimeExecuted = 0;
+
+desinfectionState UVC_Treatement_State = State_OK;
 
 void TreatementTime() {
 	if (UnitCfg.DisinfictionTime == 0) {
@@ -263,14 +266,13 @@ void StopUVTreatement() {
 	detectionTriggered = false;
 	redLightEnable = false;
 	buzzerEnable = false;
-	stopIsPressed = false;
-	delay(500);
+	UVCSetStatus(State_Stopped);
 	UnitCfg.UVCTimeExecution += phaseTimeExecuted / 1000;
 	ESP_LOGI(GPIO_TAG, "UVC Time executed: %d",UnitCfg.UVCTimeExecution);
 	SaveNVS(&UnitCfg);
-	set_relay_state(RedLightRelay, RelayStateON);
 	UVTaskIsOn = false;
-
+	delay(500);
+	set_relay_state(RedLightRelay, RelayStateON);
 }
 
 void UVCTreatement() {
@@ -280,8 +282,8 @@ void UVCTreatement() {
 	stopIsPressed = false;
 	detectionTriggered = false;
 	AlertTime();
-	phaseTimeStep = 3500;
-	phaseTime *= 1000;
+	phaseTimeStep = 3500;	phaseTime *= 1000;
+	UVCSetStatus(State_In_PROGRESS);
 	while (phaseTime > 0) {
 		ESP_LOGI(GPIO_TAG, "%d !", phaseTime);
 		redLightEnable = true;
@@ -294,11 +296,11 @@ void UVCTreatement() {
 	}
 	if (stopIsPressed) {
 		ESP_LOGI(GPIO_TAG, "STOP is Pressed !");
-		stopIsPressed = false;
 		redLightEnable = false;
 		buzzerEnable = false;
 		set_relay_state(UVRelay, RelayStateOFF);
-		delay(100);
+		UVCSetStatus(State_Stopped);
+		delay(2000);
 		set_relay_state(RedLightRelay, RelayStateON);
 		UVTaskIsOn = false;
 		vTaskDelete(NULL);
@@ -317,28 +319,34 @@ void UVCTreatement() {
 		phaseTime *= 1000;
 		phaseTimeExecuted = 0;
 		ESP_LOGI(GPIO_TAG, "SETTING the UVC treatement !");
+		set_relay_state(GreenLightRelay, RelayStateON);
+		set_relay_state(UVRelay, RelayStateON);
 		while (phaseTime > 0) {
 			if (detectionTriggered) {
 				StopUVTreatement();
 				break;
-			} else {
-				set_relay_state(GreenLightRelay, RelayStateON);
-				set_relay_state(UVRelay, RelayStateON);
 			}
 			phaseTime -= phaseTimeStep;
 			phaseTimeExecuted += phaseTimeStep;
+			UVCSetStatus(State_In_PROGRESS);
 			delay(phaseTimeStep);
 			if (stopIsPressed) {
 				ESP_LOGI(GPIO_TAG, "STOP is Pressed !");
-				stopIsPressed = false;
 				set_relay_state(UVRelay, RelayStateOFF);
 				set_relay_state(GreenLightRelay, RelayStateOFF);
-				delay(100);
+				delay(2000);
 				set_relay_state(RedLightRelay, RelayStateON);
 				UVTaskIsOn = false;
 				break;
 			}
 		}
+	}
+	ESP_LOGI(GPIO_TAG, "STOP : %s and detection : %s",stopIsPressed ? "true": "false",detectionTriggered ? "true": "false");
+	ESP_LOGI(GPIO_TAG, "state uvc : %d",UVC_Treatement_State);
+	if(stopIsPressed||detectionTriggered){
+		UVCSetStatus(State_Stopped);
+	}else{
+		UVCSetStatus(State_OK);
 	}
 	set_relay_state(UVRelay, RelayStateOFF);
 	UVTreatementIsOn = false;
@@ -410,6 +418,7 @@ void LedStatusTask() {
 		//ESP_LOGI(GPIO_TAG, "the detection state is : %d",gpio_get_level(GPIO_NUM_16));
 		if ((gpio_get_level(GPIO_NUM_16) == 1) && (UVTreatementIsOn)) {
 			detectionTriggered = true;
+			UVCSetStatus(State_Stopped);
 			ESP_LOGI(GPIO_TAG, "STOP UVC TREATEMENT, WE HAVE DETECTION !");
 		}
 		delay(50);

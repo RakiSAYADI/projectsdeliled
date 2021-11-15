@@ -3,6 +3,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutterappdentaluvc/pages/Automatique_UVC.dart';
 import 'package:flutterappdentaluvc/pages/advanced_settings.dart';
 import 'package:flutterappdentaluvc/pages/data_view.dart';
+import 'package:flutterappdentaluvc/pages/data_view_settings.dart';
 import 'package:flutterappdentaluvc/pages/end_uvc.dart';
 import 'package:flutterappdentaluvc/pages/pin_access.dart';
 import 'package:flutterappdentaluvc/pages/pin_settings.dart';
@@ -90,6 +91,7 @@ class MyApp extends StatelessWidget {
               '/scan_ble_list': (context) => ScanListBle(),
               '/auto_uvc': (context) => UVCAuto(),
               '/DataCSVView': (context) => DataCSVView(),
+              '/DataCSVSettingsView': (context) => DataCSVSettingsView(),
               '/pin_settings': (context) => PinSettings(),
               '/profiles': (context) => Profiles(),
               '/settings': (context) => Settings(),

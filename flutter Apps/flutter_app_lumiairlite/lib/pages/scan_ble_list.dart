@@ -17,7 +17,7 @@ class _ScanListBleState extends State<ScanListBle> {
   List<Device> devices = [];
 
   final String robotUVCMAC = '70:B3:D5:01:8';
-  final String robotUVCName = 'Lumiair-Lite';
+  final String robotUVCName = 'HUB-';
 
   List<String> scanIdentifiers = [];
 

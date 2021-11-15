@@ -170,3 +170,7 @@ void Default_saving() {
 		ESP_LOGE(NVS_TAG, "Unit Config saving NOT OK");
 	}
 }
+
+void UVCSetStatus(desinfectionState NewStat) {
+	UVC_Treatement_State = NewStat;
+}
