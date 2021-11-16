@@ -10,8 +10,8 @@ import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:flutterappdentaluvc/services/LEDControl.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
-import 'package:location_permissions/location_permissions.dart';
 import 'package:package_info/package_info.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:wakelock/wakelock.dart';
 
 class Welcome extends StatefulWidget {
@@ -38,8 +38,6 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   AnimationController animationController;
 
   FlutterBlue flutterBlue = FlutterBlue.instance;
-
-  PermissionStatus _permissionStatus = PermissionStatus.unknown;
 
   bool enableResetButton = false;
 
@@ -167,13 +165,31 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
+    myUvcToast = ToastyMessage(toastContext: context);
+    try {
+      wakeLock();
+    } catch (e) {
+      myUvcToast.setToastDuration(1);
+      myUvcToast.setToastMessage('erreur wake up service');
+      myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+    }
 
-    wakeLock();
+    try {
+      _listenForPermissionStatus();
+    } catch (e) {
+      myUvcToast.setToastDuration(1);
+      myUvcToast.setToastMessage('erreur permission service');
+      myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+    }
 
-    _listenForPermissionStatus();
-
-    if (Platform.isAndroid) {
-      ledInit();
+    try {
+      if (Platform.isAndroid) {
+        ledInit();
+      }
+    } catch (e) {
+      myUvcToast.setToastDuration(1);
+      myUvcToast.setToastMessage('erreur LED service');
+      myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
     }
 
     controller = AnimationController(
@@ -206,7 +222,6 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     animationController.forward();
 
     animationRefreshIcon.repeat();
-    myUvcToast = ToastyMessage(toastContext: context);
     //checks bluetooth current state
     Future.delayed(const Duration(seconds: 1), () async {
       flutterBlue.state.listen((state) {
@@ -229,30 +244,8 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     super.initState();
   }
 
-  void _listenForPermissionStatus() {
-    checkServiceStatus(context);
-    final Future<PermissionStatus> statusFuture = LocationPermissions().checkPermissionStatus();
-
-    statusFuture.then((PermissionStatus status) async {
-      _permissionStatus = status;
-      if (_permissionStatus.index != 2) {
-        myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('La Localisation n\'est pas autorisée sur votre téléphone !');
-        myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-      } else {
-        checkServiceStatus(context);
-      }
-    });
-  }
-
-  void checkServiceStatus(BuildContext context) {
-    LocationPermissions().checkServiceStatus().then((ServiceStatus serviceStatus) {
-      if (serviceStatus.index != 2) {
-        myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('La Localisation n\'est pas activée sur votre téléphone !');
-        myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-      }
-    });
+  void _listenForPermissionStatus() async {
+    await [Permission.locationWhenInUse, Permission.locationAlways].request();
   }
 
   Animation animationColor(Color colorBegin, Color colorEnd) {
@@ -267,8 +260,14 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   }
 
   void scanForDevices() {
-    // Start scanning
-    flutterBlue.startScan(timeout: Duration(seconds: 30));
+    try {
+      // Start scanning
+      flutterBlue.startScan(timeout: Duration(seconds: 30));
+    } catch (e) {
+      myUvcToast.setToastDuration(1);
+      myUvcToast.setToastMessage('erreur SCAN BLUETOOTH !');
+      myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+    }
     // Listen to scan results
     bool firstTime = true;
     flutterBlue.scanResults.listen((results) {

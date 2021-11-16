@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_app_master_uvc/services/DataVariables.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_app_master_uvc/services/uvcToast.dart';
-import 'package:location_permissions/location_permissions.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class CheckPermissions extends StatefulWidget {
   @override
@@ -18,8 +18,6 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
   FlutterBlue flutterBlue = FlutterBlue.instance;
 
   bool firstDisplayMainWidget = true;
-
-  PermissionStatus _permissionStatus = PermissionStatus.unknown;
 
   void scanForDevices() async {
     // Start scanning
@@ -46,31 +44,8 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
     super.dispose();
   }
 
-  void _listenForPermissionStatus() {
-    final Future<PermissionStatus> statusFuture = LocationPermissions().checkPermissionStatus();
-
-    statusFuture.then((PermissionStatus status) {
-      setState(() {
-        _permissionStatus = status;
-        if (_permissionStatus.index != 2) {
-          myUvcToast.setToastDuration(5);
-          myUvcToast.setToastMessage('La localisation n\'est pas activée sur votre téléphone !');
-          myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-        } else {
-          checkServiceStatus(context);
-        }
-      });
-    });
-  }
-
-  void checkServiceStatus(BuildContext context) {
-    LocationPermissions().checkServiceStatus().then((ServiceStatus serviceStatus) {
-      if (serviceStatus.index != 2) {
-        myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('La localisation n\'est pas activée sur votre téléphone !');
-        myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-      }
-    });
+  void _listenForPermissionStatus() async {
+    await [Permission.locationWhenInUse, Permission.locationAlways].request();
   }
 
   @override

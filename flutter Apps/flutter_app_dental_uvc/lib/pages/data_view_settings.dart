@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 
@@ -12,10 +11,6 @@ class DataCSVSettingsView extends StatefulWidget {
 class _DataCSVSettingsViewState extends State<DataCSVSettingsView> {
   ToastyMessage myUvcToast;
 
-  bool firstDisplayMainWidget = true;
-
-  UVCDataFile uvcDataFile;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -23,18 +18,8 @@ class _DataCSVSettingsViewState extends State<DataCSVSettingsView> {
     myUvcToast = ToastyMessage(toastContext: context);
   }
 
-  void readUVCRapportFile() async {
-    if (firstDisplayMainWidget) {
-      uvcDataFile = UVCDataFile();
-      uvcData = await uvcDataFile.readUVCDATA();
-      firstDisplayMainWidget = false;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    readUVCRapportFile();
-
     double widthScreen = MediaQuery.of(context).size.width;
 
     return Scaffold(

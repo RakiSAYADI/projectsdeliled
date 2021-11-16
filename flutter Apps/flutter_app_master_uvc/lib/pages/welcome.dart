@@ -7,8 +7,8 @@ import 'package:flutter_app_master_uvc/services/DataVariables.dart';
 import 'package:flutter_app_master_uvc/services/uvcToast.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:location_permissions/location_permissions.dart';
 import 'package:package_info/package_info.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:wakelock/wakelock.dart';
 
 class Welcome extends StatefulWidget {
@@ -22,8 +22,6 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   ToastyMessage myUvcToast;
 
   FlutterBlue flutterBlue = FlutterBlue.instance;
-
-  PermissionStatus _permissionStatus = PermissionStatus.unknown;
 
   void wakeLock() async {
     await Wakelock.enable();
@@ -55,31 +53,8 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     });
   }
 
-  void _listenForPermissionStatus() {
-    final Future<PermissionStatus> statusFuture = LocationPermissions().checkPermissionStatus();
-
-    statusFuture.then((PermissionStatus status) {
-      setState(() {
-        _permissionStatus = status;
-        if (_permissionStatus.index != 2) {
-          myUvcToast.setToastDuration(5);
-          myUvcToast.setToastMessage('La localisation n\'est pas activée sur votre téléphone !');
-          myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-        } else {
-          checkServiceStatus(context);
-        }
-      });
-    });
-  }
-
-  void checkServiceStatus(BuildContext context) {
-    LocationPermissions().checkServiceStatus().then((ServiceStatus serviceStatus) {
-      if (serviceStatus.index != 2) {
-        myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('La localisation n\'est pas activée sur votre téléphone !');
-        myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-      }
-    });
+  void _listenForPermissionStatus() async {
+    await [Permission.locationWhenInUse, Permission.locationAlways].request();
   }
 
   @override
@@ -118,7 +93,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
 
     bool checkingBLEAndLocal = true;
 
-    try{
+    try {
       flutterBlue.state.listen((state) {
         if (checkingBLEAndLocal) {
           checkingBLEAndLocal = false;
@@ -127,15 +102,9 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
           }
           if (state == BluetoothState.off) {
             //Alert user to turn on bluetooth.
-            if (Platform.isAndroid && _permissionStatus.index != 2) {
-              Future.delayed(Duration(seconds: 5), () async {
-                Navigator.pushReplacementNamed(context, '/check_permissions');
-              });
-            } else {
-              Future.delayed(Duration(seconds: 5), () async {
-                Navigator.pushReplacementNamed(context, '/check_permissions');
-              });
-            }
+            Future.delayed(Duration(seconds: 5), () async {
+              Navigator.pushReplacementNamed(context, '/check_permissions');
+            });
           } else if (state == BluetoothState.on) {
             //if bluetooth is enabled then go ahead.
             //Make sure user's device gps is on.
@@ -146,7 +115,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
           }
         }
       });
-    }catch(e){
+    } catch (e) {
       myUvcToast.setToastDuration(5);
       myUvcToast.setToastMessage('App not working !');
       myUvcToast.showToast(Colors.red, Icons.close, Colors.white);

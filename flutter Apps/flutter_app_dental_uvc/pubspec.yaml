@@ -34,9 +34,8 @@ dependencies:
   path_provider: ^2.0.2
   fluttertoast: ^8.0.8
   mailer: ^5.0.2
-  location_permissions: ^4.0.0
-  nfc_in_flutter: ^2.0.5
   wakelock: ^0.5.3+3
+  permission_handler: ^7.0.0
   flutter_gifimage: ^1.0.1
   get: ^4.3.8
   restart_app: ^1.0.3

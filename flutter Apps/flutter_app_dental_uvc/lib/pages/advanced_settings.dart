@@ -112,9 +112,9 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                     SizedBox(height: heightScreen * 0.05),
                     FlatButton(
                       onPressed: () async {
-                        if (myDevice.getConnectionState()) {
-                          Navigator.pushNamed(context, '/DataCSVSettingsView');
-                        }
+                        uvcData = await uvcDataFile.readUVCDATA();
+                        print("the uvc data file : $uvcData");
+                        Navigator.pushNamed(context, '/DataCSVSettingsView');
                       },
                       child: Text(
                         'Rapport Désinfection',

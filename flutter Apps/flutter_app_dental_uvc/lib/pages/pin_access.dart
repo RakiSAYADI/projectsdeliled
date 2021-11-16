@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutterappdentaluvc/services/AutoUVCService.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
-import 'package:flutterappdentaluvc/services/NFCManagerClass.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pinput/pin_put/pin_put.dart';
@@ -51,14 +50,6 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     );
   }
 
-  void readingNFCTags() async {
-    NFCTagsManager nfcManager = NFCTagsManager();
-    print(await nfcManager.checkNFCAvailibility());
-    nfcManager.setContext(context);
-    nfcManager.startNFCTask();
-    print(nfcManager.nfcGetMessage());
-  }
-
   void checkAutoFileExists() async {
     bool isExisted = false;
     final directory = await getApplicationDocumentsDirectory();
@@ -74,8 +65,6 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     // TODO: implement initState
     super.initState();
     gifController = GifController(vsync: this);
-
-    readingNFCTags();
 
     checkAutoFileExists();
 
