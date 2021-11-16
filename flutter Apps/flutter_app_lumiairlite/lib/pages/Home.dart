@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_bispectrum/pages/LED_control.dart';
-import 'package:flutter_app_bispectrum/pages/ambiances.dart';
 import 'package:flutter_app_bispectrum/pages/settings.dart';
 import 'package:flutter_app_bispectrum/services/DataVariables.dart';
 import 'package:flutter_app_bispectrum/services/animation_between_pages.dart';
@@ -28,6 +27,7 @@ class _HomeState extends State<Home> {
   String carbonStateOnSleepGif = "assets/fond-vert-veille.gif";
   String carbonStateOnHome = "assets/personnage-vert.png";
   String carbonStateOnHomeMessage = "Bon";
+  String myWifiState = 'assets/pasinternet.png';
   String pinCode;
   String myPinCode = '';
 
@@ -64,6 +64,11 @@ class _HomeState extends State<Home> {
         carbonStateOnSleepGif = "assets/fond-vert-veille.gif";
         carbonStateOnHome = "assets/personnage-vert.png";
         carbonStateOnHomeMessage = "Bon";
+      }
+      if (deviceWifiState) {
+        myWifiState = 'assets/internet.png';
+      } else {
+        myWifiState = 'assets/pasinternet.png';
       }
       if (stateOfSleepAndReadingProcess == 0) {
         try {
@@ -221,7 +226,7 @@ class _HomeState extends State<Home> {
                           height: (heightScreen - 80) / 5,
                           child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                             new SizedBox(width: 4.0),
-                            new Text("luminosité\n$lightValue lux", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
+                            new Text("Luminosité\n$lightValue lux", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
                           ])),
                       Container(
                           width: (widthScreen - 80) / 5,
@@ -240,8 +245,8 @@ class _HomeState extends State<Home> {
                     ],
                     borderWidth: 2,
                     selectedColor: Colors.white,
-                    selectedBorderColor: Colors.black,
-                    fillColor: Color(0xFF264eb6),
+                    selectedBorderColor: Colors.white,
+                    fillColor: Color(0xFF4271e8),
                   ),
                 ),
               ),
@@ -260,7 +265,7 @@ class _HomeState extends State<Home> {
                         ),
                         width: widthScreen * 0.8,
                         height: heightScreen * 0.25,
-                        padding: const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 10.0),
+                        padding: const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 10.0), v
                       ),
                       Row(
                         mainAxisSize: MainAxisSize.max,
@@ -271,7 +276,7 @@ class _HomeState extends State<Home> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 0, 16.0, 0),
+                                padding: EdgeInsets.fromLTRB(0, 0, widthScreen * 0.001, 0),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -282,7 +287,7 @@ class _HomeState extends State<Home> {
                                         color: Color(0xFF264eb6),
                                         fontWeight: FontWeight.bold,
                                         decoration: TextDecoration.underline,
-                                        fontSize: 20,
+                                        fontSize: widthScreen * 0.03,
                                       ),
                                     ),
                                     Text(
@@ -290,7 +295,7 @@ class _HomeState extends State<Home> {
                                       style: TextStyle(
                                         color: Color(0xFF264eb6),
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 40,
+                                        fontSize: widthScreen * 0.05,
                                       ),
                                     ),
                                   ],
@@ -325,7 +330,8 @@ class _HomeState extends State<Home> {
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(18.0),
-                              color: Color(0xFF264eb6),
+                              border: Border.all(color: Colors.white),
+                              color: Color(0xFF4271e8),
                               shape: BoxShape.rectangle,
                             ),
                             padding: const EdgeInsets.all(16.0),
@@ -335,42 +341,14 @@ class _HomeState extends State<Home> {
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 45,
+                                fontSize: widthScreen * 0.06,
                               ),
                             ),
                           ),
                         ),
                       ),
-                      /*Expanded(
-                        flex: 4,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(18.0),
-                              color: Color(0xFF264eb6),
-                              shape: BoxShape.rectangle,
-                            ),
-                            padding: const EdgeInsets.all(16.0),
-                            child: TextButton(
-                              onPressed: () {
-                                stateOfSleepAndReadingProcess = 2;
-                                createRoute(context, AmbiancePage());
-                              },
-                              child: Text(
-                                'Ambiances',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 35,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),*/
                       Expanded(
-                        flex: 4,
+                        flex: 2,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
@@ -378,7 +356,8 @@ class _HomeState extends State<Home> {
                             decoration: BoxDecoration(
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.circular(18.0),
-                              color: Color(0xFF264eb6),
+                              border: Border.all(color: Colors.white),
+                              color: Color(0xFF3a66d7),
                             ),
                             padding: const EdgeInsets.all(16.0),
                             child: TextButton(
@@ -386,40 +365,123 @@ class _HomeState extends State<Home> {
                                 stateOfSleepAndReadingProcess = 2;
                                 createRoute(context, LEDPage());
                               },
-                              child: Text(
-                                'Contrôle de la lumière',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 30,
-                                ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Expanded(
+                                    flex: 2,
+                                    child: Image.asset(
+                                      'assets/controlelumiere.png',
+                                      height: heightScreen * 0.1,
+                                      width: widthScreen * 0.2,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      'Contrôle de la lumière',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: widthScreen * 0.03,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                         ),
                       ),
                       Expanded(
-                        flex: 1,
+                        flex: 2,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(18.0),
-                                color: Color(0xFF264eb6),
-                                shape: BoxShape.rectangle,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(18.0),
+                              border: Border.all(color: Colors.white),
+                              color: Color(0xFF3a66d7),
+                            ),
+                            padding: const EdgeInsets.all(16.0),
+                            child: TextButton(
+                              onPressed: () {
+                                pinSecurity(context);
+                              },
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Expanded(
+                                    flex: 2,
+                                    child: Image.asset(
+                                      'assets/reglages.png',
+                                      height: heightScreen * 0.1,
+                                      width: widthScreen * 0.2,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      'Réglage du HuBBoX',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: widthScreen * 0.03,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: IconButton(
-                                  onPressed: () {
-                                    pinSecurity(context);
-                                  },
-                                  iconSize: 50.0,
-                                  icon: Icon(
-                                    Icons.settings,
-                                    color: Colors.white,
-                                  ))),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(18.0),
+                              border: Border.all(color: Colors.white),
+                              color: Color(0xFF4271e8),
+                              shape: BoxShape.rectangle,
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Expanded(
+                                  flex: 2,
+                                  child: Image.asset(
+                                    myWifiState,
+                                    height: heightScreen * 0.1,
+                                    width: widthScreen * 0.2,
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    'Connexion internet',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: widthScreen * 0.03,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -567,7 +629,7 @@ class _HomeState extends State<Home> {
           myPinCode += number;
           _pinPutController.text += '*';
           if (_pinPutController.text.length == 4) {
-	    Navigator.pop(buildContext);
+            Navigator.pop(buildContext);
             if (myPinCode == pinCodeAccess) {
               stateOfSleepAndReadingProcess = 2;
               createRoute(context, Settings());

@@ -154,8 +154,6 @@ class _LEDPageState extends State<LEDPage> {
                       values: [hueValue],
                       max: 255,
                       min: 0,
-                      handlerAnimation: FlutterSliderHandlerAnimation(
-                          curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
                       onDragging: (handlerIndex, lowerValue, upperValue) {
                         hueValue = lowerValue;
                         setState(() {});
@@ -278,6 +276,7 @@ class _LEDPageState extends State<LEDPage> {
         ),
         onWillPop: () => returnButton(context),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.arrow_back),
         onPressed: () => returnButton(context),
