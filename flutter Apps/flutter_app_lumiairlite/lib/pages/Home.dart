@@ -265,7 +265,7 @@ class _HomeState extends State<Home> {
                         ),
                         width: widthScreen * 0.8,
                         height: heightScreen * 0.25,
-                        padding: const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 10.0), v
+                        padding: const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 10.0),
                       ),
                       Row(
                         mainAxisSize: MainAxisSize.max,
