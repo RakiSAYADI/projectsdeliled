@@ -27,11 +27,12 @@ class _HomeState extends State<Home> {
   String carbonStateOnSleepGif = "assets/fond-vert-veille.gif";
   String carbonStateOnHome = "assets/personnage-vert.png";
   String carbonStateOnHomeMessage = "Bon";
-  String myWifiState = 'assets/pasinternet.png';
+  String myWifiState = 'assets/red-wifi.png';
   String pinCode;
   String myPinCode = '';
 
   final TextEditingController _pinPutController = TextEditingController();
+  final int sensorsTabPadding = 60;
 
   DateTime deviceDate;
 
@@ -40,7 +41,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     // TODO: implement initState
-    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.bottom]);
     myUvcToast = ToastyMessage(toastContext: context);
     super.initState();
   }
@@ -66,9 +67,9 @@ class _HomeState extends State<Home> {
         carbonStateOnHomeMessage = "Bon";
       }
       if (deviceWifiState) {
-        myWifiState = 'assets/internet.png';
+        myWifiState = 'assets/green-wifi.png';
       } else {
-        myWifiState = 'assets/pasinternet.png';
+        myWifiState = 'assets/red-wifi.png';
       }
       if (stateOfSleepAndReadingProcess == 0) {
         try {
@@ -196,7 +197,7 @@ class _HomeState extends State<Home> {
               Expanded(
                 flex: 2,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 10.0, 0, 10.0),
+                  padding: const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 10.0),
                   child: ToggleButtons(
                     borderRadius: BorderRadius.circular(18.0),
                     isSelected: [true, true, true, true, true],
@@ -207,123 +208,135 @@ class _HomeState extends State<Home> {
                     },
                     children: [
                       Container(
-                          width: (widthScreen - 80) / 5,
-                          height: (heightScreen - 80) / 5,
+                          width: (widthScreen - sensorsTabPadding) / 5,
+                          height: (heightScreen - sensorsTabPadding) / 5,
                           child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                             new SizedBox(width: 4.0),
                             new Text("Température\n$temperatureValue °C",
-                                style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
+                                style: TextStyle(fontSize: widthScreen * 0.025, color: Color(0xFF264eb6), fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center)
                           ])),
                       Container(
-                          width: (widthScreen - 80) / 5,
-                          height: (heightScreen - 80) / 5,
+                          width: (widthScreen - sensorsTabPadding) / 5,
+                          height: (heightScreen - sensorsTabPadding) / 5,
                           child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                             new SizedBox(width: 4.0),
-                            new Text("Humidité\n$humidityValue %", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
+                            new Text(
+                              "Humidité\n$humidityValue %",
+                              style: TextStyle(fontSize: widthScreen * 0.025, color: Color(0xFF264eb6), fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            )
                           ])),
                       Container(
-                          width: (widthScreen - 80) / 5,
-                          height: (heightScreen - 80) / 5,
+                          width: (widthScreen - sensorsTabPadding) / 5,
+                          height: (heightScreen - sensorsTabPadding) / 5,
                           child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                             new SizedBox(width: 4.0),
-                            new Text("Luminosité\n$lightValue lux", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
+                            new Text(
+                              "Luminosité\n$lightValue lux",
+                              style: TextStyle(fontSize: widthScreen * 0.025, color: Color(0xFF264eb6), fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            )
                           ])),
                       Container(
-                          width: (widthScreen - 80) / 5,
-                          height: (heightScreen - 80) / 5,
+                          width: (widthScreen - sensorsTabPadding) / 5,
+                          height: (heightScreen - sensorsTabPadding) / 5,
                           child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                             new SizedBox(width: 4.0),
-                            new Text("CO2\n$co2Value ppm", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
+                            new Text(
+                              "CO2\n$co2Value ppm",
+                              style: TextStyle(fontSize: widthScreen * 0.025, color: Color(0xFF264eb6), fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            )
                           ])),
                       Container(
-                          width: (widthScreen - 80) / 5,
-                          height: (heightScreen - 80) / 5,
+                          width: (widthScreen - sensorsTabPadding) / 5,
+                          height: (heightScreen - sensorsTabPadding) / 5,
                           child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                             new SizedBox(width: 4.0),
-                            new Text("TVOC\n$tvocValue mg/m3", style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
+                            new Text(
+                              "TVOC\n$tvocValue mg/m3",
+                              style: TextStyle(fontSize: widthScreen * 0.025, color: Color(0xFF264eb6), fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            )
                           ])),
                     ],
                     borderWidth: 2,
                     selectedColor: Colors.white,
                     selectedBorderColor: Colors.white,
-                    fillColor: Color(0xFF4271e8),
+                    fillColor: Colors.white.withOpacity(0.5),
                   ),
                 ),
               ),
               Expanded(
                 flex: 4,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18.0),
-                          color: Color(0xFFFFFFF0),
-                          shape: BoxShape.rectangle,
-                        ),
-                        width: widthScreen * 0.8,
-                        height: heightScreen * 0.25,
-                        padding: const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 10.0),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(18.0),
+                        color: Color(0xFFFFFFF0),
+                        shape: BoxShape.rectangle,
                       ),
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
+                      height: heightScreen * 0.3,
+                      width: widthScreen * 0.95,
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(widthScreen * 0.001, 0, widthScreen * 0.0005, 0),
+                          child: Column(
                             mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(0, 0, widthScreen * 0.001, 0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'QUALITÉ DE L\'AIR :',
-                                      style: TextStyle(
-                                        color: Color(0xFF264eb6),
-                                        fontWeight: FontWeight.bold,
-                                        decoration: TextDecoration.underline,
-                                        fontSize: widthScreen * 0.03,
-                                      ),
-                                    ),
-                                    Text(
-                                      carbonStateOnHomeMessage,
-                                      style: TextStyle(
-                                        color: Color(0xFF264eb6),
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: widthScreen * 0.05,
-                                      ),
-                                    ),
-                                  ],
+                              Text(
+                                'QUALITÉ DE L\'AIR :',
+                                style: TextStyle(
+                                  color: Color(0xFF264eb6),
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                  fontSize: widthScreen * 0.04,
+                                ),
+                              ),
+                              Text(
+                                carbonStateOnHomeMessage,
+                                style: TextStyle(
+                                  color: Color(0xFF264eb6),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: widthScreen * 0.07,
                                 ),
                               ),
                             ],
                           ),
-                          Image.asset(
-                            carbonStateOnHome,
-                            height: heightScreen * 0.4,
-                            width: widthScreen * 0.5,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                        Image.asset(
+                          carbonStateOnHome,
+                          height: heightScreen * 0.4,
+                          width: widthScreen * 0.5,
+                        ),
+                        Image.asset(
+                          myWifiState,
+                          height: heightScreen * 0.1,
+                          width: widthScreen * 0.02,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
               Expanded(
                 flex: 3,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
+                  padding: const EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
-                        flex: 2,
+                        flex: 4,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
@@ -331,7 +344,7 @@ class _HomeState extends State<Home> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(18.0),
                               border: Border.all(color: Colors.white),
-                              color: Color(0xFF4271e8),
+                              color: Colors.white.withOpacity(0.5),
                               shape: BoxShape.rectangle,
                             ),
                             padding: const EdgeInsets.all(16.0),
@@ -339,9 +352,9 @@ class _HomeState extends State<Home> {
                               appTime,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Color(0xFF264eb6),
                                 fontWeight: FontWeight.bold,
-                                fontSize: widthScreen * 0.06,
+                                fontSize: widthScreen * 0.1,
                               ),
                             ),
                           ),
@@ -362,8 +375,7 @@ class _HomeState extends State<Home> {
                             padding: const EdgeInsets.all(16.0),
                             child: TextButton(
                               onPressed: () {
-                                stateOfSleepAndReadingProcess = 2;
-                                createRoute(context, LEDPage());
+                                pinSecurity(context, LEDPage());
                               },
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
@@ -410,7 +422,7 @@ class _HomeState extends State<Home> {
                             padding: const EdgeInsets.all(16.0),
                             child: TextButton(
                               onPressed: () {
-                                pinSecurity(context);
+                                pinSecurity(context, Settings());
                               },
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
@@ -442,48 +454,6 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                       ),
-                      Expanded(
-                        flex: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(18.0),
-                              border: Border.all(color: Colors.white),
-                              color: Color(0xFF4271e8),
-                              shape: BoxShape.rectangle,
-                            ),
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Expanded(
-                                  flex: 2,
-                                  child: Image.asset(
-                                    myWifiState,
-                                    height: heightScreen * 0.1,
-                                    width: widthScreen * 0.2,
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: Text(
-                                    'Connexion internet',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: widthScreen * 0.03,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -495,7 +465,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Future<void> pinSecurity(BuildContext buildContext) async {
+  Future<void> pinSecurity(BuildContext buildContext, Object object) async {
     double widthScreen = MediaQuery.of(buildContext).size.width;
     double heightScreen = MediaQuery.of(buildContext).size.height;
     var parsedJson;
@@ -512,7 +482,6 @@ class _HomeState extends State<Home> {
       pinCodeAccess = '1234';
     }
     return showDialog<void>(
-        barrierDismissible: false,
         context: buildContext,
         builder: (BuildContext buildContext1) {
           return AlertDialog(
@@ -570,29 +539,29 @@ class _HomeState extends State<Home> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  buttonNumbers('0', buildContext1),
+                                  buttonNumbers('0', buildContext1, object),
                                   SizedBox(width: widthScreen * 0.003),
-                                  buttonNumbers('1', buildContext1),
+                                  buttonNumbers('1', buildContext1, object),
                                   SizedBox(width: widthScreen * 0.003),
-                                  buttonNumbers('2', buildContext1),
+                                  buttonNumbers('2', buildContext1, object),
                                   SizedBox(width: widthScreen * 0.003),
-                                  buttonNumbers('3', buildContext1),
+                                  buttonNumbers('3', buildContext1, object),
                                   SizedBox(width: widthScreen * 0.003),
-                                  buttonNumbers('4', buildContext1),
+                                  buttonNumbers('4', buildContext1, object),
                                 ],
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  buttonNumbers('5', buildContext1),
+                                  buttonNumbers('5', buildContext1, object),
                                   SizedBox(width: widthScreen * 0.003),
-                                  buttonNumbers('6', buildContext1),
+                                  buttonNumbers('6', buildContext1, object),
                                   SizedBox(width: widthScreen * 0.003),
-                                  buttonNumbers('7', buildContext1),
+                                  buttonNumbers('7', buildContext1, object),
                                   SizedBox(width: widthScreen * 0.003),
-                                  buttonNumbers('8', buildContext1),
+                                  buttonNumbers('8', buildContext1, object),
                                   SizedBox(width: widthScreen * 0.003),
-                                  buttonNumbers('9', buildContext1),
+                                  buttonNumbers('9', buildContext1, object),
                                 ],
                               ),
                             ],
@@ -608,7 +577,7 @@ class _HomeState extends State<Home> {
         });
   }
 
-  ButtonTheme buttonNumbers(String number, BuildContext buildContext) {
+  ButtonTheme buttonNumbers(String number, BuildContext buildContext, Object object) {
     double widthScreen = MediaQuery.of(buildContext).size.width;
     double heightScreen = MediaQuery.of(buildContext).size.height;
     return ButtonTheme(
@@ -632,7 +601,7 @@ class _HomeState extends State<Home> {
             Navigator.pop(buildContext);
             if (myPinCode == pinCodeAccess) {
               stateOfSleepAndReadingProcess = 2;
-              createRoute(context, Settings());
+              createRoute(context, object);
             } else {
               myUvcToast.setToastDuration(3);
               myUvcToast.setToastMessage('Code Invalide !');

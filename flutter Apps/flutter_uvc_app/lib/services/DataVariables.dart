@@ -8,6 +8,8 @@ Device myDevice;
 
 UvcLight myUvcLight;
 
+int languageArrayIdentifier = 0;
+
 int myExtinctionTimeMinutePosition;
 int myActivationTimeMinutePosition;
 int activationTime;
@@ -17,6 +19,7 @@ List<List<String>> uvcData;
 
 String pinCodeAccess;
 String userEmail;
+String languageCode = 'fr';
 
 bool isTreatmentCompleted;
 bool qrCodeConnectionOrSecurity;

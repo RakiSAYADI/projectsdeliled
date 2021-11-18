@@ -942,7 +942,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
             children: [
               Text('Veuillez rester près du dispositif UV-C pendant quelques instants, la connexion est en cours.'),
               Image.asset(
-                'assets/connexion_dispositif.gif',
+                'assets/connexion-dispositifs-uvc.gif',
                 height: screenHeight * 0.3,
                 width: screenWidth * 0.8,
               ),
