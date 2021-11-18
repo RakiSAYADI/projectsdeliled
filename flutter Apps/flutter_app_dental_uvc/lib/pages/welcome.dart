@@ -222,6 +222,13 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     animationController.forward();
 
     animationRefreshIcon.repeat();
+
+    super.initState();
+  }
+
+  void _listenForPermissionStatus() async {
+    await Permission.locationWhenInUse.request();
+    await Permission.locationAlways.request();
     //checks bluetooth current state
     Future.delayed(const Duration(seconds: 1), () async {
       flutterBlue.state.listen((state) {
@@ -240,12 +247,6 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
         }
       });
     });
-
-    super.initState();
-  }
-
-  void _listenForPermissionStatus() async {
-    await [Permission.locationWhenInUse, Permission.locationAlways].request();
   }
 
   Animation animationColor(Color colorBegin, Color colorEnd) {

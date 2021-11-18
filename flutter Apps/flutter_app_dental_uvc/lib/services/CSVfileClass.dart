@@ -5,13 +5,10 @@ import 'package:path_provider/path_provider.dart';
 class UVCDataFile {
   final String _uvcDefaultDataString =
       'Dispositif UVC ;Utilisateur ;Etablissement ;Pi\èce ;Heure d\'activation ;Date d\'activation ;Temps de disinfection (en secondes) ;Etat \n';
-
   final String _uvcDataFileName = 'RapportUVC.csv';
-
   final String _uvcUserEmailFileName = 'User_email.txt';
-
+  final String _uvcRobotsNamesFileName = 'Robots_Names.txt';
   final String _uvcDeviceFileName = 'UVC_Device.txt';
-
   final String _uvcAutoDataFileName = 'UVC_Auto_Data.txt';
 
   final List<List<String>> _uvcDefaultData = [
@@ -108,6 +105,27 @@ class UVCDataFile {
     final file = File('${directory.path}/$_uvcUserEmailFileName');
     await file.writeAsString(userEmail);
     print('saveStringUVCEmailDATA : saved');
+  }
+
+  Future<String> readRobotsNameDATA() async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/$_uvcRobotsNamesFileName');
+      String robotsNames = await file.readAsString();
+      print("robot name file Readed");
+      return robotsNames;
+    } catch (e) {
+      print("Couldn't read file");
+      await saveRobotsNameDATA('');
+      return '';
+    }
+  }
+
+  Future<void> saveRobotsNameDATA(String robotsNames) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/$_uvcRobotsNamesFileName');
+    await file.writeAsString(robotsNames);
+    print('saveRobotsNameDATA : saved');
   }
 
   Future<String> readUVCDevice() async {

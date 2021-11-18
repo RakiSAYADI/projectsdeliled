@@ -136,8 +136,7 @@ class _PinSettingsState extends State<PinSettings> {
                     ),
                   ),
                   SizedBox(height: heightScreen * 0.05),
-                  FlatButton(
-                    color: Colors.blue[400],
+                  TextButton(
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Text(
@@ -148,8 +147,11 @@ class _PinSettingsState extends State<PinSettings> {
                         ),
                       ),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+                      ),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
                     ),
                     onPressed: () async {
                       if ((myOldPinCode.text.length == 0 || myOldPinCode.text.length < 4) ||

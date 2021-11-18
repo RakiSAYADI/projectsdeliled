@@ -219,7 +219,7 @@ class _ProfilesState extends State<Profiles> {
                     ),
                   ),
                   SizedBox(height: heightScreen * 0.04),
-                  FlatButton(
+                  TextButton(
                     onPressed: () {
                       myUvcLight = UvcLight(
                           machineName: myDevice.device.name,
@@ -240,10 +240,12 @@ class _ProfilesState extends State<Profiles> {
                         ),
                       ),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+                      ),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
                     ),
-                    color: Colors.blue[400],
                   ),
                   SizedBox(height: heightScreen * 0.04),
                 ],
@@ -269,7 +271,7 @@ class _ProfilesState extends State<Profiles> {
           ),
         ),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text(
               'Oui',
               style: TextStyle(
@@ -281,7 +283,7 @@ class _ProfilesState extends State<Profiles> {
               sleepIsInactivePinAccess = false;
             },
           ),
-          FlatButton(
+          TextButton(
             child: Text(
               'Non',
               style: TextStyle(

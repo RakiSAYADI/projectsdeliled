@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:io' as io;
 
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutterappdentaluvc/services/AutoUVCService.dart';
+import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:path_provider/path_provider.dart';
@@ -40,6 +42,11 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   bool firstDisplayMainWidget = true;
 
   String dataRobotUVC = '';
+  bool modifyNameEnable = false;
+  String deviceName = '';
+  String deviceSurName = '';
+
+  UVCDataFile uvcDataFile;
 
   final String _uvcAutoDataFileName = 'UVC_Auto_Data.txt';
 
@@ -65,15 +72,135 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     // TODO: implement initState
     super.initState();
     gifController = GifController(vsync: this);
-
     checkAutoFileExists();
-
     myUvcToast = ToastyMessage(toastContext: context);
-
     pinCodeAccess = '';
     Future.delayed(const Duration(seconds: 1), () async {
       pinCodeAccess = await _readPINFile();
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (firstDisplayMainWidget) {
+      print('build sleep page');
+      mainWidgetScreen = appWidget(context);
+      checkingNameRobot();
+      screenSleep(context);
+      firstDisplayMainWidget = false;
+    }
+    return GestureDetector(
+      child: mainWidgetScreen,
+      onTap: () {
+        setState(() {
+          timeToSleep = timeSleep;
+          mainWidgetScreen = appWidget(context);
+        });
+      },
+    );
+  }
+
+  void checkingNameRobot() async {
+    uvcDataFile = UVCDataFile();
+    robotsNamesData = await uvcDataFile.readRobotsNameDATA();
+    if (myDevice.device.name.isEmpty) {
+      deviceName = 'pas de dispositif connecté';
+      modifyNameEnable = false;
+    } else {
+      try {
+        var parsedJson = json.decode(robotsNamesData);
+        if (parsedJson.toString().contains('${myDevice.device.name}:')) {
+          deviceSurName = parsedJson[myDevice.device.name];
+          deviceName = '${parsedJson[myDevice.device.name]} (${myDevice.device.name})';
+        } else {
+          deviceName = myDevice.device.name;
+        }
+      } catch (e) {
+        print('erreur in name');
+        deviceName = myDevice.device.name;
+      }
+      modifyNameEnable = true;
+    }
+    setState(() {
+      mainWidgetScreen = appWidget(context);
+    });
+  }
+
+  Future<void> nameDeviceModifier(BuildContext context, String nameDevice) async {
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
+    final myName = TextEditingController();
+    myName.text = nameDevice;
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Entrer le Nom de dispositif:',
+                    style: TextStyle(fontSize: (widthScreen * 0.02)),
+                  ),
+                  SizedBox(height: heightScreen * 0.005),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.02)),
+                    child: TextField(
+                      style: TextStyle(fontSize: (widthScreen * 0.017)),
+                      textAlign: TextAlign.center,
+                      controller: myName,
+                      maxLines: 1,
+                      decoration: InputDecoration(
+                          hintText: 'exemple123',
+                          hintStyle: TextStyle(
+                            fontSize: (widthScreen * 0.02),
+                            color: Colors.grey,
+                          )),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: Text(
+                'Enregistrer',
+                style: TextStyle(fontSize: (widthScreen * 0.02)),
+              ),
+              onPressed: () async {
+                try {
+                  if (robotsNamesData.isEmpty) {
+                    await uvcDataFile.saveRobotsNameDATA('{\"${myDevice.device.name}\":\"${myName.text}\"}');
+                  } else {
+                    Map<String, dynamic> parsedJson = json.decode(robotsNamesData);
+                    parsedJson.addAll({'${myDevice.device.name}':'${myName.text}'});
+                    await uvcDataFile.saveRobotsNameDATA(json.encode(parsedJson));
+                  }
+                } catch (e) {
+                  print('erreur json names robots');
+                }
+                Navigator.pop(context, true);
+                checkingNameRobot();
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Annuler',
+                style: TextStyle(fontSize: (widthScreen * 0.02)),
+              ),
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget appWidget(BuildContext context) {
@@ -107,6 +234,44 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
+                      Text(
+                        'Dispositif connecté :',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: widthScreen * 0.04,
+                        ),
+                      ),
+                      SizedBox(height: heightScreen * 0.03),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            deviceName,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: widthScreen * 0.02,
+                            ),
+                          ),
+                          Visibility(
+                            visible: modifyNameEnable,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(width: widthScreen * 0.2),
+                                IconButton(
+                                  onPressed: () => nameDeviceModifier(context, deviceSurName),
+                                  icon: Icon(Icons.pending),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: heightScreen * 0.05),
                       Text(
                         'Entrer le code de sécurité :',
                         textAlign: TextAlign.center,
@@ -245,42 +410,25 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     } while (true);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (firstDisplayMainWidget) {
-      print('build sleep page');
-      mainWidgetScreen = appWidget(context);
-      screenSleep(context);
-      firstDisplayMainWidget = false;
-    }
-    return  GestureDetector(
-        child: mainWidgetScreen,
-        onTap: () {
-          setState(() {
-            timeToSleep = timeSleep;
-            mainWidgetScreen = appWidget(context);
-          });
-        },
-      );
-  }
-
   ButtonTheme buttonNumbers(String number, BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
     return ButtonTheme(
       minWidth: widthScreen * 0.09,
       height: heightScreen * 0.07,
-      child: FlatButton(
-        color: Colors.grey[400],
+      child: TextButton(
+        style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+          ),
+          backgroundColor: MaterialStateProperty.all<Color>(Colors.grey[400]),
+        ),
         child: Text(
           number,
           style: TextStyle(
             color: Colors.white,
             fontSize: widthScreen * 0.02,
           ),
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
         ),
         onPressed: () async {
           timeToSleep = timeSleep;
@@ -314,7 +462,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
           ],
         ),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text(
               'Oui',
               style: TextStyle(fontSize: (widthScreen * 0.02)),
@@ -326,7 +474,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
               SystemChannels.platform.invokeMethod('SystemNavigator.pop');
             },
           ),
-          FlatButton(
+          TextButton(
             child: Text(
               'Non',
               style: TextStyle(fontSize: (widthScreen * 0.02)),
@@ -403,7 +551,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
         }
       },
     );
-    Scaffold.of(context).hideCurrentSnackBar();
-    Scaffold.of(context).showSnackBar(snackBar);
+    ScaffoldMessenger.of(context).hideCurrentSnackBar(reason: SnackBarClosedReason.hide);
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

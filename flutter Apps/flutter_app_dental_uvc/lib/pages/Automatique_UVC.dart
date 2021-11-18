@@ -230,7 +230,7 @@ class _UVCAutoState extends State<UVCAuto> {
                     ),
                   ),
                   SizedBox(height: heightScreen * 0.02),
-                  FlatButton(
+                  TextButton(
                     onPressed: () {
                       activationButtonState = daysStates[day];
                       activationButtonState = !activationButtonState;
@@ -253,9 +253,11 @@ class _UVCAutoState extends State<UVCAuto> {
                         style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.02),
                       ),
                     ),
-                    color: activationButtonColor[day],
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+                      ),
+                      backgroundColor: MaterialStateProperty.all<Color>(activationButtonColor[day]),
                     ),
                   ),
                   SizedBox(height: heightScreen * 0.02),
@@ -482,7 +484,7 @@ class _UVCAutoState extends State<UVCAuto> {
                     ),
                   ),
                   SizedBox(height: heightScreen * 0.04),
-                  FlatButton(
+                  TextButton(
                     onPressed: () async {
                       setState(() {
                         saveButtonColor = Colors.blue[400];
@@ -517,9 +519,11 @@ class _UVCAutoState extends State<UVCAuto> {
                         style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.02),
                       ),
                     ),
-                    color: saveButtonColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+                      ),
+                      backgroundColor: MaterialStateProperty.all<Color>(saveButtonColor),
                     ),
                   ),
                 ],

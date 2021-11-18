@@ -141,7 +141,7 @@ class _DataCSVViewState extends State<DataCSVView> {
             ],
           ),
           actions: [
-            FlatButton(
+            TextButton(
               child: Text(
                 'Envoyer',
                 style: TextStyle(fontSize: (widthScreen * 0.02)),
@@ -161,7 +161,7 @@ class _DataCSVViewState extends State<DataCSVView> {
                 }
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text(
                 'Annuler',
                 style: TextStyle(fontSize: (widthScreen * 0.02)),

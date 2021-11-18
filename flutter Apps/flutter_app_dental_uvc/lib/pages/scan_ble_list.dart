@@ -1,10 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
-import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
+import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/deviceBleWidget.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 
@@ -30,6 +31,8 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
 
   AnimationController animationRefreshIcon;
 
+  UVCDataFile uvcDataFile;
+
   @override
   void initState() {
     super.initState();
@@ -38,6 +41,8 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
       vsync: this,
       duration: new Duration(seconds: 3),
     );
+
+    checkingNameRobot();
 
     //checks bluetooth current state
     flutterBlue.state.listen((state) {
@@ -61,6 +66,17 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
         }
       }
     });
+  }
+
+  void checkingNameRobot() async {
+    uvcDataFile = UVCDataFile();
+    robotsNamesData = await uvcDataFile.readRobotsNameDATA();
+    try {
+      Map<String, dynamic> parsedJson = json.decode(robotsNamesData);
+
+    } catch (e) {
+      print('erreur in name');
+    }
   }
 
   List<String> scanIdentifiers = [];
@@ -148,7 +164,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
           ],
         ),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text(
               'Oui',
               style: TextStyle(fontSize: (screenWidth * 0.02)),
@@ -163,7 +179,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
               Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
             },
           ),
-          FlatButton(
+          TextButton(
             child: Text(
               'Non',
               style: TextStyle(fontSize: (screenWidth * 0.02)),
@@ -218,11 +234,13 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
         scrollDirection: Axis.vertical,
         child: Column(
             children: devices
-                .map((device) => DeviceCard(
-                    device: device,
-                    connect: () async {
-                      startBind(context, device.device.id.id);
-                    }))
+                .map(
+                  (device) => DeviceCard(
+                      device: device,
+                      connect: () async {
+                        startBind(context, device.device.id.id);
+                      }),
+                )
                 .toList()),
       ),
     );

@@ -24,6 +24,7 @@ int myActivationTimeMinutePosition = 0;
 int activationTime;
 
 String pinCodeAccess;
+String robotsNamesData;
 
 List<List<String>> uvcData;
 

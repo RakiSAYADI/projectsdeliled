@@ -170,7 +170,7 @@ class _WarningsState extends State<Warnings> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    FlatButton(
+                    TextButton(
                       onPressed: () async {
                         if (!nextButtonPressedOnce) {
                           nextButtonPressedOnce = true;
@@ -186,13 +186,15 @@ class _WarningsState extends State<Warnings> {
                           style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.02),
                         ),
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
                       ),
-                      color: Colors.blue[400],
                     ),
                     SizedBox(width: widthScreen * 0.09),
-                    FlatButton(
+                    TextButton(
                       onPressed: () {
                         Navigator.pop(context, true);
                       },
@@ -203,10 +205,12 @@ class _WarningsState extends State<Warnings> {
                           style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.02),
                         ),
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.red[400]),
                       ),
-                      color: Colors.red[400],
                     ),
                   ],
                 ),

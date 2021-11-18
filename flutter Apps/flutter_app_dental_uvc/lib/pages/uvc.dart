@@ -364,7 +364,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
           ),
         ),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text(
               'Oui',
               style: TextStyle(
@@ -386,7 +386,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
               Navigator.pushNamed(context, '/end_uvc');
             },
           ),
-          FlatButton(
+          TextButton(
             child: Text(
               'Non',
               style: TextStyle(

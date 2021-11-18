@@ -190,7 +190,7 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
                     width: widthScreen * 0.8,
                   ),
                   SizedBox(height: heightScreen * 0.05),
-                  FlatButton(
+                  TextButton(
                     onPressed: () {
                       //myDevice.disconnect();
                       Navigator.pushNamedAndRemoveUntil(context, "/pin_access", (r) => false);
@@ -202,10 +202,12 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
                         fontSize: widthScreen * 0.05,
                       ),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+                      ),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
                     ),
-                    color: Colors.blue[400],
                   ),
                 ],
               ),
@@ -360,8 +362,7 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
     return ButtonTheme(
       minWidth: widthScreen * 0.07,
       height: heightScreen * 0.05,
-      child: FlatButton(
-        color: Colors.grey[400],
+      child: TextButton(
         child: Text(
           number,
           style: TextStyle(
@@ -369,8 +370,11 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
             fontSize: widthScreen * 0.02,
           ),
         ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
+        style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+          ),
+          backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
         ),
         onPressed: () async {
           myPinCode += number;
