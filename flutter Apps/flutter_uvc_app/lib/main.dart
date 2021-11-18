@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutteruvcapp/pages/check_permissions.dart';
@@ -14,6 +16,7 @@ import 'package:flutteruvcapp/pages/uvc.dart';
 import 'package:flutteruvcapp/pages/warnings.dart';
 import 'package:flutteruvcapp/pages/scan_ble_list.dart';
 import 'package:flutteruvcapp/pages/welcome.dart';
+import 'package:flutteruvcapp/services/DataVariables.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -74,6 +77,13 @@ void main() async {
   if (wakelockEnabled) {
     // The following statement disables the wakelock.
     Wakelock.toggle(enable: false);
+  }
+
+  languageCode = Platform.localeName.split('_')[0];
+  print('le language de telephone : $languageCode');
+
+  if (languageCode.isEmpty) {
+    languageCode = 'fr';
   }
 
   runApp(MaterialApp(
