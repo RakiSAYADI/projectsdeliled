@@ -18,7 +18,9 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with TickerProviderStateMixin {
+  AnimationController controllerWifiAnimation;
+
   int timeToSleep;
   final int dataReadDuration = 1;
 
@@ -34,6 +36,8 @@ class _HomeState extends State<Home> {
   final TextEditingController _pinPutController = TextEditingController();
   final int sensorsTabPadding = 60;
 
+  Animation<double> _animation;
+
   DateTime deviceDate;
 
   ToastyMessage myUvcToast;
@@ -42,6 +46,14 @@ class _HomeState extends State<Home> {
   void initState() {
     // TODO: implement initState
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.bottom]);
+    controllerWifiAnimation = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 2),
+    )..repeat(reverse: true);
+    _animation = CurvedAnimation(
+      parent: controllerWifiAnimation,
+      curve: Curves.fastOutSlowIn,
+    );
     myUvcToast = ToastyMessage(toastContext: context);
     super.initState();
   }
@@ -126,6 +138,7 @@ class _HomeState extends State<Home> {
   @override
   void dispose() {
     // TODO: implement dispose
+    controllerWifiAnimation.dispose();
     super.dispose();
   }
 
@@ -287,7 +300,7 @@ class _HomeState extends State<Home> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.fromLTRB(widthScreen * 0.001, 0, widthScreen * 0.0005, 0),
+                          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -315,12 +328,15 @@ class _HomeState extends State<Home> {
                         Image.asset(
                           carbonStateOnHome,
                           height: heightScreen * 0.4,
-                          width: widthScreen * 0.5,
+                          width: widthScreen * 0.4,
                         ),
-                        Image.asset(
-                          myWifiState,
-                          height: heightScreen * 0.1,
-                          width: widthScreen * 0.02,
+                        ScaleTransition(
+                          scale: _animation,
+                          child: Image.asset(
+                            myWifiState,
+                            height: heightScreen * 0.2,
+                            width: widthScreen * 0.07,
+                          ),
                         ),
                       ],
                     ),
@@ -375,7 +391,8 @@ class _HomeState extends State<Home> {
                             padding: const EdgeInsets.all(16.0),
                             child: TextButton(
                               onPressed: () {
-                                pinSecurity(context, LEDPage());
+                                alertDialogAnimated(context, LEDPage());
+                                //pinSecurity(context, LEDPage());
                               },
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
@@ -422,7 +439,7 @@ class _HomeState extends State<Home> {
                             padding: const EdgeInsets.all(16.0),
                             child: TextButton(
                               onPressed: () {
-                                pinSecurity(context, Settings());
+                                alertDialogAnimated(context, Settings());
                               },
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
@@ -465,7 +482,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Future<void> pinSecurity(BuildContext buildContext, Object object) async {
+  Future<void> alertDialogAnimated(BuildContext buildContext, Object object) {
     double widthScreen = MediaQuery.of(buildContext).size.width;
     double heightScreen = MediaQuery.of(buildContext).size.height;
     var parsedJson;
@@ -481,100 +498,103 @@ class _HomeState extends State<Home> {
       print('erreur pin');
       pinCodeAccess = '1234';
     }
-    return showDialog<void>(
-        context: buildContext,
-        builder: (BuildContext buildContext1) {
-          return AlertDialog(
-            content: Container(
-              child: Builder(
-                builder: (buildContext1) {
-                  return Center(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            'Entrer le code de sécurité :',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
+    return showGeneralDialog(
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionBuilder: (context, a1, a2, widget) {
+        return Transform.scale(
+          scale: a1.value,
+          child: Opacity(
+            opacity: a1.value,
+            child: AlertDialog(
+              shape: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    'Entrer le code de sécurité :',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: widthScreen * 0.04,
+                    ),
+                  ),
+                  SizedBox(height: heightScreen * 0.05),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.01)),
+                      Expanded(
+                        flex: 3,
+                        child: Container(
+                          margin: EdgeInsets.all(20),
+                          padding: EdgeInsets.all(10),
+                          child: PinPut(
+                            fieldsCount: 4,
+                            onSubmit: (String pin) => pinCode = pin,
+                            focusNode: AlwaysDisabledFocusNode(),
+                            controller: _pinPutController,
+                            textStyle: TextStyle(
                               color: Colors.black,
                               fontSize: widthScreen * 0.04,
                             ),
+                            submittedFieldDecoration: _pinPutDecoration.copyWith(borderRadius: BorderRadius.circular(20)),
+                            selectedFieldDecoration: _pinPutDecoration,
+                            followingFieldDecoration: _pinPutDecoration.copyWith(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(color: Colors.grey[600].withOpacity(.5), width: 3),
+                            ),
                           ),
-                          SizedBox(height: heightScreen * 0.05),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.01)),
-                              Expanded(
-                                flex: 3,
-                                child: Container(
-                                  margin: EdgeInsets.all(20),
-                                  padding: EdgeInsets.all(10),
-                                  child: PinPut(
-                                    fieldsCount: 4,
-                                    onSubmit: (String pin) => pinCode = pin,
-                                    focusNode: AlwaysDisabledFocusNode(),
-                                    controller: _pinPutController,
-                                    textStyle: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: widthScreen * 0.04,
-                                    ),
-                                    submittedFieldDecoration: _pinPutDecoration.copyWith(borderRadius: BorderRadius.circular(20)),
-                                    selectedFieldDecoration: _pinPutDecoration,
-                                    followingFieldDecoration: _pinPutDecoration.copyWith(
-                                      borderRadius: BorderRadius.circular(5),
-                                      border: Border.all(color: Colors.grey[600].withOpacity(.5), width: 3),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.01)),
-                            ],
-                          ),
-                          Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  buttonNumbers('0', buildContext1, object),
-                                  SizedBox(width: widthScreen * 0.003),
-                                  buttonNumbers('1', buildContext1, object),
-                                  SizedBox(width: widthScreen * 0.003),
-                                  buttonNumbers('2', buildContext1, object),
-                                  SizedBox(width: widthScreen * 0.003),
-                                  buttonNumbers('3', buildContext1, object),
-                                  SizedBox(width: widthScreen * 0.003),
-                                  buttonNumbers('4', buildContext1, object),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  buttonNumbers('5', buildContext1, object),
-                                  SizedBox(width: widthScreen * 0.003),
-                                  buttonNumbers('6', buildContext1, object),
-                                  SizedBox(width: widthScreen * 0.003),
-                                  buttonNumbers('7', buildContext1, object),
-                                  SizedBox(width: widthScreen * 0.003),
-                                  buttonNumbers('8', buildContext1, object),
-                                  SizedBox(width: widthScreen * 0.003),
-                                  buttonNumbers('9', buildContext1, object),
-                                ],
-                              ),
-                            ],
-                          ),
+                        ),
+                      ),
+                      Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.01)),
+                    ],
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          buttonNumbers('0', buildContext, object),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('1', buildContext, object),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('2', buildContext, object),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('3', buildContext, object),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('4', buildContext, object),
                         ],
                       ),
-                    ),
-                  );
-                },
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          buttonNumbers('5', buildContext, object),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('6', buildContext, object),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('7', buildContext, object),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('8', buildContext, object),
+                          SizedBox(width: widthScreen * 0.003),
+                          buttonNumbers('9', buildContext, object),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+      transitionDuration: Duration(milliseconds: 200),
+      barrierDismissible: true,
+      barrierLabel: '',
+      context: context,
+      pageBuilder: (context, animation1, animation2) {},
+    );
   }
 
   ButtonTheme buttonNumbers(String number, BuildContext buildContext, Object object) {
