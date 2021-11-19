@@ -370,7 +370,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                               style: TextStyle(
                                 color: Color(0xFF264eb6),
                                 fontWeight: FontWeight.bold,
-                                fontSize: widthScreen * 0.1,
+                                fontSize: widthScreen * 0.02 + heightScreen * 0.1,
                               ),
                             ),
                           ),
@@ -414,7 +414,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: widthScreen * 0.03,
+                                        fontSize: widthScreen * 0.01 + heightScreen * 0.01,
                                       ),
                                     ),
                                   ),
@@ -461,7 +461,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: widthScreen * 0.03,
+                                        fontSize: widthScreen * 0.01 + heightScreen * 0.01,
                                       ),
                                     ),
                                   ),
@@ -593,7 +593,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       barrierDismissible: true,
       barrierLabel: '',
       context: context,
-      pageBuilder: (context, animation1, animation2) {},
+      pageBuilder: (context, animation1, animation2) => null,
     );
   }
 

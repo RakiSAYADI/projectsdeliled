@@ -19,7 +19,7 @@ class _LEDPageState extends State<LEDPage> {
   String zonesInHex = '0';
   String colorHue;
 
-  Color trackBarColor = Colors.black;
+  Color mainColor = Colors.transparent;
 
   double hueValue = 0;
   double lumValue = 50;
@@ -138,27 +138,50 @@ class _LEDPageState extends State<LEDPage> {
                     child: FlutterSlider(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(18.0),
-                        gradient: LinearGradient(colors: [
-                          Colors.purpleAccent[400],
-                          Colors.red,
-                          Colors.yellow,
-                          Colors.green,
-                          Colors.lightBlue[200],
-                          Colors.lightBlue,
-                          Colors.blue,
-                          Colors.purple[300],
-                          Colors.purple,
-                          Colors.purpleAccent[400],
-                        ]),
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.purpleAccent[400],
+                            Colors.red,
+                            Colors.yellow,
+                            Colors.green,
+                            Colors.lightBlue[200],
+                            Colors.lightBlue,
+                            Colors.blue,
+                            Colors.purple[300],
+                            Colors.purple,
+                            Colors.purpleAccent[400],
+                          ],
+                        ),
                       ),
                       values: [hueValue],
                       max: 255,
                       min: 0,
                       onDragging: (handlerIndex, lowerValue, upperValue) {
-                        hueValue = lowerValue;
-                        setState(() {});
-                        if (myDevice.getConnectionState()) {
-                          characteristicSensors.write('{\"light\":[3,${hueValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                        if (Platform.isAndroid) {
+                          hueValue = lowerValue;
+                          mainColor = HSLColor.fromColor(Colors.black)
+                              .withHue((hueValue * 360) / 256)
+                              .withLightness(lumValue / 200)
+                              .withSaturation(satValue / 100)
+                              .toColor();
+                          setState(() {});
+                          if (myDevice.getConnectionState()) {
+                            characteristicSensors.write('{\"light\":[3,${hueValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                          }
+                        }
+                      },
+                      onDragCompleted: (handlerIndex, lowerValue, upperValue) {
+                        if (Platform.isIOS) {
+                          hueValue = lowerValue;
+                          mainColor = HSLColor.fromColor(Colors.black)
+                              .withHue((hueValue * 360) / 256)
+                              .withLightness(lumValue / 200)
+                              .withSaturation(satValue / 100)
+                              .toColor();
+                          setState(() {});
+                          if (myDevice.getConnectionState()) {
+                            characteristicSensors.write('{\"light\":[3,${hueValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                          }
                         }
                       },
                       handler: FlutterSliderHandler(child: Icon(Icons.color_lens)),
@@ -177,7 +200,7 @@ class _LEDPageState extends State<LEDPage> {
                     child: FlutterSlider(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(18.0),
-                        gradient: LinearGradient(colors: [Colors.grey, Colors.white]),
+                        gradient: LinearGradient(colors: [Colors.grey, mainColor]),
                       ),
                       values: [lumValue],
                       max: 100,
@@ -186,10 +209,31 @@ class _LEDPageState extends State<LEDPage> {
                       handlerAnimation: FlutterSliderHandlerAnimation(
                           curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
                       onDragging: (handlerIndex, lowerValue, upperValue) {
-                        lumValue = lowerValue;
-                        setState(() {});
-                        if (myDevice.getConnectionState()) {
-                          characteristicSensors.write('{\"light\":[7,${lumValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                        if (Platform.isAndroid) {
+                          lumValue = lowerValue;
+                          mainColor = HSLColor.fromColor(Colors.purpleAccent[400])
+                              .withHue((hueValue * 360) / 256)
+                              .withLightness(lumValue / 200)
+                              .withSaturation(satValue / 100)
+                              .toColor();
+                          setState(() {});
+                          if (myDevice.getConnectionState()) {
+                            characteristicSensors.write('{\"light\":[7,${lumValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                          }
+                        }
+                      },
+                      onDragCompleted: (handlerIndex, lowerValue, upperValue) {
+                        if (Platform.isIOS) {
+                          lumValue = lowerValue;
+                          mainColor = HSLColor.fromColor(Colors.purpleAccent[400])
+                              .withHue((hueValue * 360) / 256)
+                              .withLightness(lumValue / 200)
+                              .withSaturation(satValue / 100)
+                              .toColor();
+                          setState(() {});
+                          if (myDevice.getConnectionState()) {
+                            characteristicSensors.write('{\"light\":[7,${lumValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                          }
                         }
                       },
                       handler: FlutterSliderHandler(child: Icon(Icons.highlight)),
@@ -208,7 +252,11 @@ class _LEDPageState extends State<LEDPage> {
                     child: FlutterSlider(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(18.0),
-                        gradient: LinearGradient(colors: [Colors.white, Colors.black]),
+                        gradient: LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: [Colors.white, mainColor],
+                        ),
                       ),
                       values: [satValue],
                       max: 100,
@@ -217,10 +265,31 @@ class _LEDPageState extends State<LEDPage> {
                       handlerAnimation: FlutterSliderHandlerAnimation(
                           curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
                       onDragging: (handlerIndex, lowerValue, upperValue) {
-                        satValue = lowerValue;
-                        setState(() {});
-                        if (myDevice.getConnectionState()) {
-                          characteristicSensors.write('{\"light\":[9,${satValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                        if (Platform.isAndroid) {
+                          satValue = lowerValue;
+                          mainColor = HSLColor.fromColor(Colors.purpleAccent[400])
+                              .withHue((hueValue * 360) / 256)
+                              .withLightness(lumValue / 200)
+                              .withSaturation(satValue / 100)
+                              .toColor();
+                          setState(() {});
+                          if (myDevice.getConnectionState()) {
+                            characteristicSensors.write('{\"light\":[9,${satValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                          }
+                        }
+                      },
+                      onDragCompleted: (handlerIndex, lowerValue, upperValue) {
+                        if (Platform.isIOS) {
+                          satValue = lowerValue;
+                          mainColor = HSLColor.fromColor(Colors.purpleAccent[400])
+                              .withHue((hueValue * 360) / 256)
+                              .withLightness(lumValue / 200)
+                              .withSaturation(satValue / 100)
+                              .toColor();
+                          setState(() {});
+                          if (myDevice.getConnectionState()) {
+                            characteristicSensors.write('{\"light\":[9,${satValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                          }
                         }
                       },
                       handler: FlutterSliderHandler(child: Icon(Icons.wb_twighlight)),
@@ -248,10 +317,21 @@ class _LEDPageState extends State<LEDPage> {
                       handlerAnimation: FlutterSliderHandlerAnimation(
                           curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
                       onDragging: (handlerIndex, lowerValue, upperValue) {
-                        whiteValue = lowerValue;
-                        setState(() {});
-                        if (myDevice.getConnectionState()) {
-                          characteristicSensors.write('{\"light\":[8,${whiteValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                        if (Platform.isAndroid) {
+                          whiteValue = lowerValue;
+                          setState(() {});
+                          if (myDevice.getConnectionState()) {
+                            characteristicSensors.write('{\"light\":[8,${whiteValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                          }
+                        }
+                      },
+                      onDragCompleted: (handlerIndex, lowerValue, upperValue) {
+                        if (Platform.isIOS) {
+                          whiteValue = lowerValue;
+                          setState(() {});
+                          if (myDevice.getConnectionState()) {
+                            characteristicSensors.write('{\"light\":[8,${whiteValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                          }
                         }
                       },
                       handler: FlutterSliderHandler(child: Icon(Icons.code)),
