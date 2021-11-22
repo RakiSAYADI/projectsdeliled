@@ -226,8 +226,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                             new SizedBox(width: 4.0),
                             new Text("Température\n$temperatureValue °C",
-                                style: TextStyle(fontSize: widthScreen * 0.025, color: Color(0xFF264eb6), fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.center)
+                                style: TextStyle(fontSize: widthScreen * 0.025, color: Color(0xFF264eb6), fontWeight: FontWeight.bold), textAlign: TextAlign.center)
                           ])),
                       Container(
                           width: (widthScreen - sensorsTabPadding) / 5,
@@ -392,7 +391,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                             child: TextButton(
                               onPressed: () {
                                 alertDialogAnimated(context, LEDPage());
-                                //pinSecurity(context, LEDPage());
                               },
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
@@ -414,7 +412,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: widthScreen * 0.01 + heightScreen * 0.01,
+                                        fontSize: widthScreen * 0.01 + heightScreen * 0.02,
                                       ),
                                     ),
                                   ),
@@ -461,7 +459,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: widthScreen * 0.01 + heightScreen * 0.01,
+                                        fontSize: widthScreen * 0.01 + heightScreen * 0.02,
                                       ),
                                     ),
                                   ),

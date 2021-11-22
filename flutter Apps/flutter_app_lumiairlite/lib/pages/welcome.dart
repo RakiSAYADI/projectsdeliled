@@ -80,12 +80,12 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       backgroundColor: Colors.indigo[700],
       body: SafeArea(
         child: Container(
-/*          decoration: BoxDecoration(
+          decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/fondapplication.jpg'),
+              image: AssetImage('assets/fond-lumiair-lite.png'),
               fit: BoxFit.cover,
             ),
-          ),*/
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[

@@ -19,7 +19,9 @@ class _LEDPageState extends State<LEDPage> {
   String zonesInHex = '0';
   String colorHue;
 
-  Color mainColor = Colors.transparent;
+  Color lumMaxColor = Colors.white;
+  Color stabMaxColor = Colors.transparent;
+  Color stabMinColor = Colors.white;
 
   double hueValue = 0;
   double lumValue = 50;
@@ -44,6 +46,12 @@ class _LEDPageState extends State<LEDPage> {
       print('erreur zone');
       zonesNamesList = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4'];
     }
+  }
+
+  void setBarreColorsState() {
+    lumMaxColor = HSLColor.fromColor(Colors.black).withHue((hueValue * 360) / 256).withLightness(0.5).withSaturation(1.0).toColor();
+    stabMaxColor = HSLColor.fromColor(Colors.black).withHue((hueValue * 360) / 256).withLightness(0.5).withSaturation(1.0).toColor();
+    stabMinColor = HSLColor.fromColor(Colors.black).withHue((hueValue * 360) / 256).withLightness(0.5).withSaturation(0.0).toColor();
   }
 
   @override
@@ -87,41 +95,51 @@ class _LEDPageState extends State<LEDPage> {
                         onPressed: (int index) async {
                           zoneStates[index] = !zoneStates[index];
                           setState(() {});
-                          zonesInHex = ((boolToInt(zoneStates[0])) +
-                                  (boolToInt(zoneStates[1]) * 2) +
-                                  (boolToInt(zoneStates[2]) * 4) +
-                                  (boolToInt(zoneStates[3]) * 8))
-                              .toRadixString(16);
+                          zonesInHex = ((boolToInt(zoneStates[0])) + (boolToInt(zoneStates[1]) * 2) + (boolToInt(zoneStates[2]) * 4) + (boolToInt(zoneStates[3]) * 8)).toRadixString(16);
+                          print(index);
+                          print(zoneStates[index]);
+                          if (myDevice.getConnectionState()) {
+                            switch (index) {
+                              case 0:
+                                characteristicSensors.write('{\"light\":[1,${boolToInt(!zoneStates[index])},\"1\"]}'.codeUnits);
+                                break;
+                              case 1:
+                                characteristicSensors.write('{\"light\":[1,${boolToInt(!zoneStates[index])},\"2\"]}'.codeUnits);
+                                break;
+                              case 2:
+                                characteristicSensors.write('{\"light\":[1,${boolToInt(!zoneStates[index])},\"4\"]}'.codeUnits);
+                                break;
+                              case 3:
+                                characteristicSensors.write('{\"light\":[1,${boolToInt(!zoneStates[index])},\"8\"]}'.codeUnits);
+                                break;
+                            }
+                          }
                         },
                         children: [
                           Container(
                               width: (widthScreen - 80) / 4,
                               height: (heightScreen - 80) / 4,
-                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                                new SizedBox(width: 4.0),
-                                new Text(zonesNamesList[0], style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
-                              ])),
+                              child: new Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[new SizedBox(width: 4.0), new Text(zonesNamesList[0], style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)])),
                           Container(
                               width: (widthScreen - 80) / 4,
                               height: (heightScreen - 80) / 4,
-                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                                new SizedBox(width: 4.0),
-                                new Text(zonesNamesList[1], style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
-                              ])),
+                              child: new Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[new SizedBox(width: 4.0), new Text(zonesNamesList[1], style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)])),
                           Container(
                               width: (widthScreen - 80) / 4,
                               height: (heightScreen - 80) / 4,
-                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                                new SizedBox(width: 4.0),
-                                new Text(zonesNamesList[2], style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
-                              ])),
+                              child: new Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[new SizedBox(width: 4.0), new Text(zonesNamesList[2], style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)])),
                           Container(
                               width: (widthScreen - 80) / 4,
                               height: (heightScreen - 80) / 4,
-                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                                new SizedBox(width: 4.0),
-                                new Text(zonesNamesList[3], style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)
-                              ])),
+                              child: new Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[new SizedBox(width: 4.0), new Text(zonesNamesList[3], style: TextStyle(fontSize: widthScreen * 0.025), textAlign: TextAlign.center)])),
                         ],
                         borderWidth: 2,
                         selectedColor: Colors.white,
@@ -159,11 +177,7 @@ class _LEDPageState extends State<LEDPage> {
                       onDragging: (handlerIndex, lowerValue, upperValue) {
                         if (Platform.isAndroid) {
                           hueValue = lowerValue;
-                          mainColor = HSLColor.fromColor(Colors.black)
-                              .withHue((hueValue * 360) / 256)
-                              .withLightness(lumValue / 200)
-                              .withSaturation(satValue / 100)
-                              .toColor();
+                          setBarreColorsState();
                           setState(() {});
                           if (myDevice.getConnectionState()) {
                             characteristicSensors.write('{\"light\":[3,${hueValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
@@ -173,11 +187,7 @@ class _LEDPageState extends State<LEDPage> {
                       onDragCompleted: (handlerIndex, lowerValue, upperValue) {
                         if (Platform.isIOS) {
                           hueValue = lowerValue;
-                          mainColor = HSLColor.fromColor(Colors.black)
-                              .withHue((hueValue * 360) / 256)
-                              .withLightness(lumValue / 200)
-                              .withSaturation(satValue / 100)
-                              .toColor();
+                          setBarreColorsState();
                           setState(() {});
                           if (myDevice.getConnectionState()) {
                             characteristicSensors.write('{\"light\":[3,${hueValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
@@ -186,10 +196,7 @@ class _LEDPageState extends State<LEDPage> {
                       },
                       handler: FlutterSliderHandler(child: Icon(Icons.color_lens)),
                       trackBar: FlutterSliderTrackBar(
-                          inactiveTrackBar: BoxDecoration(color: Colors.transparent),
-                          activeTrackBar: BoxDecoration(color: Colors.transparent),
-                          activeTrackBarHeight: 12,
-                          inactiveTrackBarHeight: 12),
+                          inactiveTrackBar: BoxDecoration(color: Colors.transparent), activeTrackBar: BoxDecoration(color: Colors.transparent), activeTrackBarHeight: 12, inactiveTrackBarHeight: 12),
                     ),
                   ),
                 ),
@@ -200,22 +207,17 @@ class _LEDPageState extends State<LEDPage> {
                     child: FlutterSlider(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(18.0),
-                        gradient: LinearGradient(colors: [Colors.grey, mainColor]),
+                        gradient: LinearGradient(colors: [Colors.grey, lumMaxColor]),
                       ),
                       values: [lumValue],
                       max: 100,
                       min: 0,
                       centeredOrigin: true,
-                      handlerAnimation: FlutterSliderHandlerAnimation(
-                          curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
+                      handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
                       onDragging: (handlerIndex, lowerValue, upperValue) {
                         if (Platform.isAndroid) {
                           lumValue = lowerValue;
-                          mainColor = HSLColor.fromColor(Colors.purpleAccent[400])
-                              .withHue((hueValue * 360) / 256)
-                              .withLightness(lumValue / 200)
-                              .withSaturation(satValue / 100)
-                              .toColor();
+                          setBarreColorsState();
                           setState(() {});
                           if (myDevice.getConnectionState()) {
                             characteristicSensors.write('{\"light\":[7,${lumValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
@@ -225,11 +227,7 @@ class _LEDPageState extends State<LEDPage> {
                       onDragCompleted: (handlerIndex, lowerValue, upperValue) {
                         if (Platform.isIOS) {
                           lumValue = lowerValue;
-                          mainColor = HSLColor.fromColor(Colors.purpleAccent[400])
-                              .withHue((hueValue * 360) / 256)
-                              .withLightness(lumValue / 200)
-                              .withSaturation(satValue / 100)
-                              .toColor();
+                          setBarreColorsState();
                           setState(() {});
                           if (myDevice.getConnectionState()) {
                             characteristicSensors.write('{\"light\":[7,${lumValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
@@ -238,10 +236,7 @@ class _LEDPageState extends State<LEDPage> {
                       },
                       handler: FlutterSliderHandler(child: Icon(Icons.highlight)),
                       trackBar: FlutterSliderTrackBar(
-                          inactiveTrackBar: BoxDecoration(color: Colors.transparent),
-                          activeTrackBar: BoxDecoration(color: Colors.transparent),
-                          activeTrackBarHeight: 12,
-                          inactiveTrackBarHeight: 12),
+                          inactiveTrackBar: BoxDecoration(color: Colors.transparent), activeTrackBar: BoxDecoration(color: Colors.transparent), activeTrackBarHeight: 12, inactiveTrackBarHeight: 12),
                     ),
                   ),
                 ),
@@ -255,23 +250,18 @@ class _LEDPageState extends State<LEDPage> {
                         gradient: LinearGradient(
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
-                          colors: [Colors.white, mainColor],
+                          colors: [stabMinColor, stabMaxColor],
                         ),
                       ),
                       values: [satValue],
                       max: 100,
                       min: 0,
                       centeredOrigin: true,
-                      handlerAnimation: FlutterSliderHandlerAnimation(
-                          curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
+                      handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
                       onDragging: (handlerIndex, lowerValue, upperValue) {
                         if (Platform.isAndroid) {
                           satValue = lowerValue;
-                          mainColor = HSLColor.fromColor(Colors.purpleAccent[400])
-                              .withHue((hueValue * 360) / 256)
-                              .withLightness(lumValue / 200)
-                              .withSaturation(satValue / 100)
-                              .toColor();
+                          setBarreColorsState();
                           setState(() {});
                           if (myDevice.getConnectionState()) {
                             characteristicSensors.write('{\"light\":[9,${satValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
@@ -281,11 +271,7 @@ class _LEDPageState extends State<LEDPage> {
                       onDragCompleted: (handlerIndex, lowerValue, upperValue) {
                         if (Platform.isIOS) {
                           satValue = lowerValue;
-                          mainColor = HSLColor.fromColor(Colors.purpleAccent[400])
-                              .withHue((hueValue * 360) / 256)
-                              .withLightness(lumValue / 200)
-                              .withSaturation(satValue / 100)
-                              .toColor();
+                          setBarreColorsState();
                           setState(() {});
                           if (myDevice.getConnectionState()) {
                             characteristicSensors.write('{\"light\":[9,${satValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
@@ -294,10 +280,7 @@ class _LEDPageState extends State<LEDPage> {
                       },
                       handler: FlutterSliderHandler(child: Icon(Icons.wb_twighlight)),
                       trackBar: FlutterSliderTrackBar(
-                          inactiveTrackBar: BoxDecoration(color: Colors.transparent),
-                          activeTrackBar: BoxDecoration(color: Colors.transparent),
-                          activeTrackBarHeight: 12,
-                          inactiveTrackBarHeight: 12),
+                          inactiveTrackBar: BoxDecoration(color: Colors.transparent), activeTrackBar: BoxDecoration(color: Colors.transparent), activeTrackBarHeight: 12, inactiveTrackBarHeight: 12),
                     ),
                   ),
                 ),
@@ -314,8 +297,7 @@ class _LEDPageState extends State<LEDPage> {
                       max: 100,
                       min: 0,
                       centeredOrigin: true,
-                      handlerAnimation: FlutterSliderHandlerAnimation(
-                          curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
+                      handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
                       onDragging: (handlerIndex, lowerValue, upperValue) {
                         if (Platform.isAndroid) {
                           whiteValue = lowerValue;
@@ -336,10 +318,7 @@ class _LEDPageState extends State<LEDPage> {
                       },
                       handler: FlutterSliderHandler(child: Icon(Icons.code)),
                       trackBar: FlutterSliderTrackBar(
-                          inactiveTrackBar: BoxDecoration(color: Colors.transparent),
-                          activeTrackBar: BoxDecoration(color: Colors.transparent),
-                          activeTrackBarHeight: 12,
-                          inactiveTrackBarHeight: 12),
+                          inactiveTrackBar: BoxDecoration(color: Colors.transparent), activeTrackBar: BoxDecoration(color: Colors.transparent), activeTrackBarHeight: 12, inactiveTrackBarHeight: 12),
                       hatchMark: FlutterSliderHatchMark(
                         density: 0.5, // means 50 lines, from 0 to 100 percent
                         labels: [
