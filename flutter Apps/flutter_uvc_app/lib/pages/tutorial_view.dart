@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutteruvcapp/services/DataVariables.dart';
+import 'package:flutteruvcapp/services/languageDataBase.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:location_permissions/location_permissions.dart';
@@ -79,7 +80,7 @@ class _TutorialViewState extends State<TutorialView> {
         _permissionStatus = status;
         if (_permissionStatus.index != 2) {
           myUvcToast.setToastDuration(5);
-          myUvcToast.setToastMessage('La localisation n\'est pas activée sur votre téléphone !');
+          myUvcToast.setToastMessage(localisationToastLanguageArray[languageArrayIdentifier]);
           myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
         } else {
           checkServiceStatus(context);
@@ -92,7 +93,7 @@ class _TutorialViewState extends State<TutorialView> {
     LocationPermissions().checkServiceStatus().then((ServiceStatus serviceStatus) {
       if (serviceStatus.index != 2) {
         myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('La localisation n\'est pas activée sur votre téléphone !');
+        myUvcToast.setToastMessage(localisationToastLanguageArray[languageArrayIdentifier]);
         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
       }
     });
@@ -109,7 +110,7 @@ class _TutorialViewState extends State<TutorialView> {
         //Alert user to turn on bluetooth.
         print("Bluetooth is off");
         myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('Le Bluetooth (BLE) n\'est pas activé sur votre téléphone !');
+        myUvcToast.setToastMessage(bluetoothToastLanguageArray[languageArrayIdentifier]);
         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
       } else if (state == BluetoothState.on) {
         //if bluetooth is enabled then go ahead.
@@ -137,7 +138,7 @@ class _TutorialViewState extends State<TutorialView> {
       child: Scaffold(
         backgroundColor: Colors.blue[400],
         appBar: AppBar(
-          title: const Text('Tutoriel'),
+          title: Text(tutorialTitleTextLanguageArray[languageArrayIdentifier]),
           centerTitle: true,
         ),
         body: Container(
@@ -151,7 +152,7 @@ class _TutorialViewState extends State<TutorialView> {
                     image: _buildImage('TUTO-01.png'),
                     titleWidget: Center(
                       child: Text(
-                        "Merci d’avoir installé l’application $appName !",
+                        firstTutorialTitleTextLanguageArray[languageArrayIdentifier],
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -160,34 +161,31 @@ class _TutorialViewState extends State<TutorialView> {
                         ),
                       ),
                     ),
-                    body: "Nous allons vous montrer comment vous en servir en toute sécurité.",
+                    body: firstTutorialBodyTextLanguageArray[languageArrayIdentifier],
                     decoration: pageDecoration,
                   ),
                   PageViewModel(
                     image: _buildImage('TUTO-02.png'),
-                    title: "Brancher le matériel.",
-                    body: "Tout d’abord, veuillez à ce que votre solution UV-C DEEPLIGHT® soit correctement raccordée à l’alimentation."
-                        " Si vous avez des solutions auxiliaires veuillez également les connecter.",
+                    title: secondTutorialTitleTextLanguageArray[languageArrayIdentifier],
+                    body: secondTutorialBodyTextLanguageArray[languageArrayIdentifier],
                     decoration: pageDecoration,
                   ),
                   PageViewModel(
                     image: _buildImage('TUTO-03.png'),
-                    title: "Connecter une solution UV-C DEEPLIGHT®.",
-                    body: "Scannez l’étiquette présente sur la solution de désinfection quand il vous le sera demandé "
-                        "afin que nous puissions reconnaître le produit utilisé.",
+                    title: threeTutorialTitleTextLanguageArray[languageArrayIdentifier],
+                    body: threeTutorialBodyTextLanguageArray[languageArrayIdentifier],
                     decoration: pageDecoration,
                   ),
                   PageViewModel(
                     image: _buildImage('TUTO-04.png'),
-                    title: "Définir vos besoins.",
-                    body: "Indiquez ensuite les données de désinfection comme le nom de l’entreprise, "
-                        "le nom de l’opérateur et la durée de désinfection.",
+                    title: fourTutorialTitleTextLanguageArray[languageArrayIdentifier],
+                    body: fourTutorialBodyTextLanguageArray[languageArrayIdentifier],
                     decoration: pageDecoration,
                   ),
                   PageViewModel(
                     image: _buildImage('TUTO-05.png'),
-                    title: "C'est presque fini !",
-                    body: "Il ne vous restera plus qu’à scanner le QR code de sécurité et lancer la désinfection !",
+                    title: fiveTutorialTitleTextLanguageArray[languageArrayIdentifier],
+                    body: fiveTutorialBodyTextLanguageArray[languageArrayIdentifier],
                     decoration: pageDecoration,
                   ),
                 ],
@@ -196,9 +194,9 @@ class _TutorialViewState extends State<TutorialView> {
                 showSkipButton: true,
                 skipFlex: 0,
                 nextFlex: 0,
-                skip: const Text('Passer'),
+                skip: Text(skipTextLanguageArray[languageArrayIdentifier]),
                 next: const Icon(Icons.arrow_forward),
-                done: const Text('COMPRIS', style: TextStyle(fontWeight: FontWeight.w600)),
+                done: Text(understoodTextLanguageArray[languageArrayIdentifier], style: TextStyle(fontWeight: FontWeight.w600)),
                 dotsDecorator: DotsDecorator(
                   size: Size(screenWidth * 0.01, screenHeight * 0.01),
                   color: Color(0xFFBDBDBD),
@@ -220,17 +218,17 @@ class _TutorialViewState extends State<TutorialView> {
     return showDialog<bool>(
       context: context,
       builder: (c) => AlertDialog(
-        title: Text('Attention'),
-        content: Text('Voulez-vous vraiment quitter l\'application ?'),
+        title: Text(attentionTextLanguageArray[languageArrayIdentifier]),
+        content: Text(stopActivityAlertDialogMessageTextLanguageArray[languageArrayIdentifier]),
         actions: [
-          FlatButton(
-            child: Text('Oui'),
+          TextButton(
+            child: Text(yesTextLanguageArray[languageArrayIdentifier]),
             onPressed: () {
               Navigator.pop(c, true);
             },
           ),
-          FlatButton(
-            child: Text('Non'),
+          TextButton(
+            child: Text(noTextLanguageArray[languageArrayIdentifier]),
             onPressed: () => Navigator.pop(c, false),
           ),
         ],

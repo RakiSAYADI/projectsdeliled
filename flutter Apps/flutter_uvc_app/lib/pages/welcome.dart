@@ -8,6 +8,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutteruvcapp/services/CSVfileClass.dart';
 import 'package:flutteruvcapp/services/DataVariables.dart';
 import 'package:flutteruvcapp/services/httpRequests.dart';
+import 'package:flutteruvcapp/services/languageDataBase.dart';
 import 'package:flutteruvcapp/services/life_cycle_widget.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
 import 'package:location_permissions/location_permissions.dart';
@@ -73,7 +74,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
         _permissionStatus = status;
         if (_permissionStatus.index != 2) {
           myUvcToast.setToastDuration(5);
-          myUvcToast.setToastMessage('La localisation n\'est pas activée sur votre téléphone !');
+          myUvcToast.setToastMessage(localisationToastLanguageArray[languageArrayIdentifier]);
           myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
         } else {
           checkServiceStatus(context);
@@ -86,7 +87,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     LocationPermissions().checkServiceStatus().then((ServiceStatus serviceStatus) {
       if (serviceStatus.index != 2) {
         myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('La localisation n\'est pas activée sur votre téléphone !');
+        myUvcToast.setToastMessage(localisationToastLanguageArray[languageArrayIdentifier]);
         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
       }
     });
@@ -133,7 +134,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       });
     } else {
       Future.delayed(Duration(seconds: loadingSeconds), () async {
-        Navigator.pushReplacementNamed(context, '/tutorial_view');//tutorial_view
+        Navigator.pushReplacementNamed(context, '/tutorial_view');
       });
     }
   }
@@ -252,7 +253,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
                       width: screenWidth * 0.7,
                     ),
                     Text(
-                      'Solutions de désinfection par UV-C',
+                      welcomePageLogoMessageLanguageArray[languageArrayIdentifier],
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -278,24 +279,26 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
                     ),
                     SizedBox(height: screenHeight * 0.01),
                     FutureBuilder(
-                        future: PackageInfo.fromPlatform(),
-                        builder: (BuildContext context, snapshot) {
-                          if (snapshot.hasData) {
-                            String version = snapshot.data.version;
-                            return Center(
-                                child: Text(
+                      future: PackageInfo.fromPlatform(),
+                      builder: (BuildContext context, snapshot) {
+                        if (snapshot.hasData) {
+                          String version = snapshot.data.version;
+                          return Center(
+                            child: Text(
                               '$version',
                               style: TextStyle(
                                 color: Colors.grey[300],
                                 fontSize: screenWidth * 0.04,
                               ),
-                            ));
-                          } else {
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                        }),
+                            ),
+                          );
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      },
+                    ),
                   ],
                 ),
               ),

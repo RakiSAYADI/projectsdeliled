@@ -96,8 +96,6 @@ class _LEDPageState extends State<LEDPage> {
                           zoneStates[index] = !zoneStates[index];
                           setState(() {});
                           zonesInHex = ((boolToInt(zoneStates[0])) + (boolToInt(zoneStates[1]) * 2) + (boolToInt(zoneStates[2]) * 4) + (boolToInt(zoneStates[3]) * 8)).toRadixString(16);
-                          print(index);
-                          print(zoneStates[index]);
                           if (myDevice.getConnectionState()) {
                             switch (index) {
                               case 0:

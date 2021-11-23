@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutteruvcapp/services/DataVariables.dart';
+import 'package:flutteruvcapp/services/languageDataBase.dart';
 
 import 'bleDeviceClass.dart';
 
@@ -53,7 +55,7 @@ class DeviceCard extends StatelessWidget {
               ],
             ),
             SizedBox(height: 8.0),
-            FlatButton.icon(onPressed: connect, icon: Icon(Icons.bluetooth), label: Text('connect'))
+            TextButton.icon(onPressed: connect, icon: Icon(Icons.bluetooth), label: Text(deviceConnectButtonTextLanguageArray[languageArrayIdentifier]))
           ],
         ),
       ),

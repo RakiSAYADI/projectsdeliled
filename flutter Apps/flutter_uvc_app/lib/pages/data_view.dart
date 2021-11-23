@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutteruvcapp/services/DataVariables.dart';
+import 'package:flutteruvcapp/services/languageDataBase.dart';
 
 class DataCSVView extends StatefulWidget {
   @override
@@ -9,7 +10,6 @@ class DataCSVView extends StatefulWidget {
 }
 
 class _DataCSVViewState extends State<DataCSVView> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -27,7 +27,7 @@ class _DataCSVViewState extends State<DataCSVView> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Rapports de désinfection'),
+        title: Text(rapportUVCTitleTextLanguageArray[languageArrayIdentifier]),
         centerTitle: true,
       ),
       body: Container(
@@ -39,7 +39,6 @@ class _DataCSVViewState extends State<DataCSVView> {
               return TableRow(
                   children: item.map((row) {
                 return Container(
-                  //color: row.toString().contains("réussi") ? Colors.green : Colors.red,
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -58,8 +57,8 @@ class _DataCSVViewState extends State<DataCSVView> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () =>     Navigator.pushNamed(context, "/send_email"),
-        label: Text('Envoi'),
+        onPressed: () => Navigator.pushNamed(context, "/send_email"),
+        label: Text(rapportUVCButtonTextLanguageArray[languageArrayIdentifier]),
         icon: Icon(
           Icons.send,
           color: Colors.white,

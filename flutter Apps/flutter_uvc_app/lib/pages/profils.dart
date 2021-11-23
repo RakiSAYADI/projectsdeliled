@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutteruvcapp/services/DataVariables.dart';
+import 'package:flutteruvcapp/services/languageDataBase.dart';
 import 'package:flutteruvcapp/services/uvcClass.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
 
@@ -56,18 +57,6 @@ class _ProfilesState extends State<Profiles> {
     }
   }
 
-  IconButton settingsControl(BuildContext context) {
-    return IconButton(
-      icon: Icon(
-        Icons.settings,
-        color: Colors.white,
-      ),
-      onPressed: () {
-        settingsWidget(context);
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     dataRobotUVC = myDevice.getReadCharMessage();
@@ -76,7 +65,6 @@ class _ProfilesState extends State<Profiles> {
     }
 
     if (dataRobotUVC.isNotEmpty && firstDisplayMainWidget) {
-
       Map<String, dynamic> user = jsonDecode(dataRobotUVC);
 
       String timeDataList = user['TimeData'].toString();
@@ -96,11 +84,8 @@ class _ProfilesState extends State<Profiles> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Profil'),
+          title: Text(profilePageTitleTextLanguageArray[languageArrayIdentifier]),
           centerTitle: true,
-/*          actions: [
-            settingsControl(context),
-          ],*/
         ),
         body: Container(
           decoration: BoxDecoration(color: Colors.grey[200]),
@@ -131,7 +116,7 @@ class _ProfilesState extends State<Profiles> {
                           color: Colors.grey[800],
                         ),
                         decoration: InputDecoration(
-                            hintText: 'Établissement',
+                            hintText: establishmentHintTextLanguageArray[languageArrayIdentifier],
                             hintStyle: TextStyle(
                               color: Colors.grey,
                             )),
@@ -141,7 +126,7 @@ class _ProfilesState extends State<Profiles> {
                     Image.asset(
                       'assets/operateur_logo.png',
                       height: screenHeight * 0.09,
-                      width: screenWidth* 0.5,
+                      width: screenWidth * 0.5,
                     ),
                     SizedBox(height: screenHeight * 0.01),
                     Padding(
@@ -156,7 +141,7 @@ class _ProfilesState extends State<Profiles> {
                           color: Colors.grey[800],
                         ),
                         decoration: InputDecoration(
-                            hintText: 'Opérateur',
+                            hintText: userHintTextLanguageArray[languageArrayIdentifier],
                             hintStyle: TextStyle(
                               color: Colors.grey,
                             )),
@@ -180,7 +165,7 @@ class _ProfilesState extends State<Profiles> {
                           fontSize: screenWidth * 0.04,
                         ),
                         decoration: InputDecoration(
-                            hintText: 'Pièce/local',
+                            hintText: roomHintTextLanguageArray[languageArrayIdentifier],
                             hintStyle: TextStyle(
                               color: Colors.grey,
                             )),
@@ -190,7 +175,7 @@ class _ProfilesState extends State<Profiles> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
                       child: Text(
-                        'Merci de compléter ces informations pour garantir un suivi de désinfection optimal.',
+                        profileMessageTextLanguageArray[languageArrayIdentifier],
                         style: TextStyle(
                           fontSize: screenWidth * 0.04,
                           color: Colors.black,
@@ -198,20 +183,16 @@ class _ProfilesState extends State<Profiles> {
                       ),
                     ),
                     SizedBox(height: screenHeight * 0.04),
-                    FlatButton(
+                    TextButton(
                       onPressed: () {
                         if (myDevice.getConnectionState()) {
-                          myUvcLight = UvcLight(
-                              machineName: myDevice.device.name,
-                              machineMac: myDevice.device.id.toString(),
-                              company: myCompany.text,
-                              operatorName: myName.text,
-                              roomName: myRoomName.text);
+                          myUvcLight =
+                              UvcLight(machineName: myDevice.device.name, machineMac: myDevice.device.id.toString(), company: myCompany.text, operatorName: myName.text, roomName: myRoomName.text);
                           Navigator.pushNamed(context, '/settings');
-                        }else{
+                        } else {
                           myUvcToast = ToastyMessage(toastContext: context);
                           myUvcToast.setToastDuration(5);
-                          myUvcToast.setToastMessage('Le dispositif est trop loin ou éteint, merci de vérifier ce dernier');
+                          myUvcToast.setToastMessage(deviceOutOfReachTextLanguageArray[languageArrayIdentifier]);
                           myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
                           myDevice.disconnect();
                           Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
@@ -219,13 +200,13 @@ class _ProfilesState extends State<Profiles> {
                         //alertSecurity(context);
                       },
                       child: Text(
-                        'SUIVANT',
+                        nextButtonTextLanguageArray[languageArrayIdentifier],
                         style: TextStyle(color: Colors.white),
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
                       ),
-                      color: Colors.blue[400],
                     ),
                   ],
                 ),
@@ -238,70 +219,15 @@ class _ProfilesState extends State<Profiles> {
     );
   }
 
-  final myRobotName = TextEditingController();
-
-  Future<void> settingsWidget(BuildContext context) {
-
-    myRobotName.text = myDevice.device.name;
-
-    double screenWidth = MediaQuery.of(context).size.width;
-    //double screenHeight = MediaQuery.of(context).size.height;
-
-    return showDialog<bool>(
-      barrierDismissible: false,
-      context: context,
-      builder: (c) => AlertDialog(
-        title: Text('Parametres'),
-        content: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('static name'),
-                SizedBox(width: screenWidth * 0.001),
-                TextField(
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  controller: myRobotName,
-                  decoration: InputDecoration(
-                      hintText: '... nom du robot',
-                      hintStyle: TextStyle(
-                        color: Colors.grey,
-                      )),
-                ),
-              ],
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            child: Text('Sauvegarder et redemarrer'),
-            onPressed: () {
-              Navigator.pop(c, true);
-              myDevice.disconnect();
-              Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
-            },
-          ),
-          TextButton(
-            child: Text('Annuler'),
-            onPressed: () => Navigator.pop(c, false),
-          ),
-        ],
-      ),
-    );
-  }
-
   Future<void> disconnection(BuildContext context) {
     return showDialog<bool>(
       context: context,
       builder: (c) => AlertDialog(
-        title: Text('Attention'),
-        content: Text('Voulez-vous vraiment quitter la page profil ?'),
+        title: Text(attentionTextLanguageArray[languageArrayIdentifier]),
+        content: Text(disconnectAlertDialogMessageTextLanguageArray[languageArrayIdentifier]),
         actions: [
           TextButton(
-            child: Text('Oui'),
+            child: Text(yesTextLanguageArray[languageArrayIdentifier]),
             onPressed: () {
               Navigator.pop(c, true);
               myDevice.disconnect();
@@ -309,7 +235,7 @@ class _ProfilesState extends State<Profiles> {
             },
           ),
           TextButton(
-            child: Text('Non'),
+            child: Text(noTextLanguageArray[languageArrayIdentifier]),
             onPressed: () => Navigator.pop(c, false),
           ),
         ],

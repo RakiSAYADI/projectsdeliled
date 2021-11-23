@@ -8,6 +8,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutteruvcapp/services/CSVfileClass.dart';
 import 'package:flutteruvcapp/services/DataVariables.dart';
 import 'package:flutteruvcapp/services/bleDeviceClass.dart';
+import 'package:flutteruvcapp/services/languageDataBase.dart';
 import 'package:flutteruvcapp/services/uvcClass.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
 import 'package:pinput/pin_put/pin_put.dart';
@@ -110,7 +111,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     Future.delayed(const Duration(seconds: 1), () {
       _controller.resume();
       myUvcToast.setToastDuration(2);
-      myUvcToast.setToastMessage('Lancement de la caméra !');
+      myUvcToast.setToastMessage(cameraStartToastTextLanguageArray[languageArrayIdentifier]);
       myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
     });
     // initialise the animation
@@ -156,10 +157,10 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                     qrCodeScanAccess = true;
                     rapportCSV(data);
                   } else {
-                    connectingToRobotAndroid(data,noLongerScan);
+                    connectingToRobotAndroid(data, noLongerScan);
                   }
                 } catch (e) {
-                  connectingToRobotAndroid(data,noLongerScan);
+                  connectingToRobotAndroid(data, noLongerScan);
                 }
               }
             }
@@ -182,12 +183,11 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                     myDevice.disconnect(); // disconnect after checking rapport DATA
                     rapportCSV(data);
                   } else {
-                    connectingToRobotIOS(data,noLongerScan);
+                    connectingToRobotIOS(data, noLongerScan);
                   }
                 } catch (e) {
-                  connectingToRobotIOS(data,noLongerScan);
+                  connectingToRobotIOS(data, noLongerScan);
                 }
-
               }
             }
           });
@@ -213,7 +213,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                   Navigator.pushNamed(context, '/uvc');
                 } else {
                   myUvcToast.setToastDuration(5);
-                  myUvcToast.setToastMessage('Le dispositif est trop loin ou éteint, merci de vérifier ce dernier');
+                  myUvcToast.setToastMessage(deviceOutOfReachTextLanguageArray[languageArrayIdentifier]);
                   myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
                   myDevice.disconnect();
                   Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
@@ -242,7 +242,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
               extinctionTime = _stringListAsciiToListInt(timeDataList.codeUnits)[0];
               activationTime = _stringListAsciiToListInt(timeDataList.codeUnits)[1];
               if (!(qrCodeValidOrNot)) {
-                qrCodeMessage = 'Accès valide';
+                qrCodeMessage = qrCodeValidMessageTextLanguageArray[languageArrayIdentifier];
                 colorMessage = Colors.green;
                 qrCodeValidOrNot = true;
                 alertSecurity(myCompany, myName, myRoom, extinctionTime, activationTime, context);
@@ -250,7 +250,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
             } catch (e) {
               qrCodeValidOrNot = false;
               setState(() {
-                qrCodeMessage = 'Accès non valide';
+                qrCodeMessage = qrCodeNonValidMessageTextLanguageArray[languageArrayIdentifier];
                 colorMessage = Colors.red;
               });
             }
@@ -263,7 +263,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: const Text('Scanner le QR code'),
+          title: Text(cameraPageTitleTextLanguageArray[languageArrayIdentifier]),
           centerTitle: true,
         ),
         body: Container(
@@ -337,11 +337,11 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     }
     setState(() {
       if (deviceExistOrNot) {
-        qrCodeMessage = 'Accès valide';
+        qrCodeMessage = qrCodeValidMessageTextLanguageArray[languageArrayIdentifier];
         colorMessage = Colors.green;
         qrCodeScanAccess = true;
       } else {
-        qrCodeMessage = 'Accès non valide';
+        qrCodeMessage = qrCodeNonValidMessageTextLanguageArray[languageArrayIdentifier];
         colorMessage = Colors.red;
         qrCodeScanAccess = false;
       }
@@ -427,11 +427,11 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     }
     setState(() {
       if (deviceExistOrNot) {
-        qrCodeMessage = 'Accès valide';
+        qrCodeMessage = qrCodeValidMessageTextLanguageArray[languageArrayIdentifier];
         colorMessage = Colors.green;
         qrCodeScanAccess = true;
       } else {
-        qrCodeMessage = 'Accès non valide';
+        qrCodeMessage = qrCodeNonValidMessageTextLanguageArray[languageArrayIdentifier];
         colorMessage = Colors.red;
         qrCodeScanAccess = false;
       }
@@ -479,6 +479,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           }
           Map<String, dynamic> dataRead;
           dataRead = jsonDecode(myDevice.getReadCharMessage());
+
           /// add the check state process
           try {
             switch (int.parse(dataRead['uvcSt'].toString())) {
@@ -505,14 +506,14 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
         });
       } else {
         myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('Le dispositif est trop loin ou éteint, merci de vérifier ce dernier');
+        myUvcToast.setToastMessage(deviceOutOfReachTextLanguageArray[languageArrayIdentifier]);
         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
         myDevice.disconnect();
         Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
       }
     } catch (e) {
       myUvcToast.setToastDuration(5);
-      myUvcToast.setToastMessage('Le dispositif est trop loin ou éteint, merci de vérifier ce dernier');
+      myUvcToast.setToastMessage(deviceOutOfReachTextLanguageArray[languageArrayIdentifier]);
       myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
       myDevice.disconnect();
       Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
@@ -532,11 +533,9 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     infectionTimePosition = _stringListAsciiToListInt(dataQrCode['TimeData'].toString().codeUnits)[0];
     activationTimePosition = _stringListAsciiToListInt(dataQrCode['TimeData'].toString().codeUnits)[1];
     if (Platform.isIOS) {
-      await myDevice.writeCharacteristic(
-          0, 0, '{\"data\":[\"$myCompany\",\"$userName\",\"$roomName\",$infectionTimePosition,$activationTimePosition]}');
+      await myDevice.writeCharacteristic(0, 0, '{\"data\":[\"$myCompany\",\"$userName\",\"$roomName\",$infectionTimePosition,$activationTimePosition]}');
     } else {
-      await myDevice.writeCharacteristic(
-          2, 0, '{\"data\":[\"$myCompany\",\"$userName\",\"$roomName\",$infectionTimePosition,$activationTimePosition]}');
+      await myDevice.writeCharacteristic(2, 0, '{\"data\":[\"$myCompany\",\"$userName\",\"$roomName\",$infectionTimePosition,$activationTimePosition]}');
     }
     myUvcLight = UvcLight();
     myUvcLight.setCompanyName(myCompany);
@@ -575,7 +574,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Entrer le code Pin:'),
+            title: Text(pinAccessTitleTextLanguageArray[languageArrayIdentifier]),
             content: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
@@ -605,7 +604,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
             actions: [
               TextButton(
                   child: Text(
-                    'Valider',
+                    pinAccessValidButtonTextLanguageArray[languageArrayIdentifier],
                     style: TextStyle(color: Colors.green),
                   ),
                   onPressed: () {
@@ -622,7 +621,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                   }),
               TextButton(
                   child: Text(
-                    'Annuler',
+                    pinAccessNonValidButtonTextLanguageArray[languageArrayIdentifier],
                     style: TextStyle(color: Colors.green),
                   ),
                   onPressed: () {
@@ -661,7 +660,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
             _isTorchOn = !_isTorchOn;
           },
           child: Text(
-            'torch',
+            cameraPageTorchButtonTextLanguageArray[languageArrayIdentifier],
             style: TextStyle(
               color: Colors.grey[300],
               fontSize: 20.0,
@@ -742,7 +741,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Vérifiez vos informations :',
+                verifyDataAlertDialogTitleTextLanguageArray[languageArrayIdentifier],
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: screenWidth * 0.04),
               ),
@@ -851,7 +850,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           actions: <Widget>[
             TextButton(
               child: Text(
-                'OK',
+                okTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () async {
@@ -863,7 +862,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
             ),
             TextButton(
               child: Text(
-                'Annuler',
+                cancelTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () {
@@ -883,11 +882,11 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Scannez le QR de données'),
+            title: Text(scanQrCodeDataAlertDialogTitleTextLanguageArray[languageArrayIdentifier]),
             actions: [
               TextButton(
                   child: Text(
-                    'OK',
+                    okTextLanguageArray[languageArrayIdentifier],
                     style: TextStyle(color: Colors.green),
                   ),
                   onPressed: () async {
@@ -905,14 +904,13 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
   }
 
   Future<void> waitingWidget() async {
-    //double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return showDialog<void>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Connexion en cours'),
+            title: Text(checkConnectionAlertDialogTitleTextLanguageArray[languageArrayIdentifier]),
             content: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
@@ -935,12 +933,12 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       barrierDismissible: false,
       builder: (BuildContext myContext) {
         return AlertDialog(
-          title: Text('Connexion en cours'),
+          title: Text(checkConnectionAlertDialogTitleTextLanguageArray[languageArrayIdentifier]),
           content: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Veuillez rester près du dispositif UV-C pendant quelques instants, la connexion est en cours.'),
+              Text(checkConnectionAlertDialogMessageTextLanguageArray[languageArrayIdentifier]),
               Image.asset(
                 'assets/connexion-dispositifs-uvc.gif',
                 height: screenHeight * 0.3,
@@ -951,7 +949,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           actions: <Widget>[
             TextButton(
               child: Text(
-                'OK',
+                okTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () async {
@@ -963,7 +961,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                 myUvcToast.setAnimationIcon(animationRefreshIcon);
                 myUvcToast.setToastDuration(60);
                 myDevice = Device(device: scanDevices.elementAt(devicesPosition));
-                myUvcToast.setToastMessage('Autorisation de connexion validée !');
+                myUvcToast.setToastMessage(authoriseConnectionToastTextLanguageArray[languageArrayIdentifier]);
                 myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
                 // stop scanning and start connecting
                 while (true) {
@@ -1019,7 +1017,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
             ),
             TextButton(
               child: Text(
-                'Annuler',
+                cancelTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () {
@@ -1052,18 +1050,18 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       context: context,
       barrierDismissible: false,
       builder: (c) => AlertDialog(
-        title: Text('Attention'),
-        content: Text('Problème lors de la précédente désinfection, veuillez la recommencer'),
+        title: Text(attentionTextLanguageArray[languageArrayIdentifier]),
+        content: Text(restartDisinfectionMessageTextLanguageArray[languageArrayIdentifier]),
         actions: [
           TextButton(
-            child: Text('Oui'),
+            child: Text(yesTextLanguageArray[languageArrayIdentifier]),
             onPressed: () {
               myDevice.writeCharacteristic(2, 0, 'UVCTreatement : ON');
               Navigator.pushNamed(context, '/uvc');
             },
           ),
           TextButton(
-            child: Text('Non'),
+            child: Text(noTextLanguageArray[languageArrayIdentifier]),
             onPressed: () {
               checkVersion(dataRead);
             },
@@ -1078,11 +1076,11 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       context: context,
       barrierDismissible: false,
       builder: (c) => AlertDialog(
-        title: Text('Attention'),
-        content: Text('Une désinfection est en cours, afin que SAFE UVC fonctionne correctement la désinfection va être stoppée.'),
+        title: Text(attentionTextLanguageArray[languageArrayIdentifier]),
+        content: Text(stopDisinfectionMessageTextLanguageArray[languageArrayIdentifier]),
         actions: [
           TextButton(
-            child: Text('Compris'),
+            child: Text(understoodTextLanguageArray[languageArrayIdentifier]),
             onPressed: () {
               if (Platform.isAndroid) {
                 myDevice.writeCharacteristic(2, 0, 'STOP : ON');
@@ -1103,11 +1101,11 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       context: context,
       barrierDismissible: false,
       builder: (c) => AlertDialog(
-        title: Text('Attention'),
-        content: Text('Voulez-vous vraiment quitter l\'application ?'),
+        title: Text(attentionTextLanguageArray[languageArrayIdentifier]),
+        content: Text(exitApplicationMessageTextLanguageArray[languageArrayIdentifier]),
         actions: [
           TextButton(
-            child: Text('Oui'),
+            child: Text(yesTextLanguageArray[languageArrayIdentifier]),
             onPressed: () {
               if (myDevice != null) {
                 myDevice.disconnect();
@@ -1115,8 +1113,8 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
               Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
             },
           ),
-              TextButton(
-            child: Text('Non'),
+          TextButton(
+            child: Text(noTextLanguageArray[languageArrayIdentifier]),
             onPressed: () => Navigator.pop(c, false),
           ),
         ],

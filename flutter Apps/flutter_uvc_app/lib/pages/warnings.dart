@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutteruvcapp/services/DataVariables.dart';
+import 'package:flutteruvcapp/services/languageDataBase.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
 
 class Warnings extends StatefulWidget {
@@ -23,7 +24,7 @@ class _WarningsState extends State<Warnings> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('À lire attentivement'),
+          title: Text(readBeforeUseTitleTextLanguageArray[languageArrayIdentifier]),
           centerTitle: true,
         ),
         body: Container(
@@ -49,7 +50,7 @@ class _WarningsState extends State<Warnings> {
                           ),
                           SizedBox(width: screenWidth * 0.03),
                           Text(
-                            'Attention !',
+                            '${attentionTextLanguageArray[languageArrayIdentifier]}!',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: screenWidth * 0.1 * screenHeight * 0.001,
@@ -84,7 +85,7 @@ class _WarningsState extends State<Warnings> {
                         Expanded(
                           flex: 9,
                           child: Text(
-                            'Sortez de la pièce.',
+                            ruleNumberOneTextLanguageArray[languageArrayIdentifier],
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: screenWidth * 0.04),
                           ),
@@ -125,7 +126,7 @@ class _WarningsState extends State<Warnings> {
                         Expanded(
                           flex: 9,
                           child: Text(
-                            'Vérifiez qu\'elle soit innocupée.',
+                            ruleNumberTwoTextLanguageArray[languageArrayIdentifier],
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: screenWidth * 0.04),
                           ),
@@ -166,7 +167,7 @@ class _WarningsState extends State<Warnings> {
                         Expanded(
                           flex: 9,
                           child: Text(
-                            'Signalez la désinfection en cours grâce aux accroche-portes et/ou au chevalet.',
+                            ruleNumberThreeTextLanguageArray[languageArrayIdentifier],
                             overflow: TextOverflow.visible,
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: screenWidth * 0.04),
@@ -180,7 +181,7 @@ class _WarningsState extends State<Warnings> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        FlatButton(
+                        TextButton(
                           onPressed: () async {
                             if (!nextButtonPressedOnce) {
                               nextButtonPressedOnce = true;
@@ -205,7 +206,7 @@ class _WarningsState extends State<Warnings> {
                                 } else {
                                   myUvcToast = ToastyMessage(toastContext: context);
                                   myUvcToast.setToastDuration(5);
-                                  myUvcToast.setToastMessage('Le dispositif est trop loin ou éteint, merci de vérifier ce dernier');
+                                  myUvcToast.setToastMessage(deviceOutOfReachTextLanguageArray[languageArrayIdentifier]);
                                   myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
                                   myDevice.disconnect();
                                   Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
@@ -214,16 +215,16 @@ class _WarningsState extends State<Warnings> {
                             }
                           },
                           child: Text(
-                            'SUIVANT',
+                            nextButtonTextLanguageArray[languageArrayIdentifier],
                             style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                            backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
                           ),
-                          color: Colors.blue[400],
                         ),
                         SizedBox(width: screenWidth * 0.09),
-                        FlatButton(
+                        TextButton(
                           onPressed: () {
                             if (startWithOutSettings) {
                               myDevice.disconnect();
@@ -233,13 +234,13 @@ class _WarningsState extends State<Warnings> {
                             }
                           },
                           child: Text(
-                            'ANNULER',
+                            cancelTextLanguageArray[languageArrayIdentifier],
                             style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                            backgroundColor: MaterialStateProperty.all<Color>(Colors.red[400]),
                           ),
-                          color: Colors.red[400],
                         ),
                       ],
                     ),
@@ -277,7 +278,7 @@ class _WarningsState extends State<Warnings> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Scanner le QR code de sécurité.',
+              scanSecurityQrCodeTextLanguageArray[languageArrayIdentifier],
               textAlign: TextAlign.center,
             ),
             Image.asset(
@@ -288,16 +289,16 @@ class _WarningsState extends State<Warnings> {
           ],
         ),
         actions: [
-          FlatButton(
-            child: Text('OK'),
+          TextButton(
+            child: Text(okTextLanguageArray[languageArrayIdentifier]),
             onPressed: () async {
               Navigator.pop(c, true);
               qrCodeConnectionOrSecurity = true;
               Navigator.pushNamed(context, '/qr_code_scan');
             },
           ),
-          FlatButton(
-            child: Text('Annuler'),
+          TextButton(
+            child: Text(cancelTextLanguageArray[languageArrayIdentifier]),
             onPressed: () {
               Navigator.pop(c, false);
             },

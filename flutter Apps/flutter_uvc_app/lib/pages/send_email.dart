@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutteruvcapp/services/CSVfileClass.dart';
+import 'package:flutteruvcapp/services/DataVariables.dart';
+import 'package:flutteruvcapp/services/languageDataBase.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
@@ -55,7 +57,7 @@ class _SendEmailState extends State<SendEmail> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Envoi Rapport'),
+        title: Text(sendEmailPageTitleTextLanguageArray[languageArrayIdentifier]),
         centerTitle: true,
       ),
       body: Container(
@@ -70,7 +72,7 @@ class _SendEmailState extends State<SendEmail> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Entrer votre adresse email :',
+                      sendEmailPageMessageTextLanguageArray[languageArrayIdentifier],
                       style: TextStyle(fontSize: (screenWidth * 0.05)),
                     ),
                     SizedBox(height: screenHeight * 0.05),
@@ -92,22 +94,22 @@ class _SendEmailState extends State<SendEmail> {
                       ),
                     ),
                     SizedBox(height: screenHeight * 0.1),
-                    FlatButton(
+                    TextButton(
                       onPressed: () async {
                         await uvcDataFile.saveStringUVCEmailDATA(myEmail.text);
                         myUvcToast.setToastDuration(60);
-                        myUvcToast.setToastMessage('Envoi en cours !');
+                        myUvcToast.setToastMessage(sendingEmailPageToastTextLanguageArray[languageArrayIdentifier]);
                         myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
                         await sendEmail(myEmail.text);
                       },
                       child: Text(
-                        'Envoyer',
+                        sendEmailPageButtonTextLanguageArray[languageArrayIdentifier],
                         style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
                       ),
-                      color: Colors.blue[400],
                     ),
                   ],
                 ),
@@ -130,25 +132,21 @@ class _SendEmailState extends State<SendEmail> {
     final message = Message()
       ..from = Address(username, 'DeliTech Medical')
       ..recipients.add(destination)
-      ..subject = 'Rapport de désinfection UVC'
+      ..subject = uvcEmailObjectTextLanguageArray[languageArrayIdentifier]
       ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataFileName')))
-      ..text = 'Bonjour,\n\n'
-          'Vous trouverez ci-joint le rapport concernant la désinfection effectuée à l’aide de'
-          ' votre solution de désinfection DEEPLIGHT® de DeliTech Medical®.\n'
-          'Cet email est envoyé automatiquement, merci de ne pas y répondre.\n\n'
-          'Merci de votre confiance.';
+      ..text = uvcEmailMessageTextLanguageArray[languageArrayIdentifier];
 
     try {
       await send(message, serverSMTPDeepLight);
       myUvcToast.clearAllToast();
       myUvcToast.setToastDuration(3);
-      myUvcToast.setToastMessage('Email bien envoyé , Verifier votre boite de reception !');
+      myUvcToast.setToastMessage(sendEmailValidToastTextLanguageArray[languageArrayIdentifier]);
       myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
     } on MailerException catch (e) {
       print(e.message);
       myUvcToast.clearAllToast();
       myUvcToast.setToastDuration(3);
-      myUvcToast.setToastMessage('Email n\'est pas envoyé , Verifier votre addresse email !');
+      myUvcToast.setToastMessage(sendEmailNotValidToastTextLanguageArray[languageArrayIdentifier]);
       myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
     }
   }

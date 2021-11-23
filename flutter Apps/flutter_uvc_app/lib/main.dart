@@ -86,6 +86,18 @@ void main() async {
     languageCode = 'fr';
   }
 
+  switch (languageCode) {
+    case 'fr':
+      languageArrayIdentifier = 0;
+      break;
+    case 'en':
+      languageArrayIdentifier = 1;
+      break;
+    default:
+      languageArrayIdentifier = 0;
+      break;
+  }
+
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     title: 'SAFE UVC',

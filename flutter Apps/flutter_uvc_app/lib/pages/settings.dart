@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutteruvcapp/services/DataVariables.dart';
+import 'package:flutteruvcapp/services/languageDataBase.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
 
 class Settings extends StatefulWidget {
@@ -83,7 +84,7 @@ class _SettingsState extends State<Settings> {
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Paramètres'),
+        title: Text(settingsTitleTextLanguageArray[languageArrayIdentifier]),
         centerTitle: true,
       ),
       body: Container(
@@ -104,7 +105,7 @@ class _SettingsState extends State<Settings> {
                   ),
                   SizedBox(height: screenHeight * 0.03),
                   Text(
-                    'Délais avant allumage :',
+                    beforeStartTextLanguageArray[languageArrayIdentifier],
                     style: TextStyle(
                       fontSize: screenWidth * 0.04,
                       color: Colors.black,
@@ -144,7 +145,7 @@ class _SettingsState extends State<Settings> {
                   ),
                   SizedBox(height: screenHeight * 0.03),
                   Text(
-                    'Durée de la désinfection :',
+                    durationDisinfectionTextLanguageArray[languageArrayIdentifier],
                     style: TextStyle(
                       fontSize: screenWidth * 0.04,
                       color: Colors.black,
@@ -177,7 +178,7 @@ class _SettingsState extends State<Settings> {
                     ),
                   ),
                   SizedBox(height: screenHeight * 0.04),
-                  FlatButton(
+                  TextButton(
                     onPressed: () {
                       if (!nextButtonPressedOnce) {
                         nextButtonPressedOnce = true;
@@ -186,7 +187,7 @@ class _SettingsState extends State<Settings> {
                         } else {
                           myUvcToast = ToastyMessage(toastContext: context);
                           myUvcToast.setToastDuration(5);
-                          myUvcToast.setToastMessage('Le dispositif est trop loin ou éteint, merci de vérifier ce dernier');
+                          myUvcToast.setToastMessage(deviceOutOfReachTextLanguageArray[languageArrayIdentifier]);
                           myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
                           myDevice.disconnect();
                           Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
@@ -194,12 +195,12 @@ class _SettingsState extends State<Settings> {
                       }
                     },
                     child: Text(
-                      'DÉMARRER',
+                      startButtonTextLanguageArray[languageArrayIdentifier],
                       style: TextStyle(color: Colors.white),
                     ),
-                    color: Colors.blue[400],
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
                     ),
                   ),
                 ],
@@ -216,11 +217,11 @@ class _SettingsState extends State<Settings> {
     myUvcLight.setActivationTime(myActivationTimeMinuteData);
     nextButtonPressedOnce = false;
     if (Platform.isIOS) {
-      await myDevice.writeCharacteristic(0, 0,
-          '{\"data\":[\"${myUvcLight.getCompanyName()}\",\"${myUvcLight.getOperatorName()}\",\"${myUvcLight.getRoomName()}\",$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition]}');
+      await myDevice.writeCharacteristic(
+          0, 0, '{\"data\":[\"${myUvcLight.getCompanyName()}\",\"${myUvcLight.getOperatorName()}\",\"${myUvcLight.getRoomName()}\",$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition]}');
     } else {
-      await myDevice.writeCharacteristic(2, 0,
-          '{\"data\":[\"${myUvcLight.getCompanyName()}\",\"${myUvcLight.getOperatorName()}\",\"${myUvcLight.getRoomName()}\",$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition]}');
+      await myDevice.writeCharacteristic(
+          2, 0, '{\"data\":[\"${myUvcLight.getCompanyName()}\",\"${myUvcLight.getOperatorName()}\",\"${myUvcLight.getRoomName()}\",$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition]}');
     }
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -235,7 +236,7 @@ class _SettingsState extends State<Settings> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Vérifiez vos informations :',
+                verifyDataTextLanguageArray[languageArrayIdentifier],
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: screenWidth * 0.04),
               ),
@@ -344,7 +345,7 @@ class _SettingsState extends State<Settings> {
           actions: <Widget>[
             TextButton(
               child: Text(
-                'OK',
+                okTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () async {
@@ -355,7 +356,7 @@ class _SettingsState extends State<Settings> {
             ),
             TextButton(
               child: Text(
-                'Annuler',
+                cancelTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () {

@@ -43,8 +43,7 @@ class _SettingsState extends State<Settings> {
     super.initState();
     myUvcToast = ToastyMessage(toastContext: context);
     zoneStates = [false, false, false, false];
-    zonesInHex = ((boolToInt(zoneStates[0])) + (boolToInt(zoneStates[1]) * 2) + (boolToInt(zoneStates[2]) * 4) + (boolToInt(zoneStates[3]) * 8))
-        .toRadixString(16);
+    zonesInHex = ((boolToInt(zoneStates[0])) + (boolToInt(zoneStates[1]) * 2) + (boolToInt(zoneStates[2]) * 4) + (boolToInt(zoneStates[3]) * 8)).toRadixString(16);
   }
 
   void readDataMaestro() async {
@@ -125,7 +124,7 @@ class _SettingsState extends State<Settings> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              myDevice.device.name.substring(0,4),
+                              myDevice.device.name.substring(0, 4),
                               style: TextStyle(fontSize: (screenWidth * 0.05)),
                             ),
                             Flexible(
@@ -154,7 +153,7 @@ class _SettingsState extends State<Settings> {
                           onPressed: () async {
                             if (myDevice.getConnectionState()) {
                               // write the new ble device name
-                              await characteristicData.write('{\"dname\":\"${myDevice.device.name.substring(0,4)}${myBleDeviceName.text}\"}'.codeUnits);
+                              await characteristicData.write('{\"dname\":\"${myDevice.device.name.substring(0, 4)}${myBleDeviceName.text}\"}'.codeUnits);
                               myUvcToast.setToastDuration(5);
                               myUvcToast.setToastMessage('Nom modifié, veuillez redémarrer pour appliquer les changements.');
                               myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
@@ -165,8 +164,7 @@ class _SettingsState extends State<Settings> {
                             style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
                           ),
                           style: ButtonStyle(
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
                               backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
                         ),
                       ),
@@ -250,11 +248,7 @@ class _SettingsState extends State<Settings> {
                             }
                           }
                           setState(() {});
-                          zonesInHex = ((boolToInt(zoneStates[0])) +
-                                  (boolToInt(zoneStates[1]) * 2) +
-                                  (boolToInt(zoneStates[2]) * 4) +
-                                  (boolToInt(zoneStates[3]) * 8))
-                              .toRadixString(16);
+                          zonesInHex = ((boolToInt(zoneStates[0])) + (boolToInt(zoneStates[1]) * 2) + (boolToInt(zoneStates[2]) * 4) + (boolToInt(zoneStates[3]) * 8)).toRadixString(16);
                         },
                         children: [
                           Padding(
@@ -297,8 +291,7 @@ class _SettingsState extends State<Settings> {
                                 style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
                               ),
                               style: ButtonStyle(
-                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
                                   backgroundColor: MaterialStateProperty.all<Color>(
                                     Colors.green[400],
                                   )),
@@ -318,8 +311,7 @@ class _SettingsState extends State<Settings> {
                                 style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
                               ),
                               style: ButtonStyle(
-                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
                                   backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
                             ),
                           ),
@@ -337,8 +329,7 @@ class _SettingsState extends State<Settings> {
                             style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
                           ),
                           style: ButtonStyle(
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
                               backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
                         ),
                       ),
@@ -446,8 +437,7 @@ class _SettingsState extends State<Settings> {
                             style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
                           ),
                           style: ButtonStyle(
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
                               backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
                         ),
                       ),
@@ -532,8 +522,7 @@ class _SettingsState extends State<Settings> {
                             style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
                           ),
                           style: ButtonStyle(
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
                               backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
                         ),
                       ),
@@ -577,8 +566,7 @@ class _SettingsState extends State<Settings> {
                             style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
                           ),
                           style: ButtonStyle(
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
                               backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
                         ),
                       ),
@@ -621,6 +609,7 @@ class _SettingsState extends State<Settings> {
                 if (myDevice.getConnectionState()) {
                   // write the restart command
                   characteristicData.write('{\"system\":1}'.codeUnits);
+                  await Future.delayed(Duration(milliseconds: 500));
                   homePageState = false;
                   myDevice.disconnect();
                   removeReplacementRouts(context, ScanListBle());
@@ -631,8 +620,7 @@ class _SettingsState extends State<Settings> {
                 style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
               ),
               style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
                   backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
             ),
           ),
@@ -651,8 +639,7 @@ class _SettingsState extends State<Settings> {
                 style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
               ),
               style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
                   backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
             ),
           ),
@@ -669,6 +656,7 @@ class _SettingsState extends State<Settings> {
                 if (myDevice.getConnectionState()) {
                   // write the restart command
                   characteristicData.write('{\"system\":1}'.codeUnits);
+                  await Future.delayed(Duration(milliseconds: 500));
                   homePageState = false;
                   myDevice.disconnect();
                   removeReplacementRouts(context, ScanListBle());
@@ -679,8 +667,7 @@ class _SettingsState extends State<Settings> {
                 style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
               ),
               style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
                   backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
             ),
           ),
@@ -700,7 +687,11 @@ class _SettingsState extends State<Settings> {
               ),
               style: ButtonStyle(
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                      side: BorderSide(color: Colors.black),
+                    ),
+                  ),
                   backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
             ),
           ),
@@ -726,6 +717,7 @@ class _SettingsState extends State<Settings> {
               onPressed: () async {
                 if (myDevice.getConnectionState()) {
                   characteristicData.write('{\"system\":1}'.codeUnits);
+                  await Future.delayed(Duration(milliseconds: 500));
                   homePageState = false;
                   myDevice.disconnect();
                   Navigator.of(context).pop();

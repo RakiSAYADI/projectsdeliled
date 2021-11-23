@@ -3,6 +3,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutteruvcapp/services/bleDeviceClass.dart';
 import 'package:flutteruvcapp/services/deviceBleWidget.dart';
 import 'package:flutteruvcapp/services/DataVariables.dart';
+import 'package:flutteruvcapp/services/languageDataBase.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
 
 class ScanListBle extends StatefulWidget {
@@ -45,7 +46,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
         print("Bluetooth is off");
         myUvcToast = ToastyMessage(toastContext: context);
         myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('Le Bluetooth (BLE) n\'est pas activé sur votre téléphone !');
+        myUvcToast.setToastMessage(bluetoothToastLanguageArray[languageArrayIdentifier]);
         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
       } else if (state == BluetoothState.on) {
         //if bluetooth is enabled then go ahead.
@@ -96,7 +97,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Scanner le QR code du dispositif UV-C DEEPLIGHT.'),
+            Text(scanBLEDevicesPageMessageTextLanguageArray[languageArrayIdentifier]),
             Image.asset(
               'assets/scan_qr_code.gif',
               height: screenHeight * 0.3,
@@ -105,16 +106,16 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
           ],
         ),
         actions: [
-          FlatButton(
-            child: Text('OK'),
+          TextButton(
+            child: Text(okTextLanguageArray[languageArrayIdentifier]),
             onPressed: () async {
               Navigator.pop(c, true);
               qrCodeConnectionOrSecurity = false;
               Navigator.pushNamed(context, '/qr_code_scan');
             },
           ),
-          FlatButton(
-            child: Text('Annuler'),
+          TextButton(
+            child: Text(cancelTextLanguageArray[languageArrayIdentifier]),
             onPressed: () => Navigator.pop(c, false),
           ),
         ],
@@ -127,7 +128,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text('Liste des UVC-LIGHT :'),
+        title: Text(scanBLEDevicesPageTitleTextLanguageArray[languageArrayIdentifier]),
         centerTitle: true,
         backgroundColor: Colors.blue[400],
       ),
@@ -168,7 +169,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                       await Future.delayed(const Duration(milliseconds: 400));
                       myUvcToast.setAnimationIcon(animationRefreshIcon);
                       myUvcToast.setToastDuration(60);
-                      myUvcToast.setToastMessage('Connexion en cours');
+                      myUvcToast.setToastMessage(checkConnectionAlertDialogTitleTextLanguageArray[languageArrayIdentifier]);
                       myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
                       // stop scanning and start connecting
                       while (true) {
@@ -195,7 +196,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                         });
                       } else {
                         myUvcToast.setToastDuration(5);
-                        myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
+                        myUvcToast.setToastMessage(deviceOutOfReachTextLanguageArray[languageArrayIdentifier]);
                         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
                         myDevice.disconnect();
                         Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);

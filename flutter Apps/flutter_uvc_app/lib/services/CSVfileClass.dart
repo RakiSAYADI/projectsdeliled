@@ -1,27 +1,13 @@
 import 'dart:io';
 
+import 'package:flutteruvcapp/services/DataVariables.dart';
+import 'package:flutteruvcapp/services/languageDataBase.dart';
 import 'package:path_provider/path_provider.dart';
 
 class UVCDataFile {
-  final String _uvcDefaultDataString =
-      'Nom du robot ;Utilisateur ;Etablissement ;Chambre ;Heure d\'activation ;Date d\'activation ;Temps de desinfection (en seconde) ;Etat \n';
-
   final String _uvcDataFileName = 'RapportUVC.csv';
 
   final String _uvcUserEmailFileName = 'User_email.txt';
-
-  final List<List<String>> _uvcDefaultData = [
-    [
-      'Nom du robot',
-      'Utilisateur',
-      'Etablissement',
-      'Chambre',
-      'Heure d\'activation',
-      'Date d\'activation',
-      'Temps de desinfection (en seconde)',
-      'Etat'
-    ]
-  ];
 
   Future<List<List<String>>> readUVCDATA() async {
     try {
@@ -37,15 +23,12 @@ class UVCDataFile {
       textuvcrows.length = 0;
       for (int i = 0; i < text.length; i++) {
         if (text[i] == '\n') {
-          print('we have /n');
           textuvcrows.add(column);
           column = '';
-          print(textuvcrows);
           textuvc.add(textuvcrows);
           textuvcrows = ['default'];
           textuvcrows.length = 0;
         } else if (text[i] == ';') {
-          print(column);
           textuvcrows.add(column);
           column = '';
         } else {
@@ -56,8 +39,8 @@ class UVCDataFile {
       return textuvc;
     } catch (e) {
       print("Couldn't read file");
-      await saveStringUVCDATA(_uvcDefaultDataString);
-      return _uvcDefaultData;
+      await saveStringUVCDATA(uvcDefaultDataString[languageArrayIdentifier]);
+      return uvcDefaultData[languageArrayIdentifier];
     }
   }
 
@@ -103,7 +86,6 @@ class UVCDataFile {
       final directory = await getApplicationDocumentsDirectory();
       final file = File('${directory.path}/$_uvcUserEmailFileName');
       String email = await file.readAsString();
-      print("Readed : $email");
       return email;
     } catch (e) {
       print("Couldn't read file");

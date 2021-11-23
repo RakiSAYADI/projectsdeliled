@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutteruvcapp/services/CSVfileClass.dart';
 import 'package:flutteruvcapp/services/DataVariables.dart';
+import 'package:flutteruvcapp/services/languageDataBase.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
@@ -11,7 +12,6 @@ class EndUVC extends StatefulWidget {
 }
 
 class _EndUVCState extends State<EndUVC> {
-
   UVCDataFile uvcDataFile;
 
   bool firstDisplayMainWidget = true;
@@ -31,17 +31,17 @@ class _EndUVCState extends State<EndUVC> {
     DateFormat dateFormat;
     DateFormat timeFormat;
     initializeDateFormatting();
-    dateFormat = new DateFormat.yMd('fr');
-    timeFormat = new DateFormat.Hm('fr');
+    dateFormat = new DateFormat.yMd(languageCode);
+    timeFormat = new DateFormat.Hm(languageCode);
     uvcOperationData.add(timeFormat.format(dateTime));
     uvcOperationData.add(dateFormat.format(dateTime));
 
     uvcOperationData.add(activationTime.toString());
 
     if (isTreatmentCompleted) {
-      uvcOperationData.add('Valide');
+      uvcOperationData.add(validTreatmentUVCStateTextLanguageArray[languageArrayIdentifier]);
     } else {
-      uvcOperationData.add('Incident');
+      uvcOperationData.add(notValidTreatmentUVCStateTextLanguageArray[languageArrayIdentifier]);
     }
 
     uvcData.add(uvcOperationData);
@@ -61,7 +61,6 @@ class _EndUVCState extends State<EndUVC> {
 
   @override
   Widget build(BuildContext context) {
-
     if (firstDisplayMainWidget) {
       firstDisplayMainWidget = false;
       if (myDevice != null) {
@@ -85,12 +84,12 @@ class _EndUVCState extends State<EndUVC> {
     String imageGif;
 
     if (isTreatmentCompleted) {
-      title = 'Désinfection terminée';
-      message = 'Désinfection réalisée avec succès.';
+      title = validTreatmentUVCStateTitleTextLanguageArray[languageArrayIdentifier];
+      message = validTreatmentUVCStateMessageTextLanguageArray[languageArrayIdentifier];
       imageGif = 'assets/felicitation_animation.gif';
     } else {
-      title = 'Désinfection annulée';
-      message = 'Désinfection interrompue.';
+      title = notValidTreatmentUVCStateTitleTextLanguageArray[languageArrayIdentifier];
+      message = notValidTreatmentUVCStateMessageTextLanguageArray[languageArrayIdentifier];
       imageGif = 'assets/echec_logo.gif';
     }
 
@@ -124,22 +123,22 @@ class _EndUVCState extends State<EndUVC> {
                     width: screenWidth * 0.8,
                   ),
                   SizedBox(height: screenHeight * 0.05),
-                  FlatButton(
+                  TextButton(
                     onPressed: () {
                       myDevice.disconnect();
                       Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
                     },
                     child: Text(
-                      'Nouvelle désinfection',
+                      newDisinfectionButtonTextLanguageArray[languageArrayIdentifier],
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: screenWidth * 0.05,
                       ),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
                     ),
-                    color: Colors.blue[400],
                   ),
                 ],
               ),
@@ -147,21 +146,6 @@ class _EndUVCState extends State<EndUVC> {
           ),
         ),
       ),
-      /*floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.pushNamed(context, '/DataCSVView', arguments: {
-            'isTreatmentCompleted': isTreatmentCompleted,
-            'myUvcLight': myUvcLight,
-            'uvcData': uvcData,
-          });
-        },
-        label: Text('Rapport'),
-        icon: Icon(
-          Icons.assignment,
-          color: Colors.white,
-        ),
-        backgroundColor: Colors.blue[400],
-      ),*/
     );
   }
 

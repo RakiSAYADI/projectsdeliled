@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutteruvcapp/services/DataVariables.dart';
+import 'package:flutteruvcapp/services/languageDataBase.dart';
 
 class DataCSVViewQrCode extends StatefulWidget {
   @override
@@ -26,7 +27,7 @@ class _DataCSVViewQrCodeState extends State<DataCSVViewQrCode> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text('Rapports de désinfection'),
+          title: Text(rapportUVCTitleTextLanguageArray[languageArrayIdentifier]),
           centerTitle: true,
         ),
         body: Container(
@@ -38,7 +39,6 @@ class _DataCSVViewQrCodeState extends State<DataCSVViewQrCode> {
                 return TableRow(
                     children: item.map((row) {
                       return Container(
-                        //color: row.toString().contains("réussi") ? Colors.green : Colors.red,
                         child: Center(
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -58,7 +58,7 @@ class _DataCSVViewQrCodeState extends State<DataCSVViewQrCode> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () =>     Navigator.pushNamed(context, "/send_email_qr_code"),
-          label: Text('Envoi'),
+          label: Text(rapportUVCButtonTextLanguageArray[languageArrayIdentifier]),
           icon: Icon(
             Icons.send,
             color: Colors.white,

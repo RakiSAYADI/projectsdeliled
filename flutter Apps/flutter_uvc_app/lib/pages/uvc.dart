@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutteruvcapp/services/DataVariables.dart';
 import 'package:flutteruvcapp/services/custum_timer_painter.dart';
+import 'package:flutteruvcapp/services/languageDataBase.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
 import 'package:slide_countdown_clock/slide_countdown_clock.dart';
 
@@ -51,12 +52,12 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
   }
 
   void _getNotification() async {
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails('your channel id', 'your channel name', 'your channel description',
-        importance: Importance.max, priority: Priority.high, ticker: 'ticker');
+    var androidPlatformChannelSpecifics =
+        AndroidNotificationDetails('your channel id', 'your channel name', 'your channel description', importance: Importance.max, priority: Priority.high, ticker: 'ticker');
     var iOSPlatformChannelSpecifics = IOSNotificationDetails(presentAlert: true, presentBadge: true, presentSound: true, badgeNumber: 1);
     var platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin
-        .show(0, 'Félicitations', 'Désinfection réalisée avec succès !', platformChannelSpecifics, payload: 'item x');
+    await flutterLocalNotificationsPlugin.show(0, notificationTitleTextLanguageArray[languageArrayIdentifier], notificationBodyTextLanguageArray[languageArrayIdentifier], platformChannelSpecifics,
+        payload: 'item x');
   }
 
   @override
@@ -108,14 +109,12 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
         myDevice.connect(false);
         myUvcToast = ToastyMessage(toastContext: context);
         myUvcToast.setToastDuration(3);
-        myUvcToast.setToastMessage('Le dispositif est trop loin ou éteint, merci de vérifier ce dernier');
+        myUvcToast.setToastMessage(deviceOutOfReachTextLanguageArray[languageArrayIdentifier]);
         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
         await Future.delayed(const Duration(seconds: 4));
         if (!myDevice.getConnectionState()) {
           myDevice.disconnect();
         }
-        //Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
-        //break;
       }
       await Future.delayed(const Duration(seconds: 1));
     } while (true);
@@ -145,11 +144,10 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Désinfection en cours'),
+          title: Text(uvcPageTitleTextLanguageArray[languageArrayIdentifier]),
           centerTitle: true,
         ),
         body: Container(
-          //decoration: BoxDecoration(color: Colors.grey[300]),
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage('assets/fondapplication.jpg'),
@@ -197,14 +195,14 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                     AnimatedOpacity(
                                       curve: Curves.linear,
                                       opacity: opacityLevelActivation,
-                                      duration: Duration(seconds: 30 /*seconds: myUvcLight.getActivationTime()*/),
+                                      duration: Duration(seconds: myUvcLight.getActivationTime()),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            'La désinfection débutera dans :',
+                                            uvcPageAlertMessageTextLanguageArray[languageArrayIdentifier],
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: Colors.red,
@@ -234,12 +232,8 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                                 _changeOpacityActivation();
                                                 setState(() {
                                                   circleColor = Colors.green;
-                                                  controllerAnimationTimeBackground.duration =
-                                                      Duration(seconds: (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds));
-                                                  controllerAnimationTimeBackground.reverse(
-                                                      from: controllerAnimationTimeBackground.value == 0.0
-                                                          ? 1.0
-                                                          : controllerAnimationTimeBackground.value);
+                                                  controllerAnimationTimeBackground.duration = Duration(seconds: (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds));
+                                                  controllerAnimationTimeBackground.reverse(from: controllerAnimationTimeBackground.value == 0.0 ? 1.0 : controllerAnimationTimeBackground.value);
                                                 });
                                               },
                                             ),
@@ -272,14 +266,14 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                     AnimatedOpacity(
                                       curve: Curves.linear,
                                       opacity: opacityLevelDisinfection,
-                                      duration: Duration(seconds: 30 /*seconds: myUvcLight.getActivationTime()*/),
+                                      duration: Duration(seconds: myUvcLight.getActivationTime()),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            'La désinfection finira dans :',
+                                            uvcPageDisinfectMessageTextLanguageArray[languageArrayIdentifier],
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: Colors.green,
@@ -344,11 +338,11 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     return showDialog<bool>(
       context: context,
       builder: (c) => AlertDialog(
-        title: Text('Attention'),
-        content: Text('Voulez-vous vraiment annuler le traitement UVC ?'),
+        title: Text(attentionTextLanguageArray[languageArrayIdentifier]),
+        content: Text(stopDisinfectAlertDialogMessageTextLanguageArray[languageArrayIdentifier]),
         actions: [
-          FlatButton(
-            child: Text('Oui'),
+          TextButton(
+            child: Text(yesTextLanguageArray[languageArrayIdentifier]),
             onPressed: () async {
               //Stop UVC processing
               stopReading = true;
@@ -367,8 +361,8 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
               Navigator.pushNamed(context, '/end_uvc');
             },
           ),
-          FlatButton(
-            child: Text('Non'),
+          TextButton(
+            child: Text(noTextLanguageArray[languageArrayIdentifier]),
             onPressed: () => Navigator.pop(c, false),
           ),
         ],

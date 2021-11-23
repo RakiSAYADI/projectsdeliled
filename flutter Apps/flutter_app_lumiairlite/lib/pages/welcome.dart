@@ -91,10 +91,13 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
             children: <Widget>[
               Expanded(
                 flex: 3,
-                child: Image.asset(
-                  'assets/ic_launcher.png',
-                  height: heightScreen * 0.2,
-                  width: widthScreen * 0.7,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.asset(
+                    'assets/ic_launcher.png',
+                    height: heightScreen * 0.2,
+                    width: widthScreen * 0.7,
+                  ),
                 ),
               ),
               Expanded(
