@@ -97,7 +97,6 @@ void main() async {
       languageArrayIdentifier = 0;
       break;
   }
-
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     title: 'SAFE UVC',

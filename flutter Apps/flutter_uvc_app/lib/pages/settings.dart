@@ -66,14 +66,6 @@ class _SettingsState extends State<Settings> {
   ];
 
   @override
-  void initState() {
-    // TODO: implement initState
-    myExtinctionTimeMinutePosition = 0;
-    myActivationTimeMinutePosition = 0;
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     if (firstDisplayMainWidget) {
       firstDisplayMainWidget = false;

@@ -111,6 +111,7 @@ class _EndUVCState extends State<EndUVC> {
                 children: <Widget>[
                   Text(
                     message,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: screenWidth * 0.06,
                       color: Colors.black,

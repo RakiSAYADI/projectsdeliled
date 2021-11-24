@@ -225,4 +225,4 @@ final List<String> uvcDefaultDataString = [
   'Robot name ;User ;Institution ;Room ;Activation time ;Activation date ;Disinfection time (in seconds) ;State \n'
 ];
 
-final List<String>  deviceConnectButtonTextLanguageArray = ['Conecter', 'Connect'];
+final List<String>  deviceConnectButtonTextLanguageArray = ['Connecter', 'Connect'];

@@ -362,6 +362,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           await myDevice.readCharacteristic(0, 0);
           Map<String, dynamic> dataRead;
           dataRead = jsonDecode(myDevice.getReadCharMessage());
+          print(myDevice.getReadCharMessage());
           // clear the remaining toast message
           myUvcToast.clearAllToast();
 
