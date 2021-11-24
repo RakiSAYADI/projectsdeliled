@@ -166,7 +166,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             if (_isTorchOn) {
               _controller.torchMode = CaptureTorchMode.off;

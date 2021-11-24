@@ -83,10 +83,7 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
                         buttonTitle: 'QR code Rapport',
                         buttonText: 'Ce QR code permet d\'afficher et d\'envoyer le rapport des désinfections par mail à un adresse préenregistrée.'),
                     qrCodeGeneratorSecond(
-                        context: context,
-                        destination: "/Qr_code_Display_Security",
-                        buttonTitle: 'QR code Sécurité',
-                        buttonText: 'Ce QR code permet de créer un QR code de sécurité.'),
+                        context: context, destination: "/Qr_code_Display_Security", buttonTitle: 'QR code Sécurité', buttonText: 'Ce QR code permet de créer un QR code de sécurité.'),
                   ],
                 ),
               ),
@@ -100,12 +97,9 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
   Future<void> displayQrCodeDATA(BuildContext context) async {
     myQrCodes.length = 0;
     listQrCodes.length = 0;
-    double widthScreen = MediaQuery.of(context).size.width;
     for (int i = 0; i < qrCodeImageList.length; i++) {
       listQrCodes.add(TableRow(children: [
-        Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [Image.file(qrCodeImageList[i], width: 100, height: 100), Text(qrCodeList[i].fileName)])
+        Row(mainAxisAlignment: MainAxisAlignment.start, children: [Image.file(qrCodeImageList[i], width: 100, height: 100), Text(qrCodeList[i].fileName)])
       ]));
     }
     return showDialog<void>(
@@ -115,11 +109,10 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
         return AlertDialog(
           title: Text('Vos QRcodes'),
           content: SingleChildScrollView(
-            child: Table(
-                border: TableBorder.all(color: Colors.black), defaultVerticalAlignment: TableCellVerticalAlignment.middle, children: listQrCodes),
+            child: Table(border: TableBorder.all(color: Colors.black), defaultVerticalAlignment: TableCellVerticalAlignment.middle, children: listQrCodes),
           ),
           actions: [
-            FlatButton(
+            TextButton(
               child: Text(
                 'OK',
                 style: TextStyle(color: Colors.green),
@@ -134,8 +127,7 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
     );
   }
 
-  GestureDetector qrCodeGenerator(
-      {BuildContext context, String destination, String buttonTitle, String buttonText, String buttonDescription1, String buttonDescription2}) {
+  GestureDetector qrCodeGenerator({BuildContext context, String destination, String buttonTitle, String buttonText, String buttonDescription1, String buttonDescription2}) {
     double screenWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
@@ -151,7 +143,7 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
             children: [
               Padding(
                 padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
-                child: FlatButton(
+                child: TextButton(
                   onPressed: () => Navigator.pushNamed(context, destination),
                   child: Text(
                     buttonTitle,
@@ -160,10 +152,10 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
                       fontSize: screenWidth * 0.05,
                     ),
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
                   ),
-                  color: Colors.blue[400],
                 ),
               ),
               Padding(
@@ -231,7 +223,7 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
             children: [
               Padding(
                 padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
-                child: FlatButton(
+                child: TextButton(
                   onPressed: () => Navigator.pushNamed(context, destination),
                   child: Text(
                     buttonTitle,
@@ -240,10 +232,10 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
                       fontSize: screenWidth * 0.05,
                     ),
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
                   ),
-                  color: Colors.blue[400],
                 ),
               ),
               Padding(

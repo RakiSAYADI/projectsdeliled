@@ -190,7 +190,7 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.04),
-                FlatButton(
+                TextButton(
                   onPressed: () async {
                     SystemChannels.textInput.invokeMethod('TextInput.hide');
                     animationRefreshIcon.repeat();
@@ -212,9 +212,9 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
                     'Générer',
                     style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.06),
                   ),
-                  color: Colors.blue[400],
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.01),

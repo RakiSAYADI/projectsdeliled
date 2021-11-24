@@ -193,7 +193,7 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
             ],
           ),
           actions: [
-            FlatButton(
+            TextButton(
               child: Text(
                 'Envoyer',
                 style: TextStyle(fontSize: (widthScreen * 0.05)),
@@ -219,7 +219,7 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
                 }
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text(
                 'Annuler',
                 style: TextStyle(fontSize: (widthScreen * 0.05)),
@@ -256,7 +256,7 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
                 border: TableBorder.all(color: Colors.black), defaultVerticalAlignment: TableCellVerticalAlignment.middle, children: listQrCodes),
           ),
           actions: [
-            FlatButton(
+            TextButton(
               child: Text(
                 'OK',
                 style: TextStyle(color: Colors.green),
@@ -266,7 +266,7 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
                 await dataEmailSending();
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text(
                 'Annuler',
                 style: TextStyle(color: Colors.green),

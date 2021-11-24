@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_safe_uvc_qrcode_app/services/httpRequests.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:package_info/package_info.dart';
 
@@ -14,14 +13,21 @@ class Welcome extends StatefulWidget {
 class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   AnimationController controller;
 
-  DataBaseRequests dataBaseRequests = DataBaseRequests();
-
-  void checkingConnection() async {
-    if (await dataBaseRequests.checkInternetConnection()) {
-      Future.delayed(Duration(seconds: 5), () async {
-        Navigator.pushReplacementNamed(context, '/choose_qr_code');
-      });
-    } else {
+  void checkConnection() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+        Future.delayed(Duration(seconds: 5), () async {
+          Navigator.pushReplacementNamed(context, '/choose_qr_code');
+        });
+      } else {
+        Future.delayed(Duration(seconds: 5), () async {
+          Navigator.pushReplacementNamed(context, '/check_permissions');
+        });
+      }
+    } on SocketException catch (_) {
+      print('not connected');
       Future.delayed(Duration(seconds: 5), () async {
         Navigator.pushReplacementNamed(context, '/check_permissions');
       });
@@ -37,7 +43,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       DeviceOrientation.portraitDown,
     ]);
 
-    checkingConnection();
+    checkConnection();
 
     controller = AnimationController(
       vsync: this,

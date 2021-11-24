@@ -19,7 +19,7 @@ final List<String>  startScanAlertDialogTextLanguageArray = ['Scanner le QR code
 
 final List<String>  okTextLanguageArray = ['OK', 'OK'];
 
-final List<String>  cancelTextLanguageArray = ['Annuler', 'Cancel'];
+final List<String>  cancelTextLanguageArray = ['ANNULER', 'CANCEL'];
 
 final List<String>  attentionTextLanguageArray = ['Attention', 'Warning'];
 
@@ -45,13 +45,13 @@ final List<String>  pinAccessValidButtonTextLanguageArray = ['Valider', 'Validat
 
 final List<String>  pinAccessNonValidButtonTextLanguageArray = ['Annuler', 'Cancel'];
 
-final List<String>  cameraPageTorchButtonTextLanguageArray = ['torche', 'torch'];
+final List<String>  cameraPageTorchButtonTextLanguageArray = ['Lampe torche', 'Torch'];
 
-final List<String>  verifyDataAlertDialogTitleTextLanguageArray = ['Vérifiez vos informations :', 'Verify your information:'];
+final List<String>  verifyDataAlertDialogTitleTextLanguageArray = ['Vérifiez vos informations :', 'Verify your informations:'];
 
 final List<String>  scanQrCodeDataAlertDialogTitleTextLanguageArray = ['Scannez le QR de données', 'Scan the data QR'];
 
-final List<String>  checkConnectionAlertDialogTitleTextLanguageArray = ['Connexion en cours', 'Checking Connection'];
+final List<String>  checkConnectionAlertDialogTitleTextLanguageArray = ['Connexion en cours', 'Checking connection'];
 
 final List<String>  checkConnectionAlertDialogMessageTextLanguageArray = [
   'Veuillez rester près du dispositif UV-C pendant quelques instants, la connexion est en cours.',
