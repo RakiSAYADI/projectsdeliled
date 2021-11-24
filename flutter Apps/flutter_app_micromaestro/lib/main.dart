@@ -58,6 +58,7 @@ void main() async {
         badge: true,
         sound: true,
       );
+  print('hello RAKI');
   runApp(MaterialApp(
     initialRoute: '/',
     routes: {
