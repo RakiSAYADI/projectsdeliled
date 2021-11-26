@@ -57,25 +57,27 @@ class _DataCSVViewState extends State<DataCSVView> {
         ),
         body: Container(
           decoration: BoxDecoration(color: Colors.grey[200]),
-          child: SingleChildScrollView(
-            child: Table(
-              border: TableBorder.all(width: 2.0),
-              children: uvcData.map((item) {
-                return TableRow(
-                    children: item.map((row) {
-                  return Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        row.toString(),
-                        style: TextStyle(
-                          fontSize: widthScreen * 0.015,
+          child: InteractiveViewer(
+            child: SingleChildScrollView(
+              child: Table(
+                border: TableBorder.all(width: 2.0),
+                children: uvcData.map((item) {
+                  return TableRow(
+                      children: item.map((row) {
+                    return Container(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          row.toString(),
+                          style: TextStyle(
+                            fontSize: widthScreen * 0.015,
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }).toList());
-              }).toList(),
+                    );
+                  }).toList());
+                }).toList(),
+              ),
             ),
           ),
         ),
