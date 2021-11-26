@@ -6,9 +6,9 @@
  */
 
 #define UVCROBOTNAME "DEEPLIGHT-L001"
-#define SSIDNAME "DEEPLIGHT-K001"
+#define SSIDNAME "DEEPLIGHT-TEST001"
 #define FIRMWAREVERSIONNAME "2.0.0"
-#define PASSWORD "123456789"
+#define ROBOTPASSWORD "123456789"
 
 void LedStatInit();
 void wifiConnectionClient();

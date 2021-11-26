@@ -20,14 +20,14 @@
 
 #include "main.h"
 
-char* TAG = "app_main";
+char* TAG = "MAIN";
 
 int app_main(void) {
 
 	ESP_ERROR_CHECK(nvs_flash_init());
 
 	// Initialize Base Mac Address.
-	BaseMacInit();
+	//BaseMacInit();
 
 	// Initialize GPIOs.
 	LedStatInit();
@@ -38,6 +38,9 @@ int app_main(void) {
 	}
 
 	//Default_saving();
+
+	// delay of 3s for the MASTER to Initiate 
+	delay(3000);
 
 	//Intialize WIFI NETWORK for the client
 	wifiConnectionClient();

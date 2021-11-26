@@ -5,9 +5,9 @@
  *      Author: raki
  */
 
-#define UVCROBOTNAME "DEEPLIGHT-LECLERC01"
+#define UVCROBOTNAME "DEEPLIGHT-TEST001"
 #define FIRMWAREVERSIONNAME "3.0.0"
-#define PASSWORD "123456789"
+#define ROBOTPASSWORD "123456789"
 #define VERSION 0
 
 void bt_main();
