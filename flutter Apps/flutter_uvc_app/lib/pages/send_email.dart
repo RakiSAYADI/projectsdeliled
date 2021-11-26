@@ -54,71 +54,86 @@ class _SendEmailState extends State<SendEmail> {
 
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Text(sendEmailPageTitleTextLanguageArray[languageArrayIdentifier]),
-        centerTitle: true,
-      ),
-      body: Container(
-        decoration: BoxDecoration(color: Colors.grey[200]),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      sendEmailPageMessageTextLanguageArray[languageArrayIdentifier],
-                      style: TextStyle(fontSize: (screenWidth * 0.05)),
-                    ),
-                    SizedBox(height: screenHeight * 0.05),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
-                      child: TextField(
-                        textAlign: TextAlign.center,
-                        controller: myEmail,
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: (screenWidth * 0.05),
+    return WillPopScope(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: Text(sendEmailPageTitleTextLanguageArray[languageArrayIdentifier]),
+          leading: BackButton(onPressed: () async {
+            await exitApp(context);
+          }),
+          centerTitle: true,
+        ),
+        body: Container(
+          decoration: BoxDecoration(color: Colors.grey[200]),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        sendEmailPageMessageTextLanguageArray[languageArrayIdentifier],
+                        style: TextStyle(fontSize: (screenWidth * 0.05)),
+                      ),
+                      SizedBox(height: screenHeight * 0.05),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          controller: myEmail,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: (screenWidth * 0.05),
+                          ),
+                          decoration: InputDecoration(
+                              hintText: 'user@exemple.fr',
+                              hintStyle: TextStyle(
+                                fontSize: (screenWidth * 0.05),
+                                color: Colors.grey,
+                              )),
                         ),
-                        decoration: InputDecoration(
-                            hintText: 'user@exemple.fr',
-                            hintStyle: TextStyle(
-                              fontSize: (screenWidth * 0.05),
-                              color: Colors.grey,
-                            )),
                       ),
-                    ),
-                    SizedBox(height: screenHeight * 0.1),
-                    TextButton(
-                      onPressed: () async {
-                        await uvcDataFile.saveStringUVCEmailDATA(myEmail.text);
-                        myUvcToast.setToastDuration(60);
-                        myUvcToast.setToastMessage(sendingEmailPageToastTextLanguageArray[languageArrayIdentifier]);
-                        myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
-                        await sendEmail(myEmail.text);
-                      },
-                      child: Text(
-                        sendEmailPageButtonTextLanguageArray[languageArrayIdentifier],
-                        style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                      SizedBox(height: screenHeight * 0.1),
+                      TextButton(
+                        onPressed: () async {
+                          await uvcDataFile.saveStringUVCEmailDATA(myEmail.text);
+                          myUvcToast.setToastDuration(60);
+                          myUvcToast.setToastMessage(sendingEmailPageToastTextLanguageArray[languageArrayIdentifier]);
+                          myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
+                          await sendEmail(myEmail.text);
+                        },
+                        child: Text(
+                          sendEmailPageButtonTextLanguageArray[languageArrayIdentifier],
+                          style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                        ),
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                          backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
+                        ),
                       ),
-                      style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
+      onWillPop: () => exitApp(context),
     );
+  }
+
+  Future<bool> exitApp(BuildContext context) async {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+    Navigator.of(context).pop();
+    return true;
   }
 
   Future<void> sendEmail(String destination) async {

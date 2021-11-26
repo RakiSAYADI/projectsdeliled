@@ -216,7 +216,7 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            sleepIsInactiveEndUVC = false;
+            sleepIsInactiveEndUVC = true;
             Navigator.pushNamed(context, '/DataCSVView');
           },
           label: Text('Rapport'),
@@ -238,7 +238,6 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
 
     if (firstDisplayMainWidget) {
       firstDisplayMainWidget = false;
-      //myDevice.disconnect();
       csvDataFile();
       mainWidgetScreen = appWidget(context);
       screenSleep(context);
@@ -414,7 +413,7 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
   }
 
   Future<bool> exitApp(BuildContext context) async {
-    sleepIsInactiveEndUVC = false;
+    sleepIsInactiveEndUVC = true;
     Navigator.pushNamedAndRemoveUntil(context, "/pin_access", (r) => false);
     return true;
   }

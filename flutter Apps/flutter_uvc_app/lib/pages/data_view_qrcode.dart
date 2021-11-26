@@ -9,7 +9,6 @@ class DataCSVViewQrCode extends StatefulWidget {
 }
 
 class _DataCSVViewQrCodeState extends State<DataCSVViewQrCode> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -27,37 +26,43 @@ class _DataCSVViewQrCodeState extends State<DataCSVViewQrCode> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          leading: BackButton(onPressed: () async {
+            await exitApp(context);
+          }),
           title: Text(rapportUVCTitleTextLanguageArray[languageArrayIdentifier]),
           centerTitle: true,
         ),
         body: Container(
           decoration: BoxDecoration(color: Colors.grey[200]),
-          child: SingleChildScrollView(
-            child: Table(
-              border: TableBorder.all(width: 2.0),
-              children: uvcData.map((item) {
-                return TableRow(
-                    children: item.map((row) {
-                      return Container(
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              row.toString(),
-                              style: TextStyle(
-                                fontSize: screenWidth * 0.017,
-                              ),
+          child: InteractiveViewer(
+            child: SingleChildScrollView(
+              child: Table(
+                border: TableBorder.all(width: 2.0),
+                children: uvcData.map((item) {
+                  return TableRow(
+                      children: item.map((row) {
+                    return Container(
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            row.toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.017,
                             ),
                           ),
                         ),
-                      );
-                    }).toList());
-              }).toList(),
+                      ),
+                    );
+                  }).toList());
+                }).toList(),
+              ),
             ),
           ),
         ),
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () =>     Navigator.pushNamed(context, "/send_email_qr_code"),
+          onPressed: () => Navigator.pushNamed(context, "/send_email_qr_code"),
           label: Text(rapportUVCButtonTextLanguageArray[languageArrayIdentifier]),
           icon: Icon(
             Icons.send,

@@ -60,6 +60,9 @@ class _SendEmailQrCodeState extends State<SendEmailQrCode> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          leading: BackButton(onPressed: () async {
+            await exitApp(context);
+          }),
           title: Text(sendEmailPageTitleTextLanguageArray[languageArrayIdentifier]),
           centerTitle: true,
         ),

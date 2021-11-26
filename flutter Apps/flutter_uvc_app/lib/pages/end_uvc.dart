@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutteruvcapp/services/CSVfileClass.dart';
 import 'package:flutteruvcapp/services/DataVariables.dart';
 import 'package:flutteruvcapp/services/languageDataBase.dart';
@@ -47,16 +46,6 @@ class _EndUVCState extends State<EndUVC> {
     uvcData.add(uvcOperationData);
 
     await uvcDataFile.saveUVCDATA(uvcData);
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-    super.initState();
   }
 
   @override
@@ -146,6 +135,17 @@ class _EndUVCState extends State<EndUVC> {
             ),
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushNamed(context, '/DataCSVView');
+        },
+        label: Text('Rapport'),
+        icon: Icon(
+          Icons.assignment,
+          color: Colors.white,
+        ),
+        backgroundColor: Colors.blue[400],
       ),
     );
   }
