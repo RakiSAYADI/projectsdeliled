@@ -55,9 +55,9 @@ class _DataCSVViewState extends State<DataCSVView> {
           title: Text('rapport CSV'),
           centerTitle: true,
         ),
-        body: Container(
-          decoration: BoxDecoration(color: Colors.grey[200]),
-          child: InteractiveViewer(
+        body: InteractiveViewer(
+          child: Container(
+            decoration: BoxDecoration(color: Colors.grey[200]),
             child: SingleChildScrollView(
               child: Table(
                 border: TableBorder.all(width: 2.0),
