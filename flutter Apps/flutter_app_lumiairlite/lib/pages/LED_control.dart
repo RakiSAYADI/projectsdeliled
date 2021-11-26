@@ -152,6 +152,7 @@ class _LEDPageState extends State<LEDPage> {
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(16.0, 15, 16.0, 15),
                     child: FlutterSlider(
+                      tooltip: FlutterSliderTooltip(disabled: true),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(18.0),
                         gradient: LinearGradient(
@@ -203,6 +204,7 @@ class _LEDPageState extends State<LEDPage> {
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(16.0, 15, 16.0, 15),
                     child: FlutterSlider(
+                      tooltip: FlutterSliderTooltip(disabled: true),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(18.0),
                         gradient: LinearGradient(colors: [Colors.grey, lumMaxColor]),
@@ -243,6 +245,7 @@ class _LEDPageState extends State<LEDPage> {
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(16.0, 15, 16.0, 15),
                     child: FlutterSlider(
+                      tooltip: FlutterSliderTooltip(disabled: true),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(18.0),
                         gradient: LinearGradient(
@@ -287,6 +290,7 @@ class _LEDPageState extends State<LEDPage> {
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(16.0, 15, 16.0, 15),
                     child: FlutterSlider(
+                      tooltip: FlutterSliderTooltip(disabled: true),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(18.0),
                         gradient: LinearGradient(colors: [Colors.blueAccent, Colors.white, Colors.yellowAccent]),
