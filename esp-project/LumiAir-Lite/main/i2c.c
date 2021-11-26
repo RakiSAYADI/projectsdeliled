@@ -352,14 +352,12 @@ static void i2c_slave_init()
 				 time_MCP7940.day_of_week, time_MCP7940.hour,
 				 time_MCP7940.minute, time_MCP7940.second);
 		TXD_PIN = GPIO_NUM_18;
-		RED_PIN = GPIO_NUM_27;
 	}
 	else
 	{
 		ESP_LOGE(TAG, "MCP7940: No ack, sensor not connected...skip...\n");
 		ESP_LOGI(TAG, "MCP7940 is not detected ,this is OLD card !\n");
 		TXD_PIN = GPIO_NUM_13;
-		RED_PIN = GPIO_NUM_12;
 	}
 
 	//ret = i2c_write_MCP7940( I2C_MASTER_NUM,0, 0);
@@ -487,11 +485,6 @@ static void i2c_test_task(void *arg)
 
 void I2c_Init()
 {
-	//init GPIOs
-
-	TXD_PIN = 0;
-	RED_PIN = 0;
-
 	gpio_pad_select_gpio(I2C_DEATH_SWITCH_GPIO);
 	gpio_set_direction(I2C_DEATH_SWITCH_GPIO, GPIO_MODE_OUTPUT);
 	gpio_set_level(I2C_DEATH_SWITCH_GPIO, 1);

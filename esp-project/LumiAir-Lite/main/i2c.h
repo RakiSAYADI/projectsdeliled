@@ -101,6 +101,5 @@ extern HDC1080_Typedef HDC1080_data;
 void I2c_Init();
 
 int TXD_PIN;
-int RED_PIN;
 
 #endif /* MAIN_I2C_H_ */

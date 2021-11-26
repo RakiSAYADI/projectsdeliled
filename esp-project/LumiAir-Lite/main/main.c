@@ -1,6 +1,8 @@
 #include "esp_log.h"
 #include "string.h"
+#include "stdio.h"
 #include "nvs_flash.h"
+#include "stdlib.h"
 
 #include "sdkconfig.h"
 
@@ -50,9 +52,7 @@ void app_main() {
 
 	I2c_Init();
 	AdcInit();
-	
 	lightControl_Init();
-	
 	bt_main();
 
 	WebService_Init();

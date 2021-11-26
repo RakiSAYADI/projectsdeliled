@@ -135,16 +135,16 @@ void Default_saving()
 	UnitCfg.UserLcProfile.CcEnb = false;
 	sprintf(UnitCfg.UserLcProfile.ZoneCc, "F");
 
-	UnitCfg.UserLcProfile.Ccp[0].CcLevel = 0;
-	UnitCfg.UserLcProfile.Ccp[0].CcTime = 28800;
+	UnitCfg.UserLcProfile.Ccp[0].CcLevel = 100;
+	UnitCfg.UserLcProfile.Ccp[0].CcTime = 28800; // 8
 	UnitCfg.UserLcProfile.Ccp[1].CcLevel = 50;
-	UnitCfg.UserLcProfile.Ccp[1].CcTime = 36000;
-	UnitCfg.UserLcProfile.Ccp[2].CcLevel = 100;
-	UnitCfg.UserLcProfile.Ccp[2].CcTime = 46800;
+	UnitCfg.UserLcProfile.Ccp[1].CcTime = 36000; // 10
+	UnitCfg.UserLcProfile.Ccp[2].CcLevel = 0;
+	UnitCfg.UserLcProfile.Ccp[2].CcTime = 46800; // 13
 	UnitCfg.UserLcProfile.Ccp[3].CcLevel = 50;
-	UnitCfg.UserLcProfile.Ccp[3].CcTime = 57600;
-	UnitCfg.UserLcProfile.Ccp[4].CcLevel = 0;
-	UnitCfg.UserLcProfile.Ccp[4].CcTime = 72000;
+	UnitCfg.UserLcProfile.Ccp[3].CcTime = 57600; // 16
+	UnitCfg.UserLcProfile.Ccp[4].CcLevel = 100;
+	UnitCfg.UserLcProfile.Ccp[4].CcTime = 72000; // 20
 
 	for (uint8_t i = 0; i < 4; i++)
 	{
