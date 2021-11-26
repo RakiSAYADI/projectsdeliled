@@ -3,14 +3,16 @@ PODS:
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
+  - MTBBarcodeScanner (5.0.11)
   - package_info (0.0.1):
     - Flutter
   - path_provider_ios (0.0.1):
     - Flutter
   - printing (1.0.0):
     - Flutter
-  - qrcode_flutter (0.0.1):
+  - qr_code_scanner (0.2.0):
     - Flutter
+    - MTBBarcodeScanner
   - Toast (4.0.0)
 
 DEPENDENCIES:
@@ -19,10 +21,11 @@ DEPENDENCIES:
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - printing (from `.symlinks/plugins/printing/ios`)
-  - qrcode_flutter (from `.symlinks/plugins/qrcode_flutter/ios`)
+  - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
 
 SPEC REPOS:
   trunk:
+    - MTBBarcodeScanner
     - Toast
 
 EXTERNAL SOURCES:
@@ -36,16 +39,17 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider_ios/ios"
   printing:
     :path: ".symlinks/plugins/printing/ios"
-  qrcode_flutter:
-    :path: ".symlinks/plugins/qrcode_flutter/ios"
+  qr_code_scanner:
+    :path: ".symlinks/plugins/qr_code_scanner/ios"
 
 SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
+  MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider_ios: 7d7ce634493af4477d156294792024ec3485acd5
   printing: eafa00acb682c0ca029d4d98d0798f55a1e27102
-  qrcode_flutter: de88a439c5eebe01b38b647af520e674770d4462
+  qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c

@@ -8,7 +8,6 @@ class ChooseQrCode extends StatefulWidget {
 }
 
 class _ChooseQrCodeState extends State<ChooseQrCode> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -17,6 +16,8 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.blue[400],
       appBar: AppBar(
@@ -33,8 +34,8 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
                 alignment: AlignmentDirectional.center,
                 children: <Widget>[
                   Container(
-                    width: 50,
-                    height: 50,
+                    width: screenWidth * 0.13,
+                    height: screenHeight * 0.07,
                     decoration: new BoxDecoration(
                       color: Colors.white,
                       shape: BoxShape.circle,

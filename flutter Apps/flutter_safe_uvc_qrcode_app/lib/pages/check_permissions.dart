@@ -42,62 +42,60 @@ class _CheckPermissionsState extends State<CheckPermissions> {
           child: Builder(
             builder: (context) {
               return Center(
-                child: InteractiveViewer(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          'Merci de vous connecter à internet pour que l\'application fonctionne correctement.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: screenWidth * 0.04,
-                          ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        'Merci de vous connecter à internet pour que l\'application fonctionne correctement.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: screenWidth * 0.04,
                         ),
                       ),
-                      SizedBox(height: screenHeight * 0.05),
-                      Image.asset(
-                        'assets/telephone-internet.gif',
-                        height: screenHeight * 0.3,
-                        width: screenWidth * 0.8,
+                    ),
+                    SizedBox(height: screenHeight * 0.05),
+                    Image.asset(
+                      'assets/telephone-internet.gif',
+                      height: screenHeight * 0.3,
+                      width: screenWidth * 0.8,
+                    ),
+                    SizedBox(height: screenHeight * 0.04),
+                    TextButton(
+                      child: Text(
+                        'COMPRIS',
+                        style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
                       ),
-                      SizedBox(height: screenHeight * 0.04),
-                      TextButton(
-                        child: Text(
-                          'COMPRIS',
-                          style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
-                        ),
-                        style: ButtonStyle(
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
-                          backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
-                        ),
-                        onPressed: () async {
-                          try {
-                            final result = await InternetAddress.lookup('google.com');
-                            if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-                              print('connected');
-                              Future.delayed(Duration(seconds: 5), () async {
-                                Navigator.pushReplacementNamed(context, '/choose_qr_code');
-                              });
-                            } else {
-                              print('not connected');
-                              myUvcToast.setToastDuration(5);
-                              myUvcToast.setToastMessage('Assurer la bonne connection d\'internet avec votre téléphone');
-                              myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
-                            }
-                          } on SocketException catch (_) {
-                            print('not connected (timeout)');
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
+                      ),
+                      onPressed: () async {
+                        try {
+                          final result = await InternetAddress.lookup('google.com');
+                          if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+                            print('connected');
+                            Future.delayed(Duration(seconds: 5), () async {
+                              Navigator.pushReplacementNamed(context, '/choose_qr_code');
+                            });
+                          } else {
+                            print('not connected');
                             myUvcToast.setToastDuration(5);
                             myUvcToast.setToastMessage('Assurer la bonne connection d\'internet avec votre téléphone');
                             myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
                           }
-                        },
-                      ),
-                      SizedBox(height: screenHeight * 0.05),
-                    ],
-                  ),
+                        } on SocketException catch (_) {
+                          print('not connected (timeout)');
+                          myUvcToast.setToastDuration(5);
+                          myUvcToast.setToastMessage('Assurer la bonne connection d\'internet avec votre téléphone');
+                          myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                        }
+                      },
+                    ),
+                    SizedBox(height: screenHeight * 0.05),
+                  ],
                 ),
               );
             },
