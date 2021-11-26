@@ -271,7 +271,7 @@ void StopUVTreatement() {
 	ESP_LOGI(GPIO_TAG, "UVC Time executed: %d",UnitCfg.UVCTimeExecution);
 	SaveNVS(&UnitCfg);
 	UVTaskIsOn = false;
-	delay(500);
+	delay(2000);
 	set_relay_state(RedLightRelay, RelayStateON);
 }
 
