@@ -5,7 +5,7 @@
  *      Author: raki
  */
 
-#define UVCROBOTNAME "DEEPLIGHT-LECLERC01"
+#define UVCROBOTNAME "DEEPLIGHT-K035"
 #define FIRMWAREVERSIONNAME "3.0.0"
 #define PASSWORD "123456789"
 #define VERSION 0

@@ -1,9 +1,3 @@
-/*
- * app_gpio.c
- *
- *  Created on: 19 août 2020
- *      Author: raki
- */
 #include "string.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -264,7 +258,7 @@ void StopUVTreatement() {
 	redLightEnable = false;
 	buzzerEnable = false;
 	stopIsPressed = false;
-	delay(500);
+	delay(2000);
 	UnitCfg.UVCTimeExecution += phaseTimeExecuted / 1000;
 	ESP_LOGI(GPIO_TAG, "UVC Time executed: %d",UnitCfg.UVCTimeExecution);
 	SaveNVS(&UnitCfg);
