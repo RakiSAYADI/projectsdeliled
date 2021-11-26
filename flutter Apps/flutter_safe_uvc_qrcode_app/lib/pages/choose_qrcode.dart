@@ -94,11 +94,16 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
   }
 
   Future<void> displayQrCodeDATA(BuildContext context) async {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     myQrCodes.length = 0;
     listQrCodes.length = 0;
     for (int i = 0; i < qrCodeImageList.length; i++) {
       listQrCodes.add(TableRow(children: [
-        Row(mainAxisAlignment: MainAxisAlignment.start, children: [Image.file(qrCodeImageList[i], width: 100, height: 100), Text(qrCodeList[i].fileName)])
+        Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Image.file(qrCodeImageList[i], width: screenWidth * 0.27, height: screenHeight * 0.14),
+          Text(qrCodeList[i].fileName),
+        ])
       ]));
     }
     return showDialog<void>(
