@@ -262,7 +262,7 @@ void StopUVTreatement() {
 	redLightEnable = false;
 	buzzerEnable = false;
 	stopIsPressed = false;
-	delay(500);
+	delay(2000);
 	UVCThreadState = false;
 	UVTreatementIsOn = false;
 	set_relay_state(RedLightRelay, RelayStateON);

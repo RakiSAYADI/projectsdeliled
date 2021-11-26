@@ -1,5 +1,6 @@
 
 # Embed the server root certificate into the final binary
 
-
-register_component()
+idf_component_register(SRCS "app_gpio.c" "base_mac_address.c" "tcp_client.c" "main.c" "unitcfg.c" 
+                    INCLUDE_DIRS "")
+# register_component()
