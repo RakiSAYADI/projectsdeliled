@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
-import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
 
 class ChooseQrCode extends StatefulWidget {
   @override
@@ -9,7 +8,6 @@ class ChooseQrCode extends StatefulWidget {
 }
 
 class _ChooseQrCodeState extends State<ChooseQrCode> {
-  ToastyMessage myUvcToast;
 
   @override
   void initState() {

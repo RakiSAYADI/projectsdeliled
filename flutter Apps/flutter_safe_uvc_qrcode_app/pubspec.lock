@@ -91,7 +91,7 @@ packages:
       name: cupertino_icons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.4"
   encrypt:
     dependency: "direct main"
     description:
@@ -162,7 +162,7 @@ packages:
       name: fluttertoast
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "7.1.1"
+    version: "7.1.8"
   http:
     dependency: "direct main"
     description:
@@ -190,7 +190,7 @@ packages:
       name: intl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.16.1"
+    version: "0.17.0"
   js:
     dependency: transitive
     description:
@@ -211,7 +211,7 @@ packages:
       name: mailer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.2.1"
+    version: "3.3.0"
   matcher:
     dependency: transitive
     description:
@@ -239,7 +239,7 @@ packages:
       name: package_info
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.3+2"
+    version: "0.4.3+4"
   path:
     dependency: transitive
     description:
@@ -316,7 +316,7 @@ packages:
       name: pedantic
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.9.2"
+    version: "1.11.1"
   petitparser:
     dependency: transitive
     description:
@@ -373,6 +373,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  qr_code_scanner:
+    dependency: "direct main"
+    description:
+      name: qr_code_scanner
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.1"
   qr_flutter:
     dependency: "direct main"
     description:
@@ -380,13 +387,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
-  qrcode_flutter:
-    dependency: "direct main"
-    description:
-      name: qrcode_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.9"
   sky_engine:
     dependency: transitive
     description: flutter

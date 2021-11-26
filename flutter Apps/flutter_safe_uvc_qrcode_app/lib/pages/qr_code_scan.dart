@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:qrcode_flutter/qrcode_flutter.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
+//import 'package:qrcode_flutter/qrcode_flutter.dart';
 
 class QrCodeScan extends StatefulWidget {
   @override
@@ -11,7 +14,10 @@ class QrCodeScan extends StatefulWidget {
 }
 
 class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
-  QRCaptureController _controller = QRCaptureController();
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  QRViewController controller;
+  Barcode result;
+
   bool _isTorchOn = false;
   String qrCodeMessage = '';
   Color colorMessage;
@@ -34,10 +40,22 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
   final String endNAME2 = "https";
 
   @override
+  void reassemble() {
+    super.reassemble();
+    if (Platform.isAndroid) {
+      controller.pauseCamera();
+    }
+    if (Platform.isIOS) {
+      controller.resumeCamera();
+    }
+  }
+
+  @override
   void initState() {
     myUvcToast = ToastyMessage(toastContext: context);
-    Future.delayed(const Duration(seconds: 1), () {
-      _controller.resume();
+    Future.delayed(const Duration(seconds: 1), () async {
+      //_controller.resume();
+      await controller.resumeCamera();
       myUvcToast.setToastDuration(2);
       myUvcToast.setToastMessage('Lancement de la caméra !');
       myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
@@ -55,10 +73,56 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    _controller.pause();
+    //_controller.pause();
+    controller.dispose();
     animationRefreshIcon.dispose();
     animationController.dispose();
     super.dispose();
+  }
+
+  void _onQrViewCreated(QRViewController controller) {
+    this.controller = controller;
+    String data;
+    controller.scannedDataStream.listen((scanData) {
+      data = result.code;
+      print('onCapture----$data');
+      if (data.isNotEmpty && !qrCodeScanAccess) {
+        try {
+          startIndex = data.indexOf(startMAC);
+          endIndex = data.indexOf(endMAC, startIndex + startMAC.length);
+          macAddress = data.substring(startIndex + startMAC.length, endIndex);
+          startIndex = data.indexOf(startNAME);
+          endIndex = data.indexOf(endNAME, startIndex + startNAME.length);
+          uvcName = data.substring(startIndex + startNAME.length, endIndex);
+          deviceExistOrNot = true;
+        } catch (e) {
+          try {
+            startIndex = data.indexOf(startNAME);
+            endIndex = data.indexOf(endNAME2, startIndex + startNAME.length);
+            uvcName = data.substring(startIndex + startNAME.length, endIndex);
+            deviceExistOrNot = true;
+          } catch (e) {
+            deviceExistOrNot = false;
+          }
+        }
+
+        setState(() {
+          if (deviceExistOrNot) {
+            qrCodeMessage = 'Accès valide';
+            colorMessage = Colors.green;
+            qrCodeScanAccess = true;
+          } else {
+            qrCodeMessage = 'Accès non valide';
+            colorMessage = Colors.red;
+            qrCodeScanAccess = false;
+          }
+        });
+        if (deviceExistOrNot) {
+          controller.pauseCamera();
+          Navigator.pushNamed(context, "/Qr_code_Generate_Full_Auto");
+        }
+      }
+    });
   }
 
   @override
@@ -67,7 +131,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     double screenHeight = MediaQuery.of(context).size.height;
     double cameraViewHeight = screenHeight * 0.60;
 
-    _controller.onCapture((data) {
+    /*_controller.onCapture((data) {
       print('onCapture----$data');
       if (data.isNotEmpty && !qrCodeScanAccess) {
         try {
@@ -105,7 +169,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           Navigator.pushNamed(context, "/Qr_code_Generate_Full_Auto");
         }
       }
-    });
+    });*/
 
     return Scaffold(
       appBar: AppBar(
@@ -133,9 +197,13 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
             Container(
               width: screenWidth,
               height: cameraViewHeight,
-              child: QRCaptureView(
-                controller: _controller,
+              child: QRView(
+                key: qrKey,
+                onQRViewCreated: _onQrViewCreated,
               ),
+              /*child: QRCaptureView(
+                controller: _controller,
+              ),*/
             ),
             SizedBox(height: screenHeight * 0.02),
             Align(
@@ -167,12 +235,13 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         TextButton(
-          onPressed: () {
+          onPressed: () async {
             if (_isTorchOn) {
-              _controller.torchMode = CaptureTorchMode.off;
+              //_controller.torchMode = CaptureTorchMode.off;
             } else {
-              _controller.torchMode = CaptureTorchMode.on;
+              //_controller.torchMode = CaptureTorchMode.on;
             }
+            await controller.toggleFlash();
             _isTorchOn = !_isTorchOn;
           },
           child: Text(
