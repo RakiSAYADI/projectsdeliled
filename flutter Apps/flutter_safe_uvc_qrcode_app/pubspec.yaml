@@ -30,7 +30,6 @@ dependencies:
   flutter_spinkit: ^4.1.2+1
   qr_flutter: ^4.0.0
   flutter_speed_dial: ^1.2.5
-  #qrcode_flutter: ^2.0.1
   qr_code_scanner: ^0.6.1
   pinput: ^0.2.6
   encrypt: ^5.0.1
