@@ -27,6 +27,7 @@
 #include "lightcontrol.h"
 #include "https_ota.h"
 #include "scanwifi.h"
+#include "i2c.h"
 
 #define GATTS_TAG "GATTS"
 
@@ -790,6 +791,7 @@ bool configData(char *jsonData)
 				tz = atoi(tmp);
 				ESP_LOGI(GATTS_TAG, "Time zone %d", tz / 3600);
 				syncTime(t, tz);
+				saveTimeOnBattery = true;
 				UnitCfg.UnitTimeZone = tz / 3600;
 				saveFlag = true;
 			}

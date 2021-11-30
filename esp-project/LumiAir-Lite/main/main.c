@@ -19,16 +19,18 @@
 
 const char *TAG = "MAIN";
 
-void app_main() {
+void app_main()
+{
 
 	// Initialize NVS.
-    esp_err_t err = nvs_flash_init();
-    if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
-        ESP_ERROR_CHECK(nvs_flash_erase());
-        err = nvs_flash_init();
-    }
-	
-    ESP_ERROR_CHECK( err );
+	esp_err_t err = nvs_flash_init();
+	if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND)
+	{
+		ESP_ERROR_CHECK(nvs_flash_erase());
+		err = nvs_flash_init();
+	}
+
+	ESP_ERROR_CHECK(err);
 
 	ESP_LOGI(TAG, "[APP] Startup..");
 	ESP_LOGI(TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
@@ -38,12 +40,14 @@ void app_main() {
 
 	LedStatInit();
 
-	if (!InitLoadCfg()) {
+	if (!InitLoadCfg())
+	{
 		UnitSetStatus(UNIT_STATUS_ERROR);
 		return;
 	}
 
-	if (!(strContains(UnitCfg.FLASH_MEMORY, "OK") == 1)) {
+	if (!(strContains(UnitCfg.FLASH_MEMORY, "OK") == 1))
+	{
 		ESP_LOGW(TAG, "Saving the default configuration ..");
 		Default_saving();
 	}
@@ -56,5 +60,4 @@ void app_main() {
 	bt_main();
 
 	WebService_Init();
-
 }

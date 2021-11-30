@@ -14,6 +14,7 @@
 
 #include "webservice.h"
 #include "unitcfg.h"
+#include "i2c.h"
 
 const char *TAG_SNTP = "SNTP";
 
@@ -72,6 +73,7 @@ void sntp_task()
         ESP_LOGI(TAG_SNTP, "The current date/time in Timezone GMT %d [%s] is: %s", UnitCfg.UnitTimeZone, tz, strftime_buf);
 
         sntpTimeSetFlag = true;
+        saveTimeOnBattery = true;
 
         sntp_stop();
     }

@@ -14,7 +14,10 @@
 #include "sdkconfig.h"
 
 #include "app_gpio.h"
+#include "i2c.h"
 #include "webservice.h"
+
+const char *GPIO_TAG = "GPIO";
 
 /* Commente ceci si les led s'allume à l'envers */
 #define INVERT_GPIO
@@ -167,15 +170,30 @@ void LedStatusTask()
 	// Set configuration of timer0 for high speed channels
 	ledc_timer_config(&ledc_timer);
 
+	while (RED_PIN == 0 && TXD_PIN == 0)
+	{
+		vTaskDelay(100 / portTICK_PERIOD_MS);
+	}
+
+	ESP_LOGI(GPIO_TAG, "Red GPIO is %d", RED_PIN);
+
 	ledc_channel_config_t ledc_channel[LEDC_TEST_CH_NUM] = {
-		{.channel = LEDC_HS_CH0_CHANNEL, .duty = 0, .gpio_num = LEDC_HS_CH0_GPIO, .speed_mode = LEDC_HS_MODE, .hpoint = 0, .timer_sel = LEDC_HS_TIMER},
-		{.channel =
-			 LEDC_HS_CH1_CHANNEL,
-		 .duty = 0,
-		 .gpio_num = LEDC_HS_CH1_GPIO,
-		 .speed_mode = LEDC_HS_MODE,
-		 .hpoint = 0,
-		 .timer_sel = LEDC_HS_TIMER},
+		{
+			.channel = LEDC_HS_CH0_CHANNEL, 
+			.duty = 0, 
+			.gpio_num = LEDC_HS_CH0_GPIO, 
+			.speed_mode = LEDC_HS_MODE, 
+			.hpoint = 0, 
+			.timer_sel = LEDC_HS_TIMER
+		},
+		{
+			.channel = LEDC_HS_CH1_CHANNEL,
+			.duty = 0,
+			.gpio_num = RED_PIN,
+			.speed_mode = LEDC_HS_MODE,
+			.hpoint = 0,
+			.timer_sel = LEDC_HS_TIMER
+		},
 	};
 
 	for (ch = 0; ch < LEDC_TEST_CH_NUM; ch++)

@@ -34,7 +34,7 @@
 #define MCP7940_REG_RTCDATE  				0x04             /*!< Register Address: Time Day */
 #define MCP7940_REG_RTCMTH   				0x05			 /*!< Register Address: Time Month */
 #define MCP7940_REG_RTCYEAR  				0x06             /*!< Register Address: Time Year */
-//#define MCP7940_CON_CONFIG				0x07			 /*!< Register Address: Config */
+#define MCP7940_CON_CONFIG				    0x07			 /*!< Register Address: Config */
 
 #define WRITE_BIT                           I2C_MASTER_WRITE  /*!< I2C master write */
 #define READ_BIT                            I2C_MASTER_READ   /*!< I2C master read */
@@ -71,8 +71,13 @@ typedef struct {
 typedef struct {
 	uint8_t osillater_start;
 	uint8_t osillater_status;
+	uint8_t squareWaveEnabled;
+	uint8_t squareWaveSelect;
+	uint8_t alarmOneEnabled;
+	uint8_t alarmTwoEnabled;
+	uint8_t coarseTrimEnabled;
 	uint8_t twelve_or_24;
-	uint8_t vBat_state;
+	uint8_t powerFailure_state;
 	uint8_t vBat_en;
 	uint8_t leap_year;
 	uint8_t second;
@@ -80,7 +85,7 @@ typedef struct {
 	uint8_t hour;
 	uint8_t day_of_week;
 	uint8_t day;
-	uint8_t mounth;
+	uint8_t month;
 	uint8_t year;
 } MCP7940_Time_Typedef;
 
@@ -97,9 +102,11 @@ extern MCP7940_Time_Typedef MCP7940_time;
 extern OPT3001_Typedef OPT3001_HoldReg;
 extern IAQ_CORE_Typedef iaq_data;
 extern HDC1080_Typedef HDC1080_data;
-
-void I2c_Init();
+extern bool saveTimeOnBattery;
 
 int TXD_PIN;
+int RED_PIN;
+
+void I2c_Init();
 
 #endif /* MAIN_I2C_H_ */

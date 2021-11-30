@@ -93,10 +93,8 @@ void ColorTemp_Controller()
 	float h1 = 0, h2 = 0, h3 = 0, h4 = 0, h5 = 0;
 	float t1 = 0, t2 = 0, t3 = 0, t4 = 0, t5 = 0;
 
-	float a1 = 0, b1 = 0;
-	float a2 = 0, b2 = 0;
-	float a3 = 0, b3 = 0;
-	float a4 = 0, b4 = 0;
+	float a1 = 0, a2 = 0, a3 = 0, a4 = 0;
+	float b1 = 0, b2 = 0, b3 = 0, b4 = 0;
 
 	time_t now = 0;
 
@@ -119,7 +117,7 @@ void ColorTemp_Controller()
 		t4 = UnitCfg.UserLcProfile.Ccp[3].CcLevel;
 		t5 = UnitCfg.UserLcProfile.Ccp[4].CcLevel;
 
-		if ((UnitCfg.UserLcProfile.CcEnb) && ((now >= h1) && (now <= h5)))
+		if (UnitCfg.UserLcProfile.CcEnb)
 		{
 
 			if (h2 != h1)
@@ -177,6 +175,10 @@ void ColorTemp_Controller()
 			else if ((now >= h4) && (now <= h5))
 			{
 				CtempOut = a4 * now + b4;
+			}
+			else
+			{
+				CtempOut = UnitCfg.UserLcProfile.Ccp[4].CcLevel; // the CC will work forever
 			}
 			if (CtempOut > 100)
 			{
