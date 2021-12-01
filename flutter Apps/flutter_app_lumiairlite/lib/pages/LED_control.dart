@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_bispectrum/services/DataVariables.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
+import 'package:get/get.dart';
 
 class LEDPage extends StatefulWidget {
   @override
@@ -28,6 +29,10 @@ class _LEDPageState extends State<LEDPage> {
   double satValue = 50;
   double whiteValue = 50;
 
+  bool ccSwitchValue = false;
+
+  int ccSwitchCounter = 0;
+
   void readDataMaestro() async {
     var parsedJson;
     try {
@@ -41,6 +46,7 @@ class _LEDPageState extends State<LEDPage> {
       zonesNamesList[1] = parsedJson['ZN'][1];
       zonesNamesList[2] = parsedJson['ZN'][2];
       zonesNamesList[3] = parsedJson['ZN'][3];
+      ccSwitchValue = intToBool(int.parse(parsedJson['cc'][0].toString()));
       await Future.delayed(Duration(seconds: 2));
     } catch (e) {
       print('erreur zone');
@@ -174,7 +180,9 @@ class _LEDPageState extends State<LEDPage> {
                       max: 255,
                       min: 0,
                       onDragging: (handlerIndex, lowerValue, upperValue) {
-                        if (Platform.isAndroid) {
+                        if (ccSwitchValue && ccSwitchCounter == 0) {
+                          displayCCWarning();
+                        } else if (Platform.isAndroid) {
                           hueValue = lowerValue;
                           setBarreColorsState();
                           setState(() {});
@@ -182,9 +190,12 @@ class _LEDPageState extends State<LEDPage> {
                             characteristicSensors.write('{\"light\":[3,${hueValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
                           }
                         }
+                        ccSwitchCounter++;
                       },
                       onDragCompleted: (handlerIndex, lowerValue, upperValue) {
-                        if (Platform.isIOS) {
+                        if (ccSwitchValue && ccSwitchCounter == 0) {
+                          displayCCWarning();
+                        } else if (Platform.isIOS) {
                           hueValue = lowerValue;
                           setBarreColorsState();
                           setState(() {});
@@ -192,6 +203,7 @@ class _LEDPageState extends State<LEDPage> {
                             characteristicSensors.write('{\"light\":[3,${hueValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
                           }
                         }
+                        ccSwitchCounter++;
                       },
                       handler: FlutterSliderHandler(child: Icon(Icons.color_lens)),
                       trackBar: FlutterSliderTrackBar(
@@ -215,7 +227,9 @@ class _LEDPageState extends State<LEDPage> {
                       centeredOrigin: true,
                       handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
                       onDragging: (handlerIndex, lowerValue, upperValue) {
-                        if (Platform.isAndroid) {
+                        if (ccSwitchValue && ccSwitchCounter == 0) {
+                          displayCCWarning();
+                        } else if (Platform.isAndroid) {
                           lumValue = lowerValue;
                           setBarreColorsState();
                           setState(() {});
@@ -223,9 +237,12 @@ class _LEDPageState extends State<LEDPage> {
                             characteristicSensors.write('{\"light\":[7,${lumValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
                           }
                         }
+                        ccSwitchCounter++;
                       },
                       onDragCompleted: (handlerIndex, lowerValue, upperValue) {
-                        if (Platform.isIOS) {
+                        if (ccSwitchValue && ccSwitchCounter == 0) {
+                          displayCCWarning();
+                        } else if (Platform.isIOS) {
                           lumValue = lowerValue;
                           setBarreColorsState();
                           setState(() {});
@@ -233,6 +250,7 @@ class _LEDPageState extends State<LEDPage> {
                             characteristicSensors.write('{\"light\":[7,${lumValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
                           }
                         }
+                        ccSwitchCounter++;
                       },
                       handler: FlutterSliderHandler(child: Icon(Icons.highlight)),
                       trackBar: FlutterSliderTrackBar(
@@ -260,7 +278,9 @@ class _LEDPageState extends State<LEDPage> {
                       centeredOrigin: true,
                       handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
                       onDragging: (handlerIndex, lowerValue, upperValue) {
-                        if (Platform.isAndroid) {
+                        if (ccSwitchValue && ccSwitchCounter == 0) {
+                          displayCCWarning();
+                        } else if (Platform.isAndroid) {
                           satValue = lowerValue;
                           setBarreColorsState();
                           setState(() {});
@@ -268,9 +288,12 @@ class _LEDPageState extends State<LEDPage> {
                             characteristicSensors.write('{\"light\":[9,${satValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
                           }
                         }
+                        ccSwitchCounter++;
                       },
                       onDragCompleted: (handlerIndex, lowerValue, upperValue) {
-                        if (Platform.isIOS) {
+                        if (ccSwitchValue && ccSwitchCounter == 0) {
+                          displayCCWarning();
+                        } else if (Platform.isIOS) {
                           satValue = lowerValue;
                           setBarreColorsState();
                           setState(() {});
@@ -278,6 +301,7 @@ class _LEDPageState extends State<LEDPage> {
                             characteristicSensors.write('{\"light\":[9,${satValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
                           }
                         }
+                        ccSwitchCounter++;
                       },
                       handler: FlutterSliderHandler(child: Icon(Icons.wb_twighlight)),
                       trackBar: FlutterSliderTrackBar(
@@ -301,22 +325,28 @@ class _LEDPageState extends State<LEDPage> {
                       centeredOrigin: true,
                       handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
                       onDragging: (handlerIndex, lowerValue, upperValue) {
-                        if (Platform.isAndroid) {
+                        if (ccSwitchValue && ccSwitchCounter == 0) {
+                          displayCCWarning();
+                        } else if (Platform.isAndroid) {
                           whiteValue = lowerValue;
                           setState(() {});
                           if (myDevice.getConnectionState()) {
                             characteristicSensors.write('{\"light\":[8,${whiteValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
                           }
                         }
+                        ccSwitchCounter++;
                       },
                       onDragCompleted: (handlerIndex, lowerValue, upperValue) {
-                        if (Platform.isIOS) {
+                        if (ccSwitchValue && ccSwitchCounter == 0) {
+                          displayCCWarning();
+                        } else if (Platform.isIOS) {
                           whiteValue = lowerValue;
                           setState(() {});
                           if (myDevice.getConnectionState()) {
                             characteristicSensors.write('{\"light\":[8,${whiteValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
                           }
                         }
+                        ccSwitchCounter++;
                       },
                       handler: FlutterSliderHandler(child: Icon(Icons.code)),
                       trackBar: FlutterSliderTrackBar(
@@ -343,6 +373,26 @@ class _LEDPageState extends State<LEDPage> {
         onPressed: () => returnButton(context),
         backgroundColor: Colors.blue[400],
       ),
+    );
+  }
+
+  void displayCCWarning() {
+    Get.defaultDialog(
+      title: 'Attention',
+      barrierDismissible: false,
+      content: Text(
+          'Cycle Circadien en cours, impossible de contrôler la lumière manuellement.'
+          'Veuillez d’abord désactiver le Cycle Circadien dans les réglages.',
+          style: TextStyle(fontSize: 14)),
+      actions: [
+        TextButton(
+          child: Text('Compris', style: TextStyle(fontSize: 14)),
+          onPressed: () {
+            Get.back();
+            ccSwitchCounter = 0;
+          },
+        ),
+      ],
     );
   }
 

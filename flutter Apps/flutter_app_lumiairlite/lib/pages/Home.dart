@@ -273,7 +273,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                             )
                           ])),
                     ],
-                    borderWidth: 2,
                     selectedColor: Colors.white,
                     selectedBorderColor: Colors.white,
                     fillColor: Colors.white.withOpacity(0.5),
