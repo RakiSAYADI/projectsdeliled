@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_app_bispectrum/pages/scan_ble_list.dart';
 import 'package:flutter_app_bispectrum/services/DataVariables.dart';
 import 'package:flutter_app_bispectrum/services/animation_between_pages.dart';
+import 'package:flutter_app_bispectrum/services/languageDataBase.dart';
 import 'package:flutter_app_bispectrum/services/uvcToast.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -28,6 +29,8 @@ class _SettingsState extends State<Settings> {
 
   List<String> wifiModems = [];
   String wifiModemsData = '';
+  String co2sensorStateMessage = 'OK';
+  Color co2sensorStateMessageColor = Colors.green;
   int wifiModemsPosition = 0;
 
   final passwordEditor = TextEditingController();
@@ -64,20 +67,43 @@ class _SettingsState extends State<Settings> {
         parsedJson = json.decode(dataCharIOS2p1);
       }
       ccSwitchValue = intToBool(int.parse(parsedJson['cc'][0].toString()));
+      switch (co2sensorStateValue) {
+        case 0:
+          co2sensorStateMessage = "OK";
+          co2sensorStateMessageColor = Colors.green;
+          break;
+        case 1:
+          co2sensorStateMessage = "BUSY";
+          co2sensorStateMessageColor = Colors.yellow;
+          break;
+        case 16:
+          co2sensorStateMessage = "RUNIN";
+          co2sensorStateMessageColor = Colors.blue;
+          break;
+        default:
+          co2sensorStateMessage = "ERROR";
+          co2sensorStateMessageColor = Colors.red;
+          break;
+      }
       await Future.delayed(Duration(seconds: 2));
       if (deviceWifiState) {
         myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('Le boitier HUBBOX est connecté au WiFi.');
+        myUvcToast.setToastMessage(internetToastTextLanguageArray[languageArrayIdentifier]);
         myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
       } else {
         myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('Votre carte n\'est pas connectée avec votre modem !');
+        myUvcToast.setToastMessage(noInternetToastTextLanguageArray[languageArrayIdentifier]);
         myUvcToast.showToast(Colors.red, Icons.info, Colors.white);
       }
     } catch (e) {
       print('erreur settings');
       ccSwitchValue = false;
-      zonesNamesList = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4'];
+      zonesNamesList = [
+        firstZoneTextLanguageArray[languageArrayIdentifier],
+        secondZoneTextLanguageArray[languageArrayIdentifier],
+        thirdZoneTextLanguageArray[languageArrayIdentifier],
+        fourthZoneTextLanguageArray[languageArrayIdentifier]
+      ];
     }
   }
 
@@ -95,220 +121,89 @@ class _SettingsState extends State<Settings> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            'Réglages',
+            settingsTitleTextLanguageArray[languageArrayIdentifier],
             style: TextStyle(fontSize: 18),
           ),
           centerTitle: true,
         ),
         body: Container(
-          decoration: BoxDecoration(color: Colors.grey[200]),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/background-bispectrum.jpg'),
+              fit: BoxFit.cover,
+            ),
+          ),
           child: Center(
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.max,
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Nom du HuBBox :',
-                          style: TextStyle(fontSize: (screenWidth * 0.05)),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              myDevice.device.name.substring(0, 4),
-                              style: TextStyle(fontSize: (screenWidth * 0.05)),
-                            ),
-                            Flexible(
-                              child: TextField(
-                                textAlign: TextAlign.center,
-                                controller: myBleDeviceName,
-                                maxLines: 1,
-                                maxLength: 64,
-                                style: TextStyle(
-                                  fontSize: (screenWidth * 0.05),
-                                ),
-                                decoration: InputDecoration(
-                                    hintText: 'exp:Maestro1234',
-                                    hintStyle: TextStyle(
-                                      fontSize: (screenWidth * 0.05),
-                                      color: Colors.grey,
-                                    )),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: TextButton(
-                          onPressed: () async {
-                            if (myDevice.getConnectionState()) {
-                              // write the new ble device name
-                              await characteristicData.write('{\"dname\":\"${myDevice.device.name.substring(0, 4)}${myBleDeviceName.text}\"}'.codeUnits);
-                              myUvcToast.setToastDuration(5);
-                              myUvcToast.setToastMessage('Nom modifié, veuillez redémarrer pour appliquer les changements.');
-                              myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
-                            }
-                          },
-                          child: Text(
-                            'Changer le nom',
-                            style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
-                          ),
-                          style: ButtonStyle(
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
-                              backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Divider(
-                          thickness: 3.0,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text(
-                              'Cycle Circadien :',
-                              style: TextStyle(fontSize: (screenWidth * 0.05)),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: CupertinoSwitch(
-                              value: ccSwitchValue,
-                              activeColor: Colors.green,
-                              onChanged: (value) async {
-                                setState(() {
-                                  ccSwitchValue = value;
-                                });
-                                if (myDevice.getConnectionState()) {
-                                  // write the cc command
-                                  await characteristicData.write('{\"cc\":${boolToInt(ccSwitchValue)}}'.codeUnits);
-                                  await Future.delayed(Duration(milliseconds: 500));
-                                  if (Platform.isAndroid) {
-                                    dataCharAndroid2 = String.fromCharCodes(await characteristicData.read());
-                                  }
-                                  if (Platform.isIOS) {
-                                    savingDataWidget(context);
-                                    dataCharIOS2p1 = await charDividedIOSRead(characteristicData);
-                                    dataCharIOS2p2 = await charDividedIOSRead(characteristicData);
-                                    dataCharIOS2p3 = await charDividedIOSRead(characteristicData);
-                                    Navigator.of(context).pop();
-                                  }
-                                }
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          'Modulez la luminosité tout au long de \nla journée en suivant le cycle du soleil.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: (screenWidth * 0.03)),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Divider(
-                          thickness: 3.0,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          'Vos Zones :',
-                          style: TextStyle(fontSize: (screenWidth * 0.05)),
-                        ),
-                      ),
-                      ToggleButtons(
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
                         borderRadius: BorderRadius.circular(18.0),
-                        isSelected: zoneStates,
-                        onPressed: (int index) async {
-                          for (int buttonIndex = 0; buttonIndex < zoneStates.length; buttonIndex++) {
-                            if (buttonIndex == index) {
-                              zoneStates[buttonIndex] = true;
-                            } else {
-                              zoneStates[buttonIndex] = false;
-                            }
-                          }
-                          setState(() {});
-                          zonesInHex = ((boolToInt(zoneStates[0])) + (boolToInt(zoneStates[1]) * 2) + (boolToInt(zoneStates[2]) * 4) + (boolToInt(zoneStates[3]) * 8)).toRadixString(16);
-                        },
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                            child: Text(zonesNamesList[0], style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                            child: Text(zonesNamesList[1], style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                            child: Text(zonesNamesList[2], style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                            child: Text(zonesNamesList[3], style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
-                          ),
-                        ],
-                        borderWidth: 2,
-                        color: Colors.grey,
-                        selectedBorderColor: Colors.black,
-                        selectedColor: Colors.green,
+                        border: Border.all(color: Color(0xFF3a66d7)),
+                        color: Colors.white.withOpacity(0.5),
                       ),
-                      SizedBox(height: screenHeight * 0.05),
-                      Row(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: TextButton(
-                              onPressed: () async {
-                                if (myDevice.getConnectionState()) {
-                                  // write the associate command
-                                  await characteristicData.write('{\"light\":[5,1,\"$zonesInHex\"]}'.codeUnits);
-                                }
-                              },
-                              child: Text(
-                                'Associer',
-                                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
-                              ),
-                              style: ButtonStyle(
-                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
-                                  backgroundColor: MaterialStateProperty.all<Color>(
-                                    Colors.green[400],
-                                  )),
+                            child: Text(
+                              deviceNameTextLanguageArray[languageArrayIdentifier],
+                              style: TextStyle(fontSize: (screenWidth * 0.03)),
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  myDevice.device.name.substring(0, 4),
+                                  style: TextStyle(fontSize: (screenWidth * 0.03)),
+                                ),
+                                Flexible(
+                                  child: TextField(
+                                    textAlign: TextAlign.center,
+                                    controller: myBleDeviceName,
+                                    maxLines: 1,
+                                    maxLength: 64,
+                                    style: TextStyle(
+                                      fontSize: (screenWidth * 0.03),
+                                    ),
+                                    decoration: InputDecoration(
+                                        hintText: 'exp:Maestro1234',
+                                        hintStyle: TextStyle(
+                                          fontSize: (screenWidth * 0.03),
+                                          color: Colors.grey,
+                                        )),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
                             child: TextButton(
                               onPressed: () async {
                                 if (myDevice.getConnectionState()) {
-                                  // write the dissociate command
-                                  await characteristicData.write('{\"light\":[5,0,\"$zonesInHex\"]}'.codeUnits);
+                                  // write the new ble device name
+                                  await characteristicData.write('{\"dname\":\"${myDevice.device.name.substring(0, 4)}${myBleDeviceName.text}\"}'.codeUnits);
+                                  myUvcToast.setToastDuration(5);
+                                  myUvcToast.setToastMessage(nameChangedToastTextLanguageArray[languageArrayIdentifier]);
+                                  myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
                                 }
                               },
                               child: Text(
-                                'Dissocier',
-                                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                                changeNameButtonTextLanguageArray[languageArrayIdentifier],
+                                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.025),
                               ),
                               style: ButtonStyle(
                                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
@@ -317,268 +212,500 @@ class _SettingsState extends State<Settings> {
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextButton(
-                          onPressed: () {
-                            // write the new zone names
-                            zoneNamesSettingsWidget(context);
-                          },
-                          child: Text(
-                            'Renommer',
-                            style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(18.0),
+                        border: Border.all(color: Color(0xFF3a66d7)),
+                        color: Colors.white.withOpacity(0.5),
+                      ),
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  cycleCTextLanguageArray[languageArrayIdentifier],
+                                  style: TextStyle(fontSize: (screenWidth * 0.03)),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: CupertinoSwitch(
+                                  value: ccSwitchValue,
+                                  activeColor: Colors.green,
+                                  onChanged: (value) async {
+                                    setState(() {
+                                      ccSwitchValue = value;
+                                    });
+                                    if (myDevice.getConnectionState()) {
+                                      // write the cc command
+                                      await characteristicData.write('{\"cc\":${boolToInt(ccSwitchValue)}}'.codeUnits);
+                                      await Future.delayed(Duration(milliseconds: 500));
+                                      if (Platform.isAndroid) {
+                                        dataCharAndroid2 = String.fromCharCodes(await characteristicData.read());
+                                      }
+                                      if (Platform.isIOS) {
+                                        savingDataWidget(context);
+                                        dataCharIOS2p1 = await charDividedIOSRead(characteristicData);
+                                        dataCharIOS2p2 = await charDividedIOSRead(characteristicData);
+                                        dataCharIOS2p3 = await charDividedIOSRead(characteristicData);
+                                        Navigator.of(context).pop();
+                                      }
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
-                          style: ButtonStyle(
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
-                              backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Divider(
-                          thickness: 3.0,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Ancien code PIN :',
-                          style: TextStyle(fontSize: (screenWidth * 0.05)),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
-                        child: TextField(
-                          textAlign: TextAlign.center,
-                          controller: myOldCodePIN,
-                          maxLines: 1,
-                          maxLength: 4,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
-                          style: TextStyle(
-                            fontSize: (screenWidth * 0.05),
-                          ),
-                          decoration: InputDecoration(
-                              hintText: 'Exemple : 1234',
-                              hintStyle: TextStyle(
-                                fontSize: (screenWidth * 0.05),
-                                color: Colors.grey,
-                              )),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Nouveau code PIN :',
-                          style: TextStyle(fontSize: (screenWidth * 0.05)),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
-                        child: TextField(
-                          textAlign: TextAlign.center,
-                          controller: myNewCodePIN,
-                          maxLines: 1,
-                          maxLength: 4,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
-                          style: TextStyle(
-                            fontSize: (screenWidth * 0.05),
-                          ),
-                          decoration: InputDecoration(
-                              hintText: 'Exemple : 1234',
-                              hintStyle: TextStyle(
-                                fontSize: (screenWidth * 0.05),
-                                color: Colors.grey,
-                              )),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: TextButton(
-                          onPressed: () async {
-                            if (myDevice.getConnectionState()) {
-                              if (pinCodeAccess == myOldCodePIN.text) {
-                                if (myNewCodePIN.text.length == 4) {
-                                  // write the new code PIN
-                                  await characteristicData.write('{\"PP\":\"${myNewCodePIN.text}\"}'.codeUnits);
-                                  myUvcToast.setToastDuration(5);
-                                  myUvcToast.setToastMessage('Votre code PIN a été modifié !');
-                                  myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
-                                  await Future.delayed(Duration(milliseconds: 500));
-                                  pinCodeAccess = myNewCodePIN.text;
-                                  if (Platform.isAndroid) {
-                                    dataCharAndroid2 = String.fromCharCodes(await characteristicData.read());
-                                  }
-                                  if (Platform.isIOS) {
-                                    savingDataWidget(context);
-                                    dataCharIOS2p1 = await charDividedIOSRead(characteristicData);
-                                    dataCharIOS2p2 = await charDividedIOSRead(characteristicData);
-                                    dataCharIOS2p3 = await charDividedIOSRead(characteristicData);
-                                    Navigator.of(context).pop();
-                                  }
-                                } else {
-                                  myUvcToast.setToastDuration(5);
-                                  myUvcToast.setToastMessage('Le nouveau code PIN doit être en 4 chiffres !');
-                                  myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
-                                }
-                              } else {
-                                myUvcToast.setToastDuration(5);
-                                myUvcToast.setToastMessage('L\'ancien code PIN n\'est pas correct !');
-                                myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
-                              }
-                              myNewCodePIN.text = '';
-                              myOldCodePIN.text = '';
-                            }
-                          },
-                          child: Text(
-                            'Changer le code PIN',
-                            style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
-                          ),
-                          style: ButtonStyle(
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
-                              backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Divider(
-                          thickness: 3.0,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          'Connexion WiFi :',
-                          style: TextStyle(fontSize: (screenWidth * 0.05)),
-                        ),
-                      ),
-                      Visibility(
-                        visible: displayModems,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
-                          child: DropdownButton<String>(
-                            value: wifiModemsData,
-                            icon: Icon(Icons.arrow_drop_down),
-                            iconSize: 24,
-                            elevation: 16,
-                            style: TextStyle(color: Colors.grey[800], fontSize: 18),
-                            underline: Container(
-                              height: 2,
-                              color: Colors.blue[300],
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              cycleCInfoTextLanguageArray[languageArrayIdentifier],
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: (screenWidth * 0.015)),
                             ),
-                            onChanged: (String data) {
-                              setState(() {
-                                wifiModemsData = data;
-                                wifiModemsPosition = wifiModems.indexOf(data);
-                              });
-                            },
-                            items: wifiModems.map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
                           ),
-                        ),
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextButton(
-                          onPressed: () async {
-                            waitingWidget();
-                            // write the scan command
-                            if (myDevice.getConnectionState()) {
-                              try {
-                                await characteristicData.write('{\"SCAN\":1}'.codeUnits);
-                                await Future.delayed(Duration(milliseconds: 500));
-                                String wifiScanningState = String.fromCharCodes(await characteristicSensors.read());
-                                var parsedJson = json.decode(wifiScanningState);
-                                while (parsedJson['SCR'] == '0') {
-                                  wifiScanningState = String.fromCharCodes(await characteristicSensors.read());
-                                  parsedJson = json.decode(wifiScanningState);
-                                  await Future.delayed(Duration(seconds: 1));
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(18.0),
+                        border: Border.all(color: Color(0xFF3a66d7)),
+                        color: Colors.white.withOpacity(0.5),
+                      ),
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              co2stateTextLanguageArray[languageArrayIdentifier],
+                              style: TextStyle(fontSize: (screenWidth * 0.03)),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              co2sensorStateMessage,
+                              style: TextStyle(color: co2sensorStateMessageColor, fontSize: (screenWidth * 0.03)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(18.0),
+                        border: Border.all(color: Color(0xFF3a66d7)),
+                        color: Colors.white.withOpacity(0.5),
+                      ),
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              zonesTextLanguageArray[languageArrayIdentifier],
+                              style: TextStyle(fontSize: (screenWidth * 0.03)),
+                            ),
+                          ),
+                          ToggleButtons(
+                            borderRadius: BorderRadius.circular(18.0),
+                            isSelected: zoneStates,
+                            onPressed: (int index) async {
+                              for (int buttonIndex = 0; buttonIndex < zoneStates.length; buttonIndex++) {
+                                if (buttonIndex == index) {
+                                  zoneStates[buttonIndex] = true;
+                                } else {
+                                  zoneStates[buttonIndex] = false;
                                 }
-                                String wifiScanningResult = String.fromCharCodes(await characteristicData.read());
-                                parsedJson = json.decode(wifiScanningResult);
-                                List<dynamic> modems = parsedJson['AP_RECORDS'];
-                                wifiModems = List<String>.from(modems);
-                                wifiModemsData = wifiModems[0];
-                              } catch (e) {
-                                print('error in device Communication');
-                                myUvcToast.setToastDuration(5);
-                                myUvcToast.setToastMessage('Erreur de communication !');
-                                myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
                               }
-                              Navigator.pop(context, false);
-                              displayModems = true;
                               setState(() {});
-                            }
-                          },
-                          child: Text(
-                            'Scanner',
-                            style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                              zonesInHex = ((boolToInt(zoneStates[0])) + (boolToInt(zoneStates[1]) * 2) + (boolToInt(zoneStates[2]) * 4) + (boolToInt(zoneStates[3]) * 8)).toRadixString(16);
+                            },
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                                child: Text(zonesNamesList[0], style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                                child: Text(zonesNamesList[1], style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                                child: Text(zonesNamesList[2], style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                                child: Text(zonesNamesList[3], style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02)),
+                              ),
+                            ],
+                            borderWidth: 2,
+                            color: Colors.grey,
+                            selectedBorderColor: Colors.black,
+                            selectedColor: Colors.green,
                           ),
-                          style: ButtonStyle(
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
-                              backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
-                        ),
+                          SizedBox(height: screenHeight * 0.05),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: TextButton(
+                                  onPressed: () async {
+                                    if (myDevice.getConnectionState()) {
+                                      // write the associate command
+                                      await characteristicData.write('{\"light\":[5,1,\"$zonesInHex\"]}'.codeUnits);
+                                    }
+                                  },
+                                  child: Text(
+                                    associateTextLanguageArray[languageArrayIdentifier],
+                                    style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.025),
+                                  ),
+                                  style: ButtonStyle(
+                                      shape:
+                                          MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                                      backgroundColor: MaterialStateProperty.all<Color>(
+                                        Colors.green[400],
+                                      )),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: TextButton(
+                                  onPressed: () async {
+                                    if (myDevice.getConnectionState()) {
+                                      // write the dissociate command
+                                      await characteristicData.write('{\"light\":[5,0,\"$zonesInHex\"]}'.codeUnits);
+                                    }
+                                  },
+                                  child: Text(
+                                    dissociateTextLanguageArray[languageArrayIdentifier],
+                                    style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.025),
+                                  ),
+                                  style: ButtonStyle(
+                                      shape:
+                                          MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                                      backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextButton(
+                              onPressed: () {
+                                // write the new zone names
+                                zoneNamesSettingsWidget(context);
+                              },
+                              child: Text(
+                                renameTextLanguageArray[languageArrayIdentifier],
+                                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.025),
+                              ),
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                                  backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
+                            ),
+                          ),
+                        ],
                       ),
-                      Padding(
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(18.0),
+                        border: Border.all(color: Color(0xFF3a66d7)),
+                        color: Colors.white.withOpacity(0.5),
+                      ),
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              oldPINTextLanguageArray[languageArrayIdentifier],
+                              style: TextStyle(fontSize: (screenWidth * 0.03)),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
+                            child: TextField(
+                              textAlign: TextAlign.center,
+                              controller: myOldCodePIN,
+                              maxLines: 1,
+                              maxLength: 4,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                              style: TextStyle(
+                                fontSize: (screenWidth * 0.03),
+                              ),
+                              decoration: InputDecoration(
+                                  hintText: 'Exemple: 1234',
+                                  hintStyle: TextStyle(
+                                    fontSize: (screenWidth * 0.03),
+                                    color: Colors.grey,
+                                  )),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              newPINTextLanguageArray[languageArrayIdentifier],
+                              style: TextStyle(fontSize: (screenWidth * 0.03)),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
+                            child: TextField(
+                              textAlign: TextAlign.center,
+                              controller: myNewCodePIN,
+                              maxLines: 1,
+                              maxLength: 4,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                              style: TextStyle(
+                                fontSize: (screenWidth * 0.03),
+                              ),
+                              decoration: InputDecoration(
+                                  hintText: 'Exemple: 1234',
+                                  hintStyle: TextStyle(
+                                    fontSize: (screenWidth * 0.03),
+                                    color: Colors.grey,
+                                  )),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: TextButton(
+                              onPressed: () async {
+                                if (myDevice.getConnectionState()) {
+                                  if (pinCodeAccess == myOldCodePIN.text) {
+                                    if (myNewCodePIN.text.length == 4) {
+                                      // write the new code PIN
+                                      await characteristicData.write('{\"PP\":\"${myNewCodePIN.text}\"}'.codeUnits);
+                                      myUvcToast.setToastDuration(5);
+                                      myUvcToast.setToastMessage(pinCodeChangedToastTextLanguageArray[languageArrayIdentifier]);
+                                      myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+                                      await Future.delayed(Duration(milliseconds: 500));
+                                      pinCodeAccess = myNewCodePIN.text;
+                                      if (Platform.isAndroid) {
+                                        dataCharAndroid2 = String.fromCharCodes(await characteristicData.read());
+                                      }
+                                      if (Platform.isIOS) {
+                                        savingDataWidget(context);
+                                        dataCharIOS2p1 = await charDividedIOSRead(characteristicData);
+                                        dataCharIOS2p2 = await charDividedIOSRead(characteristicData);
+                                        dataCharIOS2p3 = await charDividedIOSRead(characteristicData);
+                                        Navigator.of(context).pop();
+                                      }
+                                    } else {
+                                      myUvcToast.setToastDuration(5);
+                                      myUvcToast.setToastMessage(pinCodeLargerToastTextLanguageArray[languageArrayIdentifier]);
+                                      myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
+                                    }
+                                  } else {
+                                    myUvcToast.setToastDuration(5);
+                                    myUvcToast.setToastMessage(pinCodeNotCorrectToastTextLanguageArray[languageArrayIdentifier]);
+                                    myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
+                                  }
+                                  myNewCodePIN.text = '';
+                                  myOldCodePIN.text = '';
+                                }
+                              },
+                              child: Text(
+                                changeCodePINMessageLanguageArray[languageArrayIdentifier],
+                                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.025),
+                              ),
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                                  backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(18.0),
+                        border: Border.all(color: Color(0xFF3a66d7)),
+                        color: Colors.white.withOpacity(0.5),
+                      ),
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              wifiConnexionTextLanguageArray[languageArrayIdentifier],
+                              style: TextStyle(fontSize: (screenWidth * 0.03)),
+                            ),
+                          ),
+                          Visibility(
+                            visible: displayModems,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
+                              child: DropdownButton<String>(
+                                value: wifiModemsData,
+                                icon: Icon(Icons.arrow_drop_down),
+                                iconSize: 24,
+                                elevation: 16,
+                                style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                                underline: Container(
+                                  height: 2,
+                                  color: Colors.blue[300],
+                                ),
+                                onChanged: (String data) {
+                                  setState(() {
+                                    wifiModemsData = data;
+                                    wifiModemsPosition = wifiModems.indexOf(data);
+                                  });
+                                },
+                                items: wifiModems.map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextButton(
+                              onPressed: () async {
+                                waitingWidget();
+                                // write the scan command
+                                if (myDevice.getConnectionState()) {
+                                  try {
+                                    await characteristicData.write('{\"SCAN\":1}'.codeUnits);
+                                    await Future.delayed(Duration(milliseconds: 500));
+                                    String wifiScanningState = String.fromCharCodes(await characteristicSensors.read());
+                                    var parsedJson = json.decode(wifiScanningState);
+                                    while (parsedJson['SCR'] == '0') {
+                                      wifiScanningState = String.fromCharCodes(await characteristicSensors.read());
+                                      parsedJson = json.decode(wifiScanningState);
+                                      await Future.delayed(Duration(seconds: 1));
+                                    }
+                                    String wifiScanningResult = String.fromCharCodes(await characteristicData.read());
+                                    parsedJson = json.decode(wifiScanningResult);
+                                    List<dynamic> modems = parsedJson['AP_RECORDS'];
+                                    wifiModems = List<String>.from(modems);
+                                    wifiModemsData = wifiModems[0];
+                                  } catch (e) {
+                                    print('error in device Communication');
+                                    myUvcToast.setToastDuration(5);
+                                    myUvcToast.setToastMessage(wifiScanErrorToastTextLanguageArray[languageArrayIdentifier]);
+                                    myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                                  }
+                                  Navigator.pop(context, false);
+                                  displayModems = true;
+                                  setState(() {});
+                                }
+                              },
+                              child: Text(
+                                scanTextLanguageArray[languageArrayIdentifier],
+                                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.025),
+                              ),
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                                  backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              passwordTextLanguageArray[languageArrayIdentifier],
+                              style: TextStyle(fontSize: (screenWidth * 0.03)),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
+                            child: TextField(
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                              maxLength: 64,
+                              controller: passwordEditor,
+                              style: TextStyle(
+                                fontSize: screenWidth * 0.025,
+                                color: Colors.grey[800],
+                              ),
+                              decoration: InputDecoration(
+                                  hintText: 'exemple : azerty123',
+                                  hintStyle: TextStyle(
+                                    color: Colors.grey,
+                                  )),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextButton(
+                              onPressed: () async {
+                                if (myDevice.getConnectionState()) {
+                                  // write the new access point and it's password
+                                  await characteristicData.write('{\"wa\":\"$wifiModemsData\",\"wp\":\"${passwordEditor.text}\"}'.codeUnits);
+                                  restartAlertWidget(context, restartAlertDialogTitleTextLanguageArray[languageArrayIdentifier]);
+                                }
+                              },
+                              child: Text(
+                                connectTextLanguageArray[languageArrayIdentifier],
+                                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.025),
+                              ),
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                                  backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(18.0),
+                          border: Border.all(color: Color(0xFF3a66d7)),
+                          color: Colors.white.withOpacity(0.5),
+                        ),
                         padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          'Mot de passe :',
-                          style: TextStyle(fontSize: (screenWidth * 0.05)),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
-                        child: TextField(
-                          textAlign: TextAlign.center,
-                          maxLines: 1,
-                          maxLength: 64,
-                          controller: passwordEditor,
-                          style: TextStyle(
-                            fontSize: screenWidth * 0.04,
-                            color: Colors.grey[800],
-                          ),
-                          decoration: InputDecoration(
-                              hintText: 'exemple : azerty123',
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              )),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextButton(
-                          onPressed: () async {
-                            if (myDevice.getConnectionState()) {
-                              // write the new access point and it's password
-                              await characteristicData.write('{\"wa\":\"$wifiModemsData\",\"wp\":\"${passwordEditor.text}\"}'.codeUnits);
-                              restartAlertWidget(context, 'Voulez vous redemarrer la carte pour assurer la connection avec votre modem ?');
-                            }
-                          },
-                          child: Text(
-                            'Connecter',
-                            style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
-                          ),
-                          style: ButtonStyle(
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
-                              backgroundColor: MaterialStateProperty.all<Color>(Colors.green[400])),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Divider(
-                          thickness: 3.0,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                      restartAndResetWidget(context),
-                    ],
+                        child: restartAndResetWidget(context)),
                   ),
                 ],
               ),
@@ -616,8 +743,8 @@ class _SettingsState extends State<Settings> {
                 }
               },
               child: Text(
-                'Redémarrage',
-                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                restartTextLanguageArray[languageArrayIdentifier],
+                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.025),
               ),
               style: ButtonStyle(
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
@@ -631,12 +758,12 @@ class _SettingsState extends State<Settings> {
                 if (myDevice.getConnectionState()) {
                   // write the reset command
                   await characteristicData.write('{\"system\":0}'.codeUnits);
-                  restartAlertWidget(context, 'Voulez vous redemarrer la carte pour assurer ces modifications?');
+                  restartAlertWidget(context, restartAlertDialogTitleTextLanguageArray[languageArrayIdentifier]);
                 }
               },
               child: Text(
-                'Configuration par défault',
-                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                configDefaultTextLanguageArray[languageArrayIdentifier],
+                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.025),
               ),
               style: ButtonStyle(
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
@@ -663,8 +790,8 @@ class _SettingsState extends State<Settings> {
                 }
               },
               child: Text(
-                'Redémarrage',
-                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                restartTextLanguageArray[languageArrayIdentifier],
+                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.025),
               ),
               style: ButtonStyle(
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
@@ -678,12 +805,12 @@ class _SettingsState extends State<Settings> {
                 if (myDevice.getConnectionState()) {
                   // write the reset command
                   await characteristicData.write('{\"system\":0}'.codeUnits);
-                  restartAlertWidget(context, 'Voulez vous redemarrer la carte pour assurer ces modifications?');
+                  restartAlertWidget(context, restartAlertDialogTitleTextLanguageArray[languageArrayIdentifier]);
                 }
               },
               child: Text(
-                'Configuration par défault',
-                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                configDefaultTextLanguageArray[languageArrayIdentifier],
+                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.025),
               ),
               style: ButtonStyle(
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -706,12 +833,12 @@ class _SettingsState extends State<Settings> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Attention'),
-          content: Text('Le boitier HUBBOX va redémarrer afin de finaliser la connexion au WiFi'),
+          title: Text(attentionTextLanguageArray[languageArrayIdentifier]),
+          content: Text(wifiConnexionAlertDialogTextLanguageArray[languageArrayIdentifier]),
           actions: <Widget>[
             TextButton(
               child: Text(
-                'OK',
+                okTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () async {
@@ -727,7 +854,7 @@ class _SettingsState extends State<Settings> {
             ),
             TextButton(
               child: Text(
-                'Annuler',
+                cancelTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(color: Colors.red),
               ),
               onPressed: () async {
@@ -752,14 +879,13 @@ class _SettingsState extends State<Settings> {
   }
 
   Future<void> waitingWidget() async {
-    //double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return showDialog<void>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Recherche des réseaux WiFi disponibles'),
+            title: Text(searchWifiConnexionTextLanguageArray[languageArrayIdentifier]),
             content: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
@@ -776,7 +902,6 @@ class _SettingsState extends State<Settings> {
 
   Future<void> zoneNamesSettingsWidget(BuildContext context) async {
     double screenWidth = MediaQuery.of(context).size.width;
-    //double screenHeight = MediaQuery.of(context).size.height;
     final zone1NameEditor = TextEditingController();
     final zone2NameEditor = TextEditingController();
     final zone3NameEditor = TextEditingController();
@@ -790,7 +915,7 @@ class _SettingsState extends State<Settings> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Changer les noms de vos zones:'),
+          title: Text(changeZoneNamesTextLanguageArray[languageArrayIdentifier]),
           content: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
@@ -800,7 +925,7 @@ class _SettingsState extends State<Settings> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(flex: 1, child: Text('Zone 1 :', style: TextStyle(fontSize: 14))),
+                    Expanded(flex: 1, child: Text(firstZoneTextLanguageArray[languageArrayIdentifier], style: TextStyle(fontSize: screenWidth * 0.02))),
                     Expanded(
                       flex: 2,
                       child: Padding(
@@ -811,7 +936,7 @@ class _SettingsState extends State<Settings> {
                           maxLength: 10,
                           controller: zone1NameEditor,
                           style: TextStyle(
-                            fontSize: screenWidth * 0.04,
+                            fontSize: screenWidth * 0.025,
                             color: Colors.grey[800],
                           ),
                           decoration: InputDecoration(
@@ -827,7 +952,7 @@ class _SettingsState extends State<Settings> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(flex: 1, child: Text('Zone 2 :', style: TextStyle(fontSize: 14))),
+                    Expanded(flex: 1, child: Text(secondZoneTextLanguageArray[languageArrayIdentifier], style: TextStyle(fontSize: screenWidth * 0.02))),
                     Expanded(
                       flex: 2,
                       child: Padding(
@@ -838,7 +963,7 @@ class _SettingsState extends State<Settings> {
                           maxLength: 10,
                           controller: zone2NameEditor,
                           style: TextStyle(
-                            fontSize: screenWidth * 0.04,
+                            fontSize: screenWidth * 0.025,
                             color: Colors.grey[800],
                           ),
                           decoration: InputDecoration(
@@ -854,7 +979,7 @@ class _SettingsState extends State<Settings> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(flex: 1, child: Text('Zone 3 :', style: TextStyle(fontSize: 14))),
+                    Expanded(flex: 1, child: Text(thirdZoneTextLanguageArray[languageArrayIdentifier], style: TextStyle(fontSize: screenWidth * 0.02))),
                     Expanded(
                       flex: 2,
                       child: Padding(
@@ -865,7 +990,7 @@ class _SettingsState extends State<Settings> {
                           maxLength: 10,
                           controller: zone3NameEditor,
                           style: TextStyle(
-                            fontSize: screenWidth * 0.04,
+                            fontSize: screenWidth * 0.025,
                             color: Colors.grey[800],
                           ),
                           decoration: InputDecoration(
@@ -881,7 +1006,7 @@ class _SettingsState extends State<Settings> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(flex: 1, child: Text('Zone 4 :', style: TextStyle(fontSize: 14))),
+                    Expanded(flex: 1, child: Text(fourthZoneTextLanguageArray[languageArrayIdentifier], style: TextStyle(fontSize: screenWidth * 0.02))),
                     Expanded(
                       flex: 2,
                       child: Padding(
@@ -892,7 +1017,7 @@ class _SettingsState extends State<Settings> {
                           maxLength: 10,
                           controller: zone4NameEditor,
                           style: TextStyle(
-                            fontSize: screenWidth * 0.04,
+                            fontSize: screenWidth * 0.025,
                             color: Colors.grey[800],
                           ),
                           decoration: InputDecoration(
@@ -911,7 +1036,7 @@ class _SettingsState extends State<Settings> {
           actions: <Widget>[
             TextButton(
               child: Text(
-                'Renommer',
+                renameTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () async {
@@ -940,7 +1065,7 @@ class _SettingsState extends State<Settings> {
             ),
             TextButton(
               child: Text(
-                'Annuler',
+                cancelTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () {
@@ -951,11 +1076,5 @@ class _SettingsState extends State<Settings> {
         );
       },
     );
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
   }
 }

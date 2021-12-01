@@ -13,6 +13,9 @@ final int timeSleep = 60000;
 
 bool homePageState = false;
 
+String languageCode = 'fr';
+int languageArrayIdentifier = 0;
+
 Device myDevice;
 BluetoothCharacteristic characteristicSensors;
 BluetoothCharacteristic characteristicData;
@@ -37,6 +40,7 @@ int humidityValue = 50;
 int lightValue = 20;
 int co2Value = 500;
 int tvocValue = 750;
+int co2sensorStateValue = 0;
 bool deviceWifiState = false;
 
 String appTime = '00:00';

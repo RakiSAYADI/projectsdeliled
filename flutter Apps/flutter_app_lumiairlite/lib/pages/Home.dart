@@ -9,6 +9,7 @@ import 'package:flutter_app_bispectrum/pages/LED_control.dart';
 import 'package:flutter_app_bispectrum/pages/settings.dart';
 import 'package:flutter_app_bispectrum/services/DataVariables.dart';
 import 'package:flutter_app_bispectrum/services/animation_between_pages.dart';
+import 'package:flutter_app_bispectrum/services/languageDataBase.dart';
 import 'package:flutter_app_bispectrum/services/uvcToast.dart';
 import 'package:intl/intl.dart';
 import 'package:pinput/pin_put/pin_put.dart';
@@ -39,7 +40,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   Animation<double> _animation;
 
   DateTime deviceDate;
-
+  DateTime dateTime = DateTime.now();
   ToastyMessage myUvcToast;
 
   @override
@@ -66,17 +67,17 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       if (co2Value > 1500) {
         carbonStateOnSleepGif = "assets/fond-rouge-veille.gif";
         carbonStateOnHome = "assets/personnage-rouge.png";
-        carbonStateOnHomeMessage = "Mauvais";
+        carbonStateOnHomeMessage = badAirQualityMessageLanguageArray[languageArrayIdentifier];
       }
       if ((co2Value >= 800) & (co2Value <= 1500)) {
         carbonStateOnSleepGif = "assets/fond-orange-veille.gif";
         carbonStateOnHome = "assets/personnage-orange.png";
-        carbonStateOnHomeMessage = "Moyen";
+        carbonStateOnHomeMessage = averageAirQualityMessageLanguageArray[languageArrayIdentifier];
       }
       if (co2Value < 800) {
         carbonStateOnSleepGif = "assets/fond-vert-veille.gif";
         carbonStateOnHome = "assets/personnage-vert.png";
-        carbonStateOnHomeMessage = "Bon";
+        carbonStateOnHomeMessage = goodAirQualityMessageLanguageArray[languageArrayIdentifier];
       }
       if (deviceWifiState) {
         myWifiState = 'assets/green-wifi.png';
@@ -103,7 +104,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             co2Value = stringListAsciiToListInt(sensorsDataList.codeUnits)[5];
             tvocValue = stringListAsciiToListInt(sensorsDataList.codeUnits)[6];
             deviceWifiState = intToBool(stringListAsciiToListInt(sensorsDataList.codeUnits)[7]);
-            deviceDate = new DateTime.fromMillisecondsSinceEpoch(deviceTimeValue * 1000);
+            co2sensorStateValue = stringListAsciiToListInt(sensorsDataList.codeUnits)[8];
+            deviceDate = new DateTime.fromMillisecondsSinceEpoch((deviceTimeValue * 1000) - (dateTime.timeZoneOffset.inMilliseconds));
             appTime = DateFormat('kk:mm').format(deviceDate);
           }
         } catch (e) {
@@ -166,11 +168,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       onWillPop: () => showDialog<bool>(
         context: context,
         builder: (c) => AlertDialog(
-          title: Text('Attention'),
-          content: Text('Voulez-vous revenir à la sélection des HuBBox ?'),
+          title: Text(attentionTextLanguageArray[languageArrayIdentifier]),
+          content: Text(backAlertDialogTitleLanguageArray[languageArrayIdentifier]),
           actions: [
             TextButton(
-                child: Text('Oui'),
+                child: Text(yesTextLanguageArray[languageArrayIdentifier]),
                 onPressed: () async {
                   if (myDevice != null) {
                     await myDevice.disconnect();
@@ -180,7 +182,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   Navigator.pop(c, true);
                 }),
             TextButton(
-              child: Text('Non'),
+              child: Text(noTextLanguageArray[languageArrayIdentifier]),
               onPressed: () => Navigator.pop(c, false),
             ),
           ],
@@ -225,7 +227,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           height: (heightScreen - sensorsTabPadding) / 5,
                           child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                             new SizedBox(width: 4.0),
-                            new Text("Température\n$temperatureValue °C",
+                            new Text("${temperatureLanguageArray[languageArrayIdentifier]}\n$temperatureValue °C",
                                 style: TextStyle(fontSize: widthScreen * 0.025, color: Color(0xFF264eb6), fontWeight: FontWeight.bold), textAlign: TextAlign.center)
                           ])),
                       Container(
@@ -234,7 +236,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                             new SizedBox(width: 4.0),
                             new Text(
-                              "Humidité\n$humidityValue %",
+                              "${humidityLanguageArray[languageArrayIdentifier]}\n$humidityValue %",
                               style: TextStyle(fontSize: widthScreen * 0.025, color: Color(0xFF264eb6), fontWeight: FontWeight.bold),
                               textAlign: TextAlign.center,
                             )
@@ -245,7 +247,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                             new SizedBox(width: 4.0),
                             new Text(
-                              "Luminosité\n$lightValue lux",
+                              "${brightnessLanguageArray[languageArrayIdentifier]}\n$lightValue lux",
                               style: TextStyle(fontSize: widthScreen * 0.025, color: Color(0xFF264eb6), fontWeight: FontWeight.bold),
                               textAlign: TextAlign.center,
                             )
@@ -256,7 +258,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                             new SizedBox(width: 4.0),
                             new Text(
-                              "CO2\n$co2Value ppm",
+                              "${co2LanguageArray[languageArrayIdentifier]}\n$co2Value ppm",
                               style: TextStyle(fontSize: widthScreen * 0.025, color: Color(0xFF264eb6), fontWeight: FontWeight.bold),
                               textAlign: TextAlign.center,
                             )
@@ -267,7 +269,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                             new SizedBox(width: 4.0),
                             new Text(
-                              "TVOC\n$tvocValue mg/m3",
+                              "${tvocLanguageArray[languageArrayIdentifier]}\n$tvocValue mg/m3",
                               style: TextStyle(fontSize: widthScreen * 0.025, color: Color(0xFF264eb6), fontWeight: FontWeight.bold),
                               textAlign: TextAlign.center,
                             )
@@ -304,7 +306,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                'QUALITÉ DE L\'AIR :',
+                                airQualityTextLanguageArray[languageArrayIdentifier],
                                 style: TextStyle(
                                   color: Color(0xFF264eb6),
                                   fontWeight: FontWeight.bold,
@@ -399,19 +401,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                     flex: 2,
                                     child: Image.asset(
                                       'assets/controlelumiere.png',
-                                      height: heightScreen * 0.1,
+                                      height: heightScreen * 0.2,
                                       width: widthScreen * 0.2,
                                     ),
                                   ),
                                   Expanded(
                                     flex: 2,
                                     child: Text(
-                                      'Contrôle de la lumière',
+                                      lightControlTextLanguageArray[languageArrayIdentifier],
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: widthScreen * 0.01 + heightScreen * 0.02,
+                                        fontSize: widthScreen * 0.01 + heightScreen * 0.01,
                                       ),
                                     ),
                                   ),
@@ -446,19 +448,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                     flex: 2,
                                     child: Image.asset(
                                       'assets/reglages.png',
-                                      height: heightScreen * 0.1,
+                                      height: heightScreen * 0.2,
                                       width: widthScreen * 0.2,
                                     ),
                                   ),
                                   Expanded(
                                     flex: 2,
                                     child: Text(
-                                      'Réglage du HuBBoX',
+                                      settingsDeviceTextLanguageArray[languageArrayIdentifier],
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: widthScreen * 0.01 + heightScreen * 0.02,
+                                        fontSize: widthScreen * 0.01 + heightScreen * 0.01,
                                       ),
                                     ),
                                   ),
@@ -508,7 +510,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Text(
-                    'Entrer le code de sécurité :',
+                    securityPINTextLanguageArray[languageArrayIdentifier],
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
@@ -621,7 +623,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               createRoute(context, object);
             } else {
               myUvcToast.setToastDuration(3);
-              myUvcToast.setToastMessage('Code Invalide !');
+              myUvcToast.setToastMessage(invalidPINCodeToastTextLanguageArray[languageArrayIdentifier]);
               myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
             }
             _pinPutController.text = '';

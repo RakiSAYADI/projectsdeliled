@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_bispectrum/pages/Curves_paint.dart';
@@ -8,6 +10,7 @@ import 'package:flutter_app_bispectrum/pages/check_permissions.dart';
 import 'package:flutter_app_bispectrum/pages/scan_ble_list.dart';
 import 'package:flutter_app_bispectrum/pages/settings.dart';
 import 'package:flutter_app_bispectrum/pages/welcome.dart';
+import 'package:flutter_app_bispectrum/services/DataVariables.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
@@ -77,6 +80,26 @@ void main() async {
     // The following statement disables the wakelock.
     Wakelock.toggle(enable: true);
   }
+
+  languageCode = Platform.localeName.split('_')[0];
+  print('le language de telephone : $languageCode');
+
+  if (languageCode.isEmpty) {
+    languageCode = 'en';
+  }
+
+  switch (languageCode) {
+    case 'fr':
+      languageArrayIdentifier = 0;
+      break;
+    case 'en':
+      languageArrayIdentifier = 1;
+      break;
+    default:
+      languageArrayIdentifier = 1;
+      break;
+  }
+
   runApp(MyApp());
 }
 

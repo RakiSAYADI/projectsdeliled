@@ -6,6 +6,7 @@ import 'package:flutter_app_bispectrum/services/DataVariables.dart';
 import 'package:flutter_app_bispectrum/services/animation_between_pages.dart';
 import 'package:flutter_app_bispectrum/services/bleDeviceClass.dart';
 import 'package:flutter_app_bispectrum/services/deviceBleWidget.dart';
+import 'package:flutter_app_bispectrum/services/languageDataBase.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
 class ScanListBle extends StatefulWidget {
@@ -107,7 +108,7 @@ class _ScanListBleState extends State<ScanListBle> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text('Connectez-vous à un dispositif :'),
+        title: Text(scanBLETitleLanguageArray[languageArrayIdentifier]),
         centerTitle: true,
         backgroundColor: Colors.blue[400],
       ),

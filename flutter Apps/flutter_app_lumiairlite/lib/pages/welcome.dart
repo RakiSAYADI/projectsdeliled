@@ -7,6 +7,7 @@ import 'package:flutter_app_bispectrum/pages/check_permissions.dart';
 import 'package:flutter_app_bispectrum/pages/scan_ble_list.dart';
 import 'package:flutter_app_bispectrum/services/DataVariables.dart';
 import 'package:flutter_app_bispectrum/services/animation_between_pages.dart';
+import 'package:flutter_app_bispectrum/services/languageDataBase.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:package_info/package_info.dart';
@@ -16,15 +17,8 @@ class Welcome extends StatefulWidget {
   _WelcomeState createState() => _WelcomeState();
 }
 
-class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
-
+class _WelcomeState extends State<Welcome>{
   FlutterBlue flutterBlue = FlutterBlue.instance;
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
 
   @override
   void initState() {
@@ -78,121 +72,119 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     print('width : $widthScreen and height : $heightScreen');
     return Scaffold(
       backgroundColor: Colors.indigo[700],
-      body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/fond-lumiair-lite.png'),
-              fit: BoxFit.cover,
-            ),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/fond-lumiair-lite.png'),
+            fit: BoxFit.cover,
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                flex: 3,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.asset(
-                    'assets/ic_launcher.png',
-                    height: heightScreen * 0.2,
-                    width: widthScreen * 0.7,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              flex: 3,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset(
+                  'assets/ic_launcher.png',
+                  height: heightScreen * 0.2,
+                  width: widthScreen * 0.7,
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  appName,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[300],
+                    fontSize: widthScreen * 0.03,
                   ),
                 ),
               ),
-              Expanded(
-                flex: 2,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    appName,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey[300],
-                      fontSize: widthScreen * 0.03,
+            ),
+            Expanded(
+              flex: 5,
+              child: SpinKitCircle(
+                color: Colors.white,
+                size: heightScreen * 0.1,
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    flex: 3,
+                    child: Image.asset(
+                      'assets/logo_deeplight.png',
+                      height: heightScreen * 0.1,
+                      width: widthScreen * 0.7,
                     ),
                   ),
-                ),
-              ),
-              Expanded(
-                flex: 5,
-                child: SpinKitCircle(
-                  color: Colors.white,
-                  size: heightScreen * 0.1,
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      flex: 3,
-                      child: Image.asset(
-                        'assets/logo_deeplight.png',
-                        height: heightScreen * 0.1,
-                        width: widthScreen * 0.7,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Center(
-                        child: Text(
-                          'Solutions de désinfection par UV-C',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[300],
-                            fontSize: widthScreen * 0.03,
-                          ),
+                  Expanded(
+                    flex: 2,
+                    child: Center(
+                      child: Text(
+                        welcomePageMessageLanguageArray[languageArrayIdentifier],
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[300],
+                          fontSize: widthScreen * 0.03,
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Expanded(
-                flex: 1,
-                child: Center(
-                  child: Text(
-                    'Powered by DELITECH Group',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.grey[300],
-                      fontSize: widthScreen * 0.02,
-                    ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Center(
+                child: Text(
+                  'Powered by DELITECH Group',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.grey[300],
+                    fontSize: widthScreen * 0.02,
                   ),
                 ),
               ),
-              Expanded(
-                flex: 1,
-                child: Center(
-                  child: FutureBuilder(
-                    future: PackageInfo.fromPlatform(),
-                    builder: (BuildContext context, snapshot) {
-                      if (snapshot.hasData) {
-                        String version = snapshot.data.version;
-                        return Center(
-                          child: Text(
-                            '$version',
-                            style: TextStyle(
-                              color: Colors.grey[300],
-                              fontSize: widthScreen * 0.02,
-                            ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Center(
+                child: FutureBuilder(
+                  future: PackageInfo.fromPlatform(),
+                  builder: (BuildContext context, snapshot) {
+                    if (snapshot.hasData) {
+                      String version = snapshot.data.version;
+                      return Center(
+                        child: Text(
+                          '$version',
+                          style: TextStyle(
+                            color: Colors.grey[300],
+                            fontSize: widthScreen * 0.02,
                           ),
-                        );
-                      } else {
-                        return Center(
-                          child: CircularProgressIndicator(color: Colors.grey[300]),
-                        );
-                      }
-                    },
-                  ),
+                        ),
+                      );
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(color: Colors.grey[300]),
+                      );
+                    }
+                  },
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

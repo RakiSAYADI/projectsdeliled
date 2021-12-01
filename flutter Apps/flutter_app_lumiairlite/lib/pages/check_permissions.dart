@@ -2,17 +2,19 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app_bispectrum/pages/scan_ble_list.dart';
+import 'package:flutter_app_bispectrum/services/DataVariables.dart';
 import 'package:flutter_app_bispectrum/services/animation_between_pages.dart';
+import 'package:flutter_app_bispectrum/services/languageDataBase.dart';
 import 'package:flutter_app_bispectrum/services/uvcToast.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:location_permissions/location_permissions.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class CheckPermissions extends StatefulWidget {
   @override
   _CheckPermissionsState createState() => _CheckPermissionsState();
 }
 
-class _CheckPermissionsState extends State<CheckPermissions> with TickerProviderStateMixin {
+class _CheckPermissionsState extends State<CheckPermissions> {
   ToastyMessage myUvcToast;
 
   List<BluetoothDevice> scanDevices = [];
@@ -22,45 +24,15 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
   bool firstDisplayMainWidget = true;
   bool bluetoothState = false;
 
-  PermissionStatus _permissionStatus = PermissionStatus.unknown;
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   void _listenForPermissionStatus() async {
     bool connectionState = await checkConnection();
     if (!connectionState) {
       myUvcToast.setToastDuration(5);
-      myUvcToast.setToastMessage('Votre téléphone n\'est pas connecté sur internet !');
+      myUvcToast.setToastMessage(internetToastLanguageArray[languageArrayIdentifier]);
       myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
     }
-
-    final Future<PermissionStatus> statusFuture = LocationPermissions().checkPermissionStatus();
-
-    await statusFuture.then((PermissionStatus status) {
-      setState(() {
-        _permissionStatus = status;
-        if (_permissionStatus.index != 2) {
-          myUvcToast.setToastDuration(6);
-          myUvcToast.setToastMessage('La localisation n\'est pas activée sur votre téléphone !');
-          myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-        } else {
-          checkServiceStatus(context);
-        }
-      });
-    });
-  }
-
-  void checkServiceStatus(BuildContext context) {
-    LocationPermissions().checkServiceStatus().then((ServiceStatus serviceStatus) {
-      if (serviceStatus.index != 2) {
-        myUvcToast.setToastDuration(6);
-        myUvcToast.setToastMessage('La localisation n\'est pas activée sur votre téléphone !');
-        myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-      }
-    });
+    await Permission.locationWhenInUse.request();
+    await Permission.locationAlways.request();
   }
 
   @override
@@ -74,7 +46,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
         //Alert user to turn on bluetooth.
         print("Bluetooth is off");
         myUvcToast.setToastDuration(4);
-        myUvcToast.setToastMessage('Le Bluetooth (BLE) n\'est pas activé sur votre téléphone !');
+        myUvcToast.setToastMessage(bluetoothToastLanguageArray[languageArrayIdentifier]);
         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
         bluetoothState = false;
       } else if (state == BluetoothState.on) {
@@ -111,7 +83,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
       child: Scaffold(
         backgroundColor: Colors.blue[400],
         appBar: AppBar(
-          title: const Text('Permissions', style: TextStyle(fontSize: 18)),
+          title: Text(checkPermissionTitleTextLanguageArray[languageArrayIdentifier], style: TextStyle(fontSize: 18)),
           centerTitle: true,
         ),
         body: Container(
@@ -128,7 +100,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Text(
-                            'Afin de garantir le bon fonctionnement de l\'application merci d\'activer votre Bluetooth ainsi que votre localisation.',
+                            checkPermissionMessageTextLanguageArray[languageArrayIdentifier],
                             overflow: TextOverflow.fade,
                             maxLines: 2,
                             softWrap: true,
@@ -161,12 +133,11 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                           padding: const EdgeInsets.all(16.0),
                           child: TextButton(
                             child: Text(
-                              'COMPRIS',
+                              understoodTextLanguageArray[languageArrayIdentifier],
                               style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.03),
                             ),
                             style: ButtonStyle(
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
                               backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
                             ),
                             onPressed: () {
@@ -175,7 +146,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                                 createRoute(context, ScanListBle());
                               } else {
                                 myUvcToast.setToastDuration(4);
-                                myUvcToast.setToastMessage('Le Bluetooth (BLE) n\'est pas activé sur votre téléphone !');
+                                myUvcToast.setToastMessage(bluetoothToastLanguageArray[languageArrayIdentifier]);
                                 myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
                               }
                             },
@@ -198,15 +169,15 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
     return showDialog<bool>(
       context: context,
       builder: (c) => AlertDialog(
-        title: Text('Attention'),
-        content: Text('Voulez-vous vraiment quitter l\'application ?'),
+        title: Text(attentionTextLanguageArray[languageArrayIdentifier]),
+        content: Text(stopActivityAlertDialogMessageTextLanguageArray[languageArrayIdentifier]),
         actions: [
           TextButton(
-            child: Text('Oui'),
+            child: Text(yesTextLanguageArray[languageArrayIdentifier]),
             onPressed: () => Navigator.pop(c, true),
           ),
           TextButton(
-            child: Text('Non'),
+            child: Text(yesTextLanguageArray[languageArrayIdentifier]),
             onPressed: () => Navigator.pop(c, false),
           ),
         ],

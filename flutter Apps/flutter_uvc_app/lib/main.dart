@@ -83,7 +83,7 @@ void main() async {
   print('le language de telephone : $languageCode');
 
   if (languageCode.isEmpty) {
-    languageCode = 'fr';
+    languageCode = 'en';
   }
 
   switch (languageCode) {
@@ -94,7 +94,7 @@ void main() async {
       languageArrayIdentifier = 1;
       break;
     default:
-      languageArrayIdentifier = 0;
+      languageArrayIdentifier = 1;
       break;
   }
   runApp(MaterialApp(
