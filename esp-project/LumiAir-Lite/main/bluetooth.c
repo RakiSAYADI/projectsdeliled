@@ -454,9 +454,9 @@ void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 	}
 	else
 	{
-		sprintf((char *)total, "{\"EnvData\":[%ld,%ld,%d,%d,%d,%d,%d,%d],\"SCR\":%d,\"ver\":\"%s\"}",
+		sprintf((char *)total, "{\"EnvData\":[%ld,%ld,%d,%d,%d,%d,%d,%d,%d],\"SCR\":%d,\"ver\":\"%s\"}",
 				UnitData.UpdateTime, UnitData.LastDetTime, (uint8_t)UnitData.Temp, (uint8_t)UnitData.Humidity,
-				UnitData.Als, UnitData.aq_Co2Level, UnitData.aq_Tvoc, WifiConnectedFlag, scanResult, UnitCfg.versionSystem);
+				UnitData.Als, UnitData.aq_Co2Level, UnitData.aq_Tvoc, WifiConnectedFlag, UnitData.aq_status, scanResult, UnitCfg.versionSystem);
 	}
 
 	TOTAL.attr_len = strlen((char *)total);
@@ -471,25 +471,21 @@ void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 			 pos < LIST_CHAR_READ[0].char_val->attr_len && pos < LIST_CHAR_READ[0].char_val->attr_max_len;
 			 pos++)
 		{
-			rsp.attr_value.value[pos] =
-				LIST_CHAR_READ[0].char_val->attr_value[pos];
+			rsp.attr_value.value[pos] = LIST_CHAR_READ[0].char_val->attr_value[pos];
 		}
 	}
 
-	esp_ble_gatts_send_response(gatts_if, param->read.conn_id,
-								param->read.trans_id, ESP_GATT_OK, &rsp);
+	esp_ble_gatts_send_response(gatts_if, param->read.conn_id, param->read.trans_id, ESP_GATT_OK, &rsp);
 }
 
-void char_total_write_handler(esp_gatts_cb_event_t event,
-							  esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param)
+void char_total_write_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param)
 {
 	if (LIST_CHAR_READ[0].char_val != NULL)
 	{
 		LIST_CHAR_READ[0].char_val->attr_len = param->write.len;
 		for (uint32_t pos = 0; pos < param->write.len; pos++)
 		{
-			LIST_CHAR_READ[0].char_val->attr_value[pos] =
-				param->write.value[pos];
+			LIST_CHAR_READ[0].char_val->attr_value[pos] = param->write.value[pos];
 		}
 
 		uint32_t msize = LIST_CHAR_READ[0].char_val->attr_len + 1;
@@ -497,20 +493,17 @@ void char_total_write_handler(esp_gatts_cb_event_t event,
 		config_total_json = malloc(msize);
 		if (config_total_json != NULL)
 		{
-			sprintf(config_total_json, "%.*s", LIST_CHAR_READ[0].char_val->attr_len,
-					(char *)LIST_CHAR_READ[0].char_val->attr_value);
+			sprintf(config_total_json, "%.*s", LIST_CHAR_READ[0].char_val->attr_len, (char *)LIST_CHAR_READ[0].char_val->attr_value);
 			printf("%s\n", config_total_json);
 			savenvsFlag = configData(config_total_json);
 			configParserTask();
 			free(config_total_json);
 		}
 	}
-	esp_ble_gatts_send_response(gatts_if, param->write.conn_id,
-								param->write.trans_id, ESP_GATT_OK, NULL);
+	esp_ble_gatts_send_response(gatts_if, param->write.conn_id, param->write.trans_id, ESP_GATT_OK, NULL);
 }
 
-void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
-							  esp_ble_gatts_cb_param_t *param)
+void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param)
 {
 	ESP_LOGI(GATTS_TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
 

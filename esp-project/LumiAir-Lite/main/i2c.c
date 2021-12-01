@@ -578,7 +578,7 @@ void i2c_test_task(void *arg)
 				else
 				{
 					printf("true condition for having time inside the battery \n");
-					if (saveTimeBattery)
+					if (!saveTimeBattery)
 					{
 						struct tm tm;
 						tm.tm_year = time_MCP7940.year;
@@ -593,7 +593,7 @@ void i2c_test_task(void *arg)
 								 tm.tm_sec, tm.tm_min, tm.tm_hour, tm.tm_wday, tm.tm_mday, tm.tm_mon, tm.tm_year);
 						ESP_LOGI(TAG, "I2C MASTER Setting time: %s", asctime(&tm));
 						struct timeval now = {.tv_sec = t};
-						saveTimeBattery = false;
+						saveTimeBattery = true;
 						settimeofday(&now, NULL);
 					}
 				}
@@ -620,8 +620,6 @@ void i2c_test_task(void *arg)
 		UnitData.aq_status = iaq_data.status;
 
 		vTaskDelay((DELAY_TIME_BETWEEN_ITEMS_MS * (task_idx + 1)) / portTICK_RATE_MS);
-		//ESP_LOGI(TAG, "Sensors values: %f , %f , %d , %d , %d , %d \n",
-		//		 UnitData.Temp, UnitData.Humidity, UnitData.Als, UnitData.aq_Co2Level, UnitData.aq_Tvoc, UnitData.aq_status);
 	}
 }
 
