@@ -3,10 +3,9 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
+import 'package:flutter_safe_uvc_qrcode_app/services/languageDataBase.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-//import 'package:qrcode_flutter/qrcode_flutter.dart';
 
 class QrCodeScan extends StatefulWidget {
   @override
@@ -18,7 +17,6 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
   QRViewController controller;
   Barcode result;
 
-  bool _isTorchOn = false;
   String qrCodeMessage = '';
   Color colorMessage;
   bool qrCodeScanAccess = false;
@@ -54,10 +52,9 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
   void initState() {
     myUvcToast = ToastyMessage(toastContext: context);
     Future.delayed(const Duration(seconds: 1), () async {
-      //_controller.resume();
       await controller.resumeCamera();
       myUvcToast.setToastDuration(2);
-      myUvcToast.setToastMessage('Lancement de la caméra !');
+      myUvcToast.setToastMessage(cameraLaunchToastTextLanguageArray[languageArrayIdentifier]);
       myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
     });
     // initialise the animation
@@ -73,7 +70,6 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    //_controller.pause();
     controller.dispose();
     animationRefreshIcon.dispose();
     animationController.dispose();
@@ -108,11 +104,11 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
 
         setState(() {
           if (deviceExistOrNot) {
-            qrCodeMessage = 'Accès valide';
+            qrCodeMessage = validAccessTextLanguageArray[languageArrayIdentifier];
             colorMessage = Colors.green;
             qrCodeScanAccess = true;
           } else {
-            qrCodeMessage = 'Accès non valide';
+            qrCodeMessage = nonValidAccessTextLanguageArray[languageArrayIdentifier];
             colorMessage = Colors.red;
             qrCodeScanAccess = false;
           }
@@ -131,50 +127,10 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     double screenHeight = MediaQuery.of(context).size.height;
     double cameraViewHeight = screenHeight * 0.60;
 
-    /*_controller.onCapture((data) {
-      print('onCapture----$data');
-      if (data.isNotEmpty && !qrCodeScanAccess) {
-        try {
-          startIndex = data.indexOf(startMAC);
-          endIndex = data.indexOf(endMAC, startIndex + startMAC.length);
-          macAddress = data.substring(startIndex + startMAC.length, endIndex);
-          startIndex = data.indexOf(startNAME);
-          endIndex = data.indexOf(endNAME, startIndex + startNAME.length);
-          uvcName = data.substring(startIndex + startNAME.length, endIndex);
-          deviceExistOrNot = true;
-        } catch (e) {
-          try {
-            startIndex = data.indexOf(startNAME);
-            endIndex = data.indexOf(endNAME2, startIndex + startNAME.length);
-            uvcName = data.substring(startIndex + startNAME.length, endIndex);
-            deviceExistOrNot = true;
-          } catch (e) {
-            deviceExistOrNot = false;
-          }
-        }
-
-        setState(() {
-          if (deviceExistOrNot) {
-            qrCodeMessage = 'Accès valide';
-            colorMessage = Colors.green;
-            qrCodeScanAccess = true;
-          } else {
-            qrCodeMessage = 'Accès non valide';
-            colorMessage = Colors.red;
-            qrCodeScanAccess = false;
-          }
-        });
-        if (deviceExistOrNot) {
-          _controller.pause();
-          Navigator.pushNamed(context, "/Qr_code_Generate_Full_Auto");
-        }
-      }
-    });*/
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[400],
-        title: const Text('Scanner le QR code'),
+        title: Text(qrcodeScanTitleTextLanguageArray[languageArrayIdentifier]),
         centerTitle: true,
       ),
       body: Container(
@@ -201,9 +157,6 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                 key: qrKey,
                 onQRViewCreated: _onQrViewCreated,
               ),
-              /*child: QRCaptureView(
-                controller: _controller,
-              ),*/
             ),
             SizedBox(height: screenHeight * 0.02),
             Align(
@@ -236,16 +189,10 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       children: <Widget>[
         TextButton(
           onPressed: () async {
-            if (_isTorchOn) {
-              //_controller.torchMode = CaptureTorchMode.off;
-            } else {
-              //_controller.torchMode = CaptureTorchMode.on;
-            }
             await controller.toggleFlash();
-            _isTorchOn = !_isTorchOn;
           },
           child: Text(
-            'torch',
+            torchButtonTextLanguageArray[languageArrayIdentifier],
             style: TextStyle(
               color: Colors.grey[300],
               fontSize: 20.0,
@@ -265,28 +212,5 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           animationController.forward();
         }
       });
-  }
-
-  Future<void> waitingWidget() async {
-    //double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    return showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Connexion en cours'),
-            content: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SpinKitCircle(
-                  color: Colors.blue[600],
-                  size: screenHeight * 0.1,
-                ),
-              ],
-            ),
-          );
-        });
   }
 }

@@ -3,7 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mailer/mailer.dart';
 
+final String appName = 'QRcode UVC';
+
 final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
+
+String languageCode = 'fr';
+int languageArrayIdentifier = 0;
 
 int myExtinctionTimeMinutePosition = 0;
 int myActivationTimeMinutePosition = 0;

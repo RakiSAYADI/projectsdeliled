@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
+import 'package:flutter_safe_uvc_qrcode_app/services/languageDataBase.dart';
 
 class ChooseQrCode extends StatefulWidget {
   @override
@@ -21,7 +22,7 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
     return Scaffold(
       backgroundColor: Colors.blue[400],
       appBar: AppBar(
-        title: const Text('Choix des QRcodes'),
+        title: Text(qrCodeChoiceTitleLanguageArray[languageArrayIdentifier]),
         centerTitle: true,
         actions: <Widget>[
           Padding(
@@ -60,29 +61,27 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
                     qrCodeGenerator(
                         context: context,
                         destination: "/Qr_code_Generate",
-                        buttonTitle: 'QR code Data',
-                        buttonText: 'Ce QR code permet de préenregistrer les informations de désinfection.',
-                        buttonDescription1: 'Créer un QR code contenant :',
-                        buttonDescription2: '- l\'établissement\n'
-                            '- l\'opérateur\n'
-                            '- la pièce\n'
-                            '- le préavis d\'allumage\n'
-                            '- la durée de désinfection \n'),
+                        buttonTitle: qrCodeDataTitleLanguageArray[languageArrayIdentifier],
+                        buttonText: qrCodeDataTextLanguageArray[languageArrayIdentifier],
+                        buttonDescription1: qrCodeDataDescription1LanguageArray[languageArrayIdentifier],
+                        buttonDescription2: qrCodeDataDescription2LanguageArray[languageArrayIdentifier]),
                     qrCodeGenerator(
                         context: context,
                         destination: "/qr_code_scan",
-                        buttonTitle: 'QR code OneClick',
-                        buttonText: 'Ce QR code permet de lancer la désinfection plus rapidement dans SAFE UVC (moins d\'étapes).',
-                        buttonDescription1: 'Créer un QR code contenant :',
-                        buttonDescription2: '- les informations du QR code Data\n'
-                            '- Un code PIN (optionnel)\n'),
+                        buttonTitle: qrCodeOneClickTitleLanguageArray[languageArrayIdentifier],
+                        buttonText: qrCodeOneClickTextLanguageArray[languageArrayIdentifier],
+                        buttonDescription1: qrCodeOneClickDescription1LanguageArray[languageArrayIdentifier],
+                        buttonDescription2: qrCodeOneClickDescription2LanguageArray[languageArrayIdentifier]),
                     qrCodeGeneratorSecond(
                         context: context,
                         destination: "/Qr_code_Generate_Data",
-                        buttonTitle: 'QR code Rapport',
-                        buttonText: 'Ce QR code permet d\'afficher et d\'envoyer le rapport des désinfections par mail à un adresse préenregistrée.'),
+                        buttonTitle: qrCodeRapportTitleLanguageArray[languageArrayIdentifier],
+                        buttonText: qrCodeRapportTextLanguageArray[languageArrayIdentifier]),
                     qrCodeGeneratorSecond(
-                        context: context, destination: "/Qr_code_Display_Security", buttonTitle: 'QR code Sécurité', buttonText: 'Ce QR code permet de créer un QR code de sécurité.'),
+                        context: context,
+                        destination: "/Qr_code_Display_Security",
+                        buttonTitle: qrCodeSecurityTitleLanguageArray[languageArrayIdentifier],
+                        buttonText: qrCodeSecurityTextLanguageArray[languageArrayIdentifier]),
                   ],
                 ),
               ),
@@ -111,14 +110,14 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Vos QRcodes'),
+          title: Text(qrCodesAlertDialogTitleLanguageArray[languageArrayIdentifier]),
           content: SingleChildScrollView(
             child: Table(border: TableBorder.all(color: Colors.black), defaultVerticalAlignment: TableCellVerticalAlignment.middle, children: listQrCodes),
           ),
           actions: [
             TextButton(
               child: Text(
-                'OK',
+                okTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () async {
@@ -141,7 +140,7 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
         padding: const EdgeInsets.all(8.0),
         child: Card(
           margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
-          shape: RoundedRectangleBorder(side: new BorderSide(color: Colors.blue[400], width: 2.0), borderRadius: BorderRadius.circular(4.0)),
+          shape: RoundedRectangleBorder(side: new BorderSide(color: Colors.blue[400], width: 2.0), borderRadius: BorderRadius.circular(18.0)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -221,7 +220,7 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
         padding: const EdgeInsets.all(8.0),
         child: Card(
           margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
-          shape: RoundedRectangleBorder(side: new BorderSide(color: Colors.blue[400], width: 2.0), borderRadius: BorderRadius.circular(4.0)),
+          shape: RoundedRectangleBorder(side: new BorderSide(color: Colors.blue[400], width: 2.0), borderRadius: BorderRadius.circular(18.0)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

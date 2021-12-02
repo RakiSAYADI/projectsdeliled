@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_safe_uvc_qrcode_app/services/languageDataBase.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
 
@@ -18,7 +19,6 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -26,7 +26,7 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
       appBar: AppBar(
         backgroundColor: Colors.blue[400],
         centerTitle: true,
-        title: Text('Informations'),
+        title: Text(informationTitleTextLanguageArray[languageArrayIdentifier]),
       ),
       body: Container(
         decoration: BoxDecoration(color: Colors.grey[200]),
@@ -54,7 +54,7 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
                       color: Colors.grey[800],
                     ),
                     decoration: InputDecoration(
-                        hintText: 'Établissement',
+                        hintText: establishmentHintTextLanguageArray[languageArrayIdentifier],
                         hintStyle: TextStyle(
                           color: Colors.grey,
                         )),
@@ -79,7 +79,7 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
                       color: Colors.grey[800],
                     ),
                     decoration: InputDecoration(
-                        hintText: 'Opérateur',
+                        hintText: userHintTextLanguageArray[languageArrayIdentifier],
                         hintStyle: TextStyle(
                           color: Colors.grey,
                         )),
@@ -103,7 +103,7 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
                       fontSize: screenWidth * 0.04,
                     ),
                     decoration: InputDecoration(
-                        hintText: 'Pièce/local',
+                        hintText: roomHintTextLanguageArray[languageArrayIdentifier],
                         hintStyle: TextStyle(
                           color: Colors.grey,
                         )),
@@ -117,7 +117,7 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
                 ),
                 SizedBox(height: screenHeight * 0.03),
                 Text(
-                  'Délais avant allumage :',
+                  beforeStartTextLanguageArray[languageArrayIdentifier],
                   style: TextStyle(
                     fontSize: screenWidth * 0.04,
                     color: Colors.black,
@@ -157,7 +157,7 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
                 ),
                 SizedBox(height: screenHeight * 0.03),
                 Text(
-                  'Durée de la désinfection :',
+                  durationDisinfectionTextLanguageArray[languageArrayIdentifier],
                   style: TextStyle(
                     fontSize: screenWidth * 0.04,
                     color: Colors.black,
@@ -196,12 +196,11 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
                     animationRefreshIcon.repeat();
                     myUvcToast.setAnimationIcon(animationRefreshIcon);
                     myUvcToast.setToastDuration(10);
-                    myUvcToast.setToastMessage('Génération en cours !');
+                    myUvcToast.setToastMessage(generateQrCodeToastTextLanguageArray[languageArrayIdentifier]);
                     myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
                     qrCodeFileName = 'QrCode_${myCompany.text}_${myName.text}_${myRoomName.text}.png';
-                    qrCodeData =
-                        '{\"Company\":\"${myCompany.text}\",\"UserName\":\"${myName.text}\",\"RoomName\":\"${myRoomName.text}\",'
-                            '\"TimeData\":[$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition]}';
+                    qrCodeData = '{\"Company\":\"${myCompany.text}\",\"UserName\":\"${myName.text}\",\"RoomName\":\"${myRoomName.text}\",'
+                        '\"TimeData\":[$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition]}';
                     await Future.delayed(Duration(seconds: 5), () async {
                       myUvcToast.clearAllToast();
                       myRoomNameText = myRoomName.text;
@@ -209,7 +208,7 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
                     });
                   },
                   child: Text(
-                    'Générer',
+                    generateTextLanguageArray[languageArrayIdentifier],
                     style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.06),
                   ),
                   style: ButtonStyle(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
+import 'package:flutter_safe_uvc_qrcode_app/services/languageDataBase.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
 
 class QrCodeGeneratorData extends StatefulWidget {
@@ -23,7 +24,7 @@ class _QrCodeGeneratorDataState extends State<QrCodeGeneratorData> with TickerPr
       appBar: AppBar(
         backgroundColor: Colors.blue[400],
         centerTitle: true,
-        title: Text('Informations'),
+        title: Text(informationTitleTextLanguageArray[languageArrayIdentifier]),
       ),
       body: Container(
         decoration: BoxDecoration(color: Colors.grey[200]),
@@ -51,7 +52,7 @@ class _QrCodeGeneratorDataState extends State<QrCodeGeneratorData> with TickerPr
                       color: Colors.grey[800],
                     ),
                     decoration: InputDecoration(
-                        hintText: 'Adresse Email',
+                        hintText: emailAddressTextLanguageArray[languageArrayIdentifier],
                         hintStyle: TextStyle(
                           color: Colors.grey,
                         )),
@@ -65,7 +66,7 @@ class _QrCodeGeneratorDataState extends State<QrCodeGeneratorData> with TickerPr
                       animationRefreshIcon.repeat();
                       myUvcToast.setAnimationIcon(animationRefreshIcon);
                       myUvcToast.setToastDuration(5);
-                      myUvcToast.setToastMessage('Génération en cours !');
+                      myUvcToast.setToastMessage(generateQrCodeToastTextLanguageArray[languageArrayIdentifier]);
                       myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
                       qrCodeFileName = 'QrCode_${myEmail.text}.png';
                       qrCodeData = '{\"SAFEUVCDATA\":\"${myEmail.text}\"}';
@@ -76,12 +77,12 @@ class _QrCodeGeneratorDataState extends State<QrCodeGeneratorData> with TickerPr
                       });
                     } else {
                       myUvcToast.setToastDuration(10);
-                      myUvcToast.setToastMessage('Veuillez entrer une adresse e-mail !');
+                      myUvcToast.setToastMessage(emailAddressNonValidToastTextLanguageArray[languageArrayIdentifier]);
                       myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
                     }
                   },
                   child: Text(
-                    'Générer',
+                    generateTextLanguageArray[languageArrayIdentifier],
                     style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.06),
                   ),
                   style: ButtonStyle(

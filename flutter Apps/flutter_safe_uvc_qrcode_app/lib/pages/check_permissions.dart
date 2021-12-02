@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
+import 'package:flutter_safe_uvc_qrcode_app/services/languageDataBase.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
 
 class CheckPermissions extends StatefulWidget {
@@ -34,7 +36,7 @@ class _CheckPermissionsState extends State<CheckPermissions> {
       child: Scaffold(
         backgroundColor: Colors.blue[400],
         appBar: AppBar(
-          title: const Text('Permissions'),
+          title: Text(checkPermissionTitleTextLanguageArray[languageArrayIdentifier]),
           centerTitle: true,
         ),
         body: Container(
@@ -48,7 +50,7 @@ class _CheckPermissionsState extends State<CheckPermissions> {
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
-                        'Merci de vous connecter à internet pour que l\'application fonctionne correctement.',
+                        checkPermissionMessageTextLanguageArray[languageArrayIdentifier],
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.black,
@@ -65,7 +67,7 @@ class _CheckPermissionsState extends State<CheckPermissions> {
                     SizedBox(height: screenHeight * 0.04),
                     TextButton(
                       child: Text(
-                        'COMPRIS',
+                        understoodTextLanguageArray[languageArrayIdentifier],
                         style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
                       ),
                       style: ButtonStyle(
@@ -83,13 +85,13 @@ class _CheckPermissionsState extends State<CheckPermissions> {
                           } else {
                             print('not connected');
                             myUvcToast.setToastDuration(5);
-                            myUvcToast.setToastMessage('Assurer la bonne connection d\'internet avec votre téléphone');
+                            myUvcToast.setToastMessage(checkConnectionToastTextLanguageArray[languageArrayIdentifier]);
                             myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
                           }
                         } on SocketException catch (_) {
                           print('not connected (timeout)');
                           myUvcToast.setToastDuration(5);
-                          myUvcToast.setToastMessage('Assurer la bonne connection d\'internet avec votre téléphone');
+                          myUvcToast.setToastMessage(checkConnectionToastTextLanguageArray[languageArrayIdentifier]);
                           myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
                         }
                       },
@@ -110,17 +112,17 @@ class _CheckPermissionsState extends State<CheckPermissions> {
     return showDialog<bool>(
       context: context,
       builder: (c) => AlertDialog(
-        title: Text('Attention'),
-        content: Text('Voulez-vous vraiment quitter l\'application ?'),
+        title: Text(attentionTextLanguageArray[languageArrayIdentifier]),
+        content: Text(stopActivityAlertDialogMessageTextLanguageArray[languageArrayIdentifier]),
         actions: [
           TextButton(
-            child: Text('Oui'),
+            child: Text(yesTextLanguageArray[languageArrayIdentifier]),
             onPressed: () {
               Navigator.pop(c, true);
             },
           ),
           TextButton(
-            child: Text('Non'),
+            child: Text(noTextLanguageArray[languageArrayIdentifier]),
             onPressed: () => Navigator.pop(c, false),
           ),
         ],

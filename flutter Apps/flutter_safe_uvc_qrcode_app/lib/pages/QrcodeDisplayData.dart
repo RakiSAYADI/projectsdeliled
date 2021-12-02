@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/EMAILfileClass.dart';
+import 'package:flutter_safe_uvc_qrcode_app/services/languageDataBase.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:mailer/mailer.dart';
@@ -24,12 +25,21 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
   GlobalKey globalKey = new GlobalKey();
   EmailDataFile emailDataFile = EmailDataFile();
   bool saveQrCodeData = false;
+  String deepLightText = 'assets/texte-deeplight.png';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     myUvcToast = ToastyMessage(toastContext: context);
+    switch (languageArrayIdentifier) {
+      case 0:
+        deepLightText = 'assets/texte-deeplight.png';
+        break;
+      case 1:
+        deepLightText = 'assets/texte-en-deeplight.png';
+        break;
+    }
   }
 
   @override
@@ -38,7 +48,7 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
       appBar: AppBar(
         backgroundColor: Colors.blue[400],
         centerTitle: true,
-        title: Text('Votre QR code'),
+        title: Text(myQRCodeTitleTextLanguageArray[languageArrayIdentifier]),
       ),
       body: Container(
         decoration: BoxDecoration(color: Colors.grey[200]),
@@ -65,7 +75,7 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
                         child: Text(myEmailText),
                       ),
                       Image.asset(
-                        'assets/texte-deeplight.png',
+                        deepLightText,
                       ),
                     ],
                   ),
@@ -81,19 +91,11 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
         marginBottom: 20,
         animatedIcon: AnimatedIcons.menu_close,
         animatedIconTheme: IconThemeData(size: 22.0),
-        // this is ignored if animatedIcon is non null
-        // child: Icon(Icons.add),
-
-        // If true user is forced to close dial manually
-        // by tapping main button and overlay is not rendered.
         closeManually: false,
         curve: Curves.bounceIn,
         overlayColor: Colors.black,
         overlayOpacity: 0.5,
-/*          onOpen: () => print('OPENING DIAL'),
-        onClose: () => print('DIAL CLOSED'),*/
-        tooltip: 'Menu',
-/*          heroTag: 'speed-dial-hero-tag',*/
+        tooltip: menuTextLanguageArray[languageArrayIdentifier],
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 8.0,
@@ -105,7 +107,7 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
               color: Colors.white,
             ),
             backgroundColor: Colors.green,
-            label: 'Ajouter un autre QR code',
+            label: addQrCodeButtonTextLanguageArray[languageArrayIdentifier],
             labelStyle: TextStyle(fontSize: 18.0),
             onTap: () async {
               SystemChannels.textInput.invokeMethod('TextInput.hide');
@@ -119,7 +121,7 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
               color: Colors.white,
             ),
             backgroundColor: Colors.blue,
-            label: 'Envoi par email',
+            label: sendEmailButtonTextLanguageArray[languageArrayIdentifier],
             labelStyle: TextStyle(fontSize: 18.0),
             onTap: () async {
               SystemChannels.textInput.invokeMethod('TextInput.hide');
@@ -169,7 +171,7 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Entrez votre adresse e-mail :',
+                    enterEmailTextLanguageArray[languageArrayIdentifier],
                     style: TextStyle(fontSize: (widthScreen * 0.05)),
                   ),
                   SizedBox(height: heightScreen * 0.05),
@@ -195,7 +197,7 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
           actions: [
             TextButton(
               child: Text(
-                'Envoyer',
+                sendTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(fontSize: (widthScreen * 0.05)),
               ),
               onPressed: () async {
@@ -203,7 +205,7 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
                 SystemChannels.textInput.invokeMethod('TextInput.hide');
                 await emailDataFile.saveStringUVCEmailDATA(myEmail.text);
                 myUvcToast.setToastDuration(60);
-                myUvcToast.setToastMessage('Envoi en cours !');
+                myUvcToast.setToastMessage(sendProgressToastTextLanguageArray[languageArrayIdentifier]);
                 myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
                 if (await checkInternetConnection()) {
                   await sendEmail(myEmail.text);
@@ -214,14 +216,14 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
                 } else {
                   myUvcToast.clearAllToast();
                   myUvcToast.setToastDuration(3);
-                  myUvcToast.setToastMessage('Votre téléphone n\'est connecté sur internet !');
+                  myUvcToast.setToastMessage(noConnectionToastTextLanguageArray[languageArrayIdentifier]);
                   myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
                 }
               },
             ),
             TextButton(
               child: Text(
-                'Annuler',
+                cancelTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(fontSize: (widthScreen * 0.05)),
               ),
               onPressed: () {
@@ -240,9 +242,7 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
     listQrCodes.length = 0;
     for (int i = 0; i < qrCodeImageList.length; i++) {
       listQrCodes.add(TableRow(children: [
-        Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [Image.file(qrCodeImageList[i], width: 100, height: 100), Text(qrCodeList[i].fileName)])
+        Row(mainAxisAlignment: MainAxisAlignment.start, children: [Image.file(qrCodeImageList[i], width: 100, height: 100), Text(qrCodeList[i].fileName)])
       ]));
     }
     return showDialog<void>(
@@ -250,15 +250,14 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Vos QRcodes'),
+          title: Text(qrCodesAlertDialogTitleLanguageArray[languageArrayIdentifier]),
           content: SingleChildScrollView(
-            child: Table(
-                border: TableBorder.all(color: Colors.black), defaultVerticalAlignment: TableCellVerticalAlignment.middle, children: listQrCodes),
+            child: Table(border: TableBorder.all(color: Colors.black), defaultVerticalAlignment: TableCellVerticalAlignment.middle, children: listQrCodes),
           ),
           actions: [
             TextButton(
               child: Text(
-                'OK',
+                okTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () async {
@@ -268,7 +267,7 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
             ),
             TextButton(
               child: Text(
-                'Annuler',
+                cancelTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () async {
@@ -291,25 +290,21 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
     final message = Message()
       ..from = Address(username, 'DeliTech Medical')
       ..recipients.add(destination)
-      ..subject = 'Votre QR code'
+      ..subject = myQRCodeTitleTextLanguageArray[languageArrayIdentifier]
       ..attachments = qrCodeList
-      ..text = 'Bonjour,\n\n'
-          'Veuillez trouver ci-joint le QRcode généré grâce à l\'application QRCODE UVC de DEEPLIGHT®.\n'
-          'Cet email est envoyé automatiquement, merci de ne pas y répondre.\n\n'
-          'Merci de votre confiance,\n'
-          'L\'équipe DEEPLIGHT®.';
+      ..text = emailMessageTextLanguageArray[languageArrayIdentifier];
 
     try {
       await send(message, serverSMTPDeepLight);
       myUvcToast.clearAllToast();
       myUvcToast.setToastDuration(3);
-      myUvcToast.setToastMessage('E-mail envoyé, vérifiez votre boîte de réception');
+      myUvcToast.setToastMessage(emailSentToastTextLanguageArray[languageArrayIdentifier]);
       myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
     } on MailerException catch (e) {
       print(e.message);
       myUvcToast.clearAllToast();
       myUvcToast.setToastDuration(3);
-      myUvcToast.setToastMessage('E-mail non envoyé, vérifiez votre adresse e-mail');
+      myUvcToast.setToastMessage(emailNotSentToastTextLanguageArray[languageArrayIdentifier]);
       myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
     }
   }

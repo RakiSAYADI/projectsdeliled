@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_safe_uvc_qrcode_app/pages/QrcodeDisplay.dart';
 import 'package:flutter_safe_uvc_qrcode_app/pages/QrcodeDisplayData.dart';
@@ -9,8 +11,27 @@ import 'package:flutter_safe_uvc_qrcode_app/pages/check_permissions.dart';
 import 'package:flutter_safe_uvc_qrcode_app/pages/choose_qrcode.dart';
 import 'package:flutter_safe_uvc_qrcode_app/pages/qr_code_scan.dart';
 import 'package:flutter_safe_uvc_qrcode_app/pages/welcome.dart';
+import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
 
 void main() {
+  languageCode = Platform.localeName.split('_')[0];
+  print('le language de telephone : $languageCode');
+
+  if (languageCode.isEmpty) {
+    languageCode = 'en';
+  }
+
+  switch (languageCode) {
+    case 'fr':
+      languageArrayIdentifier = 0;
+      break;
+    case 'en':
+      languageArrayIdentifier = 1;
+      break;
+    default:
+      languageArrayIdentifier = 1;
+      break;
+  }
   runApp(MyApp());
 }
 
@@ -19,7 +40,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'QRcode UVC',
+      title: appName,
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {

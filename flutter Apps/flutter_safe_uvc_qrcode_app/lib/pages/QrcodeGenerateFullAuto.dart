@@ -2,6 +2,7 @@ import 'package:encrypt/encrypt.dart';
 import 'package:flutter/material.dart' hide Key;
 import 'package:flutter/services.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
+import 'package:flutter_safe_uvc_qrcode_app/services/languageDataBase.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 
@@ -21,7 +22,6 @@ class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with 
 
   @override
   Widget build(BuildContext context) {
-
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -29,7 +29,7 @@ class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with 
       appBar: AppBar(
         backgroundColor: Colors.blue[400],
         centerTitle: true,
-        title: Text('Informations'),
+        title: Text(informationTitleTextLanguageArray[languageArrayIdentifier]),
       ),
       body: Container(
         decoration: BoxDecoration(color: Colors.grey[200]),
@@ -70,7 +70,7 @@ class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with 
                       color: Colors.grey[800],
                     ),
                     decoration: InputDecoration(
-                        hintText: 'Établissement',
+                        hintText: establishmentHintTextLanguageArray[languageArrayIdentifier],
                         hintStyle: TextStyle(
                           color: Colors.grey,
                         )),
@@ -94,7 +94,7 @@ class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with 
                       color: Colors.grey[800],
                     ),
                     decoration: InputDecoration(
-                        hintText: 'Opérateur',
+                        hintText: userHintTextLanguageArray[languageArrayIdentifier],
                         hintStyle: TextStyle(
                           color: Colors.grey,
                         )),
@@ -117,7 +117,7 @@ class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with 
                       fontSize: screenWidth * 0.04,
                     ),
                     decoration: InputDecoration(
-                        hintText: 'Pièce/local',
+                        hintText: roomHintTextLanguageArray[languageArrayIdentifier],
                         hintStyle: TextStyle(
                           color: Colors.grey,
                         )),
@@ -131,7 +131,7 @@ class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with 
                 ),
                 SizedBox(height: screenHeight * 0.03),
                 Text(
-                  'Délais avant allumage :',
+                  beforeStartTextLanguageArray[languageArrayIdentifier],
                   style: TextStyle(
                     fontSize: screenWidth * 0.04,
                     color: Colors.black,
@@ -171,7 +171,7 @@ class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with 
                 ),
                 SizedBox(height: screenHeight * 0.03),
                 Text(
-                  'Durée de la désinfection :',
+                  durationDisinfectionTextLanguageArray[languageArrayIdentifier],
                   style: TextStyle(
                     fontSize: screenWidth * 0.04,
                     color: Colors.black,
@@ -214,7 +214,7 @@ class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with 
                       children: [
                         SizedBox(height: screenHeight * 0.01),
                         Text(
-                          'Code PIN :',
+                          codePINTextLanguageArray[languageArrayIdentifier],
                           style: TextStyle(
                             fontSize: screenWidth * 0.06,
                             color: Colors.black,
@@ -249,7 +249,7 @@ class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with 
                     SystemChannels.textInput.invokeMethod('TextInput.hide');
                     if (_pinPutController.text.isNotEmpty && _pinPutController.text.length < 4) {
                       myUvcToast.setToastDuration(3);
-                      myUvcToast.setToastMessage('Veuillez mettre un code PIN à 4 chiffres !');
+                      myUvcToast.setToastMessage(shortPINCodeToastTextLanguageArray[languageArrayIdentifier]);
                       myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
                       _pinPutController.text = '';
                       pinCodeAccess = '';
@@ -257,23 +257,21 @@ class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with 
                       animationRefreshIcon.repeat();
                       myUvcToast.setAnimationIcon(animationRefreshIcon);
                       myUvcToast.setToastDuration(10);
-                      myUvcToast.setToastMessage('Génération en cours !');
+                      myUvcToast.setToastMessage(generateQrCodeToastTextLanguageArray[languageArrayIdentifier]);
                       myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
                       qrCodeFileName = 'QrCodeFullAuto_${myCompany.text}_${myName.text}_${myRoomName.text}.png';
                       if (_pinPutController.text.isEmpty) {
-                        qrCodeData =
-                            '{\"Company\":\"${myCompany.text}\",\"UserName\":\"${myName.text}\",\"RoomName\":\"${myRoomName.text}\"'
-                                ',\"TimeData\":[$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition],\"MAC\":\"$macAddress\"'
-                                ',\"NAME\":\"$uvcName\"}';
+                        qrCodeData = '{\"Company\":\"${myCompany.text}\",\"UserName\":\"${myName.text}\",\"RoomName\":\"${myRoomName.text}\"'
+                            ',\"TimeData\":[$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition],\"MAC\":\"$macAddress\"'
+                            ',\"NAME\":\"$uvcName\"}';
                       } else {
                         final key = Key.fromUtf8('deeplightsolutionsdedesinfection');
                         final iv = IV.fromLength(16);
                         final encrypter = Encrypter(AES(key, mode: AESMode.cbc));
                         final encrypted = encrypter.encrypt(pinCodeAccess, iv: iv);
-                        qrCodeData =
-                            '{\"Company\":\"${myCompany.text}\",\"UserName\":\"${myName.text}\",\"RoomName\":\"${myRoomName.text}\"'
-                                ',\"TimeData\":[$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition],\"PIN\":\"${encrypted.base16}\"'
-                                ',\"MAC\":\"$macAddress\",\"NAME\":\"$uvcName\"}';
+                        qrCodeData = '{\"Company\":\"${myCompany.text}\",\"UserName\":\"${myName.text}\",\"RoomName\":\"${myRoomName.text}\"'
+                            ',\"TimeData\":[$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition],\"PIN\":\"${encrypted.base16}\"'
+                            ',\"MAC\":\"$macAddress\",\"NAME\":\"$uvcName\"}';
                       }
                       await Future.delayed(Duration(seconds: 5), () async {
                         myUvcToast.clearAllToast();
@@ -284,7 +282,7 @@ class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with 
                     }
                   },
                   child: Text(
-                    'Générer',
+                    generateTextLanguageArray[languageArrayIdentifier],
                     style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.06),
                   ),
                   style: ButtonStyle(
