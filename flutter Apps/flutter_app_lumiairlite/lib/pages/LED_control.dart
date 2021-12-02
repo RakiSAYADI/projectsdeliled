@@ -47,6 +47,9 @@ class _LEDPageState extends State<LEDPage> {
       zonesNamesList[1] = parsedJson['ZN'][1];
       zonesNamesList[2] = parsedJson['ZN'][2];
       zonesNamesList[3] = parsedJson['ZN'][3];
+      if (Platform.isIOS) {
+        parsedJson = json.decode(dataCharIOS2p1);
+      }
       ccSwitchValue = intToBool(int.parse(parsedJson['cc'][0].toString()));
       await Future.delayed(Duration(seconds: 2));
     } catch (e) {
@@ -186,9 +189,11 @@ class _LEDPageState extends State<LEDPage> {
                       max: 255,
                       min: 0,
                       onDragging: (handlerIndex, lowerValue, upperValue) {
-                        if (ccSwitchValue && ccSwitchCounter == 0) {
-                          displayCCWarning();
-                          ccSwitchCounter++;
+                        if (ccSwitchValue) {
+                          if (ccSwitchCounter == 0) {
+                            displayCCWarning();
+                            ccSwitchCounter++;
+                          }
                         } else if (Platform.isAndroid) {
                           hueValue = lowerValue;
                           setBarreColorsState();
@@ -199,9 +204,11 @@ class _LEDPageState extends State<LEDPage> {
                         }
                       },
                       onDragCompleted: (handlerIndex, lowerValue, upperValue) {
-                        if (ccSwitchValue && ccSwitchCounter == 0) {
-                          displayCCWarning();
-                          ccSwitchCounter++;
+                        if (ccSwitchValue) {
+                          if (ccSwitchCounter == 0) {
+                            displayCCWarning();
+                            ccSwitchCounter++;
+                          }
                         } else if (Platform.isIOS) {
                           hueValue = lowerValue;
                           setBarreColorsState();
@@ -233,9 +240,11 @@ class _LEDPageState extends State<LEDPage> {
                       centeredOrigin: true,
                       handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
                       onDragging: (handlerIndex, lowerValue, upperValue) {
-                        if (ccSwitchValue && ccSwitchCounter == 0) {
-                          displayCCWarning();
-                          ccSwitchCounter++;
+                        if (ccSwitchValue) {
+                          if (ccSwitchCounter == 0) {
+                            displayCCWarning();
+                            ccSwitchCounter++;
+                          }
                         } else if (Platform.isAndroid) {
                           lumValue = lowerValue;
                           setBarreColorsState();
@@ -246,9 +255,11 @@ class _LEDPageState extends State<LEDPage> {
                         }
                       },
                       onDragCompleted: (handlerIndex, lowerValue, upperValue) {
-                        if (ccSwitchValue && ccSwitchCounter == 0) {
-                          displayCCWarning();
-                          ccSwitchCounter++;
+                        if (ccSwitchValue) {
+                          if (ccSwitchCounter == 0) {
+                            displayCCWarning();
+                            ccSwitchCounter++;
+                          }
                         } else if (Platform.isIOS) {
                           lumValue = lowerValue;
                           setBarreColorsState();
@@ -284,9 +295,11 @@ class _LEDPageState extends State<LEDPage> {
                       centeredOrigin: true,
                       handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
                       onDragging: (handlerIndex, lowerValue, upperValue) {
-                        if (ccSwitchValue && ccSwitchCounter == 0) {
-                          displayCCWarning();
-                          ccSwitchCounter++;
+                        if (ccSwitchValue) {
+                          if (ccSwitchCounter == 0) {
+                            displayCCWarning();
+                            ccSwitchCounter++;
+                          }
                         } else if (Platform.isAndroid) {
                           satValue = lowerValue;
                           setBarreColorsState();
@@ -297,9 +310,11 @@ class _LEDPageState extends State<LEDPage> {
                         }
                       },
                       onDragCompleted: (handlerIndex, lowerValue, upperValue) {
-                        if (ccSwitchValue && ccSwitchCounter == 0) {
-                          displayCCWarning();
-                          ccSwitchCounter++;
+                        if (ccSwitchValue) {
+                          if (ccSwitchCounter == 0) {
+                            displayCCWarning();
+                            ccSwitchCounter++;
+                          }
                         } else if (Platform.isIOS) {
                           satValue = lowerValue;
                           setBarreColorsState();
@@ -331,9 +346,11 @@ class _LEDPageState extends State<LEDPage> {
                       centeredOrigin: true,
                       handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
                       onDragging: (handlerIndex, lowerValue, upperValue) {
-                        if (ccSwitchValue && ccSwitchCounter == 0) {
-                          displayCCWarning();
-                          ccSwitchCounter++;
+                        if (ccSwitchValue) {
+                          if (ccSwitchCounter == 0) {
+                            displayCCWarning();
+                            ccSwitchCounter++;
+                          }
                         } else if (Platform.isAndroid) {
                           whiteValue = lowerValue;
                           setState(() {});
@@ -343,9 +360,11 @@ class _LEDPageState extends State<LEDPage> {
                         }
                       },
                       onDragCompleted: (handlerIndex, lowerValue, upperValue) {
-                        if (ccSwitchValue && ccSwitchCounter == 0) {
-                          displayCCWarning();
-                          ccSwitchCounter++;
+                        if (ccSwitchValue) {
+                          if (ccSwitchCounter == 0) {
+                            displayCCWarning();
+                            ccSwitchCounter++;
+                          }
                         } else if (Platform.isIOS) {
                           whiteValue = lowerValue;
                           setState(() {});
@@ -386,7 +405,7 @@ class _LEDPageState extends State<LEDPage> {
     Get.defaultDialog(
       title: attentionTextLanguageArray[languageArrayIdentifier],
       barrierDismissible: false,
-      content: Text(ccAlertDialogMessageTextLanguageArray[languageArrayIdentifier], style: TextStyle(fontSize: 14)),
+      content: Text(ccAlertDialogMessageTextLanguageArray[languageArrayIdentifier], textAlign: TextAlign.center, style: TextStyle(fontSize: 14)),
       actions: [
         TextButton(
           child: Text(understoodTextLanguageArray[languageArrayIdentifier], style: TextStyle(fontSize: 14)),
