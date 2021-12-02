@@ -48,7 +48,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-
     if (dataRobotUVC == null) {
       dataRobotUVC = '{\"Company\":\"Votre entreprise\",\"UserName\":\"Utilisateur\",\"Detection\":0,\"RoomName\":\"Chambre 1\",\"TimeData\":[0,0]}';
     }
@@ -203,7 +202,7 @@ class _HomeState extends State<Home> {
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5),
-                                      child: FlatButton(
+                                      child: TextButton(
                                         onPressed: () async {
                                           changeFunctionMode(context);
                                         },
@@ -215,10 +214,10 @@ class _HomeState extends State<Home> {
                                             style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
                                           ),
                                         ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(18.0),
+                                        style: ButtonStyle(
+                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                                          backgroundColor: MaterialStateProperty.all<Color>(hardPink),
                                         ),
-                                        color: hardPink,
                                       ),
                                     ),
                                   ],
@@ -290,7 +289,7 @@ class _HomeState extends State<Home> {
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5),
-                                      child: FlatButton(
+                                      child: TextButton(
                                         onPressed: () async {
                                           securityAccessPage(context);
                                         },
@@ -302,10 +301,10 @@ class _HomeState extends State<Home> {
                                             style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
                                           ),
                                         ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(18.0),
+                                        style: ButtonStyle(
+                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                                          backgroundColor: MaterialStateProperty.all<Color>(hardPink),
                                         ),
-                                        color: hardPink,
                                       ),
                                     ),
                                   ],
@@ -412,7 +411,7 @@ class _HomeState extends State<Home> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 30),
-                      child: FlatButton(
+                      child: TextButton(
                         onPressed: () => resetRobot(context),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -422,10 +421,10 @@ class _HomeState extends State<Home> {
                             style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.06),
                           ),
                         ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                          backgroundColor: MaterialStateProperty.all<Color>(hardPink),
                         ),
-                        color: hardPink,
                       ),
                     ),
                   ],
@@ -451,7 +450,7 @@ class _HomeState extends State<Home> {
         ),
         content: Text('Êtes-vous sûr de vouloir remettre à zéro ces données ?'),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text('Oui'),
             onPressed: () async {
               Navigator.pop(c, false);
@@ -473,7 +472,7 @@ class _HomeState extends State<Home> {
               }
             },
           ),
-          FlatButton(
+          TextButton(
             child: Text('Non'),
             onPressed: () => Navigator.pop(c, false),
           ),
@@ -525,7 +524,7 @@ class _HomeState extends State<Home> {
           ),
         ),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text('OK'),
             onPressed: () => Navigator.pop(c, true),
           ),
@@ -553,10 +552,10 @@ class _HomeState extends State<Home> {
             mainAxisSize: MainAxisSize.min,
             children: [
               SizedBox(width: screenWidth * 0.1),
-              FlatButton.icon(
-                color: Colors.grey[200],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
+              TextButton.icon(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.grey[200]),
                 ),
                 onPressed: () async {
                   variableUVCMode = 1;
@@ -589,10 +588,10 @@ class _HomeState extends State<Home> {
                 ),
               ),
               SizedBox(width: screenWidth * 0.1),
-              FlatButton.icon(
-                color: Colors.grey[200],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
+              TextButton.icon(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.grey[200]),
                 ),
                 onPressed: () async {
                   variableUVCMode = 0;
@@ -666,10 +665,10 @@ class _HomeState extends State<Home> {
                 ),
               ),
               SizedBox(width: screenWidth * 0.05),
-              FlatButton.icon(
-                color: Colors.grey[200],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
+              TextButton.icon(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.grey[200]),
                 ),
                 onPressed: () async {
                   String modeMessageCommand = '{\"SetUVCLIFESecurity\" :0}';
@@ -702,10 +701,10 @@ class _HomeState extends State<Home> {
                 ),
               ),
               SizedBox(width: screenWidth * 0.1),
-              FlatButton.icon(
-                color: Colors.grey[200],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
+              TextButton.icon(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.grey[200]),
                 ),
                 onPressed: () async {
                   String modeMessageCommand = '{\"SetUVCLIFESecurity\" :1}';
@@ -765,7 +764,7 @@ class _HomeState extends State<Home> {
         ),
         content: Text('Voulez-vous quitter cette page ?'),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text('Oui'),
             onPressed: () {
               Navigator.pop(c, true);
@@ -773,7 +772,7 @@ class _HomeState extends State<Home> {
               Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
             },
           ),
-          FlatButton(
+          TextButton(
             child: Text('Non'),
             onPressed: () => Navigator.pop(c, false),
           ),

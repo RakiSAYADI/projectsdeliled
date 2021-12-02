@@ -105,14 +105,14 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
           ],
         ),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text('OK'),
             onPressed: () async {
               Navigator.pop(c, true);
               Navigator.pushNamed(context, '/qr_code_scan');
             },
           ),
-          FlatButton(
+          TextButton(
             child: Text('Annuler'),
             onPressed: () => Navigator.pop(c, false),
           ),

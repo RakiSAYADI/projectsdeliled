@@ -73,7 +73,7 @@ class _WarningState extends State<Warning> {
                     SizedBox(height: screenHeight * 0.02),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 30),
-                      child: FlatButton(
+                      child: TextButton(
                         onPressed: () => Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -83,10 +83,10 @@ class _WarningState extends State<Warning> {
                             style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.06),
                           ),
                         ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                          backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
                         ),
-                        color: Colors.blue[400],
                       ),
                     ),
                     SizedBox(height: screenHeight * 0.02),

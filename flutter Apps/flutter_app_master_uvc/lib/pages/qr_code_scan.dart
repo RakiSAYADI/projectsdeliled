@@ -195,7 +195,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
         title: Text('Attention'),
         content: Text('Voulez-vous vraiment quitter l\'application ?'),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text('Oui'),
             onPressed: () {
               if (myDevice != null) {
@@ -204,7 +204,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
               Navigator.pop(c, true);
             },
           ),
-          FlatButton(
+          TextButton(
             child: Text('Non'),
             onPressed: () => Navigator.pop(c, false),
           ),
@@ -218,7 +218,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             if (_isTorchOn) {
               _controller.torchMode = CaptureTorchMode.off;
@@ -295,7 +295,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
             ],
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text(
                 'OK',
                 style: TextStyle(color: Colors.green),
@@ -335,7 +335,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                 }
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text(
                 'Annuler',
                 style: TextStyle(color: Colors.green),

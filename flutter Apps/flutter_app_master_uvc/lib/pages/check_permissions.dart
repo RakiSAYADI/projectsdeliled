@@ -112,14 +112,14 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                       width: screenWidth * 0.8,
                     ),
                     SizedBox(height: screenHeight * 0.04),
-                    FlatButton(
-                      color: Color(0xFF554c9a),
+                    TextButton(
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                        backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF554c9a)),
+                      ),
                       child: Text(
                         'COMPRIS',
                         style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
                       ),
                       onPressed: () {
                         // Start scanning
@@ -217,7 +217,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
           ],
         ),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text('OK'),
             onPressed: () async {
               Navigator.pop(c, true);
@@ -226,7 +226,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
               Navigator.pushNamed(context, '/qr_code_scan');
             },
           ),
-          FlatButton(
+          TextButton(
             child: Text('Annuler'),
             onPressed: () => Navigator.pop(c, false),
           ),
@@ -242,13 +242,13 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
         title: Text('Attention'),
         content: Text('Voulez-vous vraiment quitter l\'application ?'),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text('Oui'),
             onPressed: () {
               Navigator.pop(c, true);
             },
           ),
-          FlatButton(
+          TextButton(
             child: Text('Non'),
             onPressed: () => Navigator.pop(c, false),
           ),
