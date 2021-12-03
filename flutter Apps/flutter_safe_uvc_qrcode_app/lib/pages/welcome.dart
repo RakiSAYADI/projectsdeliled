@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:package_info/package_info.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Welcome extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   AnimationController controller;
 
   void checkConnection() async {
+    await Permission.camera.request();
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
