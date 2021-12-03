@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_master_uvc/services/DataVariables.dart';
-import 'package:flutter_app_master_uvc/services/uvcToast.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:package_info/package_info.dart';
@@ -18,8 +17,6 @@ class Welcome extends StatefulWidget {
 
 class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   AnimationController controller;
-
-  ToastyMessage myUvcToast;
 
   FlutterBlue flutterBlue = FlutterBlue.instance;
 
@@ -89,8 +86,6 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       print('macos');
     }
 
-    myUvcToast = ToastyMessage(toastContext: context);
-
     bool checkingBLEAndLocal = true;
 
     try {
@@ -116,9 +111,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
         }
       });
     } catch (e) {
-      myUvcToast.setToastDuration(5);
-      myUvcToast.setToastMessage('App not working !');
-      myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+      print('App not working !');
     }
     super.initState();
   }
