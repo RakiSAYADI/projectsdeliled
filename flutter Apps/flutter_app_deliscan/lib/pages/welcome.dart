@@ -2,8 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app_deliscan/pages/check_permissions.dart';
+import 'package:flutter_app_deliscan/pages/qr_code_scan.dart';
+import 'package:flutter_app_deliscan/services/animation_between_pages.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:package_info/package_info.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Welcome extends StatefulWidget {
   @override
@@ -13,23 +17,26 @@ class Welcome extends StatefulWidget {
 class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   AnimationController controller;
 
-  void checkConnection() async {
+  void checkPermissions() async {
+    await Permission.camera.request();
+    await Permission.manageExternalStorage.request();
+    await Permission.storage.request();
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         print('connected');
         Future.delayed(Duration(seconds: 5), () async {
-          Navigator.pushReplacementNamed(context, '/choose_qr_code');
+          createReplacementRoute(context, QrCodeScan());
         });
       } else {
         Future.delayed(Duration(seconds: 5), () async {
-          Navigator.pushReplacementNamed(context, '/check_permissions');
+          createReplacementRoute(context, CheckPermissions());
         });
       }
     } on SocketException catch (_) {
       print('not connected');
       Future.delayed(Duration(seconds: 5), () async {
-        Navigator.pushReplacementNamed(context, '/check_permissions');
+        createReplacementRoute(context, CheckPermissions());
       });
     }
   }
@@ -43,7 +50,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       DeviceOrientation.portraitDown,
     ]);
 
-    checkConnection();
+    checkPermissions();
 
     controller = AnimationController(
       vsync: this,

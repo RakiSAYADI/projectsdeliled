@@ -12,30 +12,19 @@ class QrCodeScan extends StatefulWidget {
   _QrCodeScanState createState() => _QrCodeScanState();
 }
 
-class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
+class _QrCodeScanState extends State<QrCodeScan> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController controller;
   Barcode result;
 
   String qrCodeMessage = '';
+
   Color colorMessage;
+
   bool qrCodeScanAccess = false;
-
-  ToastyMessage myUvcToast;
-
   bool deviceExistOrNot = false;
 
-  AnimationController animationController;
-  AnimationController animationRefreshIcon;
-
-  int startIndex;
-  int endIndex;
-
-  final String startMAC = "(";
-  final String endMAC = ")";
-  final String startNAME = "+";
-  final String endNAME = "+";
-  final String endNAME2 = "https";
+  ToastyMessage myUvcToast;
 
   @override
   void reassemble() {
@@ -57,22 +46,12 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       myUvcToast.setToastMessage(cameraLaunchToastTextLanguageArray[languageArrayIdentifier]);
       myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
     });
-    // initialise the animation
-    animationRefreshIcon = new AnimationController(
-      vsync: this,
-      duration: new Duration(seconds: 3),
-    );
-    animationController = AnimationController(vsync: this, duration: Duration(seconds: 10));
-    animationController.forward();
-    animationRefreshIcon.repeat();
     super.initState();
   }
 
   @override
   void dispose() {
     controller.dispose();
-    animationRefreshIcon.dispose();
-    animationController.dispose();
     super.dispose();
   }
 
@@ -83,24 +62,6 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       data = result.code;
       print('onCapture----$data');
       if (data.isNotEmpty && !qrCodeScanAccess) {
-        try {
-          startIndex = data.indexOf(startMAC);
-          endIndex = data.indexOf(endMAC, startIndex + startMAC.length);
-          macAddress = data.substring(startIndex + startMAC.length, endIndex);
-          startIndex = data.indexOf(startNAME);
-          endIndex = data.indexOf(endNAME, startIndex + startNAME.length);
-          uvcName = data.substring(startIndex + startNAME.length, endIndex);
-          deviceExistOrNot = true;
-        } catch (e) {
-          try {
-            startIndex = data.indexOf(startNAME);
-            endIndex = data.indexOf(endNAME2, startIndex + startNAME.length);
-            uvcName = data.substring(startIndex + startNAME.length, endIndex);
-            deviceExistOrNot = true;
-          } catch (e) {
-            deviceExistOrNot = false;
-          }
-        }
 
         setState(() {
           if (deviceExistOrNot) {
@@ -138,17 +99,6 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Align(
-              alignment: Alignment.topCenter,
-              child: Text(
-                '',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: screenWidth * 0.04,
-                ),
-              ),
-            ),
             SizedBox(height: screenHeight * 0.02),
             Container(
               width: screenWidth,
@@ -172,7 +122,24 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                     ),
                   ),
                   SizedBox(height: screenHeight * 0.02),
-                  _buildToolBar(),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      TextButton(
+                        onPressed: () async {
+                          await controller.toggleFlash();
+                        },
+                        child: Text(
+                          torchButtonTextLanguageArray[languageArrayIdentifier],
+                          style: TextStyle(
+                            color: Colors.grey[300],
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -180,37 +147,5 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
         ),
       ),
     );
-  }
-
-  Widget _buildToolBar() {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        TextButton(
-          onPressed: () async {
-            await controller.toggleFlash();
-          },
-          child: Text(
-            torchButtonTextLanguageArray[languageArrayIdentifier],
-            style: TextStyle(
-              color: Colors.grey[300],
-              fontSize: 20.0,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Animation animationColor(Color colorBegin, Color colorEnd) {
-    return ColorTween(begin: colorBegin, end: colorEnd).animate(animationController)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          animationController.reverse();
-        } else if (status == AnimationStatus.dismissed) {
-          animationController.forward();
-        }
-      });
   }
 }

@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app_deliscan/pages/qr_code_scan.dart';
 import 'package:flutter_app_deliscan/services/DataVariables.dart';
+import 'package:flutter_app_deliscan/services/animation_between_pages.dart';
 import 'package:flutter_app_deliscan/services/languageDataBase.dart';
 import 'package:flutter_app_deliscan/services/uvcToast.dart';
 
@@ -80,7 +82,7 @@ class _CheckPermissionsState extends State<CheckPermissions> {
                           if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
                             print('connected');
                             Future.delayed(Duration(seconds: 5), () async {
-                              Navigator.pushReplacementNamed(context, '/choose_qr_code');
+                              createReplacementRoute(context, QrCodeScan());
                             });
                           } else {
                             print('not connected');
