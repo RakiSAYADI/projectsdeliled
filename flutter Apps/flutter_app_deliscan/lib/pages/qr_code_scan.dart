@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
-import 'package:flutter_safe_uvc_qrcode_app/services/languageDataBase.dart';
-import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
+import 'package:flutter_app_deliscan/services/DataVariables.dart';
+import 'package:flutter_app_deliscan/services/languageDataBase.dart';
+import 'package:flutter_app_deliscan/services/uvcToast.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QrCodeScan extends StatefulWidget {

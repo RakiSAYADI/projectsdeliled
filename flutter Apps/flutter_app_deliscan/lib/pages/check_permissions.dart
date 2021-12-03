@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
-import 'package:flutter_safe_uvc_qrcode_app/services/languageDataBase.dart';
-import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
+import 'package:flutter_app_deliscan/services/DataVariables.dart';
+import 'package:flutter_app_deliscan/services/languageDataBase.dart';
+import 'package:flutter_app_deliscan/services/uvcToast.dart';
 
 class CheckPermissions extends StatefulWidget {
   @override
