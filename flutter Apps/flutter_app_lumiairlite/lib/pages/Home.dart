@@ -105,7 +105,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             tvocValue = stringListAsciiToListInt(sensorsDataList.codeUnits)[6];
             deviceWifiState = intToBool(stringListAsciiToListInt(sensorsDataList.codeUnits)[7]);
             co2sensorStateValue = stringListAsciiToListInt(sensorsDataList.codeUnits)[8];
-            deviceDate = new DateTime.fromMillisecondsSinceEpoch((deviceTimeValue * 1000) - (dateTime.timeZoneOffset.inMilliseconds));
+            deviceDate = new DateTime.fromMillisecondsSinceEpoch(deviceTimeValue * 1000);
             appTime = DateFormat('kk:mm').format(deviceDate);
           }
         } catch (e) {
