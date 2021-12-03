@@ -11,13 +11,14 @@ import 'package:flutter_app_bispectrum/services/languageDataBase.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:package_info/package_info.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Welcome extends StatefulWidget {
   @override
   _WelcomeState createState() => _WelcomeState();
 }
 
-class _WelcomeState extends State<Welcome>{
+class _WelcomeState extends State<Welcome> {
   FlutterBlue flutterBlue = FlutterBlue.instance;
 
   @override
@@ -45,6 +46,8 @@ class _WelcomeState extends State<Welcome>{
       print('macos');
     }
 
+    checkPermissions();
+
     flutterBlue.state.listen((state) {
       if (state == BluetoothState.off) {
         //Alert user to turn on bluetooth.
@@ -63,6 +66,15 @@ class _WelcomeState extends State<Welcome>{
       }
     });
     super.initState();
+  }
+
+  void checkPermissions() async {
+    await Permission.locationWhenInUse.request();
+    await Permission.locationAlways.request();
+    await Permission.bluetooth.request();
+    await Permission.bluetoothScan.request();
+    await Permission.bluetoothAdvertise.request();
+    await Permission.bluetoothConnect.request();
   }
 
   @override
