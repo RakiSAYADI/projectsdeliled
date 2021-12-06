@@ -78,24 +78,23 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
 
   void _onQrViewCreated(QRViewController controller) {
     this.controller = controller;
-    String data;
     controller.scannedDataStream.listen((scanData) {
-      data = result.code;
-      print('onCapture----$data');
-      if (data.isNotEmpty && !qrCodeScanAccess) {
+      result = scanData;
+      print('onCapture----${result.code}');
+      if (result.code.isNotEmpty && !qrCodeScanAccess) {
         try {
-          startIndex = data.indexOf(startMAC);
-          endIndex = data.indexOf(endMAC, startIndex + startMAC.length);
-          macAddress = data.substring(startIndex + startMAC.length, endIndex);
-          startIndex = data.indexOf(startNAME);
-          endIndex = data.indexOf(endNAME, startIndex + startNAME.length);
-          uvcName = data.substring(startIndex + startNAME.length, endIndex);
+          startIndex = result.code.indexOf(startMAC);
+          endIndex = result.code.indexOf(endMAC, startIndex + startMAC.length);
+          macAddress = result.code.substring(startIndex + startMAC.length, endIndex);
+          startIndex = result.code.indexOf(startNAME);
+          endIndex = result.code.indexOf(endNAME, startIndex + startNAME.length);
+          uvcName = result.code.substring(startIndex + startNAME.length, endIndex);
           deviceExistOrNot = true;
         } catch (e) {
           try {
-            startIndex = data.indexOf(startNAME);
-            endIndex = data.indexOf(endNAME2, startIndex + startNAME.length);
-            uvcName = data.substring(startIndex + startNAME.length, endIndex);
+            startIndex = result.code.indexOf(startNAME);
+            endIndex = result.code.indexOf(endNAME2, startIndex + startNAME.length);
+            uvcName = result.code.substring(startIndex + startNAME.length, endIndex);
             deviceExistOrNot = true;
           } catch (e) {
             deviceExistOrNot = false;
