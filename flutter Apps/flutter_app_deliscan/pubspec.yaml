@@ -31,7 +31,11 @@ dependencies:
   flutter_spinkit: ^4.1.2+1
   flutter_speed_dial: ^1.2.5
   qr_code_scanner: ^0.6.1
+  connectivity_plus: ^2.0.2
   mailer: ^3.2.1
+  flutter_cached_pdfview: ^0.4.1
+  dio: ^4.0.4
+  get: ^4.3.8
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

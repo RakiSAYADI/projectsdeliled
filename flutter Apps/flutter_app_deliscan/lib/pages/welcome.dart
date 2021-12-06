@@ -14,8 +14,7 @@ class Welcome extends StatefulWidget {
   _WelcomeState createState() => _WelcomeState();
 }
 
-class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
-  AnimationController controller;
+class _WelcomeState extends State<Welcome> {
 
   void checkPermissions() async {
     await Permission.camera.request();
@@ -51,11 +50,6 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     ]);
 
     checkPermissions();
-
-    controller = AnimationController(
-      vsync: this,
-      duration: Duration(seconds: 5),
-    );
 
     if (Platform.isAndroid) {
       print('android');

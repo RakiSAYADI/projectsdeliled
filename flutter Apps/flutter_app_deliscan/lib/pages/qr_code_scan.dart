@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_deliscan/pages/pdf_view.dart';
 import 'package:flutter_app_deliscan/services/DataVariables.dart';
+import 'package:flutter_app_deliscan/services/animation_between_pages.dart';
+import 'package:flutter_app_deliscan/services/connectivityCheck.dart';
 import 'package:flutter_app_deliscan/services/languageDataBase.dart';
 import 'package:flutter_app_deliscan/services/uvcToast.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -13,70 +16,74 @@ class QrCodeScan extends StatefulWidget {
 }
 
 class _QrCodeScanState extends State<QrCodeScan> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  QRViewController controller;
-  Barcode result;
+  final GlobalKey _qrKey = GlobalKey(debugLabel: 'QR');
+  Barcode _result;
 
-  String qrCodeMessage = '';
+  String _qrCodeMessage = '';
 
-  Color colorMessage;
+  Color _colorMessage = Colors.white;
 
-  bool qrCodeScanAccess = false;
-  bool deviceExistOrNot = false;
+  ToastyMessage _myUvcToast;
 
-  ToastyMessage myUvcToast;
+  final MyConnectivity _connectivity = MyConnectivity.instance;
 
   @override
   void reassemble() {
     super.reassemble();
     if (Platform.isAndroid) {
-      controller.pauseCamera();
+      qrViewController.pauseCamera();
     }
     if (Platform.isIOS) {
-      controller.resumeCamera();
+      qrViewController.resumeCamera();
     }
   }
 
   @override
   void initState() {
-    myUvcToast = ToastyMessage(toastContext: context);
+    _myUvcToast = ToastyMessage(toastContext: context);
     Future.delayed(const Duration(seconds: 1), () async {
-      await controller.resumeCamera();
-      myUvcToast.setToastDuration(2);
-      myUvcToast.setToastMessage(cameraLaunchToastTextLanguageArray[languageArrayIdentifier]);
-      myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
+      await qrViewController.resumeCamera();
+      _myUvcToast.setToastDuration(2);
+      _myUvcToast.setToastMessage(cameraLaunchToastTextLanguageArray[languageArrayIdentifier]);
+      _myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
     });
+    _connectivity.initialise();
     super.initState();
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    _connectivity.disposeStream();
+    qrViewController.dispose();
     super.dispose();
   }
 
   void _onQrViewCreated(QRViewController controller) {
-    this.controller = controller;
-    String data;
+    qrViewController = controller;
     controller.scannedDataStream.listen((scanData) {
-      data = result.code;
-      print('onCapture----$data');
-      if (data.isNotEmpty && !qrCodeScanAccess) {
-
+      _result = scanData;
+      print('onCapture----${_result.code}');
+      if (_result.code.isNotEmpty && !qrCodeVerified) {
+        if (_result.code.startsWith(qrCodeFirstPart) && _result.code.endsWith(qrCodeLastPart)) {
+          pdfFileURL = _result.code;
+          print("good qrcode ");
+          qrCodeVerified = true;
+        } else {
+          print("bad qrcode ");
+          qrCodeVerified = false;
+        }
         setState(() {
-          if (deviceExistOrNot) {
-            qrCodeMessage = validAccessTextLanguageArray[languageArrayIdentifier];
-            colorMessage = Colors.green;
-            qrCodeScanAccess = true;
+          if (qrCodeVerified) {
+            _qrCodeMessage = validAccessTextLanguageArray[languageArrayIdentifier];
+            _colorMessage = Colors.green;
           } else {
-            qrCodeMessage = nonValidAccessTextLanguageArray[languageArrayIdentifier];
-            colorMessage = Colors.red;
-            qrCodeScanAccess = false;
+            _qrCodeMessage = nonValidAccessTextLanguageArray[languageArrayIdentifier];
+            _colorMessage = Colors.red;
           }
         });
-        if (deviceExistOrNot) {
+        if (qrCodeVerified) {
           controller.pauseCamera();
-          Navigator.pushNamed(context, "/Qr_code_Generate_Full_Auto");
+          createRoute(context, PDFViewer());
         }
       }
     });
@@ -104,7 +111,7 @@ class _QrCodeScanState extends State<QrCodeScan> {
               width: screenWidth,
               height: cameraViewHeight,
               child: QRView(
-                key: qrKey,
+                key: _qrKey,
                 onQRViewCreated: _onQrViewCreated,
               ),
             ),
@@ -116,9 +123,11 @@ class _QrCodeScanState extends State<QrCodeScan> {
                 children: <Widget>[
                   SizedBox(height: screenHeight * 0.02),
                   Text(
-                    qrCodeMessage,
+                    _qrCodeMessage,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: colorMessage,
+                      fontSize: screenHeight * 0.02,
+                      color: _colorMessage,
                     ),
                   ),
                   SizedBox(height: screenHeight * 0.02),
@@ -128,7 +137,7 @@ class _QrCodeScanState extends State<QrCodeScan> {
                     children: <Widget>[
                       TextButton(
                         onPressed: () async {
-                          await controller.toggleFlash();
+                          await qrViewController.toggleFlash();
                         },
                         child: Text(
                           torchButtonTextLanguageArray[languageArrayIdentifier],

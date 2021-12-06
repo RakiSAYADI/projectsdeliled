@@ -14,9 +14,7 @@ class CheckPermissions extends StatefulWidget {
 }
 
 class _CheckPermissionsState extends State<CheckPermissions> {
-  ToastyMessage myUvcToast;
-
-  bool firstDisplayMainWidget = true;
+  ToastyMessage _myUvcToast;
 
   @override
   void initState() {
@@ -26,7 +24,7 @@ class _CheckPermissionsState extends State<CheckPermissions> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    myUvcToast = ToastyMessage(toastContext: context);
+    _myUvcToast = ToastyMessage(toastContext: context);
   }
 
   @override
@@ -79,22 +77,24 @@ class _CheckPermissionsState extends State<CheckPermissions> {
                       onPressed: () async {
                         try {
                           final result = await InternetAddress.lookup('google.com');
+                          waitingConnectionWidget(context);
                           if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
                             print('connected');
-                            Future.delayed(Duration(seconds: 5), () async {
-                              createReplacementRoute(context, QrCodeScan());
-                            });
+                            await Future.delayed(Duration(seconds: 1));
+                            createReplacementRoute(context, QrCodeScan());
                           } else {
                             print('not connected');
-                            myUvcToast.setToastDuration(5);
-                            myUvcToast.setToastMessage(checkConnectionToastTextLanguageArray[languageArrayIdentifier]);
-                            myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                            // delete the waiting widget
+                            Navigator.of(context).pop();
+                            _myUvcToast.setToastDuration(5);
+                            _myUvcToast.setToastMessage(checkConnectionToastTextLanguageArray[languageArrayIdentifier]);
+                            _myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
                           }
                         } on SocketException catch (_) {
                           print('not connected (timeout)');
-                          myUvcToast.setToastDuration(5);
-                          myUvcToast.setToastMessage(checkConnectionToastTextLanguageArray[languageArrayIdentifier]);
-                          myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                          _myUvcToast.setToastDuration(5);
+                          _myUvcToast.setToastMessage(checkConnectionToastTextLanguageArray[languageArrayIdentifier]);
+                          _myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
                         }
                       },
                     ),
