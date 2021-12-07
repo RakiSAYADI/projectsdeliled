@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_deliscan/pages/pdf_files_list.dart';
 import 'package:flutter_app_deliscan/services/DataVariables.dart';
+import 'package:flutter_app_deliscan/services/animation_between_pages.dart';
 import 'package:flutter_app_deliscan/services/languageDataBase.dart';
 import 'package:flutter_app_deliscan/services/uvcToast.dart';
 import 'package:path_provider/path_provider.dart';
@@ -16,12 +18,32 @@ class _PDFDownloaderState extends State<PDFDownloader> {
   int downloadProgress = 0;
   final myPDFFileName = TextEditingController();
   ToastyMessage _myUvcToast;
+  Directory internalDirectory;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _myUvcToast = ToastyMessage(toastContext: context);
+    init();
+  }
+
+  Future<void> init() async => await createFolderInAppDocDir(pdfFilesFolderName);
+
+  Future<bool> createFolderInAppDocDir(String folderName) async {
+    //Get this App Document Directory
+    internalDirectory = await getApplicationDocumentsDirectory();
+    //App Document Directory + folder name
+    final Directory _appDocDirFolder = Directory('${internalDirectory.path}/$folderName/');
+
+    if (await _appDocDirFolder.exists()) {
+      //if folder already exists return path
+      return true;
+    } else {
+      //if folder not exists create folder and then return its path
+      await _appDocDirFolder.create(recursive: true);
+      return false;
+    }
   }
 
   @override
@@ -29,6 +51,7 @@ class _PDFDownloaderState extends State<PDFDownloader> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.blue[400],
         title: Text(pdfDownloaderTitleTextLanguageArray[languageArrayIdentifier]),
@@ -44,7 +67,7 @@ class _PDFDownloaderState extends State<PDFDownloader> {
               child: Text(
                 'Choissir le nom du fichier PDF :',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: screenHeight * 0.02 + screenWidth * 0.02),
+                style: TextStyle(fontSize: screenHeight * 0.02 + screenWidth * 0.02, fontWeight: FontWeight.bold),
               ),
             ),
             Padding(
@@ -53,7 +76,7 @@ class _PDFDownloaderState extends State<PDFDownloader> {
                 textAlign: TextAlign.center,
                 controller: myPDFFileName,
                 style: TextStyle(
-                  fontSize: screenWidth * 0.02,
+                  fontSize: screenHeight * 0.017 + screenWidth * 0.017,
                 ),
                 maxLines: 1,
                 maxLength: 64,
@@ -61,76 +84,57 @@ class _PDFDownloaderState extends State<PDFDownloader> {
                   hintText: 'exp:my_PDF_File',
                   hintStyle: TextStyle(
                     color: Colors.grey,
+                    fontSize: screenHeight * 0.017 + screenWidth * 0.017,
                   ),
                 ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Choissir l\'emplacement du fichier PDF :',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: screenHeight * 0.02 + screenWidth * 0.02),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [],
-            ),
-            TextButton(
-              child: Text(
-                downloadTextLanguageArray[languageArrayIdentifier],
-                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
-              ),
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
-              ),
-              onPressed: () async {
-                if (myPDFFileName.text.isNotEmpty) {
-                  var imageUrl = "https://www.itl.cat/pngfile/big/10-100326_desktop-wallpaper-hd-full-screen-free-download-full.jpg";
-                  bool downloading = true;
-                  String downloadingStr = "No data";
-                  double download = 0.0;
-                  File f;
-                  Dio dio = Dio();
-                  var dir = await getApplicationDocumentsDirectory();
-                  f = File("${dir.path}/myimagepath.jpg");
-                  String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
-                  dio.download(imageUrl, "${dir.path}/$fileName", onReceiveProgress: (rec, total) {
-                    setState(() {
-                      downloading = true;
+              child: TextButton(
+                child: Text(
+                  downloadTextLanguageArray[languageArrayIdentifier],
+                  style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                ),
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
+                ),
+                onPressed: () async {
+                  if (myPDFFileName.text.isNotEmpty) {
+                    bool downloading = false;
+                    double download = 0.0;
+                    File myPDFFile;
+                    Dio dio = Dio();
+                    myPDFFile = File('${internalDirectory.path}/$pdfFilesFolderName/${myPDFFileName.text}.pdf');
+                    dio.download(pdfFileURL, myPDFFile.path, deleteOnError: true, onReceiveProgress: (rec, total) {
                       download = (rec / total) * 100;
-                      print(fileName);
-                      downloadingStr = "Downloading Image : " + (download).toStringAsFixed(0);
+                      if (download == 100.0) {
+                        downloading = false;
+                      } else {
+                        downloading = true;
+                      }
+                      print("Downloading PDF : " + (download).toStringAsFixed(0));
                     });
-                  });
-                  /*final downloaderUtils = DownloaderUtils(
-                    progressCallback: (current, total) {
-                      final progress = (current / total) * 100;
-                      downloadProgress = progress.round();
-                      print('Downloading: $progress');
-                    },
-                    file: File('$pathFile/${myPDFFileName.text}.pdf'),
-                    progress: ProgressImplementation(),
-                    onDone: () {
-                      print('Download done');
-                      Navigator.pop(context, false);
-                    },
-                    deleteOnCancel: true,
-                  );
-                  Flowder.download(pdfFileURL, downloaderUtils);
-                  downloadWidget(context);*/
-                } else {
-                  _myUvcToast.setToastDuration(3);
-                  _myUvcToast.setToastMessage(noNameToastTextLanguageArray[languageArrayIdentifier]);
-                  _myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
-                }
-              },
+                  } else {
+                    _myUvcToast.setToastDuration(3);
+                    _myUvcToast.setToastMessage(noNameToastTextLanguageArray[languageArrayIdentifier]);
+                    _myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                  }
+                },
+              ),
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => createRoute(context, PDFList()),
+        label: Text('List PDF'),
+        icon: Icon(
+          Icons.assignment,
+          color: Colors.white,
+        ),
+        backgroundColor: Colors.blue[400],
       ),
     );
   }

@@ -49,3 +49,5 @@ final List<String> pauseTextLanguageArray = ['Pause', 'Pause'];
 final List<String> stopTextLanguageArray = ['Arrêter', 'Stop'];
 
 final List<String> noNameToastTextLanguageArray = ['Le champ de nom de fichier PDF est Vide !', 'The name of the PDF File is Empty !'];
+
+final List<String> pdfListTitleTextLanguageArray = ['List de PDF', 'List of PDF'];
