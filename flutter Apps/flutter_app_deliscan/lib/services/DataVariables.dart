@@ -14,7 +14,12 @@ final String qrCodeFirstPart = 'http://africau.edu/images/default/'; // test
 final String qrCodeLastPart = '.pdf';
 final String pdfFilesFolderName = 'Rapport_PDF_File';
 
+String filePDFPath = '';
+String filePDFName = '';
 String pdfFileURL = '';
+String userEmail = '';
+
+bool filePDFIsSaved = false;
 
 QRViewController qrViewController;
 
@@ -34,14 +39,14 @@ Future<bool> hasNetwork() async {
   }
 }
 
-Future<void> waitingConnectionWidget(BuildContext buildContext) async {
+Future<void> waitingWidget(BuildContext buildContext, String messageText) async {
   double screenHeight = MediaQuery.of(buildContext).size.height;
   return showDialog<void>(
       context: buildContext,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Connexion en cours'),
+          title: Text(messageText, textAlign: TextAlign.center),
           content: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,

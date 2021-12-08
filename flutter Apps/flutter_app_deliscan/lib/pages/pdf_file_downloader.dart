@@ -2,11 +2,14 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_app_deliscan/pages/pdf_email_send.dart';
 import 'package:flutter_app_deliscan/pages/pdf_files_list.dart';
 import 'package:flutter_app_deliscan/services/DataVariables.dart';
 import 'package:flutter_app_deliscan/services/animation_between_pages.dart';
 import 'package:flutter_app_deliscan/services/languageDataBase.dart';
 import 'package:flutter_app_deliscan/services/uvcToast.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:path_provider/path_provider.dart';
 
 class PDFDownloader extends StatefulWidget {
@@ -19,6 +22,7 @@ class _PDFDownloaderState extends State<PDFDownloader> {
   final myPDFFileName = TextEditingController();
   ToastyMessage _myUvcToast;
   Directory internalDirectory;
+  List<String> fileName = [];
 
   @override
   void initState() {
@@ -102,20 +106,38 @@ class _PDFDownloaderState extends State<PDFDownloader> {
                 ),
                 onPressed: () async {
                   if (myPDFFileName.text.isNotEmpty) {
-                    bool downloading = false;
-                    double download = 0.0;
-                    File myPDFFile;
-                    Dio dio = Dio();
-                    myPDFFile = File('${internalDirectory.path}/$pdfFilesFolderName/${myPDFFileName.text}.pdf');
-                    dio.download(pdfFileURL, myPDFFile.path, deleteOnError: true, onReceiveProgress: (rec, total) {
-                      download = (rec / total) * 100;
-                      if (download == 100.0) {
-                        downloading = false;
-                      } else {
-                        downloading = true;
+                    //App Document Directory + folder name
+                    final Directory _appDocDirFolder = Directory('${internalDirectory.path}/$pdfFilesFolderName/');
+                    List<FileSystemEntity> files = [];
+                    files = Directory(_appDocDirFolder.path).listSync(followLinks: false);
+                    if (files.length > 0) {
+                      for (int i = 0; i < files.length; i++) {
+                        fileName.add(files[i].toString().substring(internalDirectory.path.length + pdfFilesFolderName.length + 9, files[i].toString().length - 5));
                       }
-                      print("Downloading PDF : " + (download).toStringAsFixed(0));
-                    });
+                    }
+                    if (!fileName.contains(myPDFFileName.text)) {
+                      waitingWidget(context, waitingDownloadingAlertDialogMessageTextLanguageArray[languageArrayIdentifier]);
+                      double download = 0.0;
+                      File myPDFFile;
+                      Dio dio = Dio();
+                      myPDFFile = File('${internalDirectory.path}/$pdfFilesFolderName/${myPDFFileName.text}.pdf');
+                      dio.download(pdfFileURL, myPDFFile.path, deleteOnError: true, onReceiveProgress: (rec, total) {
+                        download = (rec / total) * 100;
+                        if (download == 100.0) {
+                          // delete the waiting widget
+                          Navigator.of(context).pop();
+                          _myUvcToast.setToastDuration(3);
+                          _myUvcToast.setToastMessage(downloadCompleteToastTextLanguageArray[languageArrayIdentifier]);
+                          _myUvcToast.showToast(Colors.green, Icons.done, Colors.white);
+                          filePDFIsSaved = true;
+                        }
+                        print("Downloading PDF : " + (download).toStringAsFixed(0));
+                      });
+                    } else {
+                      _myUvcToast.setToastDuration(3);
+                      _myUvcToast.setToastMessage(sameNameToastTextLanguageArray[languageArrayIdentifier]);
+                      _myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                    }
                   } else {
                     _myUvcToast.setToastDuration(3);
                     _myUvcToast.setToastMessage(noNameToastTextLanguageArray[languageArrayIdentifier]);
@@ -127,69 +149,59 @@ class _PDFDownloaderState extends State<PDFDownloader> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => createRoute(context, PDFList()),
-        label: Text('List PDF'),
-        icon: Icon(
-          Icons.assignment,
-          color: Colors.white,
-        ),
-        backgroundColor: Colors.blue[400],
+      floatingActionButton: SpeedDial(
+        marginRight: 18,
+        marginBottom: 20,
+        animatedIcon: AnimatedIcons.menu_close,
+        animatedIconTheme: IconThemeData(size: 22.0),
+        closeManually: false,
+        curve: Curves.bounceIn,
+        overlayColor: Colors.black,
+        overlayOpacity: 0.5,
+        tooltip: menuTextLanguageArray[languageArrayIdentifier],
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 8.0,
+        shape: CircleBorder(),
+        children: [
+          SpeedDialChild(
+            child: Icon(
+              Icons.assignment,
+              color: Colors.white,
+            ),
+            backgroundColor: Colors.blue[400],
+            label: listPDFTextLanguageArray[languageArrayIdentifier],
+            labelStyle: TextStyle(fontSize: 18.0),
+            onTap: () => createRoute(context, PDFList()),
+          ),
+          SpeedDialChild(
+            child: Icon(
+              Icons.send,
+              color: Colors.white,
+            ),
+            backgroundColor: Colors.green,
+            label: sendTextLanguageArray[languageArrayIdentifier],
+            labelStyle: TextStyle(fontSize: 18.0),
+            onTap: () async {
+              SystemChannels.textInput.invokeMethod('TextInput.hide');
+              if (myPDFFileName.text.isNotEmpty) {
+                if (filePDFIsSaved) {
+                  filePDFName = myPDFFileName.text;
+                  createRoute(context, PDFEmail());
+                } else {
+                  _myUvcToast.setToastDuration(3);
+                  _myUvcToast.setToastMessage(noEmailToastTextLanguageArray[languageArrayIdentifier]);
+                  _myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                }
+              } else {
+                _myUvcToast.setToastDuration(3);
+                _myUvcToast.setToastMessage(noNameToastTextLanguageArray[languageArrayIdentifier]);
+                _myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+              }
+            },
+          ),
+        ],
       ),
     );
-  }
-
-  Future<void> downloadWidget(BuildContext buildContext) async {
-    double screenHeight = MediaQuery.of(buildContext).size.height;
-    double screenWidth = MediaQuery.of(buildContext).size.width;
-    return showDialog<void>(
-        context: buildContext,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(downloadWidgetTextLanguageArray[languageArrayIdentifier]),
-            content: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    '$downloadProgress %',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: screenHeight * 0.02),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: LinearProgressIndicator(
-                    value: downloadProgress.toDouble(),
-                    semanticsLabel: 'Download indicator',
-                  ),
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                child: Text(
-                  pauseTextLanguageArray[languageArrayIdentifier],
-                  style: TextStyle(fontSize: (screenWidth * 0.02)),
-                ),
-                onPressed: () {
-                  Navigator.pop(context, false);
-                },
-              ),
-              TextButton(
-                child: Text(
-                  stopTextLanguageArray[languageArrayIdentifier],
-                  style: TextStyle(fontSize: (screenWidth * 0.02)),
-                ),
-                onPressed: () {
-                  Navigator.pop(context, false);
-                },
-              ),
-            ],
-          );
-        });
   }
 }

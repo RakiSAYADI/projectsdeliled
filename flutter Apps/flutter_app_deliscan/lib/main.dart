@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app_deliscan/pages/check_permissions.dart';
+import 'package:flutter_app_deliscan/pages/pdf_email_send.dart';
 import 'package:flutter_app_deliscan/pages/pdf_file_downloader.dart';
+import 'package:flutter_app_deliscan/pages/pdf_files_list.dart';
+import 'package:flutter_app_deliscan/pages/pdf_files_view.dart';
 import 'package:flutter_app_deliscan/pages/pdf_view.dart';
 import 'package:flutter_app_deliscan/pages/qr_code_scan.dart';
 import 'package:flutter_app_deliscan/pages/welcome.dart';
@@ -45,6 +48,9 @@ class MyApp extends StatelessWidget {
         '/qr_code_scan': (context) => QrCodeScan(),
         '/pdf_view': (context) => PDFViewer(),
         '/pdf_download': (context) => PDFDownloader(),
+        '/pdf_list': (context) => PDFList(),
+        '/pdf_file_view': (context) => PDFFileView(),
+        '/pdf_email': (context) => PDFEmail(),
       },
     );
   }

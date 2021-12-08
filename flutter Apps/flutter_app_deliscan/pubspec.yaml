@@ -35,7 +35,6 @@ dependencies:
   mailer: ^3.2.1
   flutter_cached_pdfview: ^0.4.1
   dio: ^4.0.4
-  open_file: ^3.2.1
   filesystem_picker: ^2.0.0
   get: ^4.3.8
 

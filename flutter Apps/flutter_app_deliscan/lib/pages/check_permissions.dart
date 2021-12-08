@@ -77,7 +77,7 @@ class _CheckPermissionsState extends State<CheckPermissions> {
                       onPressed: () async {
                         try {
                           final result = await InternetAddress.lookup('google.com');
-                          waitingConnectionWidget(context);
+                          waitingWidget(context, waitingConnexionAlertDialogMessageTextLanguageArray[languageArrayIdentifier]);
                           if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
                             print('connected');
                             await Future.delayed(Duration(seconds: 1));

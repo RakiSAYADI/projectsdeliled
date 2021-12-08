@@ -5,7 +5,6 @@ import 'package:flutter_app_deliscan/services/DataVariables.dart';
 import 'package:flutter_app_deliscan/services/animation_between_pages.dart';
 import 'package:flutter_app_deliscan/services/languageDataBase.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class PDFViewer extends StatefulWidget {
   @override
@@ -34,47 +33,17 @@ class _PDFViewerState extends State<PDFViewer> {
             errorWidget: (error) => Center(child: Text(error.toString())),
           ),
         ),
-        floatingActionButton: SpeedDial(
-          marginRight: 18,
-          marginBottom: 20,
-          animatedIcon: AnimatedIcons.menu_close,
-          animatedIconTheme: IconThemeData(size: 22.0),
-          closeManually: false,
-          curve: Curves.bounceIn,
-          overlayColor: Colors.black,
-          overlayOpacity: 0.5,
-          tooltip: menuTextLanguageArray[languageArrayIdentifier],
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
-          elevation: 8.0,
-          shape: CircleBorder(),
-          children: [
-            SpeedDialChild(
-              child: Icon(
-                Icons.file_download,
-                color: Colors.white,
-              ),
-              backgroundColor: Colors.green,
-              label: downloadTextLanguageArray[languageArrayIdentifier],
-              labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () async {
-                SystemChannels.textInput.invokeMethod('TextInput.hide');
-                createRoute(context, PDFDownloader());
-              },
-            ),
-            SpeedDialChild(
-              child: Icon(
-                Icons.send,
-                color: Colors.white,
-              ),
-              backgroundColor: Colors.blue,
-              label: sendTextLanguageArray[languageArrayIdentifier],
-              labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () async {
-                SystemChannels.textInput.invokeMethod('TextInput.hide');
-              },
-            ),
-          ],
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            SystemChannels.textInput.invokeMethod('TextInput.hide');
+            filePDFIsSaved = false;
+            createRoute(context, PDFDownloader());
+          },
+          child: Icon(
+            Icons.file_download,
+            color: Colors.white,
+          ),
+          backgroundColor: Colors.blue[400],
         ),
       ),
       onWillPop: () => returnButton(context),

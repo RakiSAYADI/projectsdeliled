@@ -50,4 +50,49 @@ final List<String> stopTextLanguageArray = ['Arrêter', 'Stop'];
 
 final List<String> noNameToastTextLanguageArray = ['Le champ de nom de fichier PDF est Vide !', 'The name of the PDF File is Empty !'];
 
+final List<String> sameNameToastTextLanguageArray = ['Ce nom existe deja sur ce téléphone !', 'This name is already exists on this phone !'];
+
 final List<String> pdfListTitleTextLanguageArray = ['List de PDF', 'List of PDF'];
+
+final List<String> pdfFileCardOpenTextLanguageArray = ['Ouvrir', 'Open'];
+
+final List<String> pdfFileCardDeleteTextLanguageArray = ['Supprimer', 'Delete'];
+
+final List<String> waitingAlertDialogMessageTextLanguageArray = ['Veuillez Patientez', 'Please Wait'];
+
+final List<String> waitingConnexionAlertDialogMessageTextLanguageArray = ['Connection en cours', 'Connexion in progress'];
+
+final List<String> waitingDownloadingAlertDialogMessageTextLanguageArray = ['Téléchargement en cours', 'Downloading in progress'];
+
+final List<String> downloadCompleteToastTextLanguageArray = ['Téléchargement terminé !', 'Download is completed !'];
+
+final List<String> listPDFTextLanguageArray = ['List PDF', 'List PDF'];
+
+final List<String> sendEmailPageTitleTextLanguageArray = ['Envoi Email', 'Send Email'];
+
+final List<String> sendEmailPageMessageTextLanguageArray = ['Entrer votre adresse email :', 'Enter your email address:'];
+
+final List<String> sendingEmailPageToastTextLanguageArray = ['Envoi en cours !', 'Sending in progress!'];
+
+final List<String> sendEmailPageButtonTextLanguageArray = ['Envoyer', 'Send'];
+
+final List<String> uvcEmailObjectTextLanguageArray = ['Rapport de désinfection UV-C', 'UV-C disinfection report'];
+
+final List<String> uvcEmailMessageTextLanguageArray = [
+  'Bonjour,\n\n'
+      'Vous trouverez ci-joint le rapport concernant la désinfection effectuée à l’aide de '
+      'votre solution UV-C DEEPLIGHT® de DeliTech Medical®.\n'
+      'Cet email est envoyé automatiquement, merci de ne pas y répondre.\n\n'
+      'Merci de votre confiance.',
+  'Hello, Hello,\n\n'
+      'You will find attached the report of the performed disinfection '
+      'using your DEEPLIGHT® UV-C solution from DeliTech Medical®.\n'
+      'This email is sent automatically, please do not reply.\n\n'
+      'Thank you for trusting DEEPLIGHT®.'
+];
+
+final List<String> sendEmailValidToastTextLanguageArray = ['Email envoyé, vérifiez votre boite de reception !', 'Email sent,please check your inbox!'];
+
+final List<String> sendEmailNotValidToastTextLanguageArray = ['Email non envoyé, vérifiez votre addresse email !', 'Error, please check your email address!'];
+
+final List<String> noEmailToastTextLanguageArray = ['il faut télécharger le fichier PDF avant de l\'envoyer par Email !', 'you have to save the PDF file before sending it by Email !'];
