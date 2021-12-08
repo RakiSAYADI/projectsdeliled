@@ -19,10 +19,6 @@ class _QrCodeScanState extends State<QrCodeScan> {
   final GlobalKey _qrKey = GlobalKey(debugLabel: 'QR');
   Barcode _result;
 
-  String _qrCodeMessage = '';
-
-  Color _colorMessage = Colors.white;
-
   ToastyMessage _myUvcToast;
 
   final MyConnectivity _connectivity = MyConnectivity.instance;
@@ -72,15 +68,6 @@ class _QrCodeScanState extends State<QrCodeScan> {
           print("bad qrcode ");
           qrCodeVerified = false;
         }
-        setState(() {
-          if (qrCodeVerified) {
-            _qrCodeMessage = validAccessTextLanguageArray[languageArrayIdentifier];
-            _colorMessage = Colors.green;
-          } else {
-            _qrCodeMessage = nonValidAccessTextLanguageArray[languageArrayIdentifier];
-            _colorMessage = Colors.red;
-          }
-        });
         if (qrCodeVerified) {
           controller.pauseCamera();
           createRoute(context, PDFViewer());
@@ -91,10 +78,6 @@ class _QrCodeScanState extends State<QrCodeScan> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    double cameraViewHeight = screenHeight * 0.60;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[400],
@@ -106,50 +89,30 @@ class _QrCodeScanState extends State<QrCodeScan> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(height: screenHeight * 0.02),
-            Container(
-              width: screenWidth,
-              height: cameraViewHeight,
-              child: QRView(
-                key: _qrKey,
-                onQRViewCreated: _onQrViewCreated,
+            Expanded(
+              flex: 6,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
+                child: QRView(
+                  key: _qrKey,
+                  onQRViewCreated: _onQrViewCreated,
+                ),
               ),
             ),
-            SizedBox(height: screenHeight * 0.02),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  SizedBox(height: screenHeight * 0.02),
-                  Text(
-                    _qrCodeMessage,
-                    textAlign: TextAlign.center,
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  onPressed: () async => await qrViewController.toggleFlash(),
+                  child: Text(
+                    torchButtonTextLanguageArray[languageArrayIdentifier],
                     style: TextStyle(
-                      fontSize: screenHeight * 0.02,
-                      color: _colorMessage,
+                      color: Colors.grey[300],
+                      fontSize: 20.0,
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.02),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      TextButton(
-                        onPressed: () async {
-                          await qrViewController.toggleFlash();
-                        },
-                        child: Text(
-                          torchButtonTextLanguageArray[languageArrayIdentifier],
-                          style: TextStyle(
-                            color: Colors.grey[300],
-                            fontSize: 20.0,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                ),
               ),
             ),
           ],

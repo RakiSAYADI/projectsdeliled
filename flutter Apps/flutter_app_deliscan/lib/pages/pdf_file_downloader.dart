@@ -69,7 +69,7 @@ class _PDFDownloaderState extends State<PDFDownloader> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'Choissir le nom du fichier PDF :',
+                inputTextMessageLanguageArray[languageArrayIdentifier],
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: screenHeight * 0.02 + screenWidth * 0.02, fontWeight: FontWeight.bold),
               ),
@@ -79,13 +79,14 @@ class _PDFDownloaderState extends State<PDFDownloader> {
               child: TextField(
                 textAlign: TextAlign.center,
                 controller: myPDFFileName,
+                onChanged: (text) => filePDFIsSaved = false,
                 style: TextStyle(
                   fontSize: screenHeight * 0.017 + screenWidth * 0.017,
                 ),
                 maxLines: 1,
                 maxLength: 64,
                 decoration: InputDecoration(
-                  hintText: 'exp:my_PDF_File',
+                  hintText: inputTextExampleMessageLanguageArray[languageArrayIdentifier],
                   hintStyle: TextStyle(
                     color: Colors.grey,
                     fontSize: screenHeight * 0.017 + screenWidth * 0.017,

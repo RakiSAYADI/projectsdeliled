@@ -1,9 +1,5 @@
 final List<String> cameraLaunchToastTextLanguageArray = ['Lancement de la caméra !', 'Camera launching'];
 
-final List<String> validAccessTextLanguageArray = ['Accès valide', 'Valid access'];
-
-final List<String> nonValidAccessTextLanguageArray = ['Accès non valide', 'Invalid access'];
-
 final List<String> qrcodeScanTitleTextLanguageArray = ['Scanner le QR code', 'Scan the QR code'];
 
 final List<String> torchButtonTextLanguageArray = ['Torche', 'Light'];
@@ -84,7 +80,7 @@ final List<String> uvcEmailMessageTextLanguageArray = [
       'votre solution UV-C DEEPLIGHT® de DeliTech Medical®.\n'
       'Cet email est envoyé automatiquement, merci de ne pas y répondre.\n\n'
       'Merci de votre confiance.',
-  'Hello, Hello,\n\n'
+  'Hello,\n\n'
       'You will find attached the report of the performed disinfection '
       'using your DEEPLIGHT® UV-C solution from DeliTech Medical®.\n'
       'This email is sent automatically, please do not reply.\n\n'
@@ -96,3 +92,7 @@ final List<String> sendEmailValidToastTextLanguageArray = ['Email envoyé, véri
 final List<String> sendEmailNotValidToastTextLanguageArray = ['Email non envoyé, vérifiez votre addresse email !', 'Error, please check your email address!'];
 
 final List<String> noEmailToastTextLanguageArray = ['il faut télécharger le fichier PDF avant de l\'envoyer par Email !', 'you have to save the PDF file before sending it by Email !'];
+
+final List<String> inputTextMessageLanguageArray = ['Choissir le nom du fichier PDF :', 'Choose the name of the QrCode :'];
+
+final List<String> inputTextExampleMessageLanguageArray = ['exp:my_PDF_File', 'exp:my_PDF_File'];

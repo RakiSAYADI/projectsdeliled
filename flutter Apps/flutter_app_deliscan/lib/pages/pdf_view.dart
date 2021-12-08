@@ -12,6 +12,13 @@ class PDFViewer extends StatefulWidget {
 }
 
 class _PDFViewerState extends State<PDFViewer> {
+  bool downloadVisibility = true;
+
+  Future<void> refreshWidget() async {
+    await Future.delayed(Duration(milliseconds: 500));
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -30,20 +37,27 @@ class _PDFViewerState extends State<PDFViewer> {
           ).cachedFromUrl(
             pdfFileURL,
             placeholder: (progress) => Center(child: Text('$progress %')),
-            errorWidget: (error) => Center(child: Text(error.toString())),
+            errorWidget: (error) {
+              downloadVisibility = false;
+              refreshWidget();
+              return Center(child: Text(error.toString(), textAlign: TextAlign.center));
+            },
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            SystemChannels.textInput.invokeMethod('TextInput.hide');
-            filePDFIsSaved = false;
-            createRoute(context, PDFDownloader());
-          },
-          child: Icon(
-            Icons.file_download,
-            color: Colors.white,
+        floatingActionButton: Visibility(
+          visible: downloadVisibility,
+          child: FloatingActionButton(
+            onPressed: () {
+              SystemChannels.textInput.invokeMethod('TextInput.hide');
+              filePDFIsSaved = false;
+              createRoute(context, PDFDownloader());
+            },
+            child: Icon(
+              Icons.file_download,
+              color: Colors.white,
+            ),
+            backgroundColor: Colors.blue[400],
           ),
-          backgroundColor: Colors.blue[400],
         ),
       ),
       onWillPop: () => returnButton(context),
