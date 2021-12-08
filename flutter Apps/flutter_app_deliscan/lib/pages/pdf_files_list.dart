@@ -25,7 +25,6 @@ class _PDFListState extends State<PDFList> {
   @override
   void initState() {
     // TODO: implement initState
-    filePDFIsSaved = false;
     findAllPDFs();
     super.initState();
   }
@@ -47,7 +46,7 @@ class _PDFListState extends State<PDFList> {
         }
       });
     } catch (e) {
-      print('erreur list folder');
+      print('error list folder');
     }
   }
 
