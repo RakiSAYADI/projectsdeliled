@@ -10,4 +10,9 @@ Device myDevice;
 
 UvcLight myUvcLight;
 
+final String dataRobotUVCDefault = '{\"Company\":\"Votre entreprise\",\"UserName\":\"Utilisateur\",\"Detection\":0,\"RoomName\":\"Chambre 1\",\"TimeData\":[0,0]}';
+
+String languageCode = 'fr';
+int languageArrayIdentifier = 0;
+
 List<BluetoothDevice> scanDevices = [];

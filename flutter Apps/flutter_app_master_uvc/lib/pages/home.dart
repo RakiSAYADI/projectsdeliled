@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_master_uvc/services/DataVariables.dart';
 import 'package:flutter_app_master_uvc/services/bleDeviceClass.dart';
+import 'package:flutter_app_master_uvc/services/languageDataBase.dart';
 import 'package:flutter_app_master_uvc/services/uvcToast.dart';
 
 class Home extends StatefulWidget {
@@ -17,8 +18,8 @@ class _HomeState extends State<Home> {
   bool firstDisplayMainWidget = true;
   bool securityAccess = false;
 
-  String durationUVC = '122 heures';
-  String numberOfUVC = '1 fois';
+  String durationUVC = '122 ${hoursTextLanguageArray[languageArrayIdentifier]}';
+  String numberOfUVC = '1 ${timesTextLanguageArray[languageArrayIdentifier]}';
   String typeOfDisinfectionMessage = '';
   String qrCodeScanMessage = '';
 
@@ -49,7 +50,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     if (dataRobotUVC == null) {
-      dataRobotUVC = '{\"Company\":\"Votre entreprise\",\"UserName\":\"Utilisateur\",\"Detection\":0,\"RoomName\":\"Chambre 1\",\"TimeData\":[0,0]}';
+      dataRobotUVC = dataRobotUVCDefault;
     }
 
     if (dataRobotUVC.isNotEmpty && firstDisplayMainWidget) {
@@ -63,31 +64,31 @@ class _HomeState extends State<Home> {
               variableUVCMode = data['Version'];
               if (data['security'] == 0) {
                 securityAccess = false;
-                qrCodeScanMessage = 'activé';
+                qrCodeScanMessage = activatedTextLanguageArray[languageArrayIdentifier];
               } else {
                 securityAccess = true;
-                qrCodeScanMessage = 'désactivé';
+                qrCodeScanMessage = deactivatedTextLanguageArray[languageArrayIdentifier];
               }
 
               String timeDataList = data['UVCTimeData'].toString();
               lifeCycleUVCList = _stringListAsciiToListInt(timeDataList.codeUnits);
               int lifeTimeCycle = lifeCycleUVCList[1];
-              numberOfUVC = '${lifeCycleUVCList[2]} fois';
+              numberOfUVC = '${lifeCycleUVCList[2]} ${timesTextLanguageArray[languageArrayIdentifier]}';
               if (lifeTimeCycle < 60) {
-                durationUVC = '$lifeTimeCycle secondes';
+                durationUVC = '$lifeTimeCycle ${secondsTextLanguageArray[languageArrayIdentifier]}';
               } else if (lifeTimeCycle < 3600) {
                 lifeTimeCycle = (lifeTimeCycle / 60).round();
-                durationUVC = '$lifeTimeCycle minutes';
+                durationUVC = '$lifeTimeCycle ${minutesTextLanguageArray[languageArrayIdentifier]}';
               } else {
                 lifeTimeCycle = (lifeTimeCycle / 3600).round();
-                durationUVC = '$lifeTimeCycle heures';
+                durationUVC = '$lifeTimeCycle ${hoursTextLanguageArray[languageArrayIdentifier]}';
               }
               switch (variableUVCMode) {
                 case 0:
-                  typeOfDisinfectionMessage = 'manuel';
+                  typeOfDisinfectionMessage = manualTextLanguageArray[languageArrayIdentifier];
                   break;
                 case 1:
-                  typeOfDisinfectionMessage = 'automatique';
+                  typeOfDisinfectionMessage = automaticTextLanguageArray[languageArrayIdentifier];
                   break;
               }
             } catch (e) {
@@ -112,7 +113,7 @@ class _HomeState extends State<Home> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Master UVC'),
+          title: Text(masterUVCTitleTextLanguageArray[languageArrayIdentifier]),
           centerTitle: true,
           backgroundColor: hardPink,
         ),
@@ -137,7 +138,7 @@ class _HomeState extends State<Home> {
                             child: Padding(
                               padding: const EdgeInsets.all(5.0),
                               child: Text(
-                                'Paramètres du dispositif UV-C',
+                                parametersUVCTextLanguageArray[languageArrayIdentifier],
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: screenWidth * 0.05,
@@ -157,7 +158,7 @@ class _HomeState extends State<Home> {
                                     Padding(
                                       padding: const EdgeInsets.all(3.0),
                                       child: Text(
-                                        'Type de pilotage :',
+                                        pilotTypeTextLanguageArray[languageArrayIdentifier],
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: screenWidth * 0.05,
@@ -209,7 +210,7 @@ class _HomeState extends State<Home> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(1.0),
                                           child: Text(
-                                            'Changer',
+                                            changeTextLanguageArray[languageArrayIdentifier],
                                             textAlign: TextAlign.center,
                                             style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
                                           ),
@@ -245,7 +246,7 @@ class _HomeState extends State<Home> {
                                     Padding(
                                       padding: const EdgeInsets.all(3.0),
                                       child: Text(
-                                        'QR code de sécurité :',
+                                        qrCodeSecurityTextLanguageArray[languageArrayIdentifier],
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: screenWidth * 0.05,
@@ -296,7 +297,7 @@ class _HomeState extends State<Home> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(1.0),
                                           child: Text(
-                                            'Changer',
+                                            changeTextLanguageArray[languageArrayIdentifier],
                                             textAlign: TextAlign.center,
                                             style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
                                           ),
@@ -327,7 +328,7 @@ class _HomeState extends State<Home> {
                             child: Padding(
                               padding: const EdgeInsets.all(5.0),
                               child: Text(
-                                'Maintenance des tubes UV-C',
+                                maintenanceUVCTextLanguageArray[languageArrayIdentifier],
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: screenWidth * 0.05,
@@ -346,7 +347,7 @@ class _HomeState extends State<Home> {
                                   Padding(
                                     padding: const EdgeInsets.all(5.0),
                                     child: Text(
-                                      'Durée d\'utilisation',
+                                      durationOfUseTextLanguageArray[languageArrayIdentifier],
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontSize: screenWidth * 0.05,
@@ -381,7 +382,7 @@ class _HomeState extends State<Home> {
                                   Padding(
                                     padding: const EdgeInsets.all(5.0),
                                     child: Text(
-                                      'Nombre d\'allumages',
+                                      numberIgnitionsTextLanguageArray[languageArrayIdentifier],
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontSize: screenWidth * 0.05,
@@ -416,7 +417,7 @@ class _HomeState extends State<Home> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            'Remise à zero',
+                            resetButtonTextLanguageArray[languageArrayIdentifier],
                             textAlign: TextAlign.center,
                             style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.06),
                           ),
@@ -443,15 +444,15 @@ class _HomeState extends State<Home> {
       context: context,
       builder: (c) => AlertDialog(
         title: Text(
-          'Attention',
+          attentionTextLanguageArray[languageArrayIdentifier],
           style: TextStyle(
             color: hardPink,
           ),
         ),
-        content: Text('Êtes-vous sûr de vouloir remettre à zéro ces données ?'),
+        content: Text(resetAlertDialogMessageTextLanguageArray[languageArrayIdentifier]),
         actions: [
           TextButton(
-            child: Text('Oui'),
+            child: Text(yesTextLanguageArray[languageArrayIdentifier]),
             onPressed: () async {
               Navigator.pop(c, false);
               if (myDevice.getConnectionState()) {
@@ -461,11 +462,11 @@ class _HomeState extends State<Home> {
                   await myDevice.writeCharacteristic(2, 0, '(SetUVCLIFETIME : 0)');
                 }
                 myUvcToast.setToastDuration(2);
-                myUvcToast.setToastMessage('Confuguration sauvegardée !');
+                myUvcToast.setToastMessage(configSavedToastTextLanguageArray[languageArrayIdentifier]);
                 myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
                 setState(() {
-                  durationUVC = '0 secondes';
-                  numberOfUVC = '0 fois';
+                  durationUVC = '0 ${secondsTextLanguageArray[languageArrayIdentifier]}';
+                  numberOfUVC = '0 ${timesTextLanguageArray[languageArrayIdentifier]}';
                 });
               } else {
                 lostConnection(context, myDevice);
@@ -473,7 +474,7 @@ class _HomeState extends State<Home> {
             },
           ),
           TextButton(
-            child: Text('Non'),
+            child: Text(noTextLanguageArray[languageArrayIdentifier]),
             onPressed: () => Navigator.pop(c, false),
           ),
         ],
@@ -488,14 +489,10 @@ class _HomeState extends State<Home> {
 
     switch (infoType) {
       case 'type de pilotage':
-        popUpMessage = 'En cliquant sur \"Changer\", le dispositif UV-C passera soit en mode Manuel soit en mode Automatique. \n\n'
-            'Manuel : configurez manuellement les données de désinfection (entreprise, opérateur, durée de désinfection). \n\n'
-            'Automatique : permet de lire des QR codes contenant des données de désinfection pré-configurées. ';
+        popUpMessage = pilotModeAlertDialogMessageTextLanguageArray[languageArrayIdentifier];
         break;
       case 'qr code de security':
-        popUpMessage = 'En cliquant sur \"Changer\", le dispositif UV-C passera soit en mode Activé ou Désactivé. \n\n'
-            'Activé : le QR code de sécurité vous sera demandé à chaque fois. \n\n'
-            'Désactivé : le QR code de sécurité ne vous sera plus jamais demandé. ';
+        popUpMessage = securityQrCodeAlertDialogMessageTextLanguageArray[languageArrayIdentifier];
         break;
     }
 
@@ -503,7 +500,7 @@ class _HomeState extends State<Home> {
       context: context,
       builder: (c) => AlertDialog(
         title: Text(
-          'Information:',
+          informationAlertDialogTitleTextLanguageArray[languageArrayIdentifier],
           style: TextStyle(
             color: hardPink,
           ),
@@ -525,7 +522,7 @@ class _HomeState extends State<Home> {
         ),
         actions: [
           TextButton(
-            child: Text('OK'),
+            child: Text(okTextLanguageArray[languageArrayIdentifier]),
             onPressed: () => Navigator.pop(c, true),
           ),
         ],
@@ -541,7 +538,7 @@ class _HomeState extends State<Home> {
       context: context,
       builder: (c) => AlertDialog(
         title: Text(
-          'Type de pilotage:',
+          pilotAlertDialogTitleTextLanguageArray[languageArrayIdentifier],
           style: TextStyle(
             color: hardPink,
           ),
@@ -562,7 +559,7 @@ class _HomeState extends State<Home> {
                   String modeMessageCommand = '{\"SetVersion\" :$variableUVCMode}';
                   if (myDevice.getConnectionState()) {
                     myUvcToast.setToastDuration(2);
-                    myUvcToast.setToastMessage('Confuguration sauvegardée !');
+                    myUvcToast.setToastMessage(configSavedToastTextLanguageArray[languageArrayIdentifier]);
                     myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
                     if (Platform.isIOS) {
                       await myDevice.writeCharacteristic(0, 0, modeMessageCommand);
@@ -571,7 +568,7 @@ class _HomeState extends State<Home> {
                     }
                     Navigator.pop(c, false);
                     setState(() {
-                      typeOfDisinfectionMessage = 'automatique';
+                      typeOfDisinfectionMessage = automaticTextLanguageArray[languageArrayIdentifier];
                     });
                   } else {
                     lostConnection(context, myDevice);
@@ -583,7 +580,7 @@ class _HomeState extends State<Home> {
                   size: screenHeight * 0.035,
                 ),
                 label: Text(
-                  'Mode automatique',
+                  modeAutomaticTextLanguageArray[languageArrayIdentifier],
                   style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.045),
                 ),
               ),
@@ -598,7 +595,7 @@ class _HomeState extends State<Home> {
                   String modeMessageCommand = '{\"SetVersion\" :$variableUVCMode}';
                   if (myDevice.getConnectionState()) {
                     myUvcToast.setToastDuration(2);
-                    myUvcToast.setToastMessage('Confuguration sauvegardée !');
+                    myUvcToast.setToastMessage(configSavedToastTextLanguageArray[languageArrayIdentifier]);
                     myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
                     if (Platform.isIOS) {
                       await myDevice.writeCharacteristic(0, 0, modeMessageCommand);
@@ -607,7 +604,7 @@ class _HomeState extends State<Home> {
                     }
                     Navigator.pop(c, false);
                     setState(() {
-                      typeOfDisinfectionMessage = 'manuel';
+                      typeOfDisinfectionMessage = manualTextLanguageArray[languageArrayIdentifier];
                     });
                   } else {
                     lostConnection(context, myDevice);
@@ -619,7 +616,7 @@ class _HomeState extends State<Home> {
                   size: screenHeight * 0.035,
                 ),
                 label: Text(
-                  'Mode manuel',
+                  modeManualTextLanguageArray[languageArrayIdentifier],
                   style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.045),
                 ),
               ),
@@ -639,7 +636,7 @@ class _HomeState extends State<Home> {
       context: context,
       builder: (c) => AlertDialog(
         title: Text(
-          'Scan QrCode Securité:',
+          scanQrCodeTitleAlertDialogTextLanguageArray[languageArrayIdentifier],
           style: TextStyle(
             color: hardPink,
           ),
@@ -651,8 +648,7 @@ class _HomeState extends State<Home> {
             children: [
               SizedBox(width: screenWidth * 0.1),
               Text(
-                'Attention : désactiver le QR code de sécurité peut entraîner des risques et engage votre responsabilité. '
-                'Il vous appartient de notifier les utilisateurs finaux des solutions UV-C DEEPLIGHT® de la désactivation de ce paramètre. ',
+                deactivationScanQrCodeMessageAlertDialogTextLanguageArray[languageArrayIdentifier],
                 textAlign: TextAlign.justify,
                 style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.035, fontWeight: FontWeight.bold),
               ),
@@ -675,7 +671,7 @@ class _HomeState extends State<Home> {
                   securityAccess = false;
                   if (myDevice.getConnectionState()) {
                     myUvcToast.setToastDuration(2);
-                    myUvcToast.setToastMessage('Confuguration sauvegardée !');
+                    myUvcToast.setToastMessage(configSavedToastTextLanguageArray[languageArrayIdentifier]);
                     myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
                     if (Platform.isIOS) {
                       await myDevice.writeCharacteristic(0, 0, modeMessageCommand);
@@ -684,7 +680,7 @@ class _HomeState extends State<Home> {
                     }
                     Navigator.pop(c, false);
                     setState(() {
-                      qrCodeScanMessage = 'activé';
+                      qrCodeScanMessage = activatedTextLanguageArray[languageArrayIdentifier];
                     });
                   } else {
                     lostConnection(context, myDevice);
@@ -696,7 +692,7 @@ class _HomeState extends State<Home> {
                   size: screenHeight * 0.035,
                 ),
                 label: Text(
-                  'Activée',
+                  activatedButtonTextLanguageArray[languageArrayIdentifier],
                   style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.045),
                 ),
               ),
@@ -711,7 +707,7 @@ class _HomeState extends State<Home> {
                   securityAccess = true;
                   if (myDevice.getConnectionState()) {
                     myUvcToast.setToastDuration(2);
-                    myUvcToast.setToastMessage('Confuguration sauvegardée !');
+                    myUvcToast.setToastMessage(configSavedToastTextLanguageArray[languageArrayIdentifier]);
                     myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
                     if (Platform.isIOS) {
                       await myDevice.writeCharacteristic(0, 0, modeMessageCommand);
@@ -720,7 +716,7 @@ class _HomeState extends State<Home> {
                     }
                     Navigator.pop(c, false);
                     setState(() {
-                      qrCodeScanMessage = 'désactivé';
+                      qrCodeScanMessage = deactivatedTextLanguageArray[languageArrayIdentifier];
                     });
                   } else {
                     lostConnection(context, myDevice);
@@ -732,7 +728,7 @@ class _HomeState extends State<Home> {
                   size: screenHeight * 0.035,
                 ),
                 label: Text(
-                  'Désactivée',
+                  deactivatedButtonTextLanguageArray[languageArrayIdentifier],
                   style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.045),
                 ),
               ),
@@ -746,7 +742,7 @@ class _HomeState extends State<Home> {
 
   void lostConnection(BuildContext context, Device device) {
     myUvcToast.setToastDuration(5);
-    myUvcToast.setToastMessage('Le dispositif est trop loin ou étient, merci de vérifier ce dernier');
+    myUvcToast.setToastMessage(checkConnectionToastMessageTextLanguageArray[languageArrayIdentifier]);
     myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
     device.disconnect();
     Navigator.pushNamedAndRemoveUntil(context, "/check_permissions", (r) => false);
@@ -757,15 +753,15 @@ class _HomeState extends State<Home> {
       context: context,
       builder: (c) => AlertDialog(
         title: Text(
-          'Attention',
+          attentionTextLanguageArray[languageArrayIdentifier],
           style: TextStyle(
             color: hardPink,
           ),
         ),
-        content: Text('Voulez-vous quitter cette page ?'),
+        content: Text(exitAlertDialogMessageTextLanguageArray[languageArrayIdentifier]),
         actions: [
           TextButton(
-            child: Text('Oui'),
+            child: Text(yesTextLanguageArray[languageArrayIdentifier]),
             onPressed: () {
               Navigator.pop(c, true);
               myDevice.disconnect();
@@ -773,7 +769,7 @@ class _HomeState extends State<Home> {
             },
           ),
           TextButton(
-            child: Text('Non'),
+            child: Text(noTextLanguageArray[languageArrayIdentifier]),
             onPressed: () => Navigator.pop(c, false),
           ),
         ],

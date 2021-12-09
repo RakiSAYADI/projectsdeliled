@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_master_uvc/services/DataVariables.dart';
+import 'package:flutter_app_master_uvc/services/languageDataBase.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_app_master_uvc/services/uvcToast.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -45,7 +46,8 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
   }
 
   void _listenForPermissionStatus() async {
-    await [Permission.locationWhenInUse, Permission.locationAlways].request();
+    await Permission.locationWhenInUse.request();
+    await Permission.locationAlways.request();
   }
 
   @override
@@ -63,7 +65,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
         //Alert user to turn on bluetooth.
         print("Bluetooth is off");
         myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('Le Bluetooth (BLE) n\'est pas activé sur votre téléphone !');
+        myUvcToast.setToastMessage(bluetoothToastLanguageArray[languageArrayIdentifier]);
         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
       } else if (state == BluetoothState.on) {
         //if bluetooth is enabled then go ahead.
@@ -82,7 +84,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Permissions'),
+          title: Text(checkPermissionsTitleTextLanguageArray[languageArrayIdentifier]),
           centerTitle: true,
           backgroundColor: Color(0xFF554c9a),
         ),
@@ -97,7 +99,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
-                        'Afin de garantir le bon fonctionnement de l\'application merci d\'activer votre Bluetooth ainsi que votre localisation.',
+                        checkPermissionMessageTextLanguageArray[languageArrayIdentifier],
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.black,
@@ -118,7 +120,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                         backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF554c9a)),
                       ),
                       child: Text(
-                        'COMPRIS',
+                        understoodTextLanguageArray[languageArrayIdentifier],
                         style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
                       ),
                       onPressed: () {
@@ -153,7 +155,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
-            'Afin de garantir le bon fonctionnement de l\'application merci d\'activer votre Location.',
+            checkLocationMessageTextLanguageArray[languageArrayIdentifier],
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.black,
@@ -180,7 +182,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
-            'Afin de garantir le bon fonctionnement de l\'application merci d\'activer votre Bluetooth.',
+            checkBluetoothMessageTextLanguageArray[languageArrayIdentifier],
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.black,
@@ -208,7 +210,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Scanner le QR code du dispositif UV-C DEEPLIGHT.'),
+            Text(startScanAlertDialogTextLanguageArray[languageArrayIdentifier]),
             Image.asset(
               'assets/scan_qr_code.gif',
               height: screenHeight * 0.3,
@@ -218,7 +220,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
         ),
         actions: [
           TextButton(
-            child: Text('OK'),
+            child: Text(okTextLanguageArray[languageArrayIdentifier]),
             onPressed: () async {
               Navigator.pop(c, true);
               // Start scanning
@@ -227,7 +229,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
             },
           ),
           TextButton(
-            child: Text('Annuler'),
+            child: Text(cancelTextLanguageArray[languageArrayIdentifier]),
             onPressed: () => Navigator.pop(c, false),
           ),
         ],
@@ -239,17 +241,17 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
     return showDialog<bool>(
       context: context,
       builder: (c) => AlertDialog(
-        title: Text('Attention'),
-        content: Text('Voulez-vous vraiment quitter l\'application ?'),
+        title: Text(attentionTextLanguageArray[languageArrayIdentifier]),
+        content: Text(stopActivityAlertDialogMessageTextLanguageArray[languageArrayIdentifier]),
         actions: [
           TextButton(
-            child: Text('Oui'),
+            child: Text(yesTextLanguageArray[languageArrayIdentifier]),
             onPressed: () {
               Navigator.pop(c, true);
             },
           ),
           TextButton(
-            child: Text('Non'),
+            child: Text(noTextLanguageArray[languageArrayIdentifier]),
             onPressed: () => Navigator.pop(c, false),
           ),
         ],

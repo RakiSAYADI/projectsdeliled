@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_master_uvc/services/DataVariables.dart';
+import 'package:flutter_app_master_uvc/services/languageDataBase.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Warning extends StatefulWidget {
@@ -15,7 +17,7 @@ class _WarningState extends State<Warning> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Attention'),
+          title: Text(attentionTextLanguageArray[languageArrayIdentifier]),
           centerTitle: true,
           backgroundColor: Color(0xFF554c9a),
         ),
@@ -47,14 +49,14 @@ class _WarningState extends State<Warning> {
                                 fontSize: screenWidth * 0.05,
                                 color: Colors.black,
                               ),
-                              text: 'Cette application ne fonctionne pas avec votre dispositif UV-C, veuillez contacter DeliTech Medical® pour plus d\'informations en cliquant ',
+                              text: warningMessageTextLanguageArray[languageArrayIdentifier],
                             ),
                             TextSpan(
                               style: TextStyle(
                                 color: Colors.blue,
                                 fontSize: screenWidth * 0.05,
                               ),
-                              text: 'ici',
+                              text: warningLinkTextLanguageArray[languageArrayIdentifier],
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () async {
                                   final url = 'https://www.deeplight.fr/contact/';

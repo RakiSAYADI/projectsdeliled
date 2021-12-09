@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_master_uvc/services/DataVariables.dart';
 import 'package:flutter_app_master_uvc/services/bleDeviceClass.dart';
+import 'package:flutter_app_master_uvc/services/languageDataBase.dart';
 import 'package:flutter_app_master_uvc/services/uvcToast.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:qrcode_flutter/qrcode_flutter.dart';
@@ -34,7 +35,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     Future.delayed(const Duration(seconds: 1), () {
       _controller.resume();
       myUvcToast.setToastDuration(2);
-      myUvcToast.setToastMessage('Lancement de la caméra !');
+      myUvcToast.setToastMessage(cameraStartToastTextLanguageArray[languageArrayIdentifier]);
       myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
     });
     // initialise the animation
@@ -78,11 +79,11 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           }
           setState(() {
             if (deviceExistOrNot) {
-              qrCodeMessage = 'Accès valide';
+              qrCodeMessage = qrCodeValidMessageTextLanguageArray[languageArrayIdentifier];
               colorMessage = Colors.green;
               qrCodeScanAccess = true;
             } else {
-              qrCodeMessage = 'Accès non valide';
+              qrCodeMessage = qrCodeNonValidMessageTextLanguageArray[languageArrayIdentifier];
               colorMessage = Colors.red;
               qrCodeScanAccess = false;
             }
@@ -106,11 +107,11 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           }
           setState(() {
             if (deviceExistOrNot) {
-              qrCodeMessage = 'Accès valide';
+              qrCodeMessage = qrCodeValidMessageTextLanguageArray[languageArrayIdentifier];
               colorMessage = Colors.green;
               qrCodeScanAccess = true;
             } else {
-              qrCodeMessage = 'Accès non valide';
+              qrCodeMessage = qrCodeNonValidMessageTextLanguageArray[languageArrayIdentifier];
               colorMessage = Colors.red;
               qrCodeScanAccess = false;
             }
@@ -135,7 +136,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Color(0xFF554c9a),
-          title: const Text('Scanner le QR code'),
+          title: Text(cameraPageTitleTextLanguageArray[languageArrayIdentifier]),
           centerTitle: true,
         ),
         body: Container(
@@ -192,11 +193,11 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     return showDialog<bool>(
       context: context,
       builder: (c) => AlertDialog(
-        title: Text('Attention'),
-        content: Text('Voulez-vous vraiment quitter l\'application ?'),
+        title: Text(attentionTextLanguageArray[languageArrayIdentifier]),
+        content: Text(stopActivityAlertDialogMessageTextLanguageArray[languageArrayIdentifier]),
         actions: [
           TextButton(
-            child: Text('Oui'),
+            child: Text(yesTextLanguageArray[languageArrayIdentifier]),
             onPressed: () {
               if (myDevice != null) {
                 myDevice.disconnect();
@@ -205,7 +206,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
             },
           ),
           TextButton(
-            child: Text('Non'),
+            child: Text(noTextLanguageArray[languageArrayIdentifier]),
             onPressed: () => Navigator.pop(c, false),
           ),
         ],
@@ -228,7 +229,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
             _isTorchOn = !_isTorchOn;
           },
           child: Text(
-            'torch',
+            cameraPageTorchButtonTextLanguageArray[languageArrayIdentifier],
             style: TextStyle(
               color: Colors.grey[300],
               fontSize: 20.0,
@@ -251,14 +252,13 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
   }
 
   Future<void> waitingWidget() async {
-    //double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return showDialog<void>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Connexion en cours'),
+            title: Text(checkConnectionAlertDialogTitleTextLanguageArray[languageArrayIdentifier]),
             content: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
@@ -281,12 +281,12 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
       barrierDismissible: false,
       builder: (BuildContext myContext) {
         return AlertDialog(
-          title: Text('Connexion en cours'),
+          title: Text(checkConnectionAlertDialogTitleTextLanguageArray[languageArrayIdentifier]),
           content: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Veuillez rester près du dispositif UV-C pendant quelques instants, la connexion est en cours.'),
+              Text(checkConnectionAlertDialogMessageTextLanguageArray[languageArrayIdentifier]),
               Image.asset(
                 'assets/connexion_dispositif.gif',
                 height: screenHeight * 0.3,
@@ -297,7 +297,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           actions: <Widget>[
             TextButton(
               child: Text(
-                'OK',
+                okTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () async {
@@ -309,7 +309,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                 myUvcToast.setAnimationIcon(animationRefreshIcon);
                 myUvcToast.setToastDuration(60);
                 myDevice = Device(device: scanDevices.elementAt(devicesPosition));
-                myUvcToast.setToastMessage('Autorisation de connexion validée !');
+                myUvcToast.setToastMessage(authoriseConnectionToastTextLanguageArray[languageArrayIdentifier]);
                 myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
                 // stop scanning and start connecting
                 while (true) {
@@ -337,7 +337,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
             ),
             TextButton(
               child: Text(
-                'Annuler',
+                cancelTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () {
