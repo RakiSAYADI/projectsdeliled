@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutteruvcapp/pages/check_permissions.dart';
+import 'package:flutteruvcapp/pages/data_modification_view.dart';
 import 'package:flutteruvcapp/pages/data_view.dart';
 import 'package:flutteruvcapp/pages/data_view_qrcode.dart';
 import 'package:flutteruvcapp/pages/end_uvc.dart';
@@ -116,6 +117,7 @@ void main() async {
       '/warnings': (context) => Warnings(),
       '/uvc': (context) => UVC(),
       '/end_uvc': (context) => EndUVC(),
+      '/rapport_modification': (context) => DataViewModification(),
     },
   ));
 }

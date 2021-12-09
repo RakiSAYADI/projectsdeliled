@@ -17,7 +17,6 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
 
   FlutterBlue flutterBlue = FlutterBlue.instance;
 
-  bool firstDisplayMainWidget = true;
   bool bluetoothState = false;
 
   PermissionStatus _permissionStatus = PermissionStatus.unknown;
@@ -143,8 +142,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                         style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
                       ),
                       style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
                         backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
                       ),
                       onPressed: () {

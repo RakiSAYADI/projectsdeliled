@@ -226,3 +226,25 @@ final List<String> uvcDefaultDataString = [
 ];
 
 final List<String> deviceConnectButtonTextLanguageArray = ['Connecter', 'Connect'];
+
+final List<String> selectUVCDataTitleTextLanguageArray = ['Sélectionner la date du rapport UVC', 'Select the date of the UVC report'];
+
+final List<String> settingsRapportUVCTitleTextLanguageArray = ['Paramètres Rapport UVC', 'Settings UVC Report'];
+
+final List<String> allReportTextLanguageArray = ['Tout le rapport', 'All the report'];
+
+final List<String> determinedTimeTextLanguageArray = ['Durée déterminée', 'Determined time'];
+
+final List<String> dayTextLanguageArray = ['Jour', 'Day'];
+
+final List<String> monthTextLanguageArray = ['Mois', 'Month'];
+
+final List<String> yearTextLanguageArray = ['Année', 'Year'];
+
+final List<String> confirmTextLanguageArray = ['Confirmer', 'Confirm'];
+
+final List<String> fromTextLanguageArray = ['De', 'From'];
+
+final List<String> toTextLanguageArray = ['À', 'To'];
+
+final List<String> noDataSelectionToastLanguageArray = ['Il faut choisir une de ces options !', 'You have to choose one of the options !'];
