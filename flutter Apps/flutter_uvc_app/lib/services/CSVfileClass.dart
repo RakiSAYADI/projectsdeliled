@@ -35,7 +35,7 @@ class UVCDataFile {
           column += text[i];
         }
       }
-      print(textuvc);
+      //print(textuvc);
       return textuvc;
     } catch (e) {
       print("Couldn't read file");

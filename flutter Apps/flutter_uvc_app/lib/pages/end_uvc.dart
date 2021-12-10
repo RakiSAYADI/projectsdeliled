@@ -30,8 +30,8 @@ class _EndUVCState extends State<EndUVC> {
     DateFormat dateFormat;
     DateFormat timeFormat;
     initializeDateFormatting();
-    dateFormat = new DateFormat.yMd(languageCode);
-    timeFormat = new DateFormat.Hm(languageCode);
+    dateFormat = new DateFormat.yMd('fr');
+    timeFormat = new DateFormat.Hm('fr');
     uvcOperationData.add(timeFormat.format(dateTime));
     uvcOperationData.add(dateFormat.format(dateTime));
 
@@ -138,7 +138,8 @@ class _EndUVCState extends State<EndUVC> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.pushNamed(context, '/DataCSVView');
+          openWithQrCode = false;
+          Navigator.pushNamed(context, '/rapport_modification');
         },
         label: Text('Rapport'),
         icon: Icon(

@@ -642,8 +642,8 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     } catch (e) {
       userEmail = '';
     }
-
-    Navigator.pushNamed(context, '/DataCSVViewQrCode');
+    openWithQrCode = true;
+    Navigator.pushNamed(context, '/rapport_modification');
   }
 
   Widget _buildToolBar() {

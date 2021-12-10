@@ -24,6 +24,7 @@ String languageCode = 'fr';
 bool isTreatmentCompleted;
 bool qrCodeConnectionOrSecurity;
 bool startWithOutSettings;
+bool openWithQrCode = false;
 
 List<String> myTimeDays = [
   '01',
