@@ -51,8 +51,8 @@ dev_dependencies:
 
 flutter_icons:
   #  image_path: "assets/images/icon-128x128.png"
-  image_path_android: "assets/ic_launcher_UVC.png"
-  image_path_ios: "assets/My-Launcher-Icon-UVC.jpg"
+  image_path_android: "assets/ic_launcher_DeliScan.png"
+  image_path_ios: "assets/My-Launcher-Icon-DeliScan.jpg"
   android: true # can specify file name here e.g. "ic_launcher"
   ios: true # can specify file name here e.g. "My-Launcher-Icon"
 
