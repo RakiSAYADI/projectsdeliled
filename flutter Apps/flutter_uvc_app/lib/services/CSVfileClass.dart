@@ -7,6 +7,8 @@ import 'package:path_provider/path_provider.dart';
 class UVCDataFile {
   final String _uvcDataFileName = 'RapportUVC.csv';
 
+  final String _uvcDataSelectedFileName = 'RapportUVCSelected.csv';
+
   final String _uvcUserEmailFileName = 'User_email.txt';
 
   Future<List<List<String>>> readUVCDATA() async {
@@ -42,6 +44,48 @@ class UVCDataFile {
       await saveStringUVCDATA(uvcDefaultDataString[languageArrayIdentifier]);
       return uvcDefaultData[languageArrayIdentifier];
     }
+  }
+
+  Future<List<List<String>>> readUVCSelectedDATA() async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/$_uvcDataSelectedFileName');
+      String text = await file.readAsString();
+      String column = '';
+      List<List<String>> textuvc = [
+        ['default']
+      ];
+      textuvc.length = 0;
+      List<String> textuvcrows = ['default'];
+      textuvcrows.length = 0;
+      for (int i = 0; i < text.length; i++) {
+        if (text[i] == '\n') {
+          textuvcrows.add(column);
+          column = '';
+          textuvc.add(textuvcrows);
+          textuvcrows = ['default'];
+          textuvcrows.length = 0;
+        } else if (text[i] == ';') {
+          textuvcrows.add(column);
+          column = '';
+        } else {
+          column += text[i];
+        }
+      }
+      //print(textuvc);
+      return textuvc;
+    } catch (e) {
+      print("Couldn't read file");
+      await saveStringUVCDATA(uvcDefaultDataString[languageArrayIdentifier]);
+      return uvcDefaultData[languageArrayIdentifier];
+    }
+  }
+
+  Future<void> saveStringUVCSelectedDATA(String uvcData) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/$_uvcDataSelectedFileName');
+    await file.writeAsString(uvcData);
+    print('saveStringUVCDATA : saved');
   }
 
   Future<bool> fileExist(String path) async {

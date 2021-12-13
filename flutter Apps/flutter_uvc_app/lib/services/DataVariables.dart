@@ -16,6 +16,7 @@ int activationTime;
 
 List<BluetoothDevice> scanDevices;
 List<List<String>> uvcData;
+List<List<String>> uvcDataSelected;
 
 String pinCodeAccess;
 String userEmail;

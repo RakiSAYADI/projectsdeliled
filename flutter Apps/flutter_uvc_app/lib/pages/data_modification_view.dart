@@ -32,6 +32,8 @@ class _DataViewModificationState extends State<DataViewModification> {
   bool _allData = true;
   bool _timedData = false;
 
+  UVCDataFile uvcDataFile;
+
   ToastyMessage _myUvcToast;
 
   Color enableDateDropDown(bool enable) => enable == true ? _checkBoxEnabled : _checkBoxDisabled;
@@ -40,6 +42,8 @@ class _DataViewModificationState extends State<DataViewModification> {
   void initState() {
     // TODO: implement initState
     _myUvcToast = ToastyMessage(toastContext: context);
+    uvcDataFile = UVCDataFile();
+    uvcDataSelected = uvcDefaultData[languageArrayIdentifier];
     super.initState();
   }
 
@@ -442,7 +446,6 @@ class _DataViewModificationState extends State<DataViewModification> {
                       backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
                     ),
                     onPressed: () async {
-                      UVCDataFile uvcDataFile = UVCDataFile();
                       uvcData = await uvcDataFile.readUVCDATA();
                       if (_allData) {
                         if (openWithQrCode) {
@@ -451,20 +454,12 @@ class _DataViewModificationState extends State<DataViewModification> {
                           Navigator.pushNamed(context, '/DataCSVView');
                         }
                       } else if (_timedData) {
-                        DateTime d1 = DateTime.utc(int.parse(_myStartDataTimeYearsData), int.parse(_myStartDataTimeMonthData), int.parse(_myStartDataTimeDayData));
-                        DateTime d2 = DateTime.utc(int.parse(_myEndDataTimeYearsData), int.parse(_myEndDataTimeMonthData), int.parse(_myEndDataTimeDayData));
-                        print(d1.toString());
-                        print(d2.toString());
-                        DateTime d3;
-                        for (int i = 1; i < uvcData.length; i++) {
-                          d3 = DateTime.parse(
-                              '${uvcData[i][5].split('/')[2].replaceAll(' ', '')}-${uvcData[i][5].split('/')[1].replaceAll(' ', '')}-${uvcData[i][5].split('/')[0].replaceAll(' ', '')}');
-                          print(d3.toString());
-                          if (d3.isAfter(d1) && d3.isBefore(d2)) {
-                            print("good date $d3");
-                          } else {
-                            print("bad date $d3");
-                          }
+                        if (await checkDataUVC()) {
+                          print(uvcDataSelected);
+                        } else {
+                          _myUvcToast.setToastDuration(3);
+                          _myUvcToast.setToastMessage(noDataForDateSelectedToastLanguageArray[languageArrayIdentifier]);
+                          _myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
                         }
                       } else {
                         _myUvcToast.setToastDuration(3);
@@ -480,5 +475,24 @@ class _DataViewModificationState extends State<DataViewModification> {
         ),
       ),
     );
+  }
+
+  Future<bool> checkDataUVC() async {
+    bool noDataFounded = false;
+    DateTime d1 = DateTime.utc(int.parse(_myStartDataTimeYearsData), int.parse(_myStartDataTimeMonthData), int.parse(_myStartDataTimeDayData));
+    DateTime d2 = DateTime.utc(int.parse(_myEndDataTimeYearsData), int.parse(_myEndDataTimeMonthData), int.parse(_myEndDataTimeDayData));
+    DateTime d3;
+    for (int i = 1; i < uvcData.length; i++) {
+      d3 = DateTime.parse('${uvcData[i][5].split('/')[2].replaceAll(' ', '')}-${uvcData[i][5].split('/')[1].replaceAll(' ', '')}-${uvcData[i][5].split('/')[0].replaceAll(' ', '')}');
+      if (d3.isAfter(d1) && d3.isBefore(d2)) {
+        print("good date $d3");
+        uvcDataSelected.add(uvcData[i]);
+        noDataFounded = true;
+      } else {
+        noDataFounded = false;
+        print("bad date $d3");
+      }
+    }
+    return noDataFounded;
   }
 }
