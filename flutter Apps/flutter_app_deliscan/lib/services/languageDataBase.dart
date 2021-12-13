@@ -1,3 +1,5 @@
+final List<String> welcomePageLogoMessageLanguageArray = ['Solutions de désinfection par UV-C', 'UV-C disinfection solutions'];
+
 final List<String> cameraLaunchToastTextLanguageArray = ['Lancement de la caméra !', 'Camera launching'];
 
 final List<String> qrcodeScanTitleTextLanguageArray = ['Scanner le QR code', 'Scan the QR code'];

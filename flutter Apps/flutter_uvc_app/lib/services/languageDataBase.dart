@@ -248,3 +248,5 @@ final List<String> fromTextLanguageArray = ['De', 'From'];
 final List<String> toTextLanguageArray = ['À', 'To'];
 
 final List<String> noDataSelectionToastLanguageArray = ['Il faut choisir une de ces options !', 'You have to choose one of the options !'];
+
+final List<String> noDataForDateSelectedToastLanguageArray = ['Aucune date trouvé dans le rapport !', 'No date inside the file !'];

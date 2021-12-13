@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_deliscan/pages/check_permissions.dart';
 import 'package:flutter_app_deliscan/pages/qr_code_scan.dart';
+import 'package:flutter_app_deliscan/services/DataVariables.dart';
 import 'package:flutter_app_deliscan/services/animation_between_pages.dart';
+import 'package:flutter_app_deliscan/services/languageDataBase.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:package_info/package_info.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -15,7 +17,6 @@ class Welcome extends StatefulWidget {
 }
 
 class _WelcomeState extends State<Welcome> {
-
   void checkPermissions() async {
     await Permission.camera.request();
     await Permission.manageExternalStorage.request();
@@ -79,61 +80,113 @@ class _WelcomeState extends State<Welcome> {
       backgroundColor: Colors.indigo[700],
       body: SafeArea(
         child: Container(
-          decoration: BoxDecoration(color: Colors.grey[200]),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/fondapplication.jpg'),
+              fit: BoxFit.cover,
+            ),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox(height: screenHeight * 0.04),
-              Image.asset(
-                'assets/delitech-medical-logo.png',
-                height: screenHeight * 0.15,
-                width: screenWidth * 0.7,
-              ),
-              SizedBox(height: screenHeight * 0.005),
-              Image.asset(
-                'assets/texte-qrcode.png',
-                height: screenHeight * 0.1,
-                width: screenWidth * 0.7,
-              ),
-              SizedBox(height: screenHeight * 0.02),
-              SpinKitCircle(
-                color: Color(0xFF20b3a3),
-                size: screenHeight * 0.09,
-              ),
-              SizedBox(height: screenHeight * 0.02),
-              Image.asset(
-                'assets/logo-qrcode.png',
-                height: screenHeight * 0.4,
-                width: screenWidth * 1.0,
-              ),
-              SizedBox(height: screenHeight * 0.02),
-              Text(
-                'Powered by DELITECH Group',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: screenWidth * 0.04,
+              Expanded(
+                flex: 3,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.asset(
+                    'assets/ic_launcher_DeliScan.png',
+                    height: screenHeight * 0.2,
+                    width: screenWidth * 0.7,
+                  ),
                 ),
               ),
-              FutureBuilder(
-                  future: PackageInfo.fromPlatform(),
-                  builder: (BuildContext context, snapshot) {
-                    if (snapshot.hasData) {
-                      String version = snapshot.data.version;
-                      return Center(
-                          child: Text(
-                        '$version',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: screenWidth * 0.04,
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.asset(
+                    'assets/titre-deliscan.png',
+                    height: screenHeight * 0.3,
+                    width: screenWidth * 0.4,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 5,
+                child: SpinKitCircle(
+                  color: Colors.white,
+                  size: screenHeight * 0.1,
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      flex: 3,
+                      child: Image.asset(
+                        'assets/logo_deeplight.png',
+                        height: screenHeight * 0.1,
+                        width: screenWidth * 0.7,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Center(
+                        child: Text(
+                          welcomePageLogoMessageLanguageArray[languageArrayIdentifier],
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[300],
+                            fontSize: screenWidth * 0.03 + screenHeight * 0.01,
+                          ),
                         ),
-                      ));
-                    } else {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  }),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Center(
+                  child: Text(
+                    'Powered by DELITECH Group',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.grey[300],
+                      fontSize: screenWidth * 0.03 + screenHeight * 0.005,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Center(
+                  child: FutureBuilder(
+                    future: PackageInfo.fromPlatform(),
+                    builder: (BuildContext context, snapshot) {
+                      if (snapshot.hasData) {
+                        String version = snapshot.data.version;
+                        return Center(
+                          child: Text(
+                            '$version',
+                            style: TextStyle(
+                              color: Colors.grey[300],
+                              fontSize: screenWidth * 0.03 + screenHeight * 0.005,
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(color: Colors.grey[300]),
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ),
             ],
           ),
         ),
