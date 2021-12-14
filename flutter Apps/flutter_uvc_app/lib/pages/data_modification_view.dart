@@ -449,6 +449,8 @@ class _DataViewModificationState extends State<DataViewModification> {
                     onPressed: () async {
                       uvcData = await uvcDataFile.readUVCDATA();
                       if (_allData) {
+                        uvcDataSelected = [[]];
+                        uvcDataSelected.length = 0;
                         uvcDataSelected.add(uvcData[0]);
                         List<List<String>> uvcDataReversedMiddle = uvcData.reversed.toList();
                         uvcDataReversedMiddle.last = [];
@@ -502,7 +504,6 @@ class _DataViewModificationState extends State<DataViewModification> {
         uvcDataSelectedCombiner.add(uvcData[i]);
         noDataFounded = true;
       } else {
-        noDataFounded = false;
         print("non valid date $d3");
       }
     }
