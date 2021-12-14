@@ -85,7 +85,7 @@ class UVCDataFile {
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/$_uvcDataSelectedFileName');
     await file.writeAsString(uvcData);
-    print('saveStringUVCDATA : saved');
+    print('saveStringUVCSelectedDATA : saved');
   }
 
   Future<bool> fileExist(String path) async {
