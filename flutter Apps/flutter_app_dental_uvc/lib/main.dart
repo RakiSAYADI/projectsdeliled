@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutterappdentaluvc/pages/Automatique_UVC.dart';
 import 'package:flutterappdentaluvc/pages/advanced_settings.dart';
+import 'package:flutterappdentaluvc/pages/data_modification_view.dart';
 import 'package:flutterappdentaluvc/pages/data_view.dart';
 import 'package:flutterappdentaluvc/pages/data_view_settings.dart';
 import 'package:flutterappdentaluvc/pages/end_uvc.dart';
@@ -68,6 +71,24 @@ void main() async {
         badge: true,
         sound: true,
       );
+  languageCode = Platform.localeName.split('_')[0];
+  print('le language de telephone : $languageCode');
+
+  if (languageCode.isEmpty) {
+    languageCode = 'en';
+  }
+
+  switch (languageCode) {
+    case 'fr':
+      languageArrayIdentifier = 0;
+      break;
+    case 'en':
+      languageArrayIdentifier = 1;
+      break;
+    default:
+      languageArrayIdentifier = 1;
+      break;
+  }
   runApp(MyApp());
 }
 
@@ -97,6 +118,7 @@ class MyApp extends StatelessWidget {
             '/warnings': (context) => Warnings(),
             '/uvc': (context) => UVC(),
             '/end_uvc': (context) => EndUVC(),
+            '/rapport_modification': (context) => DataViewModification(),
           },
         ),
         onTap: () {

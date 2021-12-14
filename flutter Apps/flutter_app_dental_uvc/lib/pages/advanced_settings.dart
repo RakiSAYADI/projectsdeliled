@@ -120,7 +120,8 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                       onPressed: () async {
                         uvcData = await uvcDataFile.readUVCDATA();
                         print("the uvc data file : $uvcData");
-                        Navigator.pushNamed(context, '/DataCSVSettingsView');
+                        openWithSettings = true;
+                        Navigator.pushNamed(context, '/rapport_modification');
                       },
                       child: Text(
                         'Rapport Désinfection',

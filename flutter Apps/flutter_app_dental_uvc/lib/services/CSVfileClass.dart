@@ -1,11 +1,14 @@
 import 'dart:io';
 
+import 'package:flutterappdentaluvc/services/DataVariables.dart';
+import 'package:flutterappdentaluvc/services/languageDataBase.dart';
 import 'package:path_provider/path_provider.dart';
 
 class UVCDataFile {
   final String _uvcDefaultDataString =
       'Dispositif UVC ;Utilisateur ;Etablissement ;Pi\èce ;Heure d\'activation ;Date d\'activation ;Temps de disinfection (en secondes) ;Etat \n';
   final String _uvcDataFileName = 'RapportUVC.csv';
+  final String _uvcDataSelectedFileName = 'RapportDataUVC.csv';
   final String _uvcUserEmailFileName = 'User_email.txt';
   final String _uvcRobotsNamesFileName = 'Robots_Names.txt';
   final String _uvcDeviceFileName = 'UVC_Device.txt';
@@ -59,6 +62,66 @@ class UVCDataFile {
       print(_uvcDefaultDataString);
       return _uvcDefaultData;
     }
+  }
+
+  Future<List<List<String>>> readUVCSelectedDATA() async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/$_uvcDataSelectedFileName');
+      String text = await file.readAsString();
+      String column = '';
+      List<List<String>> textuvc = [
+        ['default']
+      ];
+      textuvc.length = 0;
+      List<String> textuvcrows = ['default'];
+      textuvcrows.length = 0;
+      for (int i = 0; i < text.length; i++) {
+        if (text[i] == '\n') {
+          textuvcrows.add(column);
+          column = '';
+          textuvc.add(textuvcrows);
+          textuvcrows = ['default'];
+          textuvcrows.length = 0;
+        } else if (text[i] == ';') {
+          textuvcrows.add(column);
+          column = '';
+        } else {
+          column += text[i];
+        }
+      }
+      //print(textuvc);
+      return textuvc;
+    } catch (e) {
+      print("Couldn't read file");
+      await saveStringUVCSelectedDATA(uvcDefaultDataString[languageArrayIdentifier]);
+      return uvcDefaultData[languageArrayIdentifier];
+    }
+  }
+
+  Future<void> saveStringUVCSelectedDATA(String uvcData) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/$_uvcDataSelectedFileName');
+    await file.writeAsString(uvcData);
+    print('saveStringUVCSelectedDATA : saved');
+  }
+
+  Future<void> saveUVCDATASelected(List<List<String>> uvcData) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/$_uvcDataSelectedFileName');
+    String uvcDATA = '';
+    for (int j = 0; j < uvcData.length; j++) {
+      for (int i = 0; i < uvcData.elementAt(j).length; i++) {
+        if (i == uvcData.elementAt(j).length - 1) {
+          uvcDATA += '${uvcData.elementAt(j).elementAt(i)} ';
+        } else {
+          uvcDATA += '${uvcData.elementAt(j).elementAt(i)} ;';
+        }
+      }
+      uvcDATA += '\n';
+    }
+    await file.writeAsString(uvcDATA);
+    print('saveUVCDATASelected : saved');
   }
 
   Future<void> saveStringUVCDATA(String uvcData) async {

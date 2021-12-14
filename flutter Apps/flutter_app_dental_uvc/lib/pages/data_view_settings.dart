@@ -18,7 +18,8 @@ class DataCSVSettingsView extends StatefulWidget {
 class _DataCSVSettingsViewState extends State<DataCSVSettingsView> {
   ToastyMessage myUvcToast;
 
-  final String _uvcDataFileName = 'RapportUVC.csv';
+  //final String _uvcDataFileName = 'RapportUVC.csv';
+  final String _uvcDataSelectedFileName = 'RapportDataUVC.csv';
 
   DataBaseRequests dataBaseRequests = DataBaseRequests();
 
@@ -59,7 +60,7 @@ class _DataCSVSettingsViewState extends State<DataCSVSettingsView> {
           child: SingleChildScrollView(
             child: Table(
               border: TableBorder.all(width: 2.0),
-              children: uvcData.map((item) {
+              children: uvcDataSelected.map((item) {
                 return TableRow(
                     children: item.map((row) {
                       return Container(
@@ -141,6 +142,7 @@ class _DataCSVSettingsViewState extends State<DataCSVSettingsView> {
               onPressed: () async {
                 await uvcDataFile.saveStringUVCEmailDATA(myEmail.text);
                 if (await dataBaseRequests.checkConnection()) {
+                  uvcDataFile.saveUVCDATASelected(uvcDataSelected);
                   myUvcToast.setToastDuration(60);
                   myUvcToast.setToastMessage('Envoi en cours !');
                   myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
@@ -181,7 +183,7 @@ class _DataCSVSettingsViewState extends State<DataCSVSettingsView> {
       ..from = Address(username, 'DeliTech Medical')
       ..recipients.add(destination)
       ..subject = 'Rapport de désinfection UVC'
-      ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataFileName')))
+      ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataSelectedFileName')))
       ..text = 'Bonjour,\n\n'
           'Vous trouverez ci-joint le rapport concernant la désinfection éffectuée à l’aide de'
           ' votre solution de désinfection DEEPLIGHT® de DeliTech Medical®.\n'

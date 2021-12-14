@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
-import 'package:flutterappdentaluvc/services/LEDControl.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
+import 'package:flutterappdentaluvc/services/LEDControl.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -217,7 +217,8 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
             sleepIsInactiveEndUVC = true;
-            Navigator.pushNamed(context, '/DataCSVView');
+            openWithSettings = false;
+            Navigator.pushNamed(context, '/rapport_modification');
           },
           label: Text('Rapport'),
           icon: Icon(

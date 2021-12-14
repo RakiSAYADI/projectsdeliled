@@ -19,16 +19,20 @@ BluetoothDevice savedDevice;
 
 UvcLight myUvcLight;
 
+int languageArrayIdentifier = 0;
 int myExtinctionTimeMinutePosition = 0;
 int myActivationTimeMinutePosition = 0;
 int activationTime;
 
 String pinCodeAccess;
 String robotsNamesData;
+String languageCode = 'fr';
 
 List<List<String>> uvcData;
+List<List<String>> uvcDataSelected;
 
 bool isTreatmentCompleted;
+bool openWithSettings = false;
 
 List<String> myExtinctionTimeMinute = [
   ' 30 sec',
@@ -227,3 +231,41 @@ List<String> myTimeSeconds = [
   '58',
   '59'
 ];
+
+List<String> myTimeDays = [
+  '01',
+  '02',
+  '03',
+  '04',
+  '05',
+  '06',
+  '07',
+  '08',
+  '09',
+  '10',
+  '11',
+  '12',
+  '13',
+  '14',
+  '15',
+  '16',
+  '17',
+  '18',
+  '19',
+  '20',
+  '21',
+  '22',
+  '23',
+  '24',
+  '25',
+  '26',
+  '27',
+  '28',
+  '29',
+  '30',
+  '31'
+];
+
+List<String> myTimeMonths = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+
+List<String> myTimeYears = ['2020', '2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030'];
