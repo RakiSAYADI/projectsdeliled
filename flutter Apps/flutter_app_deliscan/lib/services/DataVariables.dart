@@ -9,7 +9,7 @@ final String appName = 'DeliScan';
 
 final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
-final String qrCodeFirstPart = 'https://www.deliled.com/index.php?controller=attachment&';
+final String qrCodeFirstPart = 'https://www.deliled.com/';
 final String pdfFilesFolderName = 'Rapport_PDF_File';
 
 String filePDFPath = '';

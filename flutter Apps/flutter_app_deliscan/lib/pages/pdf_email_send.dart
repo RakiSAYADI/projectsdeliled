@@ -58,7 +58,8 @@ class _PDFEmailState extends State<PDFEmail> {
                   children: [
                     Text(
                       sendEmailPageMessageTextLanguageArray[languageArrayIdentifier],
-                      style: TextStyle(fontSize: (screenWidth * 0.05)),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: (screenWidth * 0.05), fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: screenHeight * 0.05),
                     Padding(
