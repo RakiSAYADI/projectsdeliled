@@ -178,22 +178,18 @@ void LedStatusTask()
 	ESP_LOGI(GPIO_TAG, "Red GPIO is %d", RED_PIN);
 
 	ledc_channel_config_t ledc_channel[LEDC_TEST_CH_NUM] = {
-		{
-			.channel = LEDC_HS_CH0_CHANNEL, 
-			.duty = 0, 
-			.gpio_num = LEDC_HS_CH0_GPIO, 
-			.speed_mode = LEDC_HS_MODE, 
-			.hpoint = 0, 
-			.timer_sel = LEDC_HS_TIMER
-		},
-		{
-			.channel = LEDC_HS_CH1_CHANNEL,
-			.duty = 0,
-			.gpio_num = RED_PIN,
-			.speed_mode = LEDC_HS_MODE,
-			.hpoint = 0,
-			.timer_sel = LEDC_HS_TIMER
-		},
+		{.channel = LEDC_HS_CH0_CHANNEL,
+		 .duty = 0,
+		 .gpio_num = LEDC_HS_CH0_GPIO,
+		 .speed_mode = LEDC_HS_MODE,
+		 .hpoint = 0,
+		 .timer_sel = LEDC_HS_TIMER},
+		{.channel = LEDC_HS_CH1_CHANNEL,
+		 .duty = 0,
+		 .gpio_num = RED_PIN,
+		 .speed_mode = LEDC_HS_MODE,
+		 .hpoint = 0,
+		 .timer_sel = LEDC_HS_TIMER},
 	};
 
 	for (ch = 0; ch < LEDC_TEST_CH_NUM; ch++)
@@ -258,6 +254,13 @@ void LedStatusTask()
 
 			break;
 
+		case UNIT_STATUS_WIFI_GETTING_IP:
+			vTaskDelay(100 / portTICK_PERIOD_MS);
+			break;
+		case UNIT_STATUS_WIFI_NO_IP:
+			vTaskDelay(100 / portTICK_PERIOD_MS);
+			break;
+
 		case UNIT_STATUS_NORMAL:
 			GREEN_ON();
 			vTaskDelay(100 / portTICK_PERIOD_MS);
@@ -277,49 +280,7 @@ void LedStatusTask()
 			UnitSetStatus(UNIT_STATUS_NONE);
 			break;
 		}
-
-		if ((WifiConnectedFlag == false) && (LedStateLocked == false))
-		{
-			//printf("hello");
-			ORANGE_OFF();
-			vTaskDelay(100 / portTICK_PERIOD_MS);
-		}
 	}
-}
-
-uint8_t strContains(char *string, char *toFind)
-{
-	uint8_t slen = strlen(string);
-	uint8_t tFlen = strlen(toFind);
-	uint8_t found = 0;
-
-	if (slen >= tFlen)
-	{
-		for (uint8_t s = 0, t = 0; s < slen; s++)
-		{
-			do
-			{
-
-				if (string[s] == toFind[t])
-				{
-					if (++found == tFlen)
-						return 1;
-					s++;
-					t++;
-				}
-				else
-				{
-					s -= found;
-					found = 0;
-					t = 0;
-				}
-
-			} while (found);
-		}
-		return 0;
-	}
-	else
-		return -1;
 }
 
 void LedStatInit()

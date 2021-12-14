@@ -44,7 +44,7 @@ void sntp_task()
             // wait for time to be set
 
             int retry = 0;
-            const int retry_count = 10;
+            const int retry_count = 30;
             while (sntp_timeinfo.tm_year < (2016 - 1900) && ++retry < retry_count)
             {
                 ESP_LOGI(TAG_SNTP, "Waiting for system time to be set... (%d/%d)", retry, retry_count);

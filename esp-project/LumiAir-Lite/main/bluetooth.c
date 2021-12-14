@@ -442,8 +442,7 @@ void configParserTask()
 
 char tmp[64];
 
-void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
-							 esp_ble_gatts_cb_param_t *param)
+void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param)
 {
 
 	ESP_LOGI(GATTS_TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
@@ -454,7 +453,7 @@ void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 	}
 	else
 	{
-		sprintf((char *)total, "{\"EnvData\":[%ld,%ld,%d,%d,%d,%d,%d,%d,%d],\"SCR\":%d,\"ver\":\"%s\"}",
+		sprintf((char *)total, "{\"EnvData\":[%ld,%ld,%d,%d,%hu,%hu,%hu,%d,%d],\"SCR\":%d,\"ver\":\"%s\"}",
 				UnitData.UpdateTime, UnitData.LastDetTime, (uint8_t)UnitData.Temp, (uint8_t)UnitData.Humidity,
 				UnitData.Als, UnitData.aq_Co2Level, UnitData.aq_Tvoc, WifiConnectedFlag, UnitData.aq_status, scanResult, UnitCfg.versionSystem);
 	}
@@ -467,9 +466,7 @@ void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 	if (LIST_CHAR_READ[0].char_val != NULL)
 	{
 		rsp.attr_value.len = LIST_CHAR_READ[0].char_val->attr_len;
-		for (uint32_t pos = 0;
-			 pos < LIST_CHAR_READ[0].char_val->attr_len && pos < LIST_CHAR_READ[0].char_val->attr_max_len;
-			 pos++)
+		for (uint32_t pos = 0; pos < LIST_CHAR_READ[0].char_val->attr_len && pos < LIST_CHAR_READ[0].char_val->attr_max_len; pos++)
 		{
 			rsp.attr_value.value[pos] = LIST_CHAR_READ[0].char_val->attr_value[pos];
 		}

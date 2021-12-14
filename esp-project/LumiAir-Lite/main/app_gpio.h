@@ -9,13 +9,15 @@ typedef enum {
 	UNIT_STATUS_WIFI_AP,
 	UNIT_STATUS_WIFI_STA,
 	UNIT_STATUS_WIFI_GOT_IP,
+	UNIT_STATUS_WIFI_GETTING_IP,
+	UNIT_STATUS_WIFI_NO_IP,
 	UNIT_STATUS_RADIO_ACTIVITY,
 	UNIT_STATUS_NORMAL,
 	UNIT_STATUS_WARNING_CO2,
 	UNIT_STATUS_ALERT_CO2
 } UnitStatDef;
 
-uint8_t strContains(char* string, char* toFind);
+extern UnitStatDef UnitStat;
 
 void LedStatInit();
 void UnitSetStatus(UnitStatDef NewStat);
