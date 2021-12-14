@@ -119,33 +119,11 @@ class _WelcomeState extends State<Welcome> {
                 ),
               ),
               Expanded(
-                flex: 3,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      flex: 3,
-                      child: Image.asset(
-                        'assets/logo_deeplight.png',
-                        height: screenHeight * 0.1,
-                        width: screenWidth * 0.7,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Center(
-                        child: Text(
-                          welcomePageLogoMessageLanguageArray[languageArrayIdentifier],
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[300],
-                            fontSize: screenWidth * 0.03 + screenHeight * 0.01,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                flex: 2,
+                child: Image.asset(
+                  'assets/logo-delitech.png',
+                  height: screenHeight * 0.1,
+                  width: screenWidth * 0.7,
                 ),
               ),
               Expanded(

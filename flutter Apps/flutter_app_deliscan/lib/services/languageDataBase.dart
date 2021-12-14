@@ -1,5 +1,3 @@
-final List<String> welcomePageLogoMessageLanguageArray = ['Solutions de désinfection par UV-C', 'UV-C disinfection solutions'];
-
 final List<String> cameraLaunchToastTextLanguageArray = ['Lancement de la caméra !', 'Camera launching'];
 
 final List<String> qrcodeScanTitleTextLanguageArray = ['Scanner le QR code', 'Scan the QR code'];
@@ -30,7 +28,7 @@ final List<String> checkConnectionMessageTextLanguageArray = [
   'Internet connection lost, please restart the application'
 ];
 
-final List<String> pdfViewerTitleTextLanguageArray = ['PDF', 'PDF'];
+final List<String> pdfViewerTitleTextLanguageArray = ['Aperçu', 'Preview'];
 
 final List<String> menuTextLanguageArray = ['Menu', 'Menu'];
 
@@ -48,9 +46,9 @@ final List<String> stopTextLanguageArray = ['Arrêter', 'Stop'];
 
 final List<String> noNameToastTextLanguageArray = ['Le nom du fichier PDF est vide !', 'Name of the PDF file is empty!'];
 
-final List<String> sameNameToastTextLanguageArray = ['Ce nom existe deja sur votre téléphone !', 'This name already exists on your phone!'];
+final List<String> sameNameToastTextLanguageArray = ['Ce nom existe déjà sur votre téléphone !', 'This name already exists on your phone!'];
 
-final List<String> pdfListTitleTextLanguageArray = ['List de PDF', 'PDF list'];
+final List<String> pdfListTitleTextLanguageArray = ['Liste des PDF', 'PDF list'];
 
 final List<String> pdfFileCardOpenTextLanguageArray = ['Ouvrir', 'Open'];
 
@@ -64,7 +62,7 @@ final List<String> waitingDownloadingAlertDialogMessageTextLanguageArray = ['Té
 
 final List<String> downloadCompleteToastTextLanguageArray = ['Téléchargement terminé !', 'Download completed!'];
 
-final List<String> listPDFTextLanguageArray = ['List PDF', 'PDF list'];
+final List<String> listPDFTextLanguageArray = ['Liste des PDF', 'PDF list'];
 
 final List<String> sendEmailPageTitleTextLanguageArray = ['Envoi e-mail', 'E-mail sending'];
 
@@ -87,12 +85,12 @@ final List<String> uvcEmailMessageTextLanguageArray = [
       'Thank you for trusting DELILED.'
 ];
 
-final List<String> sendEmailValidToastTextLanguageArray = ['E-mail envoyé, merci de vérifier votre boite de reception.', 'E-mail sent, please check your inbox.'];
+final List<String> sendEmailValidToastTextLanguageArray = ['E-mail envoyé, merci de vérifier votre boite e-mail.', 'E-mail sent, please check your inbox.'];
 
 final List<String> sendEmailNotValidToastTextLanguageArray = ['E-mail non envoyé, vérifiez votre addresse e-mail.', 'Error, please check your e-mail address.'];
 
 final List<String> noEmailToastTextLanguageArray = ['Merci de télécharger le fichier PDF avant de l\'envoyer par e-mail !', 'Please save the PDF file before sending it.'];
 
-final List<String> inputTextMessageLanguageArray = ['Choississez le nom du fichier PDF :', 'Choose the name of the PDF file:'];
+final List<String> inputTextMessageLanguageArray = ['Choisissez le nom du fichier PDF :', 'Choose the name of the PDF file:'];
 
 final List<String> inputTextExampleMessageLanguageArray = ['exemple : mon_PDF', 'exp:my_PDF_file'];
