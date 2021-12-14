@@ -115,7 +115,7 @@ class _PDFEmailState extends State<PDFEmail> {
     final serverSMTPDeepLight = SmtpServer(host, username: username, password: password);
     // Create our message.
     final message = Message()
-      ..from = Address(username, 'DeliTech Medical')
+      ..from = Address(username, 'Deliled')
       ..recipients.add(destination)
       ..subject = uvcEmailObjectTextLanguageArray[languageArrayIdentifier]
       ..attachments.add(new FileAttachment(File('${directory.path}/$pdfFilesFolderName/$filePDFName.pdf')))

@@ -60,7 +60,7 @@ class _QrCodeScanState extends State<QrCodeScan> {
       _result = scanData;
       print('onCapture----${_result.code}');
       if (_result.code.isNotEmpty && !qrCodeVerified) {
-        if (_result.code.startsWith(qrCodeFirstPart) && _result.code.endsWith(qrCodeLastPart)) {
+        if (_result.code.startsWith(qrCodeFirstPart)) {
           pdfFileURL = _result.code;
           print("good qrcode ");
           qrCodeVerified = true;
