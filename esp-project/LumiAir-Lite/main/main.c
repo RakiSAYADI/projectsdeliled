@@ -36,7 +36,7 @@ void app_main()
 	ESP_LOGI(TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
 	ESP_LOGI(TAG, "[APP] IDF version: %s", esp_get_idf_version());
 
-	BaseMacInit();
+	//BaseMacInit();
 
 	LedStatInit();
 
@@ -46,7 +46,7 @@ void app_main()
 		return;
 	}
 
-	if (!(strContains(UnitCfg.FLASH_MEMORY, "OK") == 1))
+	if (!(strcmp(UnitCfg.FLASH_MEMORY, "OK") == 0))
 	{
 		ESP_LOGW(TAG, "Saving the default configuration ..");
 		Default_saving();

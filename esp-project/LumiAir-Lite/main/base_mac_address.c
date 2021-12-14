@@ -10,7 +10,7 @@
 
 #define MAC_TAG "BASE_MAC"
 
-const uint8_t MAC_BASE_ADDRESS[8] = { 0x70, 0xB3, 0xD5, 0x01, 0x82, 0x20 };//test
+const uint8_t MAC_BASE_ADDRESS[8] = { 0x70, 0xB3, 0xD5, 0x01, 0x82, 0x00 };
 
 void BaseMacInit() {
 	esp_err_t ret = ESP_OK;

@@ -10,7 +10,7 @@
 #define I2C_MASTER_NUM             			I2C_NUM_1        /*!< I2C port number for master dev */
 #define I2C_MASTER_TX_BUF_DISABLE  			0                /*!< I2C master do not need buffer */
 #define I2C_MASTER_RX_BUF_DISABLE  			0                /*!< I2C master do not need buffer */
-#define I2C_MASTER_FREQ_HZ        			10000            /*!< I2C master clock frequency */
+#define I2C_MASTER_FREQ_HZ        			100000           /*!< I2C master clock frequency */
 
 #define OPT3001_SENSOR_ADDR                 0x44             /*!< slave address for OPT3001 sensor */
 #define OPT3001_DEVICE_ID                   0x7F             /*!< slave Device ID */

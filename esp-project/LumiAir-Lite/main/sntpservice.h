@@ -1,7 +1,7 @@
 #ifndef MAIN_SNTPSERVICE_H_
 #define MAIN_SNTPSERVICE_H_
 
-extern bool TimeRecoverFlag;
+extern bool sntpTimeSetFlag;
 
 void sntp_task();
 

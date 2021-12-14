@@ -44,10 +44,12 @@ esp_err_t event_wifi_handler(void *arg, esp_event_base_t event_base, int32_t eve
 		{
 			esp_wifi_connect();
 			s_retry_num++;
+			UnitSetStatus(UNIT_STATUS_WIFI_GETTING_IP);
 			ESP_LOGI(WEBSERVICE_TAG, "retry to connect to the AP");
 		}
 		else
 		{
+			UnitSetStatus(UNIT_STATUS_WIFI_NO_IP);
 			xEventGroupSetBits(s_wifi_event_group, WIFI_FAIL_BIT);
 		}
 		ESP_LOGI(WEBSERVICE_TAG, "connect to the AP fail");
@@ -57,13 +59,13 @@ esp_err_t event_wifi_handler(void *arg, esp_event_base_t event_base, int32_t eve
 	{
 		ip_event_got_ip_t *event = (ip_event_got_ip_t *)event_data;
 		ESP_LOGI(WEBSERVICE_TAG, "got ip:" IPSTR, IP2STR(&event->ip_info.ip));
-		UnitSetStatus(UNIT_STATUS_WIFI_GOT_IP);
 		s_retry_num = 0;
 		WifiConnectedFlag = true;
 		// Start SNTP Task
 		xTaskCreatePinnedToCore(&sntp_task, "sntp_task", 4000, NULL, 2, NULL, 1);
 		// Start OTA Task
 		xTaskCreatePinnedToCore(&advanced_ota_task, "ota_task", 1024 * 8, NULL, 2, NULL, 1);
+		UnitSetStatus(UNIT_STATUS_WIFI_GOT_IP);
 		xEventGroupSetBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
 	}
 	return ESP_OK;
@@ -100,6 +102,8 @@ void WebService_Init()
 	ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
 	ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config));
 	ESP_ERROR_CHECK(esp_wifi_start());
+
+	UnitSetStatus(UNIT_STATUS_WIFI_STA);
 
 	ESP_LOGI(WEBSERVICE_TAG, "wifi_init_sta finished.");
 

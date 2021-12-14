@@ -104,9 +104,7 @@ bool LoadNVS(UnitConfig_Typedef *data)
 
 	nvs_close(handle);
 
-	//ESP_LOGI("NVS", "Configuration Loaded (%d) bytes",size);
-
-	ESP_LOGI(NVS_TAG, "Configuration Loaded (%d) bytes", sizeof(UnitCfg));
+	ESP_LOGI("NVS", "Configuration Loaded (%d) bytes",size);
 
 	return true;
 }
@@ -130,7 +128,7 @@ void Default_saving()
 	uint8_t mac[6];
 	esp_efuse_mac_get_default(mac);
 
-	sprintf(UnitCfg.UnitName, "HUB-%02X:%02X:%02X-TEST", mac[3], mac[4], mac[5]);//test
+	sprintf(UnitCfg.UnitName, "HUB-%02X:%02X:%02X", mac[3], mac[4], mac[5]);
 
 	UnitCfg.UserLcProfile.CcEnb = false;
 	sprintf(UnitCfg.UserLcProfile.ZoneCc, "F");

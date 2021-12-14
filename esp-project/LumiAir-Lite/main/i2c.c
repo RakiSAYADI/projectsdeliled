@@ -8,14 +8,15 @@
 
 #include "i2c.h"
 #include "unitcfg.h"
+#include "sntpservice.h"
+#include "app_gpio.h"
 
 #define TAG "I2C"
 
 OPT3001_Typedef OPT3001_HoldReg = {0, 0, 0, 0, 0, 0, 0, 0}; //light meter
 IAQ_CORE_Typedef iaq_data;									//CO2 TVOC
 HDC1080_Typedef HDC1080_data;								//temperature Humidity
-
-#ifdef ENABLE_OPT3001
+MCP7940_Time_Typedef time_MCP7940;							//battery Timer
 
 bool clockSavorEnabled = false;
 bool saveTimeOnBattery = false;
@@ -25,16 +26,16 @@ time_t i2c_now = 0;
 struct tm i2c_timeinfo = {0};
 char strftime_buf[64];
 
-esp_err_t i2c_read_OPT3001(i2c_port_t i2c_num, uint8_t reg,
-						   uint16_t *data)
+#ifdef ENABLE_OPT3001
+
+esp_err_t i2c_read_OPT3001(i2c_port_t i2c_num, uint8_t reg, uint16_t *data)
 {
 	int ret;
 	uint8_t lb, hb;
 
 	i2c_cmd_handle_t cmd = i2c_cmd_link_create();
 	i2c_master_start(cmd);
-	i2c_master_write_byte(cmd, OPT3001_SENSOR_ADDR << 1 | WRITE_BIT,
-						  ACK_CHECK_EN);
+	i2c_master_write_byte(cmd, OPT3001_SENSOR_ADDR << 1 | WRITE_BIT, ACK_CHECK_EN);
 	i2c_master_write_byte(cmd, reg, ACK_CHECK_EN);
 	i2c_master_stop(cmd);
 	ret = i2c_master_cmd_begin(i2c_num, cmd, 1000 / portTICK_RATE_MS);
@@ -46,8 +47,7 @@ esp_err_t i2c_read_OPT3001(i2c_port_t i2c_num, uint8_t reg,
 	vTaskDelay(30 / portTICK_RATE_MS);
 	cmd = i2c_cmd_link_create();
 	i2c_master_start(cmd);
-	i2c_master_write_byte(cmd, OPT3001_SENSOR_ADDR << 1 | READ_BIT,
-						  ACK_CHECK_EN);
+	i2c_master_write_byte(cmd, OPT3001_SENSOR_ADDR << 1 | READ_BIT, ACK_CHECK_EN);
 	i2c_master_read_byte(cmd, &hb, ACK_VAL);
 	i2c_master_read_byte(cmd, &lb, NACK_VAL);
 	i2c_master_stop(cmd);
@@ -59,15 +59,13 @@ esp_err_t i2c_read_OPT3001(i2c_port_t i2c_num, uint8_t reg,
 	return ret;
 }
 
-esp_err_t i2c_write_OPT3001(i2c_port_t i2c_num, uint8_t reg,
-							uint16_t data)
+esp_err_t i2c_write_OPT3001(i2c_port_t i2c_num, uint8_t reg, uint16_t data)
 {
 	int ret;
 
 	i2c_cmd_handle_t cmd = i2c_cmd_link_create();
 	i2c_master_start(cmd);
-	i2c_master_write_byte(cmd, OPT3001_SENSOR_ADDR << 1 | WRITE_BIT,
-						  ACK_CHECK_EN);
+	i2c_master_write_byte(cmd, OPT3001_SENSOR_ADDR << 1 | WRITE_BIT, ACK_CHECK_EN);
 	i2c_master_write_byte(cmd, reg, ACK_CHECK_EN);
 	i2c_master_write_byte(cmd, (uint8_t)(data >> 8), ACK_VAL);
 	i2c_master_write_byte(cmd, (uint8_t)(data & 0xFF), ACK_VAL);
@@ -88,11 +86,19 @@ esp_err_t i2c_read_IAQ_CORE_C(i2c_port_t i2c_num, IAQ_CORE_Typedef *data)
 
 	i2c_cmd_handle_t cmd = i2c_cmd_link_create();
 	i2c_master_start(cmd);
-	i2c_master_write_byte(cmd, IAQ_CORE_C_SENSOR_ADDR << 1 | READ_BIT,
-						  ACK_CHECK_EN);
+	i2c_master_write_byte(cmd, IAQ_CORE_C_SENSOR_ADDR << 1 | READ_BIT, ACK_CHECK_EN);
 
 	i2c_master_read(cmd, tmp, 8, ACK_VAL);
 	i2c_master_read_byte(cmd, tmp + 8, NACK_VAL);
+
+	/*printf("\n");
+
+	for (int i = 0; i < 9; i++)
+	{
+		printf("tmp (%d) = %d, ", i, tmp[i]);
+	}
+
+	printf("\n");*/
 
 	i2c_master_stop(cmd);
 	ret = i2c_master_cmd_begin(i2c_num, cmd, 1000 / portTICK_RATE_MS);
@@ -110,8 +116,11 @@ esp_err_t i2c_read_IAQ_CORE_C(i2c_port_t i2c_num, IAQ_CORE_Typedef *data)
 		data->pred = 500;
 		data->status = 0;
 		data->resistance = 0;
-		data->Tvoc = 0;
+		data->Tvoc = 250;
 	}
+
+	//printf("CO2 : %u, State : %02X, resistance : %d , TVOC : %u \n", data->pred, data->status, data->resistance, data->Tvoc);
+	//printf("\n");
 
 	return ret;
 }
@@ -137,8 +146,7 @@ esp_err_t i2c_read_HDC1080(i2c_port_t i2c_num, uint8_t reg, uint16_t *data)
 	vTaskDelay(30 / portTICK_RATE_MS);
 	cmd = i2c_cmd_link_create();
 	i2c_master_start(cmd);
-	i2c_master_write_byte(cmd, HDC1080_SENSOR_ADDR << 1 | READ_BIT,
-						  ACK_CHECK_EN);
+	i2c_master_write_byte(cmd, HDC1080_SENSOR_ADDR << 1 | READ_BIT, ACK_CHECK_EN);
 	i2c_master_read_byte(cmd, &hb, ACK_VAL);
 	i2c_master_read_byte(cmd, &lb, NACK_VAL);
 	i2c_master_stop(cmd);
@@ -150,15 +158,13 @@ esp_err_t i2c_read_HDC1080(i2c_port_t i2c_num, uint8_t reg, uint16_t *data)
 	return ret;
 }
 
-esp_err_t i2c_write_HDC1080(i2c_port_t i2c_num, uint8_t reg,
-							uint16_t data)
+esp_err_t i2c_write_HDC1080(i2c_port_t i2c_num, uint8_t reg, uint16_t data)
 {
 	int ret;
 
 	i2c_cmd_handle_t cmd = i2c_cmd_link_create();
 	i2c_master_start(cmd);
-	i2c_master_write_byte(cmd, HDC1080_SENSOR_ADDR << 1 | WRITE_BIT,
-						  ACK_CHECK_EN);
+	i2c_master_write_byte(cmd, HDC1080_SENSOR_ADDR << 1 | WRITE_BIT, ACK_CHECK_EN);
 	i2c_master_write_byte(cmd, reg, ACK_CHECK_EN);
 	i2c_master_write_byte(cmd, (uint8_t)(data >> 8), ACK_VAL);
 	i2c_master_write_byte(cmd, (uint8_t)(data & 0xFF), ACK_VAL);
@@ -171,8 +177,6 @@ esp_err_t i2c_write_HDC1080(i2c_port_t i2c_num, uint8_t reg,
 #endif
 
 #ifdef ENABLE_MCP7940
-
-MCP7940_Time_Typedef time_MCP7940;
 
 esp_err_t i2c_read_MCP7940(i2c_port_t i2c_num, uint8_t reg, MCP7940_Time_Typedef *time)
 {
@@ -301,6 +305,30 @@ esp_err_t i2c_write_MCP7940(i2c_port_t i2c_num, uint8_t reg, MCP7940_Time_Typede
 	vTaskDelay(1 / portTICK_RATE_MS);
 	return ret;
 }
+
+esp_err_t saveTimeInsideBattery(struct tm timeinfo)
+{
+	int ret;
+	time_MCP7940.second = timeinfo.tm_sec;
+	time_MCP7940.minute = timeinfo.tm_min;
+	time_MCP7940.hour = timeinfo.tm_hour;
+	time_MCP7940.twelve_or_24 = 0;
+	time_MCP7940.day_of_week = timeinfo.tm_wday;
+	time_MCP7940.day = timeinfo.tm_mday;
+	time_MCP7940.month = timeinfo.tm_mon;
+	time_MCP7940.year = timeinfo.tm_year;
+	time_MCP7940.vBat_en = 1;
+	time_MCP7940.osillater_start = 1;
+	ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCSEC, &time_MCP7940);
+	ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCMIN, &time_MCP7940);
+	ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCHOUR, &time_MCP7940);
+	ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCDATE, &time_MCP7940);
+	ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCWKDAY, &time_MCP7940);
+	ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCMTH, &time_MCP7940);
+	ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCYEAR, &time_MCP7940);
+	return ret;
+}
+
 #endif
 
 /**
@@ -360,8 +388,7 @@ void i2c_slave_init()
 #ifdef ENABLE_HDC1080
 	HDC1080_data.Config = 0x1000;
 
-	ret = i2c_write_HDC1080(I2C_MASTER_NUM, HDC1080_CONFIG,
-							HDC1080_data.Config);
+	ret = i2c_write_HDC1080(I2C_MASTER_NUM, HDC1080_CONFIG, HDC1080_data.Config);
 	ret = i2c_read_HDC1080(I2C_MASTER_NUM, HDC1080_CONFIG, &tmp);
 
 	if (ret == ESP_ERR_TIMEOUT)
@@ -436,7 +463,6 @@ void i2c_test_task(void *arg)
 #ifdef ENABLE_OPT3001
 		/* i2c_read_OPT3001 */
 		ret = i2c_read_OPT3001(I2C_MASTER_NUM, OPT3001_RESULT_REG, &OPT3001_HoldReg.raw_result);
-		//ret = i2c_read_OPT3001( I2C_MASTER_NUM,OPT3001_CONFIG_REG, &OPT3001_HoldReg.config);
 		if (ret == ESP_ERR_TIMEOUT)
 		{
 			ESP_LOGE(TAG, "I2C OPT3001 timeout\n");
@@ -527,81 +553,56 @@ void i2c_test_task(void *arg)
 				localtime_r(&i2c_now, &i2c_timeinfo);
 				if (time_MCP7940.osillater_start == 0 || time_MCP7940.vBat_en == 0)
 				{
-					printf("true condition for not having time inside the battery \n");
 					if (i2c_timeinfo.tm_year > (2016 - 1900))
 					{
-						printf("true condition for having time inside ESP32 \n");
-						time_MCP7940.second = i2c_timeinfo.tm_sec;
-						time_MCP7940.minute = i2c_timeinfo.tm_min;
-						time_MCP7940.hour = i2c_timeinfo.tm_hour;
-						time_MCP7940.twelve_or_24 = 0;
-						time_MCP7940.day_of_week = i2c_timeinfo.tm_wday;
-						time_MCP7940.day = i2c_timeinfo.tm_mday;
-						time_MCP7940.month = i2c_timeinfo.tm_mon;
-						time_MCP7940.year = i2c_timeinfo.tm_year;
-						time_MCP7940.vBat_en = 1;
-						time_MCP7940.osillater_start = 1;
-						ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCSEC, &time_MCP7940);
-						ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCMIN, &time_MCP7940);
-						ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCHOUR, &time_MCP7940);
-						ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCDATE, &time_MCP7940);
-						ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCWKDAY, &time_MCP7940);
-						ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCMTH, &time_MCP7940);
-						ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCYEAR, &time_MCP7940);
+						ret = saveTimeInsideBattery(i2c_timeinfo);
+						ESP_ERROR_CHECK(ret);
 					}
 					else
 					{
-						printf("true condition for not having time inside ESP32 \n");
 						if (saveTimeOnBattery)
 						{
-							time_MCP7940.second = i2c_timeinfo.tm_sec;
-							time_MCP7940.minute = i2c_timeinfo.tm_min;
-							time_MCP7940.hour = i2c_timeinfo.tm_hour;
-							time_MCP7940.twelve_or_24 = 0;
-							time_MCP7940.day_of_week = i2c_timeinfo.tm_wday;
-							time_MCP7940.day = i2c_timeinfo.tm_mday;
-							time_MCP7940.month = i2c_timeinfo.tm_mon;
-							time_MCP7940.year = i2c_timeinfo.tm_year;
-							time_MCP7940.vBat_en = 1;
-							time_MCP7940.osillater_start = 1;
-							ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCSEC, &time_MCP7940);
-							ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCMIN, &time_MCP7940);
-							ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCHOUR, &time_MCP7940);
-							ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCDATE, &time_MCP7940);
-							ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCWKDAY, &time_MCP7940);
-							ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCMTH, &time_MCP7940);
-							ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCYEAR, &time_MCP7940);
+							ret = saveTimeInsideBattery(i2c_timeinfo);
+							ESP_ERROR_CHECK(ret);
 							saveTimeOnBattery = false;
 						}
 					}
 				}
 				else
 				{
-					printf("true condition for having time inside the battery \n");
 					if (!saveTimeBattery)
 					{
-						struct tm tm;
-						tm.tm_year = time_MCP7940.year;
-						tm.tm_mon = time_MCP7940.month;
-						tm.tm_mday = time_MCP7940.day;
-						tm.tm_wday = time_MCP7940.day_of_week;
-						tm.tm_hour = time_MCP7940.hour;
-						tm.tm_min = time_MCP7940.minute;
-						tm.tm_sec = time_MCP7940.second;
-						time_t t = mktime(&tm);
-						ESP_LOGI(TAG, "sec : %d, min : %d, hour : %d, weekday : %d, day : %d, month : %d, year : %d\n",
-								 tm.tm_sec, tm.tm_min, tm.tm_hour, tm.tm_wday, tm.tm_mday, tm.tm_mon, tm.tm_year);
-						ESP_LOGI(TAG, "I2C MASTER Setting time: %s", asctime(&tm));
-						struct timeval now = {.tv_sec = t};
-						saveTimeBattery = true;
-						settimeofday(&now, NULL);
+						if (UnitStat == UNIT_STATUS_WIFI_GOT_IP && sntpTimeSetFlag)
+						{
+							strftime(strftime_buf, sizeof(strftime_buf), "%c", &i2c_timeinfo);
+							ESP_LOGI(TAG, "ESP32 got time from internet: %s", strftime_buf);
+							saveTimeBattery = true;
+						}
+						if (UnitStat == UNIT_STATUS_WIFI_NO_IP)
+						{
+							struct tm tm;
+							tm.tm_year = time_MCP7940.year;
+							tm.tm_mon = time_MCP7940.month;
+							tm.tm_mday = time_MCP7940.day;
+							tm.tm_wday = time_MCP7940.day_of_week;
+							tm.tm_hour = time_MCP7940.hour;
+							tm.tm_min = time_MCP7940.minute;
+							tm.tm_sec = time_MCP7940.second;
+							time_t t = mktime(&tm);
+							ESP_LOGI(TAG, "sec : %d, min : %d, hour : %d, weekday : %d, day : %d, month : %d, year : %d\n",
+									 tm.tm_sec, tm.tm_min, tm.tm_hour, tm.tm_wday, tm.tm_mday, tm.tm_mon, tm.tm_year);
+							ESP_LOGI(TAG, "I2C MASTER Setting time: %s", asctime(&tm));
+							strftime(strftime_buf, sizeof(strftime_buf), "%c", &i2c_timeinfo);
+							ESP_LOGI(TAG, "I2C MASTER Read TIMER( MCP7940 ) : %d/%d/%d in %d at %d:%d:%d",
+									 time_MCP7940.year, time_MCP7940.month, time_MCP7940.day,
+									 time_MCP7940.day_of_week, time_MCP7940.hour, time_MCP7940.minute, time_MCP7940.second);
+							ESP_LOGI(TAG, "The current date/time in ESP32 is: %s", strftime_buf);
+							struct timeval now = {.tv_sec = t};
+							saveTimeBattery = true;
+							settimeofday(&now, NULL);
+						}
 					}
 				}
-				strftime(strftime_buf, sizeof(strftime_buf), "%c", &i2c_timeinfo);
-				ESP_LOGI(TAG, "I2C MASTER Read TIMER( MCP7940 ) : %d/%d/%d in %d at %d:%d:%d",
-						 time_MCP7940.year, time_MCP7940.month, time_MCP7940.day,
-						 time_MCP7940.day_of_week, time_MCP7940.hour, time_MCP7940.minute, time_MCP7940.second);
-				ESP_LOGI(TAG, "The current date/time in ESP32 is: %s", strftime_buf);
 			}
 			else
 			{
