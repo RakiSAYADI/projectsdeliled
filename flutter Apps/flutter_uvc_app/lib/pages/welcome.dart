@@ -189,8 +189,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
 
     myUvcToast = ToastyMessage(toastContext: context);
 
-    Navigator.pushReplacementNamed(context, '/rapport_modification');
-    //startApp();
+    startApp();
     super.initState();
   }
 

@@ -10,7 +10,6 @@ class DataCSVView extends StatefulWidget {
 }
 
 class _DataCSVViewState extends State<DataCSVView> {
-  List<List<String>> uvcDataReversed = [[]];
 
   @override
   void initState() {
@@ -20,10 +19,6 @@ class _DataCSVViewState extends State<DataCSVView> {
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
-    uvcDataReversed[0] = uvcData[0];
-    List<List<String>> uvcDataReversedMiddle = uvcData.reversed.toList();
-    uvcDataReversedMiddle.last = [];
-    uvcDataReversed.addAll(uvcDataReversedMiddle);
   }
 
   @override
@@ -46,7 +41,7 @@ class _DataCSVViewState extends State<DataCSVView> {
             child: SingleChildScrollView(
               child: Table(
                 border: TableBorder.all(width: 2.0),
-                children: uvcDataReversed.map((item) {
+                children: uvcDataSelected.map((item) {
                   return TableRow(
                       children: item.map((row) {
                     return Container(

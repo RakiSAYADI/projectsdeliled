@@ -43,7 +43,8 @@ class _DataViewModificationState extends State<DataViewModification> {
     // TODO: implement initState
     _myUvcToast = ToastyMessage(toastContext: context);
     uvcDataFile = UVCDataFile();
-    uvcDataSelected = uvcDefaultData[languageArrayIdentifier];
+    uvcDataSelected = [[]];
+    uvcDataSelected.length = 0;
     super.initState();
   }
 
@@ -448,6 +449,10 @@ class _DataViewModificationState extends State<DataViewModification> {
                     onPressed: () async {
                       uvcData = await uvcDataFile.readUVCDATA();
                       if (_allData) {
+                        uvcDataSelected.add(uvcData[0]);
+                        List<List<String>> uvcDataReversedMiddle = uvcData.reversed.toList();
+                        uvcDataReversedMiddle.last = [];
+                        uvcDataSelected.addAll(uvcDataReversedMiddle);
                         if (openWithQrCode) {
                           Navigator.pushNamed(context, '/DataCSVViewQrCode');
                         } else {
@@ -456,6 +461,11 @@ class _DataViewModificationState extends State<DataViewModification> {
                       } else if (_timedData) {
                         if (await checkDataUVC()) {
                           print(uvcDataSelected);
+                          if (openWithQrCode) {
+                            Navigator.pushNamed(context, '/DataCSVViewQrCode');
+                          } else {
+                            Navigator.pushNamed(context, '/DataCSVView');
+                          }
                         } else {
                           _myUvcToast.setToastDuration(3);
                           _myUvcToast.setToastMessage(noDataForDateSelectedToastLanguageArray[languageArrayIdentifier]);
@@ -478,20 +488,26 @@ class _DataViewModificationState extends State<DataViewModification> {
   }
 
   Future<bool> checkDataUVC() async {
+    uvcDataSelected = uvcDefaultData[languageArrayIdentifier];
+    List<List<String>> uvcDataSelectedCombiner = [[]];
+    uvcDataSelectedCombiner.length = 0;
     bool noDataFounded = false;
     DateTime d1 = DateTime.utc(int.parse(_myStartDataTimeYearsData), int.parse(_myStartDataTimeMonthData), int.parse(_myStartDataTimeDayData));
     DateTime d2 = DateTime.utc(int.parse(_myEndDataTimeYearsData), int.parse(_myEndDataTimeMonthData), int.parse(_myEndDataTimeDayData));
     DateTime d3;
     for (int i = 1; i < uvcData.length; i++) {
       d3 = DateTime.parse('${uvcData[i][5].split('/')[2].replaceAll(' ', '')}-${uvcData[i][5].split('/')[1].replaceAll(' ', '')}-${uvcData[i][5].split('/')[0].replaceAll(' ', '')}');
-      if (d3.isAfter(d1) && d3.isBefore(d2)) {
-        print("good date $d3");
-        uvcDataSelected.add(uvcData[i]);
+      if ((d3.isAfter(d1) || d3.isAtSameMomentAs(d1)) && (d3.isBefore(d2) || d3.isAtSameMomentAs(d1))) {
+        print("valid date $d3");
+        uvcDataSelectedCombiner.add(uvcData[i]);
         noDataFounded = true;
       } else {
         noDataFounded = false;
-        print("bad date $d3");
+        print("non valid date $d3");
       }
+    }
+    if (noDataFounded) {
+      uvcDataSelected = new List.from(uvcDataSelected)..addAll(uvcDataSelectedCombiner.reversed.toList());
     }
     return noDataFounded;
   }

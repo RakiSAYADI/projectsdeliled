@@ -38,7 +38,7 @@ class _DataCSVViewQrCodeState extends State<DataCSVViewQrCode> {
             child: SingleChildScrollView(
               child: Table(
                 border: TableBorder.all(width: 2.0),
-                children: uvcData.map((item) {
+                children: uvcDataSelected.map((item) {
                   return TableRow(
                       children: item.map((row) {
                     return Container(

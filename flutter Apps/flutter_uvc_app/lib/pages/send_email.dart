@@ -19,7 +19,8 @@ class SendEmail extends StatefulWidget {
 class _SendEmailState extends State<SendEmail> {
   ToastyMessage myUvcToast;
 
-  final String _uvcDataFileName = 'RapportUVC.csv';
+  //final String _uvcDataFileName = 'RapportUVC.csv';
+  final String _uvcDataSelectedFileName = 'RapportDataUVC.csv';
 
   final myEmail = TextEditingController();
 
@@ -101,6 +102,7 @@ class _SendEmailState extends State<SendEmail> {
                       TextButton(
                         onPressed: () async {
                           await uvcDataFile.saveStringUVCEmailDATA(myEmail.text);
+                          uvcDataFile.saveUVCDATASelected(uvcDataSelected);
                           myUvcToast.setToastDuration(60);
                           myUvcToast.setToastMessage(sendingEmailPageToastTextLanguageArray[languageArrayIdentifier]);
                           myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
@@ -148,7 +150,7 @@ class _SendEmailState extends State<SendEmail> {
       ..from = Address(username, 'DeliTech Medical')
       ..recipients.add(destination)
       ..subject = uvcEmailObjectTextLanguageArray[languageArrayIdentifier]
-      ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataFileName')))
+      ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataSelectedFileName')))
       ..text = uvcEmailMessageTextLanguageArray[languageArrayIdentifier];
 
     try {

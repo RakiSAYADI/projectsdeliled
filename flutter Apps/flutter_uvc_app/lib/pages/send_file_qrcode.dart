@@ -18,7 +18,8 @@ class SendEmailQrCode extends StatefulWidget {
 class _SendEmailQrCodeState extends State<SendEmailQrCode> {
   ToastyMessage myUvcToast;
 
-  final String _uvcDataFileName = 'RapportUVC.csv';
+  //final String _uvcDataFileName = 'RapportUVC.csv';
+  final String _uvcDataSelectedFileName = 'RapportDataUVC.csv';
 
   final myEmail = TextEditingController();
 
@@ -103,6 +104,7 @@ class _SendEmailQrCodeState extends State<SendEmailQrCode> {
                       TextButton(
                         onPressed: () async {
                           await uvcDataFile.saveStringUVCEmailDATA(myEmail.text);
+                          uvcDataFile.saveUVCDATASelected(uvcDataSelected);
                           myUvcToast.setToastDuration(60);
                           myUvcToast.setToastMessage(sendingEmailPageToastTextLanguageArray[languageArrayIdentifier]);
                           myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
@@ -150,7 +152,7 @@ class _SendEmailQrCodeState extends State<SendEmailQrCode> {
       ..from = Address(username, 'DeliTech Medical')
       ..recipients.add(destination)
       ..subject = uvcEmailObjectTextLanguageArray[languageArrayIdentifier]
-      ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataFileName')))
+      ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataSelectedFileName')))
       ..text = uvcEmailMessageTextLanguageArray[languageArrayIdentifier];
 
     try {
