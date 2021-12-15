@@ -5,6 +5,7 @@ import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:flutterappdentaluvc/services/LEDControl.dart';
+import 'package:flutterappdentaluvc/services/languageDataBase.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -17,7 +18,6 @@ class EndUVC extends StatefulWidget {
 }
 
 class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
-
   final TextEditingController _pinPutController = TextEditingController();
 
   String pinCodeAccess = '';
@@ -82,12 +82,12 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
     await Future.delayed(const Duration(milliseconds: 50));
 
     if (isTreatmentCompleted) {
-      uvcOperationData.add('Valide');
+      uvcOperationData.add(validTextLanguageArray[languageArrayIdentifier]);
       if (Platform.isAndroid) {
         await ledControl.setLedColor('GREEN');
       }
     } else {
-      uvcOperationData.add('Incident');
+      uvcOperationData.add(incidentTextLanguageArray[languageArrayIdentifier]);
       if (Platform.isAndroid) {
         await ledControl.setLedColor('RED');
       }
@@ -154,12 +154,12 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
     String imageGif;
 
     if (isTreatmentCompleted) {
-      title = 'Désinfection terminée';
-      message = 'Désinfection réalisée avec succès.';
+      title = disinfectionGoodStateTextLanguageArray[languageArrayIdentifier];
+      message = disinfectionGoodStateMessageTextLanguageArray[languageArrayIdentifier];
       imageGif = 'assets/felicitation_animation.gif';
     } else {
-      title = 'Désinfection annulée';
-      message = 'Désinfection interrompue.';
+      title = disinfectionBadStateTextLanguageArray[languageArrayIdentifier];
+      message = disinfectionBadStateMessageTextLanguageArray[languageArrayIdentifier];
       imageGif = 'assets/echec_logo.gif';
     }
 
@@ -196,7 +196,7 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
                       Navigator.pushNamedAndRemoveUntil(context, "/pin_access", (r) => false);
                     },
                     child: Text(
-                      'Nouvelle désinfection',
+                      newDisinfectionTextLanguageArray[languageArrayIdentifier],
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: widthScreen * 0.05,
@@ -220,7 +220,7 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
             openWithSettings = false;
             Navigator.pushNamed(context, '/rapport_modification');
           },
-          label: Text('Rapport'),
+          label: Text(reportTextLanguageArray[languageArrayIdentifier]),
           icon: Icon(
             Icons.assignment,
             color: Colors.white,
@@ -236,7 +236,6 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-
     if (firstDisplayMainWidget) {
       firstDisplayMainWidget = false;
       csvDataFile();
@@ -275,7 +274,7 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Text(
-                            'Entrer le code de sécurité :',
+                            enterSecurityCodeTextLanguageArray[languageArrayIdentifier],
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.black,
@@ -390,7 +389,7 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
               });
             } else {
               myUvcToast.setToastDuration(3);
-              myUvcToast.setToastMessage('Code Invalide !');
+              myUvcToast.setToastMessage(invalidPinCodeTextLanguageArray[languageArrayIdentifier]);
               myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
             }
             _pinPutController.text = '';

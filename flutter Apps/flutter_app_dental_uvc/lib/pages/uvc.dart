@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:flutterappdentaluvc/services/LEDControl.dart';
-import 'package:flutterappdentaluvc/services/custum_timer_painter.dart';
+import 'package:flutterappdentaluvc/services/custom_timer_painter.dart';
+import 'package:flutterappdentaluvc/services/languageDataBase.dart';
 import 'package:slide_countdown_clock/slide_countdown_clock.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -51,12 +52,12 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
   }
 
   void _getNotification() async {
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails('your channel id', 'your channel name', 'your channel description',
-        importance: Importance.max, priority: Priority.high, ticker: 'ticker');
+    var androidPlatformChannelSpecifics =
+        AndroidNotificationDetails('your channel id', 'your channel name', 'your channel description', importance: Importance.max, priority: Priority.high, ticker: 'ticker');
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics,iOS: iOSPlatformChannelSpecifics);
+    var platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin
-        .show(0, 'Félicitations', 'Désinfection réalisée avec succès !', platformChannelSpecifics, payload: 'item x');
+        .show(0, congratulationMessageTextLanguageArray[languageArrayIdentifier], disinfectionGoodStateMessageTextLanguageArray[languageArrayIdentifier], platformChannelSpecifics, payload: 'item x');
   }
 
   @override
@@ -131,7 +132,6 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-
     durationOfDisinfect = Duration(seconds: myUvcLight.getActivationTime());
     if (myUvcLight.infectionTime.contains('sec')) {
       durationOfActivate = Duration(seconds: myUvcLight.getActivationTime() + myUvcLight.getInfectionTime());
@@ -142,7 +142,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     if (firstDisplayMainWidget) {
       firstDisplayMainWidget = false;
 
-      if(Platform.isAndroid){
+      if (Platform.isAndroid) {
         alertOrUVC = false;
         ledControl = LedControl();
         alertLedRed();
@@ -162,7 +162,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.red,
-          title: Text('Désinfection en cours', style: TextStyle(fontSize: widthScreen * 0.04)),
+          title: Text(disinfectionOnProgressTextLanguageArray[languageArrayIdentifier], style: TextStyle(fontSize: widthScreen * 0.04)),
           centerTitle: true,
         ),
         body: Container(
@@ -176,149 +176,145 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
           child: Container(
             child: Center(
               child: AnimatedBuilder(
-                      animation: controllerAnimationTimeBackground,
-                      builder: (context, child) {
-                        return Align(
-                          alignment: FractionalOffset.center,
-                          child: AspectRatio(
-                            aspectRatio: 1.0,
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: <Widget>[
-                                Positioned.fill(
-                                  child: CustomPaint(
-                                    painter: CustomTimerPainter(
-                                      animation: controllerAnimationTimeBackground,
-                                      backgroundColor: Colors.white,
-                                      color: circleColor,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  child: Center(
+                animation: controllerAnimationTimeBackground,
+                builder: (context, child) {
+                  return Align(
+                    alignment: FractionalOffset.center,
+                    child: AspectRatio(
+                      aspectRatio: 1.0,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: <Widget>[
+                          Positioned.fill(
+                            child: CustomPaint(
+                              painter: CustomTimerPainter(
+                                animation: controllerAnimationTimeBackground,
+                                backgroundColor: Colors.white,
+                                color: circleColor,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            child: Center(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  AnimatedOpacity(
+                                    curve: Curves.linear,
+                                    opacity: opacityLevelActivation,
+                                    duration: Duration(seconds: myUvcLight.getActivationTime()),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       mainAxisAlignment: MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        AnimatedOpacity(
-                                          curve: Curves.linear,
-                                          opacity: opacityLevelActivation,
-                                          duration: Duration(seconds: myUvcLight.getActivationTime()),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                'La désinfection débutera dans :',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.red,
-                                                  fontSize: widthScreen * 0.015,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.all(10),
-                                                child: SlideCountdownClock(
-                                                  duration: durationOfDisinfect,
-                                                  slideDirection: SlideDirection.Up,
-                                                  separator: ":",
-                                                  textStyle: TextStyle(
-                                                    fontSize: widthScreen * 0.02,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.grey[300],
-                                                  ),
-                                                  separatorTextStyle: TextStyle(
-                                                    fontSize: widthScreen * 0.02,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.red,
-                                                  ),
-                                                  padding: EdgeInsets.all(10),
-                                                  decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle),
-                                                  onDone: () async {
-                                                    _changeOpacityDisinfection();
-                                                    _changeOpacityActivation();
-                                                    alertOrUVC = true;
-                                                    print('alert is completed');
-                                                    setState(() {
-                                                      circleColor = Colors.green;
-                                                      controllerAnimationTimeBackground.duration =
-                                                          Duration(seconds: (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds));
-                                                      print(durationOfActivate.inSeconds);
-                                                      print(myUvcLight.getInfectionTime());
-                                                      controllerAnimationTimeBackground.reverse(
-                                                          from: controllerAnimationTimeBackground.value == 0.0
-                                                              ? 1.0
-                                                              : controllerAnimationTimeBackground.value);
-                                                    });
-                                                  },
-                                                ),
-                                              ),
-                                            ],
+                                      children: [
+                                        Text(
+                                          disinfectionStartOnTextLanguageArray[languageArrayIdentifier],
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.red,
+                                            fontSize: widthScreen * 0.015,
                                           ),
                                         ),
-                                        _buildSpace(),
-                                        GestureDetector(
-                                          onTap: () => stopSecurity(context),
-                                          child: ClipOval(
-                                            child: Container(
+                                        Padding(
+                                          padding: EdgeInsets.all(10),
+                                          child: SlideCountdownClock(
+                                            duration: durationOfDisinfect,
+                                            slideDirection: SlideDirection.Up,
+                                            separator: ":",
+                                            textStyle: TextStyle(
+                                              fontSize: widthScreen * 0.02,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.grey[300],
+                                            ),
+                                            separatorTextStyle: TextStyle(
+                                              fontSize: widthScreen * 0.02,
+                                              fontWeight: FontWeight.bold,
                                               color: Colors.red,
-                                              height: heightScreen * 0.1,
-                                              width: widthScreen * 0.1,
-                                              child: Center(
-                                                child: Text(
-                                                  'STOP',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.grey[300],
-                                                    fontSize: widthScreen * 0.015,
-                                                  ),
-                                                ),
-                                              ),
+                                            ),
+                                            padding: EdgeInsets.all(10),
+                                            decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+                                            onDone: () async {
+                                              _changeOpacityDisinfection();
+                                              _changeOpacityActivation();
+                                              alertOrUVC = true;
+                                              print('alert is completed');
+                                              setState(() {
+                                                circleColor = Colors.green;
+                                                controllerAnimationTimeBackground.duration = Duration(seconds: (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds));
+                                                print(durationOfActivate.inSeconds);
+                                                print(myUvcLight.getInfectionTime());
+                                                controllerAnimationTimeBackground.reverse(from: controllerAnimationTimeBackground.value == 0.0 ? 1.0 : controllerAnimationTimeBackground.value);
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  _buildSpace(),
+                                  GestureDetector(
+                                    onTap: () => stopSecurity(context),
+                                    child: ClipOval(
+                                      child: Container(
+                                        color: Colors.red,
+                                        height: heightScreen * 0.1,
+                                        width: widthScreen * 0.1,
+                                        child: Center(
+                                          child: Text(
+                                            stopTextLanguageArray[languageArrayIdentifier],
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.grey[300],
+                                              fontSize: widthScreen * 0.015,
                                             ),
                                           ),
                                         ),
-                                        _buildSpace(),
-                                        AnimatedOpacity(
-                                          curve: Curves.linear,
-                                          opacity: opacityLevelDisinfection,
-                                          duration: Duration(seconds: myUvcLight.getActivationTime()),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                'La désinfection finira dans :',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.green,
-                                                  fontSize: widthScreen * 0.015,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.all(10),
-                                                child: SlideCountdownClock(
-                                                  duration: durationOfActivate,
-                                                  slideDirection: SlideDirection.Up,
-                                                  separator: ":",
-                                                  textStyle: TextStyle(
-                                                    fontSize: widthScreen * 0.02,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.grey[300],
-                                                  ),
-                                                  separatorTextStyle: TextStyle(
-                                                    fontSize: widthScreen * 0.02,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.green,
-                                                  ),
-                                                  padding: EdgeInsets.all(10),
-                                                  decoration: BoxDecoration(color: Colors.green, shape: BoxShape.circle),
-                                                  onDone: () async {
-                                                    treatmentIsSuccessful = true;
-                                                    alertOrUVC = false;
-                                                    if ((!treatmentIsStopped) && treatmentIsOnProgress) {
+                                      ),
+                                    ),
+                                  ),
+                                  _buildSpace(),
+                                  AnimatedOpacity(
+                                    curve: Curves.linear,
+                                    opacity: opacityLevelDisinfection,
+                                    duration: Duration(seconds: myUvcLight.getActivationTime()),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          disinfectionStopOnTextLanguageArray[languageArrayIdentifier],
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.green,
+                                            fontSize: widthScreen * 0.015,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.all(10),
+                                          child: SlideCountdownClock(
+                                            duration: durationOfActivate,
+                                            slideDirection: SlideDirection.Up,
+                                            separator: ":",
+                                            textStyle: TextStyle(
+                                              fontSize: widthScreen * 0.02,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.grey[300],
+                                            ),
+                                            separatorTextStyle: TextStyle(
+                                              fontSize: widthScreen * 0.02,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.green,
+                                            ),
+                                            padding: EdgeInsets.all(10),
+                                            decoration: BoxDecoration(color: Colors.green, shape: BoxShape.circle),
+                                            onDone: () async {
+                                              treatmentIsSuccessful = true;
+                                              alertOrUVC = false;
+                                              if ((!treatmentIsStopped) && treatmentIsOnProgress) {
                                                 print('finished activation');
                                                 treatmentIsOnProgress = false;
                                                 _getNotification();
@@ -328,22 +324,22 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                                 Navigator.pushNamed(context, '/end_uvc');
                                               }
                                             },
-                                                ),
-                                              ),
-                                            ],
                                           ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        );
-                      },
+                        ],
+                      ),
                     ),
-                  ),
+                  );
+                },
+              ),
+            ),
           ),
         ),
       ),
@@ -356,9 +352,9 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     return showDialog<bool>(
       context: context,
       builder: (c) => AlertDialog(
-        title: Text('Attention'),
+        title: Text(attentionTextLanguageArray[languageArrayIdentifier]),
         content: Text(
-          'Voulez-vous vraiment annuler le traitement UVC ?',
+          disinfectionStopMessageTextLanguageArray[languageArrayIdentifier],
           style: TextStyle(
             fontSize: widthScreen * 0.02,
           ),
@@ -366,7 +362,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
         actions: [
           TextButton(
             child: Text(
-              'Oui',
+              yesTextLanguageArray[languageArrayIdentifier],
               style: TextStyle(
                 fontSize: widthScreen * 0.02,
               ),
@@ -388,7 +384,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
           ),
           TextButton(
             child: Text(
-              'Non',
+              noTextLanguageArray[languageArrayIdentifier],
               style: TextStyle(
                 fontSize: widthScreen * 0.02,
               ),

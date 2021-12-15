@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
+import 'package:flutterappdentaluvc/services/languageDataBase.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -27,7 +28,7 @@ class _SettingsState extends State<Settings> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Paramètres'),
+        title: Text(parametersTextLanguageArray[languageArrayIdentifier]),
         centerTitle: true,
       ),
       body: Container(
@@ -51,7 +52,7 @@ class _SettingsState extends State<Settings> {
                         ),
                         SizedBox(height: heightScreen * 0.03),
                         Text(
-                          'Délais avant allumage :',
+                          ignitionTimeMessageTextLanguageArray[languageArrayIdentifier],
                           style: TextStyle(
                             fontSize: widthScreen * 0.03,
                             color: Colors.black,
@@ -94,7 +95,7 @@ class _SettingsState extends State<Settings> {
                         ),
                         SizedBox(height: heightScreen * 0.03),
                         Text(
-                          'Durée de la désinfection :',
+                          disinfectionTimeMessageTextLanguageArray[languageArrayIdentifier],
                           style: TextStyle(
                             fontSize: widthScreen * 0.03,
                             color: Colors.black,
@@ -141,7 +142,7 @@ class _SettingsState extends State<Settings> {
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Text(
-                      'DÉMARRER',
+                      startTextLanguageArray[languageArrayIdentifier],
                       style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.02),
                     ),
                   ),
@@ -165,8 +166,8 @@ class _SettingsState extends State<Settings> {
     double heightScreen = MediaQuery.of(context).size.height;
     myUvcLight.setInfectionTime(myExtinctionTimeMinuteData);
     myUvcLight.setActivationTime(myActivationTimeMinuteData);
-    await myDevice.writeCharacteristic(2, 0,
-        '{\"data\":[\"${myUvcLight.getCompanyName()}\",\"${myUvcLight.getOperatorName()}\",\"${myUvcLight.getRoomName()}\",$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition]}');
+    await myDevice.writeCharacteristic(
+        2, 0, '{\"data\":[\"${myUvcLight.getCompanyName()}\",\"${myUvcLight.getOperatorName()}\",\"${myUvcLight.getRoomName()}\",$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition]}');
     return showDialog<void>(
       barrierDismissible: false,
       context: context,
@@ -177,7 +178,7 @@ class _SettingsState extends State<Settings> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Confirmer ces informations :',
+                confirmInfoTextLanguageArray[languageArrayIdentifier],
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: widthScreen * 0.03),
               ),
@@ -286,7 +287,7 @@ class _SettingsState extends State<Settings> {
           actions: <Widget>[
             TextButton(
               child: Text(
-                'OK',
+                okTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(color: Colors.green, fontSize: widthScreen * 0.02),
               ),
               onPressed: () async {
@@ -296,7 +297,7 @@ class _SettingsState extends State<Settings> {
             ),
             TextButton(
               child: Text(
-                'Annuler',
+                cancelTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(color: Colors.green, fontSize: widthScreen * 0.02),
               ),
               onPressed: () {

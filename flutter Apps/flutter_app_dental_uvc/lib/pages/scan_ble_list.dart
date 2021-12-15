@@ -7,6 +7,7 @@ import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/deviceBleWidget.dart';
+import 'package:flutterappdentaluvc/services/languageDataBase.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 
 class ScanListBle extends StatefulWidget {
@@ -51,7 +52,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
         print("Bluetooth is off");
         myUvcToast = ToastyMessage(toastContext: context);
         myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('Le Bluetooth (BLE) n\'est pas activé sur votre téléphone !');
+        myUvcToast.setToastMessage(bluetoothToastLanguageArray[languageArrayIdentifier]);
         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
       } else if (state == BluetoothState.on) {
         //if bluetooth is enabled then go ahead.
@@ -72,10 +73,9 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
     uvcDataFile = UVCDataFile();
     robotsNamesData = await uvcDataFile.readRobotsNameDATA();
     try {
-      Map<String, dynamic> parsedJson = json.decode(robotsNamesData);
-
+      json.decode(robotsNamesData);
     } catch (e) {
-      print('erreur in name');
+      print('error in name');
     }
   }
 
@@ -150,7 +150,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Voulez vous vraiment enregistrer ce dispositif ?',
+                  saveDeviceMessageTextLanguageArray[languageArrayIdentifier],
                   style: TextStyle(fontSize: (screenWidth * 0.02)),
                 ),
                 SizedBox(height: screenHeight * 0.1),
@@ -166,7 +166,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
         actions: [
           TextButton(
             child: Text(
-              'Oui',
+              yesTextLanguageArray[languageArrayIdentifier],
               style: TextStyle(fontSize: (screenWidth * 0.02)),
             ),
             onPressed: () async {
@@ -181,7 +181,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
           ),
           TextButton(
             child: Text(
-              'Non',
+              noTextLanguageArray[languageArrayIdentifier],
               style: TextStyle(fontSize: (screenWidth * 0.02)),
             ),
             onPressed: () {
@@ -203,7 +203,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text('Liste des UVC-LIGHT :'),
+        title: Text(devicesListTitleTextLanguageArray[languageArrayIdentifier]),
         centerTitle: true,
         backgroundColor: Colors.blue[400],
       ),

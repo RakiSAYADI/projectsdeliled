@@ -9,6 +9,7 @@ import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutterappdentaluvc/services/AutoUVCService.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
+import 'package:flutterappdentaluvc/services/languageDataBase.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pinput/pin_put/pin_put.dart';
@@ -26,9 +27,6 @@ class AlwaysDisabledFocusNode extends FocusNode {
 class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   final TextEditingController _pinPutController = TextEditingController();
 
-  String pinCode;
-  String myPinCode = '';
-
   ToastyMessage myUvcToast;
 
   Animation colorInfoQrCode;
@@ -40,11 +38,13 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   int timeToSleep;
 
   bool firstDisplayMainWidget = true;
+  bool modifyNameEnable = false;
 
   String dataRobotUVC = '';
-  bool modifyNameEnable = false;
   String deviceName = '';
   String deviceSurName = '';
+  String pinCode;
+  String myPinCode = '';
 
   UVCDataFile uvcDataFile;
 
@@ -104,7 +104,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     uvcDataFile = UVCDataFile();
     robotsNamesData = await uvcDataFile.readRobotsNameDATA();
     if (myDevice.device.name.isEmpty) {
-      deviceName = 'pas de dispositif connecté';
+      deviceName = deviceNameMessageTextLanguageArray[languageArrayIdentifier];
       modifyNameEnable = false;
     } else {
       try {
@@ -116,7 +116,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
           deviceName = myDevice.device.name;
         }
       } catch (e) {
-        print('erreur in name');
+        print('error in name');
         deviceName = myDevice.device.name;
       }
       modifyNameEnable = true;
@@ -143,7 +143,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Entrer le Nom de dispositif:',
+                    enterNameDeviceMessageTextLanguageArray[languageArrayIdentifier],
                     style: TextStyle(fontSize: (widthScreen * 0.02)),
                   ),
                   SizedBox(height: heightScreen * 0.005),
@@ -155,7 +155,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
                       controller: myName,
                       maxLines: 1,
                       decoration: InputDecoration(
-                          hintText: 'exemple123',
+                          hintText: nameDeviceHintTextLanguageArray[languageArrayIdentifier],
                           hintStyle: TextStyle(
                             fontSize: (widthScreen * 0.02),
                             color: Colors.grey,
@@ -169,7 +169,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
           actions: [
             TextButton(
               child: Text(
-                'Enregistrer',
+                saveTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(fontSize: (widthScreen * 0.02)),
               ),
               onPressed: () async {
@@ -178,11 +178,11 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
                     await uvcDataFile.saveRobotsNameDATA('{\"${myDevice.device.name}\":\"${myName.text}\"}');
                   } else {
                     Map<String, dynamic> parsedJson = json.decode(robotsNamesData);
-                    parsedJson.addAll({'${myDevice.device.name}':'${myName.text}'});
+                    parsedJson.addAll({'${myDevice.device.name}': '${myName.text}'});
                     await uvcDataFile.saveRobotsNameDATA(json.encode(parsedJson));
                   }
                 } catch (e) {
-                  print('erreur json names robots');
+                  print('error json names robots');
                 }
                 Navigator.pop(context, true);
                 checkingNameRobot();
@@ -190,7 +190,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
             ),
             TextButton(
               child: Text(
-                'Annuler',
+                cancelTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(fontSize: (widthScreen * 0.02)),
               ),
               onPressed: () {
@@ -222,7 +222,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
       child: Scaffold(
         backgroundColor: Colors.blue[400],
         appBar: AppBar(
-          title: const Text('Code PIN'),
+          title: Text(pinCodeTitleTextLanguageArray[languageArrayIdentifier]),
           centerTitle: true,
         ),
         body: Container(
@@ -235,7 +235,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Text(
-                        'Dispositif connecté :',
+                        deviceConnectedTextLanguageArray[languageArrayIdentifier],
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.black,
@@ -273,7 +273,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
                       ),
                       SizedBox(height: heightScreen * 0.05),
                       Text(
-                        'Entrer le code de sécurité :',
+                        enterSecurityCodeTextLanguageArray[languageArrayIdentifier],
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.black,
@@ -348,7 +348,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
             sleepIsInactivePinAccess = true;
             Navigator.pushNamed(context, '/advanced_settings');
           },
-          label: Text('Réglages'),
+          label: Text(settingsTextLanguageArray[languageArrayIdentifier]),
           icon: Icon(
             Icons.settings,
             color: Colors.white,
@@ -455,7 +455,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
           children: [
             SizedBox(height: heightScreen * 0.005),
             Text(
-              'Voulez-vous quittez l\'application ? Les désinfections programmées ne seront pas effectuées.',
+              quitAppMessageTextLanguageArray[languageArrayIdentifier],
               style: TextStyle(fontSize: (widthScreen * 0.02)),
             ),
             SizedBox(height: heightScreen * 0.005),
@@ -464,7 +464,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
         actions: [
           TextButton(
             child: Text(
-              'Oui',
+              yesTextLanguageArray[languageArrayIdentifier],
               style: TextStyle(fontSize: (widthScreen * 0.02)),
             ),
             onPressed: () {
@@ -476,7 +476,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
           ),
           TextButton(
             child: Text(
-              'Non',
+              noTextLanguageArray[languageArrayIdentifier],
               style: TextStyle(fontSize: (widthScreen * 0.02)),
             ),
             onPressed: () => Navigator.pop(c, false),
@@ -518,10 +518,10 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     String messagePin;
     Color messageColor;
     if (pin == pinCodeAccess && pin.isNotEmpty) {
-      messagePin = 'Code valide';
+      messagePin = validCodeTextLanguageArray[languageArrayIdentifier];
       messageColor = Colors.green;
     } else {
-      messagePin = 'Code non valide';
+      messagePin = noValidCodeTextLanguageArray[languageArrayIdentifier];
       messageColor = Colors.red;
     }
     _pinPutController.clear();
@@ -540,7 +540,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
         if (pin == pinCodeAccess && pin.isNotEmpty) {
           if (dataRobotUVC.isEmpty) {
             myUvcToast.setToastDuration(3);
-            myUvcToast.setToastMessage('Veuillez selectionner un dispositif UV-C dans la page \'Réglages\' !');
+            myUvcToast.setToastMessage(selectDeviceToastTextLanguageArray[languageArrayIdentifier]);
             myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
           } else {
             if (myDevice != null) {

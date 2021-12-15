@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutterappdentaluvc/services/languageDataBase.dart';
 import 'package:flutterappdentaluvc/services/uvcClass.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
 
@@ -10,7 +11,6 @@ class Profiles extends StatefulWidget {
 }
 
 class _ProfilesState extends State<Profiles> {
-
   final myCompany = TextEditingController();
   final myName = TextEditingController();
   final myRoomName = TextEditingController();
@@ -67,7 +67,8 @@ class _ProfilesState extends State<Profiles> {
     dataRobotUVC = myDevice.getReadCharMessage();
     print(dataRobotUVC);
     if (dataRobotUVC == null) {
-      dataRobotUVC = '{\"Company\":\"Votre entreprise\",\"UserName\":\"Utilisateur\",\"Detection\":0,\"RoomName\":\"Chambre 1\",\"TimeData\":[0,0]}';
+      dataRobotUVC =
+          '{\"Company\":\"${companyTextLanguageArray[languageArrayIdentifier]}\",\"UserName\":\"${userTextLanguageArray[languageArrayIdentifier]}\",\"Detection\":0,\"RoomName\":\"${roomOneTextLanguageArray[languageArrayIdentifier]}\",\"TimeData\":[0,0]}';
     }
 
     Map<String, dynamic> user = jsonDecode(dataRobotUVC);
@@ -98,7 +99,7 @@ class _ProfilesState extends State<Profiles> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Profil'),
+          title: Text(profileTitleTextLanguageArray[languageArrayIdentifier]),
           centerTitle: true,
         ),
         body: Container(
@@ -134,7 +135,7 @@ class _ProfilesState extends State<Profiles> {
                                   color: Colors.grey[800],
                                 ),
                                 decoration: InputDecoration(
-                                    hintText: 'Établissement',
+                                    hintText: establishmentTextLanguageArray[languageArrayIdentifier],
                                     hintStyle: TextStyle(
                                       color: Colors.grey,
                                     )),
@@ -165,7 +166,7 @@ class _ProfilesState extends State<Profiles> {
                                   color: Colors.grey[800],
                                 ),
                                 decoration: InputDecoration(
-                                    hintText: 'Opérateur',
+                                    hintText: operatorTextLanguageArray[languageArrayIdentifier],
                                     hintStyle: TextStyle(
                                       color: Colors.grey,
                                     )),
@@ -195,7 +196,7 @@ class _ProfilesState extends State<Profiles> {
                                   fontSize: widthScreen * 0.03,
                                 ),
                                 decoration: InputDecoration(
-                                    hintText: 'Pièce/local',
+                                    hintText: roomTextLanguageArray[languageArrayIdentifier],
                                     hintStyle: TextStyle(
                                       color: Colors.grey,
                                     )),
@@ -210,7 +211,7 @@ class _ProfilesState extends State<Profiles> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.1)),
                     child: Text(
-                      'Merci de compléter ces informations pour garantir un suivi de désinfection optimal.',
+                      profileMessageTextLanguageArray[languageArrayIdentifier],
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: widthScreen * 0.03,
@@ -221,19 +222,15 @@ class _ProfilesState extends State<Profiles> {
                   SizedBox(height: heightScreen * 0.04),
                   TextButton(
                     onPressed: () {
-                      myUvcLight = UvcLight(
-                          machineName: myDevice.device.name,
-                          machineMac: myDevice.device.id.toString(),
-                          company: myCompany.text,
-                          operatorName: myName.text,
-                          roomName: myRoomName.text);
+                      myUvcLight =
+                          UvcLight(machineName: myDevice.device.name, machineMac: myDevice.device.id.toString(), company: myCompany.text, operatorName: myName.text, roomName: myRoomName.text);
                       Navigator.pushNamed(context, '/settings');
                       //alertSecurity(context);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Text(
-                        'SUIVANT',
+                        nextTextLanguageArray[languageArrayIdentifier],
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: widthScreen * 0.02,
@@ -263,9 +260,9 @@ class _ProfilesState extends State<Profiles> {
     return showDialog<bool>(
       context: context,
       builder: (c) => AlertDialog(
-        title: Text('Attention'),
+        title: Text(attentionTextLanguageArray[languageArrayIdentifier]),
         content: Text(
-          'Voulez-vous vraiment quitter la page \"Profil\" ?',
+          quitProfileMessageTextLanguageArray[languageArrayIdentifier],
           style: TextStyle(
             fontSize: widthScreen * 0.02,
           ),
@@ -273,7 +270,7 @@ class _ProfilesState extends State<Profiles> {
         actions: [
           TextButton(
             child: Text(
-              'Oui',
+              yesTextLanguageArray[languageArrayIdentifier],
               style: TextStyle(
                 fontSize: widthScreen * 0.02,
               ),
@@ -285,7 +282,7 @@ class _ProfilesState extends State<Profiles> {
           ),
           TextButton(
             child: Text(
-              'Non',
+              noTextLanguageArray[languageArrayIdentifier],
               style: TextStyle(
                 fontSize: widthScreen * 0.02,
               ),

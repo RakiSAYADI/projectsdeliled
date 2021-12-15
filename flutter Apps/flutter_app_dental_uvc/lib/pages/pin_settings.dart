@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutterappdentaluvc/services/languageDataBase.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:path_provider/path_provider.dart';
@@ -12,7 +13,6 @@ class PinSettings extends StatefulWidget {
 }
 
 class _PinSettingsState extends State<PinSettings> {
-
   final myOldPinCode = TextEditingController();
   final myNewPinCode = TextEditingController();
   final myRenewPinCode = TextEditingController();
@@ -37,14 +37,13 @@ class _PinSettingsState extends State<PinSettings> {
 
   @override
   Widget build(BuildContext context) {
-
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: Colors.blue[400],
       appBar: AppBar(
-        title: const Text('Paramètres'),
+        title: Text(parametersTextLanguageArray[languageArrayIdentifier]),
         centerTitle: true,
       ),
       body: Container(
@@ -56,7 +55,7 @@ class _PinSettingsState extends State<PinSettings> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Entrer l\'ancien code de sécurité: ',
+                    oldPinTextLanguageArray[languageArrayIdentifier],
                     style: TextStyle(fontSize: (widthScreen * 0.02)),
                   ),
                   SizedBox(height: heightScreen * 0.05),
@@ -83,7 +82,7 @@ class _PinSettingsState extends State<PinSettings> {
                   ),
                   SizedBox(height: heightScreen * 0.1),
                   Text(
-                    'Entrer le nouveau code de sécurité : ',
+                    newPinTextLanguageArray[languageArrayIdentifier],
                     style: TextStyle(fontSize: (widthScreen * 0.02)),
                   ),
                   SizedBox(height: heightScreen * 0.05),
@@ -110,7 +109,7 @@ class _PinSettingsState extends State<PinSettings> {
                   ),
                   SizedBox(height: heightScreen * 0.1),
                   Text(
-                    'Vérifiez le nouveau code de sécurité : ',
+                    sameNewPinTextLanguageArray[languageArrayIdentifier],
                     style: TextStyle(fontSize: (widthScreen * 0.02)),
                   ),
                   SizedBox(height: heightScreen * 0.05),
@@ -140,7 +139,7 @@ class _PinSettingsState extends State<PinSettings> {
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Text(
-                        'VALIDER',
+                        validTextLanguageArray[languageArrayIdentifier],
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: widthScreen * 0.02,
@@ -154,30 +153,29 @@ class _PinSettingsState extends State<PinSettings> {
                       backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
                     ),
                     onPressed: () async {
-                      if ((myOldPinCode.text.length == 0 || myOldPinCode.text.length < 4) ||
-                          ((myNewPinCode.text.length == 0 || myNewPinCode.text.length < 4))) {
+                      if ((myOldPinCode.text.length == 0 || myOldPinCode.text.length < 4) || ((myNewPinCode.text.length == 0 || myNewPinCode.text.length < 4))) {
                         myUvcToast.setToastDuration(2);
-                        myUvcToast.setToastMessage('Veuillez remplir les champs ci-dessus !');
+                        myUvcToast.setToastMessage(emptyPinToastTextLanguageArray[languageArrayIdentifier]);
                         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
                       } else {
-                        if (myOldPinCode.text == pinCodeAccess ) {
-                          if(myNewPinCode.text == myRenewPinCode.text){
+                        if (myOldPinCode.text == pinCodeAccess) {
+                          if (myNewPinCode.text == myRenewPinCode.text) {
                             _savePINFile(myNewPinCode.text);
                             myUvcToast.setToastDuration(2);
-                            myUvcToast.setToastMessage('Le changement de mot de passe a été pris en compte !');
+                            myUvcToast.setToastMessage(goodPinToastTextLanguageArray[languageArrayIdentifier]);
                             myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
                             myOldPinCode.text = '';
                             myNewPinCode.text = '';
                             myRenewPinCode.text = '';
                             Navigator.pop(context, true);
-                          }else{
+                          } else {
                             myUvcToast.setToastDuration(2);
-                            myUvcToast.setToastMessage('Les codes sont différentes, Veuillez réssayer !');
+                            myUvcToast.setToastMessage(noSamePinToastTextLanguageArray[languageArrayIdentifier]);
                             myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
                           }
                         } else {
                           myUvcToast.setToastDuration(2);
-                          myUvcToast.setToastMessage('L\'ancien code de sécurité n\'est pas correct !');
+                          myUvcToast.setToastMessage(badOldPinToastTextLanguageArray[languageArrayIdentifier]);
                           myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
                         }
                       }

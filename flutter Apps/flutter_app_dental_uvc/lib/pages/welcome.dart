@@ -9,6 +9,7 @@ import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:flutterappdentaluvc/services/LEDControl.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
+import 'package:flutterappdentaluvc/services/languageDataBase.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:package_info/package_info.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -68,7 +69,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     if (macRobotUVC.isEmpty) {
       myUvcToast.setToastDuration(10);
       myDevice = Device(device: scanDevices.elementAt(devicesPosition));
-      myUvcToast.setToastMessage('Veuillez associer un dispositif UV-C dans la page \'Réglages\' !');
+      myUvcToast.setToastMessage(associateDeviceToastTextLanguageArray[languageArrayIdentifier]);
       myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
       await ledControl.setLedColor('ORANGE');
       Future.delayed(Duration(seconds: 1), () async {
@@ -90,7 +91,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
         myUvcToast.setToastDuration(120);
         savedDevice = scanDevices.elementAt(devicesPosition);
         myDevice = Device(device: scanDevices.elementAt(devicesPosition));
-        myUvcToast.setToastMessage('Autorisation de connexion validée !');
+        myUvcToast.setToastMessage(authoriseConnectionToastTextLanguageArray[languageArrayIdentifier]);
         myUvcToast.showToast(Colors.green, Icons.autorenew, Colors.white);
         // stop scanning and start connecting
         while (true) {
@@ -140,8 +141,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       } else {
         myUvcToast.setToastDuration(10);
         myDevice = Device(device: scanDevices.elementAt(devicesPosition));
-        myUvcToast
-            .setToastMessage('Le dispositif UV-C enregistré n\'est pas détecté !\n Veuillez le mettre sous tension et redémarrer l\'application.');
+        myUvcToast.setToastMessage(associateDeviceNotReachedToastTextLanguageArray[languageArrayIdentifier]);
         myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
         await ledControl.setLedColor('ORANGE');
         Navigator.pushReplacementNamed(context, '/pin_access');
@@ -170,7 +170,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       wakeLock();
     } catch (e) {
       myUvcToast.setToastDuration(1);
-      myUvcToast.setToastMessage('erreur wake up service');
+      myUvcToast.setToastMessage('error wake up service');
       myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
     }
 
@@ -178,7 +178,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       _listenForPermissionStatus();
     } catch (e) {
       myUvcToast.setToastDuration(1);
-      myUvcToast.setToastMessage('erreur permission service');
+      myUvcToast.setToastMessage('error permission service');
       myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
     }
 
@@ -188,7 +188,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       }
     } catch (e) {
       myUvcToast.setToastDuration(1);
-      myUvcToast.setToastMessage('erreur LED service');
+      myUvcToast.setToastMessage('error LED service');
       myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
     }
 
@@ -236,7 +236,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
           //Alert user to turn on bluetooth.
           print("Bluetooth is off");
           myUvcToast.setToastDuration(5);
-          myUvcToast.setToastMessage('Le Bluetooth (BLE) sur votre téléphone n\'est pas activé !');
+          myUvcToast.setToastMessage(bluetoothToastLanguageArray[languageArrayIdentifier]);
           myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
         } else if (state == BluetoothState.on) {
           //if bluetooth is enabled then go ahead.
@@ -266,7 +266,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       flutterBlue.startScan(timeout: Duration(seconds: 30));
     } catch (e) {
       myUvcToast.setToastDuration(1);
-      myUvcToast.setToastMessage('erreur SCAN BLUETOOTH !');
+      myUvcToast.setToastMessage('error SCAN BLUETOOTH !');
       myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
     }
     // Listen to scan results
@@ -305,7 +305,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
             myDevice.disconnect();
             Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
           },
-          label: Text('Reset Scan'),
+          label: Text(restartScanToastTextLanguageArray[languageArrayIdentifier]),
           icon: Icon(
             Icons.refresh,
             color: Colors.white,
@@ -371,7 +371,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
                       flex: 2,
                       child: Center(
                         child: Text(
-                          'Solutions de désinfection par UV-C',
+                          welcomePageLogoMessageLanguageArray[languageArrayIdentifier],
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,

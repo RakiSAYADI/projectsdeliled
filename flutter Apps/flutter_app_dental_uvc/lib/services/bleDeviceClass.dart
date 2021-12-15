@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
+import 'package:flutterappdentaluvc/services/languageDataBase.dart';
 import 'package:flutterappdentaluvc/services/uvcClass.dart';
 import 'package:get/get.dart';
 
@@ -171,16 +172,16 @@ class Device {
           print('disconnected');
           if (_connectionError) {
             Get.defaultDialog(
-              title: 'Attention',
+              title: attentionTextLanguageArray[languageArrayIdentifier],
               barrierDismissible: false,
-              content: Text('La connexion est perdue avec votre dispositif, vous allez être reconnecté',
+              content: Text(lostConnexionTextLanguageArray[languageArrayIdentifier],
                   style: TextStyle(
                     fontSize: 14,
                   )),
               actions: [
                 TextButton(
                   child: Text(
-                    'Compris',
+                    understoodTextLanguageArray[languageArrayIdentifier],
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -221,18 +222,23 @@ class Device {
     myUvcLight.setMachineName(myDevice.device.name);
 
     Get.defaultDialog(
-      title: 'Attention',
-      content: Text('Problème lors de la précédente désinfection, veuillez la recommencer'),
+      title: attentionTextLanguageArray[languageArrayIdentifier],
+      content: Text(disinfectionErrorMessageTextLanguageArray[languageArrayIdentifier]),
       actions: [
         TextButton(
-          child: Text('Oui'),
+          child: Text(yesTextLanguageArray[languageArrayIdentifier]),
           onPressed: () {
-            writeCharacteristic(2, 0, 'UVCTreatement : ON');
+            if (Platform.isAndroid) {
+              writeCharacteristic(2, 0, 'UVCTreatement : ON');
+            }
+            if (Platform.isIOS) {
+              writeCharacteristic(0, 0, 'UVCTreatement : ON');
+            }
             Get.toNamed('/uvc');
           },
         ),
         TextButton(
-          child: Text('Non'),
+          child: Text(noTextLanguageArray[languageArrayIdentifier]),
           onPressed: () {
             Get.back();
           },
@@ -243,11 +249,11 @@ class Device {
 
   void _stopDisinfection(Map<String, dynamic> dataRead) {
     Get.defaultDialog(
-      title: 'Attention',
-      content: Text('Une désinfection est en cours, afin que SAFE UVC fonctionne correctement la désinfection va être stoppée.'),
+      title: attentionTextLanguageArray[languageArrayIdentifier],
+      content: Text(disinfectionOnProgressMessageTextLanguageArray[languageArrayIdentifier]),
       actions: [
         TextButton(
-          child: Text('Compris'),
+          child: Text(understoodTextLanguageArray[languageArrayIdentifier]),
           onPressed: () {
             if (Platform.isAndroid) {
               writeCharacteristic(2, 0, 'STOP : ON');
@@ -264,7 +270,7 @@ class Device {
 
   void _scanForDevices() async {
     Get.defaultDialog(
-      title: 'Rechercher votre dispositif UV-C',
+      title: deviceSearchMessageTextLanguageArray[languageArrayIdentifier],
       barrierDismissible: false,
       content: SpinKitCircle(
         color: Colors.green,
@@ -316,10 +322,12 @@ class Device {
     }
     Get.back();
     if (deviceExistOrNot) {
-      Get.snackbar('Félicitation', 'on a trouvé votre dispostif', icon: Icon(Icons.assignment_turned_in, color: Colors.green));
+      Get.snackbar(congratulationMessageTextLanguageArray[languageArrayIdentifier], findDeviceMessageTextLanguageArray[languageArrayIdentifier],
+          icon: Icon(Icons.assignment_turned_in, color: Colors.green));
       _connectUVCDevice(devicesPosition);
     } else {
-      Get.snackbar('Félicitation', 'on n\'a trouvé votre dispostif', icon: Icon(Icons.assignment_late, color: Colors.red));
+      Get.snackbar(congratulationMessageTextLanguageArray[languageArrayIdentifier], noFindDeviceMessageTextLanguageArray[languageArrayIdentifier],
+          icon: Icon(Icons.assignment_late, color: Colors.red));
       //_scanForDevices();
     }
   }
@@ -327,7 +335,7 @@ class Device {
   void _connectUVCDevice(int devicesPosition) async {
     await Future.delayed(const Duration(seconds: 2));
     Get.defaultDialog(
-      title: 'Connexion avec votre dispositif UV-C',
+      title: connexionDeviceMessageTextLanguageArray[languageArrayIdentifier],
       barrierDismissible: false,
       content: SpinKitCircle(
         color: Colors.green,
@@ -358,7 +366,8 @@ class Device {
               _flutterBlue.stopScan();
               Get.back();
               await Future.delayed(const Duration(milliseconds: 500));
-              Get.snackbar('Félicitation', 'Connexion établi avec votre téléphone !', icon: Icon(Icons.assignment_turned_in, color: Colors.green));
+              Get.snackbar(congratulationMessageTextLanguageArray[languageArrayIdentifier], havingConnexionDeviceMessageTextLanguageArray[languageArrayIdentifier],
+                  icon: Icon(Icons.assignment_turned_in, color: Colors.green));
               _connectionError = true;
             });
             break;

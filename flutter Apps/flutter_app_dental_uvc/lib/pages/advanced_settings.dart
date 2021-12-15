@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterappdentaluvc/services/AutoUVCService.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
+import 'package:flutterappdentaluvc/services/languageDataBase.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pinput/pin_put/pin_put.dart';
@@ -40,7 +41,7 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
       child: Container(
         child: Scaffold(
           appBar: AppBar(
-            title: Text('Paramètres'),
+            title: Text(parametersTextLanguageArray[languageArrayIdentifier]),
             centerTitle: true,
           ),
           body: Container(
@@ -56,7 +57,7 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                         Navigator.pushNamed(context, '/pin_settings');
                       },
                       child: Text(
-                        'Changer le mot de passe',
+                        changePasswordTextLanguageArray[languageArrayIdentifier],
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: widthScreen * 0.05,
@@ -75,7 +76,7 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                         alertSecurity(context, 'scanlist');
                       },
                       child: Text(
-                        'Changer de dispositif UV-C',
+                        changeDeviceTextLanguageArray[languageArrayIdentifier],
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: widthScreen * 0.05,
@@ -95,14 +96,14 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                         macRobotUVC = await uvcDataFile.readUVCDevice();
                         if (macRobotUVC.isEmpty) {
                           myUvcToast.setToastDuration(3);
-                          myUvcToast.setToastMessage('Veuillez associer un dispositif UV-C !');
+                          myUvcToast.setToastMessage(associateOneDeviceToastTextLanguageArray[languageArrayIdentifier]);
                           myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
                         } else {
                           alertSecurity(context, 'autouvc');
                         }
                       },
                       child: Text(
-                        'Planning de désinfection',
+                        planningTextLanguageArray[languageArrayIdentifier],
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: widthScreen * 0.05,
@@ -124,7 +125,7 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                         Navigator.pushNamed(context, '/rapport_modification');
                       },
                       child: Text(
-                        'Rapport Désinfection',
+                        rapportTextLanguageArray[languageArrayIdentifier],
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: widthScreen * 0.05,
@@ -147,7 +148,7 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
               Navigator.of(context).pop();
               sleepIsInactivePinAccess = false;
             },
-            label: Text('Retour'),
+            label: Text(backTextLanguageArray[languageArrayIdentifier]),
             icon: Icon(
               Icons.arrow_back_rounded,
               color: Colors.white,
@@ -184,7 +185,7 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Text(
-                            'Entrer le code de sécurité :',
+                            enterSecurityCodeTextLanguageArray[languageArrayIdentifier],
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.black,
@@ -295,15 +296,14 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                     Navigator.pushNamed(context, '/auto_uvc');
                   } else {
                     myUvcToast.setToastDuration(3);
-                    myUvcToast.setToastMessage('Veuillez associer un dispositif UV-C !');
+                    myUvcToast.setToastMessage(associateOneDeviceToastTextLanguageArray[languageArrayIdentifier]);
                     myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
                   }
-
                   break;
               }
             } else {
               myUvcToast.setToastDuration(3);
-              myUvcToast.setToastMessage('Code Invalide !');
+              myUvcToast.setToastMessage(invalidPinCodeTextLanguageArray[languageArrayIdentifier]);
               myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
             }
             _pinPutController.text = '';

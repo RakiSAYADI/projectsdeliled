@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:flutterappdentaluvc/services/httpRequests.dart';
+import 'package:flutterappdentaluvc/services/languageDataBase.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
@@ -51,7 +52,7 @@ class _DataCSVSettingsViewState extends State<DataCSVSettingsView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('rapport CSV'),
+        title: Text(uvcReportTitleTextLanguageArray[languageArrayIdentifier]),
         centerTitle: true,
       ),
       body: InteractiveViewer(
@@ -82,7 +83,7 @@ class _DataCSVSettingsViewState extends State<DataCSVSettingsView> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => dataEmailSending(context),
-        label: Text('Envoi'),
+        label: Text(mailTextLanguageArray[languageArrayIdentifier]),
         icon: Icon(
           Icons.send,
           color: Colors.white,
@@ -110,7 +111,7 @@ class _DataCSVSettingsViewState extends State<DataCSVSettingsView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Entrer votre Adresse Email :',
+                    enterEmailAddressTextLanguageArray[languageArrayIdentifier],
                     style: TextStyle(fontSize: (widthScreen * 0.02)),
                   ),
                   SizedBox(height: heightScreen * 0.005),
@@ -136,7 +137,7 @@ class _DataCSVSettingsViewState extends State<DataCSVSettingsView> {
           actions: [
             TextButton(
               child: Text(
-                'Envoyer',
+                sendTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(fontSize: (widthScreen * 0.02)),
               ),
               onPressed: () async {
@@ -144,20 +145,20 @@ class _DataCSVSettingsViewState extends State<DataCSVSettingsView> {
                 if (await dataBaseRequests.checkConnection()) {
                   uvcDataFile.saveUVCDATASelected(uvcDataSelected);
                   myUvcToast.setToastDuration(60);
-                  myUvcToast.setToastMessage('Envoi en cours !');
+                  myUvcToast.setToastMessage(sendingProgressToastTextLanguageArray[languageArrayIdentifier]);
                   myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
                   await sendEmail(myEmail.text);
                   Navigator.pop(context, false);
                 } else {
                   myUvcToast.setToastDuration(3);
-                  myUvcToast.setToastMessage('Veuillez connecter votre tablette sur internet !');
+                  myUvcToast.setToastMessage(internetConnectionToastTextLanguageArray[languageArrayIdentifier]);
                   myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
                 }
               },
             ),
             TextButton(
               child: Text(
-                'Annuler',
+                cancelTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(fontSize: (widthScreen * 0.02)),
               ),
               onPressed: () {
@@ -180,27 +181,23 @@ class _DataCSVSettingsViewState extends State<DataCSVSettingsView> {
     final serverSMTPDeepLight = SmtpServer(host, username: username, password: password);
     // Create our message.
     final message = Message()
-      ..from = Address(username, 'DeliTech Medical')
+      ..from = Address(username, emailUserTextLanguageArray[languageArrayIdentifier])
       ..recipients.add(destination)
-      ..subject = 'Rapport de désinfection UVC'
+      ..subject = emailSubjectTextLanguageArray[languageArrayIdentifier]
       ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataSelectedFileName')))
-      ..text = 'Bonjour,\n\n'
-          'Vous trouverez ci-joint le rapport concernant la désinfection éffectuée à l’aide de'
-          ' votre solution de désinfection DEEPLIGHT® de DeliTech Medical®.\n'
-          'Cet email est envoyé automatiquement, merci de ne pas y répondre.\n\n'
-          'Merci de votre confiance.';
+      ..text = emailMessageTextLanguageArray[languageArrayIdentifier];
 
     try {
       await send(message, serverSMTPDeepLight);
       myUvcToast.clearAllToast();
       myUvcToast.setToastDuration(3);
-      myUvcToast.setToastMessage('Email bien envoyé , Verifier votre boite de reception !');
+      myUvcToast.setToastMessage(emailSentToastTextLanguageArray[languageArrayIdentifier]);
       myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
     } on MailerException catch (e) {
       print(e.message);
       myUvcToast.clearAllToast();
       myUvcToast.setToastDuration(3);
-      myUvcToast.setToastMessage('Email n\'est pas envoyé , Verifier votre addresse email !');
+      myUvcToast.setToastMessage(emailNotSentToastTextLanguageArray[languageArrayIdentifier]);
       myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
     }
   }

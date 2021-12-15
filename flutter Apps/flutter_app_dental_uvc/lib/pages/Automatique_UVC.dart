@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterappdentaluvc/services/AutoUVCService.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
+import 'package:flutterappdentaluvc/services/languageDataBase.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
 
@@ -23,7 +24,7 @@ class _UVCAutoState extends State<UVCAuto> {
   List<int> durationList = [0, 0, 0, 0, 0, 0, 0];
 
   String daysInHex;
-  String activationButtonText = 'Désactivé';
+  String activationButtonText = deactivatedTextLanguageArray[languageArrayIdentifier];
   List<Color> activationButtonColor = [Colors.red, Colors.red, Colors.red, Colors.red, Colors.red, Colors.red, Colors.red];
   bool activationButtonState = false;
   Color saveButtonColor = Colors.blue[400];
@@ -94,10 +95,10 @@ class _UVCAutoState extends State<UVCAuto> {
         }
       }
       if (daysStates[0]) {
-        activationButtonText = 'Activé';
+        activationButtonText = activatedTextLanguageArray[languageArrayIdentifier];
         activationButtonColor[0] = Colors.green;
       } else {
-        activationButtonText = 'Désactivé';
+        activationButtonText = deactivatedTextLanguageArray[languageArrayIdentifier];
         activationButtonColor[0] = Colors.red;
       }
     });
@@ -123,7 +124,7 @@ class _UVCAutoState extends State<UVCAuto> {
     return Scaffold(
       backgroundColor: Colors.blue[400],
       appBar: AppBar(
-        title: const Text('UVC Automatique'),
+        title: Text(autoUVCTitleTextLanguageArray[languageArrayIdentifier]),
         centerTitle: true,
       ),
       body: Container(
@@ -157,10 +158,10 @@ class _UVCAutoState extends State<UVCAuto> {
 
                             setState(() {
                               if (daysStates[day]) {
-                                activationButtonText = 'Activé';
+                                activationButtonText = activatedTextLanguageArray[languageArrayIdentifier];
                                 activationButtonColor[day] = Colors.green;
                               } else {
-                                activationButtonText = 'Désactivé';
+                                activationButtonText = deactivatedTextLanguageArray[languageArrayIdentifier];
                                 activationButtonColor[day] = Colors.red;
                               }
                             });
@@ -182,43 +183,43 @@ class _UVCAutoState extends State<UVCAuto> {
                                 width: (widthScreen - 84) / 7,
                                 child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                                   new SizedBox(width: 4.0),
-                                  new Text("Lundi", style: TextStyle(fontSize: 15, color: activationButtonColor[0], fontWeight: FontWeight.bold))
+                                  new Text(mondayTextLanguageArray[languageArrayIdentifier], style: TextStyle(fontSize: 15, color: activationButtonColor[0], fontWeight: FontWeight.bold))
                                 ])),
                             Container(
                                 width: (widthScreen - 84) / 7,
                                 child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                                   new SizedBox(width: 4.0),
-                                  new Text("Mardi", style: TextStyle(fontSize: 15, color: activationButtonColor[1], fontWeight: FontWeight.bold))
+                                  new Text(tuesdayTextLanguageArray[languageArrayIdentifier], style: TextStyle(fontSize: 15, color: activationButtonColor[1], fontWeight: FontWeight.bold))
                                 ])),
                             Container(
                                 width: (widthScreen - 84) / 7,
                                 child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                                   new SizedBox(width: 4.0),
-                                  new Text("Mercredi", style: TextStyle(fontSize: 15, color: activationButtonColor[2], fontWeight: FontWeight.bold))
+                                  new Text(wednesdayTextLanguageArray[languageArrayIdentifier], style: TextStyle(fontSize: 15, color: activationButtonColor[2], fontWeight: FontWeight.bold))
                                 ])),
                             Container(
                                 width: (widthScreen - 84) / 7,
                                 child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                                   new SizedBox(width: 4.0),
-                                  new Text("Jeudi", style: TextStyle(fontSize: 15, color: activationButtonColor[3], fontWeight: FontWeight.bold))
+                                  new Text(thursdayTextLanguageArray[languageArrayIdentifier], style: TextStyle(fontSize: 15, color: activationButtonColor[3], fontWeight: FontWeight.bold))
                                 ])),
                             Container(
                                 width: (widthScreen - 84) / 7,
                                 child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                                   new SizedBox(width: 4.0),
-                                  new Text("Vendredi", style: TextStyle(fontSize: 15, color: activationButtonColor[4], fontWeight: FontWeight.bold))
+                                  new Text(fridayTextLanguageArray[languageArrayIdentifier], style: TextStyle(fontSize: 15, color: activationButtonColor[4], fontWeight: FontWeight.bold))
                                 ])),
                             Container(
                                 width: (widthScreen - 84) / 7,
                                 child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                                   new SizedBox(width: 4.0),
-                                  new Text("Samedi", style: TextStyle(fontSize: 15, color: activationButtonColor[5], fontWeight: FontWeight.bold))
+                                  new Text(saturdayTextLanguageArray[languageArrayIdentifier], style: TextStyle(fontSize: 15, color: activationButtonColor[5], fontWeight: FontWeight.bold))
                                 ])),
                             Container(
                                 width: (widthScreen - 84) / 7,
                                 child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                                   new SizedBox(width: 4.0),
-                                  new Text("Dimanche", style: TextStyle(fontSize: 15, color: activationButtonColor[6], fontWeight: FontWeight.bold))
+                                  new Text(sundayTextLanguageArray[languageArrayIdentifier], style: TextStyle(fontSize: 15, color: activationButtonColor[6], fontWeight: FontWeight.bold))
                                 ])),
                           ],
                           borderWidth: 2,
@@ -237,10 +238,10 @@ class _UVCAutoState extends State<UVCAuto> {
                       setState(() {
                         saveButtonColor = Colors.grey[400];
                         if (activationButtonState) {
-                          activationButtonText = 'Activé';
+                          activationButtonText = activatedTextLanguageArray[languageArrayIdentifier];
                           activationButtonColor[day] = Colors.green;
                         } else {
-                          activationButtonText = 'Désactivé';
+                          activationButtonText = deactivatedTextLanguageArray[languageArrayIdentifier];
                           activationButtonColor[day] = Colors.red;
                         }
                       });
@@ -265,7 +266,7 @@ class _UVCAutoState extends State<UVCAuto> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        'Heure d\'activation :',
+                        activationTimeTextLanguageArray[languageArrayIdentifier],
                         style: TextStyle(
                           fontSize: widthScreen * 0.03,
                           color: Colors.black,
@@ -392,7 +393,7 @@ class _UVCAutoState extends State<UVCAuto> {
                               ),
                               SizedBox(height: heightScreen * 0.03),
                               Text(
-                                'Délais avant allumage :',
+                                ignitionTimeTextLanguageArray[languageArrayIdentifier],
                                 style: TextStyle(
                                   fontSize: widthScreen * 0.03,
                                   color: Colors.black,
@@ -436,7 +437,7 @@ class _UVCAutoState extends State<UVCAuto> {
                               ),
                               SizedBox(height: heightScreen * 0.03),
                               Text(
-                                'Durée de la désinfection :',
+                                durationDisinfectionTextLanguageArray[languageArrayIdentifier],
                                 style: TextStyle(
                                   fontSize: widthScreen * 0.03,
                                   color: Colors.black,
@@ -500,7 +501,7 @@ class _UVCAutoState extends State<UVCAuto> {
                           '}';
                       await uvcDataFile.saveUVCAutoData(uvcAutoData);
                       myUvcToast.setToastDuration(3);
-                      myUvcToast.setToastMessage('Configuration sauvegardée !');
+                      myUvcToast.setToastMessage(savedConfigurationTextLanguageArray[languageArrayIdentifier]);
                       myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
                       print(autoUVCService.getUVCAutoServiceState());
                       Navigator.pop(context, true);
@@ -515,7 +516,7 @@ class _UVCAutoState extends State<UVCAuto> {
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Text(
-                        'Enregistrer',
+                        saveTextLanguageArray[languageArrayIdentifier],
                         style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.02),
                       ),
                     ),

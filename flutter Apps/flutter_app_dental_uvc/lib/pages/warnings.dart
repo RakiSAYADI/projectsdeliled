@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
+import 'package:flutterappdentaluvc/services/languageDataBase.dart';
 
 class Warnings extends StatefulWidget {
   @override
@@ -11,13 +12,12 @@ class _WarningsState extends State<Warnings> {
 
   @override
   Widget build(BuildContext context) {
-
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('À lire attentivement'),
+        title: Text(readWarningsTextLanguageArray[languageArrayIdentifier]),
         centerTitle: true,
       ),
       body: Container(
@@ -40,7 +40,7 @@ class _WarningsState extends State<Warnings> {
                       ),
                       SizedBox(width: widthScreen * 0.03),
                       Text(
-                        'Attention !',
+                        warningTextLanguageArray[languageArrayIdentifier],
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: widthScreen * 0.1 * heightScreen * 0.0005,
@@ -75,7 +75,7 @@ class _WarningsState extends State<Warnings> {
                     Expanded(
                       flex: 9,
                       child: Text(
-                        'Vérifiez que la pièce soit innocupée.',
+                        warningNumberOneTextLanguageArray[languageArrayIdentifier],
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: widthScreen * 0.03),
                       ),
@@ -116,7 +116,7 @@ class _WarningsState extends State<Warnings> {
                     Expanded(
                       flex: 9,
                       child: Text(
-                        'Fermer la porte et les fenêtres.',
+                        warningNumberTwoTextLanguageArray[languageArrayIdentifier],
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: widthScreen * 0.03),
                       ),
@@ -157,7 +157,7 @@ class _WarningsState extends State<Warnings> {
                     Expanded(
                       flex: 9,
                       child: Text(
-                        'Signalez la désinfection en cours \n grâce aux accroche-portes et/ou au chevalet.',
+                        warningNumberThreeTextLanguageArray[languageArrayIdentifier],
                         overflow: TextOverflow.visible,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: widthScreen * 0.03),
@@ -182,7 +182,7 @@ class _WarningsState extends State<Warnings> {
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
-                          'SUIVANT',
+                          nextTextLanguageArray[languageArrayIdentifier],
                           style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.02),
                         ),
                       ),
@@ -201,7 +201,7 @@ class _WarningsState extends State<Warnings> {
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
-                          'ANNULER',
+                          cancelTextLanguageArray[languageArrayIdentifier],
                           style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.02),
                         ),
                       ),
