@@ -72,7 +72,7 @@ final List<String> sendingEmailPageToastTextLanguageArray = ['Envoi en cours.', 
 
 final List<String> sendEmailPageButtonTextLanguageArray = ['Envoyer', 'Send'];
 
-final List<String> uvcEmailObjectTextLanguageArray = ['Rapport de désinfection UV-C', 'UV-C disinfection report'];
+final List<String> uvcEmailObjectTextLanguageArray = ['Votre PDF - DELISCAN', 'Your PDF - DELISCAN'];
 
 final List<String> uvcEmailMessageTextLanguageArray = [
   'Bonjour,\n\n'

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app_deliscan/services/DataVariables.dart';
 import 'package:flutter_app_deliscan/services/data_storage_phone.dart';
 import 'package:flutter_app_deliscan/services/languageDataBase.dart';
@@ -82,6 +83,7 @@ class _PDFEmailState extends State<PDFEmail> {
                     SizedBox(height: screenHeight * 0.1),
                     TextButton(
                       onPressed: () async {
+                        await SystemChannels.textInput.invokeMethod('TextInput.hide');
                         await uvcDataFile.saveUserEmailDATA(myEmail.text);
                         _myUvcToast.setToastDuration(60);
                         _myUvcToast.setToastMessage(sendingEmailPageToastTextLanguageArray[languageArrayIdentifier]);

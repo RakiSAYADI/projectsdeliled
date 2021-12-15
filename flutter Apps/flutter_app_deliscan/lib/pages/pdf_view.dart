@@ -36,6 +36,10 @@ class _PDFViewerState extends State<PDFViewer> {
             enableSwipe: true,
           ).cachedFromUrl(
             pdfFileURL,
+            whenDone: (path) {
+              ancientFilePath = path;
+              print(path);
+            },
             placeholder: (progress) => Center(child: Text('$progress %')),
             errorWidget: (error) {
               downloadVisibility = false;

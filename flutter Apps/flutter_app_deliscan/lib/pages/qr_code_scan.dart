@@ -56,7 +56,7 @@ class _QrCodeScanState extends State<QrCodeScan> {
 
   void _onQrViewCreated(QRViewController controller) {
     qrViewController = controller;
-    controller.scannedDataStream.listen((scanData) {
+    controller.scannedDataStream.listen((scanData) async {
       _result = scanData;
       print('onCapture----${_result.code}');
       if (_result.code.isNotEmpty && !qrCodeVerified) {
@@ -70,6 +70,10 @@ class _QrCodeScanState extends State<QrCodeScan> {
         }
         if (qrCodeVerified) {
           controller.pauseCamera();
+          if (ancientFilePath != '') {
+            File ancientFile = File(ancientFilePath);
+            await ancientFile.delete();
+          }
           createRoute(context, PDFViewer());
         }
       }
