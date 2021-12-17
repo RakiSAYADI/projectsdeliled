@@ -21,14 +21,6 @@ class _DataViewModificationState extends State<DataViewModification> {
   String _myEndDataTimeMonthData = '12';
   String _myEndDataTimeYearsData = '2020';
 
-  int _myStartDataTimeDayPosition = 0;
-  int _myStartDataTimeMonthPosition = 0;
-  int _myStartDataTimeYearsPosition = 0;
-
-  int _myEndDataTimeDayPosition = 0;
-  int _myEndDataTimeMonthPosition = 0;
-  int _myEndDataTimeYearsPosition = 0;
-
   bool _allData = true;
   bool _timedData = false;
 
@@ -163,7 +155,6 @@ class _DataViewModificationState extends State<DataViewModification> {
                                           onChanged: (String data) {
                                             setState(() {
                                               _myStartDataTimeDayData = data;
-                                              _myStartDataTimeDayPosition = myTimeDays.indexOf(data);
                                             });
                                           },
                                           items: myTimeDays.map<DropdownMenuItem<String>>((String value) {
@@ -210,7 +201,6 @@ class _DataViewModificationState extends State<DataViewModification> {
                                           onChanged: (String data) {
                                             setState(() {
                                               _myStartDataTimeMonthData = data;
-                                              _myStartDataTimeMonthPosition = myTimeMonths.indexOf(data);
                                             });
                                           },
                                           items: myTimeMonths.map<DropdownMenuItem<String>>((String value) {
@@ -257,7 +247,6 @@ class _DataViewModificationState extends State<DataViewModification> {
                                           onChanged: (String data) {
                                             setState(() {
                                               _myStartDataTimeYearsData = data;
-                                              _myStartDataTimeYearsPosition = myTimeYears.indexOf(data);
                                             });
                                           },
                                           items: myTimeYears.map<DropdownMenuItem<String>>((String value) {
@@ -319,7 +308,6 @@ class _DataViewModificationState extends State<DataViewModification> {
                                           onChanged: (String data) {
                                             setState(() {
                                               _myEndDataTimeDayData = data;
-                                              _myEndDataTimeDayPosition = myTimeDays.indexOf(data);
                                             });
                                           },
                                           items: myTimeDays.map<DropdownMenuItem<String>>((String value) {
@@ -366,7 +354,6 @@ class _DataViewModificationState extends State<DataViewModification> {
                                           onChanged: (String data) {
                                             setState(() {
                                               _myEndDataTimeMonthData = data;
-                                              _myEndDataTimeMonthPosition = myTimeMonths.indexOf(data);
                                             });
                                           },
                                           items: myTimeMonths.map<DropdownMenuItem<String>>((String value) {
@@ -413,7 +400,6 @@ class _DataViewModificationState extends State<DataViewModification> {
                                           onChanged: (String data) {
                                             setState(() {
                                               _myEndDataTimeYearsData = data;
-                                              _myEndDataTimeYearsPosition = myTimeYears.indexOf(data);
                                             });
                                           },
                                           items: myTimeYears.map<DropdownMenuItem<String>>((String value) {
@@ -449,11 +435,10 @@ class _DataViewModificationState extends State<DataViewModification> {
                     onPressed: () async {
                       uvcData = await uvcDataFile.readUVCDATA();
                       if (_allData) {
-                        uvcDataSelected = [[]];
-                        uvcDataSelected.length = 0;
-                        uvcDataSelected.add(uvcData[0]);
+                        uvcDataSelected.clear();
+                        uvcDataSelected.addAll(uvcDefaultData[languageArrayIdentifier]);
                         List<List<String>> uvcDataReversedMiddle = uvcData.reversed.toList();
-                        uvcDataReversedMiddle.last = [];
+                        uvcDataReversedMiddle.removeLast();
                         uvcDataSelected.addAll(uvcDataReversedMiddle);
                         if (openWithQrCode) {
                           Navigator.pushNamed(context, '/DataCSVViewQrCode');
@@ -490,7 +475,8 @@ class _DataViewModificationState extends State<DataViewModification> {
   }
 
   Future<bool> checkDataUVC() async {
-    uvcDataSelected = uvcDefaultData[languageArrayIdentifier];
+    uvcDataSelected.clear();
+    uvcDataSelected.addAll(uvcDefaultData[languageArrayIdentifier]);
     List<List<String>> uvcDataSelectedCombiner = [[]];
     uvcDataSelectedCombiner.length = 0;
     bool noDataFounded = false;

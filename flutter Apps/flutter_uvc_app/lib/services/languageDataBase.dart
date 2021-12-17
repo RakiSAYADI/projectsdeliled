@@ -227,11 +227,11 @@ final List<String> uvcDefaultDataString = [
 
 final List<String> deviceConnectButtonTextLanguageArray = ['Connecter', 'Connect'];
 
-final List<String> selectUVCDataTitleTextLanguageArray = ['Sélectionner la date du rapport UVC', 'Select the date of the UVC report'];
+final List<String> selectUVCDataTitleTextLanguageArray = ['Sélectionner les dates de rapport UV-C', 'Select the date of the UV-C report'];
 
-final List<String> settingsRapportUVCTitleTextLanguageArray = ['Paramètres Rapport UVC', 'Settings UVC Report'];
+final List<String> settingsRapportUVCTitleTextLanguageArray = ['Paramètres des rapport UV-C', 'Settings of UV-C report'];
 
-final List<String> allReportTextLanguageArray = ['Tout le rapport', 'All the report'];
+final List<String> allReportTextLanguageArray = ['Tous les rapports', 'Every reports'];
 
 final List<String> determinedTimeTextLanguageArray = ['Durée déterminée', 'Determined time'];
 
@@ -247,6 +247,6 @@ final List<String> fromTextLanguageArray = ['De', 'From'];
 
 final List<String> toTextLanguageArray = ['À', 'To'];
 
-final List<String> noDataSelectionToastLanguageArray = ['Il faut choisir une de ces options !', 'You have to choose one of the options !'];
+final List<String> noDataSelectionToastLanguageArray = ['Merci de choisir une de ces options !', 'Please choose one of the following options!'];
 
-final List<String> noDataForDateSelectedToastLanguageArray = ['Aucune date trouvé dans le rapport !', 'No date inside the file !'];
+final List<String> noDataForDateSelectedToastLanguageArray = ['Aucun rapport trouvé à cette date !', 'No report found!'];
