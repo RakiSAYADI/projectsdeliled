@@ -5,27 +5,13 @@ import 'package:flutterappdentaluvc/services/languageDataBase.dart';
 import 'package:path_provider/path_provider.dart';
 
 class UVCDataFile {
-  final String _uvcDefaultDataString =
-      'Dispositif UVC ;Utilisateur ;Etablissement ;Pi\èce ;Heure d\'activation ;Date d\'activation ;Temps de disinfection (en secondes) ;Etat \n';
   final String _uvcDataFileName = 'RapportUVC.csv';
   final String _uvcDataSelectedFileName = 'RapportDataUVC.csv';
   final String _uvcUserEmailFileName = 'User_email.txt';
   final String _uvcRobotsNamesFileName = 'Robots_Names.txt';
   final String _uvcDeviceFileName = 'UVC_Device.txt';
+  final String _uvcDeviceNameFileName = 'UVC_Device_IOS.txt';
   final String _uvcAutoDataFileName = 'UVC_Auto_Data.txt';
-
-  final List<List<String>> _uvcDefaultData = [
-    [
-      'Dispositif UVC',
-      'Utilisateur',
-      'Etablissement',
-      'Pi\èce',
-      'Heure D\'activation',
-      'Date D\'activation',
-      'Temps de disinfection (en secondes)',
-      'Etat'
-    ]
-  ];
 
   Future<List<List<String>>> readUVCDATA() async {
     try {
@@ -58,9 +44,9 @@ class UVCDataFile {
       return textuvc;
     } catch (e) {
       print("Couldn't read file");
-      await saveStringUVCDATA(_uvcDefaultDataString);
-      print(_uvcDefaultDataString);
-      return _uvcDefaultData;
+      await saveStringUVCDATA(uvcDefaultDataString[languageArrayIdentifier]);
+      print(uvcDefaultDataString[languageArrayIdentifier]);
+      return uvcDefaultData[languageArrayIdentifier];
     }
   }
 
@@ -208,6 +194,27 @@ class UVCDataFile {
   Future<void> saveUVCDevice(String uvcDevice) async {
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/$_uvcDeviceFileName');
+    await file.writeAsString(uvcDevice);
+    print('saveUVCDevice : saved');
+  }
+
+  Future<String> readUVCDeviceIOS() async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/$_uvcDeviceNameFileName');
+      String uvcDevice = await file.readAsString();
+      print("uvc device file Readed");
+      return uvcDevice;
+    } catch (e) {
+      print("Couldn't read file");
+      await saveUVCDevice('');
+      return '';
+    }
+  }
+
+  Future<void> saveUVCDeviceIOS(String uvcDevice) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/$_uvcDeviceNameFileName');
     await file.writeAsString(uvcDevice);
     print('saveUVCDevice : saved');
   }

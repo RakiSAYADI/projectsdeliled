@@ -105,12 +105,16 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     do {
       if (treatmentIsOnProgress) {
         if (myDevice.getConnectionState()) {
-          await myDevice.readCharacteristic(2, 0);
+          if (Platform.isAndroid) {
+            await myDevice.readCharacteristic(2, 0);
+          }
+          if (Platform.isIOS) {
+            await myDevice.readCharacteristic(0, 0);
+          }
           dataRobotUVC = myDevice.getReadCharMessage();
           dataRead = jsonDecode(dataRobotUVC);
           detectionResult = int.parse(dataRead['Detection'].toString());
         }
-        // detectionResult = 0 ;
         if (detectionResult == 0) {
           print('No detection , KEEP THE TREATMENT PROCESS !');
         } else {
@@ -162,7 +166,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.red,
-          title: Text(disinfectionOnProgressTextLanguageArray[languageArrayIdentifier], style: TextStyle(fontSize: widthScreen * 0.04)),
+          title: Text(disinfectionOnProgressTextLanguageArray[languageArrayIdentifier], style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.02)),
           centerTitle: true,
         ),
         body: Container(
@@ -215,7 +219,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Colors.red,
-                                            fontSize: widthScreen * 0.015,
+                                            fontSize: widthScreen * 0.015 + heightScreen * 0.015,
                                           ),
                                         ),
                                         Padding(
@@ -225,12 +229,12 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                             slideDirection: SlideDirection.Up,
                                             separator: ":",
                                             textStyle: TextStyle(
-                                              fontSize: widthScreen * 0.02,
+                                              fontSize: widthScreen * 0.02 + heightScreen * 0.02,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.grey[300],
                                             ),
                                             separatorTextStyle: TextStyle(
-                                              fontSize: widthScreen * 0.02,
+                                              fontSize: widthScreen * 0.02 + heightScreen * 0.02,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.red,
                                             ),
@@ -268,7 +272,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: Colors.grey[300],
-                                              fontSize: widthScreen * 0.015,
+                                              fontSize: widthScreen * 0.01 + heightScreen * 0.01,
                                             ),
                                           ),
                                         ),
@@ -290,7 +294,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Colors.green,
-                                            fontSize: widthScreen * 0.015,
+                                            fontSize: widthScreen * 0.015 + heightScreen * 0.015,
                                           ),
                                         ),
                                         Padding(
@@ -300,12 +304,12 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                             slideDirection: SlideDirection.Up,
                                             separator: ":",
                                             textStyle: TextStyle(
-                                              fontSize: widthScreen * 0.02,
+                                              fontSize: widthScreen * 0.02 + heightScreen * 0.02,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.grey[300],
                                             ),
                                             separatorTextStyle: TextStyle(
-                                              fontSize: widthScreen * 0.02,
+                                              fontSize: widthScreen * 0.02 + heightScreen * 0.02,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.green,
                                             ),
@@ -349,6 +353,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
 
   Future<void> stopSecurity(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
     return showDialog<bool>(
       context: context,
       builder: (c) => AlertDialog(
@@ -356,7 +361,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
         content: Text(
           disinfectionStopMessageTextLanguageArray[languageArrayIdentifier],
           style: TextStyle(
-            fontSize: widthScreen * 0.02,
+            fontSize: widthScreen * 0.01 + heightScreen * 0.01,
           ),
         ),
         actions: [
@@ -364,7 +369,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
             child: Text(
               yesTextLanguageArray[languageArrayIdentifier],
               style: TextStyle(
-                fontSize: widthScreen * 0.02,
+                fontSize: widthScreen * 0.005 + heightScreen * 0.005,
               ),
             ),
             onPressed: () async {
@@ -374,7 +379,12 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
               treatmentIsOnProgress = false;
               treatmentIsSuccessful = false;
               String message = 'STOP : ON';
-              await myDevice.writeCharacteristic(2, 0, message);
+              if (Platform.isAndroid) {
+                await myDevice.writeCharacteristic(2, 0, message);
+              }
+              if (Platform.isIOS) {
+                await myDevice.writeCharacteristic(0, 0, message);
+              }
               Navigator.pop(c, true);
               activationTime = (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds);
               isTreatmentCompleted = treatmentIsSuccessful;
@@ -386,7 +396,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
             child: Text(
               noTextLanguageArray[languageArrayIdentifier],
               style: TextStyle(
-                fontSize: widthScreen * 0.02,
+                fontSize: widthScreen * 0.005 + heightScreen * 0.005,
               ),
             ),
             onPressed: () => Navigator.pop(c, false),

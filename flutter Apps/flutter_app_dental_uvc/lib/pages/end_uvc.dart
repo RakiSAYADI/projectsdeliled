@@ -53,9 +53,9 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
 
   void csvDataFile() async {
     uvcDataFile = UVCDataFile();
-    if (Platform.isAndroid) {
-      ledControl = LedControl();
-    }
+
+    ledControl = LedControl();
+
     uvcData = await uvcDataFile.readUVCDATA();
     List<String> uvcOperationData = ['default'];
     uvcOperationData.length = 0;
@@ -76,21 +76,17 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
 
     uvcOperationData.add(activationTime.toString());
 
-    if (Platform.isAndroid) {
-      await ledControl.setLedColor('ON');
-    }
+    await ledControl.setLedColor('ON');
+
     await Future.delayed(const Duration(milliseconds: 50));
 
     if (isTreatmentCompleted) {
       uvcOperationData.add(validTextLanguageArray[languageArrayIdentifier]);
-      if (Platform.isAndroid) {
-        await ledControl.setLedColor('GREEN');
-      }
+
+      await ledControl.setLedColor('GREEN');
     } else {
       uvcOperationData.add(incidentTextLanguageArray[languageArrayIdentifier]);
-      if (Platform.isAndroid) {
-        await ledControl.setLedColor('RED');
-      }
+      await ledControl.setLedColor('RED');
     }
 
     uvcData.add(uvcOperationData);

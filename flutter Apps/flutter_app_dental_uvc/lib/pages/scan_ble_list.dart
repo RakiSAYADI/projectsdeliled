@@ -135,7 +135,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
     });
   }
 
-  Future<void> startBind(BuildContext context, String uvcDeviceMac) {
+  Future<void> startBindAndroid(BuildContext context, String uvcDeviceMac) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
@@ -198,6 +198,69 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
     );
   }
 
+  Future<void> startBindIOS(BuildContext context, String uvcDeviceMac) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    return showDialog<bool>(
+      context: context,
+      builder: (c) => AlertDialog(
+        content: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  saveDeviceMessageTextLanguageArray[languageArrayIdentifier],
+                  style: TextStyle(fontSize: (screenWidth * 0.02)),
+                ),
+                SizedBox(height: screenHeight * 0.1),
+                Image.asset(
+                  'assets/connexion_dispositif.gif',
+                  height: screenHeight * 0.3,
+                  width: screenWidth * 0.5,
+                ),
+              ],
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            child: Text(
+              yesTextLanguageArray[languageArrayIdentifier],
+              style: TextStyle(fontSize: (screenWidth * 0.02)),
+            ),
+            onPressed: () async {
+              try {
+                myDevice.disconnect();
+              } catch (e) {}
+              Navigator.pop(c, true);
+              UVCDataFile uvcDataFile = UVCDataFile();
+              uvcDataFile.saveUVCDeviceIOS(uvcDeviceMac);
+              Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+            },
+          ),
+          TextButton(
+            child: Text(
+              noTextLanguageArray[languageArrayIdentifier],
+              style: TextStyle(fontSize: (screenWidth * 0.02)),
+            ),
+            onPressed: () {
+              setState(() {
+                devices.clear();
+              });
+              scanIdentifiers.clear();
+              flutterBlue.startScan(timeout: Duration(seconds: 4));
+              Navigator.pop(c, false);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -238,7 +301,12 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                   (device) => DeviceCard(
                       device: device,
                       connect: () async {
-                        startBind(context, device.device.id.id);
+                        if (Platform.isAndroid) {
+                          startBindAndroid(context, device.device.id.id);
+                        }
+                        if (Platform.isIOS) {
+                          startBindIOS(context, device.device.name);
+                        }
                       }),
                 )
                 .toList()),

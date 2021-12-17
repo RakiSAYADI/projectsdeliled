@@ -92,9 +92,14 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                     SizedBox(height: heightScreen * 0.05),
                     TextButton(
                       onPressed: () async {
-                        String macRobotUVC = '';
-                        macRobotUVC = await uvcDataFile.readUVCDevice();
-                        if (macRobotUVC.isEmpty) {
+                        String robotUVC = '';
+                        if (Platform.isAndroid) {
+                          robotUVC = await uvcDataFile.readUVCDevice();
+                        }
+                        if (Platform.isIOS) {
+                          robotUVC = await uvcDataFile.readUVCDeviceIOS();
+                        }
+                        if (robotUVC.isEmpty) {
                           myUvcToast.setToastDuration(3);
                           myUvcToast.setToastMessage(associateOneDeviceToastTextLanguageArray[languageArrayIdentifier]);
                           myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);

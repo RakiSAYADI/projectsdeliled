@@ -41,17 +41,21 @@ class LedControl {
         return false;
         break;
     }
-    try {
-      Process.start(_processName, []).then((Process process) {
-        process.stdout.transform(utf8.decoder).listen((data) {
-          print(data);
+    if (Platform.isAndroid) {
+      try {
+        Process.start(_processName, []).then((Process process) {
+          process.stdout.transform(utf8.decoder).listen((data) {
+            print(data);
+          });
+          process.stdin.writeln('$_commandOperation $colorHex $_packageName');
+          process.stdin.writeln(_exitCommand);
         });
-        process.stdin.writeln('$_commandOperation $colorHex $_packageName');
-        process.stdin.writeln(_exitCommand);
-      });
-      await Future.delayed(const Duration(milliseconds: 200));
-      return true;
-    } catch (e) {
+        await Future.delayed(const Duration(milliseconds: 200));
+        return true;
+      } catch (e) {
+        return false;
+      }
+    } else {
       return false;
     }
   }

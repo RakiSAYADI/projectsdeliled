@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:flutterappdentaluvc/services/languageDataBase.dart';
@@ -175,7 +177,12 @@ class _WarningsState extends State<Warnings> {
                         if (!nextButtonPressedOnce) {
                           nextButtonPressedOnce = true;
                           String message = 'UVCTreatement : ON';
-                          await myDevice.writeCharacteristic(2, 0, message);
+                          if (Platform.isAndroid) {
+                            await myDevice.writeCharacteristic(2, 0, message);
+                          }
+                          if (Platform.isIOS) {
+                            await myDevice.writeCharacteristic(0, 0, message);
+                          }
                           Navigator.pushNamed(context, '/uvc');
                         }
                       },

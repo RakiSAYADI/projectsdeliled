@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
@@ -34,28 +35,34 @@ class AutoUVCService {
         //service functionality
         date = DateTime.now();
         for (int i = 0; i < _daysStates.length; i++) {
-          if ((i + 1) == date.weekday &&
-              ((_daysStates[i]) == 1) &&
-              (date.hour == _hourList[i]) &&
-              (date.minute == _minutesList[i]) &&
-              (date.second == _secondsList[i])) {
+          if ((i + 1) == date.weekday && ((_daysStates[i]) == 1) && (date.hour == _hourList[i]) && (date.minute == _minutesList[i]) && (date.second == _secondsList[i])) {
             if (_myDevice != null && _myDevice.getConnectionState()) {
               print('detection of activation today');
               Map<String, dynamic> user = jsonDecode(_myDevice.getReadCharMessage());
-              _myUVCLight = UvcLight(
-                  machineName: _myDevice.device.name,
-                  machineMac: _myDevice.device.id.toString(),
-                  company: user['Company'],
-                  operatorName: user['UserName'],
-                  roomName: user['RoomName']);
+              _myUVCLight =
+                  UvcLight(machineName: _myDevice.device.name, machineMac: _myDevice.device.id.toString(), company: user['Company'], operatorName: user['UserName'], roomName: user['RoomName']);
               _myUVCLight.setInfectionTime(myExtinctionTimeMinute[_durationList[i]]);
               _myUVCLight.setActivationTime(myActivationTimeMinute[_delayList[i]]);
-              await _myDevice.writeCharacteristic(2, 0,
-                  '{\"data\":[\"${_myUVCLight.getCompanyName()}\",\"${_myUVCLight.getOperatorName()}\",'
-                      '\"${_myUVCLight.getRoomName()}\",${_durationList[i]},${_delayList[i]}]}');
-              await Future.delayed(const Duration(milliseconds: 200));
-              String message = 'UVCTreatement : ON';
-              await _myDevice.writeCharacteristic(2, 0, message);
+              if (Platform.isAndroid) {
+                await _myDevice.writeCharacteristic(
+                    2,
+                    0,
+                    '{\"data\":[\"${_myUVCLight.getCompanyName()}\",\"${_myUVCLight.getOperatorName()}\",'
+                    '\"${_myUVCLight.getRoomName()}\",${_durationList[i]},${_delayList[i]}]}');
+                await Future.delayed(const Duration(milliseconds: 200));
+                String message = 'UVCTreatement : ON';
+                await _myDevice.writeCharacteristic(2, 0, message);
+              }
+              if (Platform.isIOS) {
+                await _myDevice.writeCharacteristic(
+                    0,
+                    0,
+                    '{\"data\":[\"${_myUVCLight.getCompanyName()}\",\"${_myUVCLight.getOperatorName()}\",'
+                    '\"${_myUVCLight.getRoomName()}\",${_durationList[i]},${_delayList[i]}]}');
+                await Future.delayed(const Duration(milliseconds: 200));
+                String message = 'UVCTreatement : ON';
+                await _myDevice.writeCharacteristic(0, 0, message);
+              }
               myDevice = _myDevice;
               myUvcLight = _myUVCLight;
               navigatorKey.currentState.pushNamed('/uvc');

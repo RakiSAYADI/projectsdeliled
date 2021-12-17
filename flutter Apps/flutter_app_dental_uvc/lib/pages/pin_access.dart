@@ -103,7 +103,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   void checkingNameRobot() async {
     uvcDataFile = UVCDataFile();
     robotsNamesData = await uvcDataFile.readRobotsNameDATA();
-    if (myDevice.device.name.isEmpty) {
+    if (myDevice == null) {
       deviceName = deviceNameMessageTextLanguageArray[languageArrayIdentifier];
       modifyNameEnable = false;
     } else {

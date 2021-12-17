@@ -435,11 +435,10 @@ class _DataViewModificationState extends State<DataViewModification> {
                     onPressed: () async {
                       uvcData = await uvcDataFile.readUVCDATA();
                       if (_allData) {
-                        uvcDataSelected = [[]];
-                        uvcDataSelected.length = 0;
-                        uvcDataSelected.add(uvcData[0]);
+                        uvcDataSelected.clear();
+                        uvcDataSelected.addAll(uvcDefaultData[languageArrayIdentifier]);
                         List<List<String>> uvcDataReversedMiddle = uvcData.reversed.toList();
-                        uvcDataReversedMiddle.last = [];
+                        uvcDataReversedMiddle.removeLast();
                         uvcDataSelected.addAll(uvcDataReversedMiddle);
                         if (openWithSettings) {
                           Navigator.pushNamed(context, '/DataCSVSettingsView');
@@ -448,7 +447,6 @@ class _DataViewModificationState extends State<DataViewModification> {
                         }
                       } else if (_timedData) {
                         if (await checkDataUVC()) {
-                          print(uvcDataSelected);
                           if (openWithSettings) {
                             Navigator.pushNamed(context, '/DataCSVSettingsView');
                           } else {
@@ -476,7 +474,8 @@ class _DataViewModificationState extends State<DataViewModification> {
   }
 
   Future<bool> checkDataUVC() async {
-    uvcDataSelected = uvcDefaultData[languageArrayIdentifier];
+    uvcDataSelected.clear();
+    uvcDataSelected.addAll(uvcDefaultData[languageArrayIdentifier]);
     List<List<String>> uvcDataSelectedCombiner = [[]];
     uvcDataSelectedCombiner.length = 0;
     bool noDataFounded = false;

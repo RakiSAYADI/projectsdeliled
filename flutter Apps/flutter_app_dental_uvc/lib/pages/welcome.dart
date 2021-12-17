@@ -27,7 +27,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
 
   UVCDataFile uvcDataFile = UVCDataFile();
 
-  String macRobotUVC = '';
+  String robotUVC = '';
 
   ToastyMessage myUvcToast;
 
@@ -64,11 +64,16 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     int devicesPosition = 0;
     bool deviceExistOrNot = false;
     sleepIsInactivePinAccess = false;
-    macRobotUVC = await uvcDataFile.readUVCDevice();
+    if (Platform.isAndroid) {
+      robotUVC = await uvcDataFile.readUVCDevice();
+    }
+    if (Platform.isIOS) {
+      robotUVC = await uvcDataFile.readUVCDeviceIOS();
+    }
+
     await Future.delayed(const Duration(seconds: 3));
-    if (macRobotUVC.isEmpty) {
+    if (robotUVC.isEmpty) {
       myUvcToast.setToastDuration(10);
-      myDevice = Device(device: scanDevices.elementAt(devicesPosition));
       myUvcToast.setToastMessage(associateDeviceToastTextLanguageArray[languageArrayIdentifier]);
       myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
       await ledControl.setLedColor('ORANGE');
@@ -77,12 +82,23 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       });
     } else {
       for (int i = 0; i < scanDevices.length; i++) {
-        if (scanDevices.elementAt(i).id.toString().contains(macRobotUVC)) {
-          deviceExistOrNot = true;
-          devicesPosition = i;
-          break;
-        } else {
-          deviceExistOrNot = false;
+        if (Platform.isAndroid) {
+          if (scanDevices.elementAt(i).id.toString().contains(robotUVC)) {
+            deviceExistOrNot = true;
+            devicesPosition = i;
+            break;
+          } else {
+            deviceExistOrNot = false;
+          }
+        }
+        if (Platform.isIOS) {
+          if (scanDevices.elementAt(i).name.toString().contains(robotUVC)) {
+            deviceExistOrNot = true;
+            devicesPosition = i;
+            break;
+          } else {
+            deviceExistOrNot = false;
+          }
         }
       }
       if (deviceExistOrNot) {
@@ -106,7 +122,12 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
             }
           }
           if (myDevice.getConnectionState()) {
-            await myDevice.readCharacteristic(2, 0);
+            if (Platform.isAndroid) {
+              await myDevice.readCharacteristic(2, 0);
+            }
+            if (Platform.isIOS) {
+              await myDevice.readCharacteristic(0, 0);
+            }
             await Future.delayed(const Duration(seconds: 1));
             try {
               if (myDevice.getReadCharMessage().isNotEmpty) {
@@ -183,9 +204,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     }
 
     try {
-      if (Platform.isAndroid) {
-        ledInit();
-      }
+      ledInit();
     } catch (e) {
       myUvcToast.setToastDuration(1);
       myUvcToast.setToastMessage('error LED service');

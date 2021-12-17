@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:flutterappdentaluvc/services/languageDataBase.dart';
@@ -166,8 +168,14 @@ class _SettingsState extends State<Settings> {
     double heightScreen = MediaQuery.of(context).size.height;
     myUvcLight.setInfectionTime(myExtinctionTimeMinuteData);
     myUvcLight.setActivationTime(myActivationTimeMinuteData);
-    await myDevice.writeCharacteristic(
-        2, 0, '{\"data\":[\"${myUvcLight.getCompanyName()}\",\"${myUvcLight.getOperatorName()}\",\"${myUvcLight.getRoomName()}\",$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition]}');
+    if (Platform.isAndroid) {
+      await myDevice.writeCharacteristic(
+          2, 0, '{\"data\":[\"${myUvcLight.getCompanyName()}\",\"${myUvcLight.getOperatorName()}\",\"${myUvcLight.getRoomName()}\",$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition]}');
+    }
+    if (Platform.isIOS) {
+      await myDevice.writeCharacteristic(
+          0, 0, '{\"data\":[\"${myUvcLight.getCompanyName()}\",\"${myUvcLight.getOperatorName()}\",\"${myUvcLight.getRoomName()}\",$myExtinctionTimeMinutePosition,$myActivationTimeMinutePosition]}');
+    }
     return showDialog<void>(
       barrierDismissible: false,
       context: context,

@@ -146,7 +146,12 @@ class Device {
 
           /// add the check state process
           Map<String, dynamic> dataRead;
-          await readCharacteristic(2, 0);
+          if (Platform.isAndroid) {
+            await readCharacteristic(2, 0);
+          }
+          if (Platform.isIOS) {
+            await readCharacteristic(0, 0);
+          }
           try {
             dataRead = jsonDecode(_readCharMessage);
             switch (int.parse(dataRead['uvcSt'].toString())) {
@@ -358,7 +363,12 @@ class Device {
         }
       }
       if (myDevice.getConnectionState()) {
-        await myDevice.readCharacteristic(2, 0);
+        if (Platform.isAndroid) {
+          await readCharacteristic(2, 0);
+        }
+        if (Platform.isIOS) {
+          await readCharacteristic(0, 0);
+        }
         await Future.delayed(const Duration(seconds: 1));
         try {
           if (myDevice.getReadCharMessage().isNotEmpty) {
