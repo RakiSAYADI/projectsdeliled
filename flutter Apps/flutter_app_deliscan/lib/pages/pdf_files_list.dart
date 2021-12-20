@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app_deliscan/pages/pdf_email_send.dart';
-import 'package:flutter_app_deliscan/pages/pdf_files_view.dart';
-import 'package:flutter_app_deliscan/services/DataVariables.dart';
-import 'package:flutter_app_deliscan/services/PDF_File_Class.dart';
-import 'package:flutter_app_deliscan/services/PDF_File_widget.dart';
-import 'package:flutter_app_deliscan/services/animation_between_pages.dart';
-import 'package:flutter_app_deliscan/services/languageDataBase.dart';
+import 'package:deliscan/pages/pdf_email_send.dart';
+import 'package:deliscan/pages/pdf_files_view.dart';
+import 'package:deliscan/services/DataVariables.dart';
+import 'package:deliscan/services/PDF_File_Class.dart';
+import 'package:deliscan/services/PDF_File_widget.dart';
+import 'package:deliscan/services/animation_between_pages.dart';
+import 'package:deliscan/services/languageDataBase.dart';
 import 'package:path_provider/path_provider.dart';
 
 class PDFList extends StatefulWidget {

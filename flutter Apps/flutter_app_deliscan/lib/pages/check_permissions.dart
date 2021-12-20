@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_deliscan/pages/qr_code_scan.dart';
-import 'package:flutter_app_deliscan/services/DataVariables.dart';
-import 'package:flutter_app_deliscan/services/animation_between_pages.dart';
-import 'package:flutter_app_deliscan/services/languageDataBase.dart';
-import 'package:flutter_app_deliscan/services/uvcToast.dart';
+import 'package:deliscan/pages/qr_code_scan.dart';
+import 'package:deliscan/services/DataVariables.dart';
+import 'package:deliscan/services/animation_between_pages.dart';
+import 'package:deliscan/services/languageDataBase.dart';
+import 'package:deliscan/services/uvcToast.dart';
 
 class CheckPermissions extends StatefulWidget {
   @override

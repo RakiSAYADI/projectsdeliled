@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_deliscan/pages/pdf_email_send.dart';
-import 'package:flutter_app_deliscan/pages/pdf_files_list.dart';
-import 'package:flutter_app_deliscan/services/DataVariables.dart';
-import 'package:flutter_app_deliscan/services/animation_between_pages.dart';
-import 'package:flutter_app_deliscan/services/languageDataBase.dart';
-import 'package:flutter_app_deliscan/services/uvcToast.dart';
+import 'package:deliscan/pages/pdf_email_send.dart';
+import 'package:deliscan/pages/pdf_files_list.dart';
+import 'package:deliscan/services/DataVariables.dart';
+import 'package:deliscan/services/animation_between_pages.dart';
+import 'package:deliscan/services/languageDataBase.dart';
+import 'package:deliscan/services/uvcToast.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:path_provider/path_provider.dart';
 

@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_deliscan/services/DataVariables.dart';
-import 'package:flutter_app_deliscan/services/languageDataBase.dart';
+import 'package:deliscan/services/DataVariables.dart';
+import 'package:deliscan/services/languageDataBase.dart';
 import 'package:get/get.dart';
 
 class MyConnectivity {

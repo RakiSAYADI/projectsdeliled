@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_deliscan/services/DataVariables.dart';
-import 'package:flutter_app_deliscan/services/data_storage_phone.dart';
-import 'package:flutter_app_deliscan/services/languageDataBase.dart';
-import 'package:flutter_app_deliscan/services/uvcToast.dart';
+import 'package:deliscan/services/DataVariables.dart';
+import 'package:deliscan/services/data_storage_phone.dart';
+import 'package:deliscan/services/languageDataBase.dart';
+import 'package:deliscan/services/uvcToast.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 import 'package:path_provider/path_provider.dart';

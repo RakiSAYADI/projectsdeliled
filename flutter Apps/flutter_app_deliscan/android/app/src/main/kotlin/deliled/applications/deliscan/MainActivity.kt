@@ -1,4 +1,4 @@
-package deliled.applications.flutter_app_deliscan
+package deliled.applications.deliscan
 
 import io.flutter.embedding.android.FlutterActivity
 

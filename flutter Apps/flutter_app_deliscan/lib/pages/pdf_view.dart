@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_deliscan/pages/pdf_file_downloader.dart';
-import 'package:flutter_app_deliscan/services/DataVariables.dart';
-import 'package:flutter_app_deliscan/services/animation_between_pages.dart';
-import 'package:flutter_app_deliscan/services/languageDataBase.dart';
+import 'package:deliscan/pages/pdf_file_downloader.dart';
+import 'package:deliscan/services/DataVariables.dart';
+import 'package:deliscan/services/animation_between_pages.dart';
+import 'package:deliscan/services/languageDataBase.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 
 class PDFViewer extends StatefulWidget {

@@ -1,15 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app_deliscan/pages/check_permissions.dart';
-import 'package:flutter_app_deliscan/pages/pdf_email_send.dart';
-import 'package:flutter_app_deliscan/pages/pdf_file_downloader.dart';
-import 'package:flutter_app_deliscan/pages/pdf_files_list.dart';
-import 'package:flutter_app_deliscan/pages/pdf_files_view.dart';
-import 'package:flutter_app_deliscan/pages/pdf_view.dart';
-import 'package:flutter_app_deliscan/pages/qr_code_scan.dart';
-import 'package:flutter_app_deliscan/pages/welcome.dart';
-import 'package:flutter_app_deliscan/services/DataVariables.dart';
+import 'package:deliscan/pages/check_permissions.dart';
+import 'package:deliscan/pages/pdf_email_send.dart';
+import 'package:deliscan/pages/pdf_file_downloader.dart';
+import 'package:deliscan/pages/pdf_files_list.dart';
+import 'package:deliscan/pages/pdf_files_view.dart';
+import 'package:deliscan/pages/pdf_view.dart';
+import 'package:deliscan/pages/qr_code_scan.dart';
+import 'package:deliscan/pages/welcome.dart';
+import 'package:deliscan/services/DataVariables.dart';
 import 'package:get/get.dart';
 
 void main() {

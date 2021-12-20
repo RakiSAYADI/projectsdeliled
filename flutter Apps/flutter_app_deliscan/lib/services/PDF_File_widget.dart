@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_deliscan/services/DataVariables.dart';
-import 'package:flutter_app_deliscan/services/PDF_File_Class.dart';
-import 'package:flutter_app_deliscan/services/languageDataBase.dart';
+import 'package:deliscan/services/DataVariables.dart';
+import 'package:deliscan/services/PDF_File_Class.dart';
+import 'package:deliscan/services/languageDataBase.dart';
 
 class FileCard extends StatelessWidget {
   final PDFFile pdfFile;

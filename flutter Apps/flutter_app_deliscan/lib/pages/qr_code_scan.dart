@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_deliscan/pages/pdf_view.dart';
-import 'package:flutter_app_deliscan/services/DataVariables.dart';
-import 'package:flutter_app_deliscan/services/animation_between_pages.dart';
-import 'package:flutter_app_deliscan/services/connectivityCheck.dart';
-import 'package:flutter_app_deliscan/services/languageDataBase.dart';
-import 'package:flutter_app_deliscan/services/uvcToast.dart';
+import 'package:deliscan/pages/pdf_view.dart';
+import 'package:deliscan/services/DataVariables.dart';
+import 'package:deliscan/services/animation_between_pages.dart';
+import 'package:deliscan/services/connectivityCheck.dart';
+import 'package:deliscan/services/languageDataBase.dart';
+import 'package:deliscan/services/uvcToast.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QrCodeScan extends StatefulWidget {
