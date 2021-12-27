@@ -72,9 +72,6 @@ class _WelcomeState extends State<Welcome> {
     await Permission.locationWhenInUse.request();
     await Permission.locationAlways.request();
     await Permission.bluetooth.request();
-    await Permission.bluetoothScan.request();
-    await Permission.bluetoothAdvertise.request();
-    await Permission.bluetoothConnect.request();
   }
 
   @override
