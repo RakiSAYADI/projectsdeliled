@@ -7,7 +7,7 @@ import 'package:deliscan/pages/qr_code_scan.dart';
 import 'package:deliscan/services/animation_between_pages.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:package_info/package_info.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:super_easy_permissions/super_easy_permissions.dart';
 
 class Welcome extends StatefulWidget {
   @override
@@ -16,9 +16,12 @@ class Welcome extends StatefulWidget {
 
 class _WelcomeState extends State<Welcome> {
   void checkPermissions() async {
-    await Permission.camera.request();
-    await Permission.manageExternalStorage.request();
-    await Permission.storage.request();
+    bool result = await SuperEasyPermissions.askPermission(Permissions.camera);
+    if (result) {
+      print("permission granted");
+    } else {
+      print("permission denied");
+    }
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {

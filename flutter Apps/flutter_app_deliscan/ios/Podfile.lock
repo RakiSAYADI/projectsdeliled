@@ -25,6 +25,8 @@ PODS:
   - sqflite (0.0.2):
     - Flutter
     - FMDB (>= 2.7.5)
+  - super_easy_permissions (0.0.1):
+    - Flutter
   - Toast (4.0.0)
 
 DEPENDENCIES:
@@ -37,6 +39,7 @@ DEPENDENCIES:
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - super_easy_permissions (from `.symlinks/plugins/super_easy_permissions/ios`)
 
 SPEC REPOS:
   trunk:
@@ -64,6 +67,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/qr_code_scanner/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
+  super_easy_permissions:
+    :path: ".symlinks/plugins/super_easy_permissions/ios"
 
 SPEC CHECKSUMS:
   connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
@@ -78,8 +83,9 @@ SPEC CHECKSUMS:
   qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
+  super_easy_permissions: a3ceb753027ebace972803825c25cc44066d1a84
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 
-PODFILE CHECKSUM: 4e8f8b2be68aeea4c0d5beb6ff1e79fface1d048
+PODFILE CHECKSUM: b0ca4718e5c2f5b1dcaede86f60170b016db53fb
 
 COCOAPODS: 1.11.2
