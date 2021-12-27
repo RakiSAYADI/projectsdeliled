@@ -13,6 +13,7 @@ import 'package:flutterappdentaluvc/services/languageDataBase.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:package_info/package_info.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:super_easy_permissions/super_easy_permissions.dart';
 import 'package:wakelock/wakelock.dart';
 
 class Welcome extends StatefulWidget {
@@ -246,8 +247,9 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   }
 
   void _listenForPermissionStatus() async {
-    await Permission.locationWhenInUse.request();
-    await Permission.locationAlways.request();
+    await SuperEasyPermissions.askPermission(Permissions.locationWhenInUse);
+    await SuperEasyPermissions.askPermission(Permissions.locationAlways);
+    await SuperEasyPermissions.askPermission(Permissions.bluetooth);
     //checks bluetooth current state
     Future.delayed(const Duration(seconds: 1), () async {
       flutterBlue.state.listen((state) {

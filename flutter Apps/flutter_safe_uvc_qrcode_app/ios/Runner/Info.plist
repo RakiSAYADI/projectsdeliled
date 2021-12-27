@@ -24,12 +24,30 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSCameraUsageDescription</key>
-	<string>Camera permission is required for qrcode scanning.</string>
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>BLE permission is required to access and control UVC device </string>
+    <key>NSBluetoothPeripheralUsageDescription</key>
+    <string>BLE permission is required to access and control UVC device </string>
+    <key>NSCameraUsageDescription</key>
+    <string>Camera permission is required for qrcode scanning.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Location permission is required to scan UVC device </string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Location permission is required to scan UVC device </string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Location permission is required to scan UVC device </string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Network permission is required for printer zebra scanning.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>UIRequiresFullScreen</key>
+	<true/>
+	<key>UISupportedExternalAccessoryProtocols</key>
+	<array>
+		<string>com.zebra.rawport</string>
+	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

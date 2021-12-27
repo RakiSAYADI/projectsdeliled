@@ -1,27 +1,42 @@
 PODS:
   - Flutter (1.0.0)
+  - flutter_zebra_sdk (0.0.1):
+    - Flutter
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
+  - img_to_zpl (0.0.1):
+    - Flutter
   - MTBBarcodeScanner (5.0.11)
   - package_info (0.0.1):
     - Flutter
   - path_provider_ios (0.0.1):
+    - Flutter
+  - "permission_handler (5.1.0+2)":
     - Flutter
   - printing (1.0.0):
     - Flutter
   - qr_code_scanner (0.2.0):
     - Flutter
     - MTBBarcodeScanner
+  - super_easy_permissions (0.0.1):
+    - Flutter
   - Toast (4.0.0)
+  - zsdk (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
+  - flutter_zebra_sdk (from `.symlinks/plugins/flutter_zebra_sdk/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - img_to_zpl (from `.symlinks/plugins/img_to_zpl/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
+  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - printing (from `.symlinks/plugins/printing/ios`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
+  - super_easy_permissions (from `.symlinks/plugins/super_easy_permissions/ios`)
+  - zsdk (from `.symlinks/plugins/zsdk/ios`)
 
 SPEC REPOS:
   trunk:
@@ -31,27 +46,42 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
+  flutter_zebra_sdk:
+    :path: ".symlinks/plugins/flutter_zebra_sdk/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
+  img_to_zpl:
+    :path: ".symlinks/plugins/img_to_zpl/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
   path_provider_ios:
     :path: ".symlinks/plugins/path_provider_ios/ios"
+  permission_handler:
+    :path: ".symlinks/plugins/permission_handler/ios"
   printing:
     :path: ".symlinks/plugins/printing/ios"
   qr_code_scanner:
     :path: ".symlinks/plugins/qr_code_scanner/ios"
+  super_easy_permissions:
+    :path: ".symlinks/plugins/super_easy_permissions/ios"
+  zsdk:
+    :path: ".symlinks/plugins/zsdk/ios"
 
 SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  flutter_zebra_sdk: b5829f33fdb3ffa7c3f92a8135f0d701d6c3cb87
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
+  img_to_zpl: b0a8c39b5f0596579e8b5ee2326e08594d5e8e69
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider_ios: 7d7ce634493af4477d156294792024ec3485acd5
+  permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   printing: eafa00acb682c0ca029d4d98d0798f55a1e27102
   qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
+  super_easy_permissions: a3ceb753027ebace972803825c25cc44066d1a84
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+  zsdk: 6c0c0a12487162004dd4e4990bf901207671fa33
 
-PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+PODFILE CHECKSUM: 1d62be80675f50e63eb2f851d55ee75f09951c1b
 
 COCOAPODS: 1.11.2
