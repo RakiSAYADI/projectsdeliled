@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutteruvcapp/services/CSVfileClass.dart';
@@ -25,7 +24,6 @@ class _SendEmailState extends State<SendEmail> {
   final myEmail = TextEditingController();
 
   UVCDataFile uvcDataFile;
-  String userEmail;
 
   bool firstDisplayMainWidget = true;
 

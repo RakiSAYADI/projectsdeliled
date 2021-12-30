@@ -80,7 +80,7 @@ class _DataCSVViewQrCodeState extends State<DataCSVViewQrCode> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+    Navigator.of(context).pop();
     return true;
   }
 }

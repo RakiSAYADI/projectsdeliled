@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutteruvcapp/services/CSVfileClass.dart';
 import 'package:flutteruvcapp/services/DataVariables.dart';
 import 'package:flutteruvcapp/services/languageDataBase.dart';
@@ -58,419 +59,422 @@ class _DataViewModificationState extends State<DataViewModification> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(settingsRapportUVCTitleTextLanguageArray[languageArrayIdentifier]),
-        centerTitle: true,
-      ),
-      body: Container(
-        decoration: BoxDecoration(color: Colors.grey[200]),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    selectUVCDataTitleTextLanguageArray[languageArrayIdentifier],
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: screenWidth * 0.03 + screenHeight * 0.03),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CheckboxListTile(
-                    title: Text(
-                      allReportTextLanguageArray[languageArrayIdentifier],
-                      style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02),
-                    ),
-                    value: _allData,
-                    onChanged: _onAllDataChanged,
-                    controlAffinity: ListTileControlAffinity.leading,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CheckboxListTile(
-                    title: Text(
-                      determinedTimeTextLanguageArray[languageArrayIdentifier],
-                      style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02),
-                    ),
-                    value: _timedData,
-                    onChanged: _onTimedDataChanged,
-                    controlAffinity: ListTileControlAffinity.leading,
-                  ),
-                ),
-                Visibility(
-                  visible: _timedData,
-                  child: Card(
-                    margin: EdgeInsets.all(16.0),
-                    shape: RoundedRectangleBorder(side: new BorderSide(color: Colors.black, width: 2.0), borderRadius: BorderRadius.circular(18.0)),
-                    color: enableDateDropDown(_timedData),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 16.0, 0),
-                              child: Text(
-                                fromTextLanguageArray[languageArrayIdentifier],
-                                style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02),
-                              ),
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(2.0, 8.0, 2.0, 8.0),
-                                        child: Text(
-                                          dayTextLanguageArray[languageArrayIdentifier],
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(fontSize: screenWidth * 0.015 + screenHeight * 0.015),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(2.0, 4.0, 2.0, 8.0),
-                                        child: DropdownButton<String>(
-                                          value: _myStartDataTimeDayData,
-                                          icon: Icon(Icons.arrow_drop_down),
-                                          iconSize: 24,
-                                          elevation: 16,
-                                          style: TextStyle(color: Colors.black, fontSize: 18),
-                                          underline: Container(
-                                            height: 2,
-                                            color: Colors.blue[300],
-                                          ),
-                                          onChanged: (String data) {
-                                            setState(() {
-                                              _myStartDataTimeDayData = data;
-                                            });
-                                          },
-                                          items: myTimeDays.map<DropdownMenuItem<String>>((String value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value,
-                                              child: Text(value, textAlign: TextAlign.center),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Text(
-                                  '\n/',
-                                  style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(2.0, 8.0, 2.0, 8.0),
-                                        child: Text(
-                                          monthTextLanguageArray[languageArrayIdentifier],
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(fontSize: screenWidth * 0.015 + screenHeight * 0.015),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(2.0, 4.0, 2.0, 8.0),
-                                        child: DropdownButton<String>(
-                                          value: _myStartDataTimeMonthData,
-                                          icon: Icon(Icons.arrow_drop_down),
-                                          iconSize: 24,
-                                          elevation: 16,
-                                          style: TextStyle(color: Colors.black, fontSize: 18),
-                                          underline: Container(
-                                            height: 2,
-                                            color: Colors.blue[300],
-                                          ),
-                                          onChanged: (String data) {
-                                            setState(() {
-                                              _myStartDataTimeMonthData = data;
-                                            });
-                                          },
-                                          items: myTimeMonths.map<DropdownMenuItem<String>>((String value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value,
-                                              child: Text(value, textAlign: TextAlign.center),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Text(
-                                  '\n/',
-                                  style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(2.0, 8.0, 2.0, 8.0),
-                                        child: Text(
-                                          yearTextLanguageArray[languageArrayIdentifier],
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(fontSize: screenWidth * 0.015 + screenHeight * 0.015),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(2.0, 4.0, 2.0, 8.0),
-                                        child: DropdownButton<String>(
-                                          value: _myStartDataTimeYearsData,
-                                          icon: Icon(Icons.arrow_drop_down),
-                                          iconSize: 24,
-                                          elevation: 16,
-                                          style: TextStyle(color: Colors.black, fontSize: 18),
-                                          underline: Container(
-                                            height: 2,
-                                            color: Colors.blue[300],
-                                          ),
-                                          onChanged: (String data) {
-                                            setState(() {
-                                              _myStartDataTimeYearsData = data;
-                                            });
-                                          },
-                                          items: myTimeYears.map<DropdownMenuItem<String>>((String value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value,
-                                              child: Text(value, textAlign: TextAlign.center),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 16.0, 0),
-                              child: Text(
-                                toTextLanguageArray[languageArrayIdentifier],
-                                style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02),
-                              ),
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(2.0, 8.0, 2.0, 8.0),
-                                        child: Text(
-                                          dayTextLanguageArray[languageArrayIdentifier],
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(fontSize: screenWidth * 0.015 + screenHeight * 0.015),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(2.0, 4.0, 2.0, 8.0),
-                                        child: DropdownButton<String>(
-                                          value: _myEndDataTimeDayData,
-                                          icon: Icon(Icons.arrow_drop_down),
-                                          iconSize: 24,
-                                          elevation: 16,
-                                          style: TextStyle(color: Colors.black, fontSize: 18),
-                                          underline: Container(
-                                            height: 2,
-                                            color: Colors.blue[300],
-                                          ),
-                                          onChanged: (String data) {
-                                            setState(() {
-                                              _myEndDataTimeDayData = data;
-                                            });
-                                          },
-                                          items: myTimeDays.map<DropdownMenuItem<String>>((String value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value,
-                                              child: Text(value, textAlign: TextAlign.center),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Text(
-                                  '\n/',
-                                  style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(2.0, 8.0, 2.0, 8.0),
-                                        child: Text(
-                                          monthTextLanguageArray[languageArrayIdentifier],
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(fontSize: screenWidth * 0.015 + screenHeight * 0.015),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(2.0, 4.0, 2.0, 8.0),
-                                        child: DropdownButton<String>(
-                                          value: _myEndDataTimeMonthData,
-                                          icon: Icon(Icons.arrow_drop_down),
-                                          iconSize: 24,
-                                          elevation: 16,
-                                          style: TextStyle(color: Colors.black, fontSize: 18),
-                                          underline: Container(
-                                            height: 2,
-                                            color: Colors.blue[300],
-                                          ),
-                                          onChanged: (String data) {
-                                            setState(() {
-                                              _myEndDataTimeMonthData = data;
-                                            });
-                                          },
-                                          items: myTimeMonths.map<DropdownMenuItem<String>>((String value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value,
-                                              child: Text(value, textAlign: TextAlign.center),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Text(
-                                  '\n/',
-                                  style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(2.0, 8.0, 2.0, 8.0),
-                                        child: Text(
-                                          yearTextLanguageArray[languageArrayIdentifier],
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(fontSize: screenWidth * 0.015 + screenHeight * 0.015),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(2.0, 4.0, 2.0, 8.0),
-                                        child: DropdownButton<String>(
-                                          value: _myEndDataTimeYearsData,
-                                          icon: Icon(Icons.arrow_drop_down),
-                                          iconSize: 24,
-                                          elevation: 16,
-                                          style: TextStyle(color: Colors.black, fontSize: 18),
-                                          underline: Container(
-                                            height: 2,
-                                            color: Colors.blue[300],
-                                          ),
-                                          onChanged: (String data) {
-                                            setState(() {
-                                              _myEndDataTimeYearsData = data;
-                                            });
-                                          },
-                                          items: myTimeYears.map<DropdownMenuItem<String>>((String value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value,
-                                              child: Text(value, textAlign: TextAlign.center),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextButton(
+    return WillPopScope(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(settingsRapportUVCTitleTextLanguageArray[languageArrayIdentifier]),
+          centerTitle: true,
+        ),
+        body: Container(
+          decoration: BoxDecoration(color: Colors.grey[200]),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      confirmTextLanguageArray[languageArrayIdentifier],
-                      style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.03 + screenHeight * 0.03),
+                      selectUVCDataTitleTextLanguageArray[languageArrayIdentifier],
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: screenWidth * 0.03 + screenHeight * 0.03),
                     ),
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CheckboxListTile(
+                      title: Text(
+                        allReportTextLanguageArray[languageArrayIdentifier],
+                        style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02),
+                      ),
+                      value: _allData,
+                      onChanged: _onAllDataChanged,
+                      controlAffinity: ListTileControlAffinity.leading,
                     ),
-                    onPressed: () async {
-                      uvcData = await uvcDataFile.readUVCDATA();
-                      if (_allData) {
-                        uvcDataSelected.clear();
-                        uvcDataSelected.addAll(uvcDefaultData[languageArrayIdentifier]);
-                        List<List<String>> uvcDataReversedMiddle = uvcData.reversed.toList();
-                        uvcDataReversedMiddle.removeLast();
-                        uvcDataSelected.addAll(uvcDataReversedMiddle);
-                        if (openWithQrCode) {
-                          Navigator.pushNamed(context, '/DataCSVViewQrCode');
-                        } else {
-                          Navigator.pushNamed(context, '/DataCSVView');
-                        }
-                      } else if (_timedData) {
-                        if (await checkDataUVC()) {
-                          print(uvcDataSelected);
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CheckboxListTile(
+                      title: Text(
+                        determinedTimeTextLanguageArray[languageArrayIdentifier],
+                        style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02),
+                      ),
+                      value: _timedData,
+                      onChanged: _onTimedDataChanged,
+                      controlAffinity: ListTileControlAffinity.leading,
+                    ),
+                  ),
+                  Visibility(
+                    visible: _timedData,
+                    child: Card(
+                      margin: EdgeInsets.all(16.0),
+                      shape: RoundedRectangleBorder(side: new BorderSide(color: Colors.black, width: 2.0), borderRadius: BorderRadius.circular(18.0)),
+                      color: enableDateDropDown(_timedData),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 16.0, 0),
+                                child: Text(
+                                  fromTextLanguageArray[languageArrayIdentifier],
+                                  style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02),
+                                ),
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(2.0, 8.0, 2.0, 8.0),
+                                          child: Text(
+                                            dayTextLanguageArray[languageArrayIdentifier],
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(fontSize: screenWidth * 0.015 + screenHeight * 0.015),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(2.0, 4.0, 2.0, 8.0),
+                                          child: DropdownButton<String>(
+                                            value: _myStartDataTimeDayData,
+                                            icon: Icon(Icons.arrow_drop_down),
+                                            iconSize: 24,
+                                            elevation: 16,
+                                            style: TextStyle(color: Colors.black, fontSize: 18),
+                                            underline: Container(
+                                              height: 2,
+                                              color: Colors.blue[300],
+                                            ),
+                                            onChanged: (String data) {
+                                              setState(() {
+                                                _myStartDataTimeDayData = data;
+                                              });
+                                            },
+                                            items: myTimeDays.map<DropdownMenuItem<String>>((String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value, textAlign: TextAlign.center),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Text(
+                                    '\n/',
+                                    style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(2.0, 8.0, 2.0, 8.0),
+                                          child: Text(
+                                            monthTextLanguageArray[languageArrayIdentifier],
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(fontSize: screenWidth * 0.015 + screenHeight * 0.015),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(2.0, 4.0, 2.0, 8.0),
+                                          child: DropdownButton<String>(
+                                            value: _myStartDataTimeMonthData,
+                                            icon: Icon(Icons.arrow_drop_down),
+                                            iconSize: 24,
+                                            elevation: 16,
+                                            style: TextStyle(color: Colors.black, fontSize: 18),
+                                            underline: Container(
+                                              height: 2,
+                                              color: Colors.blue[300],
+                                            ),
+                                            onChanged: (String data) {
+                                              setState(() {
+                                                _myStartDataTimeMonthData = data;
+                                              });
+                                            },
+                                            items: myTimeMonths.map<DropdownMenuItem<String>>((String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value, textAlign: TextAlign.center),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Text(
+                                    '\n/',
+                                    style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(2.0, 8.0, 2.0, 8.0),
+                                          child: Text(
+                                            yearTextLanguageArray[languageArrayIdentifier],
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(fontSize: screenWidth * 0.015 + screenHeight * 0.015),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(2.0, 4.0, 2.0, 8.0),
+                                          child: DropdownButton<String>(
+                                            value: _myStartDataTimeYearsData,
+                                            icon: Icon(Icons.arrow_drop_down),
+                                            iconSize: 24,
+                                            elevation: 16,
+                                            style: TextStyle(color: Colors.black, fontSize: 18),
+                                            underline: Container(
+                                              height: 2,
+                                              color: Colors.blue[300],
+                                            ),
+                                            onChanged: (String data) {
+                                              setState(() {
+                                                _myStartDataTimeYearsData = data;
+                                              });
+                                            },
+                                            items: myTimeYears.map<DropdownMenuItem<String>>((String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value, textAlign: TextAlign.center),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 16.0, 0),
+                                child: Text(
+                                  toTextLanguageArray[languageArrayIdentifier],
+                                  style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02),
+                                ),
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(2.0, 8.0, 2.0, 8.0),
+                                          child: Text(
+                                            dayTextLanguageArray[languageArrayIdentifier],
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(fontSize: screenWidth * 0.015 + screenHeight * 0.015),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(2.0, 4.0, 2.0, 8.0),
+                                          child: DropdownButton<String>(
+                                            value: _myEndDataTimeDayData,
+                                            icon: Icon(Icons.arrow_drop_down),
+                                            iconSize: 24,
+                                            elevation: 16,
+                                            style: TextStyle(color: Colors.black, fontSize: 18),
+                                            underline: Container(
+                                              height: 2,
+                                              color: Colors.blue[300],
+                                            ),
+                                            onChanged: (String data) {
+                                              setState(() {
+                                                _myEndDataTimeDayData = data;
+                                              });
+                                            },
+                                            items: myTimeDays.map<DropdownMenuItem<String>>((String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value, textAlign: TextAlign.center),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Text(
+                                    '\n/',
+                                    style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(2.0, 8.0, 2.0, 8.0),
+                                          child: Text(
+                                            monthTextLanguageArray[languageArrayIdentifier],
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(fontSize: screenWidth * 0.015 + screenHeight * 0.015),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(2.0, 4.0, 2.0, 8.0),
+                                          child: DropdownButton<String>(
+                                            value: _myEndDataTimeMonthData,
+                                            icon: Icon(Icons.arrow_drop_down),
+                                            iconSize: 24,
+                                            elevation: 16,
+                                            style: TextStyle(color: Colors.black, fontSize: 18),
+                                            underline: Container(
+                                              height: 2,
+                                              color: Colors.blue[300],
+                                            ),
+                                            onChanged: (String data) {
+                                              setState(() {
+                                                _myEndDataTimeMonthData = data;
+                                              });
+                                            },
+                                            items: myTimeMonths.map<DropdownMenuItem<String>>((String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value, textAlign: TextAlign.center),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Text(
+                                    '\n/',
+                                    style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(2.0, 8.0, 2.0, 8.0),
+                                          child: Text(
+                                            yearTextLanguageArray[languageArrayIdentifier],
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(fontSize: screenWidth * 0.015 + screenHeight * 0.015),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(2.0, 4.0, 2.0, 8.0),
+                                          child: DropdownButton<String>(
+                                            value: _myEndDataTimeYearsData,
+                                            icon: Icon(Icons.arrow_drop_down),
+                                            iconSize: 24,
+                                            elevation: 16,
+                                            style: TextStyle(color: Colors.black, fontSize: 18),
+                                            underline: Container(
+                                              height: 2,
+                                              color: Colors.blue[300],
+                                            ),
+                                            onChanged: (String data) {
+                                              setState(() {
+                                                _myEndDataTimeYearsData = data;
+                                              });
+                                            },
+                                            items: myTimeYears.map<DropdownMenuItem<String>>((String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value, textAlign: TextAlign.center),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextButton(
+                      child: Text(
+                        confirmTextLanguageArray[languageArrayIdentifier],
+                        style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.03 + screenHeight * 0.03),
+                      ),
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
+                      ),
+                      onPressed: () async {
+                        uvcData = await uvcDataFile.readUVCDATA();
+                        if (_allData) {
+                          uvcDataSelected.clear();
+                          uvcDataSelected.addAll(uvcDefaultData[languageArrayIdentifier]);
+                          List<List<String>> uvcDataReversedMiddle = uvcData.reversed.toList();
+                          uvcDataReversedMiddle.removeLast();
+                          uvcDataSelected.addAll(uvcDataReversedMiddle);
                           if (openWithQrCode) {
                             Navigator.pushNamed(context, '/DataCSVViewQrCode');
                           } else {
                             Navigator.pushNamed(context, '/DataCSVView');
                           }
+                        } else if (_timedData) {
+                          if (await checkDataUVC()) {
+                            print(uvcDataSelected);
+                            if (openWithQrCode) {
+                              Navigator.pushNamed(context, '/DataCSVViewQrCode');
+                            } else {
+                              Navigator.pushNamed(context, '/DataCSVView');
+                            }
+                          } else {
+                            _myUvcToast.setToastDuration(3);
+                            _myUvcToast.setToastMessage(noDataForDateSelectedToastLanguageArray[languageArrayIdentifier]);
+                            _myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
+                          }
                         } else {
                           _myUvcToast.setToastDuration(3);
-                          _myUvcToast.setToastMessage(noDataForDateSelectedToastLanguageArray[languageArrayIdentifier]);
+                          _myUvcToast.setToastMessage(noDataSelectionToastLanguageArray[languageArrayIdentifier]);
                           _myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
                         }
-                      } else {
-                        _myUvcToast.setToastDuration(3);
-                        _myUvcToast.setToastMessage(noDataSelectionToastLanguageArray[languageArrayIdentifier]);
-                        _myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
-                      }
-                    },
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
       ),
+      onWillPop: () => exitApp(context),
     );
   }
 
@@ -497,5 +501,14 @@ class _DataViewModificationState extends State<DataViewModification> {
       uvcDataSelected = new List.from(uvcDataSelected)..addAll(uvcDataSelectedCombiner.reversed.toList());
     }
     return noDataFounded;
+  }
+
+  Future<bool> exitApp(BuildContext context) async {
+    if (openWithQrCode) {
+      Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+    } else {
+      Navigator.of(context).pop();
+    }
+    return true;
   }
 }

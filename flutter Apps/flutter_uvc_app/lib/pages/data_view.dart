@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutteruvcapp/services/DataVariables.dart';
@@ -10,7 +9,6 @@ class DataCSVView extends StatefulWidget {
 }
 
 class _DataCSVViewState extends State<DataCSVView> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -24,7 +22,6 @@ class _DataCSVViewState extends State<DataCSVView> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-
     return WillPopScope(
       child: Scaffold(
         resizeToAvoidBottomInset: false,

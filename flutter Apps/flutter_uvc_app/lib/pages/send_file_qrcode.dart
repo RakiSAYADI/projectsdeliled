@@ -42,12 +42,8 @@ class _SendEmailQrCodeState extends State<SendEmailQrCode> {
     if (firstDisplayMainWidget) {
       uvcDataFile = UVCDataFile();
       firstDisplayMainWidget = false;
-      if (userEmail.isEmpty) {
-        userEmail = await uvcDataFile.readUserEmailDATA();
-        myEmail.text = userEmail;
-      } else {
-        myEmail.text = userEmail;
-      }
+      userEmail = await uvcDataFile.readUserEmailDATA();
+      myEmail.text = userEmail;
     }
   }
 
