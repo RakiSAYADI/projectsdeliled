@@ -234,44 +234,49 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Text(
-                        deviceConnectedTextLanguageArray[languageArrayIdentifier],
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: widthScreen * 0.04,
-                        ),
-                      ),
-                      SizedBox(height: heightScreen * 0.03),
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            deviceName,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: widthScreen * 0.02,
+                      Visibility(
+                        visible: modifyNameEnable,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              deviceConnectedTextLanguageArray[languageArrayIdentifier],
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: widthScreen * 0.04,
+                              ),
                             ),
-                          ),
-                          Visibility(
-                            visible: modifyNameEnable,
-                            child: Row(
+                            SizedBox(height: heightScreen * 0.03),
+                            Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                SizedBox(width: widthScreen * 0.2),
-                                IconButton(
-                                  onPressed: () => nameDeviceModifier(context, deviceSurName),
-                                  icon: Icon(Icons.pending),
+                                Text(
+                                  deviceName,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: widthScreen * 0.02,
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(width: widthScreen * 0.2),
+                                    IconButton(
+                                      onPressed: () => nameDeviceModifier(context, deviceSurName),
+                                      icon: Icon(Icons.pending),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ),
-                        ],
+                            SizedBox(height: heightScreen * 0.05),
+                          ],
+                        ),
                       ),
-                      SizedBox(height: heightScreen * 0.05),
                       Text(
                         enterSecurityCodeTextLanguageArray[languageArrayIdentifier],
                         textAlign: TextAlign.center,
