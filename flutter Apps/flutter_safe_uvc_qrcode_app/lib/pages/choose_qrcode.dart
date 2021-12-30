@@ -1,7 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/languageDataBase.dart';
+import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
 
 class ChooseQrCode extends StatefulWidget {
   @override
@@ -9,9 +13,12 @@ class ChooseQrCode extends StatefulWidget {
 }
 
 class _ChooseQrCodeState extends State<ChooseQrCode> {
+  ToastyMessage myUvcToast;
+
   @override
   void initState() {
     // TODO: implement initState
+    myUvcToast = ToastyMessage(toastContext: context);
     super.initState();
   }
 
@@ -42,7 +49,7 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
                       shape: BoxShape.circle,
                     ),
                   ),
-                  Icon(Icons.article, color: Colors.blue[400]),
+                  Icon(Icons.print, color: Colors.blue[400]),
                 ],
               ),
             ),
@@ -95,39 +102,66 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
   Future<void> displayQrCodeDATA(BuildContext context) async {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    myQrCodes.length = 0;
-    listQrCodes.length = 0;
-    for (int i = 0; i < qrCodeImageList.length; i++) {
-      listQrCodes.add(TableRow(children: [
-        Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Image.file(qrCodeImageList[i], width: screenWidth * 0.27, height: screenHeight * 0.14),
-          Text(qrCodeList[i].fileName),
-        ])
-      ]));
-    }
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(qrCodesAlertDialogTitleLanguageArray[languageArrayIdentifier]),
-          content: SingleChildScrollView(
-            child: Table(border: TableBorder.all(color: Colors.black), defaultVerticalAlignment: TableCellVerticalAlignment.middle, children: listQrCodes),
-          ),
-          actions: [
-            TextButton(
-              child: Text(
-                okTextLanguageArray[languageArrayIdentifier],
-                style: TextStyle(color: Colors.green),
-              ),
-              onPressed: () async {
-                Navigator.of(context).pop();
-              },
+    listQrCodes.clear();
+    if (qrCodeImageList.length == 0) {
+      myUvcToast.setToastDuration(2);
+      myUvcToast.setToastMessage(noFilesToastTextLanguageArray[languageArrayIdentifier]);
+      myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+    } else {
+      for (int i = 0; i < qrCodeImageList.length; i++) {
+        listQrCodes.add(TableRow(children: [
+          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            RepaintBoundary(child: Image.file(qrCodeImageList[i], width: screenWidth * 0.27, height: screenHeight * 0.14)),
+            Text(qrCodeList[i].fileName),
+          ])
+        ]));
+      }
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(qrCodesAlertDialogTitleLanguageArray[languageArrayIdentifier]),
+            content: SingleChildScrollView(
+              child: Table(border: TableBorder.all(color: Colors.black), defaultVerticalAlignment: TableCellVerticalAlignment.middle, children: listQrCodes),
             ),
-          ],
-        );
-      },
-    );
+            actions: [
+              TextButton(
+                child: Text(
+                  printBLETextLanguageArray[languageArrayIdentifier],
+                  style: TextStyle(color: Colors.green),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  printerBLEOrWIFI = false;
+                  //Navigator.pushNamed(context, '/scan_list_printers');
+                },
+              ),
+              TextButton(
+                child: Text(
+                  printWifiTextLanguageArray[languageArrayIdentifier],
+                  style: TextStyle(color: Colors.blue),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  printerBLEOrWIFI = true;
+                  Navigator.pushNamed(context, '/scan_list_printers');
+                },
+              ),
+              TextButton(
+                child: Text(
+                  cancelTextLanguageArray[languageArrayIdentifier],
+                  style: TextStyle(color: Colors.red),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   GestureDetector qrCodeGenerator({BuildContext context, String destination, String buttonTitle, String buttonText, String buttonDescription1, String buttonDescription2}) {

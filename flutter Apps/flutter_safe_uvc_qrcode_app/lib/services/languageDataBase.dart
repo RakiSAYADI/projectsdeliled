@@ -50,6 +50,10 @@ final List<String> qrCodesAlertDialogTitleLanguageArray = ['Vos QRcodes', 'Your 
 
 final List<String> okTextLanguageArray = ['OK', 'OK'];
 
+final List<String> printWifiTextLanguageArray = ['Imprimer avec Wifi', 'Print with Wifi'];
+
+final List<String> printBLETextLanguageArray = ['Imprimer avec BLE', 'Print with BLE'];
+
 final List<String> myQRCodeTitleTextLanguageArray = ['Votre QR code', 'Your QR code'];
 
 final List<String> menuTextLanguageArray = ['Menu', 'Menu'];
@@ -139,3 +143,27 @@ final List<String> attentionTextLanguageArray = ['Attention', 'Warning'];
 final List<String> stopActivityAlertDialogMessageTextLanguageArray = ['Voulez-vous vraiment quitter l\'application ?', 'Are you sure you want to quit the app?'];
 
 final List<String> checkConnectionToastTextLanguageArray = ['Assurer la bonne connection d\'internet avec votre téléphone', 'Please check the internet connection of your phone'];
+
+final List<String> noNameDeviceTextLanguageArray = ['Imprimante sans nom', 'Unnamed printer'];
+
+final List<String> scanPrinterDevicesPageTitleTextLanguageArray = ['Liste des imprimantes Zebra :', 'List of Zebra printers :'];
+
+final List<String> noFilesToastTextLanguageArray = ['Aucun QR Code n\'a été généré !', 'No qr Codes have been generated !'];
+
+final List<String> scanWidgetTextLanguageArray = ['Recherche en cours', 'Scan in progress'];
+
+final List<String> noScanToastTextLanguageArray = ['Erreur dans le scan réseau !', 'Network scan error !'];
+
+final List<String> scanToastTextLanguageArray = ['Scan réseau est terminé !', 'Network scan is completed !'];
+
+final List<String> impressionWidgetTextLanguageArray = ['Impression en cours', 'Impression in progress'];
+
+final List<String> connectionWidgetTextLanguageArray = ['Connexion en cours', 'Connexion in progress'];
+
+final List<String> selectQrCodesTitleLanguageArray = ['Sélectionner vos qrcodes :', 'Your QR codes'];
+
+final List<String> printerConnexionToastTextLanguageArray = ['Connexion réussi !', 'Connection successful !'];
+
+final List<String> printerNoConnexionToastTextLanguageArray = ['Connexion pas réussi !', 'Connection not successful !'];
+
+final List<String> selectTextLanguageArray = ['Sélectionner', 'Select'];

@@ -5,8 +5,6 @@ PODS:
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
-  - img_to_zpl (0.0.1):
-    - Flutter
   - MTBBarcodeScanner (5.0.11)
   - package_info (0.0.1):
     - Flutter
@@ -29,7 +27,6 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_zebra_sdk (from `.symlinks/plugins/flutter_zebra_sdk/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
-  - img_to_zpl (from `.symlinks/plugins/img_to_zpl/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
@@ -50,8 +47,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_zebra_sdk/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
-  img_to_zpl:
-    :path: ".symlinks/plugins/img_to_zpl/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
   path_provider_ios:
@@ -71,7 +66,6 @@ SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_zebra_sdk: b5829f33fdb3ffa7c3f92a8135f0d701d6c3cb87
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
-  img_to_zpl: b0a8c39b5f0596579e8b5ee2326e08594d5e8e69
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider_ios: 7d7ce634493af4477d156294792024ec3485acd5

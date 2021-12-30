@@ -9,7 +9,9 @@ import 'package:flutter_safe_uvc_qrcode_app/pages/QrcodeGenerateData.dart';
 import 'package:flutter_safe_uvc_qrcode_app/pages/QrcodeGenerateFullAuto.dart';
 import 'package:flutter_safe_uvc_qrcode_app/pages/check_permissions.dart';
 import 'package:flutter_safe_uvc_qrcode_app/pages/choose_qrcode.dart';
+import 'package:flutter_safe_uvc_qrcode_app/pages/file_select_to_print.dart';
 import 'package:flutter_safe_uvc_qrcode_app/pages/qr_code_scan.dart';
+import 'package:flutter_safe_uvc_qrcode_app/pages/scan_printers_list.dart';
 import 'package:flutter_safe_uvc_qrcode_app/pages/welcome.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
 
@@ -47,6 +49,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => Welcome(),
         '/choose_qr_code': (context) => ChooseQrCode(),
         '/check_permissions': (context) => CheckPermissions(),
+        '/scan_list_printers': (context) => ScanListPrinters(),
+        '/file_selector': (context) => FileSelector(),
         '/qr_code_scan': (context) => QrCodeScan(),
         '/Qr_code_Generate_Full_Auto': (context) => QrCodeGeneratorFullAuto(),
         '/Qr_code_Generate_Data': (context) => QrCodeGeneratorData(),

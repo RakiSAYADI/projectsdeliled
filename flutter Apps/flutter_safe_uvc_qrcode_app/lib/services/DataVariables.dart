@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_safe_uvc_qrcode_app/services/zebraPrinterDeviceClass.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mailer/mailer.dart';
 
 final String appName = 'QRcode UVC';
@@ -25,10 +27,36 @@ String qrCodeData;
 String myExtinctionTimeMinuteData = ' 30 sec';
 String myActivationTimeMinuteData = ' 10 sec';
 
+ZebraWifiPrinter zebraPrinter;
+
+bool printerBLEOrWIFI = false;
+
 List<Attachment> qrCodeList = [];
 List<File> qrCodeImageList = [];
-List<Widget> myQrCodes = [];
 List<TableRow> listQrCodes = [];
+
+Future<void> waitingConnectionWidget(BuildContext buildContext, String title) async {
+  //double screenWidth = MediaQuery.of(context).size.width;
+  double screenHeight = MediaQuery.of(buildContext).size.height;
+  return showDialog<void>(
+      context: buildContext,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SpinKitCircle(
+                color: Colors.blue[600],
+                size: screenHeight * 0.1,
+              ),
+            ],
+          ),
+        );
+      });
+}
 
 List<String> myExtinctionTimeMinute = [
   ' 30 sec',
@@ -75,32 +103,7 @@ List<String> myActivationTimeMinute = [
   '120 sec',
 ];
 
-List<String> myTimeHours = [
-  '00',
-  '01',
-  '02',
-  '03',
-  '04',
-  '05',
-  '06',
-  '07',
-  '08',
-  '09',
-  '10',
-  '11',
-  '12',
-  '13',
-  '14',
-  '15',
-  '16',
-  '17',
-  '18',
-  '19',
-  '20',
-  '21',
-  '22',
-  '23'
-];
+List<String> myTimeHours = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
 
 List<String> myTimeMinutes = [
   '00',

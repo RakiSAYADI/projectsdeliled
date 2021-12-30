@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:package_info/package_info.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:super_easy_permissions/super_easy_permissions.dart';
 
 class Welcome extends StatefulWidget {
   @override
@@ -15,7 +15,13 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   AnimationController controller;
 
   void checkConnection() async {
-    await Permission.camera.request();
+    bool result = await SuperEasyPermissions.askPermission(Permissions.camera);
+    if (result) {
+      print("permission granted");
+    } else {
+      print("permission denied");
+    }
+    await SuperEasyPermissions.askPermission(Permissions.bluetooth);
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {

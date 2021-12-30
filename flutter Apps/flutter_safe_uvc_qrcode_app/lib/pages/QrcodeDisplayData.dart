@@ -129,7 +129,7 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
                 await captureQrCodePNG();
                 saveQrCodeData = true;
               }
-              await displayQrCodeDATA(context);
+              dataEmailSending();
             },
           ),
         ],
@@ -209,8 +209,7 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
                 myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
                 if (await checkInternetConnection()) {
                   await sendEmail(myEmail.text);
-                  qrCodeList = [new FileAttachment(File('path'))];
-                  qrCodeList.length = 0;
+                  qrCodeList.clear();
                   qrCodeImageList.length = 0;
                   Navigator.pushNamedAndRemoveUntil(context, "/choose_qr_code", (r) => false);
                 } else {
@@ -229,49 +228,6 @@ class _QrCodeDisplayDataState extends State<QrCodeDisplayData> {
               onPressed: () {
                 myEmail.text = '';
                 Navigator.pop(context, false);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> displayQrCodeDATA(BuildContext context) async {
-    myQrCodes.length = 0;
-    listQrCodes.length = 0;
-    for (int i = 0; i < qrCodeImageList.length; i++) {
-      listQrCodes.add(TableRow(children: [
-        Row(mainAxisAlignment: MainAxisAlignment.start, children: [Image.file(qrCodeImageList[i], width: 100, height: 100), Text(qrCodeList[i].fileName)])
-      ]));
-    }
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(qrCodesAlertDialogTitleLanguageArray[languageArrayIdentifier]),
-          content: SingleChildScrollView(
-            child: Table(border: TableBorder.all(color: Colors.black), defaultVerticalAlignment: TableCellVerticalAlignment.middle, children: listQrCodes),
-          ),
-          actions: [
-            TextButton(
-              child: Text(
-                okTextLanguageArray[languageArrayIdentifier],
-                style: TextStyle(color: Colors.green),
-              ),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                await dataEmailSending();
-              },
-            ),
-            TextButton(
-              child: Text(
-                cancelTextLanguageArray[languageArrayIdentifier],
-                style: TextStyle(color: Colors.green),
-              ),
-              onPressed: () async {
-                Navigator.of(context).pop();
               },
             ),
           ],
