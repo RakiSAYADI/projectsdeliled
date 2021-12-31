@@ -1,6 +1,9 @@
 import 'dart:io';
 
+import 'package:bluetooth_print/bluetooth_print.dart';
+import 'package:bluetooth_print/bluetooth_print_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/Image_To_ZPL.dart';
 import 'package:zsdk/zsdk.dart';
 
@@ -158,9 +161,37 @@ class ZebraWifiPrinter {
 }
 
 class ZebraBLEPrinter {
-  String name;
-  String macAddress;
-  final ZPLConverter _zplConverter = new ZPLConverter();
+  BluetoothDevice zebraPrinter;
 
-  ZebraBLEPrinter({@required this.name, @required this.macAddress});
+  bool _connected = false;
+
+  ZebraBLEPrinter({@required this.zebraPrinter});
+
+  bool getConnectionState() {
+    return _connected;
+  }
+
+  Future<void> connect() async {
+    bluetoothPrint.state.listen((state) {
+      switch (state) {
+        case BluetoothPrint.CONNECTED:
+          _connected = true;
+          break;
+        case BluetoothPrint.DISCONNECTED:
+          _connected = false;
+          break;
+        default:
+          break;
+      }
+    });
+    await bluetoothPrint.connect(zebraPrinter);
+  }
+
+  Future<bool> printTest() async {
+    return await bluetoothPrint.printTest();
+  }
+
+  Future<void> disconnect() async {
+    await bluetoothPrint.disconnect();
+  }
 }

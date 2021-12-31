@@ -128,8 +128,8 @@ class _FileSelectorState extends State<FileSelector> {
   Future<bool> checkingStatePrinter(BuildContext context) async {
     waitingConnectionWidget(context, connectionWidgetTextLanguageArray[languageArrayIdentifier]);
     bool state = false;
-    state = await zebraPrinter.printerPing();
-    state = await zebraPrinter.checkPrinterState();
+    state = await zebraWifiPrinter.printerPing();
+    state = await zebraWifiPrinter.checkPrinterState();
     Navigator.of(context).pop();
     if (state) {
       myUvcToast.setToastDuration(2);
@@ -162,16 +162,27 @@ class _FileSelectorState extends State<FileSelector> {
         child: FloatingActionButton(
             child: Icon(Icons.print),
             onPressed: () async {
-              if (await checkingStatePrinter(context)) {
-                bool state = false;
-                await zebraPrinter.getPrinterSettings();
-                for (int i = 0; i < fileSelector.length; i++) {
-                  if (fileSelector[i]) {
-                    state = await zebraPrinter.printFile(qrCodeImageList[i], true, 50);
-                    print(state);
-                  } else {
-
+              if (printerBLEOrWIFI) {
+                if (await checkingStatePrinter(context)) {
+                  bool state = false;
+                  int numberOfFilesToPrint = 0;
+                  for (bool file in fileSelector) {
+                    if (file) {
+                      numberOfFilesToPrint++;
+                    }
                   }
+                  await zebraWifiPrinter.getPrinterSettings();
+                  for (int i = 0; i < fileSelector.length; i++) {
+                    if (fileSelector[i]) {
+                      state = await zebraWifiPrinter.printFile(qrCodeImageList[i], true, 50);
+                    }
+                  }
+                }
+              } else {
+                if (zebraBlePrinter.getConnectionState()) {
+                  await zebraBlePrinter.printTest();
+                } else {
+                  zebraBlePrinter.disconnect();
                 }
               }
             }),

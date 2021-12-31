@@ -38,6 +38,11 @@
     <string>Location permission is required to scan UVC device </string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Network permission is required for printer zebra scanning.</string>
+	<key>UIBackgroundModes</key>
+    <array>
+        <string>bluetooth-central</string>
+        <string>bluetooth-peripheral</string>
+    </array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

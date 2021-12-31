@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bluetooth_print/bluetooth_print.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/zebraPrinterDeviceClass.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -27,7 +28,10 @@ String qrCodeData;
 String myExtinctionTimeMinuteData = ' 30 sec';
 String myActivationTimeMinuteData = ' 10 sec';
 
-ZebraWifiPrinter zebraPrinter;
+ZebraWifiPrinter zebraWifiPrinter;
+ZebraBLEPrinter zebraBlePrinter;
+
+BluetoothPrint bluetoothPrint;
 
 bool printerBLEOrWIFI = false;
 

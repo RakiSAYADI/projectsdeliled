@@ -134,7 +134,7 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
                 onPressed: () {
                   Navigator.of(context).pop();
                   printerBLEOrWIFI = false;
-                  //Navigator.pushNamed(context, '/scan_list_printers');
+                  Navigator.pushNamed(context, '/scan_list_printers');
                 },
               ),
               TextButton(
