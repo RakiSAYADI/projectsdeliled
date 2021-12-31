@@ -129,24 +129,6 @@ class _ScanListPrintersState extends State<ScanListPrinters> {
     }
   }
 
-  Future<bool> checkingStatePrinter(BuildContext context, ZebraBLEPrinter zebraBLEPrinter) async {
-    waitingConnectionWidget(context, connectionWidgetTextLanguageArray[languageArrayIdentifier]);
-    bool state = false;
-    await zebraBLEPrinter.connect();
-    state = zebraBLEPrinter.getConnectionState();
-    Navigator.of(context).pop();
-    if (state) {
-      myUvcToast.setToastDuration(2);
-      myUvcToast.setToastMessage(printerConnexionToastTextLanguageArray[languageArrayIdentifier]);
-      myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
-    } else {
-      myUvcToast.setToastDuration(2);
-      myUvcToast.setToastMessage(printerNoConnexionToastTextLanguageArray[languageArrayIdentifier]);
-      myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
-    }
-    return state;
-  }
-
   Widget columnDevicesScanned(BuildContext context) {
     if (printerBLEOrWIFI) {
       return Column(
@@ -167,9 +149,7 @@ class _ScanListPrintersState extends State<ScanListPrinters> {
                     send: () async {
                       zebraBlePrinter = blePrinter;
                       await bluetoothPrint.stopScan();
-                      if (await checkingStatePrinter(context, zebraBlePrinter)) {
-                        Navigator.pushNamed(context, '/file_selector');
-                      }
+                      Navigator.pushNamed(context, '/file_selector');
                     },
                   ))
               .toList());

@@ -22,8 +22,6 @@ PODS:
   - super_easy_permissions (0.0.1):
     - Flutter
   - Toast (4.0.0)
-  - zsdk (0.0.1):
-    - Flutter
 
 DEPENDENCIES:
   - bluetooth_print (from `.symlinks/plugins/bluetooth_print/ios`)
@@ -36,7 +34,6 @@ DEPENDENCIES:
   - printing (from `.symlinks/plugins/printing/ios`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
   - super_easy_permissions (from `.symlinks/plugins/super_easy_permissions/ios`)
-  - zsdk (from `.symlinks/plugins/zsdk/ios`)
 
 SPEC REPOS:
   trunk:
@@ -64,8 +61,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/qr_code_scanner/ios"
   super_easy_permissions:
     :path: ".symlinks/plugins/super_easy_permissions/ios"
-  zsdk:
-    :path: ".symlinks/plugins/zsdk/ios"
 
 SPEC CHECKSUMS:
   bluetooth_print: da8f47e8881a0b1f0fd8d73cd6fa84c9bd41ac28
@@ -80,7 +75,6 @@ SPEC CHECKSUMS:
   qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
   super_easy_permissions: a3ceb753027ebace972803825c25cc44066d1a84
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
-  zsdk: 6c0c0a12487162004dd4e4990bf901207671fa33
 
 PODFILE CHECKSUM: 1d62be80675f50e63eb2f851d55ee75f09951c1b
 

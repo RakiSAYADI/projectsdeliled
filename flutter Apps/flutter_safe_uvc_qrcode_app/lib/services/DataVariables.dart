@@ -35,6 +35,9 @@ BluetoothPrint bluetoothPrint;
 
 bool printerBLEOrWIFI = false;
 
+double screenWidth;
+double screenHeight;
+
 List<Attachment> qrCodeList = [];
 List<File> qrCodeImageList = [];
 List<TableRow> listQrCodes = [];

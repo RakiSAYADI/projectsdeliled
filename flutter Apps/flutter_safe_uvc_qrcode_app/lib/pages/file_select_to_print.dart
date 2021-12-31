@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/languageDataBase.dart';
@@ -12,6 +14,7 @@ class _FileSelectorState extends State<FileSelector> {
   List<bool> fileSelector = [];
 
   List<Color> fileCardSelectorColor = [];
+  List<Color> fileCardNameSelectorColor = [];
 
   bool printButtonVisibility = false;
 
@@ -25,15 +28,15 @@ class _FileSelectorState extends State<FileSelector> {
     super.initState();
   }
 
-  addFiles() {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+  addFiles() async {
     listQrCodes.clear();
     fileCardSelectorColor.clear();
+    fileCardNameSelectorColor.clear();
     fileSelector.clear();
     for (int i = 0; i < qrCodeImageList.length; i++) {
       fileSelector.add(false);
       fileCardSelectorColor.add(Colors.grey[200]);
+      fileCardNameSelectorColor.add(Colors.black);
       listQrCodes.add(
         TableRow(
           children: [
@@ -55,7 +58,7 @@ class _FileSelectorState extends State<FileSelector> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           qrCodeList[i].fileName,
-                          style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02),
+                          style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02, color: fileCardNameSelectorColor[i]),
                         ),
                       ),
                     ],
@@ -93,7 +96,7 @@ class _FileSelectorState extends State<FileSelector> {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         qrCodeList[i].fileName,
-                        style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02),
+                        style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02, color: fileCardNameSelectorColor[i]),
                       ),
                     ),
                   ],
@@ -112,8 +115,10 @@ class _FileSelectorState extends State<FileSelector> {
     listQrCodes = listQrCodes;
     if (fileSelector[i]) {
       fileCardSelectorColor[i] = Colors.green[700];
+      fileCardNameSelectorColor[i] = Colors.white;
     } else {
       fileCardSelectorColor[i] = Colors.grey[200];
+      fileCardNameSelectorColor[i] = Colors.black;
     }
     for (bool state in fileSelector) {
       if (state) {
@@ -128,7 +133,6 @@ class _FileSelectorState extends State<FileSelector> {
   Future<bool> checkingStatePrinter(BuildContext context) async {
     waitingConnectionWidget(context, connectionWidgetTextLanguageArray[languageArrayIdentifier]);
     bool state = false;
-    state = await zebraWifiPrinter.printerPing();
     state = await zebraWifiPrinter.checkPrinterState();
     Navigator.of(context).pop();
     if (state) {
@@ -162,10 +166,10 @@ class _FileSelectorState extends State<FileSelector> {
         child: FloatingActionButton(
             child: Icon(Icons.print),
             onPressed: () async {
+              bool state = false;
+              int numberOfFilesToPrint = 0;
               if (printerBLEOrWIFI) {
                 if (await checkingStatePrinter(context)) {
-                  bool state = false;
-                  int numberOfFilesToPrint = 0;
                   for (bool file in fileSelector) {
                     if (file) {
                       numberOfFilesToPrint++;
@@ -179,10 +183,10 @@ class _FileSelectorState extends State<FileSelector> {
                   }
                 }
               } else {
-                if (zebraBlePrinter.getConnectionState()) {
-                  await zebraBlePrinter.printTest();
-                } else {
-                  zebraBlePrinter.disconnect();
+                for (int i = 0; i < fileSelector.length; i++) {
+                  if (fileSelector[i]) {
+                    state = await zebraBlePrinter.printBluetooth(qrCodeImageList[i], true, 50);
+                  }
                 }
               }
             }),

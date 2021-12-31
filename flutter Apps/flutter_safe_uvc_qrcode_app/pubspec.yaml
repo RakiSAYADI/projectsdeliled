@@ -33,7 +33,6 @@ dependencies:
   super_easy_permissions: ^0.1.1
   qr_code_scanner: ^0.6.1
   pinput: ^0.2.6
-  zsdk: ^2.0.0+11
   flutter_zebra_sdk: ^0.0.3+2
   encrypt: ^5.0.1
   mailer: ^3.2.1
