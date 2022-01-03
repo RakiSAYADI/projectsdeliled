@@ -2,7 +2,7 @@ final List<String> welcomePageLogoMessageLanguageArray = ['Solutions de désinfe
 
 final List<String> bluetoothToastLanguageArray = ['Le Bluetooth n\'est pas activé sur votre téléphone !', 'Bluetooth is not activated on your phone!'];
 
-final List<String> associateDeviceToastTextLanguageArray = ['Veuillez associer un dispositif UV-C dans la page \'Réglages\' !', 'Please associate a UV-C device in the \'Settings\' page!'];
+final List<String> associateDeviceToastTextLanguageArray = ['Veuillez associer un dispositif UV-C dans la page \'Réglages\' !', 'Please associate an UV-C device in the \'Settings\' page!'];
 
 final List<String> restartScanToastTextLanguageArray = ['Réinitialiser l\'analyse', 'Reset scan'];
 
@@ -13,9 +13,9 @@ final List<String> associateDeviceNotReachedToastTextLanguageArray = [
 
 final List<String> deviceNameMessageTextLanguageArray = ['pas de dispositif connecté', 'no device connected'];
 
-final List<String> authoriseConnectionToastTextLanguageArray = ['Autorisation de connexion validée !', 'Connection authorization validated!'];
+final List<String> authoriseConnectionToastTextLanguageArray = ['Autorisation de connexion validée !', 'Connection confirmed!'];
 
-final List<String> enterNameDeviceMessageTextLanguageArray = ['Entrer le nom de dispositif:', 'Enter device name:'];
+final List<String> enterNameDeviceMessageTextLanguageArray = ['Entrer le nom du dispositif:', 'Enter device name:'];
 
 final List<String> saveTextLanguageArray = ['Enregistrer', 'Save'];
 
@@ -44,7 +44,7 @@ final List<String> validCodeTextLanguageArray = ['Code valide', 'Valid code'];
 
 final List<String> nameDeviceHintTextLanguageArray = ['exemple123', 'example123'];
 
-final List<String> selectDeviceToastTextLanguageArray = ['Veuillez selectionner un dispositif UV-C dans la page \'Réglages\' !', 'Please select a UV-C device in the \'Settings \' page!'];
+final List<String> selectDeviceToastTextLanguageArray = ['Veuillez selectionner un dispositif UV-C dans la page \'Réglages\' !', 'Please select an UV-C device in the \'Settings \' page!'];
 
 final List<String> parametersTextLanguageArray = ['Paramètres', 'Settings'];
 
@@ -60,15 +60,15 @@ final List<String> rapportTextLanguageArray = ['Rapport Désinfection', 'Disinfe
 
 final List<String> backTextLanguageArray = ['Retour', 'Back'];
 
-final List<String> invalidPinCodeTextLanguageArray = ['Code Invalide !', 'Invalid PIN!'];
+final List<String> invalidPinCodeTextLanguageArray = ['PIN invalide !', 'Invalid PIN!'];
 
 final List<String> savedConfigurationTextLanguageArray = ['Configuration sauvegardée !', 'Saved settings!'];
 
-final List<String> durationDisinfectionTextLanguageArray = ['Durée de la désinfection :', 'Duration of disinfection:'];
+final List<String> durationDisinfectionTextLanguageArray = ['Durée de la désinfection :', 'Disinfection time:'];
 
-final List<String> ignitionTimeTextLanguageArray = ['Délais avant allumage :', 'Time before ignition:'];
+final List<String> ignitionTimeTextLanguageArray = ['Délais avant allumage :', 'Holding time:'];
 
-final List<String> activationTimeTextLanguageArray = ['Heure d\'activation :', 'Activation time:'];
+final List<String> activationTimeTextLanguageArray = ['Heure d\'activation :', 'Start hour:'];
 
 final List<String> activatedTextLanguageArray = ['Activé', 'Activated'];
 
@@ -106,7 +106,7 @@ final List<String> emailUserTextLanguageArray = ['DeliTech Medical', 'DeliTech M
 
 final List<String> emailSubjectTextLanguageArray = ['Rapport de désinfection UV-C', 'UV-C disinfection report'];
 
-final List<String> attentionTextLanguageArray = ['Attention', 'Attention'];
+final List<String> attentionTextLanguageArray = ['Attention', 'Warning'];
 
 final List<String> lostConnexionTextLanguageArray = ['Connexion avec le dispositif perdue, reconnection en cours', 'Device connection lost, reconnection in progress.'];
 
@@ -119,48 +119,48 @@ final List<String> emailMessageTextLanguageArray = [
       'Cet email est envoyé automatiquement, merci de ne pas y répondre.\n\n'
       'Merci de votre confiance.',
   'Hello,\n\n'
-      'Enclosed you will find the report concerning the disinfection done using'
+      'Please find enclosed your disinfection report generated using'
       'the DEEPLIGHT® disinfection solution from DeliTech Medical®.\n'
       'This email was sent automatically, please do not reply. \n\n'
-      'Thank you for your confidence.'
+      'Best regards.'
 ];
 
-final List<String> oldPinTextLanguageArray = ['Entrer l\'ancien code PIN :', 'Enter the old PIN code:'];
+final List<String> oldPinTextLanguageArray = ['Entrer l\'ancien code PIN :', 'Enter old PIN code:'];
 
-final List<String> newPinTextLanguageArray = ['Entrer le nouveau code PIN :', 'Enter the new PIN code:'];
+final List<String> newPinTextLanguageArray = ['Entrer le nouveau code PIN :', 'Enter new PIN code:'];
 
-final List<String> sameNewPinTextLanguageArray = ['Vérifiez le nouveau PIN :', 'Check the new PIN code:'];
+final List<String> sameNewPinTextLanguageArray = ['Vérifiez le nouveau PIN :', 'Check new PIN code:'];
 
-final List<String> emailSentToastTextLanguageArray = ['E-mail bien envoyé, vérifiez votre boite de réception !', 'E-mail sent, please check your inbox!'];
+final List<String> emailSentToastTextLanguageArray = ['E-mail envoyé, vérifiez votre boite de réception !', 'E-mail sent, please check your e-mail box!'];
 
-final List<String> emailNotSentToastTextLanguageArray = ['E-mail non envoyé, vérifiez votre addresse e-mail !', 'E-mail not sent, please check your e-mail address !'];
+final List<String> emailNotSentToastTextLanguageArray = ['E-mail non envoyé, vérifiez votre addresse e-mail !', 'E-mail not sent, please check again your e-mail address!'];
 
 final List<String> validTextLanguageArray = ['Valide', 'Valid'];
 
-final List<String> incidentTextLanguageArray = ['Incident', 'Incident'];
+final List<String> incidentTextLanguageArray = ['Erreur', 'Error'];
 
 final List<String> disinfectionGoodStateTextLanguageArray = ['Désinfection terminée', 'Disinfection complete'];
 
-final List<String> disinfectionGoodStateMessageTextLanguageArray = ['Désinfection réalisée avec succès.', 'Disinfection success.'];
+final List<String> disinfectionGoodStateMessageTextLanguageArray = ['Désinfection réalisée avec succès.', 'Successful disinfection.'];
 
 final List<String> disinfectionBadStateTextLanguageArray = ['Désinfection annulée', 'Disinfection canceled'];
 
-final List<String> disinfectionBadStateMessageTextLanguageArray = ['Désinfection interrompue.', 'Disinfection interrupted.'];
+final List<String> disinfectionBadStateMessageTextLanguageArray = ['Désinfection interrompue.', 'Suspended disinfection.'];
 
 final List<String> newDisinfectionTextLanguageArray = ['Nouvelle désinfection', 'New disinfection'];
 
 final List<String> reportTextLanguageArray = ['Rapport', 'Report'];
 
 final List<String> disinfectionErrorMessageTextLanguageArray = [
-  'Problème lors de la précédente désinfection, veuillez la recommencer',
-  'Problem during the previous disinfection, please start over'
+  'Désinfection précédente interrompue, veuillez recommencer',
+  'Issue during the previous disinfection, please start over'
 ];
 
 final List<String> deviceSearchMessageTextLanguageArray = ['Rechercher votre dispositif UV-C', 'Find your UV-C device'];
 
 final List<String> disinfectionOnProgressMessageTextLanguageArray = [
-  'Une désinfection est en cours, afin que GLOBAL UVC fonctionne correctement, la désinfection va être stoppée.',
-  'A disinfection is in progress, in order for GLOBAL UVC to function correctly, the disinfection will be stopped.'
+  'Une désinfection est en cours, afin que GLOBAL UVC fonctionne correctement, la désinfection va être annulée.',
+  'A disinfection is in progress, in order for GLOBAL UVC to function correctly, the disinfection will be canceled.'
 ];
 
 final List<String> congratulationMessageTextLanguageArray = ['Félicitations', 'Congratulations'];
@@ -173,17 +173,17 @@ final List<String> noFindDeviceMessageTextLanguageArray = ['Dispostif non détec
 
 final List<String> havingConnexionDeviceMessageTextLanguageArray = ['Connexion établie avec votre téléphone !', 'Connection established with your phone!'];
 
-final List<String> emptyPinToastTextLanguageArray = ['Veuillez remplir les champs ci-dessus !', 'Please fill in the fields above !'];
+final List<String> emptyPinToastTextLanguageArray = ['Veuillez remplir les champs ci-dessus !', 'Please fill in the above fields!'];
 
-final List<String> goodPinToastTextLanguageArray = ['Le changement de mot de passe a été pris en compte !', 'The password changed!'];
+final List<String> goodPinToastTextLanguageArray = ['PIN mis à jour !', 'PIN updated!'];
 
-final List<String> noSamePinToastTextLanguageArray = ['Codes différentes, veuillez réessayer !', 'Unmatching codes, please try again!'];
+final List<String> noSamePinToastTextLanguageArray = ['PIN différents, veuillez réessayer !', 'Unmatching PIN, please try again!'];
 
-final List<String> badOldPinToastTextLanguageArray = ['L\'ancien code n\'est pas correct !', 'The old PIN code is not correct!'];
+final List<String> badOldPinToastTextLanguageArray = ['L\'ancien PIN n\'est pas correct !', 'The old PIN code is not correct!'];
 
 final List<String> profileTitleTextLanguageArray = ['Profil', 'Profile'];
 
-final List<String> establishmentTextLanguageArray = ['Établissement', 'Institution'];
+final List<String> establishmentTextLanguageArray = ['Établissement', 'Company'];
 
 final List<String> operatorTextLanguageArray = ['Opérateur', 'Operator'];
 
@@ -191,7 +191,7 @@ final List<String> roomTextLanguageArray = ['Pièce/local', 'Room'];
 
 final List<String> profileMessageTextLanguageArray = [
   'Merci de compléter ces informations pour garantir un suivi de désinfection optimal.',
-  'Please complete this information to ensure optimal disinfection monitoring.'
+  'Please fill in these information to ensure optimal disinfection monitoring.'
 ];
 
 final List<String> nextTextLanguageArray = ['SUIVANT', 'NEXT'];
@@ -202,37 +202,37 @@ final List<String> saveDeviceMessageTextLanguageArray = ['Voulez-vous vraiment e
 
 final List<String> devicesListTitleTextLanguageArray = ['Liste des dispositifs UV-C :', 'List of UV-C solutions:'];
 
-final List<String> ignitionTimeMessageTextLanguageArray = ['Délais avant allumage :', 'Time before ignition:'];
+final List<String> ignitionTimeMessageTextLanguageArray = ['Délais avant allumage :', 'Holding time:'];
 
-final List<String> disinfectionTimeMessageTextLanguageArray = ['Durée de la désinfection :', 'Duration of disinfection:'];
+final List<String> disinfectionTimeMessageTextLanguageArray = ['Durée de la désinfection :', 'Disinfection time:'];
 
 final List<String> startTextLanguageArray = ['DÉMARRER', 'START'];
 
 final List<String> okTextLanguageArray = ['OK', 'OK'];
 
-final List<String> confirmInfoTextLanguageArray = ['Confirmer ces informations :', 'Confirm this information:'];
+final List<String> confirmInfoTextLanguageArray = ['Confirmer ces informations :', 'Confirm these informations:'];
 
 final List<String> disinfectionOnProgressTextLanguageArray = ['Désinfection en cours', 'Disinfection in progress'];
 
-final List<String> disinfectionStartOnTextLanguageArray = ['La désinfection débutera dans :', 'Disinfection start in:'];
+final List<String> disinfectionStartOnTextLanguageArray = ['La désinfection débutera dans :', 'Disinfection will start in:'];
 
 final List<String> stopTextLanguageArray = ['STOP', 'STOP'];
 
-final List<String> disinfectionStopOnTextLanguageArray = ['La désinfection finira dans :', 'Disinfection end in:'];
+final List<String> disinfectionStopOnTextLanguageArray = ['La désinfection finira dans :', 'Disinfection will end in:'];
 
-final List<String> disinfectionStopMessageTextLanguageArray = ['Voulez-vous vraiment annuler le traitement UV-C ?', 'Are you sure to cancel the UV-C disinfection?'];
+final List<String> disinfectionStopMessageTextLanguageArray = ['Voulez-vous vraiment annuler le traitement UV-C ?', 'Are you sure to cancel UV-C disinfection?'];
 
 final List<String> readWarningsTextLanguageArray = ['À lire attentivement', 'Please read carefully'];
 
 final List<String> warningTextLanguageArray = ['Attention !', 'Warning !'];
 
-final List<String> warningNumberOneTextLanguageArray = ['Vérifiez que la pièce soit innocupée.', 'Check that the room is clear.'];
+final List<String> warningNumberOneTextLanguageArray = ['Vérifiez que la pièce soit innocupée.', 'Check that the room is unoccupied.'];
 
-final List<String> warningNumberTwoTextLanguageArray = ['Fermer la porte et les fenêtres.', 'Close the door and windows.'];
+final List<String> warningNumberTwoTextLanguageArray = ['Fermer les portes et les fenêtres.', 'Close doors and windows.'];
 
 final List<String> warningNumberThreeTextLanguageArray = [
-  'Signalez la désinfection en cours \n grâce aux accroche-portes et/ou au chevalet.',
-  'Indicate the disinfection in progress \ n with the door hanger and/or the easel.'
+  'Signalez la désinfection grâce \n aux accroche-portes et/ou au chevalet.',
+  'Notify the disinfection with \n a door hanger and/or an easel.'
 ];
 
 final List<String> companyTextLanguageArray = ['Votre entreprise', 'Your company'];
@@ -243,25 +243,25 @@ final List<String> roomOneTextLanguageArray = ['Chambre 1', 'Room 1'];
 
 final List<List<List<String>>> uvcDefaultData = [
   [
-    ['Nom du robot', 'Utilisateur', 'Etablissement', 'Chambre', 'Heure d\'activation', 'Date d\'activation', 'Disinfection time (in seconds)', 'Etat']
+    ['Nom du robot', 'Utilisateur', 'Etablissement', 'Chambre', 'Heure d\'activation', 'Date d\'activation', 'Temps de désinfection (s)', 'Etat']
   ],
   [
-    ['Robot name', 'User', 'Institution', 'Room', 'Activation time', 'Activation date', 'Disinfection time (in seconds)', 'State']
+    ['Robot name', 'User', 'Company', 'Room', 'Activation time', 'Activation date', 'Disinfection time (s)', 'State']
   ]
 ];
 
 final List<String> uvcDefaultDataString = [
-  'Nom du robot ;Utilisateur ;Etablissement ;Chambre ;Heure d\'activation ;Date d\'activation ;Temps de desinfection (en seconde) ;Etat \n',
-  'Robot name ;User ;Institution ;Room ;Activation time ;Activation date ;Disinfection time (in seconds) ;State \n'
+  'Nom du robot ;Utilisateur ;Etablissement ;Chambre ;Heure d\'activation ;Date d\'activation ;Temps de desinfection (s) ;Etat \n',
+  'Robot name ;User ;Company ;Room ;Activation time ;Activation date ;Disinfection time (s) ;State \n'
 ];
 
 final List<String> deviceConnectButtonTextLanguageArray = ['Connecter', 'Connect'];
 
-final List<String> selectUVCDataTitleTextLanguageArray = ['Sélectionner les dates de rapport UV-C', 'Select the date of the UV-C report'];
+final List<String> selectUVCDataTitleTextLanguageArray = ['Sélectionner les dates de rapport UV-C', 'Select UV-C report dates'];
 
-final List<String> settingsRapportUVCTitleTextLanguageArray = ['Paramètres des rapport UV-C', 'Settings of UV-C report'];
+final List<String> settingsRapportUVCTitleTextLanguageArray = ['Paramètres des rapport UV-C', 'UV-C report settings'];
 
-final List<String> allReportTextLanguageArray = ['Tous les rapports', 'Every reports'];
+final List<String> allReportTextLanguageArray = ['Tous les rapports', 'All reports'];
 
 final List<String> determinedTimeTextLanguageArray = ['Durée déterminée', 'Determined time'];
 
