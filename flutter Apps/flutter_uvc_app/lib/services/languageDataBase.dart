@@ -211,19 +211,6 @@ final List<String> uvcEmailMessageTextLanguageArray = [
 final List<String> sendEmailValidToastTextLanguageArray = ['Email envoyé, vérifiez votre boite de reception !', 'Email sent,please check your inbox!'];
 
 final List<String> sendEmailNotValidToastTextLanguageArray = ['Email non envoyé, vérifiez votre addresse email !', 'Error, please check your email address!'];
-final List<List<List<String>>> uvcDefaultData = [
-  [
-    ['Nom du robot', 'Utilisateur', 'Etablissement', 'Chambre', 'Heure d\'activation', 'Date d\'activation', 'Disinfection time (in seconds)', 'Etat']
-  ],
-  [
-    ['Robot name', 'User', 'Institution', 'Room', 'Activation time', 'Activation date', 'Disinfection time (in seconds)', 'State']
-  ]
-];
-
-final List<String> uvcDefaultDataString = [
-  'Nom du robot ;Utilisateur ;Etablissement ;Chambre ;Heure d\'activation ;Date d\'activation ;Temps de desinfection (en seconde) ;Etat \n',
-  'Robot name ;User ;Institution ;Room ;Activation time ;Activation date ;Disinfection time (in seconds) ;State \n'
-];
 
 final List<String> deviceConnectButtonTextLanguageArray = ['Connecter', 'Connect'];
 

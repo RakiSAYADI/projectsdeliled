@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutteruvcapp/services/CSVfileClass.dart';
 import 'package:flutteruvcapp/services/DataVariables.dart';
 import 'package:flutteruvcapp/services/languageDataBase.dart';
@@ -28,6 +27,15 @@ class _DataViewModificationState extends State<DataViewModification> {
   UVCDataFile uvcDataFile;
 
   ToastyMessage _myUvcToast;
+
+  final List<List<List<String>>> _uvcNameData = [
+    [
+      ['Nom du robot', 'Utilisateur', 'Etablissement', 'Chambre', 'Heure d\'activation', 'Date d\'activation', 'Temps de désinfection (s)', 'Etat'],
+    ],
+    [
+      ['Robot name', 'User', 'Company', 'Room', 'Activation time', 'Activation date', 'Disinfection time (s)', 'State'],
+    ],
+  ];
 
   Color enableDateDropDown(bool enable) => enable == true ? _checkBoxEnabled : _checkBoxDisabled;
 
@@ -438,10 +446,10 @@ class _DataViewModificationState extends State<DataViewModification> {
                         uvcData = await uvcDataFile.readUVCDATA();
                         if (_allData) {
                           uvcDataSelected.clear();
-                          uvcDataSelected.addAll(uvcDefaultData[languageArrayIdentifier]);
+                          uvcDataSelected = new List.from(_uvcNameData[languageArrayIdentifier]);
                           List<List<String>> uvcDataReversedMiddle = uvcData.reversed.toList();
                           uvcDataReversedMiddle.removeLast();
-                          uvcDataSelected.addAll(uvcDataReversedMiddle);
+                          uvcDataSelected.addAll(uvcDataReversedMiddle.toList());
                           if (openWithQrCode) {
                             Navigator.pushNamed(context, '/DataCSVViewQrCode');
                           } else {
@@ -480,7 +488,7 @@ class _DataViewModificationState extends State<DataViewModification> {
 
   Future<bool> checkDataUVC() async {
     uvcDataSelected.clear();
-    uvcDataSelected.addAll(uvcDefaultData[languageArrayIdentifier]);
+    uvcDataSelected.addAll(_uvcNameData[languageArrayIdentifier]);
     List<List<String>> uvcDataSelectedCombiner = [[]];
     uvcDataSelectedCombiner.length = 0;
     bool noDataFounded = false;

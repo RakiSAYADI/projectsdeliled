@@ -11,6 +11,20 @@ class UVCDataFile {
 
   final String _uvcUserEmailFileName = 'User_email.txt';
 
+  final List<List<List<String>>> _uvcNameData = [
+    [
+      ['Nom du robot', 'Utilisateur', 'Etablissement', 'Chambre', 'Heure d\'activation', 'Date d\'activation', 'Temps de désinfection (s)', 'Etat'],
+    ],
+    [
+      ['Robot name', 'User', 'Company', 'Room', 'Activation time', 'Activation date', 'Disinfection time (s)', 'State'],
+    ],
+  ];
+
+  final List<String> _uvcDefaultDataString = [
+    'Nom du robot ;Utilisateur ;Etablissement ;Chambre ;Heure d\'activation ;Date d\'activation ;Temps de desinfection (en seconde) ;Etat \n',
+    'Robot name ;User ;Institution ;Room ;Activation time ;Activation date ;Disinfection time (in seconds) ;State \n'
+  ];
+
   Future<List<List<String>>> readUVCDATA() async {
     try {
       final directory = await getApplicationDocumentsDirectory();
@@ -41,8 +55,8 @@ class UVCDataFile {
       return textuvc;
     } catch (e) {
       print("Couldn't read file");
-      await saveStringUVCDATA(uvcDefaultDataString[languageArrayIdentifier]);
-      return uvcDefaultData[languageArrayIdentifier];
+      await saveStringUVCDATA(_uvcDefaultDataString[languageArrayIdentifier].toString());
+      return _uvcNameData[languageArrayIdentifier].toList();
     }
   }
 
@@ -76,8 +90,8 @@ class UVCDataFile {
       return textuvc;
     } catch (e) {
       print("Couldn't read file");
-      await saveStringUVCSelectedDATA(uvcDefaultDataString[languageArrayIdentifier]);
-      return uvcDefaultData[languageArrayIdentifier];
+      await saveStringUVCSelectedDATA(_uvcDefaultDataString[languageArrayIdentifier].toString());
+      return _uvcNameData[languageArrayIdentifier].toList();
     }
   }
 
