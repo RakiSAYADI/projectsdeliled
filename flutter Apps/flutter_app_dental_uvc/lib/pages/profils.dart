@@ -71,7 +71,13 @@ class _ProfilesState extends State<Profiles> {
           '{\"Company\":\"${companyTextLanguageArray[languageArrayIdentifier]}\",\"UserName\":\"${userTextLanguageArray[languageArrayIdentifier]}\",\"Detection\":0,\"RoomName\":\"${roomOneTextLanguageArray[languageArrayIdentifier]}\",\"TimeData\":[0,0]}';
     }
 
-    Map<String, dynamic> user = jsonDecode(dataRobotUVC);
+    Map<String, dynamic> user;
+    try {
+      user = jsonDecode(dataRobotUVC);
+    } catch (e) {
+      print(e);
+      user = jsonDecode('{\"Company\":\"${companyTextLanguageArray[languageArrayIdentifier]}\",\"UserName\":\"${userTextLanguageArray[languageArrayIdentifier]}\",\"Detection\":0,\"RoomName\":\"${roomOneTextLanguageArray[languageArrayIdentifier]}\",\"TimeData\":[0,0]}');
+    }
 
     print('company : ${user['Company']}!');
     print('username : ${user['UserName']}!');
@@ -129,6 +135,7 @@ class _ProfilesState extends State<Profiles> {
                               child: TextField(
                                 textAlign: TextAlign.center,
                                 maxLines: 1,
+                                maxLength: 15,
                                 controller: myCompany,
                                 style: TextStyle(
                                   fontSize: widthScreen * 0.03,
@@ -159,6 +166,7 @@ class _ProfilesState extends State<Profiles> {
                               padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.02)),
                               child: TextField(
                                 textAlign: TextAlign.center,
+                                maxLength: 15,
                                 maxLines: 1,
                                 controller: myName,
                                 style: TextStyle(
@@ -190,6 +198,7 @@ class _ProfilesState extends State<Profiles> {
                               padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.02)),
                               child: TextField(
                                 textAlign: TextAlign.center,
+                                maxLength: 15,
                                 maxLines: 1,
                                 controller: myRoomName,
                                 style: TextStyle(
