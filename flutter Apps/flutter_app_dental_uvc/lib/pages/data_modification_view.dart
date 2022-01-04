@@ -28,6 +28,15 @@ class _DataViewModificationState extends State<DataViewModification> {
 
   ToastyMessage _myUvcToast;
 
+  List<List<List<String>>> _uvcNameData = [
+    [
+      ['Nom du robot', 'Utilisateur', 'Etablissement', 'Chambre', 'Heure d\'activation', 'Date d\'activation', 'Temps de désinfection (s)', 'Etat'],
+    ],
+    [
+      ['Robot name', 'User', 'Company', 'Room', 'Activation time', 'Activation date', 'Disinfection time (s)', 'State'],
+    ],
+  ];
+
   Color enableDateDropDown(bool enable) => enable == true ? _checkBoxEnabled : _checkBoxDisabled;
 
   @override
@@ -436,10 +445,10 @@ class _DataViewModificationState extends State<DataViewModification> {
                       uvcData = await uvcDataFile.readUVCDATA();
                       if (_allData) {
                         uvcDataSelected.clear();
-                        uvcDataSelected.addAll(uvcDefaultData[languageArrayIdentifier]);
+                        uvcDataSelected = new List.from(_uvcNameData[languageArrayIdentifier]);
                         List<List<String>> uvcDataReversedMiddle = uvcData.reversed.toList();
                         uvcDataReversedMiddle.removeLast();
-                        uvcDataSelected.addAll(uvcDataReversedMiddle);
+                        uvcDataSelected.addAll(uvcDataReversedMiddle.toList());
                         if (openWithSettings) {
                           Navigator.pushNamed(context, '/DataCSVSettingsView');
                         } else {
@@ -475,7 +484,7 @@ class _DataViewModificationState extends State<DataViewModification> {
 
   Future<bool> checkDataUVC() async {
     uvcDataSelected.clear();
-    uvcDataSelected.addAll(uvcDefaultData[languageArrayIdentifier]);
+    uvcDataSelected = new List.from(_uvcNameData[languageArrayIdentifier]);
     List<List<String>> uvcDataSelectedCombiner = [[]];
     uvcDataSelectedCombiner.length = 0;
     bool noDataFounded = false;

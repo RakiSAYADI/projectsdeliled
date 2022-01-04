@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
-import 'package:flutterappdentaluvc/services/languageDataBase.dart';
 import 'package:path_provider/path_provider.dart';
 
 class UVCDataFile {
@@ -12,6 +11,21 @@ class UVCDataFile {
   final String _uvcDeviceFileName = 'UVC_Device.txt';
   final String _uvcDeviceNameFileName = 'UVC_Device_IOS.txt';
   final String _uvcAutoDataFileName = 'UVC_Auto_Data.txt';
+
+  List<List<List<String>>> _uvcNameData = [
+    [
+      ['Nom du robot', 'Utilisateur', 'Etablissement', 'Chambre', 'Heure d\'activation', 'Date d\'activation', 'Temps de désinfection (s)', 'Etat']
+    ],
+    [
+      ['Robot name', 'User', 'Company', 'Room', 'Activation time', 'Activation date', 'Disinfection time (s)', 'State']
+    ]
+  ];
+
+  List<String> _uvcDefaultDataString = [
+    'Nom du robot ;Utilisateur ;Etablissement ;Chambre ;Heure d\'activation ;Date d\'activation ;Temps de desinfection (s) ;Etat \n',
+    'Robot name ;User ;Company ;Room ;Activation time ;Activation date ;Disinfection time (s) ;State \n'
+  ];
+
 
   Future<List<List<String>>> readUVCDATA() async {
     try {
@@ -44,9 +58,9 @@ class UVCDataFile {
       return textuvc;
     } catch (e) {
       print("Couldn't read file");
-      await saveStringUVCDATA(uvcDefaultDataString[languageArrayIdentifier]);
-      print(uvcDefaultDataString[languageArrayIdentifier]);
-      return uvcDefaultData[languageArrayIdentifier];
+      await saveStringUVCDATA(_uvcDefaultDataString[languageArrayIdentifier].toString());
+      print(_uvcDefaultDataString[languageArrayIdentifier]);
+      return _uvcNameData[languageArrayIdentifier].toList();
     }
   }
 
@@ -80,8 +94,8 @@ class UVCDataFile {
       return textuvc;
     } catch (e) {
       print("Couldn't read file");
-      await saveStringUVCSelectedDATA(uvcDefaultDataString[languageArrayIdentifier]);
-      return uvcDefaultData[languageArrayIdentifier];
+      await saveStringUVCSelectedDATA(_uvcDefaultDataString[languageArrayIdentifier].toString());
+      return _uvcNameData[languageArrayIdentifier].toList();
     }
   }
 

@@ -151,10 +151,7 @@ final List<String> newDisinfectionTextLanguageArray = ['Nouvelle désinfection',
 
 final List<String> reportTextLanguageArray = ['Rapport', 'Report'];
 
-final List<String> disinfectionErrorMessageTextLanguageArray = [
-  'Désinfection précédente interrompue, veuillez recommencer',
-  'Issue during the previous disinfection, please start over'
-];
+final List<String> disinfectionErrorMessageTextLanguageArray = ['Désinfection précédente interrompue, veuillez recommencer', 'Issue during the previous disinfection, please start over'];
 
 final List<String> deviceSearchMessageTextLanguageArray = ['Rechercher votre dispositif UV-C', 'Find your UV-C device'];
 
@@ -230,30 +227,13 @@ final List<String> warningNumberOneTextLanguageArray = ['Vérifiez que la pièce
 
 final List<String> warningNumberTwoTextLanguageArray = ['Fermer les portes et les fenêtres.', 'Close doors and windows.'];
 
-final List<String> warningNumberThreeTextLanguageArray = [
-  'Signalez la désinfection grâce \n aux accroche-portes et/ou au chevalet.',
-  'Notify the disinfection with \n a door hanger and/or an easel.'
-];
+final List<String> warningNumberThreeTextLanguageArray = ['Signalez la désinfection grâce \n aux accroche-portes et/ou au chevalet.', 'Notify the disinfection with \n a door hanger and/or an easel.'];
 
 final List<String> companyTextLanguageArray = ['Votre entreprise', 'Your company'];
 
 final List<String> userTextLanguageArray = ['Utilisateur', 'User'];
 
 final List<String> roomOneTextLanguageArray = ['Chambre 1', 'Room 1'];
-
-final List<List<List<String>>> uvcDefaultData = [
-  [
-    ['Nom du robot', 'Utilisateur', 'Etablissement', 'Chambre', 'Heure d\'activation', 'Date d\'activation', 'Temps de désinfection (s)', 'Etat']
-  ],
-  [
-    ['Robot name', 'User', 'Company', 'Room', 'Activation time', 'Activation date', 'Disinfection time (s)', 'State']
-  ]
-];
-
-final List<String> uvcDefaultDataString = [
-  'Nom du robot ;Utilisateur ;Etablissement ;Chambre ;Heure d\'activation ;Date d\'activation ;Temps de desinfection (s) ;Etat \n',
-  'Robot name ;User ;Company ;Room ;Activation time ;Activation date ;Disinfection time (s) ;State \n'
-];
 
 final List<String> deviceConnectButtonTextLanguageArray = ['Connecter', 'Connect'];
 
