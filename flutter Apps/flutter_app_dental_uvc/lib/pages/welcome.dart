@@ -12,7 +12,6 @@ import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/languageDataBase.dart';
 import 'package:flutterappdentaluvc/services/uvcToast.dart';
 import 'package:package_info/package_info.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:super_easy_permissions/super_easy_permissions.dart';
 import 'package:wakelock/wakelock.dart';
 
