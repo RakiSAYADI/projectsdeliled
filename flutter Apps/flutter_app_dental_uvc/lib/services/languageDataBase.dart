@@ -115,12 +115,12 @@ final List<String> understoodTextLanguageArray = ['Compris', 'Got it'];
 final List<String> emailMessageTextLanguageArray = [
   'Bonjour,\n\n'
       'Vous trouverez ci-joint le rapport concernant la désinfection effectuée à l’aide de'
-      ' votre solution de désinfection DEEPLIGHT® de DeliTech Medical®.\n'
+      ' votre solution de désinfection DEEPLIGHT®.\n'
       'Cet email est envoyé automatiquement, merci de ne pas y répondre.\n\n'
       'Merci de votre confiance.',
   'Hello,\n\n'
       'Please find enclosed your disinfection report generated using'
-      'the DEEPLIGHT® disinfection solution from DeliTech Medical®.\n'
+      'the DEEPLIGHT® disinfection solution.\n'
       'This email was sent automatically, please do not reply. \n\n'
       'Best regards.'
 ];
