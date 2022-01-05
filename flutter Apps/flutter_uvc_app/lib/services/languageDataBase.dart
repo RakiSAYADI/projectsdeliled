@@ -187,7 +187,7 @@ final List<String> scanBLEDevicesPageTitleTextLanguageArray = ['Liste des dispos
 
 final List<String> sendEmailPageTitleTextLanguageArray = ['Envoi rapport', 'Send report'];
 
-final List<String> sendEmailPageMessageTextLanguageArray = ['Entrer votre adresse email :', 'Enter your email address:'];
+final List<String> sendEmailPageMessageTextLanguageArray = ['Entrer votre adresse e-mail :', 'Enter your email address:'];
 
 final List<String> sendingEmailPageToastTextLanguageArray = ['Envoi en cours !', 'Sending in progress!'];
 
@@ -199,7 +199,7 @@ final List<String> uvcEmailMessageTextLanguageArray = [
   'Bonjour,\n\n'
       'Vous trouverez ci-joint le rapport concernant la désinfection effectuée à l’aide de '
       'votre solution UV-C DEEPLIGHT®.\n'
-      'Cet email est envoyé automatiquement, merci de ne pas y répondre.\n\n'
+      'Cet e-mail est envoyé automatiquement, merci de ne pas y répondre.\n\n'
       'Merci de votre confiance.\nDEEPLIGHT®',
   'Hello,\n\n'
       'You will find attached the report of the performed disinfection '
@@ -208,9 +208,9 @@ final List<String> uvcEmailMessageTextLanguageArray = [
       'Thank you for trusting DEEPLIGHT®.'
 ];
 
-final List<String> sendEmailValidToastTextLanguageArray = ['Email envoyé, vérifiez votre boîte de réception !', 'Email sent,please check your inbox!'];
+final List<String> sendEmailValidToastTextLanguageArray = ['E-mail envoyé, vérifiez votre boîte de réception !', 'Email sent,please check your inbox!'];
 
-final List<String> sendEmailNotValidToastTextLanguageArray = ['Email non envoyé, vérifiez votre addresse email !', 'Error, please check your email address!'];
+final List<String> sendEmailNotValidToastTextLanguageArray = ['E-mail non envoyé, vérifiez votre addresse e-mail !', 'Error, please check your email address!'];
 
 final List<String> deviceConnectButtonTextLanguageArray = ['Connecter', 'Connect'];
 
