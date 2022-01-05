@@ -116,13 +116,13 @@ final List<String> emailMessageTextLanguageArray = [
   'Bonjour,\n\n'
       'Vous trouverez ci-joint le rapport concernant la désinfection effectuée à l’aide de'
       ' votre solution de désinfection DEEPLIGHT®.\n'
-      'Cet email est envoyé automatiquement, merci de ne pas y répondre.\n\n'
-      'Merci de votre confiance.',
+      'Cet e-mail est envoyé automatiquement, merci de ne pas y répondre.\n\n'
+      'Merci de votre confiance.\nDEEPLIGHT®',
   'Hello,\n\n'
       'Please find enclosed your disinfection report generated using'
       'the DEEPLIGHT® disinfection solution.\n'
       'This email was sent automatically, please do not reply. \n\n'
-      'Best regards.'
+      'Thank you for trusting DEEPLIGHT®.'
 ];
 
 final List<String> oldPinTextLanguageArray = ['Entrer l\'ancien code PIN :', 'Enter old PIN code:'];
