@@ -102,7 +102,7 @@ final List<String> sendingProgressToastTextLanguageArray = ['Envoi en cours !', 
 
 final List<String> internetConnectionToastTextLanguageArray = ['Veuillez connecter votre tablette à internet !', 'Please connect your tablet to internet!'];
 
-final List<String> emailUserTextLanguageArray = ['DeliTech Medical', 'DeliTech Medical'];
+final List<String> emailUserTextLanguageArray = ['Deeplight', 'Deeplight'];
 
 final List<String> emailSubjectTextLanguageArray = ['Rapport de désinfection UV-C', 'UV-C disinfection report'];
 
