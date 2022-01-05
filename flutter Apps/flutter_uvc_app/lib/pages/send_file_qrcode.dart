@@ -145,7 +145,7 @@ class _SendEmailQrCodeState extends State<SendEmailQrCode> {
     final serverSMTPDeepLight = SmtpServer(host, username: username, password: password);
     // Create our message.
     final message = Message()
-      ..from = Address(username, 'DeliTech Medical')
+      ..from = Address(username, 'Deeplight')
       ..recipients.add(destination)
       ..subject = uvcEmailObjectTextLanguageArray[languageArrayIdentifier]
       ..attachments.add(new FileAttachment(File('${directory.path}/$_uvcDataSelectedFileName')))

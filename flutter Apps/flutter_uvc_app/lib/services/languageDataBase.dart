@@ -198,12 +198,12 @@ final List<String> uvcEmailObjectTextLanguageArray = ['Rapport de désinfection 
 final List<String> uvcEmailMessageTextLanguageArray = [
   'Bonjour,\n\n'
       'Vous trouverez ci-joint le rapport concernant la désinfection effectuée à l’aide de '
-      'votre solution UV-C DEEPLIGHT® de DeliTech Medical®.\n'
+      'votre solution UV-C DEEPLIGHT®.\n'
       'Cet email est envoyé automatiquement, merci de ne pas y répondre.\n\n'
-      'Merci de votre confiance.',
+      'Merci de votre confiance.\nDEEPLIGHT®',
   'Hello,\n\n'
       'You will find attached the report of the performed disinfection '
-      'using your DEEPLIGHT® UV-C solution from DeliTech Medical®.\n'
+      'using your DEEPLIGHT® UV-C solution.\n'
       'This email is sent automatically, please do not reply.\n\n'
       'Thank you for trusting DEEPLIGHT®.'
 ];
