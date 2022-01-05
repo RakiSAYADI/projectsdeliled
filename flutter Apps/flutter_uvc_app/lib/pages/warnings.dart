@@ -50,7 +50,7 @@ class _WarningsState extends State<Warnings> {
                           ),
                           SizedBox(width: screenWidth * 0.03),
                           Text(
-                            '${attentionTextLanguageArray[languageArrayIdentifier]}!',
+                            '${attentionTextLanguageArray[languageArrayIdentifier]} !',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: screenWidth * 0.1 * screenHeight * 0.001,

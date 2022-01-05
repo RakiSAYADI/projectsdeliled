@@ -201,14 +201,14 @@ final List<String> uvcEmailMessageTextLanguageArray = [
       'votre solution UV-C DEEPLIGHT® de DeliTech Medical®.\n'
       'Cet email est envoyé automatiquement, merci de ne pas y répondre.\n\n'
       'Merci de votre confiance.',
-  'Hello, Hello,\n\n'
+  'Hello,\n\n'
       'You will find attached the report of the performed disinfection '
       'using your DEEPLIGHT® UV-C solution from DeliTech Medical®.\n'
       'This email is sent automatically, please do not reply.\n\n'
       'Thank you for trusting DEEPLIGHT®.'
 ];
 
-final List<String> sendEmailValidToastTextLanguageArray = ['Email envoyé, vérifiez votre boite de reception !', 'Email sent,please check your inbox!'];
+final List<String> sendEmailValidToastTextLanguageArray = ['Email envoyé, vérifiez votre boîte de réception !', 'Email sent,please check your inbox!'];
 
 final List<String> sendEmailNotValidToastTextLanguageArray = ['Email non envoyé, vérifiez votre addresse email !', 'Error, please check your email address!'];
 
