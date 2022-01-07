@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutteruvcapp/services/DataVariables.dart';
-import 'package:flutteruvcapp/services/languageDataBase.dart';
 import 'package:path_provider/path_provider.dart';
 
 class UVCDataFile {
