@@ -21,10 +21,9 @@ class QrCodeDisplay extends StatefulWidget {
 }
 
 class _QrCodeDisplayState extends State<QrCodeDisplay> {
-  GlobalKey globalKey = new GlobalKey();
+  final GlobalKey globalKey = new GlobalKey();
   ToastyMessage myUvcToast;
-  EmailDataFile emailDataFile = EmailDataFile();
-  bool saveQrCodeData = false;
+  final EmailDataFile emailDataFile = EmailDataFile();
   String deepLightText = 'assets/texte-deeplight.png';
 
   @override
@@ -124,11 +123,7 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
             labelStyle: TextStyle(fontSize: 18.0),
             onTap: () async {
               SystemChannels.textInput.invokeMethod('TextInput.hide');
-              if (!saveQrCodeData) {
-                await captureQrCodePNG();
-                saveQrCodeData = true;
-              }
-              dataEmailSending();
+              dataEmailSending(context);
             },
           ),
         ],
@@ -152,7 +147,7 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
     }
   }
 
-  Future<void> dataEmailSending() async {
+  Future<void> dataEmailSending(BuildContext context) async {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
     final myEmail = TextEditingController();
@@ -201,6 +196,7 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
               ),
               onPressed: () async {
                 Navigator.pop(context, false);
+                await captureQrCodePNG();
                 SystemChannels.textInput.invokeMethod('TextInput.hide');
                 await emailDataFile.saveStringUVCEmailDATA(myEmail.text);
                 myUvcToast.setToastDuration(60);

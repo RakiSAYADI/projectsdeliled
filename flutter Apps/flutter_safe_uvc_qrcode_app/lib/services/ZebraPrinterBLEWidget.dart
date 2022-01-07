@@ -30,7 +30,7 @@ class PrinterBleCard extends StatelessWidget {
               style: TextStyle(fontSize: 16.0, color: Colors.grey[800]),
             ),
             Text(
-              printer.zebraPrinter.address,
+              printer.zebraPrinter.id.id,
               style: TextStyle(fontSize: 10.0, color: Colors.grey[600]),
             ),
             TextButton.icon(onPressed: send, icon: Icon(Icons.send), label: Text(selectTextLanguageArray[languageArrayIdentifier]))

@@ -50,7 +50,7 @@ final List<String> qrCodesAlertDialogTitleLanguageArray = ['Vos QRcodes', 'Your 
 
 final List<String> okTextLanguageArray = ['OK', 'OK'];
 
-final List<String> printWifiTextLanguageArray = ['Imprimer avec Wifi', 'Print with Wifi'];
+final List<String> printWifiTextLanguageArray = ['Imprimer avec WIFI', 'Print with WIFI'];
 
 final List<String> printBLETextLanguageArray = ['Imprimer avec BLE', 'Print with BLE'];
 
@@ -64,7 +64,11 @@ final List<String> sendEmailButtonTextLanguageArray = ['Envoi par email', 'Send 
 
 final List<String> enterEmailTextLanguageArray = ['Entrez votre adresse e-mail :', 'Enter your e-mail address:'];
 
+final List<String> enterIpAddressPrinterTextLanguageArray = ['Entrez l\'adresse IP de votre Imprimante Zebra :', 'Enter the IP address of your Zebra printer :'];
+
 final List<String> sendTextLanguageArray = ['Envoyer', 'Send'];
+
+final List<String> validateTextLanguageArray = ['Valider', 'Validate'];
 
 final List<String> cancelTextLanguageArray = ['Annuler', 'Cancel'];
 
@@ -167,3 +171,12 @@ final List<String> printerConnexionToastTextLanguageArray = ['Connexion réussi 
 final List<String> printerNoConnexionToastTextLanguageArray = ['Connexion pas réussi !', 'Connection not successful !'];
 
 final List<String> selectTextLanguageArray = ['Sélectionner', 'Select'];
+
+final List<String> printDoneToastTextLanguageArray = ['Impression terminée !', 'Impression is Done !'];
+
+final List<String> noWIFIConnectionToastTextLanguageArray = [
+  'La connexion en WIFI est nécessaire pour scanner les dispositifs dans le réseau !',
+  'WIFI connection is necessary to scan devices in the network!'
+];
+
+final List<String> nonValidIPAddressToastTextLanguageArray = ['Addresse IP non valide !', 'Non valid IP address'];

@@ -1,78 +1,101 @@
 PODS:
-  - bluetooth_print (0.0.1):
+  - connectivity_plus (0.0.1):
     - Flutter
+    - ReachabilitySwift
   - Flutter (1.0.0)
+  - flutter_blue (0.0.1):
+    - Flutter
+    - flutter_blue/Protos (= 0.0.1)
+  - flutter_blue/Protos (0.0.1):
+    - Flutter
+    - Protobuf (~> 3.11.4)
+  - flutter_icmp_ping (0.0.1):
+    - Flutter
   - flutter_zebra_sdk (0.0.1):
     - Flutter
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
   - MTBBarcodeScanner (5.0.11)
+  - network_info_plus (0.0.1):
+    - Flutter
   - package_info (0.0.1):
     - Flutter
   - path_provider_ios (0.0.1):
     - Flutter
   - "permission_handler (5.1.0+2)":
     - Flutter
-  - printing (1.0.0):
-    - Flutter
+  - Protobuf (3.11.4)
   - qr_code_scanner (0.2.0):
     - Flutter
     - MTBBarcodeScanner
+  - ReachabilitySwift (5.0.0)
   - super_easy_permissions (0.0.1):
     - Flutter
   - Toast (4.0.0)
 
 DEPENDENCIES:
-  - bluetooth_print (from `.symlinks/plugins/bluetooth_print/ios`)
+  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - Flutter (from `Flutter`)
+  - flutter_blue (from `.symlinks/plugins/flutter_blue/ios`)
+  - flutter_icmp_ping (from `.symlinks/plugins/flutter_icmp_ping/ios`)
   - flutter_zebra_sdk (from `.symlinks/plugins/flutter_zebra_sdk/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - network_info_plus (from `.symlinks/plugins/network_info_plus/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
-  - printing (from `.symlinks/plugins/printing/ios`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
   - super_easy_permissions (from `.symlinks/plugins/super_easy_permissions/ios`)
 
 SPEC REPOS:
   trunk:
     - MTBBarcodeScanner
+    - Protobuf
+    - ReachabilitySwift
     - Toast
 
 EXTERNAL SOURCES:
-  bluetooth_print:
-    :path: ".symlinks/plugins/bluetooth_print/ios"
+  connectivity_plus:
+    :path: ".symlinks/plugins/connectivity_plus/ios"
   Flutter:
     :path: Flutter
+  flutter_blue:
+    :path: ".symlinks/plugins/flutter_blue/ios"
+  flutter_icmp_ping:
+    :path: ".symlinks/plugins/flutter_icmp_ping/ios"
   flutter_zebra_sdk:
     :path: ".symlinks/plugins/flutter_zebra_sdk/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
+  network_info_plus:
+    :path: ".symlinks/plugins/network_info_plus/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
   path_provider_ios:
     :path: ".symlinks/plugins/path_provider_ios/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
-  printing:
-    :path: ".symlinks/plugins/printing/ios"
   qr_code_scanner:
     :path: ".symlinks/plugins/qr_code_scanner/ios"
   super_easy_permissions:
     :path: ".symlinks/plugins/super_easy_permissions/ios"
 
 SPEC CHECKSUMS:
-  bluetooth_print: da8f47e8881a0b1f0fd8d73cd6fa84c9bd41ac28
+  connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  flutter_blue: eeb381dc4727a0954dede73515f683865494b370
+  flutter_icmp_ping: 07e508847df7fa9262d050bb0b203de074bbe517
   flutter_zebra_sdk: b5829f33fdb3ffa7c3f92a8135f0d701d6c3cb87
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
+  network_info_plus: b78876159360f5580608c2cea620d6ceffabd0ad
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider_ios: 7d7ce634493af4477d156294792024ec3485acd5
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
-  printing: eafa00acb682c0ca029d4d98d0798f55a1e27102
+  Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
   qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
+  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   super_easy_permissions: a3ceb753027ebace972803825c25cc44066d1a84
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 

@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:bluetooth_print/bluetooth_print.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/zebraPrinterDeviceClass.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mailer/mailer.dart';
@@ -31,7 +31,7 @@ String myActivationTimeMinuteData = ' 10 sec';
 ZebraWifiPrinter zebraWifiPrinter;
 ZebraBLEPrinter zebraBlePrinter;
 
-BluetoothPrint bluetoothPrint;
+FlutterBlue flutterBlue;
 
 bool printerBLEOrWIFI = false;
 
@@ -43,8 +43,6 @@ List<File> qrCodeImageList = [];
 List<TableRow> listQrCodes = [];
 
 Future<void> waitingConnectionWidget(BuildContext buildContext, String title) async {
-  //double screenWidth = MediaQuery.of(context).size.width;
-  double screenHeight = MediaQuery.of(buildContext).size.height;
   return showDialog<void>(
       context: buildContext,
       barrierDismissible: false,

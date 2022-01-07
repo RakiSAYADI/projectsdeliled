@@ -1,8 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:bluetooth_print/bluetooth_print.dart';
-import 'package:bluetooth_print/bluetooth_print_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/ZebraPrinterBLEWidget.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/ZebraPrinterWIFIWidget.dart';
@@ -10,6 +10,8 @@ import 'package:flutter_safe_uvc_qrcode_app/services/languageDataBase.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/zebraPrinterDeviceClass.dart';
 import 'package:flutter_zebra_sdk/flutter_zebra_sdk.dart';
+import 'package:lan_scanner/lan_scanner.dart';
+import 'package:network_info_plus/network_info_plus.dart';
 
 class ScanListPrinters extends StatefulWidget {
   @override
@@ -22,6 +24,8 @@ class _ScanListPrintersState extends State<ScanListPrinters> {
   ToastyMessage myUvcToast;
 
   List<String> devicesMacAddress = [];
+
+  String customIpAddress = '';
 
   @override
   void initState() {
@@ -47,36 +51,47 @@ class _ScanListPrintersState extends State<ScanListPrinters> {
   }
 
   scanBLEForZebraPrinters(BuildContext context) async {
-    bluetoothPrint = BluetoothPrint.instance;
+    flutterBlue = FlutterBlue.instance;
 
-    bluetoothPrint.scanResults.listen((results) {
-      for (BluetoothDevice zebraPrinter in results) {
-        print('${zebraPrinter.name} found! mac: ${zebraPrinter.address}');
-        if (zebraPrinter.name.contains('Zebra') && (!devicesMacAddress.contains(zebraPrinter.address))) {
+    flutterBlue.scanResults.listen((results) {
+      for (ScanResult zebraPrinter in results) {
+        print('${zebraPrinter.device.name} found! mac: ${zebraPrinter.device.id.id}');
+        if (zebraPrinter.device.name.contains('Zebra') && (!devicesMacAddress.contains(zebraPrinter.device.id.id))) {
           setState(() {
-            blePrinters.add(new ZebraBLEPrinter(zebraPrinter: zebraPrinter));
+            blePrinters.add(new ZebraBLEPrinter(zebraPrinter: zebraPrinter.device));
           });
         }
-        devicesMacAddress.add(zebraPrinter.address);
+        devicesMacAddress.add(zebraPrinter.device.id.id);
       }
     });
     // Start scanning`
-    bluetoothPrint.startScan(timeout: Duration(seconds: 4));
+    flutterBlue.startScan(timeout: Duration(seconds: 4));
   }
 
+  List<String> printerAddressList = [];
+
   scanWIFIForZebraPrinters(BuildContext context) async {
+    await Future.delayed(Duration(milliseconds: 200));
     waitingConnectionWidget(context, scanWidgetTextLanguageArray[languageArrayIdentifier]);
-    // Start scanning`
-    Map<String, dynamic> messageJSON;
+    var wifiIP = await (NetworkInfo().getWifiIP());
+    customIpAddress = ipToSubnet(wifiIP);
+    // Start scanning
     try {
+      Map<String, dynamic> messageJSON;
       await ZebraSdk.onDiscovery().then((printersString) {
+        print(printersString);
         messageJSON = json.decode(printersString);
         if (messageJSON['success'] == true) {
           List<dynamic> listPrinters = jsonDecode(messageJSON['content']);
           for (int i = 0; i < listPrinters.length; i++) {
             print('list of zebra printers on Local : ${listPrinters[i]}');
             setState(() {
-              wifiPrinters.add(new ZebraWifiPrinter(name: listPrinters[i]['productName'], address: listPrinters[i]['address'], port: listPrinters[i]['jsonPortNumber']));
+              if (Platform.isIOS) {
+                wifiPrinters.add(new ZebraWifiPrinter(name: listPrinters[i]['productName'], address: listPrinters[i]['address'], port: listPrinters[i]['jsonPortNumber']));
+              }
+              if (Platform.isAndroid) {
+                wifiPrinters.add(new ZebraWifiPrinter(name: listPrinters[i]['productName'], address: listPrinters[i]['address'], port: 9100));
+              }
             });
           }
           scanDoneToast(context);
@@ -92,7 +107,7 @@ class _ScanListPrintersState extends State<ScanListPrinters> {
     Navigator.of(context).pop();
   }
 
-  Widget floatingActionButtonScan() {
+  Widget floatingActionButtonScan(BuildContext context) {
     if (printerBLEOrWIFI) {
       return FloatingActionButton(
           child: Icon(Icons.search),
@@ -104,13 +119,13 @@ class _ScanListPrintersState extends State<ScanListPrinters> {
           });
     } else {
       return StreamBuilder<bool>(
-        stream: bluetoothPrint.isScanning,
+        stream: flutterBlue.isScanning,
         initialData: false,
         builder: (c, snapshot) {
           if (snapshot.data) {
             return FloatingActionButton(
               child: Icon(Icons.stop),
-              onPressed: () => bluetoothPrint.stopScan(),
+              onPressed: () => flutterBlue.stopScan(),
               backgroundColor: Colors.red,
             );
           } else {
@@ -121,11 +136,122 @@ class _ScanListPrintersState extends State<ScanListPrinters> {
                     blePrinters.clear();
                   });
                   devicesMacAddress.clear();
-                  bluetoothPrint.startScan(timeout: Duration(seconds: 4));
+                  flutterBlue.startScan(timeout: Duration(seconds: 4));
                 });
           }
         },
       );
+    }
+  }
+
+  Future<void> editIPAddress(BuildContext context) async {
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
+    final myPrinterIP = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext c) {
+        return AlertDialog(
+          content: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    enterIpAddressPrinterTextLanguageArray[languageArrayIdentifier],
+                    style: TextStyle(fontSize: (widthScreen * 0.05)),
+                  ),
+                  SizedBox(height: heightScreen * 0.05),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.05)),
+                    child: TextField(
+                      style: TextStyle(fontSize: (widthScreen * 0.05)),
+                      textAlign: TextAlign.center,
+                      controller: myPrinterIP,
+                      maxLines: 1,
+                      decoration: InputDecoration(
+                          hintText: '$customIpAddress.XXX',
+                          hintStyle: TextStyle(
+                            fontSize: (widthScreen * 0.05),
+                            color: Colors.grey,
+                          )),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: Text(
+                validateTextLanguageArray[languageArrayIdentifier],
+                style: TextStyle(fontSize: (widthScreen * 0.05)),
+              ),
+              onPressed: () async {
+                Navigator.pop(context, false);
+                if (myPrinterIP.text.isNotEmpty && myPrinterIP.text.contains(customIpAddress)) {
+                  try {
+                    await Socket.connect(myPrinterIP.text, 9100, timeout: Duration(milliseconds: 100));
+                    zebraWifiPrinter = ZebraWifiPrinter(name: 'Custom Zebra Printer', address: myPrinterIP.text, port: 9100);
+                    Navigator.pushNamed(context, '/file_selector');
+                  } catch (e) {
+                    print(e);
+                    myUvcToast.setToastDuration(3);
+                    myUvcToast.setToastMessage(nonValidIPAddressToastTextLanguageArray[languageArrayIdentifier]);
+                    myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                  }
+                } else {
+                  myUvcToast.setToastDuration(3);
+                  myUvcToast.setToastMessage(nonValidIPAddressToastTextLanguageArray[languageArrayIdentifier]);
+                  myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                }
+                myPrinterIP.text = '';
+              },
+            ),
+            TextButton(
+              child: Text(
+                cancelTextLanguageArray[languageArrayIdentifier],
+                style: TextStyle(fontSize: (widthScreen * 0.05)),
+              ),
+              onPressed: () {
+                myPrinterIP.text = '';
+                Navigator.pop(context, false);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget enterIPAddress(BuildContext context) {
+    if (printerBLEOrWIFI) {
+      return Padding(
+        padding: EdgeInsets.all(10.0),
+        child: GestureDetector(
+          onTap: () async {
+            await editIPAddress(context);
+          },
+          child: Stack(
+            alignment: AlignmentDirectional.center,
+            children: <Widget>[
+              Container(
+                width: screenWidth * 0.13,
+                height: screenHeight * 0.07,
+                decoration: new BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+              ),
+              Icon(Icons.edit, color: Colors.blue[400]),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return Container();
     }
   }
 
@@ -148,7 +274,7 @@ class _ScanListPrintersState extends State<ScanListPrinters> {
                     printer: blePrinter,
                     send: () async {
                       zebraBlePrinter = blePrinter;
-                      await bluetoothPrint.stopScan();
+                      await flutterBlue.stopScan();
                       Navigator.pushNamed(context, '/file_selector');
                     },
                   ))
@@ -162,10 +288,13 @@ class _ScanListPrintersState extends State<ScanListPrinters> {
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         title: Text(scanPrinterDevicesPageTitleTextLanguageArray[languageArrayIdentifier]),
+        actions: <Widget>[
+          enterIPAddress(context),
+        ],
         centerTitle: true,
         backgroundColor: Colors.blue[400],
       ),
-      floatingActionButton: floatingActionButtonScan(),
+      floatingActionButton: floatingActionButtonScan(context),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: columnDevicesScanned(context),

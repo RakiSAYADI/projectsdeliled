@@ -1,8 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'dart:async' show Completer, Future;
-import 'dart:ui' as ui;
+import 'dart:async' show Future;
 
 import 'package:flutter/widgets.dart';
 import 'package:image/image.dart' as img;
@@ -20,6 +19,8 @@ class ZPLConverter {
   bool compressHex = false;
   int total;
   int widthBytes;
+  int printerWidth = 600;
+  int printerHeight = 400;
   final Map<int, String> mapCode = {
     1: 'G',
     2: 'H',
@@ -76,16 +77,20 @@ class ZPLConverter {
     this.compressHex = compressHex;
   }
 
+  void setPrinterWidth(int width) {
+    this.printerWidth = width;
+  }
+
+  void setPrinterHeight(int height) {
+    this.printerHeight = height;
+  }
+
   Future<HexImageString> _getHexBody(Uint8List imageAsU8) async {
-    var image = Image.memory(imageAsU8);
-    Completer<ui.Image> completer = new Completer<ui.Image>();
-    image.image.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((ImageInfo image, bool _) {
-      completer.complete(image.image);
-    }));
-    ui.Image info = await completer.future;
-    int width = info.width;
-    int height = info.height;
     var photo = img.decodeImage(imageAsU8);
+    photo = img.copyResize(photo, width: 400, height: 570);
+    photo = img.copyRotate(photo, 270);
+    int width = photo.width;
+    int height = photo.height;
     widthBytes = width ~/ 8;
     if (width % 8 > 0) {
       widthBytes = (((width / 8).floor()) + 1);
@@ -120,7 +125,7 @@ class ZPLConverter {
     return HexImageString(hexImage: hexString, totalBytes: total.toDouble(), widthBytes: widthBytes.toDouble());
   }
 
-  String _headDoc() => "^XA " + "^FO0,0^GFA, $total , $total , $widthBytes , ";
+  String _headDoc() => "^XA " + "^PW600^LL400^PON^GFA, $total , $total , $widthBytes , ";
 
   String _footDoc() => "^FS" + "^XZ";
 

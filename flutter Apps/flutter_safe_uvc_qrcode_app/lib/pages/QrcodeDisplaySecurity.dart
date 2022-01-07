@@ -24,7 +24,6 @@ class _QrCodeDisplaySecurityState extends State<QrCodeDisplaySecurity> {
   ToastyMessage myUvcToast;
   GlobalKey globalKey = new GlobalKey();
   EmailDataFile emailDataFile = EmailDataFile();
-  bool saveQrCodeData = false;
   String deepLightText = 'assets/texte-deeplight.png';
 
   @override
@@ -67,7 +66,7 @@ class _QrCodeDisplaySecurityState extends State<QrCodeDisplaySecurity> {
                         'assets/delitech.png',
                       ),
                       QrImage(
-                        data: 'https://qrgo.page.link/hYgXu',
+                        data: qrCodeData,
                       ),
                       Container(
                         alignment: Alignment.bottomCenter, // align the row
@@ -124,11 +123,7 @@ class _QrCodeDisplaySecurityState extends State<QrCodeDisplaySecurity> {
             labelStyle: TextStyle(fontSize: 18.0),
             onTap: () async {
               SystemChannels.textInput.invokeMethod('TextInput.hide');
-              if (!saveQrCodeData) {
-                await captureQrCodePNG();
-                saveQrCodeData = true;
-              }
-              dataEmailSending();
+              dataEmailSending(context);
             },
           ),
         ],
@@ -152,7 +147,7 @@ class _QrCodeDisplaySecurityState extends State<QrCodeDisplaySecurity> {
     }
   }
 
-  Future<void> dataEmailSending() async {
+  Future<void> dataEmailSending(BuildContext context) async {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
     final myEmail = TextEditingController();
@@ -201,6 +196,7 @@ class _QrCodeDisplaySecurityState extends State<QrCodeDisplaySecurity> {
               ),
               onPressed: () async {
                 Navigator.pop(context, false);
+                await captureQrCodePNG();
                 SystemChannels.textInput.invokeMethod('TextInput.hide');
                 await emailDataFile.saveStringUVCEmailDATA(myEmail.text);
                 myUvcToast.setToastDuration(60);

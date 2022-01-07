@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/languageDataBase.dart';
@@ -16,9 +14,9 @@ class _FileSelectorState extends State<FileSelector> {
   List<Color> fileCardSelectorColor = [];
   List<Color> fileCardNameSelectorColor = [];
 
-  bool printButtonVisibility = false;
-
   ToastyMessage myUvcToast;
+
+  bool printButtonVisibility = false;
 
   @override
   void initState() {
@@ -130,21 +128,40 @@ class _FileSelectorState extends State<FileSelector> {
     setState(() {});
   }
 
-  Future<bool> checkingStatePrinter(BuildContext context) async {
-    waitingConnectionWidget(context, connectionWidgetTextLanguageArray[languageArrayIdentifier]);
-    bool state = false;
-    state = await zebraWifiPrinter.checkPrinterState();
-    Navigator.of(context).pop();
-    if (state) {
-      myUvcToast.setToastDuration(2);
-      myUvcToast.setToastMessage(printerConnexionToastTextLanguageArray[languageArrayIdentifier]);
-      myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
-    } else {
-      myUvcToast.setToastDuration(2);
-      myUvcToast.setToastMessage(printerNoConnexionToastTextLanguageArray[languageArrayIdentifier]);
-      myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
-    }
-    return state;
+  Future<void> printStateWidget(BuildContext buildContext, int fileNumber) async {
+    double screenWidth = MediaQuery.of(buildContext).size.width;
+    double screenHeight = MediaQuery.of(buildContext).size.height;
+    return showDialog<void>(
+        context: buildContext,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              shape: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
+              title: Text(
+                impressionWidgetTextLanguageArray[languageArrayIdentifier],
+                textAlign: TextAlign.center,
+              ),
+              content: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'assets/printing.gif',
+                    width: screenWidth * 0.5,
+                    height: screenHeight * 0.3,
+                  ),
+                ],
+              ),
+            );
+          });
+        });
+  }
+
+  printDoneToast(BuildContext context) async {
+    myUvcToast.setToastDuration(2);
+    myUvcToast.setToastMessage(printDoneToastTextLanguageArray[languageArrayIdentifier]);
+    myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
   }
 
   @override
@@ -166,29 +183,26 @@ class _FileSelectorState extends State<FileSelector> {
         child: FloatingActionButton(
             child: Icon(Icons.print),
             onPressed: () async {
-              bool state = false;
               int numberOfFilesToPrint = 0;
-              if (printerBLEOrWIFI) {
-                if (await checkingStatePrinter(context)) {
-                  for (bool file in fileSelector) {
-                    if (file) {
-                      numberOfFilesToPrint++;
-                    }
-                  }
-                  await zebraWifiPrinter.getPrinterSettings();
-                  for (int i = 0; i < fileSelector.length; i++) {
-                    if (fileSelector[i]) {
-                      state = await zebraWifiPrinter.printFile(qrCodeImageList[i], true, 50);
-                    }
-                  }
+              for (bool file in fileSelector) {
+                if (file) {
+                  numberOfFilesToPrint++;
                 }
-              } else {
-                for (int i = 0; i < fileSelector.length; i++) {
-                  if (fileSelector[i]) {
-                    state = await zebraBlePrinter.printBluetooth(qrCodeImageList[i], true, 50);
+              }
+              printStateWidget(context, numberOfFilesToPrint);
+              for (int i = 0; i < fileSelector.length; i++) {
+                if (fileSelector[i]) {
+                  if (printerBLEOrWIFI) {
+                    await zebraWifiPrinter.printFile(qrCodeImageList[i], true, 50);
+                    await Future.delayed(Duration(milliseconds: 500));
+                  } else {
+                    await zebraBlePrinter.printFile(qrCodeImageList[i], true, 50);
+                    await Future.delayed(Duration(milliseconds: 500));
                   }
                 }
               }
+              Navigator.of(context).pop();
+              printDoneToast(context);
             }),
       ),
     );

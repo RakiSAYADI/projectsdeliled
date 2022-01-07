@@ -1,11 +1,13 @@
 import 'dart:ui';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/languageDataBase.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
+import 'package:super_easy_permissions/super_easy_permissions.dart';
 
 class ChooseQrCode extends StatefulWidget {
   @override
@@ -131,8 +133,9 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
                   printBLETextLanguageArray[languageArrayIdentifier],
                   style: TextStyle(color: Colors.green),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   Navigator.of(context).pop();
+                  await SuperEasyPermissions.askPermission(Permissions.bluetooth);
                   printerBLEOrWIFI = false;
                   Navigator.pushNamed(context, '/scan_list_printers');
                 },
@@ -142,10 +145,17 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
                   printWifiTextLanguageArray[languageArrayIdentifier],
                   style: TextStyle(color: Colors.blue),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   Navigator.of(context).pop();
-                  printerBLEOrWIFI = true;
-                  Navigator.pushNamed(context, '/scan_list_printers');
+                  var connectivityResult = await (Connectivity().checkConnectivity());
+                  if (connectivityResult == ConnectivityResult.wifi) {
+                    printerBLEOrWIFI = true;
+                    Navigator.pushNamed(context, '/scan_list_printers');
+                  } else {
+                    myUvcToast.setToastDuration(2);
+                    myUvcToast.setToastMessage(noWIFIConnectionToastTextLanguageArray[languageArrayIdentifier]);
+                    myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                  }
                 },
               ),
               TextButton(
@@ -167,7 +177,10 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
   GestureDetector qrCodeGenerator({BuildContext context, String destination, String buttonTitle, String buttonText, String buttonDescription1, String buttonDescription2}) {
     double screenWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        if (destination == "/qr_code_scan") {
+          await SuperEasyPermissions.askPermission(Permissions.camera);
+        }
         Navigator.pushNamed(context, destination);
       },
       child: Padding(
@@ -181,7 +194,12 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
               Padding(
                 padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
                 child: TextButton(
-                  onPressed: () => Navigator.pushNamed(context, destination),
+                  onPressed: () async {
+                    if (destination == "/qr_code_scan") {
+                      await SuperEasyPermissions.askPermission(Permissions.camera);
+                    }
+                    Navigator.pushNamed(context, destination);
+                  },
                   child: Text(
                     buttonTitle,
                     style: TextStyle(
@@ -248,6 +266,9 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
     double screenWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
+        if (destination == "/Qr_code_Display_Security") {
+          qrCodeData = 'https://qrgo.page.link/hYgXu';
+        }
         Navigator.pushNamed(context, destination);
       },
       child: Padding(
@@ -261,7 +282,12 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
               Padding(
                 padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
                 child: TextButton(
-                  onPressed: () => Navigator.pushNamed(context, destination),
+                  onPressed: () {
+                    if (destination == "/Qr_code_Display_Security") {
+                      qrCodeData = 'https://qrgo.page.link/hYgXu';
+                    }
+                    Navigator.pushNamed(context, destination);
+                  },
                   child: Text(
                     buttonTitle,
                     style: TextStyle(
