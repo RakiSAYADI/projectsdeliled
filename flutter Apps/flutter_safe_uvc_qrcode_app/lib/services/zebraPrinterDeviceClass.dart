@@ -3,10 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:flutter_safe_uvc_qrcode_app/services/Image_To_ZPL.dart';
+import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
 import 'package:flutter_zebra_sdk/flutter_zebra_sdk.dart';
-
-final ZPLConverter _zplConverter = new ZPLConverter();
 
 class ZebraWifiPrinter {
   String name;
@@ -16,9 +14,9 @@ class ZebraWifiPrinter {
   ZebraWifiPrinter({@required this.name, @required this.address, @required this.port});
 
   Future<bool> printFile(File fileToPrint, bool compressEnable, int Blackness) async {
-    _zplConverter.setCompressHex(compressEnable);
-    _zplConverter.setBlacknessLimitPercentage(Blackness);
-    String dataSPL = await _zplConverter.convertImgToZpl(await fileToPrint.readAsBytes());
+    zplConverter.setCompressHex(compressEnable);
+    zplConverter.setBlacknessLimitPercentage(Blackness);
+    String dataSPL = await zplConverter.convertImgToZpl(await fileToPrint.readAsBytes());
     bool result = false;
     try {
       await ZebraSdk.printZPLOverTCPIP(address, port: port, data: dataSPL).then((message) {
@@ -47,6 +45,7 @@ class ZebraBLEPrinter {
   BluetoothDevice zebraPrinter;
   List<BluetoothService> _zebraPrinterServices;
   bool _isConnected = false;
+  int writeState = -1;
 
   ZebraBLEPrinter({@required this.zebraPrinter});
 
@@ -70,9 +69,9 @@ class ZebraBLEPrinter {
   }
 
   Future<bool> printFile(File fileToPrint, bool compressEnable, int Blackness) async {
-    _zplConverter.setCompressHex(compressEnable);
-    _zplConverter.setBlacknessLimitPercentage(Blackness);
-    String dataSPL = await _zplConverter.convertImgToZpl(await fileToPrint.readAsBytes());
+    zplConverter.setCompressHex(compressEnable);
+    zplConverter.setBlacknessLimitPercentage(Blackness);
+    String dataSPL = await zplConverter.convertImgToZpl(await fileToPrint.readAsBytes());
     bool result = false;
     _connectionState();
     try {
@@ -107,12 +106,12 @@ class ZebraBLEPrinter {
         }
       }
       if (Platform.isAndroid) {
-        zebraPrinter.connect(timeout: Duration(seconds: 1));
+        zebraPrinter.connect(timeout: Duration(seconds: 3));
         await Future.delayed(Duration(seconds: 2));
         if (_isConnected) {
           await zebraPrinter.requestMtu(512);
+          await Future.delayed(Duration(milliseconds: 500));
           final mtu = await zebraPrinter.mtu.first;
-          print(mtu);
           await Future.delayed(Duration(milliseconds: 500));
           _zebraPrinterServices = await zebraPrinter.discoverServices();
           print('printer is connected');
@@ -122,15 +121,22 @@ class ZebraBLEPrinter {
             double numberOfSend = dataSPL.length / mtu;
             for (int i = 0; i < numberOfSend.round(); i++) {
               if (i == numberOfSend.round() - 1) {
-                _writeCharacteristic(3, 1, dataSPL.substring(dataSentProgress));
+                await _writeCharacteristic(3, 1, dataSPL.substring(dataSentProgress));
               } else {
-                _writeCharacteristic(3, 1, dataSPL.substring(dataSentProgress, dataSentProgress + mtu));
-                dataSentProgress += mtu;
+                await _writeCharacteristic(3, 1, dataSPL.substring(dataSentProgress, dataSentProgress + mtu));
+                if (writeState == 0) {
+                  dataSentProgress += mtu;
+                } else {
+                  print('write error BLE');
+                }
               }
-              await Future.delayed(Duration(seconds: 1));
+              await Future.delayed(Duration(milliseconds: 300));
             }
           } else {
-            _writeCharacteristic(3, 1, dataSPL);
+            do {
+              await _writeCharacteristic(3, 1, dataSPL);
+              await Future.delayed(Duration(milliseconds: 300));
+            } while (writeState == -1);
           }
           await Future.delayed(Duration(seconds: 3));
           await zebraPrinter.disconnect();
@@ -149,17 +155,18 @@ class ZebraBLEPrinter {
     return result;
   }
 
-  Future<int> _writeCharacteristic(int servicePosition, int charPosition, String data) async {
-    // checking Connection
-    if (_isConnected) {
-      // writing characteristic after 1 second
-      await Future.delayed(const Duration(seconds: 1), () async {
-        List<int> messageToBytes = data.codeUnits;
-        await _zebraPrinterServices.elementAt(servicePosition).characteristics.elementAt(charPosition).write(messageToBytes);
-      });
-      return 0;
-    } else {
-      return -1;
+  Future<void> _writeCharacteristic(int servicePosition, int charPosition, String data) async {
+    try {
+      // checking Connection
+      if (_isConnected) {
+        // writing characteristic after 1 second
+        await _zebraPrinterServices.elementAt(servicePosition).characteristics.elementAt(charPosition).write(data.codeUnits);
+      } else {
+        writeState = -1;
+      }
+    } catch (e) {
+      writeState = -1;
     }
+    writeState = 0;
   }
 }

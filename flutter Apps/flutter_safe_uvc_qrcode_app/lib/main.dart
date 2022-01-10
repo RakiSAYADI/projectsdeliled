@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_safe_uvc_qrcode_app/pages/QrcodeDisplay.dart';
-import 'package:flutter_safe_uvc_qrcode_app/pages/QrcodeDisplayData.dart';
-import 'package:flutter_safe_uvc_qrcode_app/pages/QrcodeDisplaySecurity.dart';
 import 'package:flutter_safe_uvc_qrcode_app/pages/QrcodeGenerate.dart';
 import 'package:flutter_safe_uvc_qrcode_app/pages/QrcodeGenerateData.dart';
 import 'package:flutter_safe_uvc_qrcode_app/pages/QrcodeGenerateFullAuto.dart';
@@ -54,10 +52,8 @@ class MyApp extends StatelessWidget {
         '/qr_code_scan': (context) => QrCodeScan(),
         '/Qr_code_Generate_Full_Auto': (context) => QrCodeGeneratorFullAuto(),
         '/Qr_code_Generate_Data': (context) => QrCodeGeneratorData(),
-        '/Qr_code_Display_Data': (context) => QrCodeDisplayData(),
         '/Qr_code_Generate': (context) => QrCodeGenerator(),
-        '/Qr_code_Display': (context) => QrCodeDisplay(),
-        '/Qr_code_Display_Security': (context) => QrCodeDisplaySecurity()
+        '/Qr_code_Display': (context) => QrCodeDisplay()
       },
     );
   }

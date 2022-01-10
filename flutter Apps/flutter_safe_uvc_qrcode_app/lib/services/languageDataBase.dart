@@ -180,3 +180,13 @@ final List<String> noWIFIConnectionToastTextLanguageArray = [
 ];
 
 final List<String> nonValidIPAddressToastTextLanguageArray = ['Addresse IP non valide !', 'Non valid IP address'];
+
+final List<String> saveTextLanguageArray = ['Sauvegarder', 'Save'];
+
+final List<String> printSettingsAlertDialogTitleLanguageArray = ['Paramètres impression', 'Print settings'];
+
+final List<String> resolutionAlertDialogTitleLanguageArray = ['Résolution (en dpi)', 'Resolution (in dpi)'];
+
+final List<String> printWidthAlertDialogTitleLanguageArray = ['Largeur (en mm)', 'Width (in mm)'];
+
+final List<String> printHeightAlertDialogTitleLanguageArray = ['Longueur (en mm)', 'Height (in mm)'];

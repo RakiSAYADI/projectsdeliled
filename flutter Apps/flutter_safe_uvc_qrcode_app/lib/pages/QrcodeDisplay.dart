@@ -71,7 +71,15 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
                       Container(
                         alignment: Alignment.bottomCenter, // align the row
                         padding: EdgeInsets.all(16.0),
-                        child: Text(myRoomNameText),
+                        child: Text(
+                          qrCodeDataName,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                            fontSize: screenWidth * 0.035 + screenHeight * 0.0035,
+                          ),
+                        ),
                       ),
                       Image.asset(
                         deepLightText,

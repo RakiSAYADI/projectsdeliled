@@ -72,8 +72,8 @@ class _QrCodeGeneratorDataState extends State<QrCodeGeneratorData> with TickerPr
                       qrCodeData = '{\"SAFEUVCDATA\":\"${myEmail.text}\"}';
                       await Future.delayed(Duration(seconds: 5), () async {
                         myUvcToast.clearAllToast();
-                        myEmailText = myEmail.text;
-                        Navigator.pushNamed(context, '/Qr_code_Display_Data');
+                        qrCodeDataName = myEmail.text;
+                        Navigator.pushNamed(context, '/Qr_code_Display');
                       });
                     } else {
                       myUvcToast.setToastDuration(10);

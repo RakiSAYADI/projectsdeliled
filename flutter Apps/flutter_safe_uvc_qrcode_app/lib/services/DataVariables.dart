@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_safe_uvc_qrcode_app/services/Image_To_ZPL.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/zebraPrinterDeviceClass.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mailer/mailer.dart';
@@ -17,13 +18,12 @@ int myExtinctionTimeMinutePosition = 0;
 int myActivationTimeMinutePosition = 0;
 int activationTime;
 
-String myEmailText;
 String uvcName;
 String macAddress;
 String pinCodeAccess;
-String myRoomNameText;
 String qrCodeFileName;
 String qrCodeData;
+String qrCodeDataName;
 
 String myExtinctionTimeMinuteData = ' 30 sec';
 String myActivationTimeMinuteData = ' 10 sec';
@@ -34,6 +34,8 @@ ZebraBLEPrinter zebraBlePrinter;
 FlutterBlue flutterBlue;
 
 bool printerBLEOrWIFI = false;
+
+final ZPLConverter zplConverter = new ZPLConverter();
 
 double screenWidth;
 double screenHeight;

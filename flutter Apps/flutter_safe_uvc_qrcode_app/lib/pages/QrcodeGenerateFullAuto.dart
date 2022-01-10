@@ -275,7 +275,7 @@ class _QrCodeGeneratorFullAutoState extends State<QrCodeGeneratorFullAuto> with 
                       }
                       await Future.delayed(Duration(seconds: 5), () async {
                         myUvcToast.clearAllToast();
-                        myRoomNameText = myRoomName.text;
+                        qrCodeDataName = myRoomName.text;
                         Navigator.pushNamed(context, '/Qr_code_Display');
                       });
                     }

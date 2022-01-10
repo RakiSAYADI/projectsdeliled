@@ -88,7 +88,7 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
                         buttonText: qrCodeRapportTextLanguageArray[languageArrayIdentifier]),
                     qrCodeGeneratorSecond(
                         context: context,
-                        destination: "/Qr_code_Display_Security",
+                        destination: "/Qr_code_Display",
                         buttonTitle: qrCodeSecurityTitleLanguageArray[languageArrayIdentifier],
                         buttonText: qrCodeSecurityTextLanguageArray[languageArrayIdentifier]),
                   ],
@@ -266,8 +266,10 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
     double screenWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
-        if (destination == "/Qr_code_Display_Security") {
+        if (destination == "/Qr_code_Display") {
           qrCodeData = 'https://qrgo.page.link/hYgXu';
+          qrCodeDataName = qrcodeSecurityTextLanguageArray[languageArrayIdentifier];
+          qrCodeFileName = 'securityQrCode.png';
         }
         Navigator.pushNamed(context, destination);
       },
@@ -285,6 +287,8 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
                   onPressed: () {
                     if (destination == "/Qr_code_Display_Security") {
                       qrCodeData = 'https://qrgo.page.link/hYgXu';
+                      qrCodeDataName = qrcodeSecurityTextLanguageArray[languageArrayIdentifier];
+                      qrCodeFileName = 'securityQrCode.png';
                     }
                     Navigator.pushNamed(context, destination);
                   },
