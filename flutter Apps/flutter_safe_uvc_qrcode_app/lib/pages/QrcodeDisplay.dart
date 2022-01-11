@@ -76,7 +76,6 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.underline,
                             fontSize: screenWidth * 0.035 + screenHeight * 0.0035,
                           ),
                         ),

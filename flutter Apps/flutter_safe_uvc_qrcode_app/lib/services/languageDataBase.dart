@@ -181,7 +181,7 @@ final List<String> noWIFIConnectionToastTextLanguageArray = [
 
 final List<String> nonValidIPAddressToastTextLanguageArray = ['Addresse IP non valide !', 'Non valid IP address'];
 
-final List<String> saveTextLanguageArray = ['Sauvegarder', 'Save'];
+final List<String> applyTextLanguageArray = ['Appliquer', 'Apply'];
 
 final List<String> printSettingsAlertDialogTitleLanguageArray = ['Paramètres impression', 'Print settings'];
 

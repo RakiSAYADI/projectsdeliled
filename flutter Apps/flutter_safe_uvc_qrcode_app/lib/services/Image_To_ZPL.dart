@@ -19,8 +19,8 @@ class ZPLConverter {
   bool compressHex = false;
   int total;
   int widthBytes;
-  int printerWidth = 406;
-  int printerHeight = 609;
+  int printerWidth = 609;
+  int printerHeight = 406;
   int printerResolution = 203;
   final Map<int, String> mapCode = {
     1: 'G',
@@ -88,8 +88,13 @@ class ZPLConverter {
 
   Future<HexImageString> _getHexBody(Uint8List imageAsU8) async {
     var photo = img.decodeImage(imageAsU8);
-    photo = img.copyResize(photo, width: printerWidth, height: printerHeight);
-    photo = img.copyRotate(photo, 270);
+    if (printerWidth > printerHeight) {
+      photo = img.copyResize(photo, height: printerWidth, width: printerHeight);
+      photo = img.copyRotate(photo, 270);
+    } else {
+      photo = img.copyResize(photo, width: printerWidth, height: printerHeight);
+    }
+
     int width = photo.width;
     int height = photo.height;
     widthBytes = width ~/ 8;

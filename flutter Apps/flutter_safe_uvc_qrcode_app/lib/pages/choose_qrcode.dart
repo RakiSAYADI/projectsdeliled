@@ -4,9 +4,12 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/languageDataBase.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
+import 'package:flutter_usb_write/flutter_usb_write.dart';
+import 'package:flutter_zebra_sdk/flutter_zebra_sdk.dart';
 import 'package:super_easy_permissions/super_easy_permissions.dart';
 
 class ChooseQrCode extends StatefulWidget {
@@ -21,6 +24,15 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
   void initState() {
     // TODO: implement initState
     myUvcToast = ToastyMessage(toastContext: context);
+    SuperEasyPermissions.askPermission(Permissions.location).then((value) {
+      if (value) {
+        SuperEasyPermissions.askPermission(Permissions.locationAlways).then((value) {
+          if (value) {
+            SuperEasyPermissions.askPermission(Permissions.locationWhenInUse);
+          }
+        });
+      }
+    });
     super.initState();
   }
 
@@ -117,6 +129,22 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
             Text(qrCodeList[i].fileName),
           ])
         ]));
+      }
+      try {
+        FlutterUsbWrite _flutterUsbWrite = FlutterUsbWrite();
+        List<UsbDevice> devices = await _flutterUsbWrite.listDevices();
+        print(" length: ${devices.length}");
+        myUvcToast.setToastDuration(5);
+        myUvcToast.setToastMessage(devices.toString());
+        myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+        await Future.delayed(Duration(seconds: 1));
+        await ZebraSdk.onDiscoveryUSB().then((value) {
+          myUvcToast.setToastDuration(5);
+          myUvcToast.setToastMessage(value.toString());
+          myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+        });
+      } on PlatformException catch (e) {
+        print(e.message);
       }
       return showDialog<void>(
         context: context,

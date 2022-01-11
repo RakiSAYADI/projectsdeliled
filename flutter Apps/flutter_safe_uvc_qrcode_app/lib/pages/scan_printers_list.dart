@@ -56,7 +56,7 @@ class _ScanListPrintersState extends State<ScanListPrinters> {
     flutterBlue.scanResults.listen((results) {
       for (ScanResult zebraPrinter in results) {
         print('${zebraPrinter.device.name} found! mac: ${zebraPrinter.device.id.id}');
-        if (zebraPrinter.device.name.contains('Zebra') && (!devicesMacAddress.contains(zebraPrinter.device.id.id))) {
+        if ((zebraPrinter.device.name.contains('Zebra')) || (zebraPrinter.device.name.contains('ZEBRA')) && (!devicesMacAddress.contains(zebraPrinter.device.id.id))) {
           setState(() {
             blePrinters.add(new ZebraBLEPrinter(zebraPrinter: zebraPrinter.device));
           });
@@ -75,6 +75,8 @@ class _ScanListPrintersState extends State<ScanListPrinters> {
     waitingConnectionWidget(context, scanWidgetTextLanguageArray[languageArrayIdentifier]);
     var wifiIP = await (NetworkInfo().getWifiIP());
     customIpAddress = ipToSubnet(wifiIP);
+    //ping to check the network
+    await Socket.connect('192.168.1.1', 8000);
     // Start scanning
     try {
       Map<String, dynamic> messageJSON;
@@ -148,6 +150,7 @@ class _ScanListPrintersState extends State<ScanListPrinters> {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
     final myPrinterIP = TextEditingController();
+    myPrinterIP.text = customIpAddress;
     return showDialog<void>(
       context: context,
       builder: (BuildContext c) {
@@ -193,7 +196,7 @@ class _ScanListPrintersState extends State<ScanListPrinters> {
                 Navigator.pop(context, false);
                 if (myPrinterIP.text.isNotEmpty && myPrinterIP.text.contains(customIpAddress)) {
                   try {
-                    await Socket.connect(myPrinterIP.text, 9100, timeout: Duration(milliseconds: 100));
+                    await Socket.connect(myPrinterIP.text, 9100, timeout: Duration(seconds: 1));
                     zebraWifiPrinter = ZebraWifiPrinter(name: 'Custom Zebra Printer', address: myPrinterIP.text, port: 9100);
                     Navigator.pushNamed(context, '/file_selector');
                   } catch (e) {

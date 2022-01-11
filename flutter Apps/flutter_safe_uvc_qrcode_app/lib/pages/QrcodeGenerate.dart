@@ -47,7 +47,7 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
                   child: TextField(
                     textAlign: TextAlign.center,
                     maxLines: 1,
-                    maxLength: 64,
+                    maxLength: 15,
                     controller: myCompany,
                     style: TextStyle(
                       fontSize: screenWidth * 0.04,
@@ -72,7 +72,7 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
                   child: TextField(
                     textAlign: TextAlign.center,
                     maxLines: 1,
-                    maxLength: 64,
+                    maxLength: 15,
                     controller: myName,
                     style: TextStyle(
                       fontSize: screenWidth * 0.04,
@@ -97,7 +97,7 @@ class _QrCodeGeneratorState extends State<QrCodeGenerator> with TickerProviderSt
                   child: TextField(
                     textAlign: TextAlign.center,
                     maxLines: 1,
-                    maxLength: 64,
+                    maxLength: 15,
                     controller: myRoomName,
                     style: TextStyle(
                       fontSize: screenWidth * 0.04,

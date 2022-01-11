@@ -16,13 +16,15 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   AnimationController controller;
 
   void checkConnection() async {
-    bool result = await SuperEasyPermissions.askPermission(Permissions.camera);
-    if (result) {
-      print("permission granted");
-    } else {
-      print("permission denied");
-    }
-    await SuperEasyPermissions.askPermission(Permissions.bluetooth);
+    await SuperEasyPermissions.askPermission(Permissions.camera).then((value) {
+      if (value) {
+        print("permission granted");
+        SuperEasyPermissions.askPermission(Permissions.bluetooth);
+      } else {
+        print("permission denied");
+      }
+    });
+
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {

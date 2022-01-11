@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/languageDataBase.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/uvcToast.dart';
@@ -196,6 +197,7 @@ class _FileSelectorState extends State<FileSelector> {
                   maxLines: 1,
                   maxLength: 3,
                   keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))],
                   decoration: InputDecoration(
                       hintText: '0...999',
                       hintStyle: TextStyle(
@@ -203,38 +205,6 @@ class _FileSelectorState extends State<FileSelector> {
                         color: Colors.grey,
                       )),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      printHeightAlertDialogTitleLanguageArray[languageArrayIdentifier],
-                      style: TextStyle(fontSize: (screenWidth * 0.05)),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.05)),
-                      child: TextField(
-                        style: TextStyle(fontSize: (screenWidth * 0.03 + screenHeight * 0.001)),
-                        textAlign: TextAlign.center,
-                        controller: printHeightCM,
-                        maxLines: 1,
-                        maxLength: 5,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                            hintText: '0...999.9',
-                            hintStyle: TextStyle(
-                              fontSize: (screenWidth * 0.03 + screenHeight * 0.001),
-                              color: Colors.grey,
-                            )),
-                      ),
-                    ),
-                  ),
-                ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -256,6 +226,40 @@ class _FileSelectorState extends State<FileSelector> {
                         controller: printWidthCM,
                         maxLines: 1,
                         maxLength: 5,
+                        inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))],
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            hintText: '0...999.9',
+                            hintStyle: TextStyle(
+                              fontSize: (screenWidth * 0.03 + screenHeight * 0.001),
+                              color: Colors.grey,
+                            )),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      printHeightAlertDialogTitleLanguageArray[languageArrayIdentifier],
+                      style: TextStyle(fontSize: (screenWidth * 0.05)),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.05)),
+                      child: TextField(
+                        style: TextStyle(fontSize: (screenWidth * 0.03 + screenHeight * 0.001)),
+                        textAlign: TextAlign.center,
+                        controller: printHeightCM,
+                        maxLines: 1,
+                        maxLength: 5,
+                        inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))],
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                             hintText: '0...999.9',
@@ -273,14 +277,14 @@ class _FileSelectorState extends State<FileSelector> {
           actions: [
             TextButton(
               child: Text(
-                saveTextLanguageArray[languageArrayIdentifier],
+                applyTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
                 zplConverter.printerResolution = int.parse(printResolutionDPI.text);
-                zplConverter.printerHeight = double.parse(printHeightCM.text) * zplConverter.printerResolution ~/ 25.4;
-                zplConverter.printerWidth = double.parse(printWidthCM.text) * zplConverter.printerResolution ~/ 25.4;
+                zplConverter.printerHeight = (double.parse(printHeightCM.text) * zplConverter.printerResolution) ~/ 25.4;
+                zplConverter.printerWidth = (double.parse(printWidthCM.text) * zplConverter.printerResolution) ~/ 25.4;
                 print(zplConverter.printerResolution);
                 print(zplConverter.printerHeight);
                 print(zplConverter.printerWidth);
