@@ -32,7 +32,7 @@ dependencies:
   provider: ^6.0.0
   path_provider: ^2.0.2
   wakelock: ^0.5.2
-  permission_handler: ^7.0.0
+  super_easy_permissions: ^0.1.1
   flutter_spinkit: ^5.0.0
   flutter_svg: ^0.22.0
   fl_chart: ^0.40.0

@@ -177,7 +177,7 @@ class _CheckPermissionsState extends State<CheckPermissions> {
             onPressed: () => Navigator.pop(c, true),
           ),
           TextButton(
-            child: Text(yesTextLanguageArray[languageArrayIdentifier]),
+            child: Text(noTextLanguageArray[languageArrayIdentifier]),
             onPressed: () => Navigator.pop(c, false),
           ),
         ],
