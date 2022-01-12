@@ -3,7 +3,7 @@
 
 #define DATA_LENGTH                         512              /*!<Data buffer length for test buffer*/
 #define RW_TEST_LENGTH                      129              /*!<Data length for r/w test, any value from 0-DATA_LENGTH*/
-#define DELAY_TIME_BETWEEN_ITEMS_MS         1000             /*!< delay time between different test items */
+#define DELAY_TIME_BETWEEN_ITEMS_MS         10000            /*!< delay time between different test items */
 
 #define I2C_MASTER_SCL_IO             		2                /*!< gpio number for I2C master clock */
 #define I2C_MASTER_SDA_IO          			15               /*!< gpio number for I2C master data  */

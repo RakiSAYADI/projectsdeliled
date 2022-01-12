@@ -32,7 +32,7 @@ dependencies:
   wakelock: ^0.5.6
   package_info: ^2.0.2
   pinput: ^1.0.0
-  permission_handler: ^7.0.0
+  super_easy_permissions: ^0.1.1
   introduction_screen: ^2.1.0
   qrcode_flutter: ^2.0.1
 

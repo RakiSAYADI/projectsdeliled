@@ -10,8 +10,11 @@
 #include "unitcfg.h"
 #include "sntpservice.h"
 #include "app_gpio.h"
+#include "webservice.h"
 
 #define TAG "I2C"
+
+void I2cRestart();
 
 OPT3001_Typedef OPT3001_HoldReg = {0, 0, 0, 0, 0, 0, 0, 0}; //light meter
 IAQ_CORE_Typedef iaq_data;									//CO2 TVOC
@@ -91,18 +94,18 @@ esp_err_t i2c_read_IAQ_CORE_C(i2c_port_t i2c_num, IAQ_CORE_Typedef *data)
 	i2c_master_read(cmd, tmp, 8, ACK_VAL);
 	i2c_master_read_byte(cmd, tmp + 8, NACK_VAL);
 
+	i2c_master_stop(cmd);
+	ret = i2c_master_cmd_begin(i2c_num, cmd, 1000 / portTICK_RATE_MS);
+	i2c_cmd_link_delete(cmd);
+
 	/*printf("\n");
 
 	for (int i = 0; i < 9; i++)
 	{
-		printf("tmp (%d) = %d, ", i, tmp[i]);
-	}
+		printf("tmp (%d) = %x, ", i, tmp[i]);
+	}*/
 
-	printf("\n");*/
-
-	i2c_master_stop(cmd);
-	ret = i2c_master_cmd_begin(i2c_num, cmd, 1000 / portTICK_RATE_MS);
-	i2c_cmd_link_delete(cmd);
+	//printf("\n");
 
 	if (ret == ESP_OK)
 	{
@@ -320,12 +323,20 @@ esp_err_t saveTimeInsideBattery(struct tm timeinfo)
 	time_MCP7940.vBat_en = 1;
 	time_MCP7940.osillater_start = 1;
 	ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCSEC, &time_MCP7940);
+	ESP_ERROR_CHECK(ret);
 	ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCMIN, &time_MCP7940);
+	ESP_ERROR_CHECK(ret);
 	ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCHOUR, &time_MCP7940);
+	ESP_ERROR_CHECK(ret);
 	ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCDATE, &time_MCP7940);
+	ESP_ERROR_CHECK(ret);
 	ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCWKDAY, &time_MCP7940);
+	ESP_ERROR_CHECK(ret);
 	ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCMTH, &time_MCP7940);
+	ESP_ERROR_CHECK(ret);
 	ret = i2c_write_MCP7940(I2C_MASTER_NUM, MCP7940_REG_RTCYEAR, &time_MCP7940);
+	ESP_ERROR_CHECK(ret);
+	ESP_LOGI(TAG, "Time saved to MCP7940 !");
 	return ret;
 }
 
@@ -437,6 +448,17 @@ void i2c_slave_init()
 #endif
 }
 
+#define CO2ArraySize 5
+uint8_t i2cReadCounter = 0;
+
+uint16_t middleCO2 = 450;
+uint16_t lastMiddleCO2 = 450;
+uint16_t CO2Array[CO2ArraySize];
+uint16_t i2cHourRestart = 0;
+
+uint32_t normalCO2Counter = 0;
+uint32_t badCO2Counter = 0;
+
 int32_t power(int32_t x, uint32_t n)
 {
 	int32_t res = 1;
@@ -450,6 +472,29 @@ int32_t power(int32_t x, uint32_t n)
 	}
 
 	return (res);
+}
+
+uint16_t find_minimum(uint16_t a[], uint8_t n)
+{
+	uint16_t min = 0;
+	uint8_t c = 0;
+
+	min = a[c];
+
+	for (c = 1; c < n; c++)
+	{
+		if (a[c] < min)
+		{
+			min = a[c];
+		}
+	}
+
+	if (min == 0)
+	{
+		return 450;
+	}
+
+	return min;
 }
 
 void i2c_test_task(void *arg)
@@ -482,7 +527,7 @@ void i2c_test_task(void *arg)
 			ESP_LOGE(TAG, "OPT3001: No ack, sensor not connected...skip...\n");
 		}
 
-		vTaskDelay(1 / portTICK_RATE_MS);
+		vTaskDelay(10 / portTICK_RATE_MS);
 #endif
 
 #ifdef ENABLE_HDC1080
@@ -507,7 +552,7 @@ void i2c_test_task(void *arg)
 			ESP_LOGE(TAG, "HDC1080: No ack, sensor not connected...skip...\n");
 		}
 
-		vTaskDelay(1 / portTICK_RATE_MS);
+		vTaskDelay(10 / portTICK_RATE_MS);
 #endif
 
 #ifdef ENABLE_IAQ_CORE_C
@@ -520,14 +565,46 @@ void i2c_test_task(void *arg)
 		}
 		else if (ret == ESP_OK)
 		{
-			//printf("I2C MASTER READ SENSOR( IAQ_CORE_C ) : PRED %u , status %02X, resistance %d, Tvox %u\r\n",iaq_data.pred,iaq_data.status,iaq_data.resistance,iaq_data.Tvoc);
+			CO2Array[i2cReadCounter] = iaq_data.pred;
+			i2cReadCounter++;
+			if (i2cReadCounter == 5)
+			{
+				middleCO2 = find_minimum(CO2Array, CO2ArraySize);
+				middleCO2 = (middleCO2 + lastMiddleCO2) / 2;
+				lastMiddleCO2 = middleCO2;
+				i2cReadCounter = 0;
+			}
+			if (middleCO2 > 1000 && middleCO2 < 1999)
+			{
+				normalCO2Counter++;
+			}
+			else if (middleCO2 > 1999)
+			{
+				middleCO2 = 2000;
+				badCO2Counter++;
+			}
+			time(&i2c_now);
+			i2c_now = i2c_now % (3600 * 24) + (UnitCfg.UnitTimeZone * 3600);
+			if (normalCO2Counter > 180 || badCO2Counter > 30 || (i2c_now >= 0 && i2c_now <= 3) || i2cHourRestart == 360)
+			{
+				i2cReadCounter = 0;
+				normalCO2Counter = 0;
+				badCO2Counter = 0;
+				i2cHourRestart = 0;
+				break;
+			}
+			i2cHourRestart++;
+			//ESP_LOGI(TAG, "(IAQ_CORE_C READ) time %ld ", i2c_now);
+			//ESP_LOGI(TAG, "(IAQ_CORE_C READ) CO2Array[0] %d, CO2Array[1] %d, CO2Array[2] %d, CO2Array[3] %d, CO2Array[4] %d", CO2Array[0], CO2Array[1], CO2Array[2], CO2Array[3], CO2Array[4]);
+			//ESP_LOGI(TAG, "(IAQ_CORE_C READ) middleCO2 %d, lastMiddleCO2 %d, i2cReadCounter %d, normalCO2Counter %d, badCO2Counter %d", middleCO2, lastMiddleCO2, i2cReadCounter, normalCO2Counter, badCO2Counter);
+			//ESP_LOGI(TAG, "(IAQ_CORE_C READ) PRED %u , status %02X, resistance %d, Tvox %u\r\n", iaq_data.pred, iaq_data.status, iaq_data.resistance, iaq_data.Tvoc);
 		}
 		else
 		{
 			ESP_LOGE(TAG, "IAQ_CORE_C: No ack, sensor not connected...skip...\n");
 		}
 
-		vTaskDelay(1 / portTICK_RATE_MS);
+		vTaskDelay(10 / portTICK_RATE_MS);
 #endif
 
 #ifdef ENABLE_MCP7940
@@ -555,6 +632,7 @@ void i2c_test_task(void *arg)
 				{
 					if (i2c_timeinfo.tm_year > (2016 - 1900))
 					{
+						printf("time of esp");
 						ret = saveTimeInsideBattery(i2c_timeinfo);
 						ESP_ERROR_CHECK(ret);
 					}
@@ -563,6 +641,7 @@ void i2c_test_task(void *arg)
 						if (saveTimeOnBattery)
 						{
 							ret = saveTimeInsideBattery(i2c_timeinfo);
+							printf("time of phone");
 							ESP_ERROR_CHECK(ret);
 							saveTimeOnBattery = false;
 						}
@@ -603,6 +682,10 @@ void i2c_test_task(void *arg)
 						}
 					}
 				}
+				strftime(strftime_buf, sizeof(strftime_buf), "%c", &i2c_timeinfo);
+				ESP_LOGI(TAG, "I2C MASTER Read TIMER( MCP7940 ) : %d/%d/%d in %d at %d:%d:%d", time_MCP7940.year, time_MCP7940.month, time_MCP7940.day, time_MCP7940.day_of_week, time_MCP7940.hour, time_MCP7940.minute, time_MCP7940.second);
+				ESP_LOGI(TAG, "I2C MASTER Read TIMER( MCP7940 ) : osillator %d, battery enable :%d", time_MCP7940.osillater_start, time_MCP7940.vBat_en);
+				ESP_LOGI(TAG, "The current date/time in ESP32 is: %s", strftime_buf);
 			}
 			else
 			{
@@ -610,18 +693,21 @@ void i2c_test_task(void *arg)
 			}
 		}
 
-		vTaskDelay(1 / portTICK_RATE_MS);
+		vTaskDelay(10 / portTICK_RATE_MS);
 #endif
 		time(&UnitData.UpdateTime);
 		UnitData.Temp = HDC1080_data.temp_result;
 		UnitData.Humidity = HDC1080_data.humidity_result;
 		UnitData.Als = OPT3001_HoldReg.result;
-		UnitData.aq_Co2Level = iaq_data.pred;
+		UnitData.aq_Co2Level = middleCO2;
 		UnitData.aq_Tvoc = iaq_data.Tvoc;
 		UnitData.aq_status = iaq_data.status;
 
 		vTaskDelay((DELAY_TIME_BETWEEN_ITEMS_MS * (task_idx + 1)) / portTICK_RATE_MS);
 	}
+	ESP_LOGE(TAG, "Reading I2C Task ended ,Restarting !");
+	I2cRestart();
+	vTaskDelete(NULL);
 }
 
 void I2c_Init()
@@ -631,6 +717,9 @@ void I2c_Init()
 
 	gpio_pad_select_gpio(I2C_DEATH_SWITCH_GPIO);
 	gpio_set_direction(I2C_DEATH_SWITCH_GPIO, GPIO_MODE_OUTPUT);
+
+	gpio_set_level(I2C_DEATH_SWITCH_GPIO, 0);
+	vTaskDelay(1000 / portTICK_RATE_MS);
 	gpio_set_level(I2C_DEATH_SWITCH_GPIO, 1);
 
 	vTaskDelay(1000 / portTICK_RATE_MS);
@@ -638,4 +727,15 @@ void I2c_Init()
 	vTaskDelay(1 / portTICK_RATE_MS);
 	i2c_slave_init();
 	xTaskCreatePinnedToCore(i2c_test_task, "i2c_test_task_0", 1024 * 2, (void *)0, 1, NULL, 1);
+}
+
+void I2cRestart()
+{
+	gpio_set_level(I2C_DEATH_SWITCH_GPIO, 0); //I2C OFF
+	vTaskDelay(1000 / portTICK_RATE_MS);
+	gpio_set_level(I2C_DEATH_SWITCH_GPIO, 1); //I2C ON
+	vTaskDelay(1000 / portTICK_RATE_MS);
+	i2c_slave_init();
+	xTaskCreatePinnedToCore(i2c_test_task, "i2c_test_task_0", 1024 * 2, (void *)0, 1, NULL, 1);
+	ESP_LOGI(TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
 }

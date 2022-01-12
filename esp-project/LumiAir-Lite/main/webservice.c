@@ -22,7 +22,7 @@
 #define WIFI_CONNECTED_BIT BIT0
 #define WIFI_FAIL_BIT BIT1
 
-#define WIFI_RETRY_MAX 10
+#define WIFI_RETRY_MAX 5
 
 EventGroupHandle_t s_wifi_event_group;
 
@@ -116,6 +116,7 @@ void WebService_Init()
 	else if (bits & WIFI_FAIL_BIT)
 	{
 		ESP_LOGI(WEBSERVICE_TAG, "Failed to connect to SSID:%s, password:%s", UnitCfg.WifiCfg.WIFI_SSID, UnitCfg.WifiCfg.WIFI_PASS);
+		UnitSetStatus(UNIT_STATUS_WIFI_NO_IP);
 	}
 	else
 	{

@@ -25,17 +25,17 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
     <key>NSBluetoothAlwaysUsageDescription</key>
-    <string>BLE permission is required to access and control UVC device </string>
+    <string>BLE permission is required to access and control Zebra printers </string>
     <key>NSBluetoothPeripheralUsageDescription</key>
-    <string>BLE permission is required to access and control UVC device </string>
+    <string>BLE permission is required to access and control Zebra printers </string>
     <key>NSCameraUsageDescription</key>
     <string>Camera permission is required for qrcode scanning.</string>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>Location permission is required to scan UVC device </string>
+    <string>Location permission is required to scan Zebra printers </string>
     <key>NSLocationAlwaysUsageDescription</key>
-    <string>Location permission is required to scan UVC device </string>
+    <string>Location permission is required to scan Zebra printers </string>
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Location permission is required to scan UVC device </string>
+    <string>Location permission is required to scan Zebra printers </string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Network permission is required for printer zebra scanning.</string>
 	<key>UIBackgroundModes</key>

@@ -447,6 +447,8 @@ void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 
 	ESP_LOGI(GATTS_TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
 
+	time(&UnitData.UpdateTime);
+
 	if (otaEnable)
 	{
 		sprintf((char *)total, "{\"ota\":[%d,%d,%d]}", otaNotNeeded, otaProgress, otaIsDone);

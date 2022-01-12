@@ -76,7 +76,15 @@ class _ScanListPrintersState extends State<ScanListPrinters> {
     var wifiIP = await (NetworkInfo().getWifiIP());
     customIpAddress = ipToSubnet(wifiIP);
     //ping to check the network
-    await Socket.connect('192.168.1.1', 8000);
+    for (int i = 1; i < 256; i++) {
+      try {
+        await Socket.connect('$customIpAddress.$i', 9100, timeout: Duration(milliseconds: 200));
+        print('we have good connection => $customIpAddress.$i');
+      } catch (e) {
+        print(e);
+      }
+    }
+
     // Start scanning
     try {
       Map<String, dynamic> messageJSON;

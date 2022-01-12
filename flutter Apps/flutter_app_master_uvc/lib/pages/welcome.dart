@@ -7,7 +7,7 @@ import 'package:flutter_app_master_uvc/services/DataVariables.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:package_info/package_info.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:super_easy_permissions/super_easy_permissions.dart';
 import 'package:wakelock/wakelock.dart';
 
 class Welcome extends StatefulWidget {
@@ -24,7 +24,6 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     await Wakelock.enable();
     bool wakelockEnabled = await Wakelock.enabled;
     if (wakelockEnabled) {
-      // The following statement disables the wakelock.
       Wakelock.toggle(enable: true);
     }
     print('screen lock is disabled');
@@ -51,7 +50,24 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   }
 
   void _listenForPermissionStatus() async {
-    await [Permission.locationWhenInUse, Permission.locationAlways].request();
+    bool result = await SuperEasyPermissions.askPermission(Permissions.camera);
+    if (result) {
+      SuperEasyPermissions.askPermission(Permissions.location).then((value) {
+        if (value) {
+          SuperEasyPermissions.askPermission(Permissions.locationAlways).then((value) {
+            if (value) {
+              SuperEasyPermissions.askPermission(Permissions.locationWhenInUse).then((value){
+                if(value){
+                  SuperEasyPermissions.askPermission(Permissions.bluetooth);
+                }
+              });
+            }
+          });
+        }
+      });
+    } else {
+      print("permission denied");
+    }
   }
 
   @override

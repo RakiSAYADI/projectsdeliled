@@ -262,7 +262,7 @@ void Co2_MonitorTask()
 		//co2
 		if (UnitCfg.Co2LevelWarEnb)
 		{
-			if ((iaq_data.pred > UnitCfg.Co2LevelWar) && (co2_alert_enable == 0))
+			if ((UnitData.aq_Co2Level > UnitCfg.Co2LevelWar) && (co2_alert_enable == 0))
 			{
 				co2_alert_enable = 1;
 				co2_triger_alert = true;
@@ -280,7 +280,7 @@ void Co2_MonitorTask()
 				}
 			}
 			//desativate co2 and init the light
-			if ((iaq_data.pred < UnitCfg.Co2LevelWar) && (co2_alert_enable == 1))
+			if ((UnitData.aq_Co2Level < UnitCfg.Co2LevelWar) && (co2_alert_enable == 1))
 			{
 				ESP_LOGI(TAG, "Co2 Warning off");
 				co2_alert_enable = 0;
@@ -296,11 +296,11 @@ void Co2_MonitorTask()
 				}
 			}
 		}
-		if (iaq_data.pred < 799)
+		if (UnitData.aq_Co2Level < 799)
 		{
 			UnitSetStatus(UNIT_STATUS_NORMAL);
 		}
-		else if (iaq_data.pred < 1499)
+		else if (UnitData.aq_Co2Level < 1499)
 		{
 			UnitSetStatus(UNIT_STATUS_WARNING_CO2);
 		}

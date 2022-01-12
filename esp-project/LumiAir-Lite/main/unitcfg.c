@@ -134,15 +134,15 @@ void Default_saving()
 	sprintf(UnitCfg.UserLcProfile.ZoneCc, "F");
 
 	UnitCfg.UserLcProfile.Ccp[0].CcLevel = 100;
-	UnitCfg.UserLcProfile.Ccp[0].CcTime = 28800; // 8
+	UnitCfg.UserLcProfile.Ccp[0].CcTime = 28800; // 08:00
 	UnitCfg.UserLcProfile.Ccp[1].CcLevel = 50;
-	UnitCfg.UserLcProfile.Ccp[1].CcTime = 36000; // 10
+	UnitCfg.UserLcProfile.Ccp[1].CcTime = 36000; // 10:00
 	UnitCfg.UserLcProfile.Ccp[2].CcLevel = 0;
-	UnitCfg.UserLcProfile.Ccp[2].CcTime = 46800; // 13
+	UnitCfg.UserLcProfile.Ccp[2].CcTime = 46800; // 13:00
 	UnitCfg.UserLcProfile.Ccp[3].CcLevel = 50;
-	UnitCfg.UserLcProfile.Ccp[3].CcTime = 57600; // 16
+	UnitCfg.UserLcProfile.Ccp[3].CcTime = 57600; // 16:00
 	UnitCfg.UserLcProfile.Ccp[4].CcLevel = 100;
-	UnitCfg.UserLcProfile.Ccp[4].CcTime = 72000; // 20
+	UnitCfg.UserLcProfile.Ccp[4].CcTime = 72000; // 20:00
 
 	for (uint8_t i = 0; i < 4; i++)
 	{
@@ -194,23 +194,12 @@ void syncTime(time_t t, uint32_t tzone)
 
 	//set timezone
 
-	char tz[10];
+	char tz[50];
 	int8_t tzc = 0;
 
 	tzc = tzone / 3600;
 
-	if (tzc == 0)
-	{
-		sprintf(tz, "CET0");
-	}
-	else if (tzc < 0)
-	{
-		sprintf(tz, "CET%d", tzc);
-	}
-	else
-	{
-		sprintf(tz, "CET-%d", tzc);
-	}
+	sprintf(tz, "CET-%dCEST-%d,M3.5.0/02:00:00,M10.5.0/03:00:00", abs(tzc), abs(tzc) + 1);
 
 	setenv("TZ", tz, 1);
 	tzset();

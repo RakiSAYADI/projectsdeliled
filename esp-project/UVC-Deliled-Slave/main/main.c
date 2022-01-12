@@ -27,7 +27,7 @@ int app_main(void) {
 	ESP_ERROR_CHECK(nvs_flash_init());
 
 	// Initialize Base Mac Address.
-	BaseMacInit();
+	//BaseMacInit();
 
 	// Initialize GPIOs.
 	LedStatInit();

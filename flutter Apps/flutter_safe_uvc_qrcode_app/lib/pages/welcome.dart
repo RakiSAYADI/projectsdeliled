@@ -6,6 +6,7 @@ import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:package_info/package_info.dart';
 import 'package:super_easy_permissions/super_easy_permissions.dart';
+import 'package:wakelock/wakelock.dart';
 
 class Welcome extends StatefulWidget {
   @override
@@ -43,6 +44,8 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
         Navigator.pushReplacementNamed(context, '/check_permissions');
       });
     }
+    // The following line will enable the Android and iOS wakelock.
+    Wakelock.enable();
   }
 
   @override

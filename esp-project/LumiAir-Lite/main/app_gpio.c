@@ -258,7 +258,6 @@ void LedStatusTask()
 			vTaskDelay(100 / portTICK_PERIOD_MS);
 			break;
 		case UNIT_STATUS_WIFI_NO_IP:
-			vTaskDelay(100 / portTICK_PERIOD_MS);
 			break;
 
 		case UNIT_STATUS_NORMAL:
@@ -279,6 +278,13 @@ void LedStatusTask()
 		default:
 			UnitSetStatus(UNIT_STATUS_NONE);
 			break;
+		}
+
+		if ((WifiConnectedFlag == false) && (LedStateLocked == false))
+		{
+			//printf("wifi anf led");
+			ORANGE_OFF();
+			vTaskDelay(100 / portTICK_PERIOD_MS);
 		}
 	}
 }

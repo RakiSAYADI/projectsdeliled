@@ -10,24 +10,24 @@
 
 #define MAC_TAG "BASE_MAC"
 
-const uint8_t MAC_BASE_ADDRESS[8] = { 0x70, 0xB3, 0xD5, 0x01, 0x82, 0x00 };
+const uint8_t MAC_BASE_ADDRESS[8] = {0x70, 0xB3, 0xD5, 0x01, 0x82, 0x05};
 
-void BaseMacInit() {
+void BaseMacInit()
+{
 	esp_err_t ret = ESP_OK;
 
 	//ret = esp_read_mac(mac_addr, ESP_MAC_BT);
 	ret = esp_base_mac_addr_set(MAC_BASE_ADDRESS);
-	if (ret == ESP_OK) {
-		ESP_LOGI(MAC_TAG,
-				"Use base MAC address which is stored in other external storage(flash, EEPROM, etc)");
-	} else {
-		ESP_LOGE(MAC_TAG,
-				"Use base MAC address which is stored in BLK0 of EFUSE (%s)",
-				esp_err_to_name(ret));
+	if (ret == ESP_OK)
+	{
+		ESP_LOGI(MAC_TAG, "Use base MAC address which is stored in other external storage(flash, EEPROM, etc)");
+	}
+	else
+	{
+		ESP_LOGE(MAC_TAG, "Use base MAC address which is stored in BLK0 of EFUSE (%s)", esp_err_to_name(ret));
 	}
 
 	ESP_LOGI(MAC_TAG, "MAC:%02X:%02X:%02X:%02X:%02X:%02X", MAC_BASE_ADDRESS[0], MAC_BASE_ADDRESS[1], MAC_BASE_ADDRESS[2], MAC_BASE_ADDRESS[3], MAC_BASE_ADDRESS[4], MAC_BASE_ADDRESS[5]);
 
 	ESP_LOGI(MAC_TAG, "Changing Base MAC Address is Completed !");
-
 }
