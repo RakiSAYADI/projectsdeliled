@@ -191,6 +191,8 @@ final List<String> sendEmailPageMessageTextLanguageArray = ['Entrer votre adress
 
 final List<String> sendingEmailPageToastTextLanguageArray = ['Envoi en cours !', 'Sending in progress!'];
 
+final List<String> emailAddressNonValidToastTextLanguageArray = ['Veuillez entrer une adresse e-mail !', 'Please enter an e-mail address!'];
+
 final List<String> sendEmailPageButtonTextLanguageArray = ['Envoyer', 'Send'];
 
 final List<String> uvcEmailObjectTextLanguageArray = ['Rapport de désinfection UV-C', 'UV-C disinfection report'];

@@ -51,8 +51,14 @@ class _SendEmailState extends State<SendEmail> {
   Widget build(BuildContext context) {
     readUserEmailFile();
 
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    double screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
     return WillPopScope(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -99,12 +105,19 @@ class _SendEmailState extends State<SendEmail> {
                       SizedBox(height: screenHeight * 0.1),
                       TextButton(
                         onPressed: () async {
-                          await uvcDataFile.saveStringUVCEmailDATA(myEmail.text);
-                          uvcDataFile.saveUVCDATASelected(uvcDataSelected);
-                          myUvcToast.setToastDuration(60);
-                          myUvcToast.setToastMessage(sendingEmailPageToastTextLanguageArray[languageArrayIdentifier]);
-                          myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
-                          await sendEmail(myEmail.text);
+                          if (myEmail.text.isNotEmpty && RegExp(
+                              r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$").hasMatch(myEmail.text)) {
+                            await uvcDataFile.saveStringUVCEmailDATA(myEmail.text);
+                            uvcDataFile.saveUVCDATASelected(uvcDataSelected);
+                            myUvcToast.setToastDuration(60);
+                            myUvcToast.setToastMessage(sendingEmailPageToastTextLanguageArray[languageArrayIdentifier]);
+                            myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
+                            await sendEmail(myEmail.text);
+                          } else {
+                            myUvcToast.setToastDuration(10);
+                            myUvcToast.setToastMessage(emailAddressNonValidToastTextLanguageArray[languageArrayIdentifier]);
+                            myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                          }
                         },
                         child: Text(
                           sendEmailPageButtonTextLanguageArray[languageArrayIdentifier],
