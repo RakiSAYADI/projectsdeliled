@@ -37,6 +37,8 @@ bool printerBLEOrWIFI = false;
 
 final ZPLConverter zplConverter = new ZPLConverter();
 
+bool saveToPrint = false;
+
 double screenWidth;
 double screenHeight;
 

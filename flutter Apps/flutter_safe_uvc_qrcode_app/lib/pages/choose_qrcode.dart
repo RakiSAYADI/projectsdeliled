@@ -35,37 +35,11 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.blue[400],
       appBar: AppBar(
         title: Text(qrCodeChoiceTitleLanguageArray[languageArrayIdentifier]),
         centerTitle: true,
-        actions: <Widget>[
-          Padding(
-            padding: EdgeInsets.all(10.0),
-            child: GestureDetector(
-              onTap: () async {
-                await displayQrCodeDATA(context);
-              },
-              child: Stack(
-                alignment: AlignmentDirectional.center,
-                children: <Widget>[
-                  Container(
-                    width: screenWidth * 0.13,
-                    height: screenHeight * 0.07,
-                    decoration: new BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  Icon(Icons.print, color: Colors.blue[400]),
-                ],
-              ),
-            ),
-          ),
-        ],
       ),
       body: Container(
         decoration: BoxDecoration(color: Colors.grey[200]),
@@ -107,6 +81,11 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
           },
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.print),
+          onPressed: () async {
+            await displayQrCodeDATA(context);
+          }),
     );
   }
 
@@ -123,19 +102,10 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
         listQrCodes.add(TableRow(children: [
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             RepaintBoundary(child: Image.file(qrCodeImageList[i], width: screenWidth * 0.27, height: screenHeight * 0.14)),
-            Text(qrCodeList[i].fileName),
+            Text(qrCodeList[i].fileName, textAlign: TextAlign.center),
           ])
         ]));
       }
-      /*try {
-        await ZebraSdk.onDiscoveryUSB().then((value) {
-          myUvcToast.setToastDuration(5);
-          myUvcToast.setToastMessage(value.toString());
-          myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
-        });
-      } on PlatformException catch (e) {
-        print(e.message);
-      }*/
       return showDialog<void>(
         context: context,
         barrierDismissible: false,
@@ -288,6 +258,7 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
           qrCodeData = 'https://qrgo.page.link/hYgXu';
           qrCodeDataName = qrcodeSecurityTextLanguageArray[languageArrayIdentifier];
           qrCodeFileName = 'securityQrCode.png';
+          saveToPrint = true;
         }
         Navigator.pushNamed(context, destination);
       },
@@ -303,10 +274,11 @@ class _ChooseQrCodeState extends State<ChooseQrCode> {
                 padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
                 child: TextButton(
                   onPressed: () {
-                    if (destination == "/Qr_code_Display_Security") {
+                    if (destination == "/Qr_code_Display") {
                       qrCodeData = 'https://qrgo.page.link/hYgXu';
                       qrCodeDataName = qrcodeSecurityTextLanguageArray[languageArrayIdentifier];
                       qrCodeFileName = 'securityQrCode.png';
+                      saveToPrint = true;
                     }
                     Navigator.pushNamed(context, destination);
                   },

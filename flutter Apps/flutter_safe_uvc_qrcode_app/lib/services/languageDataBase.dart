@@ -152,7 +152,7 @@ final List<String> noNameDeviceTextLanguageArray = ['Imprimante sans nom', 'Unna
 
 final List<String> scanPrinterDevicesPageTitleTextLanguageArray = ['Liste des imprimantes Zebra :', 'List of Zebra printers :'];
 
-final List<String> noFilesToastTextLanguageArray = ['Aucun QR Code n\'a été généré !', 'No qr Codes have been generated !'];
+final List<String> noFilesToastTextLanguageArray = ['Aucun QR Code n\'a été généré !', 'No QR Codes have been generated !'];
 
 final List<String> scanWidgetTextLanguageArray = ['Recherche en cours', 'Scan in progress'];
 
@@ -183,6 +183,8 @@ final List<String> nonValidIPAddressToastTextLanguageArray = ['Addresse IP non v
 
 final List<String> applyTextLanguageArray = ['Appliquer', 'Apply'];
 
+final List<String> printTextLanguageArray = ['Imprimer', 'Print'];
+
 final List<String> printSettingsAlertDialogTitleLanguageArray = ['Paramètres impression', 'Print settings'];
 
 final List<String> resolutionAlertDialogTitleLanguageArray = ['Résolution (en dpi)', 'Resolution (in dpi)'];
@@ -190,3 +192,7 @@ final List<String> resolutionAlertDialogTitleLanguageArray = ['Résolution (en d
 final List<String> printWidthAlertDialogTitleLanguageArray = ['Largeur (en mm)', 'Width (in mm)'];
 
 final List<String> printHeightAlertDialogTitleLanguageArray = ['Longueur (en mm)', 'Height (in mm)'];
+
+final List<String> fileSelectPrintToastTextLanguageArray = ['Séléctionner les étiquettes à imprimer !', 'Select the labels to print !'];
+
+final List<String> connectIpAddressPrinterTextLanguageArray = ['Voulez vous connecter à cette adresse IP ? ', 'Do you want to connect to this IP address ?'];

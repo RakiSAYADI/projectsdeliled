@@ -57,6 +57,7 @@ class _FileSelectorState extends State<FileSelector> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           qrCodeList[i].fileName,
+                          textAlign: TextAlign.center,
                           style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02, color: fileCardNameSelectorColor[i]),
                         ),
                       ),
@@ -95,6 +96,7 @@ class _FileSelectorState extends State<FileSelector> {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         qrCodeList[i].fileName,
+                        textAlign: TextAlign.center,
                         style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02, color: fileCardNameSelectorColor[i]),
                       ),
                     ),
@@ -113,7 +115,7 @@ class _FileSelectorState extends State<FileSelector> {
     fileSelector[i] = !fileSelector[i];
     listQrCodes = listQrCodes;
     if (fileSelector[i]) {
-      fileCardSelectorColor[i] = Colors.green[700];
+      fileCardSelectorColor[i] = Colors.blue[700];
       fileCardNameSelectorColor[i] = Colors.white;
     } else {
       fileCardSelectorColor[i] = Colors.grey[200];
@@ -343,17 +345,20 @@ class _FileSelectorState extends State<FileSelector> {
           child: Table(border: TableBorder.all(color: Colors.black), defaultVerticalAlignment: TableCellVerticalAlignment.middle, children: listQrCodes),
         ),
       ),
-      floatingActionButton: Visibility(
-        visible: printButtonVisibility,
-        child: FloatingActionButton(
-            child: Icon(Icons.print),
-            onPressed: () async {
-              int numberOfFilesToPrint = 0;
-              for (bool file in fileSelector) {
-                if (file) {
-                  numberOfFilesToPrint++;
-                }
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.print),
+          onPressed: () async {
+            int numberOfFilesToPrint = 0;
+            for (bool file in fileSelector) {
+              if (file) {
+                numberOfFilesToPrint++;
               }
+            }
+            if (numberOfFilesToPrint == 0) {
+              myUvcToast.setToastDuration(2);
+              myUvcToast.setToastMessage(fileSelectPrintToastTextLanguageArray[languageArrayIdentifier]);
+              myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+            } else {
               printStateWidget(context, numberOfFilesToPrint);
               for (int i = 0; i < fileSelector.length; i++) {
                 if (fileSelector[i]) {
@@ -368,8 +373,8 @@ class _FileSelectorState extends State<FileSelector> {
               }
               Navigator.of(context).pop();
               printDoneToast(context);
-            }),
-      ),
+            }
+          }),
     );
   }
 }

@@ -112,6 +112,7 @@ class ZebraBLEPrinter {
           await zebraPrinter.requestMtu(512);
           await Future.delayed(Duration(milliseconds: 500));
           final mtu = await zebraPrinter.mtu.first;
+          print('mtu is : $mtu');
           await Future.delayed(Duration(milliseconds: 500));
           _zebraPrinterServices = await zebraPrinter.discoverServices();
           print('printer is connected');
@@ -160,13 +161,16 @@ class ZebraBLEPrinter {
       // checking Connection
       if (_isConnected) {
         // writing characteristic after 1 second
+        //print(data);
         await _zebraPrinterServices.elementAt(servicePosition).characteristics.elementAt(charPosition).write(data.codeUnits);
+        writeState = 0;
       } else {
         writeState = -1;
       }
     } catch (e) {
+      print(e);
       writeState = -1;
     }
-    writeState = 0;
+    print(writeState);
   }
 }

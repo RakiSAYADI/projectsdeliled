@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/DataVariables.dart';
+import 'package:flutter_safe_uvc_qrcode_app/services/IP_Address_File_class.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/ZebraPrinterBLEWidget.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/ZebraPrinterWIFIWidget.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/languageDataBase.dart';
@@ -27,12 +28,14 @@ class _ScanListPrintersState extends State<ScanListPrinters> {
 
   String customIpAddress = '';
 
+  IpAddressFile ipAddressFile = IpAddressFile();
+
   @override
   void initState() {
     super.initState();
     myUvcToast = ToastyMessage(toastContext: context);
     if (printerBLEOrWIFI) {
-      scanWIFIForZebraPrinters(context);
+      checkIpAddress(context);
     } else {
       scanBLEForZebraPrinters(context);
     }
@@ -56,7 +59,7 @@ class _ScanListPrintersState extends State<ScanListPrinters> {
     flutterBlue.scanResults.listen((results) {
       for (ScanResult zebraPrinter in results) {
         print('${zebraPrinter.device.name} found! mac: ${zebraPrinter.device.id.id}');
-        if ((zebraPrinter.device.name.contains('Zebra')) || (zebraPrinter.device.name.contains('ZEBRA')) && (!devicesMacAddress.contains(zebraPrinter.device.id.id))) {
+        if ((zebraPrinter.device.name.contains('Zebra') || zebraPrinter.device.name.contains('ZEBRA')) && (!devicesMacAddress.contains(zebraPrinter.device.id.id))) {
           setState(() {
             blePrinters.add(new ZebraBLEPrinter(zebraPrinter: zebraPrinter.device));
           });
@@ -68,10 +71,32 @@ class _ScanListPrintersState extends State<ScanListPrinters> {
     flutterBlue.startScan(timeout: Duration(seconds: 4));
   }
 
-  List<String> printerAddressList = [];
+  checkIpAddress(BuildContext context) async {
+    await Future.delayed(Duration(milliseconds: 200));
+    customIpAddress = await ipAddressFile.readUserIpAddressDATA();
+    if (customIpAddress.isEmpty) {
+      scanWIFIForZebraPrinters(context);
+    } else {
+      waitingConnectionWidget(context, scanWidgetTextLanguageArray[languageArrayIdentifier]);
+      try {
+        await Socket.connect(customIpAddress, 9100, timeout: Duration(seconds: 1));
+        zebraWifiPrinter = ZebraWifiPrinter(name: 'Custom Zebra Printer', address: customIpAddress, port: 9100);
+        ipAddressFile.saveStringIpAddressDATA(zebraWifiPrinter.address);
+        await Future.delayed(Duration(seconds: 1));
+        Navigator.pop(context, false);
+        Navigator.pushNamed(context, '/file_selector');
+      } catch (e) {
+        print(e);
+        myUvcToast.setToastDuration(3);
+        myUvcToast.setToastMessage(nonValidIPAddressToastTextLanguageArray[languageArrayIdentifier]);
+        myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+        await Future.delayed(Duration(seconds: 1));
+        Navigator.pop(context, false);
+      }
+    }
+  }
 
   scanWIFIForZebraPrinters(BuildContext context) async {
-    await Future.delayed(Duration(milliseconds: 200));
     waitingConnectionWidget(context, scanWidgetTextLanguageArray[languageArrayIdentifier]);
     var wifiIP = await (NetworkInfo().getWifiIP());
     customIpAddress = ipToSubnet(wifiIP);
@@ -121,10 +146,11 @@ class _ScanListPrintersState extends State<ScanListPrinters> {
     if (printerBLEOrWIFI) {
       return FloatingActionButton(
           child: Icon(Icons.search),
-          onPressed: () {
+          onPressed: () async {
             setState(() {
               wifiPrinters.clear();
             });
+            customIpAddress = await ipAddressFile.readUserIpAddressDATA();
             scanWIFIForZebraPrinters(context);
           });
     } else {
@@ -206,6 +232,7 @@ class _ScanListPrintersState extends State<ScanListPrinters> {
                   try {
                     await Socket.connect(myPrinterIP.text, 9100, timeout: Duration(seconds: 1));
                     zebraWifiPrinter = ZebraWifiPrinter(name: 'Custom Zebra Printer', address: myPrinterIP.text, port: 9100);
+                    ipAddressFile.saveStringIpAddressDATA(zebraWifiPrinter.address);
                     Navigator.pushNamed(context, '/file_selector');
                   } catch (e) {
                     print(e);
@@ -274,6 +301,7 @@ class _ScanListPrintersState extends State<ScanListPrinters> {
                     printer: wifiPrinter,
                     send: () {
                       zebraWifiPrinter = wifiPrinter;
+                      ipAddressFile.saveStringIpAddressDATA(zebraWifiPrinter.address);
                       Navigator.pushNamed(context, '/file_selector');
                     },
                   ))

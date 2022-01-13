@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +15,7 @@ import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:super_easy_permissions/super_easy_permissions.dart';
 
 class QrCodeDisplay extends StatefulWidget {
   @override
@@ -116,7 +118,10 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
             labelStyle: TextStyle(fontSize: 18.0),
             onTap: () async {
               SystemChannels.textInput.invokeMethod('TextInput.hide');
-              await captureQrCodePNG();
+              if (saveToPrint) {
+                await captureQrCodePNG();
+                saveToPrint = false;
+              }
               Navigator.pushNamedAndRemoveUntil(context, "/choose_qr_code", (r) => false);
             },
           ),
@@ -125,12 +130,28 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
               Icons.send,
               color: Colors.white,
             ),
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.red,
             label: sendEmailButtonTextLanguageArray[languageArrayIdentifier],
             labelStyle: TextStyle(fontSize: 18.0),
             onTap: () async {
               SystemChannels.textInput.invokeMethod('TextInput.hide');
               dataEmailSending(context);
+            },
+          ),
+          SpeedDialChild(
+            child: Icon(
+              Icons.print,
+              color: Colors.white,
+            ),
+            backgroundColor: Colors.blue,
+            label: printTextLanguageArray[languageArrayIdentifier],
+            labelStyle: TextStyle(fontSize: 18.0),
+            onTap: () async {
+              if (saveToPrint) {
+                await captureQrCodePNG();
+                saveToPrint = false;
+              }
+              await displayQrCodeDATA(context);
             },
           ),
         ],
@@ -202,23 +223,30 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
                 style: TextStyle(fontSize: (widthScreen * 0.05)),
               ),
               onPressed: () async {
-                Navigator.pop(context, false);
-                await captureQrCodePNG();
-                SystemChannels.textInput.invokeMethod('TextInput.hide');
-                await emailDataFile.saveStringUVCEmailDATA(myEmail.text);
-                myUvcToast.setToastDuration(60);
-                myUvcToast.setToastMessage(sendProgressToastTextLanguageArray[languageArrayIdentifier]);
-                myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
-                if (await checkInternetConnection()) {
-                  await sendEmail(myEmail.text);
-                  qrCodeList.clear();
-                  qrCodeImageList.length = 0;
-                  Navigator.pushNamedAndRemoveUntil(context, "/choose_qr_code", (r) => false);
+                if (myEmail.text.isNotEmpty &&
+                    RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$").hasMatch(myEmail.text)) {
+                  Navigator.pop(context, false);
+                  await captureQrCodePNG();
+                  SystemChannels.textInput.invokeMethod('TextInput.hide');
+                  await emailDataFile.saveStringUVCEmailDATA(myEmail.text);
+                  myUvcToast.setToastDuration(60);
+                  myUvcToast.setToastMessage(sendProgressToastTextLanguageArray[languageArrayIdentifier]);
+                  myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
+                  if (await checkInternetConnection()) {
+                    await sendEmail(myEmail.text);
+                    qrCodeList.clear();
+                    qrCodeImageList.length = 0;
+                    Navigator.pushNamedAndRemoveUntil(context, "/choose_qr_code", (r) => false);
+                  } else {
+                    myUvcToast.clearAllToast();
+                    myUvcToast.setToastDuration(3);
+                    myUvcToast.setToastMessage(noConnectionToastTextLanguageArray[languageArrayIdentifier]);
+                    myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
+                  }
                 } else {
-                  myUvcToast.clearAllToast();
-                  myUvcToast.setToastDuration(3);
-                  myUvcToast.setToastMessage(noConnectionToastTextLanguageArray[languageArrayIdentifier]);
-                  myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
+                  myUvcToast.setToastDuration(10);
+                  myUvcToast.setToastMessage(emailAddressNonValidToastTextLanguageArray[languageArrayIdentifier]);
+                  myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
                 }
               },
             ),
@@ -264,6 +292,79 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
       myUvcToast.setToastDuration(3);
       myUvcToast.setToastMessage(emailNotSentToastTextLanguageArray[languageArrayIdentifier]);
       myUvcToast.showToast(Colors.red, Icons.thumb_down, Colors.white);
+    }
+  }
+
+  Future<void> displayQrCodeDATA(BuildContext context) async {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    listQrCodes.clear();
+    if (qrCodeImageList.length == 0) {
+      myUvcToast.setToastDuration(2);
+      myUvcToast.setToastMessage(noFilesToastTextLanguageArray[languageArrayIdentifier]);
+      myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+    } else {
+      for (int i = 0; i < qrCodeImageList.length; i++) {
+        listQrCodes.add(TableRow(children: [
+          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            RepaintBoundary(child: Image.file(qrCodeImageList[i], width: screenWidth * 0.27, height: screenHeight * 0.14)),
+            Text(qrCodeList[i].fileName, textAlign: TextAlign.center),
+          ])
+        ]));
+      }
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(qrCodesAlertDialogTitleLanguageArray[languageArrayIdentifier]),
+            content: SingleChildScrollView(
+              child: Table(border: TableBorder.all(color: Colors.black), defaultVerticalAlignment: TableCellVerticalAlignment.middle, children: listQrCodes),
+            ),
+            actions: [
+              TextButton(
+                child: Text(
+                  printBLETextLanguageArray[languageArrayIdentifier],
+                  style: TextStyle(color: Colors.green),
+                ),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  await SuperEasyPermissions.askPermission(Permissions.bluetooth);
+                  printerBLEOrWIFI = false;
+                  Navigator.pushNamed(context, '/scan_list_printers');
+                },
+              ),
+              TextButton(
+                child: Text(
+                  printWifiTextLanguageArray[languageArrayIdentifier],
+                  style: TextStyle(color: Colors.blue),
+                ),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  var connectivityResult = await (Connectivity().checkConnectivity());
+                  if (connectivityResult == ConnectivityResult.wifi) {
+                    printerBLEOrWIFI = true;
+                    Navigator.pushNamed(context, '/scan_list_printers');
+                  } else {
+                    myUvcToast.setToastDuration(2);
+                    myUvcToast.setToastMessage(noWIFIConnectionToastTextLanguageArray[languageArrayIdentifier]);
+                    myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                  }
+                },
+              ),
+              TextButton(
+                child: Text(
+                  cancelTextLanguageArray[languageArrayIdentifier],
+                  style: TextStyle(color: Colors.red),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
