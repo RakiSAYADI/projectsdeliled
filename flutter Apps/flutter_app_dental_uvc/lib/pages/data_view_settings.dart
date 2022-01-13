@@ -64,13 +64,13 @@ class _DataCSVSettingsViewState extends State<DataCSVSettingsView> {
               children: uvcDataSelected.map((item) {
                 return TableRow(
                     children: item.map((row) {
-                      return Container(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            row.toString(),
-                            style: TextStyle(
-                              fontSize: widthScreen * 0.015,
+                  return Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        row.toString(),
+                        style: TextStyle(
+                          fontSize: widthScreen * 0.015,
                         ),
                       ),
                     ),
@@ -141,17 +141,24 @@ class _DataCSVSettingsViewState extends State<DataCSVSettingsView> {
                 style: TextStyle(fontSize: (widthScreen * 0.02)),
               ),
               onPressed: () async {
-                await uvcDataFile.saveStringUVCEmailDATA(myEmail.text);
-                if (await dataBaseRequests.checkConnection()) {
-                  uvcDataFile.saveUVCDATASelected(uvcDataSelected);
-                  myUvcToast.setToastDuration(60);
-                  myUvcToast.setToastMessage(sendingProgressToastTextLanguageArray[languageArrayIdentifier]);
-                  myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
-                  await sendEmail(myEmail.text);
-                  Navigator.pop(context, false);
+                if (myEmail.text.isNotEmpty &&
+                    RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$").hasMatch(myEmail.text)) {
+                  await uvcDataFile.saveStringUVCEmailDATA(myEmail.text);
+                  if (await dataBaseRequests.checkConnection()) {
+                    uvcDataFile.saveUVCDATASelected(uvcDataSelected);
+                    myUvcToast.setToastDuration(60);
+                    myUvcToast.setToastMessage(sendingProgressToastTextLanguageArray[languageArrayIdentifier]);
+                    myUvcToast.showToast(Colors.green, Icons.send, Colors.white);
+                    await sendEmail(myEmail.text);
+                    Navigator.pop(context, false);
+                  } else {
+                    myUvcToast.setToastDuration(3);
+                    myUvcToast.setToastMessage(internetConnectionToastTextLanguageArray[languageArrayIdentifier]);
+                    myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                  }
                 } else {
-                  myUvcToast.setToastDuration(3);
-                  myUvcToast.setToastMessage(internetConnectionToastTextLanguageArray[languageArrayIdentifier]);
+                  myUvcToast.setToastDuration(10);
+                  myUvcToast.setToastMessage(emailAddressNonValidToastTextLanguageArray[languageArrayIdentifier]);
                   myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
                 }
               },
