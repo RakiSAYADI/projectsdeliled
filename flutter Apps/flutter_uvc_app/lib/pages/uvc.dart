@@ -39,6 +39,8 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
 
   bool firstDisplayMainWidget = true;
 
+  var platformChannelSpecifics;
+
   void _changeOpacityDisinfection() {
     setState(() {
       opacityLevelDisinfection = opacityLevelDisinfection == 0 ? 1.0 : 0.0;
@@ -51,13 +53,15 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     });
   }
 
-  void _getNotification() async {
+  void _setNotification() async {
     var androidPlatformChannelSpecifics =
-        AndroidNotificationDetails('your channel id', 'your channel name', 'your channel description', importance: Importance.max, priority: Priority.high, ticker: 'ticker');
+        AndroidNotificationDetails('123', 'Safe UVC', descriptionNotificationLanguageArray[languageArrayIdentifier], importance: Importance.max, priority: Priority.high, ticker: 'ticker');
     var iOSPlatformChannelSpecifics = IOSNotificationDetails(presentAlert: true, presentBadge: true, presentSound: true, badgeNumber: 1);
-    var platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(0, notificationTitleTextLanguageArray[languageArrayIdentifier], notificationBodyTextLanguageArray[languageArrayIdentifier], platformChannelSpecifics,
-        payload: 'item x');
+    platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
+  }
+
+  void _getNotification(String titleText, String bodyText) async {
+    await flutterLocalNotificationsPlugin.show(0, titleText, bodyText, platformChannelSpecifics);
   }
 
   @override
@@ -69,10 +73,11 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     durationInSeconds = 30;
     controllerAnimationTimeBackground = AnimationController(vsync: this);
     circleColor = Colors.red;
+    _setNotification();
     super.initState();
   }
 
-  void readingCharacteristic() async {
+  void readingCharacteristic(BuildContext context) async {
     print('the read methode !');
     Map<String, dynamic> dataRead;
     int detectionResult = 0;
@@ -135,7 +140,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
 
       controllerAnimationTimeBackground.reverse(from: controllerAnimationTimeBackground.value == 0.0 ? 1.0 : controllerAnimationTimeBackground.value);
 
-      readingCharacteristic();
+      readingCharacteristic(context);
     }
 
     double screenWidth = MediaQuery.of(context).size.width;
@@ -303,7 +308,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                                 if ((!treatmentIsStopped) && treatmentIsOnProgress) {
                                                   print('finished activation');
                                                   treatmentIsOnProgress = false;
-                                                  _getNotification();
+                                                  _getNotification(notificationTitleTextLanguageArray[languageArrayIdentifier], notificationBodyTextLanguageArray[languageArrayIdentifier]);
                                                   stopReading = true;
                                                   activationTime = (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds);
                                                   isTreatmentCompleted = treatmentIsSuccessful;

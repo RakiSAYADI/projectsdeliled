@@ -239,3 +239,5 @@ final List<String> toTextLanguageArray = ['À', 'To'];
 final List<String> noDataSelectionToastLanguageArray = ['Merci de choisir une de ces options !', 'Please choose one of the following options!'];
 
 final List<String> noDataForDateSelectedToastLanguageArray = ['Aucun rapport trouvé à cette date !', 'No report found!'];
+
+final List<String> descriptionNotificationLanguageArray = ['Détails sur la désinfection', 'Disinfection details'];
