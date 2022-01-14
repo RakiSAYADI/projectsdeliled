@@ -24,26 +24,26 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-    <key>NSBluetoothAlwaysUsageDescription</key>
-    <string>BLE permission is required to access and control Zebra printers </string>
-    <key>NSBluetoothPeripheralUsageDescription</key>
-    <string>BLE permission is required to access and control Zebra printers </string>
-    <key>NSCameraUsageDescription</key>
-    <string>Camera permission is required for qrcode scanning.</string>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>Location permission is required to scan Zebra printers </string>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>Location permission is required to scan Zebra printers </string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Location permission is required to scan Zebra printers </string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>BLE permission is required to access and control Zebra printers </string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>BLE permission is required to access and control Zebra printers </string>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera permission is required for qrcode scanning.</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Network permission is required for printer zebra scanning.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Location permission is required to scan Zebra printers </string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Location permission is required to scan Zebra printers </string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Location permission is required to scan Zebra printers </string>
 	<key>UIBackgroundModes</key>
-    <array>
-        <string>bluetooth-central</string>
-        <string>bluetooth-peripheral</string>
-        <string>external-accessory</string>
-    </array>
+	<array>
+		<string>bluetooth-central</string>
+		<string>bluetooth-peripheral</string>
+		<string>external-accessory</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
