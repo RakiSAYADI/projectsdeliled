@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app_bispectrum/services/DataVariables.dart';
+import 'package:flutter_app_bispectrum/services/languageDataBase.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:get/get.dart';
 
@@ -66,12 +67,12 @@ class Device {
           print('disconnected');
           if (homePageState) {
             Get.defaultDialog(
-              title: 'Attention',
+              title: attentionTextLanguageArray[languageArrayIdentifier],
               barrierDismissible: false,
-              content: Text('La connexion est perdue avec votre dispositif, vous allez être reconnecté', style: TextStyle(fontSize: 14)),
+              content: Text(attentionAlertDialogTextLanguageArray[languageArrayIdentifier], style: TextStyle(fontSize: 14)),
               actions: [
                 TextButton(
-                  child: Text('Compris', style: TextStyle(fontSize: 14)),
+                  child: Text(understoodTextLanguageArray[languageArrayIdentifier], style: TextStyle(fontSize: 14)),
                   onPressed: () {
                     Get.clearRouteTree();
                     myDevice.disconnect();

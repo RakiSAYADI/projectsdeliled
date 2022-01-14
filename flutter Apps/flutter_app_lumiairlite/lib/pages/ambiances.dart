@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app_bispectrum/services/DataVariables.dart';
+import 'package:flutter_app_bispectrum/services/languageDataBase.dart';
 import 'package:hsl_colorpicker/HSLColorPicker.dart';
 
 class AmbiancePage extends StatefulWidget {
@@ -202,7 +203,7 @@ class _AmbiancePageState extends State<AmbiancePage> {
                     dataCharAndroid2 = String.fromCharCodes(await characteristicData.read());
                   }
                   if (Platform.isIOS) {
-                    savingDataWidget(context);
+                    savingDataWidget(context, waitTextLanguageArray[languageArrayIdentifier]);
                     dataCharIOS2p1 = await charDividedIOSRead(characteristicData);
                     dataCharIOS2p2 = await charDividedIOSRead(characteristicData);
                     dataCharIOS2p3 = await charDividedIOSRead(characteristicData);

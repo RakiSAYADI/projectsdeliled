@@ -17,6 +17,8 @@ final List<String> understoodTextLanguageArray = ['Compris', 'I understand'];
 
 final List<String> attentionTextLanguageArray = ['Attention', 'Warning'];
 
+final List<String> attentionAlertDialogTextLanguageArray = ['La connexion est perdue avec votre dispositif, vous allez être reconnecté', 'The connection is lost with your device, you will be reconnected'];
+
 final List<String> stopActivityAlertDialogMessageTextLanguageArray = ['Voulez-vous vraiment quitter l\'application ?', 'Are you sure you want to quit the app?'];
 
 final List<String> yesTextLanguageArray = ['Oui', 'Yes'];
@@ -104,10 +106,7 @@ final List<String> passwordTextLanguageArray = ['Mot de passe :', 'Password'];
 
 final List<String> connectTextLanguageArray = ['Connecter', 'Connect'];
 
-final List<String> restartWIFIAlertDialogTitleTextLanguageArray = [
-  'Voulez-vous redémarrer le HuBBox pour vous connecter au WiFi ?',
-  'Do you want to restart the HuBBox to connect to WiFi?'
-];
+final List<String> restartWIFIAlertDialogTitleTextLanguageArray = ['Voulez-vous redémarrer le HuBBox pour vous connecter au WiFi ?', 'Do you want to restart the HuBBox to connect to WiFi?'];
 
 final List<String> restartTextLanguageArray = ['Redémarrage', 'Restart'];
 
@@ -121,10 +120,11 @@ final List<String> cancelTextLanguageArray = ['Annuler', 'Cancel'];
 
 final List<String> searchWifiConnexionTextLanguageArray = ['Recherche des réseaux WiFi disponibles', 'Search for available WiFi networks'];
 
-final List<String> wifiConnexionAlertDialogTextLanguageArray = [
-  'HuBBox va redémarrer afin de finaliser la connexion au WiFi',
-  'HuBBox will restart in order to achieve the WiFi connection'
-];
+final List<String> wifiConnexionAlertDialogTextLanguageArray = ['HuBBox va redémarrer afin de finaliser la connexion au WiFi', 'HuBBox will restart in order to achieve the WiFi connection'];
+
+final List<String> waitTextLanguageArray = ['Veuillez patienter', 'Please wait'];
+
+final List<String> connexionTextLanguageArray = ['Connexion en cours', 'Connexion in progress'];
 
 final List<String> firstZoneTextLanguageArray = ['Zone 1 :', 'Zone 1:'];
 

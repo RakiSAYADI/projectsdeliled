@@ -255,7 +255,7 @@ class _SettingsState extends State<Settings> {
                                         dataCharAndroid2 = String.fromCharCodes(await characteristicData.read());
                                       }
                                       if (Platform.isIOS) {
-                                        savingDataWidget(context);
+                                        savingDataWidget(context, waitTextLanguageArray[languageArrayIdentifier]);
                                         dataCharIOS2p1 = await charDividedIOSRead(characteristicData);
                                         dataCharIOS2p2 = await charDividedIOSRead(characteristicData);
                                         dataCharIOS2p3 = await charDividedIOSRead(characteristicData);
@@ -521,7 +521,7 @@ class _SettingsState extends State<Settings> {
                                         dataCharAndroid2 = String.fromCharCodes(await characteristicData.read());
                                       }
                                       if (Platform.isIOS) {
-                                        savingDataWidget(context);
+                                        savingDataWidget(context, waitTextLanguageArray[languageArrayIdentifier]);
                                         dataCharIOS2p1 = await charDividedIOSRead(characteristicData);
                                         dataCharIOS2p2 = await charDividedIOSRead(characteristicData);
                                         dataCharIOS2p3 = await charDividedIOSRead(characteristicData);
@@ -863,7 +863,7 @@ class _SettingsState extends State<Settings> {
                   dataCharAndroid2 = String.fromCharCodes(await characteristicData.read());
                 }
                 if (Platform.isIOS) {
-                  savingDataWidget(context);
+                  savingDataWidget(context, waitTextLanguageArray[languageArrayIdentifier]);
                   dataCharIOS2p1 = await charDividedIOSRead(characteristicData);
                   dataCharIOS2p2 = await charDividedIOSRead(characteristicData);
                   dataCharIOS2p3 = await charDividedIOSRead(characteristicData);
@@ -1052,7 +1052,7 @@ class _SettingsState extends State<Settings> {
                     dataCharAndroid2 = String.fromCharCodes(await characteristicData.read());
                   }
                   if (Platform.isIOS) {
-                    savingDataWidget(context);
+                    savingDataWidget(context, waitTextLanguageArray[languageArrayIdentifier]);
                     dataCharIOS2p1 = await charDividedIOSRead(characteristicData);
                     dataCharIOS2p2 = await charDividedIOSRead(characteristicData);
                     dataCharIOS2p3 = await charDividedIOSRead(characteristicData);

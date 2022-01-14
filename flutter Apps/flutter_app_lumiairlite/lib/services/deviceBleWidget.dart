@@ -33,7 +33,7 @@ class DeviceCard extends StatelessWidget {
               style: TextStyle(fontSize: 16.0, color: Colors.grey[800]),
             ),
             SizedBox(height: 8.0),
-            FlatButton.icon(
+            TextButton.icon(
                 onPressed: connect,
                 icon: Icon(Icons.bluetooth),
                 label: Text('connect'))

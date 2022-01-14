@@ -151,7 +151,7 @@ class _ScanListBleState extends State<ScanListBle> {
 
   void startConnect(BuildContext context, BluetoothDevice thisDevice) async {
     myDevice = Device(device: thisDevice);
-    waitingConnectionWidget(context);
+    waitingConnectionWidget(context, connexionTextLanguageArray[languageArrayIdentifier]);
     // stop scanning and start connecting
     await flutterBlue.stopScan();
     bool resultConnection = false;
@@ -187,9 +187,6 @@ class _ScanListBleState extends State<ScanListBle> {
           // delete the waiting widget
           Navigator.of(context).pop();
           DateTime dateTime = DateTime.now();
-          print(dateTime.millisecondsSinceEpoch ~/ 1000);
-          print(dateTime.timeZoneName);
-          print(dateTime.timeZoneOffset.inSeconds);
           homePageState = true;
           await characteristicData.write('{\"Time\":[${dateTime.millisecondsSinceEpoch ~/ 1000},${dateTime.timeZoneOffset.inSeconds}]}'.codeUnits);
           createRoute(context, Home());
@@ -212,9 +209,6 @@ class _ScanListBleState extends State<ScanListBle> {
           // delete the waiting widget
           Navigator.of(context).pop();
           DateTime dateTime = DateTime.now();
-          print(dateTime.millisecondsSinceEpoch ~/ 1000);
-          print(dateTime.timeZoneName);
-          print(dateTime.timeZoneOffset.inSeconds);
           homePageState = true;
           await characteristicData.write('{\"Time\":[${dateTime.millisecondsSinceEpoch ~/ 1000},${dateTime.timeZoneOffset.inSeconds}]}'.codeUnits);
           createRoute(context, Home());

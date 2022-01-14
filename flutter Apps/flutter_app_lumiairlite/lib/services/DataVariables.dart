@@ -98,7 +98,7 @@ Future<String> charDividedIOSRead(BluetoothCharacteristic characteristicIOS) asy
   return data;
 }
 
-Future<void> waitingConnectionWidget(BuildContext buildContext) async {
+Future<void> waitingConnectionWidget(BuildContext buildContext, String text) async {
   //double screenWidth = MediaQuery.of(context).size.width;
   double screenHeight = MediaQuery.of(buildContext).size.height;
   return showDialog<void>(
@@ -106,7 +106,7 @@ Future<void> waitingConnectionWidget(BuildContext buildContext) async {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Connexion en cours'),
+          title: Text(text),
           content: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
@@ -121,7 +121,7 @@ Future<void> waitingConnectionWidget(BuildContext buildContext) async {
       });
 }
 
-Future<void> savingDataWidget(BuildContext buildContext) async {
+Future<void> savingDataWidget(BuildContext buildContext, String text) async {
   //double screenWidth = MediaQuery.of(context).size.width;
   double screenHeight = MediaQuery.of(buildContext).size.height;
   return showDialog<void>(
@@ -129,7 +129,7 @@ Future<void> savingDataWidget(BuildContext buildContext) async {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Veuillez patienter'),
+          title: Text(text),
           content: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
