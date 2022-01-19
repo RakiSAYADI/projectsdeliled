@@ -42,7 +42,9 @@ class _SendEmailState extends State<SendEmail> {
     if (firstDisplayMainWidget) {
       firstDisplayMainWidget = false;
       uvcDataFile = UVCDataFile();
-      userEmail = await uvcDataFile.readUserEmailDATA();
+      if (userEmail.isEmpty) {
+        userEmail = await uvcDataFile.readUserEmailDATA();
+      }
       myEmail.text = userEmail;
     }
   }
@@ -51,14 +53,8 @@ class _SendEmailState extends State<SendEmail> {
   Widget build(BuildContext context) {
     readUserEmailFile();
 
-    double screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return WillPopScope(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -105,8 +101,9 @@ class _SendEmailState extends State<SendEmail> {
                       SizedBox(height: screenHeight * 0.1),
                       TextButton(
                         onPressed: () async {
-                          if (myEmail.text.isNotEmpty && RegExp(
-                              r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$").hasMatch(myEmail.text)) {
+                          if (myEmail.text.isNotEmpty &&
+                              RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
+                                  .hasMatch(myEmail.text)) {
                             await uvcDataFile.saveStringUVCEmailDATA(myEmail.text);
                             uvcDataFile.saveUVCDATASelected(uvcDataSelected);
                             myUvcToast.setToastDuration(60);

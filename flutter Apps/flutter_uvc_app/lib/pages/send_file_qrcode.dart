@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutteruvcapp/services/CSVfileClass.dart';
 import 'package:flutteruvcapp/services/DataVariables.dart';
 import 'package:flutteruvcapp/services/languageDataBase.dart';
 import 'package:flutteruvcapp/services/uvcToast.dart';
@@ -23,8 +22,6 @@ class _SendEmailQrCodeState extends State<SendEmailQrCode> {
 
   final myEmail = TextEditingController();
 
-  UVCDataFile uvcDataFile;
-
   bool firstDisplayMainWidget = true;
 
   @override
@@ -40,9 +37,7 @@ class _SendEmailQrCodeState extends State<SendEmailQrCode> {
 
   void readUserEmailFile() async {
     if (firstDisplayMainWidget) {
-      uvcDataFile = UVCDataFile();
       firstDisplayMainWidget = false;
-      userEmail = await uvcDataFile.readUserEmailDATA();
       myEmail.text = userEmail;
     }
   }
@@ -99,8 +94,6 @@ class _SendEmailQrCodeState extends State<SendEmailQrCode> {
                       SizedBox(height: screenHeight * 0.1),
                       TextButton(
                         onPressed: () async {
-                          await uvcDataFile.saveStringUVCEmailDATA(myEmail.text);
-                          uvcDataFile.saveUVCDATASelected(uvcDataSelected);
                           myUvcToast.setToastDuration(60);
                           myUvcToast.setToastMessage(sendingEmailPageToastTextLanguageArray[languageArrayIdentifier]);
                           myUvcToast.showToast(Colors.green, Icons.send, Colors.white);

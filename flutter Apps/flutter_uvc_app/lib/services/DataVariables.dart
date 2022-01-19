@@ -19,7 +19,7 @@ List<List<String>> uvcData;
 List<List<String>> uvcDataSelected;
 
 String pinCodeAccess;
-String userEmail;
+String userEmail = '';
 String languageCode = 'fr';
 
 bool isTreatmentCompleted;

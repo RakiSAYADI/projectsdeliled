@@ -39,6 +39,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
 
   bool qrCodeValidOrNot = false;
   bool qrCodeSettings = false;
+  bool noLongerScan = false;
 
   Map<String, dynamic> dataRead;
   Map<String, dynamic> dataUVC;
@@ -142,7 +143,6 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     if (!qrCodeSettings) {
       if (!qrCodeConnectionOrSecurity) {
         if (Platform.isAndroid) {
-          bool noLongerScan = false;
           _controller.onCapture((data) {
             print('onCapture----$data');
             if (data.isNotEmpty && !qrCodeScanAccess) {
@@ -157,17 +157,16 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                     qrCodeScanAccess = true;
                     rapportCSV(data);
                   } else {
-                    connectingToRobotAndroid(data, noLongerScan);
+                    connectingToRobotAndroid(data);
                   }
                 } catch (e) {
-                  connectingToRobotAndroid(data, noLongerScan);
+                  connectingToRobotAndroid(data);
                 }
               }
             }
           });
         }
         if (Platform.isIOS) {
-          bool noLongerScan = false;
           _controller.onCapture((data) {
             print('onCapture----$data');
             if (data.isNotEmpty && !qrCodeScanAccess) {
@@ -183,17 +182,16 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                     myDevice.disconnect(); // disconnect after checking rapport DATA
                     rapportCSV(data);
                   } else {
-                    connectingToRobotIOS(data, noLongerScan);
+                    connectingToRobotIOS(data);
                   }
                 } catch (e) {
-                  connectingToRobotIOS(data, noLongerScan);
+                  connectingToRobotIOS(data);
                 }
               }
             }
           });
         }
       } else {
-        bool noLongerScan = false;
         _controller.onCapture((data) async {
           print('onCapture----$data');
           if (data.isNotEmpty) {
@@ -224,7 +222,6 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
         });
       }
     } else {
-      bool noLongerScan = false;
       _controller.onCapture((data) async {
         print('onCapture----$data');
         if (data.isNotEmpty) {
@@ -326,7 +323,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     );
   }
 
-  void connectingToRobotIOS(String data, bool noLongerScan) {
+  void connectingToRobotIOS(String data) {
     if (data.contains(myDevice.device.name)) {
       deviceExistOrNot = true;
       _controller.pause();
@@ -375,11 +372,11 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                 break;
               case 1:
                 print('in progress');
-                await stopDisinfection(context, dataRead);
+                await stopDisinfection(context, dataRead, data, false);
                 break;
               case 2:
                 print('error');
-                await restartDisinfection(context, dataRead);
+                await restartDisinfection(context, dataRead, data, false);
                 break;
               default:
                 checkVersion(dataRead);
@@ -413,7 +410,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     }
   }
 
-  void connectingToRobotAndroid(String data, bool noLongerScan) {
+  void connectingToRobotAndroid(String data) {
     for (int i = 0; i < scanDevices.length; i++) {
       if (data.contains(scanDevices.elementAt(i).id.toString())) {
         deviceExistOrNot = true;
@@ -470,6 +467,8 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
         connexion = myDevice.getConnectionState();
       }
 
+      Navigator.pop(context, false);
+
       if (connexion) {
         Future.delayed(const Duration(seconds: 2), () async {
           // Read data from robot
@@ -490,11 +489,11 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                 break;
               case 1:
                 print('in progress');
-                await stopDisinfection(context, dataRead);
+                await stopDisinfection(context, dataRead, data, true);
                 break;
               case 2:
                 print('error');
-                await restartDisinfection(context, dataRead);
+                await restartDisinfection(context, dataRead, data, true);
                 break;
               default:
                 pinCodeAccessProcess(data);
@@ -868,6 +867,8 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
               ),
               onPressed: () {
                 _controller.resume();
+                noLongerScan = false;
+                qrCodeValidOrNot = false;
                 Navigator.of(context).pop();
               },
             ),
@@ -895,6 +896,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                     Navigator.of(context).pop();
                     qrCodeSettings = true;
                     qrCodeScanAccess = false;
+                    noLongerScan = false;
                     setState(() {
                       changeModeFloatButton = true;
                     });
@@ -998,11 +1000,11 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
                           break;
                         case 1:
                           print('in progress');
-                          await stopDisinfection(context, dataRead);
+                          await stopDisinfection(context, dataRead, '', false);
                           break;
                         case 2:
                           print('error');
-                          await restartDisinfection(context, dataRead);
+                          await restartDisinfection(context, dataRead, '', false);
                           break;
                         default:
                           checkVersion(dataRead);
@@ -1033,7 +1035,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     );
   }
 
-  Future<void> restartDisinfection(BuildContext context, Map<String, dynamic> dataRead) {
+  Future<void> restartDisinfection(BuildContext context, Map<String, dynamic> dataRead, String data, bool oneClickQrCode) {
     String timeDataList = dataRead['TimeData'].toString();
     myExtinctionTimeMinutePosition = _stringListAsciiToListInt(timeDataList.codeUnits)[0];
     myActivationTimeMinutePosition = _stringListAsciiToListInt(timeDataList.codeUnits)[1];
@@ -1057,14 +1059,19 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           TextButton(
             child: Text(yesTextLanguageArray[languageArrayIdentifier]),
             onPressed: () {
-              myDevice.writeCharacteristic(2, 0, 'UVCTreatement : ON');
-              Navigator.pushNamed(context, '/uvc');
+              startWithOutSettings = true;
+              Navigator.pushNamed(context, '/warnings');
             },
           ),
           TextButton(
             child: Text(noTextLanguageArray[languageArrayIdentifier]),
             onPressed: () {
-              checkVersion(dataRead);
+              Navigator.pop(context, false);
+              if (oneClickQrCode) {
+                pinCodeAccessProcess(data);
+              } else {
+                checkVersion(dataRead);
+              }
             },
           ),
         ],
@@ -1072,7 +1079,7 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     );
   }
 
-  Future<void> stopDisinfection(BuildContext context, Map<String, dynamic> dataRead) {
+  Future<void> stopDisinfection(BuildContext context, Map<String, dynamic> dataRead, String data, bool oneClickQrCode) {
     return showDialog<bool>(
       context: context,
       barrierDismissible: false,
@@ -1083,13 +1090,18 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
           TextButton(
             child: Text(understoodTextLanguageArray[languageArrayIdentifier]),
             onPressed: () {
+              Navigator.pop(context, false);
               if (Platform.isAndroid) {
                 myDevice.writeCharacteristic(2, 0, 'STOP : ON');
               }
               if (Platform.isIOS) {
                 myDevice.writeCharacteristic(0, 0, 'STOP : ON');
               }
-              checkVersion(dataRead);
+              if (oneClickQrCode) {
+                pinCodeAccessProcess(data);
+              } else {
+                checkVersion(dataRead);
+              }
             },
           ),
         ],

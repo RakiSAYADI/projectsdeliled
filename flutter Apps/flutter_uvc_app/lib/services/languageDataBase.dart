@@ -60,7 +60,10 @@ final List<String> checkConnectionAlertDialogMessageTextLanguageArray = [
 
 final List<String> authoriseConnectionToastTextLanguageArray = ['Autorisation de connexion validée !', 'Connection authorization validated!'];
 
-final List<String> restartDisinfectionMessageTextLanguageArray = ['Problème lors de la précédente désinfection, veuillez la recommencer', 'Problem during the previous disinfection, please repeat it'];
+final List<String> restartDisinfectionMessageTextLanguageArray = [
+  'Problème lors de la précédente désinfection, voulez-vous la recommencer ?',
+  'Problem during the previous disinfection, do ypu want to repeat it ?'
+];
 
 final List<String> stopDisinfectionMessageTextLanguageArray = [
   'Une désinfection est en cours, afin que SAFE UVC fonctionne correctement la désinfection va être stoppée.',
