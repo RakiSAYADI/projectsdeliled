@@ -174,9 +174,13 @@ final List<String> fiveTutorialBodyTextLanguageArray = [
 
 final List<String> stopDisinfectAlertDialogMessageTextLanguageArray = ['Voulez-vous vraiment annuler le traitement UV-C ?', 'Are you sure you want to cancel UV-C treatment ?'];
 
-final List<String> notificationTitleTextLanguageArray = ['Félicitations', 'Congratulation'];
+final List<String> notificationSuccessTitleTextLanguageArray = ['Félicitations', 'Congratulation'];
 
-final List<String> notificationBodyTextLanguageArray = ['Désinfection réalisée avec succès !', 'Disinfection successfully completed!'];
+final List<String> notificationSuccessBodyTextLanguageArray = ['Désinfection réalisée avec succès !', 'Disinfection successfully completed!'];
+
+final List<String> notificationBadTitleTextLanguageArray = ['Attention', 'Warning'];
+
+final List<String> notificationBadBodyTextLanguageArray = ['Désinfection arrêtée !', 'Disinfection stopped !'];
 
 final List<String> uvcPageTitleTextLanguageArray = ['Désinfection en cours', 'Disinfection in progress'];
 

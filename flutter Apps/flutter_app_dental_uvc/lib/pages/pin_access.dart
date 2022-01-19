@@ -130,7 +130,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
     final myName = TextEditingController();
-    myName.text = nameDevice;
+    myName.text = nameDevice.substring(9);
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -149,17 +149,32 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
                   SizedBox(height: heightScreen * 0.005),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.02)),
-                    child: TextField(
-                      style: TextStyle(fontSize: (widthScreen * 0.017)),
-                      textAlign: TextAlign.center,
-                      controller: myName,
-                      maxLines: 1,
-                      decoration: InputDecoration(
-                          hintText: nameDeviceHintTextLanguageArray[languageArrayIdentifier],
-                          hintStyle: TextStyle(
-                            fontSize: (widthScreen * 0.02),
-                            color: Colors.grey,
-                          )),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            'DEEPLIGHT-',
+                            style: TextStyle(fontSize: (widthScreen * 0.02)),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: TextField(
+                            style: TextStyle(fontSize: (widthScreen * 0.017)),
+                            textAlign: TextAlign.center,
+                            controller: myName,
+                            maxLines: 1,
+                            decoration: InputDecoration(
+                                hintText: nameDeviceHintTextLanguageArray[languageArrayIdentifier],
+                                hintStyle: TextStyle(
+                                  fontSize: (widthScreen * 0.02),
+                                  color: Colors.grey,
+                                )),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -175,10 +190,10 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
               onPressed: () async {
                 try {
                   if (robotsNamesData.isEmpty) {
-                    await uvcDataFile.saveRobotsNameDATA('{\"${myDevice.device.name}\":\"${myName.text}\"}');
+                    await uvcDataFile.saveRobotsNameDATA('{\"${myDevice.device.name}\":\"DEEPLIGHT-${myName.text}\"}');
                   } else {
                     Map<String, dynamic> parsedJson = json.decode(robotsNamesData);
-                    parsedJson.addAll({'${myDevice.device.name}': '${myName.text}'});
+                    parsedJson.addAll({'${myDevice.device.name}': 'DEEPLIGHT-${myName.text}'});
                     await uvcDataFile.saveRobotsNameDATA(json.encode(parsedJson));
                   }
                 } catch (e) {

@@ -104,6 +104,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
             treatmentIsSuccessful = false;
             activationTime = (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds);
             isTreatmentCompleted = treatmentIsSuccessful;
+            _getNotification(notificationBadTitleTextLanguageArray[languageArrayIdentifier], notificationBadBodyTextLanguageArray[languageArrayIdentifier]);
             Navigator.pushNamed(context, '/end_uvc');
             break;
           }
@@ -308,7 +309,8 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                                 if ((!treatmentIsStopped) && treatmentIsOnProgress) {
                                                   print('finished activation');
                                                   treatmentIsOnProgress = false;
-                                                  _getNotification(notificationTitleTextLanguageArray[languageArrayIdentifier], notificationBodyTextLanguageArray[languageArrayIdentifier]);
+                                                  _getNotification(
+                                                      notificationSuccessTitleTextLanguageArray[languageArrayIdentifier], notificationSuccessBodyTextLanguageArray[languageArrayIdentifier]);
                                                   stopReading = true;
                                                   activationTime = (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds);
                                                   isTreatmentCompleted = treatmentIsSuccessful;
@@ -360,6 +362,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
               } else {
                 await myDevice.writeCharacteristic(2, 0, message);
               }
+              _getNotification(notificationBadTitleTextLanguageArray[languageArrayIdentifier], notificationBadBodyTextLanguageArray[languageArrayIdentifier]);
               Navigator.pop(c, true);
               activationTime = (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds);
               isTreatmentCompleted = treatmentIsSuccessful;
