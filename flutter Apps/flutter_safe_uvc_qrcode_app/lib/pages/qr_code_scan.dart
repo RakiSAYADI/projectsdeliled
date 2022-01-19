@@ -14,12 +14,10 @@ class QrCodeScan extends StatefulWidget {
 
 class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  QRViewController controller;
   Barcode result;
 
   String qrCodeMessage = '';
   Color colorMessage;
-  bool qrCodeScanAccess = false;
 
   ToastyMessage myUvcToast;
 
@@ -76,9 +74,9 @@ class _QrCodeScanState extends State<QrCodeScan> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  void _onQrViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
+  void _onQrViewCreated(QRViewController qrViewController) {
+    controller = qrViewController;
+    qrViewController.scannedDataStream.listen((scanData) {
       result = scanData;
       print('onCapture----${result.code}');
       if (result.code.isNotEmpty && !qrCodeScanAccess) {

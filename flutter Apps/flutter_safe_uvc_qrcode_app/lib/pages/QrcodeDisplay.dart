@@ -115,7 +115,7 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
             ),
             backgroundColor: Colors.green,
             label: addQrCodeButtonTextLanguageArray[languageArrayIdentifier],
-            labelStyle: TextStyle(fontSize: 18.0),
+            labelStyle: TextStyle(fontSize: screenWidth * 0.03 + screenHeight * 0.002),
             onTap: () async {
               SystemChannels.textInput.invokeMethod('TextInput.hide');
               if (saveToPrint) {
@@ -132,7 +132,7 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
             ),
             backgroundColor: Colors.red,
             label: sendEmailButtonTextLanguageArray[languageArrayIdentifier],
-            labelStyle: TextStyle(fontSize: 18.0),
+            labelStyle: TextStyle(fontSize: screenWidth * 0.03 + screenHeight * 0.002),
             onTap: () async {
               SystemChannels.textInput.invokeMethod('TextInput.hide');
               dataEmailSending(context);
@@ -145,7 +145,7 @@ class _QrCodeDisplayState extends State<QrCodeDisplay> {
             ),
             backgroundColor: Colors.blue,
             label: printTextLanguageArray[languageArrayIdentifier],
-            labelStyle: TextStyle(fontSize: 18.0),
+            labelStyle: TextStyle(fontSize: screenWidth * 0.03 + screenHeight * 0.002),
             onTap: () async {
               if (saveToPrint) {
                 await captureQrCodePNG();

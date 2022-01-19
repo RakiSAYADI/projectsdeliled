@@ -22,7 +22,7 @@ final List<String> qrCodeDataDescription2LanguageArray = [
 final List<String> qrCodeOneClickTitleLanguageArray = ['QR code OneClick', 'OneClick QR code'];
 
 final List<String> qrCodeOneClickTextLanguageArray = [
-  'Ce QR code permet de lancer la désinfection plus rapidement dans SAFE UVC (moins d\'étapes).',
+  'Ce QR code permet de lancer la désinfection plus rapidement avec SAFE UVC (moins d\'étapes).',
   'This QR code allows to start disinfection more quickly in SAFE UVC (in less steps).'
 ];
 
@@ -38,7 +38,7 @@ final List<String> qrCodeOneClickDescription2LanguageArray = [
 final List<String> qrCodeRapportTitleLanguageArray = ['QR code Rapport', 'QR code Report'];
 
 final List<String> qrCodeRapportTextLanguageArray = [
-  'Ce QR code permet d\'afficher et d\'envoyer le rapport des désinfections par mail à un adresse préenregistrée.',
+  'Ce QR code permet d\'afficher et d\'envoyer le rapport des désinfections par mail à une adresse préenregistrée.',
   'This QR code is used to display and send the disinfection report by email to a pre-registered address.'
 ];
 
@@ -58,7 +58,7 @@ final List<String> myQRCodeTitleTextLanguageArray = ['Votre QR code', 'Your QR c
 
 final List<String> menuTextLanguageArray = ['Menu', 'Menu'];
 
-final List<String> addQrCodeButtonTextLanguageArray = ['Ajouter un autre QR code', 'Add another QR code'];
+final List<String> addQrCodeButtonTextLanguageArray = ['Enregistrer et créer un QR code', 'Save and create a QR code'];
 
 final List<String> sendEmailButtonTextLanguageArray = ['Envoi par email', 'Send by email'];
 

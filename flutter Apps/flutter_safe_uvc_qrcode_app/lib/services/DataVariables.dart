@@ -6,6 +6,7 @@ import 'package:flutter_safe_uvc_qrcode_app/services/Image_To_ZPL.dart';
 import 'package:flutter_safe_uvc_qrcode_app/services/zebraPrinterDeviceClass.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mailer/mailer.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 final String appName = 'QRcode UVC';
 
@@ -38,6 +39,9 @@ bool printerBLEOrWIFI = false;
 final ZPLConverter zplConverter = new ZPLConverter();
 
 bool saveToPrint = false;
+bool qrCodeScanAccess = false;
+
+QRViewController controller;
 
 double screenWidth;
 double screenHeight;

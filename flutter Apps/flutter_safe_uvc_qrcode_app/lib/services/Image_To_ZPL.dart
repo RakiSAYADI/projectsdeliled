@@ -17,9 +17,9 @@ class ZPLConverter {
   bool compressHex = false;
   int total;
   int widthBytes;
-  int printerWidth = 609;
-  int printerHeight = 406;
-  int printerResolution = 203;
+  int printerWidth = 900;
+  int printerHeight = 600;
+  int printerResolution = 300;
   final Map<int, String> mapCode = {
     1: 'G',
     2: 'H',
@@ -129,7 +129,7 @@ class ZPLConverter {
     return HexImageString(hexImage: hexString, totalBytes: total.toDouble(), widthBytes: widthBytes.toDouble());
   }
 
-  String _headDoc() => "^XA " + "^PW600^LL400^PON^GFA, $total , $total , $widthBytes , ";
+  String _headDoc() => "^XA " + "^PW900^LL600^PON^GFA, $total , $total , $widthBytes , ";
 
   String _footDoc() => "^FS" + "^XZ";
 

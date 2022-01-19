@@ -76,8 +76,8 @@ class ZebraBLEPrinter {
     _connectionState();
     try {
       if (Platform.isIOS) {
-        zebraPrinter.connect(timeout: Duration(seconds: 1));
-        await Future.delayed(Duration(seconds: 1));
+        zebraPrinter.connect(timeout: Duration(seconds: 2));
+        await Future.delayed(Duration(seconds: 2));
         if (_isConnected) {
           _zebraPrinterServices = await zebraPrinter.discoverServices();
           print('printer is connected');
@@ -90,24 +90,29 @@ class ZebraBLEPrinter {
                 _writeCharacteristic(1, 1, dataSPL.substring(dataSentProgress));
               } else {
                 _writeCharacteristic(1, 1, dataSPL.substring(dataSentProgress, dataSentProgress + 180));
-                dataSentProgress += 180;
+                if (writeState == 0) {
+                  dataSentProgress += 180;
+                } else {
+                  print('write error BLE');
+                }
               }
+
               await Future.delayed(Duration(milliseconds: 300));
             }
           } else {
             _writeCharacteristic(1, 1, dataSPL);
           }
           await Future.delayed(Duration(seconds: 3));
-          await zebraPrinter.disconnect();
-          print('disconnected');
           result = true;
         } else {
           result = false;
         }
+        await zebraPrinter.disconnect();
+        print('disconnected');
       }
       if (Platform.isAndroid) {
-        zebraPrinter.connect(timeout: Duration(seconds: 3));
-        await Future.delayed(Duration(seconds: 2));
+        zebraPrinter.connect(timeout: Duration(seconds: 5));
+        await Future.delayed(Duration(seconds: 5));
         if (_isConnected) {
           await zebraPrinter.requestMtu(512);
           await Future.delayed(Duration(milliseconds: 500));
@@ -129,9 +134,10 @@ class ZebraBLEPrinter {
                   dataSentProgress += mtu;
                 } else {
                   print('write error BLE');
+                  break;
                 }
               }
-              await Future.delayed(Duration(milliseconds: 300));
+              await Future.delayed(Duration(milliseconds: 500));
             }
           } else {
             do {
@@ -140,12 +146,12 @@ class ZebraBLEPrinter {
             } while (writeState == -1);
           }
           await Future.delayed(Duration(seconds: 3));
-          await zebraPrinter.disconnect();
-          print('disconnected');
           result = true;
         } else {
           result = false;
         }
+        await zebraPrinter.disconnect();
+        print('disconnected');
       }
     } catch (e) {
       result = false;

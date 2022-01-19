@@ -26,6 +26,10 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       }
     });
 
+    Future.delayed(Duration(seconds: 5), () async {
+      Navigator.pushReplacementNamed(context, '/choose_qr_code');
+    });/*
+
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
@@ -43,7 +47,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       Future.delayed(Duration(seconds: 5), () async {
         Navigator.pushReplacementNamed(context, '/check_permissions');
       });
-    }
+    }*/
     // The following line will enable the Android and iOS wakelock.
     Wakelock.enable();
   }
