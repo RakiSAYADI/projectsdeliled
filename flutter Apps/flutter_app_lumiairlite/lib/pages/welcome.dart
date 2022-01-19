@@ -72,9 +72,7 @@ class _WelcomeState extends State<Welcome> {
     await SuperEasyPermissions.askPermission(Permissions.locationWhenInUse).then((value) {
       if (value) {
         print("permission granted");
-        SuperEasyPermissions.askPermission(Permissions.locationAlways).then((value) {
-          SuperEasyPermissions.askPermission(Permissions.bluetooth);
-        });
+        SuperEasyPermissions.askPermission(Permissions.bluetooth);
       } else {
         print("permission denied");
       }
