@@ -8,18 +8,55 @@
       </config>
     </shared>
   </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="5ee4e1b8-c737-4975-a0d5-815f1ccc2e3f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_uvc_app/lib/pages/bluetooth_activation.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_uvc_app/lib/pages/bluetooth_activation.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_uvc_app/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_uvc_app/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_uvc_app/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_uvc_app/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_ambiMaestro/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_app_ambiMaestro/android/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_ambiMaestro/android/app/src/debug/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_app_ambiMaestro/android/app/src/debug/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_ambiMaestro/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_app_ambiMaestro/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_ambiMaestro/android/app/src/main/java/deliled/applications/ambiMaestroapp/flutter_app_ambimaestro/MainActivity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_ambiMaestro/android/app/src/profile/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_app_ambiMaestro/android/app/src/profile/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_ambiMaestro/ios/Runner/AppDelegate.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_ambiMaestro/ios/Runner/AppDelegate.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_ambiMaestro/ios/Runner/main.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_ambiMaestro/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_app_ambiMaestro/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_ambiMaestro/lib/pages/welcome.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_app_ambiMaestro/lib/pages/welcome.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_ambiMaestro/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_app_ambiMaestro/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_ambiMaestro/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_app_ambiMaestro/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/lib/pages/pin_access.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_app_dental_uvc/lib/pages/pin_access.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/Runner/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/lib/include/DiscoveredPrinter.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/lib/include/DiscoveredPrinterNetwork.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/lib/include/FieldDescriptionData.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/lib/include/FileUtil.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/lib/include/FormatUtil.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/lib/include/GraphicsUtil.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/lib/include/MagCardReader.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/lib/include/MfiBtPrinterConnection.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/lib/include/NetworkDiscoverer.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/lib/include/PrinterStatus.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/lib/include/PrinterStatusMessages.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/lib/include/ResponseValidator.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/lib/include/SGD.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/lib/include/SmartCardReader.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/lib/include/TcpPrinterConnection.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/lib/include/ToolsUtil.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/lib/include/ZebraErrorCode.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/lib/include/ZebraPrinter.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/lib/include/ZebraPrinterConnection.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/lib/include/ZebraPrinterFactory.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/lib/include/ZplPrintMode.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../flutter Apps/flutter_safe_uvc_qrcode_app/ios/lib/libzsdk.a" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="39V4C19A12010231" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -63,8 +100,8 @@
   </component>
   <component name="GenerateSignedApkSettings">
     <option name="EXPORT_PRIVATE_KEY" value="false" />
-    <option name="KEY_STORE_PATH" value="C:\Users\DELILED\Desktop\deliled.jks" />
-    <option name="KEY_ALIAS" value="delitechapp" />
+    <option name="KEY_STORE_PATH" value="$PROJECT_DIR$/key.jks" />
+    <option name="KEY_ALIAS" value="key" />
     <option name="REMEMBER_PASSWORDS" value="true" />
   </component>
   <component name="Git.Settings">
@@ -74,25 +111,34 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="BundleExportedModule" value="Application" />
+    <property name="BundleExportedModule" value="DELITECH.Application" />
     <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="39V4C19A12010231" />
     <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2020-09-22T12:39:03.897Z" />
-    <property name="ExportApk.ApkPath" value="C:\Users\DELILED\Desktop" />
+    <property name="ExportApk.ApkPath" value="$USER_HOME$/Desktop" />
     <property name="ExportApk.BuildVariants" value="release" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="android.recentlyUsedThemes" value="Base.Theme.AppCompat" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/Application/src/androidTestDebug/aidl" />
     <property name="last_opened_file_path" value="$USER_HOME$/Downloads/LED demo/demo" />
+    <property name="memory.settings.postsync.last.time.stamp" value="1643099993530" />
+    <property name="project.structure.last.edited" value="Dependencies" />
+    <property name="project.structure.proportion" value="0.17" />
+    <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="PsdUISettings">
+    <option name="MODULE_TAB" value="Properties" />
+    <option name="LAST_EDITED_SIGNING_CONFIG" value="debug" />
   </component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.RecentsKey">
@@ -120,12 +166,14 @@
       </method>
     </configuration>
     <configuration name="Application" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
-      <module name="Application" />
+      <module name="DELITECH.Application" />
       <option name="DEPLOY" value="true" />
       <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
       <option name="DEPLOY_AS_INSTANT" value="false" />
       <option name="ARTIFACT_NAME" value="" />
       <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
+      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
       <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
       <option name="ACTIVITY_EXTRA_FLAGS" value="" />
       <option name="MODE" value="default_activity" />
@@ -161,16 +209,22 @@
       </Native>
       <Profilers>
         <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
         <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
         <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
       </Profilers>
       <option name="DEEP_LINK" value="" />
       <option name="ACTIVITY_CLASS" value="" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
       <method v="2">
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -183,31 +237,5 @@
       <updated>1569579073431</updated>
     </task>
     <servers />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="2608" y="325" key="FileChooserDialogImpl" timestamp="1601977324868">
-      <screen x="1920" y="26" width="1680" height="1010" />
-    </state>
-    <state x="2608" y="325" key="FileChooserDialogImpl/0.0.1920.1040/1920.26.1680.1010@1920.26.1680.1010" timestamp="1601977324868" />
-    <state width="1637" height="239" key="GridCell.Tab.0.bottom" timestamp="1600266994721">
-      <screen x="1920" y="26" width="1680" height="1010" />
-    </state>
-    <state width="1637" height="239" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.26.1680.1010@1920.26.1680.1010" timestamp="1600266994721" />
-    <state width="1637" height="239" key="GridCell.Tab.0.center" timestamp="1600266994721">
-      <screen x="1920" y="26" width="1680" height="1010" />
-    </state>
-    <state width="1637" height="239" key="GridCell.Tab.0.center/0.0.1920.1040/1920.26.1680.1010@1920.26.1680.1010" timestamp="1600266994721" />
-    <state width="1637" height="239" key="GridCell.Tab.0.left" timestamp="1600266994720">
-      <screen x="1920" y="26" width="1680" height="1010" />
-    </state>
-    <state width="1637" height="239" key="GridCell.Tab.0.left/0.0.1920.1040/1920.26.1680.1010@1920.26.1680.1010" timestamp="1600266994720" />
-    <state width="1637" height="239" key="GridCell.Tab.0.right" timestamp="1600266994721">
-      <screen x="1920" y="26" width="1680" height="1010" />
-    </state>
-    <state width="1637" height="239" key="GridCell.Tab.0.right/0.0.1920.1040/1920.26.1680.1010@1920.26.1680.1010" timestamp="1600266994721" />
-    <state x="2261" y="173" key="SettingsEditor" timestamp="1601290470620">
-      <screen x="1920" y="26" width="1680" height="1010" />
-    </state>
-    <state x="2261" y="173" key="SettingsEditor/0.0.1920.1040/1920.26.1680.1010@1920.26.1680.1010" timestamp="1601290470620" />
   </component>
 </project>

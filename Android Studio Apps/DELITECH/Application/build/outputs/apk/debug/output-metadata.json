@@ -1,20 +1,20 @@
 {
-  "version": 1,
+  "version": 3,
   "artifactType": {
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "deliled.Applications.android.Maestro",
+  "applicationId": "deliled.Applications.android.Lumiair",
   "variantName": "debug",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
-      "properties": [],
+      "attributes": [],
       "versionCode": 16,
       "versionName": "6.0",
-      "enabled": true,
       "outputFile": "Application-debug.apk"
     }
-  ]
+  ],
+  "elementType": "File"
 }

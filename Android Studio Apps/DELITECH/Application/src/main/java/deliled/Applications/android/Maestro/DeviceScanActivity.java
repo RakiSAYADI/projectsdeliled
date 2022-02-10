@@ -42,7 +42,6 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -69,7 +68,11 @@ public class DeviceScanActivity extends ListActivity {
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
     private Handler mHandler;
-    private String[] arrayMAC = new String[26];
+    final private String[] arrayMAC = {"18:FE:34", "24:0A:C4", "24:B2:DE", "24:6F:28", "2C:3A:E8",
+            "2C:F4:32", "30:AE:A4", "3C:71:BF", "54:5A:A6", "5C:CF:7F", "60:01:94", "68:C6:3A",
+            "80:7D:3A", "84:0D:8E", "84:F3:EB", "90:97:D5", "A0:20:A6", "A4:7B:9D", "A4:CF:12",
+            "AC:D0:74", "B4:E6:2D", "BC:DD:C2", "C4:4F:33", "CC:50:E3", "D8:A0:1D", "DC:4F:22",
+            "EC:FA:BC"};
 
     private static final int REQUEST_ENABLE_BT = 1;
     // Stops scanning after 10 seconds.
@@ -86,32 +89,6 @@ public class DeviceScanActivity extends ListActivity {
         MainActivity.active = false;
         access_super_admin = true;
         getActionBar().setIcon(R.drawable.lumiair);
-        arrayMAC[0] = "18:FE:34";
-        arrayMAC[1] = "24:0A:C4";
-        arrayMAC[2] = "24:B2:DE";
-        arrayMAC[3] = "2C:3A:E8";
-        arrayMAC[4] = "2C:F4:32";
-        arrayMAC[5] = "30:AE:A4";
-        arrayMAC[6] = "3C:71:BF";
-        arrayMAC[7] = "54:5A:A6";
-        arrayMAC[8] = "5C:CF:7F";
-        arrayMAC[9] = "60:01:94";
-        arrayMAC[10] = "68:C6:3A";
-        arrayMAC[11] = "80:7D:3A";
-        arrayMAC[12] = "84:0D:8E";
-        arrayMAC[13] = "84:F3:EB";
-        arrayMAC[14] = "90:97:D5";
-        arrayMAC[15] = "A0:20:A6";
-        arrayMAC[16] = "A4:7B:9D";
-        arrayMAC[17] = "A4:CF:12";
-        arrayMAC[18] = "AC:D0:74";
-        arrayMAC[19] = "B4:E6:2D";
-        arrayMAC[20] = "BC:DD:C2";
-        arrayMAC[21] = "C4:4F:33";
-        arrayMAC[22] = "CC:50:E3";
-        arrayMAC[23] = "D8:A0:1D";
-        arrayMAC[24] = "DC:4F:22";
-        arrayMAC[25] = "EC:FA:BC";
         getActionBar().setTitle(R.string.title_devices);
         mHandler = new Handler();
         change_mode = false;
@@ -511,18 +488,18 @@ public class DeviceScanActivity extends ListActivity {
             ACCESS = true;
             startActivity(intent);
         } else {
-            for (int i = 0; i < devices.length; i++) {
-                if (devices[i].contains(mDevice.getAddress()) & (devices[i].contains("MA"))) {
+            for (String s : devices) {
+                if (s.contains(mDevice.getAddress()) & (s.contains("MA"))) {
                     first_Access = false;
-                    if (devices[i].contains("USER")) {
+                    if (s.contains("USER")) {
                         ACCESS = false;
                         user_compter++;
                     }
-                    if (devices[i].contains("ADMIN")) {
+                    if (s.contains("ADMIN")) {
                         ACCESS = true;
                         admin_compter++;
                     }
-                    if (!(admin_compter == 0) & (!(user_compter == 0)) & (devices[i].contains(mDevice.getAddress()))) {
+                    if (!(admin_compter == 0) & (!(user_compter == 0)) & (s.contains(mDevice.getAddress()))) {
                         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         builder.setMessage("Voulez-vous vous connecter en tant qu'Utilisateur ou Administrateur ?")
                                 .setCancelable(false)
@@ -555,8 +532,8 @@ public class DeviceScanActivity extends ListActivity {
                     }
                 }
             }
-            for (int i = 0; i < devices.length; i++) {
-                if (((!(admin_compter == 0) | (!(user_compter == 0))) | !(user_compter == admin_compter)) & devices[i].contains(mDevice.getAddress())) {
+            for (String s : devices) {
+                if (((!(admin_compter == 0) | (!(user_compter == 0))) | !(user_compter == admin_compter)) & s.contains(mDevice.getAddress())) {
                     first_Access = false;
                     final Intent intent = new Intent(DeviceScanActivity.this, MainActivity.class);
                     intent.putExtra(MainActivity.EXTRAS_DEVICE_NAME, device.getName());
@@ -564,8 +541,8 @@ public class DeviceScanActivity extends ListActivity {
                     startActivity(intent);
                 }
             }
-            for (int i = 0; i < devices.length; i++) {
-                if (!(devices[i].contains(mDevice.getAddress())) & first_Access) {
+            for (String s : devices) {
+                if (!(s.contains(mDevice.getAddress())) & first_Access) {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setMessage("Voulez-vous activer le scan de QR-CODE à chaque connexion ?")
                             .setCancelable(false)
@@ -636,8 +613,8 @@ public class DeviceScanActivity extends ListActivity {
 
     // Adapter for holding devices found through scanning.
     private class LeDeviceListAdapter extends BaseAdapter {
-        private ArrayList<BluetoothDevice> mLeDevices;
-        private LayoutInflater mInflator;
+        final private ArrayList<BluetoothDevice> mLeDevices;
+        final private LayoutInflater mInflator;
 
         private LeDeviceListAdapter() {
             super();
@@ -692,13 +669,11 @@ public class DeviceScanActivity extends ListActivity {
             final String deviceName = device.getName();
             if (deviceName != null && deviceName.length() > 0) {
                 viewHolder.deviceName.setText(deviceName);
-                viewHolder.deviceAddress.setText(device.getAddress());
-                return view;
             } else {
                 viewHolder.deviceName.setText(R.string.unknown_device);
-                viewHolder.deviceAddress.setText(device.getAddress());
-                return view;
             }
+            viewHolder.deviceAddress.setText(device.getAddress());
+            return view;
         }
     }
 
@@ -722,11 +697,7 @@ public class DeviceScanActivity extends ListActivity {
 
     public boolean fileExists(Context context, String filename) {
         File file = context.getFileStreamPath(filename);
-        if (file == null || !file.exists()) {
-            return false;
-        } else {
-            return true;
-        }
+        return file != null && file.exists();
     }
 
     public void save(String FILE_NAME, String text) {
@@ -734,8 +705,6 @@ public class DeviceScanActivity extends ListActivity {
         try {
             fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
             fos.write(text.getBytes());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -764,8 +733,6 @@ public class DeviceScanActivity extends ListActivity {
             }
             return sb.toString();
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -782,19 +749,24 @@ public class DeviceScanActivity extends ListActivity {
 
     int i;
     // Device scan callback.
-    private ScanCallback mLeScanCallback = new ScanCallback() {
+    final private ScanCallback mLeScanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, final ScanResult result) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    for (i = 0; i <= 25; i++) {
-                        if (result.getDevice().getAddress().contains(arrayMAC[i])) {
-                            mLeDeviceListAdapter.addDevice(result.getDevice());
-                            mLeDeviceListAdapter.notifyDataSetChanged();
+                    for (i = 0; i < arrayMAC.length; i++) {
+                        try {
+                            if (result.getDevice().getAddress().contains(arrayMAC[i])) {
+                                mLeDeviceListAdapter.addDevice(result.getDevice());
+                                mLeDeviceListAdapter.notifyDataSetChanged();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
+
                     }
-                    //Log.i("SCAN","device name is = "+device.getName()+ " and address is = "+device.getAddress());
+                    Log.i("SCAN", "device name is = " + result.getDevice().getName() + " and address is = " + result.getDevice().getAddress());
                 }
             });
         }

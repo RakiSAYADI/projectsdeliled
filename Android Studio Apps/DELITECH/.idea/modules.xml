@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Application/Application.iml" filepath="$PROJECT_DIR$/Application/Application.iml" group="DELITECH/Application" />
-      <module fileurl="file://$PROJECT_DIR$/DELITECH.iml" filepath="$PROJECT_DIR$/DELITECH.iml" group="DELITECH" />
+      <module fileurl="file://$PROJECT_DIR$/DELITECH.iml" filepath="$PROJECT_DIR$/DELITECH.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Application/DELITECH.Application.iml" filepath="$PROJECT_DIR$/.idea/modules/Application/DELITECH.Application.iml" />
     </modules>
   </component>
 </project>

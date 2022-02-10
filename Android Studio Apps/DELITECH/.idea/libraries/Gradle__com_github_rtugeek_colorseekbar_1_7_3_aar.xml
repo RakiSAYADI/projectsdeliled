@@ -4,6 +4,9 @@
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f7a0df40170c5db357631c2fafbab59b/jetified-colorseekbar-1.7.3/AndroidManifest.xml" />
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f7a0df40170c5db357631c2fafbab59b/jetified-colorseekbar-1.7.3/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f7a0df40170c5db357631c2fafbab59b/jetified-colorseekbar-1.7.3/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/11af3db75532b2d06684058825d64899/transformed/jetified-colorseekbar-1.7.3/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/11af3db75532b2d06684058825d64899/transformed/jetified-colorseekbar-1.7.3/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/11af3db75532b2d06684058825d64899/transformed/jetified-colorseekbar-1.7.3/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

@@ -1,0 +1,618 @@
+[
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_gaz.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/gaz.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/raw_beep.mp3.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/raw/beep.mp3"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_couleurverte.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/couleurverte.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/anim_slide_from_left.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/anim/slide_from_left.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_maestro_fragment.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/maestro_fragment.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_edit_main.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/edit_main.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-large_qr_code.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-large/qr_code.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_home.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/home.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_ic_launcher.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-xhdpi_ic_launcher.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_ambiances_fragment.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/ambiances_fragment.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/raw_sirene.mp3.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/raw/sirene.mp3"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_menudots.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/menudots.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_ambiance_list.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/ambiance_list.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_scenes_fragment.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/scenes_fragment.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_activity_main.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/activity_main.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-xlarge_avancee.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-xlarge/avancee.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_sun.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/sun.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable_buttonshapeconnect.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable/buttonshapeconnect.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/anim_slide_out_left.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/anim/slide_out_left.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/anim_slide_to_right.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/anim/slide_to_right.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-large_listitem_device.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-large/listitem_device.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-large_gatt_services_characteristics.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-large/gatt_services_characteristics.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable_buttonshapebig.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable/buttonshapebig.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-xxxhdpi_ic_launcher.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_couleurrouge.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/couleurrouge.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_tile.9.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/tile.9.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_information.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/information.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-xlarge_co2.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-xlarge/co2.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-large_drop_list_spinner.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-large/drop_list_spinner.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_longbouttonbig.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/longbouttonbig.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-xlarge_actionbar_switcher.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-xlarge/actionbar_switcher.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-large_spinner_item.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-large/spinner_item.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/animator_fragment_slide_left_exit.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/animator/fragment_slide_left_exit.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable_lumiair.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable/lumiair.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_favorison.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/favorison.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/anim_fade_in_animation.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/anim/fade_in_animation.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_checked.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/checked.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_favorisoff.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/favorisoff.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/anim_animation_enter.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/anim/animation_enter.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_circadien.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/circadien.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/anim_slide_to_left.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/anim/slide_to_left.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_actionbar_switcher.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/actionbar_switcher.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-large_luminoste.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-large/luminoste.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/anim_animation_leave.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/anim/animation_leave.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_onoffgreen.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/onoffgreen.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_onofforange.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/onofforange.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_blancfroid.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/blancfroid.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable_logomaestros.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable/logomaestros.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_vocs.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/vocs.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable_layout_bg.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable/layout_bg.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/anim_slide_in_left.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/anim/slide_in_left.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_modeexpert.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/modeexpert.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_modeexpertcouleur.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/modeexpertcouleur.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-xlarge_welcome.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-xlarge/welcome.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/menu_gatt_services_appcompat.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/menu/gatt_services_appcompat.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_luminoste.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/luminoste.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/animator_slide_from_right.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/animator/slide_from_right.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_unchecked.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/unchecked.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_qr_code.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/qr_code.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_gatt_services_characteristics.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/gatt_services_characteristics.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable_white_circle_shape.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable/white_circle_shape.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-large_actionbar_indeterminate_progress.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-large/actionbar_indeterminate_progress.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/animator_slide_to_left.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/animator/slide_to_left.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_scene_option.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/scene_option.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable_buttonshapemeduim.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable/buttonshapemeduim.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/animator_fragment_slide_right_enter.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/animator/fragment_slide_right_enter.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-large_actionbar_switcher.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-large/actionbar_switcher.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_snowflake.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/snowflake.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-xxhdpi_maestrobackgroundapplication.jpg.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-xxhdpi/maestrobackgroundapplication.jpg"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_setting.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/setting.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_wifi_fragmnet.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/wifi_fragmnet.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable_ic_close_black_24dp.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable/ic_close_black_24dp.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_presence.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/presence.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_drop_list_spinner.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/drop_list_spinner.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/animator_slide_to_right.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/animator/slide_to_right.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_goback.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/goback.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-large_cyc_circa.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-large/cyc_circa.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_overlay_layout.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/overlay_layout.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable_logodelitechblanc.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable/logodelitechblanc.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable_buttonshape.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable/buttonshape.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/animator_slide_from_left.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/animator/slide_from_left.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_actionbar_indeterminate_progress.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/actionbar_indeterminate_progress.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable_noir.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable/noir.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_movie.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/movie.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_scenes_zone_active.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/scenes_zone_active.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_co2.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/co2.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable_box.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable/box.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_onoff.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/onoff.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_spinner.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/spinner.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_offon.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/offon.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-large_welcome.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-large/welcome.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_avancee.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/avancee.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-xxhdpi_ic_launcher.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_circadiens.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/circadiens.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/menu_navigation.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/menu/navigation.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_paint.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/paint.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-xlarge_spinner_item.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-xlarge/spinner_item.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/anim_slide_out_right.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/anim/slide_out_right.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_cyc_circa.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/cyc_circa.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_modeexpertonclick.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/modeexpertonclick.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_saturation.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/saturation.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/menu_gatt_services_activity.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/menu/gatt_services_activity.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_grandbouttononclickmeduim.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/grandbouttononclickmeduim.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-mdpi_ic_launcher.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_gear.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/gear.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-large_avancee.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-large/avancee.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/animator_fragment_slide_right_exit.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/animator/fragment_slide_right_exit.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-xlarge_qr_code.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-xlarge/qr_code.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable_togglebutton.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable/togglebutton.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable_texteapplication.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable/texteapplication.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-large_co2.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-large/co2.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_veille_detection.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/veille_detection.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable_cercle_shape.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable/cercle_shape.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-xlarge_veille_detection.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-xlarge/veille_detection.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/anim_slide_from_right.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/anim/slide_from_right.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-xlarge_gatt_services_characteristics.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-xlarge/gatt_services_characteristics.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable_ic_close_white_24dp.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable/ic_close_white_24dp.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_luminosite.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/luminosite.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_listitem_device.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/listitem_device.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_chronometer.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/chronometer.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable_ic_aspect_ratio_black_24dp.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable/ic_aspect_ratio_black_24dp.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_longbouttononclickbig.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/longbouttononclickbig.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_spinner_item.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/spinner_item.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_house.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/house.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/menu_main.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/menu/main.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_blancsprofil.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/blancsprofil.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-xlarge_listitem_device.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-xlarge/listitem_device.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable_checkbox_selector.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable/checkbox_selector.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_blancs.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/blancs.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable_wheel.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable/wheel.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-xlarge_luminoste.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-xlarge/luminoste.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_welcome.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/welcome.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_modeexpertcouleuronclick.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/modeexpertcouleuronclick.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable_circle_shape.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable/circle_shape.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-xlarge_actionbar_indeterminate_progress.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-xlarge/actionbar_indeterminate_progress.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-xlarge_drop_list_spinner.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-xlarge/drop_list_spinner.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_couleurbleue.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/couleurbleue.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_close.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/close.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable_led.jpg.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable/led.jpg"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-xlarge_cyc_circa.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-xlarge/cyc_circa.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_profil_fragment.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/profil_fragment.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout_co2.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout/co2.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/layout-large_veille_detection.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/layout-large/veille_detection.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_temperature.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/temperature.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_humidite.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/humidite.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_blancchaud.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/blancchaud.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_radio.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/radio.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/animator_fragment_slide_left_enter.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/animator/fragment_slide_left_enter.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/anim_slide_in_right.xml.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/anim/slide_in_right.xml"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_edit.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/edit.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_grandbouttonmeduim.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/grandbouttonmeduim.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-hdpi_luxs.png.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-hdpi/luxs.png"
+    },
+    {
+        "merged": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/merged_res/release/drawable-xxhdpi_logosmaestro.jpg.flat",
+        "source": "/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/res/drawable-xxhdpi/logosmaestro.jpg"
+    }
+]

@@ -1,7 +1,13 @@
-#Tue Oct 06 13:11:40 CEST 2020
-base.0=C\:\\Users\\Utilisateur\\Documents\\GitHub\\projectsdeliled\\Android Studio Apps\\DELITECH\\Application\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
-path.1=classes.dex
-renamed.1=classes2.dex
+#Thu Jan 27 17:45:05 CET 2022
+path.3=4/classes.dex
+path.2=14/classes.dex
+path.1=0/classes.dex
 path.0=classes.dex
+base.3=/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/dex/debug/mergeProjectDexDebug/4/classes.dex
+base.2=/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/dex/debug/mergeProjectDexDebug/14/classes.dex
+base.1=/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex
+base.0=/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/dex/debug/mergeExtDexDebug/classes.dex
+renamed.3=classes4.dex
+renamed.2=classes3.dex
+renamed.1=classes2.dex
 renamed.0=classes.dex
-base.1=C\:\\Users\\Utilisateur\\Documents\\GitHub\\projectsdeliled\\Android Studio Apps\\DELITECH\\Application\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\classes.dex

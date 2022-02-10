@@ -4,6 +4,10 @@
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/526a3dc38b138edc10d6402e09d7579f/jetified-counterfab-1.0.1/AndroidManifest.xml" />
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/526a3dc38b138edc10d6402e09d7579f/jetified-counterfab-1.0.1/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/526a3dc38b138edc10d6402e09d7579f/jetified-counterfab-1.0.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f95dfc867b6a7395c1f5a439018e6375/jetified-counterfab-1.0.1/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/6d4d54bd8daa98abaa824f9c67d972ed/transformed/jetified-counterfab-1.0.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/6d4d54bd8daa98abaa824f9c67d972ed/transformed/jetified-counterfab-1.0.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/6d4d54bd8daa98abaa824f9c67d972ed/transformed/jetified-counterfab-1.0.1/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.andremion/counterfab/1.0.1/8e02eaf1e0e5a33d062cb72ef9a1889f7765d4c5/counterfab-1.0.1-javadoc.jar!/" />

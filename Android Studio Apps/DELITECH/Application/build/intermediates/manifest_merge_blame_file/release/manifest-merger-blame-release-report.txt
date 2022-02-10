@@ -1,0 +1,190 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="deliled.Applications.android.Lumiair"
+4    android:versionCode="16"
+5    android:versionName="6.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="23"
+8-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml
+9        android:targetSdkVersion="31" />
+9-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.BLUETOOTH" />
+11-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:9:5-68
+11-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:9:22-65
+12    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+12-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:10:5-74
+12-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:10:22-71
+13    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+13-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:11:5-76
+13-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:11:22-73
+14    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+14-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:12:5-81
+14-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:12:22-78
+15    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+15-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:13:5-79
+15-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:13:22-76
+16    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+16-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:14:5-76
+16-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:14:22-73
+17    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+17-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:15:5-73
+17-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:15:22-70
+18    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+18-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:16:5-76
+18-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:16:22-73
+19    <uses-permission android:name="android.permission.VIBRATE" />
+19-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:17:5-66
+19-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:17:22-63
+20    <uses-permission android:name="android.permission.CAMERA" />
+20-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:18:5-65
+20-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:18:22-62
+21    <uses-permission android:name="android.permission.INTERNET" />
+21-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:19:5-67
+21-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:19:22-64
+22    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+22-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:20:5-79
+22-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:20:22-76
+23    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+23-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:21:5-78
+23-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:21:22-75
+24
+25    <application
+25-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:23:5-81:19
+26        android:allowBackup="true"
+26-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:24:9-35
+27        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+27-->[androidx.core:core:1.3.1] /Users/pierrezemour/.gradle/caches/transforms-3/e89cc30d83e7763ffd18296e3e008066/transformed/core-1.3.1/AndroidManifest.xml:24:18-86
+28        android:extractNativeLibs="false"
+29        android:fullBackupContent="true"
+29-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:25:9-41
+30        android:icon="@drawable/ic_launcher"
+30-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:26:9-45
+31        android:label="@string/app_name"
+31-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:27:9-41
+32        android:supportsRtl="true"
+32-->[com.github.rtugeek:colorseekbar:1.7.3] /Users/pierrezemour/.gradle/caches/transforms-3/11af3db75532b2d06684058825d64899/transformed/jetified-colorseekbar-1.7.3/AndroidManifest.xml:14:9-35
+33        android:theme="@android:style/Theme.Holo.Light" >
+33-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:28:9-56
+34        <activity
+34-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:29:9-32:56
+35            android:name="deliled.Applications.android.Maestro.MainActivity"
+35-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:30:13-41
+36            android:screenOrientation="portrait"
+36-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:31:13-49
+37            android:theme="@style/MyTheme_appcompat" />
+37-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:32:13-53
+38        <activity
+38-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:33:9-44:20
+39            android:name="deliled.Applications.android.Maestro.welcome"
+39-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:34:13-72
+40            android:exported="true"
+40-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:38:13-36
+41            android:label="@string/app_name"
+41-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:35:13-45
+42            android:screenOrientation="portrait"
+42-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:36:13-49
+43            android:theme="@style/AppFullScreenTheme" >
+43-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:37:13-54
+44            <intent-filter>
+44-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:39:13-43:29
+45                <action android:name="android.intent.action.MAIN" />
+45-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:40:17-69
+45-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:40:25-66
+46
+47                <category android:name="android.intent.category.LAUNCHER" />
+47-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:42:17-77
+47-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:42:27-74
+48            </intent-filter>
+49        </activity>
+50        <activity
+50-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:45:9-48:46
+51            android:name="deliled.Applications.android.Maestro.cycle_circa"
+51-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:46:13-76
+52            android:screenOrientation="portrait"
+52-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:47:13-49
+53            android:theme="@style/MyTheme" />
+53-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:48:13-43
+54        <activity
+54-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:49:9-52:46
+55            android:name="deliled.Applications.android.Maestro.veille_detections"
+55-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:50:13-82
+56            android:screenOrientation="portrait"
+56-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:51:13-49
+57            android:theme="@style/MyTheme" />
+57-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:52:13-43
+58        <activity
+58-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:53:9-56:46
+59            android:name="deliled.Applications.android.Maestro.ajustement_luminosite"
+59-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:54:13-86
+60            android:screenOrientation="portrait"
+60-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:55:13-49
+61            android:theme="@style/MyTheme" />
+61-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:56:13-43
+62        <activity
+62-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:57:9-59:52
+63            android:name="deliled.Applications.android.Maestro.DeviceScanActivity"
+63-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:58:13-83
+64            android:screenOrientation="portrait" />
+64-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:59:13-49
+65        <activity
+65-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:60:9-63:46
+66            android:name="deliled.Applications.android.Maestro.serveur_access"
+66-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:61:13-79
+67            android:screenOrientation="portrait"
+67-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:62:13-49
+68            android:theme="@style/MyTheme" />
+68-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:63:13-43
+69        <activity
+69-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:64:9-67:46
+70            android:name="deliled.Applications.android.Maestro.QR_CODE"
+70-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:65:13-72
+71            android:screenOrientation="portrait"
+71-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:66:13-49
+72            android:theme="@style/MyTheme" />
+72-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:67:13-43
+73        <activity
+73-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:68:9-72:46
+74            android:name="deliled.Applications.android.Maestro.co2"
+74-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:69:13-68
+75            android:configChanges="orientation"
+75-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:70:13-48
+76            android:screenOrientation="portrait"
+76-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:71:13-49
+77            android:theme="@style/MyTheme" />
+77-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:72:13-43
+78
+79        <service
+79-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:74:9-76:38
+80            android:name="deliled.Applications.android.Maestro.BluetoothLeService"
+80-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:75:13-83
+81            android:enabled="true" />
+81-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:76:13-35
+82        <service
+82-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:77:9-80:40
+83            android:name="deliled.Applications.android.Maestro.FloatingWidgetService"
+83-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:78:13-86
+84            android:enabled="true"
+84-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:79:13-35
+85            android:exported="false" />
+85-->/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/src/main/AndroidManifest.xml:80:13-37
+86
+87        <activity
+87-->[com.google.android.gms:play-services-base:17.0.0] /Users/pierrezemour/.gradle/caches/transforms-3/06f08a7c9eb92bee56db18779f31a479/transformed/jetified-play-services-base-17.0.0/AndroidManifest.xml:23:9-26:75
+88            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+88-->[com.google.android.gms:play-services-base:17.0.0] /Users/pierrezemour/.gradle/caches/transforms-3/06f08a7c9eb92bee56db18779f31a479/transformed/jetified-play-services-base-17.0.0/AndroidManifest.xml:24:13-79
+89            android:exported="false"
+89-->[com.google.android.gms:play-services-base:17.0.0] /Users/pierrezemour/.gradle/caches/transforms-3/06f08a7c9eb92bee56db18779f31a479/transformed/jetified-play-services-base-17.0.0/AndroidManifest.xml:25:13-37
+90            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+90-->[com.google.android.gms:play-services-base:17.0.0] /Users/pierrezemour/.gradle/caches/transforms-3/06f08a7c9eb92bee56db18779f31a479/transformed/jetified-play-services-base-17.0.0/AndroidManifest.xml:26:13-72
+91
+92        <meta-data
+92-->[com.google.android.gms:play-services-basement:17.0.0] /Users/pierrezemour/.gradle/caches/transforms-3/5b4a5af03789cf1669cedf0b85ed5f41/transformed/jetified-play-services-basement-17.0.0/AndroidManifest.xml:23:9-25:69
+93            android:name="com.google.android.gms.version"
+93-->[com.google.android.gms:play-services-basement:17.0.0] /Users/pierrezemour/.gradle/caches/transforms-3/5b4a5af03789cf1669cedf0b85ed5f41/transformed/jetified-play-services-basement-17.0.0/AndroidManifest.xml:24:13-58
+94            android:value="@integer/google_play_services_version" />
+94-->[com.google.android.gms:play-services-basement:17.0.0] /Users/pierrezemour/.gradle/caches/transforms-3/5b4a5af03789cf1669cedf0b85ed5f41/transformed/jetified-play-services-basement-17.0.0/AndroidManifest.xml:25:13-66
+95    </application>
+96
+97</manifest>

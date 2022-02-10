@@ -1,0 +1,4 @@
+#Wed Jan 26 14:58:25 CET 2022
+base.0=/Users/pierrezemour/Documents/GitHub/appdeliled/Android Studio Apps/DELITECH/Application/build/intermediates/dex/release/mergeDexRelease/classes.dex
+renamed.0=classes.dex
+path.0=classes.dex
