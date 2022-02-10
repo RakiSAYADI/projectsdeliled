@@ -61,7 +61,7 @@ class _QrCodeGeneratorDataState extends State<QrCodeGeneratorData> with TickerPr
                 SizedBox(height: screenHeight * 0.05),
                 TextButton(
                   onPressed: () async {
-                    if (myEmail.text.isNotEmpty && RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(myEmail.text)) {
+                    if (myEmail.text.isNotEmpty && RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9.*+-_]+\.[a-zA-Z]+").hasMatch(myEmail.text)) {
                       SystemChannels.textInput.invokeMethod('TextInput.hide');
                       animationRefreshIcon.repeat();
                       myUvcToast.setAnimationIcon(animationRefreshIcon);
