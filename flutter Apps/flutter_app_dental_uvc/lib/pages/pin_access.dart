@@ -111,7 +111,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
         var parsedJson = json.decode(robotsNamesData);
         if (parsedJson.toString().contains('${myDevice.device.name}:')) {
           deviceSurName = parsedJson[myDevice.device.name];
-          deviceName = '${parsedJson[myDevice.device.name]} (${myDevice.device.name})';
+          deviceName = parsedJson[myDevice.device.name];
         } else {
           deviceName = myDevice.device.name;
         }
@@ -166,6 +166,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
                             textAlign: TextAlign.center,
                             controller: myName,
                             maxLines: 1,
+                            maxLength: 64,
                             decoration: InputDecoration(
                                 hintText: nameDeviceHintTextLanguageArray[languageArrayIdentifier],
                                 hintStyle: TextStyle(
@@ -192,6 +193,12 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
                   if (robotsNamesData.isEmpty) {
                     await uvcDataFile.saveRobotsNameDATA('{\"${myDevice.device.name}\":\"DEEPLIGHT-${myName.text}\"}');
                   } else {
+                    if (Platform.isIOS) {
+                      myDevice.writeCharacteristic(0, 0, '{\"SetName\":\"DEEPLIGHT-${myName.text}\"}');
+                    }
+                    if (Platform.isAndroid) {
+                      myDevice.writeCharacteristic(2, 0, '{\"SetName\":\"DEEPLIGHT-${myName.text}\"}');
+                    }
                     Map<String, dynamic> parsedJson = json.decode(robotsNamesData);
                     parsedJson.addAll({'${myDevice.device.name}': 'DEEPLIGHT-${myName.text}'});
                     await uvcDataFile.saveRobotsNameDATA(json.encode(parsedJson));
