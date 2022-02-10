@@ -1,0 +1,12 @@
+[submodule "components/axp192"]
+	path = components/axp192
+	url = https://github.com/usedbytes/axp192.git
+[submodule "components/esp_i2c_hal"]
+	path = components/esp_i2c_hal
+	url = https://github.com/tuupola/esp_i2c_helper
+[submodule "components/lvgl"]
+	path = components/lvgl
+	url = https://github.com/lvgl/lvgl.git
+[submodule "components/lvgl_esp32_drivers"]
+	path = components/lvgl_esp32_drivers
+	url = https://github.com/usedbytes/lvgl_esp32_drivers.git
