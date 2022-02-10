@@ -62,7 +62,7 @@ final List<String> authoriseConnectionToastTextLanguageArray = ['Autorisation de
 
 final List<String> restartDisinfectionMessageTextLanguageArray = [
   'Problème lors de la précédente désinfection, voulez-vous la recommencer ?',
-  'Problem during the previous disinfection, do ypu want to repeat it ?'
+  'Problem during the previous disinfection, do you want to repeat it ?'
 ];
 
 final List<String> stopDisinfectionMessageTextLanguageArray = [
