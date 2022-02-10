@@ -1,4 +1,4 @@
-package deliled.applications.ambiMaestroapp.flutter_app_ambimaestro;
+package deliled.applications.ambiMaestroapp;
 
 import io.flutter.embedding.android.FlutterActivity;
 

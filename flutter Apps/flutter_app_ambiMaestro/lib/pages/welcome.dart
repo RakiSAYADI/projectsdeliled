@@ -22,12 +22,11 @@ class Welcome extends StatefulWidget {
 
 class _WelcomeState extends State<Welcome> {
   FlutterBlue flutterBlue = FlutterBlue.instance;
-  String? version;
+  String version = '';
 
   @override
   void initState() {
     // TODO: implement initState
-    SystemChannels.textInput.invokeMethod('TextInput.hide');
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
       DeviceOrientation.portraitUp,
@@ -72,9 +71,6 @@ class _WelcomeState extends State<Welcome> {
   }
 
   void checkPermissions() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    version = packageInfo.version;
-
     await SuperEasyPermissions.askPermission(Permissions.locationWhenInUse).then((value) {
       if (value) {
         debugPrint("permission granted");
@@ -85,6 +81,14 @@ class _WelcomeState extends State<Welcome> {
         debugPrint("permission denied");
       }
     });
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    try {
+      setState(() {
+        version = packageInfo.version;
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   @override
@@ -105,33 +109,18 @@ class _WelcomeState extends State<Welcome> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Expanded(
-              flex: 3,
+              flex: 9,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Image.asset(
                   'assets/ic_launcher.png',
-                  height: heightScreen * 0.2,
-                  width: widthScreen * 0.7,
+                  height: heightScreen * 0.15,
+                  width: widthScreen * 0.3,
                 ),
               ),
             ),
             Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  appName,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey[300],
-                    fontSize: widthScreen * 0.03,
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 5,
+              flex: 3,
               child: SpinKitCircle(
                 color: Colors.white,
                 size: heightScreen * 0.1,
@@ -146,7 +135,7 @@ class _WelcomeState extends State<Welcome> {
                     flex: 3,
                     child: Image.asset(
                       'assets/logo_deeplight.png',
-                      height: heightScreen * 0.1,
+                      height: heightScreen * 0.15,
                       width: widthScreen * 0.7,
                     ),
                   ),
@@ -159,7 +148,7 @@ class _WelcomeState extends State<Welcome> {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.grey[300],
-                          fontSize: widthScreen * 0.03,
+                          fontSize: widthScreen * 0.05,
                         ),
                       ),
                     ),
@@ -175,7 +164,7 @@ class _WelcomeState extends State<Welcome> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.grey[300],
-                    fontSize: widthScreen * 0.02,
+                    fontSize: widthScreen * 0.04,
                   ),
                 ),
               ),
@@ -185,10 +174,10 @@ class _WelcomeState extends State<Welcome> {
               child: Center(
                 child: Center(
                   child: Text(
-                    version!,
+                    'V$version',
                     style: TextStyle(
                       color: Colors.grey[300],
-                      fontSize: widthScreen * 0.02,
+                      fontSize: widthScreen * 0.04,
                     ),
                   ),
                 ),

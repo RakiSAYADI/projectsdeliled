@@ -64,10 +64,6 @@ void main() async {
       );
 
   SystemChannels.textInput.invokeMethod('TextInput.hide');
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight,
-  ]);
 
   Wakelock.enable();
   bool wakelockEnabled = await Wakelock.enabled;
