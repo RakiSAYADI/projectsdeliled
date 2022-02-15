@@ -14,6 +14,8 @@
 #include "lvgl.h"
 #include "lvgl_helpers.h"
 
+#include "main.h"
+
 #define LV_TICK_PERIOD_MS true
 
 #define TAG "MAIN"
@@ -81,7 +83,7 @@ static void gui_thread(void *pvParameter)
 {
 	(void)pvParameter;
 
-	ESP_LOGI(TAG, "Start LCD !");
+	ESP_LOGI(TAG, "Start Application !");
 
 	static lv_color_t bufs[2][DISP_BUF_SIZE];
 	static lv_disp_buf_t disp_buf;
@@ -202,12 +204,13 @@ static void gui_thread(void *pvParameter)
 
 	while (1)
 	{
-		vTaskDelay(10 / portTICK_PERIOD_MS);
-
+		delay(10);
+		/*if (true) {
+			break;
+		}*/
 		lv_task_handler();
 	}
-
-	// Never returns
+	delete (NULL);
 }
 
 void app_main(void)
@@ -230,15 +233,19 @@ void app_main(void)
 	lv_init();
 	lvgl_driver_init();
 
-	vTaskDelay(100 / portTICK_PERIOD_MS);
+	delay(100);
 	touch_driver_init();
 	disp_driver_init();
 
+	// prepare style design
+
+	// initStyles();
+
+	// Start display User Interface
 	// Needs to be pinned to a core
 	xTaskCreatePinnedToCore(gui_thread, "gui", 4096 * 2, NULL, 0, NULL, 1);
 
 	ESP_LOGI(TAG, "Running...");
-	fflush(stdout);
 
 	for (;;)
 	{
