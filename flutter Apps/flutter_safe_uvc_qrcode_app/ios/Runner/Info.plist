@@ -38,18 +38,16 @@
 	<string>Location permission is required to scan Zebra printers </string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Location permission is required to scan Zebra printers </string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>bluetooth-central</string>
-		<string>bluetooth-peripheral</string>
-		<string>external-accessory</string>
-	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiresFullScreen</key>
 	<true/>
+    <key>UISupportedExternalAccessoryProtocols</key>
+        <array>
+            <string>com.zebra.rawport</string>
+        </array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
