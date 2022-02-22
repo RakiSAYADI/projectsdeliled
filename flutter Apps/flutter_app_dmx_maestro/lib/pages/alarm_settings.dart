@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app_dmx_maestro/services/DataVariables.dart';
@@ -45,15 +46,7 @@ class _AlarmClockState extends State<AlarmClock> {
 
   bool firstDisplayMainWidget = true;
 
-  List<Color> hueInitial = [
-    Colors.blueAccent,
-    Colors.blueAccent,
-    Colors.blueAccent,
-    Colors.blueAccent,
-    Colors.blueAccent,
-    Colors.blueAccent,
-    Colors.blueAccent
-  ];
+  List<Color> hueInitial = [Colors.blueAccent, Colors.blueAccent, Colors.blueAccent, Colors.blueAccent, Colors.blueAccent, Colors.blueAccent, Colors.blueAccent];
 
   @override
   void initState() {
@@ -95,14 +88,29 @@ class _AlarmClockState extends State<AlarmClock> {
     double heightScreen = MediaQuery.of(context).size.height;
     if (firstDisplayMainWidget) {
       try {
-        var parsedJson = json.decode(dataMaestro2);
-        readWakeUpDataPerDay(parsedJson['lun'], 0);
-        readWakeUpDataPerDay(parsedJson['mar'], 1);
-        readWakeUpDataPerDay(parsedJson['mer'], 2);
-        readWakeUpDataPerDay(parsedJson['jeu'], 3);
-        readWakeUpDataPerDay(parsedJson['ven'], 4);
-        readWakeUpDataPerDay(parsedJson['sam'], 5);
-        readWakeUpDataPerDay(parsedJson['dim'], 6);
+        var parsedJson;
+        if (Platform.isAndroid) {
+          parsedJson = json.decode(dataMaestro2);
+          readWakeUpDataPerDay(parsedJson['lun'], 0);
+          readWakeUpDataPerDay(parsedJson['mar'], 1);
+          readWakeUpDataPerDay(parsedJson['mer'], 2);
+          readWakeUpDataPerDay(parsedJson['jeu'], 3);
+          readWakeUpDataPerDay(parsedJson['ven'], 4);
+          readWakeUpDataPerDay(parsedJson['sam'], 5);
+          readWakeUpDataPerDay(parsedJson['dim'], 6);
+        }
+        if (Platform.isIOS) {
+          parsedJson = json.decode(dataMaestroIOS4);
+          readWakeUpDataPerDay(parsedJson['lun'], 0);
+          readWakeUpDataPerDay(parsedJson['mar'], 1);
+          readWakeUpDataPerDay(parsedJson['mer'], 2);
+          readWakeUpDataPerDay(parsedJson['jeu'], 3);
+          parsedJson = json.decode(dataMaestroIOS5);
+          readWakeUpDataPerDay(parsedJson['ven'], 4);
+          readWakeUpDataPerDay(parsedJson['sam'], 5);
+          readWakeUpDataPerDay(parsedJson['dim'], 6);
+        }
+
         day = 0;
         if (daysStates[day]) {
           activationButtonText = 'Activé';
@@ -169,9 +177,9 @@ class _AlarmClockState extends State<AlarmClock> {
                                 '\"sam\":[${alarmDayData(5)}],\"dim\":[${alarmDayData(6)}]}'
                             .codeUnits);
                         await Future.delayed(Duration(milliseconds: 500));
-                        dataMaestro = String.fromCharCodes(await characteristicMaestro.read());
+                        dataMaestro = String.fromCharCodes(await characteristicWifi.read());
                         await Future.delayed(Duration(milliseconds: 500));
-                        dataMaestro2 = String.fromCharCodes(await characteristicMaestro.read());
+                        dataMaestro2 = String.fromCharCodes(await characteristicWifi.read());
                       }
                     },
                     child: Padding(
@@ -254,46 +262,39 @@ class _AlarmClockState extends State<AlarmClock> {
                       children: [
                         Container(
                             width: (widthScreen - 84) / 7,
-                            child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                              new SizedBox(width: 4.0),
-                              new Text("Lun.", style: TextStyle(fontSize: 15, color: activationButtonColor[0], fontWeight: FontWeight.bold))
-                            ])),
+                            child: new Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[new SizedBox(width: 4.0), new Text("Lun.", style: TextStyle(fontSize: 15, color: activationButtonColor[0], fontWeight: FontWeight.bold))])),
                         Container(
                             width: (widthScreen - 84) / 7,
-                            child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                              new SizedBox(width: 4.0),
-                              new Text("Mar.", style: TextStyle(fontSize: 15, color: activationButtonColor[1], fontWeight: FontWeight.bold))
-                            ])),
+                            child: new Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[new SizedBox(width: 4.0), new Text("Mar.", style: TextStyle(fontSize: 15, color: activationButtonColor[1], fontWeight: FontWeight.bold))])),
                         Container(
                             width: (widthScreen - 84) / 7,
-                            child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                              new SizedBox(width: 4.0),
-                              new Text("Mer.", style: TextStyle(fontSize: 15, color: activationButtonColor[2], fontWeight: FontWeight.bold))
-                            ])),
+                            child: new Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[new SizedBox(width: 4.0), new Text("Mer.", style: TextStyle(fontSize: 15, color: activationButtonColor[2], fontWeight: FontWeight.bold))])),
                         Container(
                             width: (widthScreen - 84) / 7,
-                            child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                              new SizedBox(width: 4.0),
-                              new Text("Jeu.", style: TextStyle(fontSize: 15, color: activationButtonColor[3], fontWeight: FontWeight.bold))
-                            ])),
+                            child: new Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[new SizedBox(width: 4.0), new Text("Jeu.", style: TextStyle(fontSize: 15, color: activationButtonColor[3], fontWeight: FontWeight.bold))])),
                         Container(
                             width: (widthScreen - 84) / 7,
-                            child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                              new SizedBox(width: 4.0),
-                              new Text("Ven.", style: TextStyle(fontSize: 15, color: activationButtonColor[4], fontWeight: FontWeight.bold))
-                            ])),
+                            child: new Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[new SizedBox(width: 4.0), new Text("Ven.", style: TextStyle(fontSize: 15, color: activationButtonColor[4], fontWeight: FontWeight.bold))])),
                         Container(
                             width: (widthScreen - 84) / 7,
-                            child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                              new SizedBox(width: 4.0),
-                              new Text("Sam.", style: TextStyle(fontSize: 15, color: activationButtonColor[5], fontWeight: FontWeight.bold))
-                            ])),
+                            child: new Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[new SizedBox(width: 4.0), new Text("Sam.", style: TextStyle(fontSize: 15, color: activationButtonColor[5], fontWeight: FontWeight.bold))])),
                         Container(
                             width: (widthScreen - 84) / 7,
-                            child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                              new SizedBox(width: 4.0),
-                              new Text("Dim.", style: TextStyle(fontSize: 15, color: activationButtonColor[6], fontWeight: FontWeight.bold))
-                            ])),
+                            child: new Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[new SizedBox(width: 4.0), new Text("Dim.", style: TextStyle(fontSize: 15, color: activationButtonColor[6], fontWeight: FontWeight.bold))])),
                       ],
                       borderWidth: 2,
                       color: Colors.grey,
@@ -606,8 +607,7 @@ class _AlarmClockState extends State<AlarmClock> {
                 max: 100,
                 min: 0,
                 rangeSlider: true,
-                handlerAnimation:
-                    FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
+                handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
                 onDragging: (handlerIndex, lowerValue, upperValue) {
                   luminosityMinList[day] = lowerValue.toInt();
                   luminosityMaxList[day] = upperValue.toInt();
@@ -629,8 +629,7 @@ class _AlarmClockState extends State<AlarmClock> {
                     width: widthScreen * 0.1,
                   ),
                 ),
-                trackBar: FlutterSliderTrackBar(
-                    activeTrackBar: BoxDecoration(color: Colors.grey[700]), activeTrackBarHeight: 15, inactiveTrackBarHeight: 15),
+                trackBar: FlutterSliderTrackBar(activeTrackBar: BoxDecoration(color: Colors.grey[700]), activeTrackBarHeight: 15, inactiveTrackBarHeight: 15),
                 hatchMark: FlutterSliderHatchMark(
                   density: 0.5, // means 50 lines, from 0 to 100 percent
                   labels: [

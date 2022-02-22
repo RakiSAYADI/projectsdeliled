@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -13,7 +14,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   final String zonesInHex = 'F';
 
   final myBleDeviceName = TextEditingController();
@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     // TODO: implement initState
-    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.bottom]);
     super.initState();
   }
 
@@ -54,16 +54,28 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-
     if (firstDisplayMainWidget) {
       try {
-        var parsedJson = json.decode(dataMaestro);
-        ambiance1 = List<String>.from(parsedJson['Amb1']);
-        ambiance2 = List<String>.from(parsedJson['Amb2']);
-        ambiance3 = List<String>.from(parsedJson['Amb3']);
-        ambiance4 = List<String>.from(parsedJson['Amb4']);
-        ambiance5 = List<String>.from(parsedJson['Amb5']);
-        ambiance6 = List<String>.from(parsedJson['Amb6']);
+        var parsedJson;
+        if (Platform.isIOS) {
+          parsedJson = json.decode(dataMaestroIOS2);
+          ambiance1 = List<String>.from(parsedJson['Amb1']);
+          ambiance2 = List<String>.from(parsedJson['Amb2']);
+          ambiance3 = List<String>.from(parsedJson['Amb3']);
+          parsedJson = json.decode(dataMaestroIOS3);
+          ambiance4 = List<String>.from(parsedJson['Amb4']);
+          ambiance5 = List<String>.from(parsedJson['Amb5']);
+          ambiance6 = List<String>.from(parsedJson['Amb6']);
+        }
+        if (Platform.isAndroid) {
+          parsedJson = json.decode(dataMaestro);
+          ambiance1 = [parsedJson['Amb'][0].toString(), parsedJson['Amb'][1].toString()];
+          ambiance2 = [parsedJson['Amb'][2].toString(), parsedJson['Amb'][3].toString()];
+          ambiance3 = [parsedJson['Amb'][4].toString(), parsedJson['Amb'][5].toString()];
+          ambiance4 = [parsedJson['Amb'][6].toString(), parsedJson['Amb'][7].toString()];
+          ambiance5 = [parsedJson['Amb'][8].toString(), parsedJson['Amb'][9].toString()];
+          ambiance6 = [parsedJson['Amb'][10].toString(), parsedJson['Amb'][11].toString()];
+        }
       } catch (e) {
         print('erreur');
         ambiance1 = ['Ambiance 1', 'FF0000'];
@@ -117,7 +129,7 @@ class _HomeState extends State<Home> {
                         ),
                       ],
                     ),
-                    FlatButton(
+                    TextButton(
                       key: Key('bottom_bar_title'),
                       onPressed: () {
                         setState(() {
@@ -141,10 +153,9 @@ class _HomeState extends State<Home> {
                           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                       ),
-                      color: Colors.grey[200],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
+                      style: ButtonStyle(
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                          backgroundColor: MaterialStateProperty.all<Color>(Colors.grey[200])),
                     ),
                     Row(
                       mainAxisSize: MainAxisSize.max,
@@ -204,14 +215,14 @@ class _HomeState extends State<Home> {
           title: Text('Attention'),
           content: Text('Êtes-vous sûr de vouloir revenir à la page de sélection des cartes Maestro™ ?'),
           actions: [
-            FlatButton(
+            TextButton(
                 child: Text('Oui'),
                 onPressed: () async {
                   await myDevice.disconnect();
                   Navigator.pop(c, true);
                   Navigator.pushNamedAndRemoveUntil(context, "/scan_ble_list", (r) => false);
                 }),
-            FlatButton(
+            TextButton(
               child: Text('Non'),
               onPressed: () => Navigator.pop(c, false),
             ),
@@ -378,9 +389,8 @@ class _HomeState extends State<Home> {
                   hslColor = colorSelected;
                   if (myDevice.getConnectionState()) {
                     if (!bottomBarTitleState) {
-                      characteristicMaestro.write(
-                          '{\"hue\":${colorSelected.toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")},\"zone\":\"$zonesInHex\"}'
-                              .codeUnits);
+                      characteristicMaestro
+                          .write('{\"hue\":${colorSelected.toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")},\"zone\":\"$zonesInHex\"}'.codeUnits);
                     }
                   }
                 },
@@ -407,8 +417,7 @@ class _HomeState extends State<Home> {
                 min: 0,
                 centeredOrigin: true,
                 disabled: bottomBarTitleState,
-                handlerAnimation:
-                    FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
+                handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
                 onDragging: (handlerIndex, lowerValue, upperValue) {
                   _lowerValue = lowerValue;
                   if (_lowerValue > 50) {
@@ -424,8 +433,7 @@ class _HomeState extends State<Home> {
                   }
                 },
                 handler: FlutterSliderHandler(child: Icon(Icons.code)),
-                trackBar:
-                    FlutterSliderTrackBar(activeTrackBar: BoxDecoration(color: trackBarColor), activeTrackBarHeight: 12, inactiveTrackBarHeight: 12),
+                trackBar: FlutterSliderTrackBar(activeTrackBar: BoxDecoration(color: trackBarColor), activeTrackBarHeight: 12, inactiveTrackBarHeight: 12),
                 hatchMark: FlutterSliderHatchMark(
                   density: 0.5, // means 50 lines, from 0 to 100 percent
                   labels: [
@@ -458,7 +466,7 @@ class _HomeState extends State<Home> {
                       },
                     ),
                   ),
-                  FlatButton(
+                  TextButton(
                     onPressed: () async {
                       if (myDevice.getConnectionState()) {
                         if (!bottomBarTitleState) {
@@ -473,10 +481,9 @@ class _HomeState extends State<Home> {
                         style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.01 + heightScreen * 0.015),
                       ),
                     ),
-                    color: Colors.blue[400],
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                    ),
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400])),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16.0, 0, 0, 0),
@@ -601,7 +608,7 @@ class _HomeState extends State<Home> {
             ),
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text(
                 'Sauvegarder',
                 style: TextStyle(color: Colors.green),
@@ -617,7 +624,7 @@ class _HomeState extends State<Home> {
                 Navigator.of(context).pop();
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text(
                 'Annuler',
                 style: TextStyle(color: Colors.green),

@@ -13,6 +13,12 @@ List<Device> devices = [];
 String dataMaestro = '';
 String dataMaestro2 = '';
 
+String dataMaestroIOS = '';
+String dataMaestroIOS2 = '';
+String dataMaestroIOS3 = '';
+String dataMaestroIOS4 = '';
+String dataMaestroIOS5 = '';
+
 bool startWithOutSettings;
 
 List<String> myTimeHours = [

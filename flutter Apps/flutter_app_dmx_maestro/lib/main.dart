@@ -3,7 +3,6 @@ import 'package:flutter_app_dmx_maestro/pages/alarm_settings.dart';
 import 'package:flutter_app_dmx_maestro/pages/check_permissions.dart';
 import 'package:flutter_app_dmx_maestro/pages/home.dart';
 import 'package:flutter_app_dmx_maestro/pages/scan_ble_list.dart';
-import 'package:flutter_app_dmx_maestro/pages/scan_qrcode.dart';
 import 'package:flutter_app_dmx_maestro/pages/settings.dart';
 import 'package:flutter_app_dmx_maestro/pages/welcome.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -81,7 +80,6 @@ class MyApp extends StatelessWidget {
         '/': (context) => Welcome(),
         '/check_permissions': (context) => CheckPermissions(),
         '/scan_ble_list': (context) => ScanListBle(),
-        '/scan_qrcode': (context) => ScanQrCode(),
         '/home': (context) => Home(),
         '/settings': (context) => Settings(),
         '/alarm_settings': (context) => AlarmClock(),

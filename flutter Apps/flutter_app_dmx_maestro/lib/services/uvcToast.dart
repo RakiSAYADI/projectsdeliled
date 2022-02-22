@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class ToastyMessage {
   AnimationController animationRefreshIcon;
-  FlutterToast flutterToast;
+  FToast flutterToast;
   BuildContext toastContext;
   String toastMessage;
   int toastDuration;
@@ -24,7 +24,8 @@ class ToastyMessage {
   }
 
   void showToast(Color toastColor, IconData messageIcon, Color toastMessageColor) {
-    this.flutterToast = FlutterToast(this.toastContext);
+    this.flutterToast = FToast();
+    this.flutterToast.init(this.toastContext);
     Widget toast;
 
     if (animationRefreshIcon != null) {
@@ -92,10 +93,10 @@ class ToastyMessage {
       );
     }
     this.flutterToast.showToast(
-      child: toast,
-      gravity: ToastGravity.BOTTOM,
-      toastDuration: Duration(seconds: this.toastDuration),
-    );
+          child: toast,
+          gravity: ToastGravity.BOTTOM,
+          toastDuration: Duration(seconds: this.toastDuration),
+        );
   }
 
   void clearAllToast() {
@@ -105,7 +106,7 @@ class ToastyMessage {
         this.animationRefreshIcon.stop();
       }
     } catch (e) {
-      print('error detected');
+      print('error detected $e');
     }
   }
 
@@ -116,7 +117,7 @@ class ToastyMessage {
       }
       this.flutterToast.removeCustomToast();
     } catch (e) {
-      print('error detected');
+      print('error detected $e');
     }
   }
 }

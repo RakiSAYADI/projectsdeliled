@@ -14,11 +14,10 @@ class ScanListBle extends StatefulWidget {
 }
 
 class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStateMixin {
-
   ToastyMessage myUvcToast;
 
   final String robotUVCMAC = '70:B3:D5:01:8';
-  final String robotUVCName = 'DMXLIGHT';
+  final String robotUVCName = 'HUB-';
 
   ///Initialisation and listening to device state
 
@@ -49,6 +48,8 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
         flutterBlue = FlutterBlue.instance;
         print("Bluetooth is on");
         try {
+          scanIdentifiers.clear();
+          setState(() {});
           if (Platform.isAndroid) {
             scanForDevicesAndroid();
           }
@@ -164,27 +165,27 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
         child: Column(
             children: devices
                 .map((device) => DeviceCard(
-                device: device,
-                connect: () async {
-                  setState(() {
-                    myDeviceBluetooth = device.device;
-                  });
-                  // display Toast message
-                  animationRefreshIcon.repeat();
-                  myDevice = Device(device: myDeviceBluetooth);
-                  try {
-                    myUvcToast.clearAllToast();
-                  } catch (e) {
-                    print(e);
-                  }
-                  waitingWidget();
-                  String deviceName = myDeviceBluetooth.name;
-                  // stop scanning and start connecting
-                  await flutterBlue.stopScan();
-                  bool resultConnection = false;
-                  while (true) {
-                    myDevice.connect(autoConnection: false);
-                    await Future.delayed(Duration(seconds: 1));
+                    device: device,
+                    connect: () async {
+                      setState(() {
+                        myDeviceBluetooth = device.device;
+                      });
+                      // display Toast message
+                      animationRefreshIcon.repeat();
+                      myDevice = Device(device: myDeviceBluetooth);
+                      try {
+                        myUvcToast.clearAllToast();
+                      } catch (e) {
+                        print(e);
+                      }
+                      waitingWidget();
+                      String deviceName = myDeviceBluetooth.name;
+                      // stop scanning and start connecting
+                      await flutterBlue.stopScan();
+                      bool resultConnection = false;
+                      while (true) {
+                        myDevice.connect(autoConnection: false);
+                        await Future.delayed(Duration(seconds: 1));
                         resultConnection = myDevice.getConnectionState();
                         if (resultConnection) {
                           break;
@@ -202,30 +203,53 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                         //Discover services
                         List<BluetoothService> services = await myDeviceBluetooth.discoverServices();
                         BluetoothService service;
-                        service = services.elementAt(2);
+                        if (Platform.isAndroid) {
+                          service = services.elementAt(2);
+                        }
+                        if (Platform.isIOS) {
+                          service = services.elementAt(0);
+                        }
                         // Read the first characteristic
                         characteristicMaestro = service.characteristics[0];
                         // Read the second characteristic
                         characteristicWifi = service.characteristics[1];
                         // reading the characteristic after 1 second
                         Future.delayed(const Duration(seconds: 1), () async {
-                          dataMaestro = String.fromCharCodes(await characteristicMaestro.read());
-                          print(dataMaestro);
+                          await characteristicMaestro.write('{\"APP\":1}'.codeUnits);
                           await Future.delayed(Duration(milliseconds: 500));
-                          dataMaestro2 = String.fromCharCodes(await characteristicMaestro.read());
-                          print(dataMaestro2);
+                          if (Platform.isAndroid) {
+                            dataMaestro = String.fromCharCodes(await characteristicWifi.read());
+                            print(dataMaestro);
+                            await Future.delayed(Duration(milliseconds: 500));
+                            dataMaestro2 = String.fromCharCodes(await characteristicWifi.read());
+                            print(dataMaestro2);
+                          }
+                          if (Platform.isIOS) {
+                            await characteristicMaestro.write('{\"IOS\":1}'.codeUnits);
+                            await Future.delayed(Duration(milliseconds: 500));
+                            dataMaestroIOS = String.fromCharCodes(await characteristicWifi.read());
+                            print(dataMaestroIOS);
+                            await Future.delayed(Duration(milliseconds: 500));
+                            dataMaestroIOS2 = String.fromCharCodes(await characteristicWifi.read());
+                            print(dataMaestroIOS2);
+                            await Future.delayed(Duration(milliseconds: 500));
+                            dataMaestroIOS3 = String.fromCharCodes(await characteristicWifi.read());
+                            print(dataMaestroIOS3);
+                            await Future.delayed(Duration(milliseconds: 500));
+                            dataMaestroIOS4 = String.fromCharCodes(await characteristicWifi.read());
+                            print(dataMaestroIOS4);
+                            await Future.delayed(Duration(milliseconds: 500));
+                            dataMaestroIOS5 = String.fromCharCodes(await characteristicWifi.read());
+                            print(dataMaestroIOS5);
+                          }
                           // clear the remaining toast message
                           myUvcToast.clearCurrentToast();
                           DateTime dateTime = DateTime.now();
-                          print(dateTime.millisecondsSinceEpoch ~/ 1000);
-                          print(dateTime.timeZoneName);
-                          print(dateTime.timeZoneOffset.inSeconds);
-                          await characteristicMaestro
-                              .write('{\"Time\":[${dateTime.millisecondsSinceEpoch ~/ 1000},${dateTime.timeZoneOffset.inSeconds}]}'.codeUnits);
+                          await characteristicMaestro.write('{\"Time\":[${dateTime.millisecondsSinceEpoch ~/ 1000},${dateTime.timeZoneOffset.inSeconds}]}'.codeUnits);
                           Navigator.pushNamed(context, '/home');
                         });
                       }
-                }))
+                    }))
                 .toList()),
       ),
     );
