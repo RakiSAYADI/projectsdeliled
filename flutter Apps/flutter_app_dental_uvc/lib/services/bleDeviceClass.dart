@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -6,7 +5,6 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:flutterappdentaluvc/services/languageDataBase.dart';
-import 'package:flutterappdentaluvc/services/uvcClass.dart';
 import 'package:get/get.dart';
 
 class Device {
@@ -20,7 +18,6 @@ class Device {
 
   bool _readIsReady = false;
   bool _connectionError = false;
-  bool _connectionOnce = true;
 
   FlutterBlue _flutterBlue = FlutterBlue.instance;
   List<BluetoothDevice> _scanDevices = [];
@@ -48,9 +45,9 @@ class Device {
       _readIsReady = true;
       _connectionError = true;
       // listen if the state connexion is changed or not
-      if (_connectionOnce) {
+      if (connectionOnce) {
         _checkBLEConnectionState(device);
-        _connectionOnce = false;
+        connectionOnce = false;
       }
     });
   }
@@ -143,35 +140,6 @@ class Device {
       switch (event) {
         case BluetoothDeviceState.connected:
           print('connected');
-
-          /// add the check state process
-          Map<String, dynamic> dataRead;
-          if (Platform.isAndroid) {
-            await readCharacteristic(2, 0);
-          }
-          if (Platform.isIOS) {
-            await readCharacteristic(0, 0);
-          }
-          try {
-            dataRead = jsonDecode(_readCharMessage);
-            switch (int.parse(dataRead['uvcSt'].toString())) {
-              case 0:
-                print('ok');
-                break;
-              case 1:
-                print('in progress');
-                _stopDisinfection(dataRead);
-                break;
-              case 2:
-                print('error');
-                _restartDisinfection(dataRead);
-                break;
-              default:
-                break;
-            }
-          } catch (e) {
-            print('No version detected');
-          }
           break;
         case BluetoothDeviceState.disconnected:
           print('disconnected');
@@ -212,67 +180,6 @@ class Device {
     });
   }
 
-  void _restartDisinfection(Map<String, dynamic> dataRead) {
-    String timeDataList = dataRead['TimeData'].toString();
-    myExtinctionTimeMinutePosition = _stringListAsciiToListInt(timeDataList.codeUnits)[0];
-    myActivationTimeMinutePosition = _stringListAsciiToListInt(timeDataList.codeUnits)[1];
-
-    myUvcLight = UvcLight();
-    myUvcLight.setCompanyName(dataRead['Company']);
-    myUvcLight.setOperatorName(dataRead['UserName']);
-    myUvcLight.setRoomName(dataRead['RoomName']);
-    myUvcLight.setActivationTime(myActivationTimeMinute.elementAt(myActivationTimeMinutePosition));
-    myUvcLight.setInfectionTime(myExtinctionTimeMinute.elementAt(myExtinctionTimeMinutePosition));
-    myUvcLight.setMachineMac(myDevice.device.id.id);
-    myUvcLight.setMachineName(myDevice.device.name);
-
-    Get.defaultDialog(
-      title: attentionTextLanguageArray[languageArrayIdentifier],
-      content: Text(disinfectionErrorMessageTextLanguageArray[languageArrayIdentifier]),
-      actions: [
-        TextButton(
-          child: Text(yesTextLanguageArray[languageArrayIdentifier]),
-          onPressed: () {
-            if (Platform.isAndroid) {
-              writeCharacteristic(2, 0, 'UVCTreatement : ON');
-            }
-            if (Platform.isIOS) {
-              writeCharacteristic(0, 0, 'UVCTreatement : ON');
-            }
-            Get.toNamed('/uvc');
-          },
-        ),
-        TextButton(
-          child: Text(noTextLanguageArray[languageArrayIdentifier]),
-          onPressed: () {
-            Get.back();
-          },
-        ),
-      ],
-    );
-  }
-
-  void _stopDisinfection(Map<String, dynamic> dataRead) {
-    Get.defaultDialog(
-      title: attentionTextLanguageArray[languageArrayIdentifier],
-      content: Text(disinfectionOnProgressMessageTextLanguageArray[languageArrayIdentifier]),
-      actions: [
-        TextButton(
-          child: Text(understoodTextLanguageArray[languageArrayIdentifier]),
-          onPressed: () {
-            if (Platform.isAndroid) {
-              writeCharacteristic(2, 0, 'STOP : ON');
-            }
-            if (Platform.isIOS) {
-              writeCharacteristic(0, 0, 'STOP : ON');
-            }
-            Get.back();
-          },
-        ),
-      ],
-    );
-  }
-
   void _scanForDevices() async {
     Get.defaultDialog(
       title: deviceSearchMessageTextLanguageArray[languageArrayIdentifier],
@@ -289,7 +196,7 @@ class Device {
       _scanDevices.clear();
       // do something with scan results
       for (ScanResult r in results) {
-        print('${r.device.name} found! mac: ${r.device.id.toString()}');
+        print('${r.device.name} found! mac: ${r.device.id.toString()} with rssi ${r.rssi}');
         if (_scanDevices.isEmpty) {
           _scanDevices.add(r.device);
         } else {
@@ -300,17 +207,8 @@ class Device {
       }
     });
     await Future.delayed(const Duration(seconds: 10));
-    _flutterBlue.isScanning.listen((state) {
-      // do something with scan results
-      if (state) {
-        print('scanning !');
-      } else {
-        print('we have result !');
-        _deviceState();
-      }
-    }, onDone: () {
-      print('Scan is Done !');
-    });
+    _flutterBlue.stopScan();
+    _deviceState();
   }
 
   void _deviceState() {
@@ -333,7 +231,9 @@ class Device {
     } else {
       Get.snackbar(congratulationMessageTextLanguageArray[languageArrayIdentifier], noFindDeviceMessageTextLanguageArray[languageArrayIdentifier],
           icon: Icon(Icons.assignment_late, color: Colors.red));
-      //_scanForDevices();
+      connectionOnce = true;
+      Get.toNamed('/');
+      Get.resetRootNavigator();
     }
   }
 
@@ -364,10 +264,10 @@ class Device {
       }
       if (myDevice.getConnectionState()) {
         if (Platform.isAndroid) {
-          await readCharacteristic(2, 0);
+          await myDevice.readCharacteristic(2, 0);
         }
         if (Platform.isIOS) {
-          await readCharacteristic(0, 0);
+          await myDevice.readCharacteristic(0, 0);
         }
         await Future.delayed(const Duration(seconds: 1));
         try {
@@ -390,32 +290,6 @@ class Device {
         }
       }
       await Future.delayed(const Duration(seconds: 1));
-    }
-  }
-
-  List<int> _stringListAsciiToListInt(List<int> listInt) {
-    List<int> ourListInt = [0];
-    int listIntLength = listInt.length;
-    int intNumber = (listIntLength / 4).round();
-    ourListInt.length = intNumber;
-    int listCounter;
-    int listIntCounter = 0;
-    String numberString = '';
-    if (listInt.first == 91 && listInt.last == 93) {
-      for (listCounter = 0; listCounter < listIntLength - 1; listCounter++) {
-        if (!((listInt[listCounter] == 91) || (listInt[listCounter] == 93) || (listInt[listCounter] == 32) || (listInt[listCounter] == 44))) {
-          numberString = '';
-          do {
-            numberString += String.fromCharCode(listInt[listCounter]);
-            listCounter++;
-          } while (!((listInt[listCounter] == 44) || (listInt[listCounter] == 93)));
-          ourListInt[listIntCounter] = int.parse(numberString);
-          listIntCounter++;
-        }
-      }
-      return ourListInt;
-    } else {
-      return [0];
     }
   }
 }

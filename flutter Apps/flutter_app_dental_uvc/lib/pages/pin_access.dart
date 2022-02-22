@@ -41,7 +41,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   bool modifyNameEnable = false;
 
   String dataRobotUVC = '';
-  String deviceName = '';
+  String deviceName = deviceNameMessageTextLanguageArray[languageArrayIdentifier];
   String deviceSurName = '';
   String pinCode;
   String myPinCode = '';
@@ -113,10 +113,12 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
           deviceSurName = parsedJson[myDevice.device.name];
           deviceName = parsedJson[myDevice.device.name];
         } else {
+          deviceSurName = myDevice.device.name;
           deviceName = myDevice.device.name;
         }
       } catch (e) {
         print('error in name');
+        deviceSurName = myDevice.device.name;
         deviceName = myDevice.device.name;
       }
       modifyNameEnable = true;
@@ -130,7 +132,7 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
     final myName = TextEditingController();
-    myName.text = nameDevice.substring(9);
+    myName.text = nameDevice.substring(10);
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -194,13 +196,17 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
                     await uvcDataFile.saveRobotsNameDATA('{\"${myDevice.device.name}\":\"DEEPLIGHT-${myName.text}\"}');
                   } else {
                     if (Platform.isIOS) {
-                      myDevice.writeCharacteristic(0, 0, '{\"SetName\":\"DEEPLIGHT-${myName.text}\"}');
+                      await myDevice.writeCharacteristic(0, 0, '{\"SetName\":\"DEEPLIGHT-${myName.text}\"}');
                     }
                     if (Platform.isAndroid) {
-                      myDevice.writeCharacteristic(2, 0, '{\"SetName\":\"DEEPLIGHT-${myName.text}\"}');
+                      await myDevice.writeCharacteristic(2, 0, '{\"SetName\":\"DEEPLIGHT-${myName.text}\"}');
                     }
                     Map<String, dynamic> parsedJson = json.decode(robotsNamesData);
                     parsedJson.addAll({'${myDevice.device.name}': 'DEEPLIGHT-${myName.text}'});
+                    if (Platform.isIOS) {
+                      UVCDataFile uvcDataFile = UVCDataFile();
+                      uvcDataFile.saveUVCDeviceIOS('DEEPLIGHT-${myName.text}');
+                    }
                     await uvcDataFile.saveRobotsNameDATA(json.encode(parsedJson));
                   }
                 } catch (e) {

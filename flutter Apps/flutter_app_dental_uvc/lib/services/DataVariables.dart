@@ -33,6 +33,7 @@ List<List<String>> uvcDataSelected;
 
 bool isTreatmentCompleted;
 bool openWithSettings = false;
+bool connectionOnce = true;
 
 List<String> myExtinctionTimeMinute = [
   ' 30 sec',

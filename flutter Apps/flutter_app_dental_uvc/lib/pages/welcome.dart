@@ -161,7 +161,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
         }
       } else {
         myUvcToast.setToastDuration(10);
-        myDevice = Device(device: scanDevices.elementAt(devicesPosition));
+        myDevice = null;
         myUvcToast.setToastMessage(associateDeviceNotReachedToastTextLanguageArray[languageArrayIdentifier]);
         myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
         await ledControl.setLedColor('ORANGE');
@@ -299,7 +299,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
           firstTime = false;
           readUVCDevice();
         }
-        print('${r.device.name} found! mac: ${r.device.id.toString()}');
+        print('${r.device.name} found! mac: ${r.device.id.toString()} with rssi ${r.rssi}');
         if (scanDevices.isEmpty) {
           scanDevices.add(r.device);
         } else {
