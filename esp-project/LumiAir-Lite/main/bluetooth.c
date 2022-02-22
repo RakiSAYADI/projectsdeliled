@@ -21,6 +21,7 @@
 #include "sdkconfig.h"
 
 #include "unitcfg.h"
+#include "bluetooth.h"
 #include "autolight.h"
 #include "app_gpio.h"
 #include "webservice.h"
@@ -34,7 +35,7 @@
 #define GATTS_CHAR_NUM_READ 2
 #define GATTS_NUM_HANDLE_READ 1 + (2 * GATTS_CHAR_NUM_READ)
 
-///Declare the functions
+/// Declare the functions
 
 void gatts_profile_read_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
 
@@ -48,11 +49,11 @@ void char_total2_write_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_i
 
 bool configData(char *jsonData);
 
-//Declare uuid of READ and WRITE Service
+// Declare uuid of READ and WRITE Service
 
 #define GATTS_SERVICE_UUID_TEST_READ 0x00FF
-#define GATTS_UUID_TEST_READ_Total 0xFF01  //capteurs
-#define GATTS_UUID_TEST_READ_Total2 0xFF02 //data
+#define GATTS_UUID_TEST_READ_Total 0xFF01  // capteurs
+#define GATTS_UUID_TEST_READ_Total2 0xFF02 // data
 
 #define TEST_DEVICE_NAME "MAESTRO"
 #define TEST_MANUFACTURER_DATA_LEN 17
@@ -61,12 +62,12 @@ bool configData(char *jsonData);
 #define CHAR_ROOM_MAX 0x02
 #define PREPARE_BUF_MAX_SIZE 1024
 
-//characteristics values of READ profile
+// characteristics values of READ profile
 
 uint8_t total[GATTS_CHAR_VAL_LEN_MAX];
 uint8_t total2[GATTS_CHAR_VAL_LEN_MAX];
 
-//property of each service
+// property of each service
 
 esp_gatt_char_prop_t read_property = 0;
 esp_gatt_char_prop_t write_property = 0;
@@ -92,7 +93,7 @@ uint32_t ble_add_char_pos;
 
 uint8_t adv_service_uuid128[32] = {
 	/* LSB <--------------------------------------------------------------------------------> MSB */
-	//first uuid, 16bit, [12],[13] is the value
+	// first uuid, 16bit, [12],[13] is the value
 	0xfb,
 	0x34,
 	0x9b,
@@ -109,7 +110,7 @@ uint8_t adv_service_uuid128[32] = {
 	0x00,
 	0x00,
 	0x00,
-	//second uuid, 32bit, [12], [13], [14], [15] is the value
+	// second uuid, 32bit, [12], [13], [14], [15] is the value
 	0xfb,
 	0x34,
 	0x9b,
@@ -128,8 +129,8 @@ uint8_t adv_service_uuid128[32] = {
 	0x00};
 
 // The length of adv data must be less than 31 bytes
-//uint8_t test_manufacturer[TEST_MANUFACTURER_DATA_LEN] =  {0x12, 0x23, 0x45, 0x56};
-//adv data
+// uint8_t test_manufacturer[TEST_MANUFACTURER_DATA_LEN] =  {0x12, 0x23, 0x45, 0x56};
+// adv data
 esp_ble_adv_data_t adv_data = {
 	.set_scan_rsp = false,
 	.include_name = true,
@@ -137,7 +138,7 @@ esp_ble_adv_data_t adv_data = {
 	.min_interval = 0x20,
 	.max_interval = 0x40,
 	.appearance = 0x00,
-	.manufacturer_len = 0,		 //TEST_MANUFACTURER_DATA_LEN,
+	.manufacturer_len = 0,		 // TEST_MANUFACTURER_DATA_LEN,
 	.p_manufacturer_data = NULL, //&test_manufacturer[0],
 	.service_data_len = 0,
 	.p_service_data = NULL,
@@ -153,7 +154,7 @@ esp_ble_adv_data_t scan_rsp_data = {
 	.min_interval = 0x20,
 	.max_interval = 0x40,
 	.appearance = 0x00,
-	.manufacturer_len = 0,		 //TEST_MANUFACTURER_DATA_LEN,
+	.manufacturer_len = 0,		 // TEST_MANUFACTURER_DATA_LEN,
 	.p_manufacturer_data = NULL, //&test_manufacturer[0],
 	.service_data_len = 0,
 	.p_service_data = NULL,
@@ -210,7 +211,7 @@ struct gatts_char_inst
 	esp_gatts_cb_t char_write_callback;
 };
 
-struct gatts_char_inst LIST_CHAR_READ[GATTS_CHAR_NUM_READ] = { //SERVICE READ
+struct gatts_char_inst LIST_CHAR_READ[GATTS_CHAR_NUM_READ] = { // SERVICE READ
 	{
 		.char_uuid.len = ESP_UUID_LEN_16,
 		.char_uuid.uuid.uuid16 = GATTS_UUID_TEST_READ_Total,
@@ -235,7 +236,8 @@ struct gatts_char_inst LIST_CHAR_READ[GATTS_CHAR_NUM_READ] = { //SERVICE READ
 	}};
 
 bool deviceIsIOS = false;
-int charIOSCounter = 0;
+uint8_t charIOSCounter = 0;
+uint8_t appIdentifier = 0;
 
 bool jsonparse(char *src, char *dst, char *label, unsigned short arrayindex)
 {
@@ -246,7 +248,7 @@ bool jsonparse(char *src, char *dst, char *label, unsigned short arrayindex)
 
 	if (sp == NULL)
 	{
-		//ESP_LOGE(GATTS_TAG, "label %s not found",label);
+		// ESP_LOGE(GATTS_TAG, "label %s not found",label);
 		return false;
 	}
 
@@ -521,59 +523,202 @@ void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 	}
 	else
 	{
-		if (deviceIsIOS)
+		switch (appIdentifier)
 		{
-			switch (charIOSCounter)
+		case 0:
+			if (deviceIsIOS)
 			{
-			case 0:
+				switch (charIOSCounter)
+				{
+				case 0:
+					sprintf((char *)total2,
+							"{\"wifi\":[\"%s\",\"%s\"],\"cc\":[%d,\"%s\"],\"tabcc\":[%d,%ld,%d,%ld,%d,%ld,%d,%ld,%d,%ld]}",
+							UnitCfg.WifiCfg.WIFI_SSID, UnitCfg.WifiCfg.WIFI_PASS,
+							UnitCfg.UserLcProfile.CcEnb, UnitCfg.UserLcProfile.ZoneCc,
+							UnitCfg.UserLcProfile.Ccp[0].CcLevel, UnitCfg.UserLcProfile.Ccp[0].CcTime,
+							UnitCfg.UserLcProfile.Ccp[1].CcLevel, UnitCfg.UserLcProfile.Ccp[1].CcTime,
+							UnitCfg.UserLcProfile.Ccp[2].CcLevel, UnitCfg.UserLcProfile.Ccp[2].CcTime,
+							UnitCfg.UserLcProfile.Ccp[3].CcLevel, UnitCfg.UserLcProfile.Ccp[3].CcTime,
+							UnitCfg.UserLcProfile.Ccp[4].CcLevel, UnitCfg.UserLcProfile.Ccp[4].CcTime);
+					charIOSCounter++;
+					break;
+				case 1:
+					sprintf((char *)total2,
+							"{\"ZN\":[\"%s\",\"%s\",\"%s\",\"%s\"]}",
+							UnitCfg.Zones_info[0].zonename, UnitCfg.Zones_info[1].zonename,
+							UnitCfg.Zones_info[2].zonename, UnitCfg.Zones_info[3].zonename);
+					charIOSCounter++;
+					break;
+				case 2:
+					sprintf((char *)total2, "{\"Amb\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"],\"PP\":\"%s\"}",
+							UnitCfg.ColortrProfile[0].ambname, UnitCfg.ColortrProfile[0].Hue,
+							UnitCfg.ColortrProfile[1].ambname, UnitCfg.ColortrProfile[1].Hue,
+							UnitCfg.ColortrProfile[2].ambname, UnitCfg.ColortrProfile[2].Hue,
+							UnitCfg.ColortrProfile[3].ambname, UnitCfg.ColortrProfile[3].Hue,
+							UnitCfg.ColortrProfile[4].ambname, UnitCfg.ColortrProfile[4].Hue,
+							UnitCfg.ColortrProfile[5].ambname, UnitCfg.ColortrProfile[5].Hue,
+							UnitCfg.passPIN);
+					charIOSCounter = 0;
+					break;
+				}
+			}
+			else
+			{
 				sprintf((char *)total2,
-						"{\"wifi\":[\"%s\",\"%s\"],\"cc\":[%d,\"%s\"],\"tabcc\":[%d,%ld,%d,%ld,%d,%ld,%d,%ld,%d,%ld]}",
+						"{\"wifi\":[\"%s\",\"%s\"],\"cc\":[%d,\"%s\"],\"tabcc\":[%d,%ld,%d,%ld,%d,%ld,%d,%ld,%d,%ld],\"ZN\":[\"%s\",\"%s\",\"%s\",\"%s\"],"
+						"\"Amb\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"],\"PP\":\"%s\"}",
 						UnitCfg.WifiCfg.WIFI_SSID, UnitCfg.WifiCfg.WIFI_PASS,
 						UnitCfg.UserLcProfile.CcEnb, UnitCfg.UserLcProfile.ZoneCc,
 						UnitCfg.UserLcProfile.Ccp[0].CcLevel, UnitCfg.UserLcProfile.Ccp[0].CcTime,
 						UnitCfg.UserLcProfile.Ccp[1].CcLevel, UnitCfg.UserLcProfile.Ccp[1].CcTime,
 						UnitCfg.UserLcProfile.Ccp[2].CcLevel, UnitCfg.UserLcProfile.Ccp[2].CcTime,
 						UnitCfg.UserLcProfile.Ccp[3].CcLevel, UnitCfg.UserLcProfile.Ccp[3].CcTime,
-						UnitCfg.UserLcProfile.Ccp[4].CcLevel, UnitCfg.UserLcProfile.Ccp[4].CcTime);
-				charIOSCounter++;
-				break;
-			case 1:
-				sprintf((char *)total2,
-						"{\"ZN\":[\"%s\",\"%s\",\"%s\",\"%s\"]}",
+						UnitCfg.UserLcProfile.Ccp[4].CcLevel, UnitCfg.UserLcProfile.Ccp[4].CcTime,
 						UnitCfg.Zones_info[0].zonename, UnitCfg.Zones_info[1].zonename,
-						UnitCfg.Zones_info[2].zonename, UnitCfg.Zones_info[3].zonename);
-				charIOSCounter++;
-				break;
-			case 2:
-				sprintf((char *)total2, "{\"Amb\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"],\"PP\":\"%s\"}",
+						UnitCfg.Zones_info[2].zonename, UnitCfg.Zones_info[3].zonename,
 						UnitCfg.ColortrProfile[0].ambname, UnitCfg.ColortrProfile[0].Hue,
 						UnitCfg.ColortrProfile[1].ambname, UnitCfg.ColortrProfile[1].Hue,
 						UnitCfg.ColortrProfile[2].ambname, UnitCfg.ColortrProfile[2].Hue,
 						UnitCfg.ColortrProfile[3].ambname, UnitCfg.ColortrProfile[3].Hue,
+						UnitCfg.ColortrProfile[4].ambname, UnitCfg.ColortrProfile[4].Hue,
+						UnitCfg.ColortrProfile[5].ambname, UnitCfg.ColortrProfile[5].Hue,
 						UnitCfg.passPIN);
-				charIOSCounter = 0;
-				break;
 			}
-		}
-		else
-		{
-			sprintf((char *)total2,
-					"{\"wifi\":[\"%s\",\"%s\"],\"cc\":[%d,\"%s\"],\"tabcc\":[%d,%ld,%d,%ld,%d,%ld,%d,%ld,%d,%ld],\"ZN\":[\"%s\",\"%s\",\"%s\",\"%s\"],"
-					"\"Amb\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"],\"PP\":\"%s\"}",
-					UnitCfg.WifiCfg.WIFI_SSID, UnitCfg.WifiCfg.WIFI_PASS,
-					UnitCfg.UserLcProfile.CcEnb, UnitCfg.UserLcProfile.ZoneCc,
-					UnitCfg.UserLcProfile.Ccp[0].CcLevel, UnitCfg.UserLcProfile.Ccp[0].CcTime,
-					UnitCfg.UserLcProfile.Ccp[1].CcLevel, UnitCfg.UserLcProfile.Ccp[1].CcTime,
-					UnitCfg.UserLcProfile.Ccp[2].CcLevel, UnitCfg.UserLcProfile.Ccp[2].CcTime,
-					UnitCfg.UserLcProfile.Ccp[3].CcLevel, UnitCfg.UserLcProfile.Ccp[3].CcTime,
-					UnitCfg.UserLcProfile.Ccp[4].CcLevel, UnitCfg.UserLcProfile.Ccp[4].CcTime,
-					UnitCfg.Zones_info[0].zonename, UnitCfg.Zones_info[1].zonename,
-					UnitCfg.Zones_info[2].zonename, UnitCfg.Zones_info[3].zonename,
-					UnitCfg.ColortrProfile[0].ambname, UnitCfg.ColortrProfile[0].Hue,
-					UnitCfg.ColortrProfile[1].ambname, UnitCfg.ColortrProfile[1].Hue,
-					UnitCfg.ColortrProfile[2].ambname, UnitCfg.ColortrProfile[2].Hue,
-					UnitCfg.ColortrProfile[3].ambname, UnitCfg.ColortrProfile[3].Hue,
-					UnitCfg.passPIN);
+			break;
+		case 1:
+			if (deviceIsIOS)
+			{
+				switch (charIOSCounter)
+				{
+				case 0:
+					sprintf((char *)total2,
+							"{\"Ver\":%d,\"FirmV\":\"%s\",\"SCR\":%d,\"wifiSt\":%d,"
+							"\"zone\":[\"%s\",\"%s\",\"%s\",\"%s\"]}",
+							UnitCfg.Version, UnitCfg.versionSystem, scanResult,
+							WifiConnectedFlag, UnitCfg.Zones_info[0].zonename, UnitCfg.Zones_info[1].zonename,
+							UnitCfg.Zones_info[2].zonename, UnitCfg.Zones_info[3].zonename);
+					charIOSCounter++;
+					break;
+				case 1:
+					sprintf((char *)total2,
+							"{\"Amb1\":[\"%s\",\"%s\"],\"Amb2\":[\"%s\",\"%s\"],"
+							"\"Amb3\":[\"%s\",\"%s\"]}",
+							UnitCfg.ColortrProfile[0].ambname, UnitCfg.ColortrProfile[0].Hue,
+							UnitCfg.ColortrProfile[1].ambname, UnitCfg.ColortrProfile[1].Hue,
+							UnitCfg.ColortrProfile[2].ambname, UnitCfg.ColortrProfile[2].Hue);
+					charIOSCounter++;
+					break;
+				case 2:
+					sprintf((char *)total2,
+							"{\"Amb4\":[\"%s\",\"%s\"],"
+							"\"Amb5\":[\"%s\",\"%s\"],\"Amb6\":[\"%s\",\"%s\"]}",
+							UnitCfg.ColortrProfile[3].ambname, UnitCfg.ColortrProfile[3].Hue,
+							UnitCfg.ColortrProfile[4].ambname, UnitCfg.ColortrProfile[4].Hue,
+							UnitCfg.ColortrProfile[5].ambname, UnitCfg.ColortrProfile[5].Hue);
+					charIOSCounter++;
+					break;
+				case 3:
+					sprintf((char *)total2,
+							"{\"lun\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],"
+							"\"mar\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],\"mer\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],"
+							"\"jeu\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"]}",
+							UnitCfg.alarmDay[1].state, UnitCfg.alarmDay[1].autoTrigTime,
+							UnitCfg.alarmDay[1].duration, UnitCfg.alarmDay[1].hue,
+							UnitCfg.alarmDay[1].startLumVal,
+							UnitCfg.alarmDay[1].finishLumVal, UnitCfg.alarmDay[1].zones,
+							UnitCfg.alarmDay[2].state, UnitCfg.alarmDay[2].autoTrigTime,
+							UnitCfg.alarmDay[2].duration, UnitCfg.alarmDay[2].hue,
+							UnitCfg.alarmDay[2].startLumVal,
+							UnitCfg.alarmDay[2].finishLumVal, UnitCfg.alarmDay[2].zones,
+							UnitCfg.alarmDay[3].state, UnitCfg.alarmDay[3].autoTrigTime,
+							UnitCfg.alarmDay[3].duration, UnitCfg.alarmDay[3].hue,
+							UnitCfg.alarmDay[3].startLumVal,
+							UnitCfg.alarmDay[3].finishLumVal, UnitCfg.alarmDay[3].zones,
+							UnitCfg.alarmDay[4].state, UnitCfg.alarmDay[4].autoTrigTime,
+							UnitCfg.alarmDay[4].duration, UnitCfg.alarmDay[4].hue,
+							UnitCfg.alarmDay[4].startLumVal,
+							UnitCfg.alarmDay[4].finishLumVal, UnitCfg.alarmDay[4].zones);
+					charIOSCounter++;
+					break;
+				case 4:
+					sprintf((char *)total2,
+							"{\"ven\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],"
+							"\"sam\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],\"dim\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"]}",
+							UnitCfg.alarmDay[5].state, UnitCfg.alarmDay[5].autoTrigTime,
+							UnitCfg.alarmDay[5].duration, UnitCfg.alarmDay[5].hue,
+							UnitCfg.alarmDay[5].startLumVal,
+							UnitCfg.alarmDay[5].finishLumVal, UnitCfg.alarmDay[5].zones,
+							UnitCfg.alarmDay[6].state, UnitCfg.alarmDay[6].autoTrigTime,
+							UnitCfg.alarmDay[6].duration, UnitCfg.alarmDay[6].hue,
+							UnitCfg.alarmDay[6].startLumVal,
+							UnitCfg.alarmDay[6].finishLumVal, UnitCfg.alarmDay[6].zones,
+							UnitCfg.alarmDay[0].state, UnitCfg.alarmDay[0].autoTrigTime,
+							UnitCfg.alarmDay[0].duration, UnitCfg.alarmDay[0].hue,
+							UnitCfg.alarmDay[0].startLumVal,
+							UnitCfg.alarmDay[0].finishLumVal, UnitCfg.alarmDay[0].zones);
+					charIOSCounter = 0;
+					break;
+				}
+			}
+			else
+			{
+				switch (charIOSCounter)
+				{
+				case 0:
+					sprintf((char *)total2,
+							"{\"Ver\":%d,\"FirmV\":\"%s\",\"SCR\":%d,"
+							"\"Amb\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"],\"wifiSt\":%d,"
+							"\"zone\":[\"%s\",\"%s\",\"%s\",\"%s\"]}",
+							UnitCfg.Version, UnitCfg.versionSystem, scanResult,
+							UnitCfg.ColortrProfile[0].ambname, UnitCfg.ColortrProfile[0].Hue,
+							UnitCfg.ColortrProfile[1].ambname, UnitCfg.ColortrProfile[1].Hue,
+							UnitCfg.ColortrProfile[2].ambname, UnitCfg.ColortrProfile[2].Hue,
+							UnitCfg.ColortrProfile[3].ambname, UnitCfg.ColortrProfile[3].Hue,
+							UnitCfg.ColortrProfile[4].ambname, UnitCfg.ColortrProfile[4].Hue,
+							UnitCfg.ColortrProfile[5].ambname, UnitCfg.ColortrProfile[5].Hue,
+							WifiConnectedFlag, UnitCfg.Zones_info[0].zonename, UnitCfg.Zones_info[1].zonename,
+							UnitCfg.Zones_info[2].zonename, UnitCfg.Zones_info[3].zonename);
+					charIOSCounter++;
+					break;
+				case 1:
+					sprintf((char *)total2,
+							"{\"lun\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],"
+							"\"mar\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],\"mer\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],"
+							"\"jeu\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],\"ven\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],"
+							"\"sam\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],\"dim\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"]}",
+							UnitCfg.alarmDay[1].state, UnitCfg.alarmDay[1].autoTrigTime,
+							UnitCfg.alarmDay[1].duration, UnitCfg.alarmDay[1].hue,
+							UnitCfg.alarmDay[1].startLumVal,
+							UnitCfg.alarmDay[1].finishLumVal, UnitCfg.alarmDay[1].zones,
+							UnitCfg.alarmDay[2].state, UnitCfg.alarmDay[2].autoTrigTime,
+							UnitCfg.alarmDay[2].duration, UnitCfg.alarmDay[2].hue,
+							UnitCfg.alarmDay[2].startLumVal,
+							UnitCfg.alarmDay[2].finishLumVal, UnitCfg.alarmDay[2].zones,
+							UnitCfg.alarmDay[3].state, UnitCfg.alarmDay[3].autoTrigTime,
+							UnitCfg.alarmDay[3].duration, UnitCfg.alarmDay[3].hue,
+							UnitCfg.alarmDay[3].startLumVal,
+							UnitCfg.alarmDay[3].finishLumVal, UnitCfg.alarmDay[3].zones,
+							UnitCfg.alarmDay[4].state, UnitCfg.alarmDay[4].autoTrigTime,
+							UnitCfg.alarmDay[4].duration, UnitCfg.alarmDay[4].hue,
+							UnitCfg.alarmDay[4].startLumVal,
+							UnitCfg.alarmDay[4].finishLumVal, UnitCfg.alarmDay[4].zones,
+							UnitCfg.alarmDay[5].state, UnitCfg.alarmDay[5].autoTrigTime,
+							UnitCfg.alarmDay[5].duration, UnitCfg.alarmDay[5].hue,
+							UnitCfg.alarmDay[5].startLumVal,
+							UnitCfg.alarmDay[5].finishLumVal, UnitCfg.alarmDay[5].zones,
+							UnitCfg.alarmDay[6].state, UnitCfg.alarmDay[6].autoTrigTime,
+							UnitCfg.alarmDay[6].duration, UnitCfg.alarmDay[6].hue,
+							UnitCfg.alarmDay[6].startLumVal,
+							UnitCfg.alarmDay[6].finishLumVal, UnitCfg.alarmDay[6].zones,
+							UnitCfg.alarmDay[0].state, UnitCfg.alarmDay[0].autoTrigTime,
+							UnitCfg.alarmDay[0].duration, UnitCfg.alarmDay[0].hue,
+							UnitCfg.alarmDay[0].startLumVal,
+							UnitCfg.alarmDay[0].finishLumVal, UnitCfg.alarmDay[0].zones);
+					charIOSCounter = 0;
+					break;
+				}
+			}
+			break;
 		}
 	}
 
@@ -624,15 +769,90 @@ void char_total2_write_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_i
 								param->write.trans_id, ESP_GATT_OK, NULL);
 }
 
+bool readAlertMessage(char *jsonData, char day[4], int dayID)
+{
+	char tmp[64];
+	bool stateFlag = false;
+
+	if (jsonparse(jsonData, tmp, day, 0))
+	{
+
+		UnitCfg.alarmDay[dayID].state = atoi(tmp);
+
+		if (UnitCfg.alarmDay[dayID].state)
+		{
+			ESP_LOGI(GATTS_TAG, "%s is selected !", day);
+		}
+		else
+		{
+			ESP_LOGI(GATTS_TAG, "%s is not selected !", day);
+		}
+		stateFlag = true;
+
+		if (jsonparse(jsonData, tmp, day, 1))
+		{
+			UnitCfg.alarmDay[dayID].autoTrigTime = atoi(tmp);
+			ESP_LOGI(GATTS_TAG, "%s time is %ld", day, UnitCfg.alarmDay[dayID].autoTrigTime);
+			stateFlag = true;
+		}
+		if (jsonparse(jsonData, tmp, day, 2))
+		{
+			UnitCfg.alarmDay[dayID].duration = atoi(tmp);
+			ESP_LOGI(GATTS_TAG, "%s duration is %d", day, UnitCfg.alarmDay[dayID].duration);
+			stateFlag = true;
+		}
+		if (jsonparse(jsonData, UnitCfg.alarmDay[dayID].hue, day, 3))
+		{
+			ESP_LOGI(GATTS_TAG, "%s hue is %s", day, UnitCfg.alarmDay[dayID].hue);
+			stateFlag = true;
+		}
+		if (jsonparse(jsonData, tmp, day, 4))
+		{
+			UnitCfg.alarmDay[dayID].startLumVal = atoi(tmp);
+			ESP_LOGI(GATTS_TAG, "%s start lum is %d", day, UnitCfg.alarmDay[dayID].startLumVal);
+			stateFlag = true;
+		}
+		if (jsonparse(jsonData, tmp, day, 5))
+		{
+			UnitCfg.alarmDay[dayID].finishLumVal = atoi(tmp);
+			ESP_LOGI(GATTS_TAG, "%s start lum is %d", day, UnitCfg.alarmDay[dayID].finishLumVal);
+			stateFlag = true;
+		}
+		if (jsonparse(jsonData, UnitCfg.alarmDay[dayID].zones, day, 6))
+		{
+			ESP_LOGI(GATTS_TAG, "%s zone is %s\n", day, UnitCfg.alarmDay[dayID].zones);
+			stateFlag = true;
+		}
+	}
+	return stateFlag;
+}
+
+uint8_t cmd = 0, subcmd = 0, subcmdhue = 0, subcmdlum = 0, subcmdstab = 0,
+		subcmdhueold = 0, subcmdlumold = 0, subcmdstabold = 0, zoneLight = 0;
+
+bool transtionAmbiancesActivated = false;
+
+HSLStruct HSLtmp;
+
 bool configData(char *jsonData)
 {
-	uint8_t cmd = 0, subcmd = 0, zone = 0;
 	char tmp[64];
 	bool saveFlag = false;
 
 	time_t t = 0;
 	uint32_t tz = 0;
-	//Zones Names
+
+	// wakeup DATA
+
+	saveFlag = readAlertMessage(jsonData, "lun", 1);
+	saveFlag = readAlertMessage(jsonData, "mar", 2);
+	saveFlag = readAlertMessage(jsonData, "mer", 3);
+	saveFlag = readAlertMessage(jsonData, "jeu", 4);
+	saveFlag = readAlertMessage(jsonData, "ven", 5);
+	saveFlag = readAlertMessage(jsonData, "sam", 6);
+	saveFlag = readAlertMessage(jsonData, "dim", 0);
+
+	// Zones Names
 
 	if (jsonparse(jsonData, UnitCfg.Zones_info[0].zonename, "zones", 0))
 	{
@@ -661,7 +881,7 @@ bool configData(char *jsonData)
 	}
 	else if (jsonparse(jsonData, tmp, "system", 0))
 	{
-		//system
+		// system
 		if (atoi(tmp) == 0)
 		{
 			ESP_LOGI(GATTS_TAG, "System apply default setting");
@@ -696,6 +916,11 @@ bool configData(char *jsonData)
 		{
 			ESP_LOGE(GATTS_TAG, "Scan is not activated");
 		}
+	}
+	else if (jsonparse(jsonData, tmp, "APP", 0))
+	{
+		appIdentifier = atoi(tmp);
+		ESP_LOGW(GATTS_TAG, "Application identifier recieved !");
 	}
 	else if (jsonparse(jsonData, tmp, "IOS", 0))
 	{
@@ -741,7 +966,7 @@ bool configData(char *jsonData)
 	}
 	else if (jsonparse(jsonData, tmp, "light", 0))
 	{
-		//light
+		// light
 		cmd = atoi(tmp);
 
 		if (jsonparse(jsonData, tmp, "light", 1))
@@ -750,13 +975,15 @@ bool configData(char *jsonData)
 		}
 		if (jsonparse(jsonData, tmp, "light", 2))
 		{
-			zone = strtol(tmp, NULL, 16);
+			zoneLight = strtol(tmp, NULL, 16);
 		}
 
-		//radio
-		MilightHandler(cmd, subcmd, zone & 0x0F);
+		transtionAmbiancesActivated = false;
 
-		ESP_LOGI(GATTS_TAG, "Light control manu cmd %d subcmd %d zone %d", cmd, subcmd, zone);
+		// radio
+		MilightHandler(cmd, subcmd, zoneLight & 0x0F);
+
+		ESP_LOGI(GATTS_TAG, "Light control manu cmd %d subcmd %d zone %d", cmd, subcmd, zoneLight);
 	}
 	else if (jsonparse(jsonData, UnitCfg.UnitName, "dname", 0))
 	{
@@ -799,25 +1026,24 @@ bool configData(char *jsonData)
 			// hue
 			HueToHSL(tmp, tmpzone);
 		}
+		transtionAmbiancesActivated = false;
 	}
 	else if (jsonparse(jsonData, UnitCfg.ColortrProfile[0].ambname, "couleur1", 0))
 	{
 
-		//Couleur 1
+		// Couleur 1
 
-		ESP_LOGI(GATTS_TAG, "Profile Color name set %s",
-				 UnitCfg.ColortrProfile[0].ambname);
+		ESP_LOGI(GATTS_TAG, "Profile Color name set %s", UnitCfg.ColortrProfile[0].ambname);
 		saveFlag = true;
 		if (jsonparse(jsonData, UnitCfg.ColortrProfile[0].Hue, "couleur1", 1))
 		{
-			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s",
-					 UnitCfg.ColortrProfile[0].Hue);
+			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[0].Hue);
 			saveFlag = true;
 		}
 	}
 	else if (jsonparse(jsonData, UnitCfg.ColortrProfile[1].ambname, "couleur2", 0))
 	{
-		//Couleur 2
+		// Couleur 2
 
 		ESP_LOGI(GATTS_TAG, "Profile Color name set %s", UnitCfg.ColortrProfile[1].ambname);
 		saveFlag = true;
@@ -830,31 +1056,52 @@ bool configData(char *jsonData)
 	else if (jsonparse(jsonData, UnitCfg.ColortrProfile[2].ambname, "couleur3", 0))
 	{
 
-		//Couleur 3
+		// Couleur 3
 
 		ESP_LOGI(GATTS_TAG, "Profile Color name set %s", UnitCfg.ColortrProfile[2].ambname);
 		saveFlag = true;
 		if (jsonparse(jsonData, UnitCfg.ColortrProfile[2].Hue, "couleur3", 1))
 		{
-			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s",
-					 UnitCfg.ColortrProfile[2].Hue);
+			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[2].Hue);
 			saveFlag = true;
 		}
 	}
-	else
-
-		if (jsonparse(jsonData, UnitCfg.ColortrProfile[3].ambname, "couleur4", 0))
+	else if (jsonparse(jsonData, UnitCfg.ColortrProfile[3].ambname, "couleur4", 0))
 	{
 
-		//Couleur 4
+		// Couleur 4
 
-		ESP_LOGI(GATTS_TAG, "Profile Color name set %s",
-				 UnitCfg.ColortrProfile[3].ambname);
+		ESP_LOGI(GATTS_TAG, "Profile Color name set %s", UnitCfg.ColortrProfile[3].ambname);
 		saveFlag = true;
 		if (jsonparse(jsonData, UnitCfg.ColortrProfile[3].Hue, "couleur4", 1))
 		{
-			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s",
-					 UnitCfg.ColortrProfile[3].Hue);
+			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[3].Hue);
+			saveFlag = true;
+		}
+	}
+	else if (jsonparse(jsonData, UnitCfg.ColortrProfile[4].ambname, "couleur5", 0))
+	{
+
+		// Couleur 5
+
+		ESP_LOGI(GATTS_TAG, "Profile Color name set %s", UnitCfg.ColortrProfile[4].ambname);
+		saveFlag = true;
+		if (jsonparse(jsonData, UnitCfg.ColortrProfile[4].Hue, "couleur5", 1))
+		{
+			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[4].Hue);
+			saveFlag = true;
+		}
+	}
+	else if (jsonparse(jsonData, UnitCfg.ColortrProfile[5].ambname, "couleur6", 0))
+	{
+
+		// Couleur 6
+
+		ESP_LOGI(GATTS_TAG, "Profile Color name set %s", UnitCfg.ColortrProfile[5].ambname);
+		saveFlag = true;
+		if (jsonparse(jsonData, UnitCfg.ColortrProfile[5].Hue, "couleur6", 1))
+		{
+			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[5].Hue);
 			saveFlag = true;
 		}
 	}
@@ -864,22 +1111,32 @@ bool configData(char *jsonData)
 		if (strcmp(tmp, "Ambiance 1") == 0)
 		{
 			ESP_LOGI(GATTS_TAG, "Ambiance 1 is Selected");
-			HueToHSL(UnitCfg.ColortrProfile[0].Hue, UnitCfg.ColortrProfile[0].zone);
+			transitionAmbianceProcess(0);
 		}
 		else if (strcmp(tmp, "Ambiance 2") == 0)
 		{
 			ESP_LOGI(GATTS_TAG, "Ambiance 2 is Selected");
-			HueToHSL(UnitCfg.ColortrProfile[1].Hue, UnitCfg.ColortrProfile[1].zone);
+			transitionAmbianceProcess(1);
 		}
 		else if (strcmp(tmp, "Ambiance 3") == 0)
 		{
 			ESP_LOGI(GATTS_TAG, "Ambiance 3 is Selected");
-			HueToHSL(UnitCfg.ColortrProfile[2].Hue, UnitCfg.ColortrProfile[2].zone);
+			transitionAmbianceProcess(2);
 		}
 		else if (strcmp(tmp, "Ambiance 4") == 0)
 		{
 			ESP_LOGI(GATTS_TAG, "Ambiance 4 is Selected");
-			HueToHSL(UnitCfg.ColortrProfile[3].Hue, UnitCfg.ColortrProfile[3].zone);
+			transitionAmbianceProcess(3);
+		}
+		else if (strcmp(tmp, "Ambiance 5") == 0)
+		{
+			ESP_LOGI(GATTS_TAG, "Ambiance 5 is Selected");
+			transitionAmbianceProcess(4);
+		}
+		else if (strcmp(tmp, "Ambiance 6") == 0)
+		{
+			ESP_LOGI(GATTS_TAG, "Ambiance 6 is Selected");
+			transitionAmbianceProcess(5);
 		}
 		else
 		{
@@ -891,6 +1148,80 @@ bool configData(char *jsonData)
 		ESP_LOGE(GATTS_TAG, "BAD MESSAGE");
 	}
 	return saveFlag;
+}
+
+void transitionAmbianceProcess(int ambianceId)
+{
+	uint32_t rgb = 0;
+	rgb = strtol(UnitCfg.ColortrProfile[ambianceId].Hue, NULL, 16);
+	RgbToHSL(rgb, &HSLtmp);
+	//	if (jsonparse(jsonData, tmp, "zone", 0) == 0) {
+	//		zone = strtol(tmp, NULL, 16);
+	//	}
+	zoneLight = 15;
+	if (!transtionAmbiancesActivated)
+	{
+		// apply hue
+		cmd = 3;
+		subcmdhue = HSLtmp.Hue;
+		MilightHandler(cmd, subcmdhue, zoneLight);
+		ESP_LOGI(GATTS_TAG,
+				 "Light control cmd %d subcmd %d subcmdold %d zone %d", cmd,
+				 subcmdhue, subcmdhueold, zoneLight);
+		subcmdhueold = subcmdhue;
+
+		// apply brightness
+		cmd = 7;
+		subcmdlum = HSLtmp.Bri;
+		MilightHandler(cmd, subcmdlum, zoneLight);
+		ESP_LOGI(GATTS_TAG,
+				 "Light control cmd %d subcmd %d subcmdold %d zone %d", cmd,
+				 subcmdlum, subcmdlumold, zoneLight);
+		subcmdlumold = subcmdlum;
+
+		// apply saturation
+		cmd = 9;
+		subcmdstab = HSLtmp.Sat;
+		MilightHandler(cmd, subcmdstab, zoneLight);
+		ESP_LOGI(GATTS_TAG,
+				 "Light control cmd %d subcmd %d subcmdold %d zone %d", cmd,
+				 subcmdstab, subcmdstabold, zoneLight);
+		subcmdstabold = subcmdstab;
+
+		transtionAmbiancesActivated = true;
+	}
+	else
+	{
+		float penteTransHue = 0, penteTransLum = 0, penteTransStab = 0;
+		uint8_t transOutHue = 0, transOutLum = 0, transOutStab = 0;
+		uint16_t progressTime = 0;
+		subcmdhue = HSLtmp.Hue;
+		subcmdlum = HSLtmp.Bri;
+		subcmdstab = HSLtmp.Sat;
+		penteTransHue = (subcmdhue - subcmdhueold) / 2000.0;
+		penteTransLum = (subcmdlum - subcmdlumold) / 2000.0;
+		penteTransStab = (subcmdstab - subcmdstabold) / 2000.0;
+
+		while (progressTime <= 2000)
+		{
+			cmd = 3;
+			transOutHue = (penteTransHue * progressTime) + subcmdhueold;
+			MilightHandler(cmd, transOutHue, zoneLight);
+			cmd = 7;
+			transOutLum = (penteTransLum * progressTime) + subcmdlumold;
+			MilightHandler(cmd, transOutLum, zoneLight);
+			cmd = 9;
+			transOutStab = (penteTransStab * progressTime) + subcmdstabold;
+			MilightHandler(cmd, transOutStab, zoneLight);
+			progressTime += 50;
+			delay(50);
+			ESP_LOGI(GATTS_TAG, "Light control hue %d lum %d stab %d zone %d",
+					 transOutHue, transOutLum, transOutStab, zoneLight);
+		}
+		subcmdhueold = subcmdhue;
+		subcmdlumold = subcmdlum;
+		subcmdstabold = subcmdstab;
+	}
 }
 
 void gap_event_handler(esp_gap_ble_cb_event_t event,
@@ -915,7 +1246,7 @@ void gap_event_handler(esp_gap_ble_cb_event_t event,
 		break;
 
 	case ESP_GAP_BLE_ADV_START_COMPLETE_EVT:
-		//advertising start complete event to indicate advertising start successfully or failed
+		// advertising start complete event to indicate advertising start successfully or failed
 		if (param->adv_start_cmpl.status != ESP_BT_STATUS_SUCCESS)
 		{
 			ESP_LOGE(GATTS_TAG, "Advertising start failed\n");
@@ -958,14 +1289,14 @@ void gatts_profile_read_event_handler(esp_gatts_cb_event_t event,
 					 set_dev_name_ret);
 		}
 
-		//config adv data
+		// config adv data
 		esp_err_t ret = esp_ble_gap_config_adv_data(&adv_data);
 		if (ret)
 		{
 			ESP_LOGE(GATTS_TAG, "config adv data failed, error code = %x", ret);
 		}
 		adv_config_done |= adv_config_flag;
-		//config scan response data
+		// config scan response data
 		ret = esp_ble_gap_config_adv_data(&scan_rsp_data);
 		if (ret)
 		{
@@ -1065,13 +1396,14 @@ void gatts_profile_read_event_handler(esp_gatts_cb_event_t event,
 				 param->connect.remote_bda[3], param->connect.remote_bda[4],
 				 param->connect.remote_bda[5]);
 		gl_profile_tab[SERVICE_READ].conn_id = param->connect.conn_id;
-		//start sent the update connection parameters to the peer device.
+		// start sent the update connection parameters to the peer device.
 		esp_ble_gap_update_conn_params(&conn_params);
 		break;
 	}
 	case ESP_GATTS_DISCONNECT_EVT:
 		ESP_LOGI(GATTS_TAG, "ESP_GATTS_DISCONNECT_EVT_READ");
 		deviceIsIOS = false;
+		appIdentifier = 0;
 		esp_ble_gap_start_advertising(&adv_params);
 		break;
 	case ESP_GATTS_CONF_EVT:

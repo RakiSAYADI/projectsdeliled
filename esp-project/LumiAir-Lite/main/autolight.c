@@ -25,22 +25,24 @@
 
 void Pir_MonitorTask();
 void ColorTemp_Controller();
+void autoLightWakeUpTask(uint8_t zone);
 
 AutoLightStateDef AutoLightState = AUTOL_STATE_OFF;
 
 struct tm now = {0};
 time_t CurrentTime = 0;
 
+uint32_t cparttime = 0, phaseTimeStart = 0, phaseTimeEnd = 0, rgb = 0,
+		 durationLumTransition = 0;
+uint8_t Curday = 0;
+HSLStruct HSLtmp;
+
 void AutoLightStateMachine()
 {
-	// Init Light Stat
+	struct timeval tv;
 
-	//Radio
-	//MilightHandler(LCMD_SWITCH_ON_OFF,LSUBCMD_SWITCH_OFF,15);
-
-	//0-10V
-	//dac_output_voltage(DAC_CHANNEL_1, 0);
-	//DacLightStatOn=false;
+	time_t nows = 0;
+	uint16_t veille_zone_int;
 
 	time(&CurrentTime);
 	localtime_r(&CurrentTime, &now);
@@ -52,34 +54,35 @@ void AutoLightStateMachine()
 		vTaskDelay(1000 / portTICK_PERIOD_MS);
 	}
 
-	//xTaskCreatePinnedToCore(&Pir_MonitorTask, "Pir_MonitorTask", 1024 * 2, NULL, 10, NULL, 1);
+	// xTaskCreatePinnedToCore(&Pir_MonitorTask, "Pir_MonitorTask", 1024 * 2, NULL, 10, NULL, 1);
 	xTaskCreatePinnedToCore(&ColorTemp_Controller, "ColorTemp_Controller", 2048, NULL, 10, NULL, 1);
 
-	/*
-	char txt0[64];
-	uint8_t Curday;
-	uint32_t cparttime;
-	struct timeval tv;
-	time_t nows = 0;
-	
+	ESP_LOGI(TAG, "Time is correct , begin checking");
+
 	while (1)
 	{
 		gettimeofday(&tv, NULL);
 
 		localtime_r(&tv.tv_sec, &now);
-		strftime(txt0, sizeof(txt0), "%R", &now);
 
 		time(&nows);
+		Curday = now.tm_wday;
 		cparttime = nows % (3600 * 24) + (UnitCfg.UnitTimeZone * 3600);
 
-		time(&CurrentTime);
-		localtime_r(&CurrentTime, &now);
+		if ((cparttime == UnitCfg.alarmDay[Curday].autoTrigTime) && (UnitCfg.alarmDay[Curday].state))
+		{
 
-		Curday = now.tm_wday;
+			printf("AutoTrigger Timer Switch light on\n");
+			printf("Info : Now %d @ %d start at : %ld \n", Curday, cparttime,
+				   UnitCfg.alarmDay[Curday].autoTrigTime);
+			veille_zone_int = strtol(UnitCfg.alarmDay[Curday].zones,
+									 NULL, 16);
 
-		vTaskDelay(100 / portTICK_RATE_MS);
+			autoLightWakeUpTask(veille_zone_int);
+		}
+		delay(100);
 	}
-	*/
+
 	vTaskDelete(NULL);
 }
 
@@ -201,6 +204,143 @@ void ColorTemp_Controller()
 	vTaskDelete(NULL);
 }
 
+void autoLightWakeUpTask(uint8_t zone)
+{
+
+	uint8_t cmd = 0, subcmdhue = 0, subcmdstab = 0;
+	// radio apply LIGHT ON
+	MilightHandler(LCMD_SWITCH_ON_OFF, LSUBCMD_SWITCH_ON, zone);
+	delay(10);
+
+	rgb = strtol(UnitCfg.alarmDay[Curday].hue, NULL, 16);
+	RgbToHSL(rgb, &HSLtmp);
+
+	// apply hue
+	cmd = 3;
+	subcmdhue = HSLtmp.Hue;
+
+	MilightHandler(cmd, subcmdhue, zone);
+	ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", cmd, subcmdhue,
+			 zone);
+	delay(10);
+
+	// apply saturation
+	cmd = 9;
+	subcmdstab = HSLtmp.Sat;
+	MilightHandler(cmd, subcmdstab, zone);
+	ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", cmd, subcmdstab,
+			 zone);
+	delay(10);
+	switch (UnitCfg.alarmDay[Curday].duration)
+	{
+	case 0:
+		durationLumTransition = 5000;
+		break;
+	case 1:
+		durationLumTransition = 10000;
+		break;
+	case 2:
+		durationLumTransition = 20000;
+		break;
+	case 3:
+		durationLumTransition = 30000;
+		break;
+	case 4:
+		durationLumTransition = 60000;
+		break;
+	case 5:
+		durationLumTransition = 120000;
+		break;
+	case 6:
+		durationLumTransition = 300000;
+		break;
+	case 7:
+		durationLumTransition = 600000;
+		break;
+	case 8:
+		durationLumTransition = 900000;
+		break;
+	case 9:
+		durationLumTransition = 1200000;
+		break;
+	case 10:
+		durationLumTransition = 1500000;
+		break;
+	case 11:
+		durationLumTransition = 1800000;
+		break;
+	case 12:
+		durationLumTransition = 2100000;
+		break;
+	case 13:
+		durationLumTransition = 2400000;
+		break;
+	case 14:
+		durationLumTransition = 2700000;
+		break;
+	case 15:
+		durationLumTransition = 3000000;
+		break;
+	case 16:
+		durationLumTransition = 3300000;
+		break;
+	case 17:
+		durationLumTransition = 3600000;
+		break;
+	case 18:
+		durationLumTransition = 3900000;
+		break;
+	case 19:
+		durationLumTransition = 4200000;
+		break;
+	case 20:
+		durationLumTransition = 4500000;
+		break;
+	case 21:
+		durationLumTransition = 4800000;
+		break;
+	case 22:
+		durationLumTransition = 5100000;
+		break;
+	case 23:
+		durationLumTransition = 5400000;
+		break;
+	case 24:
+		durationLumTransition = 5700000;
+		break;
+	case 25:
+		durationLumTransition = 6000000;
+		break;
+	case 26:
+		durationLumTransition = 6300000;
+		break;
+	case 27:
+		durationLumTransition = 6600000;
+		break;
+	case 28:
+		durationLumTransition = 6900000;
+		break;
+	case 29:
+		durationLumTransition = 7200000;
+		break;
+	default:
+		durationLumTransition = 1000;
+		break;
+	}
+	uint32_t progressTime = 0;
+	float penteTransLum = 0;
+	uint8_t transOutLum = 0;
+	penteTransLum = (UnitCfg.alarmDay[Curday].finishLumVal - UnitCfg.alarmDay[Curday].startLumVal) / (float)durationLumTransition;
+	cmd = 7;
+	while (progressTime < durationLumTransition)
+	{
+		transOutLum = (penteTransLum * progressTime) + UnitCfg.alarmDay[Curday].startLumVal;
+		MilightHandler(cmd, transOutLum, zone);
+		progressTime += 100;
+		delay(100);
+	}
+}
+
 // PIR Low level Handler
 
 bool PirTimeoutTask = false;
@@ -215,7 +355,7 @@ void PirTimeoutRoutine()
 	while (PirTimeout > 0)
 	{
 		PirTimeout--;
-		//sprintf ("time of detection : %ld\n",PirTimeout);
+		// sprintf ("time of detection : %ld\n",PirTimeout);
 		vTaskDelay(1000 / portTICK_RATE_MS);
 	}
 
@@ -226,7 +366,7 @@ void PirTimeoutRoutine()
 
 void Pir_MonitorTask()
 {
-	//pir
+	// pir
 	while (1)
 	{
 		if (PirFlag == 1 && UnitCfg.UserLcProfile.PIRBrEnb)
@@ -237,7 +377,7 @@ void Pir_MonitorTask()
 			{
 				PirTimeout = 5;
 			}
-			//ESP_LOGI(TAG, "PIR Triggered + %ld",PirTimeout);
+			// ESP_LOGI(TAG, "PIR Triggered + %ld",PirTimeout);
 			if (!PirTimeoutTask)
 			{
 				xTaskCreatePinnedToCore(&PirTimeoutRoutine, "PirTimeoutRoutine", 2048, NULL, 5, NULL, 1);
@@ -259,7 +399,7 @@ void Co2_MonitorTask()
 	while (1)
 	{
 		zone = strtol(UnitCfg.Co2LevelSelect, NULL, 16);
-		//co2
+		// co2
 		if (UnitCfg.Co2LevelWarEnb)
 		{
 			if ((UnitData.aq_Co2Level > UnitCfg.Co2LevelWar) && (co2_alert_enable == 0))
@@ -267,7 +407,7 @@ void Co2_MonitorTask()
 				co2_alert_enable = 1;
 				co2_triger_alert = true;
 				ESP_LOGI(TAG, "Co2 Warning triggered");
-				//zone
+				// zone
 				if (UnitCfg.Co2LevelZoneEnb)
 				{
 					UnitData.state = 0;
@@ -279,7 +419,7 @@ void Co2_MonitorTask()
 					MilightHandler(LCMD_SET_MODE, 6, zone & 0x0F);
 				}
 			}
-			//desativate co2 and init the light
+			// desativate co2 and init the light
 			if ((UnitData.aq_Co2Level < UnitCfg.Co2LevelWar) && (co2_alert_enable == 1))
 			{
 				ESP_LOGI(TAG, "Co2 Warning off");

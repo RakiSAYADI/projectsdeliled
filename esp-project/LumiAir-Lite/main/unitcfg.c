@@ -104,7 +104,7 @@ bool LoadNVS(UnitConfig_Typedef *data)
 
 	nvs_close(handle);
 
-	ESP_LOGI("NVS", "Configuration Loaded (%d) bytes",size);
+	ESP_LOGI("NVS", "Configuration Loaded (%d) bytes", size);
 
 	return true;
 }
@@ -144,12 +144,26 @@ void Default_saving()
 	UnitCfg.UserLcProfile.Ccp[4].CcLevel = 100;
 	UnitCfg.UserLcProfile.Ccp[4].CcTime = 72000; // 20:00
 
+	for (int i = 0; i < 7; i++)
+	{
+		UnitCfg.alarmDay[i].state = false;
+		UnitCfg.alarmDay[i].autoTrigTime = 0;
+		UnitCfg.alarmDay[i].duration = 0;
+		sprintf(UnitCfg.alarmDay[i].hue, "00A6FF");
+		sprintf(UnitCfg.alarmDay[i].zones, "F");
+		UnitCfg.alarmDay[i].startLumVal = 0;
+		UnitCfg.alarmDay[i].finishLumVal = 100;
+	}
+
 	for (uint8_t i = 0; i < 4; i++)
 	{
 		sprintf(UnitCfg.Zones_info[i].zonename, "Zone %d", i + 1);
+	}
 
+	for (uint8_t i = 0; i < 6; i++)
+	{
 		sprintf(UnitCfg.ColortrProfile[i].ambname, "Ambiance %d", i + 1);
-		sprintf(UnitCfg.ColortrProfile[i].Hue, "000000");
+		sprintf(UnitCfg.ColortrProfile[i].Hue, "00A6FF");
 		sprintf(UnitCfg.ColortrProfile[i].zone, "F");
 	}
 
@@ -171,7 +185,8 @@ void Default_saving()
 
 	sprintf(UnitCfg.passPIN, "1234");
 
-	sprintf(UnitCfg.versionSystem, "1.0.0");
+	sprintf(UnitCfg.versionSystem, FIRMWAREVERSIONNAME);
+	UnitCfg.Version = VERSION;
 
 	sprintf(UnitCfg.FLASH_MEMORY, "OK");
 
@@ -192,7 +207,7 @@ void syncTime(time_t t, uint32_t tzone)
 	time_t epoch = t;
 	char strftime_buf[64];
 
-	//set timezone
+	// set timezone
 
 	char tz[50];
 	int8_t tzc = 0;
