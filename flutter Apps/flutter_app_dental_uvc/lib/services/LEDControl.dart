@@ -44,10 +44,10 @@ class LedControl {
     if (Platform.isAndroid) {
       try {
         Process.start(_processName, []).then((Process process) {
+          process.stdin.writeln('$_commandOperation $colorHex $_packageName');
           process.stdout.transform(utf8.decoder).listen((data) {
             print(data);
           });
-          process.stdin.writeln('$_commandOperation $colorHex $_packageName');
           process.stdin.writeln(_exitCommand);
         });
         await Future.delayed(const Duration(milliseconds: 200));

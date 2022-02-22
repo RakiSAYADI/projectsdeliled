@@ -76,9 +76,11 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
 
     uvcOperationData.add(activationTime.toString());
 
+    await Future.delayed(const Duration(milliseconds: 50));
+
     await ledControl.setLedColor('ON');
 
-    await Future.delayed(const Duration(milliseconds: 50));
+    await Future.delayed(const Duration(milliseconds: 1000));
 
     if (isTreatmentCompleted) {
       uvcOperationData.add(validTextLanguageArray[languageArrayIdentifier]);

@@ -22,6 +22,16 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>BLE permission is required to access and control HuBBoX device </string>
+    <key>NSBluetoothPeripheralUsageDescription</key>
+    <string>BLE permission is required to access and control HuBBoX device </string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Location permission is required to scan HuBBoX device</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Location permission is required to scan HuBBoX device</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Location permission is required to scan HuBBoX device</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

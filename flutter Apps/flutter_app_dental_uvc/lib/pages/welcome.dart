@@ -47,7 +47,30 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   void ledInit() async {
     ledControl = LedControl();
     await ledControl.setLedColor('ON');
+    await Future.delayed(const Duration(milliseconds: 1000));
+    await ledControl.setLedColor('OFF');
+    await Future.delayed(const Duration(milliseconds: 1000));
+    await ledControl.setLedColor('ON');
+    await Future.delayed(const Duration(milliseconds: 1000));
+    await ledControl.setLedColor('RED');
+    await Future.delayed(const Duration(milliseconds: 1000));
     await ledControl.setLedColor('GREEN');
+    await Future.delayed(const Duration(milliseconds: 1000));
+    await ledControl.setLedColor('BLUE');
+    await Future.delayed(const Duration(milliseconds: 1000));
+    await ledControl.setLedColor('WHITE');
+    await Future.delayed(const Duration(milliseconds: 1000));
+    await ledControl.setLedColor('ORANGE');
+    await Future.delayed(const Duration(milliseconds: 1000));
+    await ledControl.setLedColor('CYAN');
+    await Future.delayed(const Duration(milliseconds: 1000));
+    await ledControl.setLedColor('PURPLE');
+    await Future.delayed(const Duration(milliseconds: 1000));
+    if (robotUVC.isEmpty) {
+      await ledControl.setLedColor('ORANGE');
+    } else {
+      await ledControl.setLedColor('GREEN');
+    }
   }
 
   void wakeLock() async {
@@ -204,7 +227,9 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     }
 
     try {
-      ledInit();
+      if(Platform.isAndroid){
+        ledInit();
+      }
     } catch (e) {
       myUvcToast.setToastDuration(1);
       myUvcToast.setToastMessage('error LED service');
