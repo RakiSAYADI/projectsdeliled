@@ -48,8 +48,11 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
         flutterBlue = FlutterBlue.instance;
         print("Bluetooth is on");
         try {
+          flutterBlue = FlutterBlue.instance;
+          setState(() {
+            devices.clear();
+          });
           scanIdentifiers.clear();
-          setState(() {});
           if (Platform.isAndroid) {
             scanForDevicesAndroid();
           }
@@ -147,6 +150,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
             return FloatingActionButton(
                 child: Icon(Icons.search),
                 onPressed: () {
+                  flutterBlue = FlutterBlue.instance;
                   setState(() {
                     devices.clear();
                   });

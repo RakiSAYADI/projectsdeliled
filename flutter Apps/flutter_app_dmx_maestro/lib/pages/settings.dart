@@ -43,7 +43,13 @@ class _SettingsState extends State<Settings> {
   void readDataMaestro() async {
     try {
       myBleDeviceName.text = myDevice.device.name.substring(4);
-      var parsedJson = json.decode(dataMaestro);
+      var parsedJson;
+      if (Platform.isIOS) {
+        parsedJson = json.decode(dataMaestroIOS);
+      }
+      if (Platform.isAndroid) {
+        parsedJson = json.decode(dataMaestro);
+      }
       zonesNamesList[0] = parsedJson['zone'][0];
       zonesNamesList[1] = parsedJson['zone'][1];
       zonesNamesList[2] = parsedJson['zone'][2];
@@ -540,7 +546,7 @@ class _SettingsState extends State<Settings> {
                 style: TextStyle(color: Colors.red),
               ),
               onPressed: () async {
-                if(Platform.isIOS){
+                if (Platform.isIOS) {
                   await Future.delayed(Duration(milliseconds: 500));
                   dataMaestroIOS = String.fromCharCodes(await characteristicWifi.read());
                   await Future.delayed(Duration(milliseconds: 500));
@@ -552,7 +558,7 @@ class _SettingsState extends State<Settings> {
                   await Future.delayed(Duration(milliseconds: 500));
                   dataMaestroIOS5 = String.fromCharCodes(await characteristicWifi.read());
                 }
-                if(Platform.isAndroid){
+                if (Platform.isAndroid) {
                   await Future.delayed(Duration(milliseconds: 500));
                   dataMaestro = String.fromCharCodes(await characteristicWifi.read());
                   await Future.delayed(Duration(milliseconds: 500));

@@ -24,6 +24,11 @@ class _WelcomeState extends State<Welcome> {
   void initState() {
     // TODO: implement initState
     SystemChannels.textInput.invokeMethod('TextInput.hide');
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     super.initState();
     if (Platform.isAndroid) {
       print('android');

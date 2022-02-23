@@ -165,21 +165,43 @@ class _AlarmClockState extends State<AlarmClock> {
                     thickness: 1.0,
                     color: Colors.grey[600],
                   ),
-                  FlatButton(
+                  TextButton(
                     onPressed: () async {
                       setState(() {
                         saveButtonColor = Colors.blue[400];
                       });
                       if (myDevice.getConnectionState()) {
-                        await characteristicMaestro.write('{\"lun\":[${alarmDayData(0)}],'
-                                '\"mar\":[${alarmDayData(1)}],\"mer\":[${alarmDayData(2)}],'
-                                '\"jeu\":[${alarmDayData(3)}],\"ven\":[${alarmDayData(4)}],'
-                                '\"sam\":[${alarmDayData(5)}],\"dim\":[${alarmDayData(6)}]}'
-                            .codeUnits);
-                        await Future.delayed(Duration(milliseconds: 500));
-                        dataMaestro = String.fromCharCodes(await characteristicWifi.read());
-                        await Future.delayed(Duration(milliseconds: 500));
-                        dataMaestro2 = String.fromCharCodes(await characteristicWifi.read());
+                        if (Platform.isAndroid) {
+                          await characteristicMaestro.write('{\"lun\":[${alarmDayData(0)}],'
+                                  '\"mar\":[${alarmDayData(1)}],\"mer\":[${alarmDayData(2)}],'
+                                  '\"jeu\":[${alarmDayData(3)}],\"ven\":[${alarmDayData(4)}],'
+                                  '\"sam\":[${alarmDayData(5)}],\"dim\":[${alarmDayData(6)}]}'
+                              .codeUnits);
+                          await Future.delayed(Duration(milliseconds: 500));
+                          dataMaestro = String.fromCharCodes(await characteristicWifi.read());
+                          await Future.delayed(Duration(milliseconds: 500));
+                          dataMaestro2 = String.fromCharCodes(await characteristicWifi.read());
+                        }
+                        if (Platform.isIOS) {
+                          await characteristicMaestro.write('{\"lun\":[${alarmDayData(0)}],'
+                                  '\"mar\":[${alarmDayData(1)}],\"mer\":[${alarmDayData(2)}],'
+                                  '\"jeu\":[${alarmDayData(3)}]}'
+                              .codeUnits);
+                          await Future.delayed(Duration(milliseconds: 500));
+                          await characteristicMaestro.write('{\"ven\":[${alarmDayData(4)}],'
+                                  '\"sam\":[${alarmDayData(5)}],\"dim\":[${alarmDayData(6)}]}'
+                              .codeUnits);
+                          await Future.delayed(Duration(milliseconds: 500));
+                          dataMaestroIOS = String.fromCharCodes(await characteristicWifi.read());
+                          await Future.delayed(Duration(milliseconds: 500));
+                          dataMaestroIOS2 = String.fromCharCodes(await characteristicWifi.read());
+                          await Future.delayed(Duration(milliseconds: 500));
+                          dataMaestroIOS3 = String.fromCharCodes(await characteristicWifi.read());
+                          await Future.delayed(Duration(milliseconds: 500));
+                          dataMaestroIOS4 = String.fromCharCodes(await characteristicWifi.read());
+                          await Future.delayed(Duration(milliseconds: 500));
+                          dataMaestroIOS5 = String.fromCharCodes(await characteristicWifi.read());
+                        }
                       }
                     },
                     child: Padding(
@@ -189,10 +211,9 @@ class _AlarmClockState extends State<AlarmClock> {
                         style: TextStyle(color: Colors.white, fontSize: 15),
                       ),
                     ),
-                    color: saveButtonColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                    ),
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                        backgroundColor: MaterialStateProperty.all<Color>(saveButtonColor)),
                   ),
                   VerticalDivider(
                     thickness: 1.0,
@@ -212,434 +233,435 @@ class _AlarmClockState extends State<AlarmClock> {
         ),
       ),
       body: Center(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-              child: Align(
-                alignment: Alignment.topCenter,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      ToggleButtons(
+                        isSelected: days,
+                        onPressed: (int index) async {
+                          day = index;
+                          setState(() {
+                            days[day] = !days[day];
+                            for (int buttonIndex = 0; buttonIndex < days.length; buttonIndex++) {
+                              if (buttonIndex == day) {
+                                days[buttonIndex] = true;
+                              } else {
+                                days[buttonIndex] = false;
+                              }
+                            }
+                          });
+
+                          setState(() {
+                            if (daysStates[day]) {
+                              activationButtonText = 'Activé';
+                              activationButtonColor[day] = Colors.green;
+                            } else {
+                              activationButtonText = 'Désactivé';
+                              activationButtonColor[day] = Colors.red;
+                            }
+                            hueInitial[day] = hueInitial[day];
+                          });
+
+                          myTimeHoursPosition = hourList[day];
+                          myTimeMinutesPosition = minutesList[day];
+                          myTimeSecondsPosition = secondsList[day];
+                          myAlarmTimeMinutePosition = myAlarmTimeMinuteList[day];
+
+                          myTimeHoursData = myTimeHours.elementAt(myTimeHoursPosition);
+                          myTimeMinutesData = myTimeMinutes.elementAt(myTimeMinutesPosition);
+                          myTimeSecondsData = myTimeSeconds.elementAt(myTimeSecondsPosition);
+
+                          myAlarmTimeMinuteData = myAlarmTimeMinute.elementAt(myAlarmTimeMinutePosition);
+                        },
+                        children: [
+                          Container(
+                              width: (widthScreen - 84) / 7,
+                              child: new Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[new SizedBox(width: 4.0), new Text("Lun.", style: TextStyle(fontSize: 15, color: activationButtonColor[0], fontWeight: FontWeight.bold))])),
+                          Container(
+                              width: (widthScreen - 84) / 7,
+                              child: new Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[new SizedBox(width: 4.0), new Text("Mar.", style: TextStyle(fontSize: 15, color: activationButtonColor[1], fontWeight: FontWeight.bold))])),
+                          Container(
+                              width: (widthScreen - 84) / 7,
+                              child: new Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[new SizedBox(width: 4.0), new Text("Mer.", style: TextStyle(fontSize: 15, color: activationButtonColor[2], fontWeight: FontWeight.bold))])),
+                          Container(
+                              width: (widthScreen - 84) / 7,
+                              child: new Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[new SizedBox(width: 4.0), new Text("Jeu.", style: TextStyle(fontSize: 15, color: activationButtonColor[3], fontWeight: FontWeight.bold))])),
+                          Container(
+                              width: (widthScreen - 84) / 7,
+                              child: new Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[new SizedBox(width: 4.0), new Text("Ven.", style: TextStyle(fontSize: 15, color: activationButtonColor[4], fontWeight: FontWeight.bold))])),
+                          Container(
+                              width: (widthScreen - 84) / 7,
+                              child: new Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[new SizedBox(width: 4.0), new Text("Sam.", style: TextStyle(fontSize: 15, color: activationButtonColor[5], fontWeight: FontWeight.bold))])),
+                          Container(
+                              width: (widthScreen - 84) / 7,
+                              child: new Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[new SizedBox(width: 4.0), new Text("Dim.", style: TextStyle(fontSize: 15, color: activationButtonColor[6], fontWeight: FontWeight.bold))])),
+                        ],
+                        borderWidth: 2,
+                        color: Colors.grey,
+                        selectedBorderColor: Colors.black,
+                        selectedColor: Colors.blue,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+              ),
+              TextButton(
+                onPressed: () {
+                  activationButtonState = daysStates[day];
+                  activationButtonState = !activationButtonState;
+                  setState(() {
+                    saveButtonColor = Colors.grey[400];
+                    if (activationButtonState) {
+                      activationButtonText = 'Activé';
+                      activationButtonColor[day] = Colors.green;
+                    } else {
+                      activationButtonText = 'Désactivé';
+                      activationButtonColor[day] = Colors.red;
+                    }
+                  });
+                  daysStates[day] = activationButtonState;
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    activationButtonText,
+                    style: TextStyle(color: Colors.white, fontSize: 15),
+                  ),
+                ),
+                style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
+                    backgroundColor: MaterialStateProperty.all<Color>(activationButtonColor[day])),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
                   children: [
-                    ToggleButtons(
-                      isSelected: days,
-                      onPressed: (int index) async {
-                        day = index;
-                        setState(() {
-                          days[day] = !days[day];
-                          for (int buttonIndex = 0; buttonIndex < days.length; buttonIndex++) {
-                            if (buttonIndex == day) {
-                              days[buttonIndex] = true;
-                            } else {
-                              days[buttonIndex] = false;
-                            }
-                          }
-                        });
-
-                        setState(() {
-                          if (daysStates[day]) {
-                            activationButtonText = 'Activé';
-                            activationButtonColor[day] = Colors.green;
-                          } else {
-                            activationButtonText = 'Désactivé';
-                            activationButtonColor[day] = Colors.red;
-                          }
-                          hueInitial[day] = hueInitial[day];
-                        });
-
-                        myTimeHoursPosition = hourList[day];
-                        myTimeMinutesPosition = minutesList[day];
-                        myTimeSecondsPosition = secondsList[day];
-                        myAlarmTimeMinutePosition = myAlarmTimeMinuteList[day];
-
-                        myTimeHoursData = myTimeHours.elementAt(myTimeHoursPosition);
-                        myTimeMinutesData = myTimeMinutes.elementAt(myTimeMinutesPosition);
-                        myTimeSecondsData = myTimeSeconds.elementAt(myTimeSecondsPosition);
-
-                        myAlarmTimeMinuteData = myAlarmTimeMinute.elementAt(myAlarmTimeMinutePosition);
-                      },
-                      children: [
-                        Container(
-                            width: (widthScreen - 84) / 7,
-                            child: new Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[new SizedBox(width: 4.0), new Text("Lun.", style: TextStyle(fontSize: 15, color: activationButtonColor[0], fontWeight: FontWeight.bold))])),
-                        Container(
-                            width: (widthScreen - 84) / 7,
-                            child: new Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[new SizedBox(width: 4.0), new Text("Mar.", style: TextStyle(fontSize: 15, color: activationButtonColor[1], fontWeight: FontWeight.bold))])),
-                        Container(
-                            width: (widthScreen - 84) / 7,
-                            child: new Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[new SizedBox(width: 4.0), new Text("Mer.", style: TextStyle(fontSize: 15, color: activationButtonColor[2], fontWeight: FontWeight.bold))])),
-                        Container(
-                            width: (widthScreen - 84) / 7,
-                            child: new Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[new SizedBox(width: 4.0), new Text("Jeu.", style: TextStyle(fontSize: 15, color: activationButtonColor[3], fontWeight: FontWeight.bold))])),
-                        Container(
-                            width: (widthScreen - 84) / 7,
-                            child: new Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[new SizedBox(width: 4.0), new Text("Ven.", style: TextStyle(fontSize: 15, color: activationButtonColor[4], fontWeight: FontWeight.bold))])),
-                        Container(
-                            width: (widthScreen - 84) / 7,
-                            child: new Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[new SizedBox(width: 4.0), new Text("Sam.", style: TextStyle(fontSize: 15, color: activationButtonColor[5], fontWeight: FontWeight.bold))])),
-                        Container(
-                            width: (widthScreen - 84) / 7,
-                            child: new Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[new SizedBox(width: 4.0), new Text("Dim.", style: TextStyle(fontSize: 15, color: activationButtonColor[6], fontWeight: FontWeight.bold))])),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+                      child: Image.asset(
+                        'assets/reveil-dmx.png',
+                        height: heightScreen * 0.1,
+                        width: widthScreen * 0.2,
+                      ),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Heure d\'activation :',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            DropdownButton<String>(
+                              value: myTimeHoursData,
+                              icon: Icon(Icons.arrow_drop_down),
+                              iconSize: 24,
+                              elevation: 16,
+                              style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                              onChanged: (String data) {
+                                setState(() {
+                                  saveButtonColor = Colors.grey[400];
+                                  myTimeHoursData = data;
+                                  myTimeHoursPosition = myTimeHours.indexOf(data);
+                                  hourList[day] = myTimeHoursPosition;
+                                });
+                              },
+                              items: myTimeHours.map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(
+                                    value,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                            Text(
+                              ' : ',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
+                            ),
+                            DropdownButton<String>(
+                              value: myTimeMinutesData,
+                              icon: Icon(Icons.arrow_drop_down),
+                              iconSize: 24,
+                              elevation: 16,
+                              style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                              onChanged: (String data) {
+                                setState(() {
+                                  saveButtonColor = Colors.grey[400];
+                                  myTimeMinutesData = data;
+                                  myTimeMinutesPosition = myTimeMinutes.indexOf(data);
+                                  minutesList[day] = myTimeMinutesPosition;
+                                });
+                              },
+                              items: myTimeMinutes.map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(
+                                    value,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                            Text(
+                              ' : ',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
+                            ),
+                            DropdownButton<String>(
+                              value: myTimeSecondsData,
+                              icon: Icon(Icons.arrow_drop_down),
+                              iconSize: 24,
+                              elevation: 16,
+                              style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                              onChanged: (String data) {
+                                setState(() {
+                                  saveButtonColor = Colors.grey[400];
+                                  myTimeSecondsData = data;
+                                  myTimeSecondsPosition = myTimeSeconds.indexOf(data);
+                                  secondsList[day] = myTimeSecondsPosition;
+                                });
+                              },
+                              items: myTimeMinutes.map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(
+                                    value,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ],
+                        ),
                       ],
-                      borderWidth: 2,
-                      color: Colors.grey,
-                      selectedBorderColor: Colors.black,
-                      selectedColor: Colors.blue,
                     ),
                   ],
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-            ),
-            FlatButton(
-              onPressed: () {
-                activationButtonState = daysStates[day];
-                activationButtonState = !activationButtonState;
-                setState(() {
-                  saveButtonColor = Colors.grey[400];
-                  if (activationButtonState) {
-                    activationButtonText = 'Activé';
-                    activationButtonColor[day] = Colors.green;
-                  } else {
-                    activationButtonText = 'Désactivé';
-                    activationButtonColor[day] = Colors.red;
-                  }
-                });
-                daysStates[day] = activationButtonState;
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(
-                  activationButtonText,
-                  style: TextStyle(color: Colors.white, fontSize: 15),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    bigCircle(50, 50),
+                    Text(
+                      'Couleur \n à appliquer',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.settings),
+                      onPressed: () async {
+                        await colorSettingWidget(context);
+                        setState(() {
+                          hueInitial[day] = hueInitial[day];
+                        });
+                      },
+                      color: Colors.black,
+                    ),
+                  ],
                 ),
               ),
-              color: activationButtonColor[day],
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Divider(
+                  thickness: 3.0,
+                  color: Colors.grey[600],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
-                    child: Image.asset(
-                      'assets/reveil-dmx.png',
-                      height: heightScreen * 0.1,
-                      width: widthScreen * 0.2,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+                      child: Image.asset(
+                        'assets/sablier-dmx.png',
+                        height: heightScreen * 0.15,
+                        width: widthScreen * 0.2,
+                      ),
                     ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Heure d\'activation :',
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Durée d\'activation :',
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,
                           ),
                         ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          DropdownButton<String>(
-                            value: myTimeHoursData,
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.1)),
+                          child: DropdownButton<String>(
+                            value: myAlarmTimeMinuteData,
                             icon: Icon(Icons.arrow_drop_down),
                             iconSize: 24,
                             elevation: 16,
                             style: TextStyle(color: Colors.grey[800], fontSize: 18),
-                            onChanged: (String data) {
-                              setState(() {
-                                saveButtonColor = Colors.grey[400];
-                                myTimeHoursData = data;
-                                myTimeHoursPosition = myTimeHours.indexOf(data);
-                                hourList[day] = myTimeHoursPosition;
-                              });
-                            },
-                            items: myTimeHours.map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(
-                                  value,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                          Text(
-                            ' : ',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
+                            underline: Container(
+                              height: 2,
+                              color: Colors.blue[300],
                             ),
-                          ),
-                          DropdownButton<String>(
-                            value: myTimeMinutesData,
-                            icon: Icon(Icons.arrow_drop_down),
-                            iconSize: 24,
-                            elevation: 16,
-                            style: TextStyle(color: Colors.grey[800], fontSize: 18),
                             onChanged: (String data) {
                               setState(() {
-                                saveButtonColor = Colors.grey[400];
-                                myTimeMinutesData = data;
-                                myTimeMinutesPosition = myTimeMinutes.indexOf(data);
-                                minutesList[day] = myTimeMinutesPosition;
+                                myAlarmTimeMinuteData = data;
+                                myAlarmTimeMinutePosition = myAlarmTimeMinute.indexOf(data);
+                                myAlarmTimeMinuteList[day] = myAlarmTimeMinutePosition;
                               });
                             },
-                            items: myTimeMinutes.map<DropdownMenuItem<String>>((String value) {
+                            items: myAlarmTimeMinute.map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
-                                child: Text(
-                                  value,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
+                                child: Text(value),
                               );
                             }).toList(),
                           ),
-                          Text(
-                            ' : ',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                            ),
-                          ),
-                          DropdownButton<String>(
-                            value: myTimeSecondsData,
-                            icon: Icon(Icons.arrow_drop_down),
-                            iconSize: 24,
-                            elevation: 16,
-                            style: TextStyle(color: Colors.grey[800], fontSize: 18),
-                            onChanged: (String data) {
-                              setState(() {
-                                saveButtonColor = Colors.grey[400];
-                                myTimeSecondsData = data;
-                                myTimeSecondsPosition = myTimeSeconds.indexOf(data);
-                                secondsList[day] = myTimeSecondsPosition;
-                              });
-                            },
-                            items: myTimeMinutes.map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(
-                                  value,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  bigCircle(50, 50),
                   Text(
-                    'Couleur \n à appliquer',
+                    'Séléctionner la luminosité ',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.black,
                     ),
                   ),
-                  IconButton(
-                    icon: Icon(Icons.settings),
-                    onPressed: () async {
-                      await colorSettingWidget(context);
-                      setState(() {
-                        hueInitial[day] = hueInitial[day];
-                      });
-                    },
-                    color: Colors.black,
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Divider(
-                thickness: 3.0,
-                color: Colors.grey[600],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
-                    child: Image.asset(
-                      'assets/sablier-dmx.png',
-                      height: heightScreen * 0.15,
-                      width: widthScreen * 0.2,
-                    ),
-                  ),
-                  Column(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Durée d\'activation :',
+                        'de départ ',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 18,
                           color: Colors.black,
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.1)),
-                        child: DropdownButton<String>(
-                          value: myAlarmTimeMinuteData,
-                          icon: Icon(Icons.arrow_drop_down),
-                          iconSize: 24,
-                          elevation: 16,
-                          style: TextStyle(color: Colors.grey[800], fontSize: 18),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.blue[300],
-                          ),
-                          onChanged: (String data) {
-                            setState(() {
-                              myAlarmTimeMinuteData = data;
-                              myAlarmTimeMinutePosition = myAlarmTimeMinute.indexOf(data);
-                              myAlarmTimeMinuteList[day] = myAlarmTimeMinutePosition;
-                            });
-                          },
-                          items: myAlarmTimeMinute.map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
+                      Image.asset(
+                        'assets/arrivee.png',
+                        height: heightScreen * 0.05,
+                        width: widthScreen * 0.05,
+                      ),
+                      Text(
+                        ' d\'arrivée',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
                         ),
+                      ),
+                      Image.asset(
+                        'assets/depart.png',
+                        height: heightScreen * 0.05,
+                        width: widthScreen * 0.05,
                       ),
                     ],
                   ),
                 ],
               ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Séléctionner la luminosité ',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'de départ ',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
-                      ),
-                    ),
-                    Image.asset(
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                child: FlutterSlider(
+                  values: [luminosityMinList[day].toDouble(), luminosityMaxList[day].toDouble()],
+                  max: 100,
+                  min: 0,
+                  rangeSlider: true,
+                  handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
+                  onDragging: (handlerIndex, lowerValue, upperValue) {
+                    luminosityMinList[day] = lowerValue.toInt();
+                    luminosityMaxList[day] = upperValue.toInt();
+                    setState(() {});
+                  },
+                  handler: FlutterSliderHandler(
+                    decoration: BoxDecoration(),
+                    child: Image.asset(
                       'assets/arrivee.png',
-                      height: heightScreen * 0.05,
-                      width: widthScreen * 0.05,
+                      height: heightScreen * 0.1,
+                      width: widthScreen * 0.1,
                     ),
-                    Text(
-                      ' d\'arrivée',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
-                      ),
-                    ),
-                    Image.asset(
+                  ),
+                  rightHandler: FlutterSliderHandler(
+                    decoration: BoxDecoration(),
+                    child: Image.asset(
                       'assets/depart.png',
-                      height: heightScreen * 0.05,
-                      width: widthScreen * 0.05,
+                      height: heightScreen * 0.1,
+                      width: widthScreen * 0.1,
                     ),
-                  ],
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-              child: FlutterSlider(
-                values: [luminosityMinList[day].toDouble(), luminosityMaxList[day].toDouble()],
-                max: 100,
-                min: 0,
-                rangeSlider: true,
-                handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
-                onDragging: (handlerIndex, lowerValue, upperValue) {
-                  luminosityMinList[day] = lowerValue.toInt();
-                  luminosityMaxList[day] = upperValue.toInt();
-                  setState(() {});
-                },
-                handler: FlutterSliderHandler(
-                  decoration: BoxDecoration(),
-                  child: Image.asset(
-                    'assets/arrivee.png',
-                    height: heightScreen * 0.1,
-                    width: widthScreen * 0.1,
                   ),
-                ),
-                rightHandler: FlutterSliderHandler(
-                  decoration: BoxDecoration(),
-                  child: Image.asset(
-                    'assets/depart.png',
-                    height: heightScreen * 0.1,
-                    width: widthScreen * 0.1,
+                  trackBar: FlutterSliderTrackBar(activeTrackBar: BoxDecoration(color: Colors.grey[700]), activeTrackBarHeight: 15, inactiveTrackBarHeight: 15),
+                  hatchMark: FlutterSliderHatchMark(
+                    density: 0.5, // means 50 lines, from 0 to 100 percent
+                    labels: [
+                      FlutterSliderHatchMarkLabel(percent: 0, label: Text('0%')),
+                      FlutterSliderHatchMarkLabel(percent: 100, label: Text('100%')),
+                    ],
                   ),
-                ),
-                trackBar: FlutterSliderTrackBar(activeTrackBar: BoxDecoration(color: Colors.grey[700]), activeTrackBarHeight: 15, inactiveTrackBarHeight: 15),
-                hatchMark: FlutterSliderHatchMark(
-                  density: 0.5, // means 50 lines, from 0 to 100 percent
-                  labels: [
-                    FlutterSliderHatchMarkLabel(percent: 0, label: Text('0%')),
-                    FlutterSliderHatchMarkLabel(percent: 100, label: Text('100%')),
-                  ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -696,7 +718,7 @@ class _AlarmClockState extends State<AlarmClock> {
             ),
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text(
                 'Sauvgarder',
                 style: TextStyle(color: Colors.green),
@@ -705,7 +727,7 @@ class _AlarmClockState extends State<AlarmClock> {
                 Navigator.of(context).pop();
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text(
                 'Annuler',
                 style: TextStyle(color: Colors.green),
