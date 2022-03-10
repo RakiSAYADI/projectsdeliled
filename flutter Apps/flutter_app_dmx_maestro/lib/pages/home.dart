@@ -15,45 +15,44 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final String zonesInHex = 'F';
-
-  final myBleDeviceName = TextEditingController();
+  final double hueCoefficient = (256 / 360);
 
   HSLColor hslColor = HSLColor.fromColor(Colors.blue);
 
   int boolToInt(bool a) => a == true ? 1 : 0;
 
-  double _lowerValue = 50;
+  bool intToBool(int a) => a == 1 ? true : false;
 
   Color trackBarColor = Colors.black;
 
   String bottomBarTitle = 'Ambiances';
-  bool bottomBarTitleState = false;
+  String zonesInHexAmb;
 
+  bool bottomBarTitleState = false;
   bool firstDisplayMainWidget = true;
+  bool colorPickerSelected = false;
 
   double opacityLevelRemoteControl = 1.0;
   double opacityLevelAmbiances = 0.0;
+  double _lowerValue = 50;
 
   List<String> ambiance1, ambiance2, ambiance3, ambiance4, ambiance5, ambiance6;
-
   List<bool> remoteAndAmbVisibility = [true, false];
+  List<String> zonesNamesList = ['', '', '', ''];
+  List<bool> zoneStates;
 
   @override
   void initState() {
     // TODO: implement initState
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.bottom]);
+    zoneStates = [false, false, false, false];
+    zonesInHexAmb = '0';
     super.initState();
   }
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    myBleDeviceName.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    print('home page');
     if (firstDisplayMainWidget) {
       try {
         var parsedJson;
@@ -66,24 +65,34 @@ class _HomeState extends State<Home> {
           ambiance4 = List<String>.from(parsedJson['Amb4']);
           ambiance5 = List<String>.from(parsedJson['Amb5']);
           ambiance6 = List<String>.from(parsedJson['Amb6']);
+          parsedJson = json.decode(dataMaestroIOS);
+          zonesNamesList[0] = parsedJson['zone'][0];
+          zonesNamesList[1] = parsedJson['zone'][1];
+          zonesNamesList[2] = parsedJson['zone'][2];
+          zonesNamesList[3] = parsedJson['zone'][3];
         }
         if (Platform.isAndroid) {
           parsedJson = json.decode(dataMaestro);
-          ambiance1 = [parsedJson['Amb'][0].toString(), parsedJson['Amb'][1].toString()];
-          ambiance2 = [parsedJson['Amb'][2].toString(), parsedJson['Amb'][3].toString()];
-          ambiance3 = [parsedJson['Amb'][4].toString(), parsedJson['Amb'][5].toString()];
-          ambiance4 = [parsedJson['Amb'][6].toString(), parsedJson['Amb'][7].toString()];
-          ambiance5 = [parsedJson['Amb'][8].toString(), parsedJson['Amb'][9].toString()];
-          ambiance6 = [parsedJson['Amb'][10].toString(), parsedJson['Amb'][11].toString()];
+          ambiance1 = [parsedJson['Amb'][0].toString(), parsedJson['Amb'][1].toString(), parsedJson['Amb'][2].toString()];
+          ambiance2 = [parsedJson['Amb'][3].toString(), parsedJson['Amb'][4].toString(), parsedJson['Amb'][5].toString()];
+          ambiance3 = [parsedJson['Amb'][6].toString(), parsedJson['Amb'][7].toString(), parsedJson['Amb'][8].toString()];
+          ambiance4 = [parsedJson['Amb'][9].toString(), parsedJson['Amb'][10].toString(), parsedJson['Amb'][11].toString()];
+          ambiance5 = [parsedJson['Amb'][12].toString(), parsedJson['Amb'][13].toString(), parsedJson['Amb'][14].toString()];
+          ambiance6 = [parsedJson['Amb'][15].toString(), parsedJson['Amb'][16].toString(), parsedJson['Amb'][17].toString()];
+          zonesNamesList[0] = parsedJson['zone'][0];
+          zonesNamesList[1] = parsedJson['zone'][1];
+          zonesNamesList[2] = parsedJson['zone'][2];
+          zonesNamesList[3] = parsedJson['zone'][3];
         }
       } catch (e) {
         print('erreur');
-        ambiance1 = ['Ambiance 1', 'FF0000'];
-        ambiance2 = ['Ambiance 2', '000000'];
-        ambiance3 = ['Ambiance 3', '00FF00'];
-        ambiance4 = ['Ambiance 4', '0000FF'];
-        ambiance5 = ['Ambiance 5', 'FFFF00'];
-        ambiance6 = ['Ambiance 6', '00FFFF'];
+        ambiance1 = ['Ambiance 1', 'FF0000', 'F'];
+        ambiance2 = ['Ambiance 2', '000000', 'F'];
+        ambiance3 = ['Ambiance 3', '00FF00', 'F'];
+        ambiance4 = ['Ambiance 4', '0000FF', 'F'];
+        ambiance5 = ['Ambiance 5', 'FFFF00', 'F'];
+        ambiance6 = ['Ambiance 6', '00FFFF', 'F'];
+        zonesNamesList = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4'];
       }
       firstDisplayMainWidget = false;
     }
@@ -229,13 +238,6 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget verticalDivider() {
-    return VerticalDivider(
-      thickness: 1.0,
-      color: Colors.grey[600],
     );
   }
 
@@ -386,11 +388,24 @@ class _HomeState extends State<Home> {
             children: [
               HSLColorPicker(
                 onChanged: (colorSelected) {
-                  hslColor = colorSelected;
                   if (myDevice.getConnectionState()) {
                     if (!bottomBarTitleState) {
-                      characteristicMaestro
-                          .write('{\"hue\":${colorSelected.toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")},\"zone\":\"$zonesInHex\"}'.codeUnits);
+                      if (colorPickerSelected) {
+                        if (hslColor.lightness != colorSelected.lightness) {
+                          characteristicMaestro.write('{\"light\":[7,${(hslColor.lightness * 100).toInt()},\"$zonesInHex\"]}'.codeUnits);
+                        }
+                        if (hslColor.hue != colorSelected.hue) {
+                          characteristicMaestro.write('{\"light\":[3,${(hslColor.hue * hueCoefficient).toInt()},\"$zonesInHex\"]}'.codeUnits);
+                        }
+                        if (hslColor.saturation != colorSelected.saturation) {
+                          characteristicMaestro.write('{\"light\":[9,${(hslColor.saturation * 100).toInt()},\"$zonesInHex\"]}'.codeUnits);
+                        }
+                      } else {
+                        colorPickerSelected = true;
+                        characteristicMaestro
+                            .write('{\"hue\":${hslColor.toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")},\"zone\":\"$zonesInHex\"}'.codeUnits);
+                      }
+                      hslColor = colorSelected;
                     }
                   }
                 },
@@ -412,6 +427,7 @@ class _HomeState extends State<Home> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
               child: FlutterSlider(
+                tooltip: FlutterSliderTooltip(disabled: true),
                 values: [_lowerValue],
                 max: 100,
                 min: 0,
@@ -475,7 +491,7 @@ class _HomeState extends State<Home> {
                       }
                     },
                     child: Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: EdgeInsets.all(widthScreen * 0.001 + heightScreen * 0.0001),
                       child: Text(
                         'Mode',
                         style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.01 + heightScreen * 0.015),
@@ -512,13 +528,13 @@ class _HomeState extends State<Home> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Expanded(flex: 1, child: verticalDivider()),
-                  Expanded(flex: 3, child: zoneOnOff(context, 'Zone 1', '1')),
+                  Expanded(flex: 3, child: zoneOnOff(context, zonesNamesList[0], '1')),
                   Expanded(flex: 1, child: verticalDivider()),
-                  Expanded(flex: 3, child: zoneOnOff(context, 'Zone 2', '2')),
+                  Expanded(flex: 3, child: zoneOnOff(context, zonesNamesList[1], '2')),
                   Expanded(flex: 1, child: verticalDivider()),
-                  Expanded(flex: 3, child: zoneOnOff(context, 'Zone 3', '4')),
+                  Expanded(flex: 3, child: zoneOnOff(context, zonesNamesList[2], '4')),
                   Expanded(flex: 1, child: verticalDivider()),
-                  Expanded(flex: 3, child: zoneOnOff(context, 'Zone 4', '8')),
+                  Expanded(flex: 3, child: zoneOnOff(context, zonesNamesList[3], '8')),
                   Expanded(flex: 1, child: verticalDivider()),
                 ],
               ),
@@ -551,6 +567,11 @@ class _HomeState extends State<Home> {
     double screenHeight = MediaQuery.of(context).size.height;
     final ambianceNameEditor = TextEditingController();
     final color = StringBuffer();
+    zonesInHexAmb = ambiance[2];
+    zoneStates[0] = intToBool(int.parse(zonesInHexAmb, radix: 16) ~/ 8);
+    zoneStates[1] = intToBool(int.parse(zonesInHexAmb, radix: 16) % 8 ~/ 4);
+    zoneStates[2] = intToBool(int.parse(zonesInHexAmb, radix: 16) % 4 ~/ 2);
+    zoneStates[3] = intToBool(int.parse(zonesInHexAmb, radix: 16) % 2);
     if (ambiance[1].length == 6 || ambiance[1].length == 7) color.write('ff');
     color.write(ambiance[1].replaceFirst('#', ''));
     ambianceNameEditor.text = ambiance[0];
@@ -559,81 +580,172 @@ class _HomeState extends State<Home> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Modifier l’ambiance'),
-          content: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text('Nom de votre ambiance:'),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    maxLength: 10,
-                    controller: ambianceNameEditor,
-                    style: TextStyle(
-                      fontSize: screenWidth * 0.04,
-                      color: Colors.grey[800],
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text('Modifier l’ambiance'),
+              content: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('Nom de votre ambiance:'),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        maxLength: 10,
+                        controller: ambianceNameEditor,
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.04,
+                          color: Colors.grey[800],
+                        ),
+                        decoration: InputDecoration(
+                            hintText: 'exp:amb123',
+                            hintStyle: TextStyle(
+                              color: Colors.grey,
+                            )),
+                      ),
                     ),
-                    decoration: InputDecoration(
-                        hintText: 'exp:amb123',
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                        )),
-                  ),
+                    Text('Zone de votre ambiance:'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [zoneButton(context, 0), zoneButton(context, 1)],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [zoneButton(context, 2), zoneButton(context, 3)],
+                    ),
+                    Text('Couleur de votre ambiance:'),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: HSLColorPicker(
+                        onChanged: (colorSelected) {
+                          colorHue = colorSelected.toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "");
+                        },
+                        size: screenWidth * 0.4 + screenHeight * 0.1,
+                        strokeWidth: screenWidth * 0.04,
+                        thumbSize: 0.00001,
+                        thumbStrokeSize: screenWidth * 0.005 + screenHeight * 0.005,
+                        showCenterColorIndicator: true,
+                        centerColorIndicatorSize: screenWidth * 0.05 + screenHeight * 0.05,
+                        initialColor: Color(int.parse(color.toString(), radix: 16)),
+                      ),
+                    ),
+                  ],
                 ),
-                Text('Couleur de votre ambiance:'),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: HSLColorPicker(
-                    onChanged: (colorSelected) {
-                      hslColor = colorSelected;
-                      colorHue = colorSelected.toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "");
-                      print(colorHue);
-                    },
-                    size: screenWidth * 0.4 + screenHeight * 0.1,
-                    strokeWidth: screenWidth * 0.04,
-                    thumbSize: 0.00001,
-                    thumbStrokeSize: screenWidth * 0.005 + screenHeight * 0.005,
-                    showCenterColorIndicator: true,
-                    centerColorIndicatorSize: screenWidth * 0.05 + screenHeight * 0.05,
-                    initialColor: Color(int.parse(color.toString(), radix: 16)),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text(
+                    'Sauvegarder',
+                    style: TextStyle(color: Colors.green),
                   ),
+                  onPressed: () async {
+                    zonesInHexAmb = ((boolToInt(zoneStates[3])) + (boolToInt(zoneStates[2]) * 2) + (boolToInt(zoneStates[1]) * 4) + (boolToInt(zoneStates[0]) * 8)).toRadixString(16);
+                    ambiance[0] = ambianceNameEditor.text;
+                    ambiance[1] = colorHue;
+                    ambiance[2] = zonesInHexAmb;
+                    if (bottomBarTitleState) {
+                      await characteristicMaestro.write('{\"couleur$ambianceID\":[${ambiance[0]},${ambiance[1]},${ambiance[2]}]}'.codeUnits);
+                    }
+                    switch (ambianceID) {
+                      case 1:
+                        ambiance1[0] = ambiance[0];
+                        ambiance1[1] = ambiance[1];
+                        ambiance1[2] = ambiance[2];
+                        break;
+                      case 2:
+                        ambiance2[0] = ambiance[0];
+                        ambiance2[1] = ambiance[1];
+                        ambiance2[2] = ambiance[2];
+                        break;
+                      case 3:
+                        ambiance3[0] = ambiance[0];
+                        ambiance3[1] = ambiance[1];
+                        ambiance3[2] = ambiance[2];
+                        break;
+                      case 4:
+                        ambiance4[0] = ambiance[0];
+                        ambiance4[1] = ambiance[1];
+                        ambiance4[2] = ambiance[2];
+                        break;
+                      case 5:
+                        ambiance5[0] = ambiance[0];
+                        ambiance5[1] = ambiance[1];
+                        ambiance5[2] = ambiance[2];
+                        break;
+                      case 6:
+                        ambiance6[0] = ambiance[0];
+                        ambiance6[1] = ambiance[1];
+                        ambiance6[2] = ambiance[2];
+                        break;
+                    }
+                    pageRefresh();
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: Text(
+                    'Annuler',
+                    style: TextStyle(color: Colors.green),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                 ),
               ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(
-                'Sauvegarder',
-                style: TextStyle(color: Colors.green),
-              ),
-              onPressed: () async {
-                setState(() {
-                  ambiance[0] = ambianceNameEditor.text;
-                  ambiance[1] = colorHue;
-                });
-                if (bottomBarTitleState) {
-                  await characteristicMaestro.write('{\"couleur$ambianceID\":[${ambiance[0]},${ambiance[1]}]}'.codeUnits);
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void pageRefresh() async {
+    await Future.delayed(Duration(milliseconds: 500));
+    setState(() {});
+  }
+
+  Widget zoneButton(BuildContext context, int zoneID) {
+    Color zoneState;
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
+    final Color selected = Colors.green;
+    final Color notSelected = Colors.red;
+    if (zoneStates[zoneID]) {
+      zoneState = selected;
+    } else {
+      zoneState = notSelected;
+    }
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextButton(
+            onPressed: () {
+              zoneStates[zoneID] = !zoneStates[zoneID];
+              setState(() {
+                if (zoneStates[zoneID]) {
+                  zoneState = selected;
+                } else {
+                  zoneState = notSelected;
                 }
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
+              });
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
               child: Text(
-                'Annuler',
-                style: TextStyle(color: Colors.green),
+                zonesNamesList[zoneID],
+                style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.01 + heightScreen * 0.015),
               ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
             ),
-          ],
+            style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+                backgroundColor: MaterialStateProperty.all<Color>(zoneState)),
+          ),
         );
       },
     );
@@ -642,41 +754,47 @@ class _HomeState extends State<Home> {
   Widget zoneOnOff(BuildContext context, String zoneName, String zoneNumber) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Expanded(
-          flex: 2,
-          child: Center(
-            child: IconButton(
-              icon: Icon(Icons.power_settings_new, color: Colors.green, size: widthScreen * 0.025 + heightScreen * 0.015),
-              onPressed: () async {
-                if (myDevice.getConnectionState()) {
-                  if (!bottomBarTitleState) {
-                    await characteristicMaestro.write('{\"light\":[1,0,\"$zoneNumber\"]}'.codeUnits);
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: Colors.blueAccent),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: IconButton(
+                icon: Icon(Icons.power_settings_new, color: Colors.green, size: widthScreen * 0.025 + heightScreen * 0.015),
+                onPressed: () async {
+                  if (myDevice.getConnectionState()) {
+                    if (!bottomBarTitleState) {
+                      await characteristicMaestro.write('{\"light\":[1,0,\"$zoneNumber\"]}'.codeUnits);
+                    }
                   }
-                }
-              },
+                },
+              ),
             ),
           ),
-        ),
-        Expanded(flex: 2, child: Center(child: Text(zoneName, style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.009)))),
-        Expanded(
-          flex: 2,
-          child: Center(
-            child: IconButton(
-              icon: Icon(Icons.close, color: Colors.red, size: widthScreen * 0.025 + heightScreen * 0.015),
-              onPressed: () async {
-                if (myDevice.getConnectionState()) {
-                  if (!bottomBarTitleState) {
-                    await characteristicMaestro.write('{\"light\":[1,1,\"$zoneNumber\"]}'.codeUnits);
+          Expanded(flex: 2, child: Center(child: Text(zoneName, style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.009)))),
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: IconButton(
+                icon: Icon(Icons.close, color: Colors.red, size: widthScreen * 0.025 + heightScreen * 0.015),
+                onPressed: () async {
+                  if (myDevice.getConnectionState()) {
+                    if (!bottomBarTitleState) {
+                      await characteristicMaestro.write('{\"light\":[1,1,\"$zoneNumber\"]}'.codeUnits);
+                    }
                   }
-                }
-              },
+                },
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -705,6 +823,13 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget verticalDivider() {
+    return VerticalDivider(
+      thickness: 1.0,
+      color: Colors.white,
     );
   }
 

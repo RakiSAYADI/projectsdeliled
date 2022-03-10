@@ -29,6 +29,7 @@ class _AlarmClockState extends State<AlarmClock> {
   List<int> luminosityMinList = [0, 0, 0, 0, 0, 0, 0];
   List<int> luminosityMaxList = [100, 100, 100, 100, 100, 100, 100];
   List<String> dayZones = ['F', 'F', 'F', 'F', 'F', 'F', 'F'];
+  List<int> alarmOptionList = [0, 0, 0, 0, 0, 0, 0];
 
   String myTimeHoursData = '00';
   String myTimeMinutesData = '00';
@@ -41,8 +42,10 @@ class _AlarmClockState extends State<AlarmClock> {
   ToastyMessage myUvcToast;
 
   String myAlarmTimeMinuteData = '  5 sec';
+  String myAlarmOptionData = 'Sun rise';
   List<int> myAlarmTimeMinuteList = [0, 0, 0, 0, 0, 0, 0];
   int myAlarmTimeMinutePosition = 0;
+  int myAlarmOptionPosition = 0;
 
   bool firstDisplayMainWidget = true;
 
@@ -69,6 +72,7 @@ class _AlarmClockState extends State<AlarmClock> {
     luminosityMinList[dayID] = day[4];
     luminosityMaxList[dayID] = day[5];
     dayZones[dayID] = day[6];
+    alarmOptionList[dayID] = day[7];
     if (daysStates[dayID]) {
       activationButtonText = 'Activé';
       activationButtonColor[dayID] = Colors.green;
@@ -123,12 +127,14 @@ class _AlarmClockState extends State<AlarmClock> {
         myTimeMinutesPosition = minutesList[day];
         myTimeSecondsPosition = secondsList[day];
         myAlarmTimeMinutePosition = myAlarmTimeMinuteList[day];
+        myAlarmOptionPosition = alarmOptionList[day];
 
         myTimeHoursData = myTimeHours.elementAt(myTimeHoursPosition);
         myTimeMinutesData = myTimeMinutes.elementAt(myTimeMinutesPosition);
         myTimeSecondsData = myTimeSeconds.elementAt(myTimeSecondsPosition);
 
         myAlarmTimeMinuteData = myAlarmTimeMinute.elementAt(myAlarmTimeMinutePosition);
+        myAlarmOptionData = myAlarmOption.elementAt(myAlarmOptionPosition);
       } catch (e) {
         print('erreur');
       }
@@ -274,12 +280,15 @@ class _AlarmClockState extends State<AlarmClock> {
                           myTimeMinutesPosition = minutesList[day];
                           myTimeSecondsPosition = secondsList[day];
                           myAlarmTimeMinutePosition = myAlarmTimeMinuteList[day];
+                          myAlarmOptionPosition = alarmOptionList[day];
 
                           myTimeHoursData = myTimeHours.elementAt(myTimeHoursPosition);
                           myTimeMinutesData = myTimeMinutes.elementAt(myTimeMinutesPosition);
                           myTimeSecondsData = myTimeSeconds.elementAt(myTimeSecondsPosition);
 
                           myAlarmTimeMinuteData = myAlarmTimeMinute.elementAt(myAlarmTimeMinutePosition);
+
+                          myAlarmOptionData = myAlarmOption.elementAt(myAlarmOptionPosition);
                         },
                         children: [
                           Container(
@@ -559,6 +568,7 @@ class _AlarmClockState extends State<AlarmClock> {
                             ),
                             onChanged: (String data) {
                               setState(() {
+                                saveButtonColor = Colors.grey[400];
                                 myAlarmTimeMinuteData = data;
                                 myAlarmTimeMinutePosition = myAlarmTimeMinute.indexOf(data);
                                 myAlarmTimeMinuteList[day] = myAlarmTimeMinutePosition;
@@ -632,6 +642,7 @@ class _AlarmClockState extends State<AlarmClock> {
                   onDragging: (handlerIndex, lowerValue, upperValue) {
                     luminosityMinList[day] = lowerValue.toInt();
                     luminosityMaxList[day] = upperValue.toInt();
+                    saveButtonColor = Colors.grey[400];
                     setState(() {});
                   },
                   handler: FlutterSliderHandler(
@@ -658,6 +669,48 @@ class _AlarmClockState extends State<AlarmClock> {
                       FlutterSliderHatchMarkLabel(percent: 100, label: Text('100%')),
                     ],
                   ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Divider(
+                  thickness: 3.0,
+                  color: Colors.grey[600],
+                ),
+              ),
+              Text(
+                'Option de reveil',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.black,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.1)),
+                child: DropdownButton<String>(
+                  value: myAlarmOptionData,
+                  icon: Icon(Icons.arrow_drop_down),
+                  iconSize: 24,
+                  elevation: 16,
+                  style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.blue[300],
+                  ),
+                  onChanged: (String data) {
+                    setState(() {
+                      saveButtonColor = Colors.grey[400];
+                      myAlarmOptionData = data;
+                      myAlarmOptionPosition = myAlarmOption.indexOf(data);
+                      alarmOptionList[day] = myAlarmOptionPosition;
+                    });
+                  },
+                  items: myAlarmOption.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
                 ),
               ),
             ],
@@ -724,6 +777,7 @@ class _AlarmClockState extends State<AlarmClock> {
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () async {
+                saveButtonColor = Colors.grey[400];
                 Navigator.of(context).pop();
               },
             ),
@@ -745,6 +799,6 @@ class _AlarmClockState extends State<AlarmClock> {
   String alarmDayData(int dayID) {
     return '${boolToInt(daysStates[dayID])},${(hourList[dayID] * 3600) + (minutesList[dayID] * 60) + (secondsList[dayID])},'
         '${myAlarmTimeMinuteList[dayID]},\"${hueInitial[dayID].toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")}\",'
-        '${luminosityMinList[dayID]},${luminosityMaxList[dayID]},\"${dayZones[dayID]}\"';
+        '${luminosityMinList[dayID]},${luminosityMaxList[dayID]},\"${dayZones[dayID]}\",${alarmOptionList[dayID]}';
   }
 }
