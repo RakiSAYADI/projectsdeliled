@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutterappdentaluvc/pages/Automatique_UVC.dart';
@@ -71,6 +72,17 @@ void main() async {
         badge: true,
         sound: true,
       );
+
+  if (Platform.isAndroid) {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    if (androidInfo.model.startsWith('r') || androidInfo.model.startsWith('R')) {
+      isItOurTablet = true;
+    } else {
+      isItOurTablet = false;
+    }
+  }
+
   languageCode = Platform.localeName.split('_')[0];
   print('le language de telephone : $languageCode');
 

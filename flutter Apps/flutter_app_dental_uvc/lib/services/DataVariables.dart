@@ -34,6 +34,7 @@ List<List<String>> uvcDataSelected;
 bool isTreatmentCompleted;
 bool openWithSettings = false;
 bool connectionOnce = true;
+bool isItOurTablet = false;
 
 List<String> myExtinctionTimeMinute = [
   ' 30 sec',
@@ -80,32 +81,7 @@ List<String> myActivationTimeMinute = [
   '120 sec',
 ];
 
-List<String> myTimeHours = [
-  '00',
-  '01',
-  '02',
-  '03',
-  '04',
-  '05',
-  '06',
-  '07',
-  '08',
-  '09',
-  '10',
-  '11',
-  '12',
-  '13',
-  '14',
-  '15',
-  '16',
-  '17',
-  '18',
-  '19',
-  '20',
-  '21',
-  '22',
-  '23'
-];
+List<String> myTimeHours = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
 
 List<String> myTimeMinutes = [
   '00',

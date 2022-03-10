@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutterappdentaluvc/services/DataVariables.dart';
+
 class LedControl {
   final String _processName = 'su';
   final String _commandOperation = 'echo w';
@@ -41,7 +43,7 @@ class LedControl {
         return false;
         break;
     }
-    if (Platform.isAndroid) {
+    if (Platform.isAndroid && isItOurTablet) {
       try {
         Process.start(_processName, []).then((Process process) {
           process.stdin.writeln('$_commandOperation $colorHex $_packageName');
