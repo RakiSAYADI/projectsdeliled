@@ -9,7 +9,6 @@
 #include <stdio.h>
 #include <esp_err.h>
 #include <esp_event.h>
-#include "sdkconfig.h"
 #include <stdlib.h>
 #include <time.h>
 #include "math.h"
@@ -20,6 +19,8 @@
 #include "adc.h"
 #include "i2c.h"
 #include "app_gpio.h"
+
+#include "sdkconfig.h"
 
 #define TAG "AUTOREG"
 
@@ -71,18 +72,13 @@ void AutoLightStateMachine()
 
 		if ((cparttime == UnitCfg.alarmDay[Curday].autoTrigTime) && (UnitCfg.alarmDay[Curday].state))
 		{
-
 			printf("AutoTrigger Timer Switch light on\n");
-			printf("Info : Now %d @ %d start at : %ld \n", Curday, cparttime,
-				   UnitCfg.alarmDay[Curday].autoTrigTime);
-			veille_zone_int = strtol(UnitCfg.alarmDay[Curday].zones,
-									 NULL, 16);
-
+			printf("Info : Now %d @ %d start at : %ld \n", Curday, cparttime, UnitCfg.alarmDay[Curday].autoTrigTime);
+			veille_zone_int = strtol(UnitCfg.alarmDay[Curday].zones, NULL, 16);
 			autoLightWakeUpTask(veille_zone_int);
 		}
 		delay(100);
 	}
-
 	vTaskDelete(NULL);
 }
 
@@ -220,16 +216,14 @@ void autoLightWakeUpTask(uint8_t zone)
 	subcmdhue = HSLtmp.Hue;
 
 	MilightHandler(cmd, subcmdhue, zone);
-	ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", cmd, subcmdhue,
-			 zone);
+	ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", cmd, subcmdhue, zone);
 	delay(10);
 
 	// apply saturation
 	cmd = 9;
 	subcmdstab = HSLtmp.Sat;
 	MilightHandler(cmd, subcmdstab, zone);
-	ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", cmd, subcmdstab,
-			 zone);
+	ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", cmd, subcmdstab, zone);
 	delay(10);
 	switch (UnitCfg.alarmDay[Curday].duration)
 	{
@@ -330,15 +324,33 @@ void autoLightWakeUpTask(uint8_t zone)
 	uint32_t progressTime = 0;
 	float penteTransLum = 0;
 	uint8_t transOutLum = 0;
+	const uint8_t transPeriode = 100;
+	const uint8_t transFrequancy = transPeriode * 2;
 	penteTransLum = (UnitCfg.alarmDay[Curday].finishLumVal - UnitCfg.alarmDay[Curday].startLumVal) / (float)durationLumTransition;
 	cmd = 7;
 	while (progressTime < durationLumTransition)
 	{
-		transOutLum = (penteTransLum * progressTime) + UnitCfg.alarmDay[Curday].startLumVal;
+		switch (UnitCfg.alarmDay[Curday].alarmOption)
+		{
+		case 0:
+			transOutLum = (penteTransLum * progressTime) + UnitCfg.alarmDay[Curday].startLumVal;
+			break;
+		case 1:
+			transOutLum = ((UnitCfg.alarmDay[Curday].finishLumVal - UnitCfg.alarmDay[Curday].startLumVal) / 2) *
+							  sin(((M_TWOPI / (transFrequancy * 5)) * progressTime) - M_PI_2) +
+						  ((UnitCfg.alarmDay[Curday].finishLumVal + UnitCfg.alarmDay[Curday].startLumVal) / 2);
+			break;
+		case 2:
+			transOutLum = (((UnitCfg.alarmDay[Curday].finishLumVal - UnitCfg.alarmDay[Curday].startLumVal) / 2) *
+							   (sin(((M_TWOPI / (transFrequancy * 5)) * progressTime) - M_PI_2) / abs(sin(((M_TWOPI / (transFrequancy * 5)) * progressTime) - M_PI_2))) +
+						   ((UnitCfg.alarmDay[Curday].finishLumVal + UnitCfg.alarmDay[Curday].startLumVal) / 2));
+			break;
+		}
 		MilightHandler(cmd, transOutLum, zone);
-		progressTime += 100;
-		delay(100);
+		progressTime += transPeriode;
+		delay(transPeriode);
 	}
+	MilightHandler(cmd, UnitCfg.alarmDay[Curday].finishLumVal, zone);
 }
 
 // PIR Low level Handler

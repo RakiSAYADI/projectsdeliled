@@ -153,6 +153,7 @@ void Default_saving()
 		sprintf(UnitCfg.alarmDay[i].zones, "F");
 		UnitCfg.alarmDay[i].startLumVal = 0;
 		UnitCfg.alarmDay[i].finishLumVal = 100;
+		UnitCfg.alarmDay[i].alarmOption = 0;
 	}
 
 	for (uint8_t i = 0; i < 4; i++)

@@ -54,6 +54,7 @@ typedef struct {
 	char zones[3];
 	uint8_t startLumVal;
 	uint8_t finishLumVal;
+	uint8_t alarmOption;
 } Alarm_Typedef;
 
 typedef struct {

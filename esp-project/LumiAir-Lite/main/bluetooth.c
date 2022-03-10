@@ -550,13 +550,13 @@ void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 					charIOSCounter++;
 					break;
 				case 2:
-					sprintf((char *)total2, "{\"Amb\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"],\"PP\":\"%s\"}",
-							UnitCfg.ColortrProfile[0].ambname, UnitCfg.ColortrProfile[0].Hue,
-							UnitCfg.ColortrProfile[1].ambname, UnitCfg.ColortrProfile[1].Hue,
-							UnitCfg.ColortrProfile[2].ambname, UnitCfg.ColortrProfile[2].Hue,
-							UnitCfg.ColortrProfile[3].ambname, UnitCfg.ColortrProfile[3].Hue,
-							UnitCfg.ColortrProfile[4].ambname, UnitCfg.ColortrProfile[4].Hue,
-							UnitCfg.ColortrProfile[5].ambname, UnitCfg.ColortrProfile[5].Hue,
+					sprintf((char *)total2, "{\"Amb\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"],\"PP\":\"%s\"}",
+							UnitCfg.ColortrProfile[0].ambname, UnitCfg.ColortrProfile[0].Hue, UnitCfg.ColortrProfile[0].zone,
+							UnitCfg.ColortrProfile[1].ambname, UnitCfg.ColortrProfile[1].Hue, UnitCfg.ColortrProfile[1].zone,
+							UnitCfg.ColortrProfile[2].ambname, UnitCfg.ColortrProfile[2].Hue, UnitCfg.ColortrProfile[2].zone,
+							UnitCfg.ColortrProfile[3].ambname, UnitCfg.ColortrProfile[3].Hue, UnitCfg.ColortrProfile[3].zone,
+							UnitCfg.ColortrProfile[4].ambname, UnitCfg.ColortrProfile[4].Hue, UnitCfg.ColortrProfile[4].zone,
+							UnitCfg.ColortrProfile[5].ambname, UnitCfg.ColortrProfile[5].Hue, UnitCfg.ColortrProfile[5].zone,
 							UnitCfg.passPIN);
 					charIOSCounter = 0;
 					break;
@@ -566,7 +566,7 @@ void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 			{
 				sprintf((char *)total2,
 						"{\"wifi\":[\"%s\",\"%s\"],\"cc\":[%d,\"%s\"],\"tabcc\":[%d,%ld,%d,%ld,%d,%ld,%d,%ld,%d,%ld],\"ZN\":[\"%s\",\"%s\",\"%s\",\"%s\"],"
-						"\"Amb\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"],\"PP\":\"%s\"}",
+						"\"Amb\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"],\"PP\":\"%s\"}",
 						UnitCfg.WifiCfg.WIFI_SSID, UnitCfg.WifiCfg.WIFI_PASS,
 						UnitCfg.UserLcProfile.CcEnb, UnitCfg.UserLcProfile.ZoneCc,
 						UnitCfg.UserLcProfile.Ccp[0].CcLevel, UnitCfg.UserLcProfile.Ccp[0].CcTime,
@@ -576,12 +576,12 @@ void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 						UnitCfg.UserLcProfile.Ccp[4].CcLevel, UnitCfg.UserLcProfile.Ccp[4].CcTime,
 						UnitCfg.Zones_info[0].zonename, UnitCfg.Zones_info[1].zonename,
 						UnitCfg.Zones_info[2].zonename, UnitCfg.Zones_info[3].zonename,
-						UnitCfg.ColortrProfile[0].ambname, UnitCfg.ColortrProfile[0].Hue,
-						UnitCfg.ColortrProfile[1].ambname, UnitCfg.ColortrProfile[1].Hue,
-						UnitCfg.ColortrProfile[2].ambname, UnitCfg.ColortrProfile[2].Hue,
-						UnitCfg.ColortrProfile[3].ambname, UnitCfg.ColortrProfile[3].Hue,
-						UnitCfg.ColortrProfile[4].ambname, UnitCfg.ColortrProfile[4].Hue,
-						UnitCfg.ColortrProfile[5].ambname, UnitCfg.ColortrProfile[5].Hue,
+						UnitCfg.ColortrProfile[0].ambname, UnitCfg.ColortrProfile[0].Hue, UnitCfg.ColortrProfile[0].zone,
+						UnitCfg.ColortrProfile[1].ambname, UnitCfg.ColortrProfile[1].Hue, UnitCfg.ColortrProfile[1].zone,
+						UnitCfg.ColortrProfile[2].ambname, UnitCfg.ColortrProfile[2].Hue, UnitCfg.ColortrProfile[2].zone,
+						UnitCfg.ColortrProfile[3].ambname, UnitCfg.ColortrProfile[3].Hue, UnitCfg.ColortrProfile[3].zone,
+						UnitCfg.ColortrProfile[4].ambname, UnitCfg.ColortrProfile[4].Hue, UnitCfg.ColortrProfile[4].zone,
+						UnitCfg.ColortrProfile[5].ambname, UnitCfg.ColortrProfile[5].Hue, UnitCfg.ColortrProfile[5].zone,
 						UnitCfg.passPIN);
 			}
 			break;
@@ -601,61 +601,54 @@ void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 					break;
 				case 1:
 					sprintf((char *)total2,
-							"{\"Amb1\":[\"%s\",\"%s\"],\"Amb2\":[\"%s\",\"%s\"],"
-							"\"Amb3\":[\"%s\",\"%s\"]}",
-							UnitCfg.ColortrProfile[0].ambname, UnitCfg.ColortrProfile[0].Hue,
-							UnitCfg.ColortrProfile[1].ambname, UnitCfg.ColortrProfile[1].Hue,
-							UnitCfg.ColortrProfile[2].ambname, UnitCfg.ColortrProfile[2].Hue);
+							"{\"Amb1\":[\"%s\",\"%s\",\"%s\"],\"Amb2\":[\"%s\",\"%s\",\"%s\"],"
+							"\"Amb3\":[\"%s\",\"%s\",\"%s\"]}",
+							UnitCfg.ColortrProfile[0].ambname, UnitCfg.ColortrProfile[0].Hue, UnitCfg.ColortrProfile[0].zone,
+							UnitCfg.ColortrProfile[1].ambname, UnitCfg.ColortrProfile[1].Hue, UnitCfg.ColortrProfile[1].zone,
+							UnitCfg.ColortrProfile[2].ambname, UnitCfg.ColortrProfile[2].Hue, UnitCfg.ColortrProfile[2].zone);
 					charIOSCounter++;
 					break;
 				case 2:
 					sprintf((char *)total2,
-							"{\"Amb4\":[\"%s\",\"%s\"],"
-							"\"Amb5\":[\"%s\",\"%s\"],\"Amb6\":[\"%s\",\"%s\"]}",
-							UnitCfg.ColortrProfile[3].ambname, UnitCfg.ColortrProfile[3].Hue,
-							UnitCfg.ColortrProfile[4].ambname, UnitCfg.ColortrProfile[4].Hue,
-							UnitCfg.ColortrProfile[5].ambname, UnitCfg.ColortrProfile[5].Hue);
+							"{\"Amb4\":[\"%s\",\"%s\",\"%s\"],"
+							"\"Amb5\":[\"%s\",\"%s\",\"%s\"],\"Amb6\":[\"%s\",\"%s\",\"%s\"]}",
+							UnitCfg.ColortrProfile[3].ambname, UnitCfg.ColortrProfile[3].Hue, UnitCfg.ColortrProfile[3].zone,
+							UnitCfg.ColortrProfile[4].ambname, UnitCfg.ColortrProfile[4].Hue, UnitCfg.ColortrProfile[4].zone,
+							UnitCfg.ColortrProfile[5].ambname, UnitCfg.ColortrProfile[5].Hue, UnitCfg.ColortrProfile[5].zone);
 					charIOSCounter++;
 					break;
 				case 3:
 					sprintf((char *)total2,
-							"{\"lun\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],"
-							"\"mar\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],\"mer\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],"
-							"\"jeu\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"]}",
+							"{\"lun\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],"
+							"\"mar\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],\"mer\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],"
+							"\"jeu\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d]}",
 							UnitCfg.alarmDay[1].state, UnitCfg.alarmDay[1].autoTrigTime,
-							UnitCfg.alarmDay[1].duration, UnitCfg.alarmDay[1].hue,
-							UnitCfg.alarmDay[1].startLumVal,
-							UnitCfg.alarmDay[1].finishLumVal, UnitCfg.alarmDay[1].zones,
+							UnitCfg.alarmDay[1].duration, UnitCfg.alarmDay[1].hue, UnitCfg.alarmDay[1].startLumVal,
+							UnitCfg.alarmDay[1].finishLumVal, UnitCfg.alarmDay[1].zones, UnitCfg.alarmDay[1].alarmOption,
 							UnitCfg.alarmDay[2].state, UnitCfg.alarmDay[2].autoTrigTime,
-							UnitCfg.alarmDay[2].duration, UnitCfg.alarmDay[2].hue,
-							UnitCfg.alarmDay[2].startLumVal,
-							UnitCfg.alarmDay[2].finishLumVal, UnitCfg.alarmDay[2].zones,
+							UnitCfg.alarmDay[2].duration, UnitCfg.alarmDay[2].hue, UnitCfg.alarmDay[2].startLumVal,
+							UnitCfg.alarmDay[2].finishLumVal, UnitCfg.alarmDay[2].zones, UnitCfg.alarmDay[2].alarmOption,
 							UnitCfg.alarmDay[3].state, UnitCfg.alarmDay[3].autoTrigTime,
-							UnitCfg.alarmDay[3].duration, UnitCfg.alarmDay[3].hue,
-							UnitCfg.alarmDay[3].startLumVal,
-							UnitCfg.alarmDay[3].finishLumVal, UnitCfg.alarmDay[3].zones,
+							UnitCfg.alarmDay[3].duration, UnitCfg.alarmDay[3].hue, UnitCfg.alarmDay[3].startLumVal,
+							UnitCfg.alarmDay[3].finishLumVal, UnitCfg.alarmDay[3].zones, UnitCfg.alarmDay[3].alarmOption,
 							UnitCfg.alarmDay[4].state, UnitCfg.alarmDay[4].autoTrigTime,
-							UnitCfg.alarmDay[4].duration, UnitCfg.alarmDay[4].hue,
-							UnitCfg.alarmDay[4].startLumVal,
-							UnitCfg.alarmDay[4].finishLumVal, UnitCfg.alarmDay[4].zones);
+							UnitCfg.alarmDay[4].duration, UnitCfg.alarmDay[4].hue, UnitCfg.alarmDay[4].startLumVal,
+							UnitCfg.alarmDay[4].finishLumVal, UnitCfg.alarmDay[4].zones, UnitCfg.alarmDay[4].alarmOption);
 					charIOSCounter++;
 					break;
 				case 4:
 					sprintf((char *)total2,
-							"{\"ven\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],"
-							"\"sam\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],\"dim\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"]}",
+							"{\"ven\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],"
+							"\"sam\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],\"dim\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d]}",
 							UnitCfg.alarmDay[5].state, UnitCfg.alarmDay[5].autoTrigTime,
-							UnitCfg.alarmDay[5].duration, UnitCfg.alarmDay[5].hue,
-							UnitCfg.alarmDay[5].startLumVal,
-							UnitCfg.alarmDay[5].finishLumVal, UnitCfg.alarmDay[5].zones,
+							UnitCfg.alarmDay[5].duration, UnitCfg.alarmDay[5].hue, UnitCfg.alarmDay[5].startLumVal,
+							UnitCfg.alarmDay[5].finishLumVal, UnitCfg.alarmDay[5].zones, UnitCfg.alarmDay[5].alarmOption,
 							UnitCfg.alarmDay[6].state, UnitCfg.alarmDay[6].autoTrigTime,
-							UnitCfg.alarmDay[6].duration, UnitCfg.alarmDay[6].hue,
-							UnitCfg.alarmDay[6].startLumVal,
-							UnitCfg.alarmDay[6].finishLumVal, UnitCfg.alarmDay[6].zones,
+							UnitCfg.alarmDay[6].duration, UnitCfg.alarmDay[6].hue, UnitCfg.alarmDay[6].startLumVal,
+							UnitCfg.alarmDay[6].finishLumVal, UnitCfg.alarmDay[6].zones, UnitCfg.alarmDay[6].alarmOption,
 							UnitCfg.alarmDay[0].state, UnitCfg.alarmDay[0].autoTrigTime,
-							UnitCfg.alarmDay[0].duration, UnitCfg.alarmDay[0].hue,
-							UnitCfg.alarmDay[0].startLumVal,
-							UnitCfg.alarmDay[0].finishLumVal, UnitCfg.alarmDay[0].zones);
+							UnitCfg.alarmDay[0].duration, UnitCfg.alarmDay[0].hue, UnitCfg.alarmDay[0].startLumVal,
+							UnitCfg.alarmDay[0].finishLumVal, UnitCfg.alarmDay[0].zones, UnitCfg.alarmDay[0].alarmOption);
 					charIOSCounter = 0;
 					break;
 				}
@@ -667,53 +660,46 @@ void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 				case 0:
 					sprintf((char *)total2,
 							"{\"Ver\":%d,\"FirmV\":\"%s\",\"SCR\":%d,"
-							"\"Amb\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"],\"wifiSt\":%d,"
+							"\"Amb\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"],\"wifiSt\":%d,"
 							"\"zone\":[\"%s\",\"%s\",\"%s\",\"%s\"]}",
 							UnitCfg.Version, UnitCfg.versionSystem, scanResult,
-							UnitCfg.ColortrProfile[0].ambname, UnitCfg.ColortrProfile[0].Hue,
-							UnitCfg.ColortrProfile[1].ambname, UnitCfg.ColortrProfile[1].Hue,
-							UnitCfg.ColortrProfile[2].ambname, UnitCfg.ColortrProfile[2].Hue,
-							UnitCfg.ColortrProfile[3].ambname, UnitCfg.ColortrProfile[3].Hue,
-							UnitCfg.ColortrProfile[4].ambname, UnitCfg.ColortrProfile[4].Hue,
-							UnitCfg.ColortrProfile[5].ambname, UnitCfg.ColortrProfile[5].Hue,
+							UnitCfg.ColortrProfile[0].ambname, UnitCfg.ColortrProfile[0].Hue, UnitCfg.ColortrProfile[0].zone,
+							UnitCfg.ColortrProfile[1].ambname, UnitCfg.ColortrProfile[1].Hue, UnitCfg.ColortrProfile[1].zone,
+							UnitCfg.ColortrProfile[2].ambname, UnitCfg.ColortrProfile[2].Hue, UnitCfg.ColortrProfile[2].zone,
+							UnitCfg.ColortrProfile[3].ambname, UnitCfg.ColortrProfile[3].Hue, UnitCfg.ColortrProfile[3].zone,
+							UnitCfg.ColortrProfile[4].ambname, UnitCfg.ColortrProfile[4].Hue, UnitCfg.ColortrProfile[4].zone,
+							UnitCfg.ColortrProfile[5].ambname, UnitCfg.ColortrProfile[5].Hue, UnitCfg.ColortrProfile[5].zone,
 							WifiConnectedFlag, UnitCfg.Zones_info[0].zonename, UnitCfg.Zones_info[1].zonename,
 							UnitCfg.Zones_info[2].zonename, UnitCfg.Zones_info[3].zonename);
 					charIOSCounter++;
 					break;
 				case 1:
 					sprintf((char *)total2,
-							"{\"lun\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],"
-							"\"mar\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],\"mer\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],"
-							"\"jeu\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],\"ven\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],"
-							"\"sam\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],\"dim\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"]}",
+							"{\"lun\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],"
+							"\"mar\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],\"mer\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],"
+							"\"jeu\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],\"ven\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],"
+							"\"sam\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],\"dim\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d]}",
 							UnitCfg.alarmDay[1].state, UnitCfg.alarmDay[1].autoTrigTime,
-							UnitCfg.alarmDay[1].duration, UnitCfg.alarmDay[1].hue,
-							UnitCfg.alarmDay[1].startLumVal,
-							UnitCfg.alarmDay[1].finishLumVal, UnitCfg.alarmDay[1].zones,
+							UnitCfg.alarmDay[1].duration, UnitCfg.alarmDay[1].hue, UnitCfg.alarmDay[1].startLumVal,
+							UnitCfg.alarmDay[1].finishLumVal, UnitCfg.alarmDay[1].zones, UnitCfg.alarmDay[1].alarmOption,
 							UnitCfg.alarmDay[2].state, UnitCfg.alarmDay[2].autoTrigTime,
-							UnitCfg.alarmDay[2].duration, UnitCfg.alarmDay[2].hue,
-							UnitCfg.alarmDay[2].startLumVal,
-							UnitCfg.alarmDay[2].finishLumVal, UnitCfg.alarmDay[2].zones,
+							UnitCfg.alarmDay[2].duration, UnitCfg.alarmDay[2].hue, UnitCfg.alarmDay[2].startLumVal,
+							UnitCfg.alarmDay[2].finishLumVal, UnitCfg.alarmDay[2].zones, UnitCfg.alarmDay[2].alarmOption,
 							UnitCfg.alarmDay[3].state, UnitCfg.alarmDay[3].autoTrigTime,
-							UnitCfg.alarmDay[3].duration, UnitCfg.alarmDay[3].hue,
-							UnitCfg.alarmDay[3].startLumVal,
-							UnitCfg.alarmDay[3].finishLumVal, UnitCfg.alarmDay[3].zones,
+							UnitCfg.alarmDay[3].duration, UnitCfg.alarmDay[3].hue, UnitCfg.alarmDay[3].startLumVal,
+							UnitCfg.alarmDay[3].finishLumVal, UnitCfg.alarmDay[3].zones, UnitCfg.alarmDay[3].alarmOption,
 							UnitCfg.alarmDay[4].state, UnitCfg.alarmDay[4].autoTrigTime,
-							UnitCfg.alarmDay[4].duration, UnitCfg.alarmDay[4].hue,
-							UnitCfg.alarmDay[4].startLumVal,
-							UnitCfg.alarmDay[4].finishLumVal, UnitCfg.alarmDay[4].zones,
+							UnitCfg.alarmDay[4].duration, UnitCfg.alarmDay[4].hue, UnitCfg.alarmDay[4].startLumVal,
+							UnitCfg.alarmDay[4].finishLumVal, UnitCfg.alarmDay[4].zones, UnitCfg.alarmDay[4].alarmOption,
 							UnitCfg.alarmDay[5].state, UnitCfg.alarmDay[5].autoTrigTime,
-							UnitCfg.alarmDay[5].duration, UnitCfg.alarmDay[5].hue,
-							UnitCfg.alarmDay[5].startLumVal,
-							UnitCfg.alarmDay[5].finishLumVal, UnitCfg.alarmDay[5].zones,
+							UnitCfg.alarmDay[5].duration, UnitCfg.alarmDay[5].hue, UnitCfg.alarmDay[5].startLumVal,
+							UnitCfg.alarmDay[5].finishLumVal, UnitCfg.alarmDay[5].zones, UnitCfg.alarmDay[5].alarmOption,
 							UnitCfg.alarmDay[6].state, UnitCfg.alarmDay[6].autoTrigTime,
-							UnitCfg.alarmDay[6].duration, UnitCfg.alarmDay[6].hue,
-							UnitCfg.alarmDay[6].startLumVal,
-							UnitCfg.alarmDay[6].finishLumVal, UnitCfg.alarmDay[6].zones,
+							UnitCfg.alarmDay[6].duration, UnitCfg.alarmDay[6].hue, UnitCfg.alarmDay[6].startLumVal,
+							UnitCfg.alarmDay[6].finishLumVal, UnitCfg.alarmDay[6].zones, UnitCfg.alarmDay[6].alarmOption,
 							UnitCfg.alarmDay[0].state, UnitCfg.alarmDay[0].autoTrigTime,
-							UnitCfg.alarmDay[0].duration, UnitCfg.alarmDay[0].hue,
-							UnitCfg.alarmDay[0].startLumVal,
-							UnitCfg.alarmDay[0].finishLumVal, UnitCfg.alarmDay[0].zones);
+							UnitCfg.alarmDay[0].duration, UnitCfg.alarmDay[0].hue, UnitCfg.alarmDay[0].startLumVal,
+							UnitCfg.alarmDay[0].finishLumVal, UnitCfg.alarmDay[0].zones, UnitCfg.alarmDay[0].alarmOption);
 					charIOSCounter = 0;
 					break;
 				}
@@ -820,7 +806,13 @@ bool readAlertMessage(char *jsonData, char day[4], int dayID)
 		}
 		if (jsonparse(jsonData, UnitCfg.alarmDay[dayID].zones, day, 6))
 		{
-			ESP_LOGI(GATTS_TAG, "%s zone is %s\n", day, UnitCfg.alarmDay[dayID].zones);
+			ESP_LOGI(GATTS_TAG, "%s zone is %s", day, UnitCfg.alarmDay[dayID].zones);
+			stateFlag = true;
+		}
+		if (jsonparse(jsonData, tmp, day, 7))
+		{
+			UnitCfg.alarmDay[dayID].alarmOption = atoi(tmp);
+			ESP_LOGI(GATTS_TAG, "%s option is %d\n", day, UnitCfg.alarmDay[dayID].alarmOption);
 			stateFlag = true;
 		}
 	}
@@ -1038,7 +1030,10 @@ bool configData(char *jsonData)
 		if (jsonparse(jsonData, UnitCfg.ColortrProfile[0].Hue, "couleur1", 1))
 		{
 			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[0].Hue);
-			saveFlag = true;
+			if (jsonparse(jsonData, UnitCfg.ColortrProfile[0].zone, "couleur1", 2))
+			{
+				ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[0].zone);
+			}
 		}
 	}
 	else if (jsonparse(jsonData, UnitCfg.ColortrProfile[1].ambname, "couleur2", 0))
@@ -1050,7 +1045,10 @@ bool configData(char *jsonData)
 		if (jsonparse(jsonData, UnitCfg.ColortrProfile[1].Hue, "couleur2", 1))
 		{
 			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[1].Hue);
-			saveFlag = true;
+			if (jsonparse(jsonData, UnitCfg.ColortrProfile[1].zone, "couleur2", 2))
+			{
+				ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[1].zone);
+			}
 		}
 	}
 	else if (jsonparse(jsonData, UnitCfg.ColortrProfile[2].ambname, "couleur3", 0))
@@ -1063,7 +1061,10 @@ bool configData(char *jsonData)
 		if (jsonparse(jsonData, UnitCfg.ColortrProfile[2].Hue, "couleur3", 1))
 		{
 			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[2].Hue);
-			saveFlag = true;
+			if (jsonparse(jsonData, UnitCfg.ColortrProfile[2].zone, "couleur3", 2))
+			{
+				ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[2].zone);
+			}
 		}
 	}
 	else if (jsonparse(jsonData, UnitCfg.ColortrProfile[3].ambname, "couleur4", 0))
@@ -1076,7 +1077,10 @@ bool configData(char *jsonData)
 		if (jsonparse(jsonData, UnitCfg.ColortrProfile[3].Hue, "couleur4", 1))
 		{
 			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[3].Hue);
-			saveFlag = true;
+			if (jsonparse(jsonData, UnitCfg.ColortrProfile[3].zone, "couleur4", 2))
+			{
+				ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[3].zone);
+			}
 		}
 	}
 	else if (jsonparse(jsonData, UnitCfg.ColortrProfile[4].ambname, "couleur5", 0))
@@ -1089,7 +1093,10 @@ bool configData(char *jsonData)
 		if (jsonparse(jsonData, UnitCfg.ColortrProfile[4].Hue, "couleur5", 1))
 		{
 			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[4].Hue);
-			saveFlag = true;
+			if (jsonparse(jsonData, UnitCfg.ColortrProfile[4].zone, "couleur5", 2))
+			{
+				ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[4].zone);
+			}
 		}
 	}
 	else if (jsonparse(jsonData, UnitCfg.ColortrProfile[5].ambname, "couleur6", 0))
@@ -1102,7 +1109,10 @@ bool configData(char *jsonData)
 		if (jsonparse(jsonData, UnitCfg.ColortrProfile[5].Hue, "couleur6", 1))
 		{
 			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[5].Hue);
-			saveFlag = true;
+			if (jsonparse(jsonData, UnitCfg.ColortrProfile[5].zone, "couleur6", 2))
+			{
+				ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[5].zone);
+			}
 		}
 	}
 	else if (jsonparse(jsonData, tmp, "Favoris", 0))
@@ -1155,18 +1165,14 @@ void transitionAmbianceProcess(int ambianceId)
 	uint32_t rgb = 0;
 	rgb = strtol(UnitCfg.ColortrProfile[ambianceId].Hue, NULL, 16);
 	RgbToHSL(rgb, &HSLtmp);
-	//	if (jsonparse(jsonData, tmp, "zone", 0) == 0) {
-	//		zone = strtol(tmp, NULL, 16);
-	//	}
-	zoneLight = 15;
+	zoneLight = strtol(UnitCfg.ColortrProfile[ambianceId].zone, NULL, 16);
 	if (!transtionAmbiancesActivated)
 	{
 		// apply hue
 		cmd = 3;
 		subcmdhue = HSLtmp.Hue;
 		MilightHandler(cmd, subcmdhue, zoneLight);
-		ESP_LOGI(GATTS_TAG,
-				 "Light control cmd %d subcmd %d subcmdold %d zone %d", cmd,
+		ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d subcmdold %d zone %d", cmd,
 				 subcmdhue, subcmdhueold, zoneLight);
 		subcmdhueold = subcmdhue;
 
@@ -1174,8 +1180,7 @@ void transitionAmbianceProcess(int ambianceId)
 		cmd = 7;
 		subcmdlum = HSLtmp.Bri;
 		MilightHandler(cmd, subcmdlum, zoneLight);
-		ESP_LOGI(GATTS_TAG,
-				 "Light control cmd %d subcmd %d subcmdold %d zone %d", cmd,
+		ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d subcmdold %d zone %d", cmd,
 				 subcmdlum, subcmdlumold, zoneLight);
 		subcmdlumold = subcmdlum;
 
@@ -1183,8 +1188,7 @@ void transitionAmbianceProcess(int ambianceId)
 		cmd = 9;
 		subcmdstab = HSLtmp.Sat;
 		MilightHandler(cmd, subcmdstab, zoneLight);
-		ESP_LOGI(GATTS_TAG,
-				 "Light control cmd %d subcmd %d subcmdold %d zone %d", cmd,
+		ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d subcmdold %d zone %d", cmd,
 				 subcmdstab, subcmdstabold, zoneLight);
 		subcmdstabold = subcmdstab;
 
@@ -1215,8 +1219,7 @@ void transitionAmbianceProcess(int ambianceId)
 			MilightHandler(cmd, transOutStab, zoneLight);
 			progressTime += 50;
 			delay(50);
-			ESP_LOGI(GATTS_TAG, "Light control hue %d lum %d stab %d zone %d",
-					 transOutHue, transOutLum, transOutStab, zoneLight);
+			ESP_LOGI(GATTS_TAG, "Light control hue %d lum %d stab %d zone %d", transOutHue, transOutLum, transOutStab, zoneLight);
 		}
 		subcmdhueold = subcmdhue;
 		subcmdlumold = subcmdlum;
@@ -1224,8 +1227,7 @@ void transitionAmbianceProcess(int ambianceId)
 	}
 }
 
-void gap_event_handler(esp_gap_ble_cb_event_t event,
-					   esp_ble_gap_cb_param_t *param)
+void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *param)
 {
 	switch (event)
 	{

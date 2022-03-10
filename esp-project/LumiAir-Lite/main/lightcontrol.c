@@ -91,9 +91,8 @@ void UartTxTask()
 		{
 			for (uint8_t i = 0; i < REPEAT_COUNTER; i++)
 			{
-				//ESP_LOG_BUFFER_HEXDUMP("TX_TASK_TAG", BufferArray[TxBufferitemPassedCount].bufferitem, 12, ESP_LOG_INFO);
-				uart_write_bytes(UART_NUM_1,
-								 BufferArray[TxBufferitemPassedCount].bufferitem, 12);
+				// ESP_LOG_BUFFER_HEXDUMP("TX_TASK_TAG", BufferArray[TxBufferitemPassedCount].bufferitem, 12, ESP_LOG_INFO);
+				uart_write_bytes(UART_NUM_1, BufferArray[TxBufferitemPassedCount].bufferitem, 12);
 				vTaskDelay(30 / portTICK_PERIOD_MS);
 			}
 			TxBufferitemPassedCount++;
@@ -254,7 +253,7 @@ void Mi_spddw(uint8_t id)
 	add2buffer();
 }
 
-//uint8_t lastCmd = 0, lastSubcmd = 0, lastZonecode = 0;
+// uint8_t lastCmd = 0, lastSubcmd = 0, lastZonecode = 0;
 
 uint8_t LastMode = 0;
 
@@ -491,7 +490,7 @@ void HueToHSL(char hueChar[64], char hueZone[3])
 void lightControl_Init()
 {
 
-	//radio
+	// radio
 
 	const uart_config_t uart_config = {.baud_rate = 38400, .data_bits = UART_DATA_8_BITS, .parity = UART_PARITY_DISABLE, .stop_bits = UART_STOP_BITS_1, .flow_ctrl = UART_HW_FLOWCTRL_DISABLE};
 	uart_param_config(UART_NUM_1, &uart_config);
@@ -500,14 +499,14 @@ void lightControl_Init()
 
 	uart_driver_install(UART_NUM_1, RX_BUF_SIZE * 2, 0, 0, NULL, 0);
 
-	//xTaskCreatePinnedToCore(rx_task, "uart_rx_task", 1024*2, NULL, 1, NULL,1);
+	// xTaskCreatePinnedToCore(rx_task, "uart_rx_task", 1024*2, NULL, 1, NULL,1);
 	xTaskCreatePinnedToCore(UartTxTask, "UartTxTask", 1024 * 2, NULL, 1, NULL,
 							1);
 
-	//0-10
+	// 0-10
 	dac_output_enable(DAC_CHANNEL_1);
 
-	//xTaskCreatePinnedToCore(&SimLightCommand, "SimLightCommand", 2048*2, NULL, 1, NULL,1);
+	// xTaskCreatePinnedToCore(&SimLightCommand, "SimLightCommand", 2048*2, NULL, 1, NULL,1);
 	xTaskCreatePinnedToCore(&AutoLightStateMachine, "AutoLightStateMachine",
 							2048 * 8, NULL, 5, NULL, 1);
 	xTaskCreatePinnedToCore(&Co2_MonitorTask, "Co2_MonitorTask", 1024 * 2, NULL,
