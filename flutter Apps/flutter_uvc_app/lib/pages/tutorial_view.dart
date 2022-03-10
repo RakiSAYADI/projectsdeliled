@@ -9,6 +9,8 @@ import 'package:introduction_screen/introduction_screen.dart';
 import 'package:location_permissions/location_permissions.dart';
 
 class TutorialView extends StatefulWidget {
+  const TutorialView({Key key}) : super(key: key);
+
   @override
   _TutorialViewState createState() => _TutorialViewState();
 }
@@ -26,7 +28,7 @@ class _TutorialViewState extends State<TutorialView> {
 
   void _onIntroEnd(context) {
     // Start scanning
-    flutterBlue.startScan(timeout: Duration(seconds: 5));
+    flutterBlue.startScan(timeout: const Duration(seconds: 5));
     flutterBlue.state.listen((state) {
       if (state == BluetoothState.off) {
         Navigator.pushNamed(context, '/check_permissions');
@@ -37,7 +39,7 @@ class _TutorialViewState extends State<TutorialView> {
         }
         if (Platform.isAndroid) {
           // Start scanning
-          flutterBlue.startScan(timeout: Duration(seconds: 5));
+          flutterBlue.startScan(timeout: const Duration(seconds: 5));
           qrCodeConnectionOrSecurity = false;
           Navigator.pushNamed(context, '/qr_code_scan');
         }
@@ -55,13 +57,13 @@ class _TutorialViewState extends State<TutorialView> {
 
   void scanForDevices() {
     // Start scanning
-    flutterBlue.startScan(timeout: Duration(seconds: 5));
+    flutterBlue.startScan(timeout: const Duration(seconds: 5));
     // Listen to scan results
     flutterBlue.scanResults.listen((results) {
       scanDevices.clear();
       // do something with scan results
       for (ScanResult r in results) {
-        print('${r.device.name} found! mac: ${r.device.id.toString()}');
+        debugPrint('${r.device.name} found! mac: ${r.device.id.toString()}');
         if (scanDevices.isEmpty) {
           scanDevices.add(r.device);
         } else {
@@ -108,7 +110,7 @@ class _TutorialViewState extends State<TutorialView> {
     flutterBlue.state.listen((state) {
       if (state == BluetoothState.off) {
         //Alert user to turn on bluetooth.
-        print("Bluetooth is off");
+        debugPrint("Bluetooth is off");
         myUvcToast.setToastDuration(5);
         myUvcToast.setToastMessage(bluetoothToastLanguageArray[languageArrayIdentifier]);
         myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
@@ -116,7 +118,7 @@ class _TutorialViewState extends State<TutorialView> {
         //if bluetooth is enabled then go ahead.
         //Make sure user's device gps is on.
         flutterBlue = FlutterBlue.instance;
-        print("Bluetooth is on");
+        debugPrint("Bluetooth is on");
         scanForDevices();
       }
     });
@@ -127,7 +129,7 @@ class _TutorialViewState extends State<TutorialView> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     const bodyStyle = TextStyle(fontSize: 19.0);
-    const pageDecoration = const PageDecoration(
+    const pageDecoration = PageDecoration(
       titleTextStyle: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
       bodyTextStyle: bodyStyle,
       descriptionPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
@@ -196,12 +198,12 @@ class _TutorialViewState extends State<TutorialView> {
                 nextFlex: 0,
                 skip: Text(skipTextLanguageArray[languageArrayIdentifier]),
                 next: const Icon(Icons.arrow_forward),
-                done: Text(understoodTextLanguageArray[languageArrayIdentifier], style: TextStyle(fontWeight: FontWeight.w600)),
+                done: Text(understoodTextLanguageArray[languageArrayIdentifier], style: const TextStyle(fontWeight: FontWeight.w600)),
                 dotsDecorator: DotsDecorator(
                   size: Size(screenWidth * 0.01, screenHeight * 0.01),
-                  color: Color(0xFFBDBDBD),
+                  color: const Color(0xFFBDBDBD),
                   activeSize: Size(screenWidth * 0.022, screenHeight * 0.010),
-                  activeShape: RoundedRectangleBorder(
+                  activeShape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(25.0)),
                   ),
                 ),

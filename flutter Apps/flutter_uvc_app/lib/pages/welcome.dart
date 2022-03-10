@@ -16,6 +16,8 @@ import 'package:package_info/package_info.dart';
 import 'package:wakelock/wakelock.dart';
 
 class Welcome extends StatefulWidget {
+  const Welcome({Key key}) : super(key: key);
+
   @override
   _WelcomeState createState() => _WelcomeState();
 }
@@ -43,7 +45,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       // The following statement disables the wakelock.
       Wakelock.toggle(enable: true);
     }
-    print('screen lock is disabled');
+    debugPrint('screen lock is disabled');
   }
 
   void scanForDevices() async {
@@ -54,7 +56,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
       scanDevices.clear();
       // do something with scan results
       for (ScanResult r in results) {
-        print('${r.device.name} found! mac: ${r.device.id.toString()}');
+        debugPrint('${r.device.name} found! mac: ${r.device.id.toString()}');
         if (scanDevices.isEmpty) {
           scanDevices.add(r.device);
         } else {
@@ -151,13 +153,13 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     scanDevices = [];
 
     lifecycleEventHandler = LifecycleEventHandler(resumeCallBack: () async {
-      print('resumed');
+      debugPrint('resumed');
     }, inactiveCallBack: () async {
-      print('inactivated');
+      debugPrint('inactivated');
     }, pauseCallBack: () async {
-      print('paused');
+      debugPrint('paused');
     }, suspendingCallBack: () async {
-      print('suspended');
+      debugPrint('suspended');
     });
 
     WidgetsBinding.instance.addObserver(lifecycleEventHandler);
@@ -168,23 +170,23 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
 
     controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 5),
+      duration: const Duration(seconds: 5),
     );
 
     if (Platform.isAndroid) {
-      print('android');
+      debugPrint('android');
     }
     if (Platform.isIOS) {
-      print('ios');
+      debugPrint('ios');
     }
     if (Platform.isWindows) {
-      print('windows');
+      debugPrint('windows');
     }
     if (Platform.isLinux) {
-      print('linux');
+      debugPrint('linux');
     }
     if (Platform.isMacOS) {
-      print('macos');
+      debugPrint('macos');
     }
 
     myUvcToast = ToastyMessage(toastContext: context);
@@ -197,12 +199,12 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    print('width : $screenWidth and height : $screenHeight');
+    debugPrint('width : $screenWidth and height : $screenHeight');
     return Scaffold(
       backgroundColor: Colors.indigo[700],
       body: SafeArea(
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage('assets/fondapplication.jpg'),
               fit: BoxFit.cover,
@@ -284,7 +286,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
                           String version = snapshot.data.version;
                           return Center(
                             child: Text(
-                              '$version',
+                              version,
                               style: TextStyle(
                                 color: Colors.grey[300],
                                 fontSize: screenWidth * 0.04,
@@ -292,7 +294,7 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
                             ),
                           );
                         } else {
-                          return Center(
+                          return const Center(
                             child: CircularProgressIndicator(),
                           );
                         }
