@@ -5,6 +5,9 @@
  *      Author: raki
  */
 
+#ifndef MAIN_MAIN_H_
+#define MAIN_MAIN_H_
+
 #define UVCROBOTNAME "DEEPLIGHT-X001"
 #define FIRMWAREVERSIONNAME "3.0.0"
 #define PASSWORD "123456789"
@@ -30,6 +33,12 @@ bool stopEventTrigerred;
 bool UVTaskIsOn;
 bool UVTreatementIsOn;
 
+typedef enum {
+	State_OK,
+	State_In_PROGRESS,
+	State_Stopped
+}desinfectionState;
+
 void UVCTreatement();
 
 typedef struct {
@@ -48,8 +57,12 @@ typedef struct {
 	char FLASH_MEMORY[3];
 } UnitConfig_Typedef;
 
+extern desinfectionState UVC_Treatement_State;
 extern UnitConfig_Typedef UnitCfg;
 
+void UVCSetStatus(desinfectionState NewStat);
 void Default_saving();
 int InitLoadCfg();
 int SaveNVS(UnitConfig_Typedef *data);
+
+#endif /* MAIN_MAIN_H_ */

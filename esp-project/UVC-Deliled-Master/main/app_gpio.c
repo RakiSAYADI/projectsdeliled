@@ -1,4 +1,11 @@
+/*
+ * app_gpio.c
+ *
+ *  Created on: 19 août 2020
+ *      Author: raki
+ */
 #include "string.h"
+#include "stdint.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/gpio.h"
@@ -15,11 +22,11 @@
 
 #include "main.h"
 
-int cntrl_pins[4] = {27, 26, 25, 33};
+int cntrl_pins[4] = { 27, 26, 25, 33 };
 
-#define PIR_GPIO 16
+#define PIR_GPIO  16
 
-const char *GPIO_TAG = "app_gpio";
+const char* GPIO_TAG = "app_gpio";
 
 #define RelayStateOFF 0
 #define RelayStateON 1
@@ -36,266 +43,213 @@ uint16_t phaseTimeStep = 0;
 int32_t phaseTime = 0;
 int32_t phaseTimeExecuted = 0;
 
-void TreatementTime()
-{
-	if (UnitCfg.DisinfictionTime == 0)
-	{
+desinfectionState UVC_Treatement_State = State_OK;
+
+void TreatementTime() {
+	if (UnitCfg.DisinfictionTime == 0) {
 		phaseTime = 30;
 	}
-	if (UnitCfg.DisinfictionTime == 1)
-	{
+	if (UnitCfg.DisinfictionTime == 1) {
 		phaseTime = 60;
 	}
-	if (UnitCfg.DisinfictionTime == 2)
-	{
+	if (UnitCfg.DisinfictionTime == 2) {
 		phaseTime = 120;
 	}
-	if (UnitCfg.DisinfictionTime == 3)
-	{
+	if (UnitCfg.DisinfictionTime == 3) {
 		phaseTime = 300;
 	}
-	if (UnitCfg.DisinfictionTime == 4)
-	{
+	if (UnitCfg.DisinfictionTime == 4) {
 		phaseTime = 600;
 	}
-	if (UnitCfg.DisinfictionTime == 5)
-	{
+	if (UnitCfg.DisinfictionTime == 5) {
 		phaseTime = 900;
 	}
-	if (UnitCfg.DisinfictionTime == 6)
-	{
+	if (UnitCfg.DisinfictionTime == 6) {
 		phaseTime = 1200;
 	}
-	if (UnitCfg.DisinfictionTime == 7)
-	{
+	if (UnitCfg.DisinfictionTime == 7) {
 		phaseTime = 1500;
 	}
-	if (UnitCfg.DisinfictionTime == 8)
-	{
+	if (UnitCfg.DisinfictionTime == 8) {
 		phaseTime = 1800;
 	}
-	if (UnitCfg.DisinfictionTime == 9)
-	{
+	if (UnitCfg.DisinfictionTime == 9) {
 		phaseTime = 2100;
 	}
-	if (UnitCfg.DisinfictionTime == 10)
-	{
+	if (UnitCfg.DisinfictionTime == 10) {
 		phaseTime = 2400;
 	}
-	if (UnitCfg.DisinfictionTime == 11)
-	{
+	if (UnitCfg.DisinfictionTime == 11) {
 		phaseTime = 2700;
 	}
-	if (UnitCfg.DisinfictionTime == 12)
-	{
+	if (UnitCfg.DisinfictionTime == 12) {
 		phaseTime = 3000;
 	}
-	if (UnitCfg.DisinfictionTime == 13)
-	{
+	if (UnitCfg.DisinfictionTime == 13) {
 		phaseTime = 3300;
 	}
-	if (UnitCfg.DisinfictionTime == 14)
-	{
+	if (UnitCfg.DisinfictionTime == 14) {
 		phaseTime = 3600;
 	}
-	if (UnitCfg.DisinfictionTime == 15)
-	{
+	if (UnitCfg.DisinfictionTime == 15) {
 		phaseTime = 3900;
 	}
-	if (UnitCfg.DisinfictionTime == 16)
-	{
+	if (UnitCfg.DisinfictionTime == 16) {
 		phaseTime = 4200;
 	}
-	if (UnitCfg.DisinfictionTime == 17)
-	{
+	if (UnitCfg.DisinfictionTime == 17) {
 		phaseTime = 4500;
 	}
-	if (UnitCfg.DisinfictionTime == 18)
-	{
+	if (UnitCfg.DisinfictionTime == 18) {
 		phaseTime = 4800;
 	}
-	if (UnitCfg.DisinfictionTime == 19)
-	{
+	if (UnitCfg.DisinfictionTime == 19) {
 		phaseTime = 5100;
 	}
-	if (UnitCfg.DisinfictionTime == 20)
-	{
+	if (UnitCfg.DisinfictionTime == 20) {
 		phaseTime = 5400;
 	}
-	if (UnitCfg.DisinfictionTime == 21)
-	{
+	if (UnitCfg.DisinfictionTime == 21) {
 		phaseTime = 5700;
 	}
-	if (UnitCfg.DisinfictionTime == 22)
-	{
+	if (UnitCfg.DisinfictionTime == 22) {
 		phaseTime = 6000;
 	}
-	if (UnitCfg.DisinfictionTime == 23)
-	{
+	if (UnitCfg.DisinfictionTime == 23) {
 		phaseTime = 6300;
 	}
-	if (UnitCfg.DisinfictionTime == 24)
-	{
+	if (UnitCfg.DisinfictionTime == 24) {
 		phaseTime = 6600;
 	}
-	if (UnitCfg.DisinfictionTime == 25)
-	{
+	if (UnitCfg.DisinfictionTime == 25) {
 		phaseTime = 6900;
 	}
-	if (UnitCfg.DisinfictionTime == 26)
-	{
+	if (UnitCfg.DisinfictionTime == 26) {
 		phaseTime = 7200;
 	}
 }
 
-void AlertTime()
-{
-	if (UnitCfg.ActivationTime == 0)
-	{
+void AlertTime() {
+	if (UnitCfg.ActivationTime == 0) {
 		phaseTime = 10;
 	}
-	if (UnitCfg.ActivationTime == 1)
-	{
+	if (UnitCfg.ActivationTime == 1) {
 		phaseTime = 20;
 	}
-	if (UnitCfg.ActivationTime == 2)
-	{
+	if (UnitCfg.ActivationTime == 2) {
 		phaseTime = 30;
 	}
-	if (UnitCfg.ActivationTime == 3)
-	{
+	if (UnitCfg.ActivationTime == 3) {
 		phaseTime = 40;
 	}
-	if (UnitCfg.ActivationTime == 4)
-	{
+	if (UnitCfg.ActivationTime == 4) {
 		phaseTime = 50;
 	}
-	if (UnitCfg.ActivationTime == 5)
-	{
+	if (UnitCfg.ActivationTime == 5) {
 		phaseTime = 60;
 	}
-	if (UnitCfg.ActivationTime == 6)
-	{
+	if (UnitCfg.ActivationTime == 6) {
 		phaseTime = 70;
 	}
-	if (UnitCfg.ActivationTime == 7)
-	{
+	if (UnitCfg.ActivationTime == 7) {
 		phaseTime = 80;
 	}
-	if (UnitCfg.ActivationTime == 8)
-	{
+	if (UnitCfg.ActivationTime == 8) {
 		phaseTime = 90;
 	}
-	if (UnitCfg.ActivationTime == 9)
-	{
+	if (UnitCfg.ActivationTime == 9) {
 		phaseTime = 100;
 	}
-	if (UnitCfg.ActivationTime == 10)
-	{
+	if (UnitCfg.ActivationTime == 10) {
 		phaseTime = 110;
 	}
-	if (UnitCfg.ActivationTime == 11)
-	{
+	if (UnitCfg.ActivationTime == 11) {
 		phaseTime = 120;
 	}
 }
 
-int set_relay_state(int relay, uint32_t level)
-{
-	if ((relay >= 0) && (relay < 4))
-	{
+int set_relay_state(int relay, uint32_t level) {
+	if ((relay >= 0) && (relay < 4)) {
 		gpio_set_level(cntrl_pins[relay], level);
 		cntrl_states[relay] = level;
-	}
-	else
-	{
+	} else {
+
 		return 0;
 	}
 	return 1;
 }
 
-void generate_json()
-{
-	//	int i;
-	//	char buf[4];
-	//	cJSON *root, *info, *relays;
-	//	root = cJSON_CreateObject();
-	//	struct timeval now;
-	//	gettimeofday(&now, NULL);
-	//
-	//	cJSON_AddItemToObject(root, "info", info = cJSON_CreateObject());
-	//	cJSON_AddItemToObject(root, "relays", relays = cJSON_CreateObject());
-	//
-	//	cJSON_AddStringToObject(info, "ssid", "dummy");
-	//	cJSON_AddNumberToObject(info, "heap", esp_get_free_heap_size());
-	//	cJSON_AddStringToObject(info, "sdk", esp_get_idf_version());
-	//	cJSON_AddNumberToObject(info, "time", (now.tv_sec * 1000000 + now.tv_usec));
-	//
-	//	for (i = 0; i < 4; i++) {
-	//		sprintf(buf, "RELAY%d", i); // Relay name.
-	//		cJSON_AddNumberToObject(relays, buf, cntrl_states[i]);
-	//	}
-	//	gettimeofday(&now, NULL);
-	//	cJSON_ReplaceItemInObject(info, "heap",
-	//			cJSON_CreateNumber(esp_get_free_heap_size()));
-	//	cJSON_ReplaceItemInObject(info, "time",
-	//			cJSON_CreateNumber((now.tv_sec * 1000000 + now.tv_usec)));
-	//	cJSON_ReplaceItemInObject(info, "sdk",
-	//			cJSON_CreateString(esp_get_idf_version()));
-	//
-	//	for (i = 0; i < 4; i++) {
-	//		sprintf(buf, "RELAY%d", i); // Relay name.
-	//		cJSON_ReplaceItemInObject(relays, buf,
-	//				cJSON_CreateNumber(cntrl_states[i]));
-	//	}
-	//
-	//	json_unformatted = cJSON_PrintUnformatted(root);
-	//
-	//	cJSON_Delete(root);
+void generate_json() {
+//	int i;
+//	char buf[4];
+//	cJSON *root, *info, *relays;
+//	root = cJSON_CreateObject();
+//	struct timeval now;
+//	gettimeofday(&now, NULL);
+//
+//	cJSON_AddItemToObject(root, "info", info = cJSON_CreateObject());
+//	cJSON_AddItemToObject(root, "relays", relays = cJSON_CreateObject());
+//
+//	cJSON_AddStringToObject(info, "ssid", "dummy");
+//	cJSON_AddNumberToObject(info, "heap", esp_get_free_heap_size());
+//	cJSON_AddStringToObject(info, "sdk", esp_get_idf_version());
+//	cJSON_AddNumberToObject(info, "time", (now.tv_sec * 1000000 + now.tv_usec));
+//
+//	for (i = 0; i < 4; i++) {
+//		sprintf(buf, "RELAY%d", i); // Relay name.
+//		cJSON_AddNumberToObject(relays, buf, cntrl_states[i]);
+//	}
+//	gettimeofday(&now, NULL);
+//	cJSON_ReplaceItemInObject(info, "heap",
+//			cJSON_CreateNumber(esp_get_free_heap_size()));
+//	cJSON_ReplaceItemInObject(info, "time",
+//			cJSON_CreateNumber((now.tv_sec * 1000000 + now.tv_usec)));
+//	cJSON_ReplaceItemInObject(info, "sdk",
+//			cJSON_CreateString(esp_get_idf_version()));
+//
+//	for (i = 0; i < 4; i++) {
+//		sprintf(buf, "RELAY%d", i); // Relay name.
+//		cJSON_ReplaceItemInObject(relays, buf,
+//				cJSON_CreateNumber(cntrl_states[i]));
+//	}
+//
+//	json_unformatted = cJSON_PrintUnformatted(root);
+//
+//	cJSON_Delete(root);
+
 }
 
-void redRelayAlert()
-{
+void redRelayAlert() {
 	ESP_LOGI(GPIO_TAG, "Red light on !");
-	while (1)
-	{
-		if (redLightEnable)
-		{
+	while (1) {
+		if (redLightEnable) {
 			set_relay_state(RedLightRelay, RelayStateON);
 			delay(500);
 			set_relay_state(RedLightRelay, RelayStateOFF);
 			delay(500);
-		}
-		else
-		{
+		} else {
 			delay(200);
 		}
 	}
 	vTaskDelete(NULL);
 }
 
-void buzzerRelayAlert()
-{
+void buzzerRelayAlert() {
 	ESP_LOGI(GPIO_TAG, "Buzzzer on !");
-	while (1)
-	{
-		if (buzzerEnable)
-		{
+	while (1) {
+		if (buzzerEnable) {
 			set_relay_state(BuzzerRelay, RelayStateON);
 			delay(500);
 			set_relay_state(BuzzerRelay, RelayStateOFF);
 			delay(2000);
-		}
-		else
-		{
+		} else {
 
 			delay(200);
 		}
 	}
 	vTaskDelete(NULL);
 }
-void StopUVTreatement()
-{
+void StopUVTreatement() {
 	ESP_LOGI(GPIO_TAG, "Detection ! START ALARM");
 	phaseTimeStep = 3500;
 	phaseTime = 5;
@@ -303,8 +257,7 @@ void StopUVTreatement()
 	set_relay_state(UVRelay, RelayStateOFF);
 	set_relay_state(GreenLightRelay, RelayStateOFF);
 	UVTreatementIsOn = false;
-	while (phaseTime > 0)
-	{
+	while (phaseTime > 0) {
 		redLightEnable = true;
 		buzzerEnable = true;
 		phaseTime -= phaseTimeStep;
@@ -313,45 +266,41 @@ void StopUVTreatement()
 	detectionTriggered = false;
 	redLightEnable = false;
 	buzzerEnable = false;
-	stopIsPressed = false;
-	delay(2000);
+	UVCSetStatus(State_Stopped);
 	UnitCfg.UVCTimeExecution += phaseTimeExecuted / 1000;
-	ESP_LOGI(GPIO_TAG, "UVC Time executed: %d", UnitCfg.UVCTimeExecution);
+	ESP_LOGI(GPIO_TAG, "UVC Time executed: %d",UnitCfg.UVCTimeExecution);
 	SaveNVS(&UnitCfg);
-	set_relay_state(RedLightRelay, RelayStateON);
 	UVTaskIsOn = false;
+	delay(2000);
+	set_relay_state(RedLightRelay, RelayStateON);
 }
 
-void UVCTreatement()
-{
+void UVCTreatement() {
 	ESP_LOGI(GPIO_TAG, "SETTING the safety treatement !");
 	set_relay_state(GreenLightRelay, RelayStateOFF);
 	UnitCfg.NumberOfDisinfection++;
 	stopIsPressed = false;
 	detectionTriggered = false;
 	AlertTime();
-	phaseTimeStep = 3500;
-	phaseTime *= 1000;
-	while (phaseTime > 0)
-	{
+	phaseTimeStep = 3500;	phaseTime *= 1000;
+	UVCSetStatus(State_In_PROGRESS);
+	while (phaseTime > 0) {
 		ESP_LOGI(GPIO_TAG, "%d !", phaseTime);
 		redLightEnable = true;
 		buzzerEnable = true;
 		phaseTime -= phaseTimeStep;
 		delay(phaseTimeStep);
-		if (stopIsPressed)
-		{
+		if (stopIsPressed) {
 			break;
 		}
 	}
-	if (stopIsPressed)
-	{
+	if (stopIsPressed) {
 		ESP_LOGI(GPIO_TAG, "STOP is Pressed !");
-		stopIsPressed = false;
 		redLightEnable = false;
 		buzzerEnable = false;
 		set_relay_state(UVRelay, RelayStateOFF);
-		delay(100);
+		UVCSetStatus(State_Stopped);
+		delay(2000);
 		set_relay_state(RedLightRelay, RelayStateON);
 		UVTaskIsOn = false;
 		vTaskDelete(NULL);
@@ -359,13 +308,10 @@ void UVCTreatement()
 	UVTreatementIsOn = true;
 	ESP_LOGI(GPIO_TAG, "CHECKING the PIR Sensor !");
 	delay(100);
-	if (detectionTriggered)
-	{
+	if (detectionTriggered) {
 		StopUVTreatement();
 		vTaskDelete(NULL);
-	}
-	else
-	{
+	} else {
 		TreatementTime();
 		redLightEnable = false;
 		buzzerEnable = false;
@@ -373,65 +319,59 @@ void UVCTreatement()
 		phaseTime *= 1000;
 		phaseTimeExecuted = 0;
 		ESP_LOGI(GPIO_TAG, "SETTING the UVC treatement !");
-		while (phaseTime > 0)
-		{
-			if (detectionTriggered)
-			{
+		set_relay_state(GreenLightRelay, RelayStateON);
+		set_relay_state(UVRelay, RelayStateON);
+		while (phaseTime > 0) {
+			if (detectionTriggered) {
 				StopUVTreatement();
 				break;
 			}
-			else
-			{
-				set_relay_state(GreenLightRelay, RelayStateON);
-				set_relay_state(UVRelay, RelayStateON);
-			}
 			phaseTime -= phaseTimeStep;
 			phaseTimeExecuted += phaseTimeStep;
+			UVCSetStatus(State_In_PROGRESS);
 			delay(phaseTimeStep);
-			if (stopIsPressed)
-			{
+			if (stopIsPressed) {
 				ESP_LOGI(GPIO_TAG, "STOP is Pressed !");
-				stopIsPressed = false;
 				set_relay_state(UVRelay, RelayStateOFF);
 				set_relay_state(GreenLightRelay, RelayStateOFF);
-				delay(100);
+				delay(2000);
 				set_relay_state(RedLightRelay, RelayStateON);
 				UVTaskIsOn = false;
 				break;
 			}
 		}
 	}
+	ESP_LOGI(GPIO_TAG, "STOP : %s and detection : %s",stopIsPressed ? "true": "false",detectionTriggered ? "true": "false");
+	ESP_LOGI(GPIO_TAG, "state uvc : %d",UVC_Treatement_State);
+	if(stopIsPressed||detectionTriggered){
+		UVCSetStatus(State_Stopped);
+	}else{
+		UVCSetStatus(State_OK);
+	}
 	set_relay_state(UVRelay, RelayStateOFF);
 	UVTreatementIsOn = false;
 	UnitCfg.UVCTimeExecution += phaseTimeExecuted / 1000;
-	ESP_LOGI(GPIO_TAG, "UVC Time executed: %d", UnitCfg.UVCTimeExecution);
+	ESP_LOGI(GPIO_TAG, "UVC Time executed: %d",UnitCfg.UVCTimeExecution);
 	SaveNVS(&UnitCfg);
 	UVTaskIsOn = false;
 	vTaskDelete(NULL);
 }
 
-uint8_t strContains(char *string, char *toFind)
-{
+uint8_t strContains(char* string, char* toFind) {
 	uint8_t slen = strlen(string);
 	uint8_t tFlen = strlen(toFind);
 	uint8_t found = 0;
 
-	if (slen >= tFlen)
-	{
-		for (uint8_t s = 0, t = 0; s < slen; s++)
-		{
-			do
-			{
+	if (slen >= tFlen) {
+		for (uint8_t s = 0, t = 0; s < slen; s++) {
+			do {
 
-				if (string[s] == toFind[t])
-				{
+				if (string[s] == toFind[t]) {
 					if (++found == tFlen)
 						return 1;
 					s++;
 					t++;
-				}
-				else
-				{
+				} else {
 					s -= found;
 					found = 0;
 					t = 0;
@@ -440,13 +380,11 @@ uint8_t strContains(char *string, char *toFind)
 			} while (found);
 		}
 		return 0;
-	}
-	else
+	} else
 		return -1;
 }
 
-void LedStatusTask()
-{
+void LedStatusTask() {
 
 	UVTaskIsOn = false;
 	stopEventTrigerred = false;
@@ -458,8 +396,7 @@ void LedStatusTask()
 	// initialize the gpio
 	int i;
 
-	for (i = 0; i < 4; i++)
-	{
+	for (i = 0; i < 4; i++) {
 		gpio_pad_select_gpio(cntrl_pins[i]);
 		gpio_set_direction(cntrl_pins[i], GPIO_MODE_OUTPUT);
 		// setting all relay OFF
@@ -472,24 +409,25 @@ void LedStatusTask()
 
 	set_relay_state(GreenLightRelay, RelayStateON);
 
-	xTaskCreate(&redRelayAlert, "redRelayAlert", 2048, NULL, 5,NULL);
-	xTaskCreate(&buzzerRelayAlert, "buzzerRelayAlert", 2048, NULL, 5,NULL);
+	xTaskCreate(&redRelayAlert, "redRelayAlert", 2048, NULL, 5,
+	NULL);
+	xTaskCreate(&buzzerRelayAlert, "buzzerRelayAlert", 2048, NULL, 5,
+	NULL);
 
-	while (1)
-	{
+	while (1) {
 		//ESP_LOGI(GPIO_TAG, "the detection state is : %d",gpio_get_level(GPIO_NUM_16));
-		if ((gpio_get_level(GPIO_NUM_16) == 1) && (UVTreatementIsOn))
-		{
+		if ((gpio_get_level(GPIO_NUM_16) == 1) && (UVTreatementIsOn)) {
 			detectionTriggered = true;
+			UVCSetStatus(State_Stopped);
 			ESP_LOGI(GPIO_TAG, "STOP UVC TREATEMENT, WE HAVE DETECTION !");
 		}
 		delay(50);
 	}
 }
 
-void LedStatInit()
-{
+void LedStatInit() {
 	//Led and relay task
 	xTaskCreate(&LedStatusTask, "LedStatusTask",
-				configMINIMAL_STACK_SIZE * 3, NULL, 1, NULL);
+	configMINIMAL_STACK_SIZE * 3, NULL, 1, NULL);
 }
+

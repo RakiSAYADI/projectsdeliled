@@ -30,7 +30,7 @@
 #define GATTS_CHAR_NUM_READ 1
 #define GATTS_NUM_HANDLE_READ 1 + (2 * GATTS_CHAR_NUM_READ)
 
-///Declare the static function
+/// Declare the static function
 
 static void gatts_profile_read_event_handler(esp_gatts_cb_event_t event,
 											 esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
@@ -41,10 +41,10 @@ static void char_total_read_handler(esp_gatts_cb_event_t event,
 static void char_total_write_handler(esp_gatts_cb_event_t event,
 									 esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
 
-//Declare uuid of READ and WRITE Service
+// Declare uuid of READ and WRITE Service
 
 #define GATTS_SERVICE_UUID_TEST_READ 0x00FF
-#define GATTS_UUID_TEST_READ_Total 0xFF01 //capteurs
+#define GATTS_UUID_TEST_READ_Total 0xFF01 // capteurs
 
 #define TEST_DEVICE_NAME "MAESTRO"
 #define TEST_MANUFACTURER_DATA_LEN 17
@@ -53,11 +53,11 @@ static void char_total_write_handler(esp_gatts_cb_event_t event,
 #define CHAR_ROOM_MAX 0x02
 #define PREPARE_BUF_MAX_SIZE 1024
 
-//characteristics values of READ profile
+// characteristics values of READ profile
 
-uint8_t total[GATTS_CHAR_VAL_LEN_MAX];
+uint8_t total[GATTS_CHAR_VAL_LEN_MAX]; // capteurs	  = {0x4e,0x4f,0x54,0x20,0x43,0x4f,0x4e,0x4e,0x45,0x43,0x54,0x45,0x44,0x4e,0x4f,0x54,0x20,0x21,0x21,0x21,0x21,0x21};
 
-//property of each service
+// property of each service
 
 esp_gatt_char_prop_t read_property = 0;
 esp_gatt_char_prop_t write_property = 0;
@@ -79,7 +79,7 @@ static uint32_t ble_add_char_pos;
 
 static uint8_t adv_service_uuid128[32] = {
 	/* LSB <--------------------------------------------------------------------------------> MSB */
-	//first uuid, 16bit, [12],[13] is the value
+	// first uuid, 16bit, [12],[13] is the value
 	0xfb,
 	0x34,
 	0x9b,
@@ -96,7 +96,7 @@ static uint8_t adv_service_uuid128[32] = {
 	0x00,
 	0x00,
 	0x00,
-	//second uuid, 32bit, [12], [13], [14], [15] is the value
+	// second uuid, 32bit, [12], [13], [14], [15] is the value
 	0xfb,
 	0x34,
 	0x9b,
@@ -116,8 +116,8 @@ static uint8_t adv_service_uuid128[32] = {
 };
 
 // The length of adv data must be less than 31 bytes
-//static uint8_t test_manufacturer[TEST_MANUFACTURER_DATA_LEN] =  {0x12, 0x23, 0x45, 0x56};
-//adv data
+// static uint8_t test_manufacturer[TEST_MANUFACTURER_DATA_LEN] =  {0x12, 0x23, 0x45, 0x56};
+// adv data
 static esp_ble_adv_data_t adv_data = {
 	.set_scan_rsp = false,
 	.include_name =
@@ -126,7 +126,7 @@ static esp_ble_adv_data_t adv_data = {
 	.min_interval = 0x20,
 	.max_interval = 0x40,
 	.appearance = 0x00,
-	.manufacturer_len = 0,		 //TEST_MANUFACTURER_DATA_LEN,
+	.manufacturer_len = 0,		 // TEST_MANUFACTURER_DATA_LEN,
 	.p_manufacturer_data = NULL, //&test_manufacturer[0],
 	.service_data_len = 0,
 	.p_service_data = NULL,
@@ -143,7 +143,7 @@ static esp_ble_adv_data_t scan_rsp_data = {
 	.min_interval = 0x20,
 	.max_interval = 0x40,
 	.appearance = 0x00,
-	.manufacturer_len = 0,		 //TEST_MANUFACTURER_DATA_LEN,
+	.manufacturer_len = 0,		 // TEST_MANUFACTURER_DATA_LEN,
 	.p_manufacturer_data = NULL, //&test_manufacturer[0],
 	.service_data_len = 0,
 	.p_service_data = NULL,
@@ -201,7 +201,7 @@ struct gatts_char_inst
 	esp_gatts_cb_t char_write_callback;
 };
 
-static struct gatts_char_inst LIST_CHAR_READ[GATTS_CHAR_NUM_READ] = { //SERVICE READ
+static struct gatts_char_inst LIST_CHAR_READ[GATTS_CHAR_NUM_READ] = { // SERVICE READ
 	{
 		.char_uuid.len = ESP_UUID_LEN_16,
 		.char_uuid.uuid.uuid16 =
@@ -225,7 +225,7 @@ int jsonparse(char *src, char *dst, char *label, unsigned short arrayindex)
 
 	if (sp == NULL)
 	{
-		//ESP_LOGE(GATTS_TAG, "label %s not found",label);
+		// ESP_LOGE(GATTS_TAG, "label %s not found",label);
 		return (-1);
 	}
 
@@ -436,21 +436,20 @@ cJSON *messageJson, *jsonData;
 
 uint8_t dataCharRead[GATTS_CHAR_VAL_LEN_MAX];
 
-void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
-							 esp_ble_gatts_cb_param_t *param)
+void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param)
 {
 	ESP_LOGD(GATTS_TAG, "char_total_read_handler %d\n", param->read.handle);
 
-	ESP_LOGI(GATTS_TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
+	ESP_LOGI(GATTS_TAG, "[APP] Free memory: %d bytes",
+			 esp_get_free_heap_size());
 
 	sprintf((char *)total,
-			"{\"Company\":\"%s\",\"UserName\":\"%s\",\"Detection\":%d,\"RoomName\":\"%s\",\"security\":%d,\"Version\":%d,"
-			"\"FirmwareVersion\":\"%s\",\"TimeData\":[%d,%d],\"UVCTimeData\":[%d,%d,%d],\"uvcSt\":%d}",
+			"{\"Company\":\"%s\",\"UserName\":\"%s\",\"Detection\":%d,\"RoomName\":\"%s\",\"security\":%d,\"Version\":%d,\"FirmwareVersion\":\"%s\",\"TimeData\":[%d,%d],\"UVCTimeData\":[%d,%d,%d]}",
 			UnitCfg.Company, UnitCfg.OperatorName, detectionTriggered,
-			UnitCfg.RoomName, UnitCfg.SecurityCodeDismiss, UnitCfg.Version, UnitCfg.FirmwareVersion,
-			UnitCfg.DisinfictionTime, UnitCfg.ActivationTime,
-			UnitCfg.UVCLifeTime, UnitCfg.UVCTimeExecution,
-			UnitCfg.NumberOfDisinfection, UVC_Treatement_State);
+			UnitCfg.RoomName, UnitCfg.SecurityCodeDismiss, UnitCfg.Version,
+			UnitCfg.FirmwareVersion, UnitCfg.DisinfictionTime,
+			UnitCfg.ActivationTime, UnitCfg.UVCLifeTime,
+			UnitCfg.UVCTimeExecution, UnitCfg.NumberOfDisinfection);
 
 	TOTAL.attr_len = strlen((char *)total);
 
@@ -459,7 +458,8 @@ void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 	rsp.attr_value.handle = param->read.handle;
 	if (LIST_CHAR_READ[0].char_val != NULL)
 	{
-		ESP_LOGD(GATTS_TAG, "char_total_read_handler char_val %d\n", LIST_CHAR_READ[0].char_val->attr_len);
+		ESP_LOGD(GATTS_TAG, "char_total_read_handler char_val %d\n",
+				 LIST_CHAR_READ[0].char_val->attr_len);
 		rsp.attr_value.len = LIST_CHAR_READ[0].char_val->attr_len;
 		for (uint32_t pos = 0;
 			 pos < LIST_CHAR_READ[0].char_val->attr_len && pos < LIST_CHAR_READ[0].char_val->attr_max_len;
@@ -478,8 +478,7 @@ void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 								param->read.trans_id, ESP_GATT_OK, &rsp);
 }
 
-void char_total_write_handler(esp_gatts_cb_event_t event,
-							  esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param)
+void char_total_write_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param)
 {
 	ESP_LOGD(GATTS_TAG, "char_light_write_handler %d\n", param->write.handle);
 	if (LIST_CHAR_READ[0].char_val != NULL)
@@ -505,9 +504,8 @@ void char_total_write_handler(esp_gatts_cb_event_t event,
 		}
 	}
 	ESP_LOGD(GATTS_TAG, "char_light_write_handler esp_gatt_rsp_t\n");
-	//printf("%s\n",light_json);
-	esp_ble_gatts_send_response(gatts_if, param->write.conn_id,
-								param->write.trans_id, ESP_GATT_OK, NULL);
+	// printf("%s\n",light_json);
+	esp_ble_gatts_send_response(gatts_if, param->write.conn_id, param->write.trans_id, ESP_GATT_OK, NULL);
 
 	printf("%s\n", config_json);
 
@@ -515,9 +513,7 @@ void char_total_write_handler(esp_gatts_cb_event_t event,
 	{
 		ESP_LOGI(GATTS_TAG, "UVCTreatement is ON ");
 		UVTaskIsOn = true;
-		xTaskCreate(&UVCTreatement, "UVCTreatement",
-					configMINIMAL_STACK_SIZE * 3, NULL, 5,
-					NULL);
+		xTaskCreate(&UVCTreatement, "UVCTreatement", configMINIMAL_STACK_SIZE * 3, NULL, 5, NULL);
 	}
 	else if (strContains(config_json, "STOP : ON") == 1)
 	{
@@ -557,7 +553,8 @@ void char_total_write_handler(esp_gatts_cb_event_t event,
 	{
 		UnitCfg.UVCTimeExecution = 0;
 		UnitCfg.NumberOfDisinfection = 0;
-		ESP_LOGI(GATTS_TAG, "Setting uvc life time to %d  ", UnitCfg.UVCTimeExecution);
+		ESP_LOGI(GATTS_TAG, "Setting uvc life time to %d  ",
+				 UnitCfg.UVCTimeExecution);
 		savenvsFlag = true;
 	}
 	else if (jsonparse(config_json, tmp, "SetUVCLIFESecurity", 0) == 0)
@@ -583,7 +580,8 @@ char *light_json;
 
 char *config_json;
 
-void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *param)
+void gap_event_handler(esp_gap_ble_cb_event_t event,
+					   esp_ble_gap_cb_param_t *param)
 {
 	switch (event)
 	{
@@ -604,7 +602,7 @@ void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *par
 		break;
 
 	case ESP_GAP_BLE_ADV_START_COMPLETE_EVT:
-		//advertising start complete event to indicate advertising start successfully or failed
+		// advertising start complete event to indicate advertising start successfully or failed
 		if (param->adv_start_cmpl.status != ESP_BT_STATUS_SUCCESS)
 		{
 			ESP_LOGE(GATTS_TAG, "Advertising start failed\n");
@@ -635,13 +633,12 @@ void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *par
 	}
 }
 
-void gatts_profile_read_event_handler(esp_gatts_cb_event_t event,  esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param)
+void gatts_profile_read_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param)
 {
 	switch (event)
 	{
 	case ESP_GATTS_REG_EVT:
-		ESP_LOGD(GATTS_TAG, "REGISTER_APP_EVT_READ, status %d, app_id %d\n",
-				 param->reg.status, param->reg.app_id);
+		ESP_LOGD(GATTS_TAG, "REGISTER_APP_EVT_READ, status %d, app_id %d\n", param->reg.status, param->reg.app_id);
 		gl_profile_tab[SERVICE_READ].service_id.is_primary = true;
 		gl_profile_tab[SERVICE_READ].service_id.id.inst_id = 0x00;
 		gl_profile_tab[SERVICE_READ].service_id.id.uuid.len = ESP_UUID_LEN_16;
@@ -656,14 +653,14 @@ void gatts_profile_read_event_handler(esp_gatts_cb_event_t event,  esp_gatt_if_t
 					 set_dev_name_ret);
 		}
 
-		//config adv data
+		// config adv data
 		esp_err_t ret = esp_ble_gap_config_adv_data(&adv_data);
 		if (ret)
 		{
 			ESP_LOGE(GATTS_TAG, "config adv data failed, error code = %x", ret);
 		}
 		adv_config_done |= adv_config_flag;
-		//config scan response data
+		// config scan response data
 		ret = esp_ble_gap_config_adv_data(&scan_rsp_data);
 		if (ret)
 		{
@@ -761,7 +758,7 @@ void gatts_profile_read_event_handler(esp_gatts_cb_event_t event,  esp_gatt_if_t
 				 param->connect.remote_bda[3], param->connect.remote_bda[4],
 				 param->connect.remote_bda[5]);
 		gl_profile_tab[SERVICE_READ].conn_id = param->connect.conn_id;
-		//start sent the update connection parameters to the peer device.
+		// start sent the update connection parameters to the peer device.
 		esp_ble_gap_update_conn_params(&conn_params);
 		break;
 	}
@@ -838,8 +835,6 @@ void bt_main()
 		ESP_LOGE(GATTS_TAG, "%s initialize controller failed\n", __func__);
 		return;
 	}
-
-	ESP_LOGI(GATTS_TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
 
 	ret = esp_bt_controller_enable(ESP_BT_MODE_BLE);
 
