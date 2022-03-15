@@ -444,12 +444,13 @@ void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 			 esp_get_free_heap_size());
 
 	sprintf((char *)total,
-			"{\"Company\":\"%s\",\"UserName\":\"%s\",\"Detection\":%d,\"RoomName\":\"%s\",\"security\":%d,\"Version\":%d,\"FirmwareVersion\":\"%s\",\"TimeData\":[%d,%d],\"UVCTimeData\":[%d,%d,%d]}",
+			"{\"Company\":\"%s\",\"UserName\":\"%s\",\"Detection\":%d,\"RoomName\":\"%s\",\"security\":%d,\"Version\":%d,"
+			"\"FirmwareVersion\":\"%s\",\"TimeData\":[%d,%d],\"UVCTimeData\":[%d,%d,%d],\"uvcSt\":%d}",
 			UnitCfg.Company, UnitCfg.OperatorName, detectionTriggered,
-			UnitCfg.RoomName, UnitCfg.SecurityCodeDismiss, UnitCfg.Version,
-			UnitCfg.FirmwareVersion, UnitCfg.DisinfictionTime,
-			UnitCfg.ActivationTime, UnitCfg.UVCLifeTime,
-			UnitCfg.UVCTimeExecution, UnitCfg.NumberOfDisinfection);
+			UnitCfg.RoomName, UnitCfg.SecurityCodeDismiss, UnitCfg.Version, UnitCfg.FirmwareVersion,
+			UnitCfg.DisinfictionTime, UnitCfg.ActivationTime,
+			UnitCfg.UVCLifeTime, UnitCfg.UVCTimeExecution,
+			UnitCfg.NumberOfDisinfection, UVC_Treatement_State);
 
 	TOTAL.attr_len = strlen((char *)total);
 
