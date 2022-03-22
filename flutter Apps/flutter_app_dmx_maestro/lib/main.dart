@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_dmx_maestro/pages/alarm_settings.dart';
+import 'package:flutter_app_dmx_maestro/pages/ambiance_settings.dart';
 import 'package:flutter_app_dmx_maestro/pages/check_permissions.dart';
 import 'package:flutter_app_dmx_maestro/pages/home.dart';
 import 'package:flutter_app_dmx_maestro/pages/scan_ble_list.dart';
@@ -83,6 +84,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => Home(),
         '/settings': (context) => Settings(),
         '/alarm_settings': (context) => AlarmClock(),
+        '/ambiances_settings': (context) => Ambiances(),
       },
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,

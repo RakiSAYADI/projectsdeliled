@@ -130,11 +130,15 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: backGroundColor[backGroundColorSelect],
       appBar: AppBar(
         title: Text('Liste des convertisseurs DMX :', style: TextStyle(fontSize: 18), key: Key('title')),
         centerTitle: true,
-        backgroundColor: Colors.indigo[700],
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: modeColor[backGroundColorSelect]),
+          ),
+        ),
       ),
       floatingActionButton: StreamBuilder<bool>(
         stream: flutterBlue.isScanning,
@@ -149,6 +153,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
           } else {
             return FloatingActionButton(
                 child: Icon(Icons.search),
+                backgroundColor: Color(0xFF494961),
                 onPressed: () {
                   flutterBlue = FlutterBlue.instance;
                   setState(() {
@@ -182,7 +187,14 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                       } catch (e) {
                         print(e);
                       }
-                      waitingWidget();
+                      displayAlert(
+                          context,
+                          'Connexion en cours',
+                          Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [SpinKitCircle(color: Colors.blue[600], size: MediaQuery.of(context).size.height * 0.1)]),
+                          null);
                       String deviceName = myDeviceBluetooth.name;
                       // stop scanning and start connecting
                       await flutterBlue.stopScan();
@@ -227,6 +239,9 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                             await Future.delayed(Duration(milliseconds: 500));
                             dataMaestro2 = String.fromCharCodes(await characteristicWifi.read());
                             print(dataMaestro2);
+                            await Future.delayed(Duration(milliseconds: 500));
+                            dataMaestro3 = String.fromCharCodes(await characteristicWifi.read());
+                            print(dataMaestro3);
                           }
                           if (Platform.isIOS) {
                             await characteristicMaestro.write('{\"IOS\":1}'.codeUnits);
@@ -245,6 +260,9 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                             await Future.delayed(Duration(milliseconds: 500));
                             dataMaestroIOS5 = String.fromCharCodes(await characteristicWifi.read());
                             print(dataMaestroIOS5);
+                            await Future.delayed(Duration(milliseconds: 500));
+                            dataMaestroIOS6 = String.fromCharCodes(await characteristicWifi.read());
+                            print(dataMaestroIOS6);
                           }
                           // clear the remaining toast message
                           myUvcToast.clearCurrentToast();
@@ -257,28 +275,5 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                 .toList()),
       ),
     );
-  }
-
-  Future<void> waitingWidget() async {
-    //double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    return showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Connexion en cours'),
-            content: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SpinKitCircle(
-                  color: Colors.blue[600],
-                  size: screenHeight * 0.1,
-                ),
-              ],
-            ),
-          );
-        });
   }
 }

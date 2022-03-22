@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_dmx_maestro/services/DataVariables.dart';
+import 'package:flutter_app_dmx_maestro/services/custom_container.dart';
+import 'package:flutter_app_dmx_maestro/services/elavated_button.dart';
+import 'package:flutter_app_dmx_maestro/services/icon_button.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:hsl_colorpicker/HSLColorPicker.dart';
 
@@ -23,13 +26,10 @@ class _HomeState extends State<Home> {
 
   bool intToBool(int a) => a == 1 ? true : false;
 
-  Color trackBarColor = Colors.black;
-
   String bottomBarTitle = 'Ambiances';
   String zonesInHexAmb;
 
   bool bottomBarTitleState = false;
-  bool firstDisplayMainWidget = true;
   bool colorPickerSelected = false;
 
   double opacityLevelRemoteControl = 1.0;
@@ -53,57 +53,55 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     print('home page');
-    if (firstDisplayMainWidget) {
-      try {
-        var parsedJson;
-        if (Platform.isIOS) {
-          parsedJson = json.decode(dataMaestroIOS2);
-          ambiance1 = List<String>.from(parsedJson['Amb1']);
-          ambiance2 = List<String>.from(parsedJson['Amb2']);
-          ambiance3 = List<String>.from(parsedJson['Amb3']);
-          parsedJson = json.decode(dataMaestroIOS3);
-          ambiance4 = List<String>.from(parsedJson['Amb4']);
-          ambiance5 = List<String>.from(parsedJson['Amb5']);
-          ambiance6 = List<String>.from(parsedJson['Amb6']);
-          parsedJson = json.decode(dataMaestroIOS);
-          zonesNamesList[0] = parsedJson['zone'][0];
-          zonesNamesList[1] = parsedJson['zone'][1];
-          zonesNamesList[2] = parsedJson['zone'][2];
-          zonesNamesList[3] = parsedJson['zone'][3];
-        }
-        if (Platform.isAndroid) {
-          parsedJson = json.decode(dataMaestro);
-          ambiance1 = [parsedJson['Amb'][0].toString(), parsedJson['Amb'][1].toString(), parsedJson['Amb'][2].toString()];
-          ambiance2 = [parsedJson['Amb'][3].toString(), parsedJson['Amb'][4].toString(), parsedJson['Amb'][5].toString()];
-          ambiance3 = [parsedJson['Amb'][6].toString(), parsedJson['Amb'][7].toString(), parsedJson['Amb'][8].toString()];
-          ambiance4 = [parsedJson['Amb'][9].toString(), parsedJson['Amb'][10].toString(), parsedJson['Amb'][11].toString()];
-          ambiance5 = [parsedJson['Amb'][12].toString(), parsedJson['Amb'][13].toString(), parsedJson['Amb'][14].toString()];
-          ambiance6 = [parsedJson['Amb'][15].toString(), parsedJson['Amb'][16].toString(), parsedJson['Amb'][17].toString()];
-          zonesNamesList[0] = parsedJson['zone'][0];
-          zonesNamesList[1] = parsedJson['zone'][1];
-          zonesNamesList[2] = parsedJson['zone'][2];
-          zonesNamesList[3] = parsedJson['zone'][3];
-        }
-      } catch (e) {
-        print('erreur');
-        ambiance1 = ['Ambiance 1', 'FF0000', 'F'];
-        ambiance2 = ['Ambiance 2', '000000', 'F'];
-        ambiance3 = ['Ambiance 3', '00FF00', 'F'];
-        ambiance4 = ['Ambiance 4', '0000FF', 'F'];
-        ambiance5 = ['Ambiance 5', 'FFFF00', 'F'];
-        ambiance6 = ['Ambiance 6', '00FFFF', 'F'];
-        zonesNamesList = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4'];
+    try {
+      var parsedJson;
+      if (Platform.isIOS) {
+        parsedJson = json.decode(dataMaestroIOS2);
+        ambiance1 = List<String>.from(parsedJson['Amb1']);
+        ambiance2 = List<String>.from(parsedJson['Amb2']);
+        parsedJson = json.decode(dataMaestroIOS3);
+        ambiance3 = List<String>.from(parsedJson['Amb3']);
+        ambiance4 = List<String>.from(parsedJson['Amb4']);
+        parsedJson = json.decode(dataMaestroIOS4);
+        ambiance5 = List<String>.from(parsedJson['Amb5']);
+        ambiance6 = List<String>.from(parsedJson['Amb6']);
+        parsedJson = json.decode(dataMaestroIOS);
+        zonesNamesList[0] = parsedJson['zone'][0];
+        zonesNamesList[1] = parsedJson['zone'][1];
+        zonesNamesList[2] = parsedJson['zone'][2];
+        zonesNamesList[3] = parsedJson['zone'][3];
       }
-      firstDisplayMainWidget = false;
+      if (Platform.isAndroid) {
+        parsedJson = json.decode(dataMaestro2);
+        ambiance1 = [parsedJson['Amb'][0].toString(), parsedJson['Amb'][1].toString(), parsedJson['Amb'][2].toString(), parsedJson['Amb'][3].toString(), parsedJson['Amb'][4].toString()];
+        ambiance2 = [parsedJson['Amb'][5].toString(), parsedJson['Amb'][6].toString(), parsedJson['Amb'][7].toString(), parsedJson['Amb'][8].toString(), parsedJson['Amb'][9].toString()];
+        ambiance3 = [parsedJson['Amb'][10].toString(), parsedJson['Amb'][11].toString(), parsedJson['Amb'][12].toString(), parsedJson['Amb'][13].toString(), parsedJson['Amb'][14].toString()];
+        ambiance4 = [parsedJson['Amb'][15].toString(), parsedJson['Amb'][16].toString(), parsedJson['Amb'][17].toString(), parsedJson['Amb'][18].toString(), parsedJson['Amb'][19].toString()];
+        ambiance5 = [parsedJson['Amb'][20].toString(), parsedJson['Amb'][21].toString(), parsedJson['Amb'][22].toString(), parsedJson['Amb'][23].toString(), parsedJson['Amb'][24].toString()];
+        ambiance6 = [parsedJson['Amb'][25].toString(), parsedJson['Amb'][26].toString(), parsedJson['Amb'][27].toString(), parsedJson['Amb'][28].toString(), parsedJson['Amb'][29].toString()];
+        parsedJson = json.decode(dataMaestro);
+        zonesNamesList[0] = parsedJson['zone'][0];
+        zonesNamesList[1] = parsedJson['zone'][1];
+        zonesNamesList[2] = parsedJson['zone'][2];
+        zonesNamesList[3] = parsedJson['zone'][3];
+      }
+    } catch (e) {
+      print('erreur');
+      ambiance1 = ['Ambiance 1', 'FF0000', 'FF0000', 'FF0000', 'FF0000'];
+      ambiance2 = ['Ambiance 2', '000000', '000000', '000000', '000000'];
+      ambiance3 = ['Ambiance 3', '00FF00', '00FF00', '00FF00', '00FF00'];
+      ambiance4 = ['Ambiance 4', '0000FF', '0000FF', '0000FF', '0000FF'];
+      ambiance5 = ['Ambiance 5', 'FFFF00', 'FFFF00', 'FFFF00', 'FFFF00'];
+      ambiance6 = ['Ambiance 6', '00FFFF', '00FFFF', '00FFFF', '00FFFF'];
+      zonesNamesList = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4'];
     }
 
     return WillPopScope(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
+        backgroundColor: backGroundColor[backGroundColorSelect],
         bottomNavigationBar: BottomAppBar(
-          notchMargin: 10.0,
-          color: Colors.grey[200],
+          color: Colors.transparent,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -111,7 +109,7 @@ class _HomeState extends State<Home> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Divider(
                   thickness: 1.0,
-                  color: Colors.grey[600],
+                  color: Colors.transparent,
                 ),
               ),
               IntrinsicHeight(
@@ -124,9 +122,10 @@ class _HomeState extends State<Home> {
                       children: [
                         VerticalDivider(
                           thickness: 1.0,
-                          color: Colors.grey[600],
+                          color: Colors.transparent,
                         ),
-                        IconButton(
+                        MyIconButton(
+                          iconColor: textColor[backGroundColorSelect],
                           icon: Icon(Icons.alarm),
                           onPressed: () {
                             Navigator.pushNamed(context, '/alarm_settings');
@@ -134,11 +133,11 @@ class _HomeState extends State<Home> {
                         ),
                         VerticalDivider(
                           thickness: 1.0,
-                          color: Colors.grey[600],
+                          color: Colors.transparent,
                         ),
                       ],
                     ),
-                    TextButton(
+                    MyElevatedButton(
                       key: Key('bottom_bar_title'),
                       onPressed: () {
                         setState(() {
@@ -159,22 +158,20 @@ class _HomeState extends State<Home> {
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
                           bottomBarTitle,
-                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                          style: TextStyle(color: textColor[backGroundColorSelect], fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                       ),
-                      style: ButtonStyle(
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
-                          backgroundColor: MaterialStateProperty.all<Color>(Colors.grey[200])),
                     ),
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         VerticalDivider(
                           thickness: 1.0,
-                          color: Colors.grey[600],
+                          color: Colors.transparent,
                         ),
-                        IconButton(
+                        MyIconButton(
                           key: Key('settings_button'),
+                          iconColor: textColor[backGroundColorSelect],
                           icon: Icon(Icons.settings),
                           onPressed: () {
                             Navigator.pushNamed(context, '/settings');
@@ -182,7 +179,7 @@ class _HomeState extends State<Home> {
                         ),
                         VerticalDivider(
                           thickness: 1.0,
-                          color: Colors.grey[600],
+                          color: Colors.transparent,
                         ),
                       ],
                     ),
@@ -193,7 +190,7 @@ class _HomeState extends State<Home> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Divider(
                   thickness: 1.0,
-                  color: Colors.grey[600],
+                  color: Colors.transparent,
                 ),
               ),
             ],
@@ -218,26 +215,26 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
-      onWillPop: () => showDialog<bool>(
-        context: context,
-        builder: (c) => AlertDialog(
-          title: Text('Attention'),
-          content: Text('Êtes-vous sûr de vouloir revenir à la page de sélection des cartes Maestro™ ?'),
-          actions: [
-            TextButton(
-                child: Text('Oui'),
-                onPressed: () async {
-                  await myDevice.disconnect();
-                  Navigator.pop(c, true);
-                  Navigator.pushNamedAndRemoveUntil(context, "/scan_ble_list", (r) => false);
-                }),
-            TextButton(
-              child: Text('Non'),
-              onPressed: () => Navigator.pop(c, false),
+      onWillPop: () =>
+          displayAlert(context, 'Attention', Text('Êtes-vous sûr de vouloir revenir à la page de sélection des cartes Maestro™ ?', style: TextStyle(color: textColor[backGroundColorSelect])), [
+        TextButton(
+            child: Text(
+              'Oui',
+              style: TextStyle(color: positiveButton[backGroundColorSelect]),
             ),
-          ],
+            onPressed: () async {
+              await myDevice.disconnect();
+              Navigator.pop(context, true);
+              Navigator.pushNamedAndRemoveUntil(context, "/scan_ble_list", (r) => false);
+            }),
+        TextButton(
+          child: Text(
+            'Non',
+            style: TextStyle(color: negativeButton[backGroundColorSelect]),
+          ),
+          onPressed: () => Navigator.pop(context, false),
         ),
-      ),
+      ]),
     );
   }
 
@@ -314,20 +311,29 @@ class _HomeState extends State<Home> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            ambiance[0],
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              ambiance[0],
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: textColor[backGroundColorSelect]),
+            ),
           ),
-          IconButton(
-            onPressed: () async {
-              if (bottomBarTitleState) {
-                ambianceSettingWidget(context, ambiance, ambianceID);
-              }
-            },
-            icon: Icon(Icons.settings),
-            color: Colors.blue[400],
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ambianceCircleDisplay(context, ambiance, ambianceID),
           ),
-          ambianceCircleDisplay(context, ambiance[1], ambianceID),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: MyIconButton(
+              onPressed: () async {
+                if (bottomBarTitleState) {
+                  Navigator.pushNamed(context, '/ambiances_settings', arguments: {'ambianceID': ambianceID, 'ambiance': ambiance, 'zoneNames': zonesNamesList});
+                }
+              },
+              icon: Icon(Icons.settings),
+              iconColor: textColor[backGroundColorSelect],
+            ),
+          ),
         ],
       ),
     );
@@ -350,7 +356,7 @@ class _HomeState extends State<Home> {
                 flex: 2,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                  child: IconButton(
+                  child: MyIconButton(
                     icon: Icon(Icons.power_settings_new, color: Colors.green, size: widthScreen * 0.03 + heightScreen * 0.02),
                     onPressed: () async {
                       if (myDevice.getConnectionState()) {
@@ -366,7 +372,8 @@ class _HomeState extends State<Home> {
                 flex: 2,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                  child: IconButton(
+                  child: MyIconButton(
+                    shape: BoxShape.circle,
                     icon: Icon(Icons.close, color: Colors.red, size: widthScreen * 0.03 + heightScreen * 0.02),
                     onPressed: () async {
                       if (myDevice.getConnectionState()) {
@@ -382,82 +389,101 @@ class _HomeState extends State<Home> {
           ),
         ),
         Expanded(
-          flex: 5,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              HSLColorPicker(
-                onChanged: (colorSelected) {
-                  if (myDevice.getConnectionState()) {
-                    if (!bottomBarTitleState) {
-                      if (colorPickerSelected) {
-                        if (hslColor.lightness != colorSelected.lightness) {
-                          characteristicMaestro.write('{\"light\":[7,${(hslColor.lightness * 100).toInt()},\"$zonesInHex\"]}'.codeUnits);
-                        }
-                        if (hslColor.hue != colorSelected.hue) {
-                          characteristicMaestro.write('{\"light\":[3,${(hslColor.hue * hueCoefficient).toInt()},\"$zonesInHex\"]}'.codeUnits);
-                        }
-                        if (hslColor.saturation != colorSelected.saturation) {
-                          characteristicMaestro.write('{\"light\":[9,${(hslColor.saturation * 100).toInt()},\"$zonesInHex\"]}'.codeUnits);
-                        }
-                      } else {
-                        colorPickerSelected = true;
-                        characteristicMaestro
-                            .write('{\"hue\":${hslColor.toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")},\"zone\":\"$zonesInHex\"}'.codeUnits);
+          flex: 6,
+          child: MyCustomContainer(
+            child: HSLColorPicker(
+              onChanged: (colorSelected) {
+                if (myDevice.getConnectionState()) {
+                  if (!bottomBarTitleState) {
+                    if (colorPickerSelected) {
+                      if (hslColor.lightness != colorSelected.lightness) {
+                        characteristicMaestro.write('{\"light\":[7,${(hslColor.lightness * 100).toInt()},\"$zonesInHex\"]}'.codeUnits);
                       }
-                      hslColor = colorSelected;
+                      if (hslColor.hue != colorSelected.hue) {
+                        characteristicMaestro.write('{\"light\":[3,${(hslColor.hue * hueCoefficient).toInt()},\"$zonesInHex\"]}'.codeUnits);
+                      }
+                      if (hslColor.saturation != colorSelected.saturation) {
+                        characteristicMaestro.write('{\"light\":[9,${(hslColor.saturation * 100).toInt()},\"$zonesInHex\"]}'.codeUnits);
+                      }
+                    } else {
+                      colorPickerSelected = true;
+                      characteristicMaestro
+                          .write('{\"hue\":${hslColor.toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")},\"zone\":\"$zonesInHex\"}'.codeUnits);
                     }
+                    hslColor = colorSelected;
                   }
-                },
-                size: widthScreen * 0.4 + heightScreen * 0.1,
-                strokeWidth: widthScreen * 0.04,
-                thumbSize: 0.00001,
-                thumbStrokeSize: widthScreen * 0.005 + heightScreen * 0.005,
-                showCenterColorIndicator: true,
-                centerColorIndicatorSize: widthScreen * 0.005 + heightScreen * 0.005,
-                initialColor: Colors.blue[900],
-              ),
-              bigCircle(widthScreen * 0.14, heightScreen * 0.1),
-            ],
+                }
+              },
+              size: widthScreen * 0.45 + heightScreen * 0.15,
+              strokeWidth: widthScreen * 0.045,
+              thumbStrokeSize: widthScreen * 0.005 + heightScreen * 0.005,
+              showCenterColorIndicator: false,
+              centerColorIndicatorSize: widthScreen * 0.005 + heightScreen * 0.005,
+              initialColor: Colors.blue[900],
+            ),
           ),
         ),
         Expanded(
           flex: 2,
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-              child: FlutterSlider(
-                tooltip: FlutterSliderTooltip(disabled: true),
-                values: [_lowerValue],
-                max: 100,
-                min: 0,
-                centeredOrigin: true,
-                disabled: bottomBarTitleState,
-                handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
-                onDragging: (handlerIndex, lowerValue, upperValue) {
-                  _lowerValue = lowerValue;
-                  if (_lowerValue > 50) {
-                    trackBarColor = Colors.yellowAccent;
-                  } else {
-                    trackBarColor = Colors.blueAccent;
-                  }
-                  setState(() {});
-                  if (myDevice.getConnectionState()) {
-                    if (!bottomBarTitleState) {
-                      characteristicMaestro.write('{\"light\":[8,${_lowerValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
-                    }
-                  }
-                },
-                handler: FlutterSliderHandler(child: Icon(Icons.code)),
-                trackBar: FlutterSliderTrackBar(activeTrackBar: BoxDecoration(color: trackBarColor), activeTrackBarHeight: 12, inactiveTrackBarHeight: 12),
-                hatchMark: FlutterSliderHatchMark(
-                  density: 0.5, // means 50 lines, from 0 to 100 percent
-                  labels: [
-                    FlutterSliderHatchMarkLabel(percent: 0, label: Icon(Icons.ac_unit, size: 30)),
-                    FlutterSliderHatchMarkLabel(percent: 100, label: Icon(Icons.wb_sunny, size: 30)),
-                  ],
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(flex: 1, child: Icon(Icons.wb_sunny, size: widthScreen * 0.03 + heightScreen * 0.02, color: textColor[backGroundColorSelect])),
+                Expanded(
+                  flex: 8,
+                  child: Center(
+                    child: FlutterSlider(
+                      tooltip: FlutterSliderTooltip(disabled: true),
+                      values: [_lowerValue],
+                      max: 100,
+                      min: 0,
+                      centeredOrigin: true,
+                      disabled: bottomBarTitleState,
+                      handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
+                      onDragging: (handlerIndex, lowerValue, upperValue) {
+                        _lowerValue = lowerValue;
+                        setState(() {});
+                        if (Platform.isAndroid) {
+                          if (myDevice.getConnectionState()) {
+                            if (!bottomBarTitleState) {
+                              characteristicMaestro.write('{\"light\":[8,${100 - _lowerValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                            }
+                          }
+                        }
+                      },
+                      onDragCompleted: (handlerIndex, lowerValue, upperValue) {
+                        _lowerValue = lowerValue;
+                        setState(() {});
+                        if (Platform.isIOS) {
+                          if (myDevice.getConnectionState()) {
+                            if (!bottomBarTitleState) {
+                              characteristicMaestro.write('{\"light\":[8,${100 - _lowerValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                            }
+                          }
+                        }
+                      },
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        gradient: LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: [Color(0xFFFFF99A), Color(0xFF8FB5FF)],
+                        ),
+                      ),
+                      handler: FlutterSliderHandler(child: MyCustomContainer(child: null)),
+                      trackBar: FlutterSliderTrackBar(
+                        inactiveTrackBar: BoxDecoration(color: Colors.transparent),
+                        activeTrackBar: BoxDecoration(color: Colors.transparent),
+                        activeTrackBarHeight: heightScreen * 0.001,
+                        inactiveTrackBarHeight: heightScreen * 0.001,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+                Expanded(flex: 1, child: Icon(Icons.ac_unit, size: widthScreen * 0.03 + heightScreen * 0.02, color: textColor[backGroundColorSelect])),
+              ],
             ),
           ),
         ),
@@ -465,13 +491,13 @@ class _HomeState extends State<Home> {
           flex: 2,
           child: Center(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 20.0),
+              padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 16.0, 0),
-                    child: IconButton(
+                    child: MyIconButton(
                       icon: Icon(Icons.more_time, color: Colors.green, size: widthScreen * 0.025 + heightScreen * 0.015),
                       onPressed: () async {
                         if (myDevice.getConnectionState()) {
@@ -482,7 +508,7 @@ class _HomeState extends State<Home> {
                       },
                     ),
                   ),
-                  TextButton(
+                  MyElevatedButton(
                     onPressed: () async {
                       if (myDevice.getConnectionState()) {
                         if (!bottomBarTitleState) {
@@ -490,20 +516,11 @@ class _HomeState extends State<Home> {
                         }
                       }
                     },
-                    child: Padding(
-                      padding: EdgeInsets.all(widthScreen * 0.001 + heightScreen * 0.0001),
-                      child: Text(
-                        'Mode',
-                        style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.01 + heightScreen * 0.015),
-                      ),
-                    ),
-                    style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.blue[400])),
+                    child: Text('Mode', style: TextStyle(color: textColor[backGroundColorSelect])),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16.0, 0, 0, 0),
-                    child: IconButton(
+                    child: MyIconButton(
                       icon: Icon(Icons.timelapse, color: Colors.red, size: widthScreen * 0.025 + heightScreen * 0.015),
                       onPressed: () async {
                         if (myDevice.getConnectionState()) {
@@ -527,37 +544,15 @@ class _HomeState extends State<Home> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Expanded(flex: 1, child: verticalDivider()),
-                  Expanded(flex: 3, child: zoneOnOff(context, zonesNamesList[0], '1')),
-                  Expanded(flex: 1, child: verticalDivider()),
-                  Expanded(flex: 3, child: zoneOnOff(context, zonesNamesList[1], '2')),
-                  Expanded(flex: 1, child: verticalDivider()),
-                  Expanded(flex: 3, child: zoneOnOff(context, zonesNamesList[2], '4')),
-                  Expanded(flex: 1, child: verticalDivider()),
-                  Expanded(flex: 3, child: zoneOnOff(context, zonesNamesList[3], '8')),
-                  Expanded(flex: 1, child: verticalDivider()),
+                  Expanded(flex: 3, child: zoneOnOff(context, zonesNamesList[0], '1', 1)),
+                  Expanded(flex: 3, child: zoneOnOff(context, zonesNamesList[1], '2', 2)),
+                  Expanded(flex: 3, child: zoneOnOff(context, zonesNamesList[2], '4', 3)),
+                  Expanded(flex: 3, child: zoneOnOff(context, zonesNamesList[3], '8', 4)),
                 ],
               ),
             ),
           ),
         ),
-/*              IntrinsicHeight(
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  verticalDivider(),
-                  zoneOnOff(context, 'Zone 5', '10'),
-                  verticalDivider(),
-                  zoneOnOff(context, 'Zone 6', '20'),
-                  verticalDivider(),
-                  zoneOnOff(context, 'Zone 7', '40'),
-                  verticalDivider(),
-                  zoneOnOff(context, 'Zone 8', '80'),
-                  verticalDivider(),
-                ],
-              ),
-            ),*/
       ],
     );
   }
@@ -751,45 +746,56 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget zoneOnOff(BuildContext context, String zoneName, String zoneNumber) {
+  Widget zoneOnOff(BuildContext context, String zoneName, String zoneNumber, int zoneID) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.blueAccent),
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 17.0, vertical: 3.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
+        children: [
           Expanded(
-            flex: 1,
-            child: Center(
-              child: IconButton(
-                icon: Icon(Icons.power_settings_new, color: Colors.green, size: widthScreen * 0.025 + heightScreen * 0.015),
-                onPressed: () async {
-                  if (myDevice.getConnectionState()) {
-                    if (!bottomBarTitleState) {
-                      await characteristicMaestro.write('{\"light\":[1,0,\"$zoneNumber\"]}'.codeUnits);
-                    }
-                  }
-                },
-              ),
-            ),
-          ),
-          Expanded(flex: 2, child: Center(child: Text(zoneName, style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.009)))),
+              flex: 1,
+              child: Center(child: Text(zoneName, textAlign: TextAlign.center, style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.009, color: textColor[backGroundColorSelect])))),
           Expanded(
-            flex: 1,
-            child: Center(
-              child: IconButton(
-                icon: Icon(Icons.close, color: Colors.red, size: widthScreen * 0.025 + heightScreen * 0.015),
-                onPressed: () async {
-                  if (myDevice.getConnectionState()) {
-                    if (!bottomBarTitleState) {
-                      await characteristicMaestro.write('{\"light\":[1,1,\"$zoneNumber\"]}'.codeUnits);
-                    }
-                  }
-                },
+            flex: 4,
+            child: MyCustomContainer(
+              shape: BoxShape.rectangle,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: Center(
+                      child: IconButton(
+                        icon: Icon(Icons.power_settings_new, color: Colors.green, size: widthScreen * 0.025 + heightScreen * 0.015),
+                        onPressed: () async {
+                          if (myDevice.getConnectionState()) {
+                            if (!bottomBarTitleState) {
+                              await characteristicMaestro.write('{\"light\":[1,0,\"$zoneNumber\"]}'.codeUnits);
+                            }
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                  Expanded(flex: 2, child: Center(child: Text('$zoneID', style: TextStyle(fontSize: widthScreen * 0.03 + heightScreen * 0.01, color: textColor[backGroundColorSelect])))),
+                  Expanded(
+                    flex: 1,
+                    child: Center(
+                      child: IconButton(
+                        icon: Icon(Icons.close, color: Colors.red, size: widthScreen * 0.025 + heightScreen * 0.015),
+                        onPressed: () async {
+                          if (myDevice.getConnectionState()) {
+                            if (!bottomBarTitleState) {
+                              await characteristicMaestro.write('{\"light\":[1,1,\"$zoneNumber\"]}'.codeUnits);
+                            }
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -798,12 +804,13 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget ambianceCircleDisplay(BuildContext context, String ambianceColor, int ambianceID) {
+  Widget ambianceCircleDisplay(BuildContext context, List<String> ambianceColors, int ambianceID) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
-    final color = StringBuffer();
-    if (ambianceColor.length == 6 || ambianceColor.length == 7) color.write('ff');
-    color.write(ambianceColor.replaceFirst('#', ''));
+    final colorZone1 = getColors(ambianceColors[1]);
+    final colorZone2 = getColors(ambianceColors[2]);
+    final colorZone3 = getColors(ambianceColors[3]);
+    final colorZone4 = getColors(ambianceColors[4]);
     return GestureDetector(
       onTap: () async {
         if (myDevice.getConnectionState()) {
@@ -812,34 +819,27 @@ class _HomeState extends State<Home> {
           }
         }
       },
-      child: Container(
-        width: widthScreen * 0.13,
-        height: heightScreen * 0.1,
-        decoration: new BoxDecoration(
-          color: Color(int.parse(color.toString(), radix: 16)),
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(color: Colors.black, spreadRadius: 3),
-          ],
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          ambianceZoneColor(context, Color(int.parse(colorZone1.toString(), radix: 16))),
+          ambianceZoneColor(context, Color(int.parse(colorZone2.toString(), radix: 16))),
+          ambianceZoneColor(context, Color(int.parse(colorZone3.toString(), radix: 16))),
+          ambianceZoneColor(context, Color(int.parse(colorZone4.toString(), radix: 16))),
+        ],
       ),
     );
   }
 
-  Widget verticalDivider() {
-    return VerticalDivider(
-      thickness: 1.0,
-      color: Colors.white,
-    );
-  }
-
-  Widget bigCircle(double width, double height) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: new BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
+  Widget ambianceZoneColor(BuildContext context, Color zoneColor) {
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Container(
+        width: widthScreen * 0.05,
+        height: heightScreen * 0.05,
+        decoration: BoxDecoration(shape: BoxShape.circle, color: zoneColor),
       ),
     );
   }

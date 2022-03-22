@@ -55,14 +55,17 @@ class _SettingsState extends State<Settings> {
       zonesNamesList[2] = parsedJson['zone'][2];
       zonesNamesList[3] = parsedJson['zone'][3];
       await Future.delayed(Duration(seconds: 2));
-      if (parsedJson['wifiSt'] == 0) {
-        myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('Votre carte n\'est pas connectée avec votre modem !');
-        myUvcToast.showToast(Colors.red, Icons.info, Colors.white);
-      } else {
-        myUvcToast.setToastDuration(5);
-        myUvcToast.setToastMessage('Votre carte est bien connectée avec votre modem !');
-        myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+      if (firstDisplayMainWidget) {
+        if (parsedJson['wifiSt'] == 0) {
+          myUvcToast.setToastDuration(5);
+          myUvcToast.setToastMessage('Votre carte n\'est pas connectée avec votre modem !');
+          myUvcToast.showToast(Colors.red, Icons.info, Colors.white);
+        } else {
+          myUvcToast.setToastDuration(5);
+          myUvcToast.setToastMessage('Votre carte est bien connectée avec votre modem !');
+          myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+        }
+        firstDisplayMainWidget = false;
       }
     } catch (e) {
       print('erreur');
@@ -72,11 +75,7 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    if (firstDisplayMainWidget) {
-      readDataMaestro();
-      firstDisplayMainWidget = false;
-    }
-
+    readDataMaestro();
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     print('width : $screenWidth and height : $screenHeight');
@@ -89,7 +88,7 @@ class _SettingsState extends State<Settings> {
         centerTitle: true,
       ),
       body: Container(
-        decoration: BoxDecoration(color: Colors.grey[200]),
+        decoration: BoxDecoration(color: backGroundColor[backGroundColorSelect]),
         child: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -106,7 +105,7 @@ class _SettingsState extends State<Settings> {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             'Nom du convertisseur DMX :',
-                            style: TextStyle(fontSize: (screenWidth * 0.05)),
+                            style: TextStyle(fontSize: (screenWidth * 0.05), color: textColor[backGroundColorSelect]),
                           ),
                         ),
                         Padding(
@@ -116,7 +115,7 @@ class _SettingsState extends State<Settings> {
                             children: [
                               Text(
                                 myDevice.device.name.substring(0, 4),
-                                style: TextStyle(fontSize: (screenWidth * 0.03)),
+                                style: TextStyle(fontSize: (screenWidth * 0.03), color: textColor[backGroundColorSelect]),
                               ),
                               Flexible(
                                 child: TextField(
@@ -124,14 +123,14 @@ class _SettingsState extends State<Settings> {
                                   controller: myBleDeviceName,
                                   maxLines: 1,
                                   maxLength: 64,
-                                  style: TextStyle(
-                                    fontSize: screenWidth * 0.02 + screenHeight * 0.02,
-                                  ),
+                                  cursorColor: textColor[backGroundColorSelect],
+                                  style: TextStyle(fontSize: screenWidth * 0.02 + screenHeight * 0.02, color: textColor[backGroundColorSelect]),
                                   decoration: InputDecoration(
+                                      counterStyle: TextStyle(color: textColor[backGroundColorSelect]),
                                       hintText: 'exp:Maestro1234',
                                       hintStyle: TextStyle(
                                         fontSize: screenWidth * 0.02 + screenHeight * 0.02,
-                                        color: Colors.grey,
+                                        color: textColor[backGroundColorSelect],
                                       )),
                                 ),
                               ),
@@ -172,7 +171,7 @@ class _SettingsState extends State<Settings> {
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
                         'Vos Zones :',
-                        style: TextStyle(fontSize: (screenWidth * 0.05)),
+                        style: TextStyle(fontSize: (screenWidth * 0.05), color: textColor[backGroundColorSelect]),
                       ),
                     ),
                     ToggleButtons(
@@ -275,7 +274,7 @@ class _SettingsState extends State<Settings> {
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
                         'Connexion WiFi :',
-                        style: TextStyle(fontSize: (screenWidth * 0.05)),
+                        style: TextStyle(fontSize: (screenWidth * 0.05), color: textColor[backGroundColorSelect]),
                       ),
                     ),
                     Visibility(
@@ -311,7 +310,20 @@ class _SettingsState extends State<Settings> {
                       padding: const EdgeInsets.all(8.0),
                       child: TextButton(
                         onPressed: () async {
-                          waitingWidget();
+                          displayAlert(
+                              context,
+                              'Recherche des réseaux WiFi disponibles',
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SpinKitCircle(
+                                    color: Colors.blue[600],
+                                    size: screenHeight * 0.1,
+                                  ),
+                                ],
+                              ),
+                              null);
                           // write the scan command
                           if (myDevice.getConnectionState()) {
                             try {
@@ -353,7 +365,7 @@ class _SettingsState extends State<Settings> {
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
                         'Mot de passe :',
-                        style: TextStyle(fontSize: (screenWidth * 0.05)),
+                        style: TextStyle(fontSize: (screenWidth * 0.05), color: textColor[backGroundColorSelect]),
                       ),
                     ),
                     Padding(
@@ -362,15 +374,16 @@ class _SettingsState extends State<Settings> {
                         textAlign: TextAlign.center,
                         maxLines: 1,
                         maxLength: 64,
-                        controller: passwordEditor,
+                        controller: passwordEditor,cursorColor: textColor[backGroundColorSelect],
                         style: TextStyle(
                           fontSize: screenWidth * 0.04,
-                          color: Colors.grey[800],
+                          color: textColor[backGroundColorSelect],
                         ),
                         decoration: InputDecoration(
+                            counterStyle: TextStyle(color: textColor[backGroundColorSelect]),
                             hintText: 'exemple : 123',
                             hintStyle: TextStyle(
-                              color: Colors.grey,
+                              color: textColor[backGroundColorSelect],
                             )),
                       ),
                     ),
@@ -557,14 +570,17 @@ class _SettingsState extends State<Settings> {
                   dataMaestroIOS4 = String.fromCharCodes(await characteristicWifi.read());
                   await Future.delayed(Duration(milliseconds: 500));
                   dataMaestroIOS5 = String.fromCharCodes(await characteristicWifi.read());
+                  await Future.delayed(Duration(milliseconds: 500));
+                  dataMaestroIOS6 = String.fromCharCodes(await characteristicWifi.read());
                 }
                 if (Platform.isAndroid) {
                   await Future.delayed(Duration(milliseconds: 500));
                   dataMaestro = String.fromCharCodes(await characteristicWifi.read());
                   await Future.delayed(Duration(milliseconds: 500));
                   dataMaestro2 = String.fromCharCodes(await characteristicWifi.read());
+                  await Future.delayed(Duration(milliseconds: 500));
+                  dataMaestro3 = String.fromCharCodes(await characteristicWifi.read());
                 }
-
                 Navigator.of(context).pop();
               },
             ),
@@ -572,29 +588,6 @@ class _SettingsState extends State<Settings> {
         );
       },
     );
-  }
-
-  Future<void> waitingWidget() async {
-    //double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    return showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Recherche des réseaux WiFi disponibles'),
-            content: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SpinKitCircle(
-                  color: Colors.blue[600],
-                  size: screenHeight * 0.1,
-                ),
-              ],
-            ),
-          );
-        });
   }
 
   Future<void> zoneNamesSettingsWidget(BuildContext context) async {
@@ -608,159 +601,203 @@ class _SettingsState extends State<Settings> {
     zone2NameEditor.text = zonesNamesList[1];
     zone3NameEditor.text = zonesNamesList[2];
     zone4NameEditor.text = zonesNamesList[3];
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Changer les noms de vos zones:'),
-          content: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(flex: 1, child: Text('Zone 1 :', style: TextStyle(fontSize: 14))),
-                    Expanded(
-                      flex: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
-                        child: TextField(
-                          textAlign: TextAlign.center,
-                          maxLines: 1,
-                          maxLength: 10,
-                          controller: zone1NameEditor,
+    displayAlert(
+        context,
+        'Changer les noms de vos zones:',
+        SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                      flex: 1,
+                      child: Text('Zone 1 :',
                           style: TextStyle(
-                            fontSize: screenWidth * 0.04,
-                            color: Colors.grey[800],
-                          ),
-                          decoration: InputDecoration(
-                              hintText: 'exp:chamb123',
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              )),
+                            fontSize: 14,
+                            color: textColor[backGroundColorSelect],
+                          ))),
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
+                      child: TextField(
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        maxLength: 10,
+                        controller: zone1NameEditor,
+                        cursorColor: textColor[backGroundColorSelect],
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.04,
+                          color: textColor[backGroundColorSelect],
                         ),
+                        decoration: InputDecoration(
+                            counterStyle: TextStyle(
+                              color: textColor[backGroundColorSelect],
+                            ),
+                            hintText: 'exp:chamb123',
+                            hintStyle: TextStyle(
+                              color: textColor[backGroundColorSelect],
+                            )),
                       ),
                     ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(flex: 1, child: Text('Zone 2 :', style: TextStyle(fontSize: 14))),
-                    Expanded(
-                      flex: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
-                        child: TextField(
-                          textAlign: TextAlign.center,
-                          maxLines: 1,
-                          maxLength: 10,
-                          controller: zone2NameEditor,
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                      flex: 1,
+                      child: Text('Zone 2 :',
                           style: TextStyle(
-                            fontSize: screenWidth * 0.04,
-                            color: Colors.grey[800],
-                          ),
-                          decoration: InputDecoration(
-                              hintText: 'exp:chamb123',
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              )),
+                            fontSize: 14,
+                            color: textColor[backGroundColorSelect],
+                          ))),
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
+                      child: TextField(
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        maxLength: 10,
+                        controller: zone2NameEditor,
+                        cursorColor: textColor[backGroundColorSelect],
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.04,
+                          color: textColor[backGroundColorSelect],
                         ),
+                        decoration: InputDecoration(
+                            counterStyle: TextStyle(
+                              color: textColor[backGroundColorSelect],
+                            ),
+                            hintText: 'exp:chamb123',
+                            hintStyle: TextStyle(
+                              color: textColor[backGroundColorSelect],
+                            )),
                       ),
                     ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(flex: 1, child: Text('Zone 3 :', style: TextStyle(fontSize: 14))),
-                    Expanded(
-                      flex: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
-                        child: TextField(
-                          textAlign: TextAlign.center,
-                          maxLines: 1,
-                          maxLength: 10,
-                          controller: zone3NameEditor,
-                          style: TextStyle(
-                            fontSize: screenWidth * 0.04,
-                            color: Colors.grey[800],
-                          ),
-                          decoration: InputDecoration(
-                              hintText: 'exp:chamb123',
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              )),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(flex: 1, child: Text('Zone 3 :', style: TextStyle(fontSize: 14, color: textColor[backGroundColorSelect]))),
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
+                      child: TextField(
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        maxLength: 10,
+                        controller: zone3NameEditor,
+                        cursorColor: textColor[backGroundColorSelect],
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.04,
+                          color: textColor[backGroundColorSelect],
                         ),
+                        decoration: InputDecoration(
+                            counterStyle: TextStyle(
+                              color: textColor[backGroundColorSelect],
+                            ),
+                            hintText: 'exp:chamb123',
+                            hintStyle: TextStyle(
+                              color: textColor[backGroundColorSelect],
+                            )),
                       ),
                     ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(flex: 1, child: Text('Zone 4 :', style: TextStyle(fontSize: 14))),
-                    Expanded(
-                      flex: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
-                        child: TextField(
-                          textAlign: TextAlign.center,
-                          maxLines: 1,
-                          maxLength: 10,
-                          controller: zone4NameEditor,
-                          style: TextStyle(
-                            fontSize: screenWidth * 0.04,
-                            color: Colors.grey[800],
-                          ),
-                          decoration: InputDecoration(
-                              hintText: 'exp:chamb123',
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              )),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(flex: 1, child: Text('Zone 4 :', style: TextStyle(fontSize: 14, color: textColor[backGroundColorSelect]))),
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
+                      child: TextField(
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        maxLength: 10,
+                        controller: zone4NameEditor,
+                        cursorColor: textColor[backGroundColorSelect],
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.04,
+                          color: textColor[backGroundColorSelect],
                         ),
+                        decoration: InputDecoration(
+                            counterStyle: TextStyle(
+                              color: textColor[backGroundColorSelect],
+                            ),
+                            hintText: 'exp:chamb123',
+                            hintStyle: TextStyle(
+                              color: textColor[backGroundColorSelect],
+                            )),
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(
-                'Renommer',
-                style: TextStyle(color: Colors.green),
-              ),
-              onPressed: () async {
-                zonesNamesList[0] = zone1NameEditor.text;
-                zonesNamesList[1] = zone2NameEditor.text;
-                zonesNamesList[2] = zone3NameEditor.text;
-                zonesNamesList[3] = zone4NameEditor.text;
-                String zoneNames = "{\"zones\":[${zonesNamesList[0]},${zonesNamesList[1]},${zonesNamesList[2]},${zonesNamesList[3]}]}";
-                await characteristicMaestro.write(zoneNames.codeUnits);
-                setState(() {});
-                Navigator.of(context).pop();
-              },
+        ),
+        [
+          TextButton(
+            child: Text(
+              'Renommer',
+              style: TextStyle(color: positiveButton[backGroundColorSelect]),
             ),
-            TextButton(
-              child: Text(
-                'Annuler',
-                style: TextStyle(color: Colors.green),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+            onPressed: () async {
+              zonesNamesList[0] = zone1NameEditor.text;
+              zonesNamesList[1] = zone2NameEditor.text;
+              zonesNamesList[2] = zone3NameEditor.text;
+              zonesNamesList[3] = zone4NameEditor.text;
+              String zoneNames = "{\"zones\":[${zonesNamesList[0]},${zonesNamesList[1]},${zonesNamesList[2]},${zonesNamesList[3]}]}";
+              await characteristicMaestro.write(zoneNames.codeUnits);
+              Navigator.of(context).pop();
+              if (Platform.isIOS) {
+                await Future.delayed(Duration(milliseconds: 500));
+                dataMaestroIOS = String.fromCharCodes(await characteristicWifi.read());
+                await Future.delayed(Duration(milliseconds: 500));
+                dataMaestroIOS2 = String.fromCharCodes(await characteristicWifi.read());
+                await Future.delayed(Duration(milliseconds: 500));
+                dataMaestroIOS3 = String.fromCharCodes(await characteristicWifi.read());
+                await Future.delayed(Duration(milliseconds: 500));
+                dataMaestroIOS4 = String.fromCharCodes(await characteristicWifi.read());
+                await Future.delayed(Duration(milliseconds: 500));
+                dataMaestroIOS5 = String.fromCharCodes(await characteristicWifi.read());
+                await Future.delayed(Duration(milliseconds: 500));
+                dataMaestroIOS6 = String.fromCharCodes(await characteristicWifi.read());
+              }
+              if (Platform.isAndroid) {
+                await Future.delayed(Duration(milliseconds: 500));
+                dataMaestro = String.fromCharCodes(await characteristicWifi.read());
+                await Future.delayed(Duration(milliseconds: 500));
+                dataMaestro2 = String.fromCharCodes(await characteristicWifi.read());
+                await Future.delayed(Duration(milliseconds: 500));
+                dataMaestro3 = String.fromCharCodes(await characteristicWifi.read());
+              }
+              setState(() {});
+            },
+          ),
+          TextButton(
+            child: Text(
+              'Annuler',
+              style: TextStyle(color: negativeButton[backGroundColorSelect]),
             ),
-          ],
-        );
-      },
-    );
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ]);
   }
 
   @override

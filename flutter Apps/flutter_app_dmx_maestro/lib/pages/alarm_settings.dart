@@ -104,12 +104,12 @@ class _AlarmClockState extends State<AlarmClock> {
           readWakeUpDataPerDay(parsedJson['dim'], 6);
         }
         if (Platform.isIOS) {
-          parsedJson = json.decode(dataMaestroIOS4);
+          parsedJson = json.decode(dataMaestroIOS5);
           readWakeUpDataPerDay(parsedJson['lun'], 0);
           readWakeUpDataPerDay(parsedJson['mar'], 1);
           readWakeUpDataPerDay(parsedJson['mer'], 2);
           readWakeUpDataPerDay(parsedJson['jeu'], 3);
-          parsedJson = json.decode(dataMaestroIOS5);
+          parsedJson = json.decode(dataMaestroIOS6);
           readWakeUpDataPerDay(parsedJson['ven'], 4);
           readWakeUpDataPerDay(parsedJson['sam'], 5);
           readWakeUpDataPerDay(parsedJson['dim'], 6);
@@ -187,6 +187,8 @@ class _AlarmClockState extends State<AlarmClock> {
                           dataMaestro = String.fromCharCodes(await characteristicWifi.read());
                           await Future.delayed(Duration(milliseconds: 500));
                           dataMaestro2 = String.fromCharCodes(await characteristicWifi.read());
+                          await Future.delayed(Duration(milliseconds: 500));
+                          dataMaestro3 = String.fromCharCodes(await characteristicWifi.read());
                         }
                         if (Platform.isIOS) {
                           await characteristicMaestro.write('{\"lun\":[${alarmDayData(0)}],'
@@ -207,6 +209,8 @@ class _AlarmClockState extends State<AlarmClock> {
                           dataMaestroIOS4 = String.fromCharCodes(await characteristicWifi.read());
                           await Future.delayed(Duration(milliseconds: 500));
                           dataMaestroIOS5 = String.fromCharCodes(await characteristicWifi.read());
+                          await Future.delayed(Duration(milliseconds: 500));
+                          dataMaestroIOS6 = String.fromCharCodes(await characteristicWifi.read());
                         }
                       }
                     },
