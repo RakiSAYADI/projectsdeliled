@@ -6,6 +6,7 @@
 #include "nvs.h"
 #include "nvs_flash.h"
 #include "stdlib.h"
+#include "math.h"
 
 #include "sdkconfig.h"
 
@@ -164,8 +165,12 @@ void Default_saving()
 	for (uint8_t i = 0; i < 6; i++)
 	{
 		sprintf(UnitCfg.ColortrProfile[i].ambname, "Ambiance %d", i + 1);
-		sprintf(UnitCfg.ColortrProfile[i].Hue, "00A6FF");
-		sprintf(UnitCfg.ColortrProfile[i].zone, "F");
+		for (uint8_t j = 0; j < 4; j++)
+		{
+			UnitCfg.ColortrProfile[i].zoneAmbiance[j].zoneId = (uint8_t)pow(2, j);
+			UnitCfg.ColortrProfile[i].zoneAmbiance[j].zoneState = true;
+			sprintf(UnitCfg.ColortrProfile[i].zoneAmbiance[j].Hue, "00A6FF");
+		}
 	}
 
 	UnitData.state = 0;
