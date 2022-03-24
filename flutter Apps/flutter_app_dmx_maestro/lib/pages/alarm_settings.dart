@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app_dmx_maestro/services/DataVariables.dart';
+import 'package:flutter_app_dmx_maestro/services/elavated_button.dart';
 import 'package:flutter_app_dmx_maestro/services/uvcToast.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:hsl_colorpicker/HSLColorPicker.dart';
@@ -141,105 +142,72 @@ class _AlarmClockState extends State<AlarmClock> {
       firstDisplayMainWidget = false;
     }
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: backGroundColor[backGroundColorSelect],
       appBar: AppBar(
-        title: const Text(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: modeColor[backGroundColorSelect]),
+          ),
+        ),
+        title: Text(
           'Planning d\'ambiances',
-          style: TextStyle(fontSize: 18),
+          style: TextStyle(fontSize: 18, color: textColor[backGroundColorSelect]),
         ),
         centerTitle: true,
       ),
       bottomNavigationBar: BottomAppBar(
         notchMargin: 10.0,
-        color: Colors.grey[200],
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Divider(
-                thickness: 1.0,
-                color: Colors.grey[600],
+        color: Colors.transparent,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 20.0),
+          child: MyElevatedButton(
+            onPressed: () async {
+              if (myDevice.getConnectionState()) {
+                if (Platform.isAndroid) {
+                  await characteristicMaestro.write('{\"lun\":[${alarmDayData(0)}],'
+                          '\"mar\":[${alarmDayData(1)}],\"mer\":[${alarmDayData(2)}],'
+                          '\"jeu\":[${alarmDayData(3)}],\"ven\":[${alarmDayData(4)}],'
+                          '\"sam\":[${alarmDayData(5)}],\"dim\":[${alarmDayData(6)}]}'
+                      .codeUnits);
+                  await Future.delayed(Duration(milliseconds: 500));
+                  dataMaestro = String.fromCharCodes(await characteristicWifi.read());
+                  await Future.delayed(Duration(milliseconds: 500));
+                  dataMaestro2 = String.fromCharCodes(await characteristicWifi.read());
+                  await Future.delayed(Duration(milliseconds: 500));
+                  dataMaestro3 = String.fromCharCodes(await characteristicWifi.read());
+                }
+                if (Platform.isIOS) {
+                  await characteristicMaestro.write('{\"lun\":[${alarmDayData(0)}],'
+                          '\"mar\":[${alarmDayData(1)}],\"mer\":[${alarmDayData(2)}],'
+                          '\"jeu\":[${alarmDayData(3)}]}'
+                      .codeUnits);
+                  await Future.delayed(Duration(milliseconds: 500));
+                  await characteristicMaestro.write('{\"ven\":[${alarmDayData(4)}],'
+                          '\"sam\":[${alarmDayData(5)}],\"dim\":[${alarmDayData(6)}]}'
+                      .codeUnits);
+                  await Future.delayed(Duration(milliseconds: 500));
+                  dataMaestroIOS = String.fromCharCodes(await characteristicWifi.read());
+                  await Future.delayed(Duration(milliseconds: 500));
+                  dataMaestroIOS2 = String.fromCharCodes(await characteristicWifi.read());
+                  await Future.delayed(Duration(milliseconds: 500));
+                  dataMaestroIOS3 = String.fromCharCodes(await characteristicWifi.read());
+                  await Future.delayed(Duration(milliseconds: 500));
+                  dataMaestroIOS4 = String.fromCharCodes(await characteristicWifi.read());
+                  await Future.delayed(Duration(milliseconds: 500));
+                  dataMaestroIOS5 = String.fromCharCodes(await characteristicWifi.read());
+                  await Future.delayed(Duration(milliseconds: 500));
+                  dataMaestroIOS6 = String.fromCharCodes(await characteristicWifi.read());
+                }
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text(
+                'Enregistrer',
+                style: TextStyle(color: textColor[backGroundColorSelect], fontSize: 15),
               ),
             ),
-            IntrinsicHeight(
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  VerticalDivider(
-                    thickness: 1.0,
-                    color: Colors.grey[600],
-                  ),
-                  TextButton(
-                    onPressed: () async {
-                      setState(() {
-                        saveButtonColor = Colors.blue[400];
-                      });
-                      if (myDevice.getConnectionState()) {
-                        if (Platform.isAndroid) {
-                          await characteristicMaestro.write('{\"lun\":[${alarmDayData(0)}],'
-                                  '\"mar\":[${alarmDayData(1)}],\"mer\":[${alarmDayData(2)}],'
-                                  '\"jeu\":[${alarmDayData(3)}],\"ven\":[${alarmDayData(4)}],'
-                                  '\"sam\":[${alarmDayData(5)}],\"dim\":[${alarmDayData(6)}]}'
-                              .codeUnits);
-                          await Future.delayed(Duration(milliseconds: 500));
-                          dataMaestro = String.fromCharCodes(await characteristicWifi.read());
-                          await Future.delayed(Duration(milliseconds: 500));
-                          dataMaestro2 = String.fromCharCodes(await characteristicWifi.read());
-                          await Future.delayed(Duration(milliseconds: 500));
-                          dataMaestro3 = String.fromCharCodes(await characteristicWifi.read());
-                        }
-                        if (Platform.isIOS) {
-                          await characteristicMaestro.write('{\"lun\":[${alarmDayData(0)}],'
-                                  '\"mar\":[${alarmDayData(1)}],\"mer\":[${alarmDayData(2)}],'
-                                  '\"jeu\":[${alarmDayData(3)}]}'
-                              .codeUnits);
-                          await Future.delayed(Duration(milliseconds: 500));
-                          await characteristicMaestro.write('{\"ven\":[${alarmDayData(4)}],'
-                                  '\"sam\":[${alarmDayData(5)}],\"dim\":[${alarmDayData(6)}]}'
-                              .codeUnits);
-                          await Future.delayed(Duration(milliseconds: 500));
-                          dataMaestroIOS = String.fromCharCodes(await characteristicWifi.read());
-                          await Future.delayed(Duration(milliseconds: 500));
-                          dataMaestroIOS2 = String.fromCharCodes(await characteristicWifi.read());
-                          await Future.delayed(Duration(milliseconds: 500));
-                          dataMaestroIOS3 = String.fromCharCodes(await characteristicWifi.read());
-                          await Future.delayed(Duration(milliseconds: 500));
-                          dataMaestroIOS4 = String.fromCharCodes(await characteristicWifi.read());
-                          await Future.delayed(Duration(milliseconds: 500));
-                          dataMaestroIOS5 = String.fromCharCodes(await characteristicWifi.read());
-                          await Future.delayed(Duration(milliseconds: 500));
-                          dataMaestroIOS6 = String.fromCharCodes(await characteristicWifi.read());
-                        }
-                      }
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Text(
-                        'Enregistrer',
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                      ),
-                    ),
-                    style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
-                        backgroundColor: MaterialStateProperty.all<Color>(saveButtonColor)),
-                  ),
-                  VerticalDivider(
-                    thickness: 1.0,
-                    color: Colors.grey[600],
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Divider(
-                thickness: 1.0,
-                color: Colors.grey[600],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
       body: Center(
@@ -296,40 +264,68 @@ class _AlarmClockState extends State<AlarmClock> {
                         },
                         children: [
                           Container(
-                              width: (widthScreen - 84) / 7,
-                              child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[new SizedBox(width: 4.0), new Text("Lun.", style: TextStyle(fontSize: 15, color: activationButtonColor[0], fontWeight: FontWeight.bold))])),
+                              width: (widthScreen - 60) / 7,
+                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                new SizedBox(width: 4.0),
+                                new Text(
+                                  "Lun.",
+                                  style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.01, color: activationButtonColor[0], fontWeight: FontWeight.bold),
+                                ),
+                              ])),
                           Container(
-                              width: (widthScreen - 84) / 7,
-                              child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[new SizedBox(width: 4.0), new Text("Mar.", style: TextStyle(fontSize: 15, color: activationButtonColor[1], fontWeight: FontWeight.bold))])),
+                              width: (widthScreen - 60) / 7,
+                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                new SizedBox(width: 4.0),
+                                new Text(
+                                  "Mar.",
+                                  style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.01, color: activationButtonColor[1], fontWeight: FontWeight.bold),
+                                ),
+                              ])),
                           Container(
-                              width: (widthScreen - 84) / 7,
-                              child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[new SizedBox(width: 4.0), new Text("Mer.", style: TextStyle(fontSize: 15, color: activationButtonColor[2], fontWeight: FontWeight.bold))])),
+                              width: (widthScreen - 60) / 7,
+                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                new SizedBox(width: 4.0),
+                                new Text(
+                                  "Mer.",
+                                  style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.01, color: activationButtonColor[2], fontWeight: FontWeight.bold),
+                                ),
+                              ])),
                           Container(
-                              width: (widthScreen - 84) / 7,
-                              child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[new SizedBox(width: 4.0), new Text("Jeu.", style: TextStyle(fontSize: 15, color: activationButtonColor[3], fontWeight: FontWeight.bold))])),
+                              width: (widthScreen - 60) / 7,
+                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                new SizedBox(width: 4.0),
+                                new Text(
+                                  "Jeu.",
+                                  style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.01, color: activationButtonColor[3], fontWeight: FontWeight.bold),
+                                ),
+                              ])),
                           Container(
-                              width: (widthScreen - 84) / 7,
-                              child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[new SizedBox(width: 4.0), new Text("Ven.", style: TextStyle(fontSize: 15, color: activationButtonColor[4], fontWeight: FontWeight.bold))])),
+                              width: (widthScreen - 60) / 7,
+                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                new SizedBox(width: 4.0),
+                                new Text(
+                                  "Ven.",
+                                  style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.01, color: activationButtonColor[4], fontWeight: FontWeight.bold),
+                                ),
+                              ])),
                           Container(
-                              width: (widthScreen - 84) / 7,
-                              child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[new SizedBox(width: 4.0), new Text("Sam.", style: TextStyle(fontSize: 15, color: activationButtonColor[5], fontWeight: FontWeight.bold))])),
+                              width: (widthScreen - 60) / 7,
+                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                new SizedBox(width: 4.0),
+                                new Text(
+                                  "Sam.",
+                                  style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.01, color: activationButtonColor[5], fontWeight: FontWeight.bold),
+                                ),
+                              ])),
                           Container(
-                              width: (widthScreen - 84) / 7,
-                              child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[new SizedBox(width: 4.0), new Text("Dim.", style: TextStyle(fontSize: 15, color: activationButtonColor[6], fontWeight: FontWeight.bold))])),
+                              width: (widthScreen - 60) / 7,
+                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                new SizedBox(width: 4.0),
+                                new Text(
+                                  "Dim.",
+                                  style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.01, color: activationButtonColor[6], fontWeight: FontWeight.bold),
+                                ),
+                              ])),
                         ],
                         borderWidth: 2,
                         color: Colors.grey,
@@ -343,7 +339,7 @@ class _AlarmClockState extends State<AlarmClock> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
               ),
-              TextButton(
+              MyElevatedButton(
                 onPressed: () {
                   activationButtonState = daysStates[day];
                   activationButtonState = !activationButtonState;
@@ -363,233 +359,286 @@ class _AlarmClockState extends State<AlarmClock> {
                   padding: const EdgeInsets.all(10.0),
                   child: Text(
                     activationButtonText,
-                    style: TextStyle(color: Colors.white, fontSize: 15),
+                    style: TextStyle(color: activationButtonColor[day], fontSize: 15),
                   ),
                 ),
-                style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
-                    backgroundColor: MaterialStateProperty.all<Color>(activationButtonColor[day])),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
-                      child: Image.asset(
-                        'assets/reveil-dmx.png',
-                        height: heightScreen * 0.1,
-                        width: widthScreen * 0.2,
-                      ),
-                    ),
-                    Column(
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
+                      children: [
+                        Icon(
+                          Icons.alarm,
+                          size: heightScreen * 0.03 + widthScreen * 0.05,
+                          color: textColor[backGroundColorSelect],
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            'Heure d\'activation :',
+                            'Heure de réveil :',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: textColor[backGroundColorSelect],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(20), color: Colors.white),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          DropdownButton<String>(
+                            value: myTimeHoursData,
+                            icon: Icon(Icons.arrow_drop_down),
+                            iconSize: 24,
+                            elevation: 16,
+                            style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                            onChanged: (String data) {
+                              setState(() {
+                                saveButtonColor = Colors.grey[400];
+                                myTimeHoursData = data;
+                                myTimeHoursPosition = myTimeHours.indexOf(data);
+                                hourList[day] = myTimeHoursPosition;
+                              });
+                            },
+                            items: myTimeHours.map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                          Text(
+                            ' : ',
                             style: TextStyle(
                               fontSize: 18,
                               color: Colors.black,
                             ),
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            DropdownButton<String>(
-                              value: myTimeHoursData,
-                              icon: Icon(Icons.arrow_drop_down),
-                              iconSize: 24,
-                              elevation: 16,
-                              style: TextStyle(color: Colors.grey[800], fontSize: 18),
-                              onChanged: (String data) {
-                                setState(() {
-                                  saveButtonColor = Colors.grey[400];
-                                  myTimeHoursData = data;
-                                  myTimeHoursPosition = myTimeHours.indexOf(data);
-                                  hourList[day] = myTimeHoursPosition;
-                                });
-                              },
-                              items: myTimeHours.map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.grey[600],
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                            Text(
-                              ' : ',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                              ),
-                            ),
-                            DropdownButton<String>(
-                              value: myTimeMinutesData,
-                              icon: Icon(Icons.arrow_drop_down),
-                              iconSize: 24,
-                              elevation: 16,
-                              style: TextStyle(color: Colors.grey[800], fontSize: 18),
-                              onChanged: (String data) {
-                                setState(() {
-                                  saveButtonColor = Colors.grey[400];
-                                  myTimeMinutesData = data;
-                                  myTimeMinutesPosition = myTimeMinutes.indexOf(data);
-                                  minutesList[day] = myTimeMinutesPosition;
-                                });
-                              },
-                              items: myTimeMinutes.map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.grey[600],
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                            Text(
-                              ' : ',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                              ),
-                            ),
-                            DropdownButton<String>(
-                              value: myTimeSecondsData,
-                              icon: Icon(Icons.arrow_drop_down),
-                              iconSize: 24,
-                              elevation: 16,
-                              style: TextStyle(color: Colors.grey[800], fontSize: 18),
-                              onChanged: (String data) {
-                                setState(() {
-                                  saveButtonColor = Colors.grey[400];
-                                  myTimeSecondsData = data;
-                                  myTimeSecondsPosition = myTimeSeconds.indexOf(data);
-                                  secondsList[day] = myTimeSecondsPosition;
-                                });
-                              },
-                              items: myTimeMinutes.map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.grey[600],
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    bigCircle(50, 50),
-                    Text(
-                      'Couleur \n à appliquer',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
-                      ),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.settings),
-                      onPressed: () async {
-                        await colorSettingWidget(context);
-                        setState(() {
-                          hueInitial[day] = hueInitial[day];
-                        });
-                      },
-                      color: Colors.black,
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Divider(
-                  thickness: 3.0,
-                  color: Colors.grey[600],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
-                      child: Image.asset(
-                        'assets/sablier-dmx.png',
-                        height: heightScreen * 0.15,
-                        width: widthScreen * 0.2,
-                      ),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Durée d\'activation :',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.1)),
-                          child: DropdownButton<String>(
-                            value: myAlarmTimeMinuteData,
+                          DropdownButton<String>(
+                            value: myTimeMinutesData,
                             icon: Icon(Icons.arrow_drop_down),
                             iconSize: 24,
                             elevation: 16,
                             style: TextStyle(color: Colors.grey[800], fontSize: 18),
-                            underline: Container(
-                              height: 2,
-                              color: Colors.blue[300],
-                            ),
                             onChanged: (String data) {
                               setState(() {
                                 saveButtonColor = Colors.grey[400];
-                                myAlarmTimeMinuteData = data;
-                                myAlarmTimeMinutePosition = myAlarmTimeMinute.indexOf(data);
-                                myAlarmTimeMinuteList[day] = myAlarmTimeMinutePosition;
+                                myTimeMinutesData = data;
+                                myTimeMinutesPosition = myTimeMinutes.indexOf(data);
+                                minutesList[day] = myTimeMinutesPosition;
                               });
                             },
-                            items: myAlarmTimeMinute.map<DropdownMenuItem<String>>((String value) {
+                            items: myTimeMinutes.map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
-                                child: Text(value),
+                                child: Text(
+                                  value,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                  ),
+                                ),
                               );
                             }).toList(),
                           ),
-                        ),
-                      ],
+                          Text(
+                            ' : ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
+                          ),
+                          DropdownButton<String>(
+                            value: myTimeSecondsData,
+                            icon: Icon(Icons.arrow_drop_down),
+                            iconSize: 24,
+                            elevation: 16,
+                            style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                            onChanged: (String data) {
+                              setState(() {
+                                saveButtonColor = Colors.grey[400];
+                                myTimeSecondsData = data;
+                                myTimeSecondsPosition = myTimeSeconds.indexOf(data);
+                                secondsList[day] = myTimeSecondsPosition;
+                              });
+                            },
+                            items: myTimeMinutes.map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.workspaces_outline,
+                    size: heightScreen * 0.03 + widthScreen * 0.05,
+                    color: textColor[backGroundColorSelect],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Ambiances :',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: textColor[backGroundColorSelect],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.hourglass_bottom,
+                    size: heightScreen * 0.03 + widthScreen * 0.05,
+                    color: textColor[backGroundColorSelect],
+                  ),
+                  Text(
+                    'Durée de réveil :',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: textColor[backGroundColorSelect],
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(20), color: Colors.white),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      DropdownButton<String>(
+                        value: myTimeMinutesData,
+                        icon: Icon(Icons.arrow_drop_down),
+                        iconSize: 24,
+                        elevation: 16,
+                        style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                        onChanged: (String data) {
+                          setState(() {
+                            saveButtonColor = Colors.grey[400];
+                            myTimeMinutesData = data;
+                            myTimeMinutesPosition = myTimeMinutes.indexOf(data);
+                            minutesList[day] = myTimeMinutesPosition;
+                          });
+                        },
+                        items: myTimeMinutes.map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                      Text(
+                        ' : ',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
+                      ),
+                      DropdownButton<String>(
+                        value: myTimeSecondsData,
+                        icon: Icon(Icons.arrow_drop_down),
+                        iconSize: 24,
+                        elevation: 16,
+                        style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                        onChanged: (String data) {
+                          setState(() {
+                            saveButtonColor = Colors.grey[400];
+                            myTimeSecondsData = data;
+                            myTimeSecondsPosition = myTimeSeconds.indexOf(data);
+                            secondsList[day] = myTimeSecondsPosition;
+                          });
+                        },
+                        items: myTimeMinutes.map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
                 ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.1)),
+                    child: DropdownButton<String>(
+                      value: myAlarmTimeMinuteData,
+                      icon: Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                      underline: Container(
+                        height: 2,
+                        color: Colors.blue[300],
+                      ),
+                      onChanged: (String data) {
+                        setState(() {
+                          saveButtonColor = Colors.grey[400];
+                          myAlarmTimeMinuteData = data;
+                          myAlarmTimeMinutePosition = myAlarmTimeMinute.indexOf(data);
+                          myAlarmTimeMinuteList[day] = myAlarmTimeMinutePosition;
+                        });
+                      },
+                      items: myAlarmTimeMinute.map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,

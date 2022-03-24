@@ -4,11 +4,13 @@ import 'package:flutter_app_dmx_maestro/services/DataVariables.dart';
 class MyCustomContainer extends StatelessWidget {
   final BoxShape shape;
   final Widget child;
+  final double radius;
 
   const MyCustomContainer({
     Key key,
     @required this.child,
     this.shape = BoxShape.circle,
+    this.radius = 80.0,
   }) : super(key: key);
 
   @override
@@ -18,7 +20,7 @@ class MyCustomContainer extends StatelessWidget {
     if (shape == BoxShape.circle) {
       borderRadius = null;
     } else {
-      borderRadius = BorderRadius.circular(80);
+      borderRadius = BorderRadius.circular(radius);
     }
     return Container(
       decoration: BoxDecoration(

@@ -36,7 +36,7 @@ class _HomeState extends State<Home> {
   double opacityLevelAmbiances = 0.0;
   double _lowerValue = 50;
 
-  List<String> ambiance1, ambiance2, ambiance3, ambiance4, ambiance5, ambiance6;
+  List<dynamic> ambiance1, ambiance2, ambiance3, ambiance4, ambiance5, ambiance6;
   List<bool> remoteAndAmbVisibility = [true, false];
   List<String> zonesNamesList = ['', '', '', ''];
   List<bool> zoneStates;
@@ -73,12 +73,72 @@ class _HomeState extends State<Home> {
       }
       if (Platform.isAndroid) {
         parsedJson = json.decode(dataMaestro2);
-        ambiance1 = [parsedJson['Amb'][0].toString(), parsedJson['Amb'][1].toString(), parsedJson['Amb'][2].toString(), parsedJson['Amb'][3].toString(), parsedJson['Amb'][4].toString()];
-        ambiance2 = [parsedJson['Amb'][5].toString(), parsedJson['Amb'][6].toString(), parsedJson['Amb'][7].toString(), parsedJson['Amb'][8].toString(), parsedJson['Amb'][9].toString()];
-        ambiance3 = [parsedJson['Amb'][10].toString(), parsedJson['Amb'][11].toString(), parsedJson['Amb'][12].toString(), parsedJson['Amb'][13].toString(), parsedJson['Amb'][14].toString()];
-        ambiance4 = [parsedJson['Amb'][15].toString(), parsedJson['Amb'][16].toString(), parsedJson['Amb'][17].toString(), parsedJson['Amb'][18].toString(), parsedJson['Amb'][19].toString()];
-        ambiance5 = [parsedJson['Amb'][20].toString(), parsedJson['Amb'][21].toString(), parsedJson['Amb'][22].toString(), parsedJson['Amb'][23].toString(), parsedJson['Amb'][24].toString()];
-        ambiance6 = [parsedJson['Amb'][25].toString(), parsedJson['Amb'][26].toString(), parsedJson['Amb'][27].toString(), parsedJson['Amb'][28].toString(), parsedJson['Amb'][29].toString()];
+        ambiance1 = [
+          parsedJson['Amb'][0].toString(),
+          parsedJson['Amb'][1],
+          parsedJson['Amb'][2].toString(),
+          parsedJson['Amb'][3],
+          parsedJson['Amb'][4].toString(),
+          parsedJson['Amb'][5],
+          parsedJson['Amb'][6].toString(),
+          parsedJson['Amb'][7],
+          parsedJson['Amb'][8].toString()
+        ];
+        ambiance2 = [
+          parsedJson['Amb'][9].toString(),
+          parsedJson['Amb'][10],
+          parsedJson['Amb'][11].toString(),
+          parsedJson['Amb'][12],
+          parsedJson['Amb'][13].toString(),
+          parsedJson['Amb'][14],
+          parsedJson['Amb'][15].toString(),
+          parsedJson['Amb'][16],
+          parsedJson['Amb'][17].toString()
+        ];
+        ambiance3 = [
+          parsedJson['Amb'][18].toString(),
+          parsedJson['Amb'][19],
+          parsedJson['Amb'][20].toString(),
+          parsedJson['Amb'][21],
+          parsedJson['Amb'][22].toString(),
+          parsedJson['Amb'][23],
+          parsedJson['Amb'][24].toString(),
+          parsedJson['Amb'][25],
+          parsedJson['Amb'][26].toString()
+        ];
+        ambiance4 = [
+          parsedJson['Amb'][27].toString(),
+          parsedJson['Amb'][28],
+          parsedJson['Amb'][29].toString(),
+          parsedJson['Amb'][30],
+          parsedJson['Amb'][31].toString(),
+          parsedJson['Amb'][32],
+          parsedJson['Amb'][33].toString(),
+          parsedJson['Amb'][34],
+          parsedJson['Amb'][35].toString()
+        ];
+        ambiance5 = [
+          parsedJson['Amb'][36].toString(),
+          parsedJson['Amb'][37],
+          parsedJson['Amb'][38].toString(),
+          parsedJson['Amb'][39],
+          parsedJson['Amb'][40].toString(),
+          parsedJson['Amb'][41],
+          parsedJson['Amb'][42].toString(),
+          parsedJson['Amb'][43],
+          parsedJson['Amb'][44].toString()
+        ];
+        ambiance6 = [
+          parsedJson['Amb'][45].toString(),
+          parsedJson['Amb'][46],
+          parsedJson['Amb'][47].toString(),
+          parsedJson['Amb'][48],
+          parsedJson['Amb'][49].toString(),
+          parsedJson['Amb'][50],
+          parsedJson['Amb'][51].toString(),
+          parsedJson['Amb'][52],
+          parsedJson['Amb'][53].toString()
+        ];
         parsedJson = json.decode(dataMaestro);
         zonesNamesList[0] = parsedJson['zone'][0];
         zonesNamesList[1] = parsedJson['zone'][1];
@@ -87,12 +147,12 @@ class _HomeState extends State<Home> {
       }
     } catch (e) {
       print('erreur');
-      ambiance1 = ['Ambiance 1', 'FF0000', 'FF0000', 'FF0000', 'FF0000'];
-      ambiance2 = ['Ambiance 2', '000000', '000000', '000000', '000000'];
-      ambiance3 = ['Ambiance 3', '00FF00', '00FF00', '00FF00', '00FF00'];
-      ambiance4 = ['Ambiance 4', '0000FF', '0000FF', '0000FF', '0000FF'];
-      ambiance5 = ['Ambiance 5', 'FFFF00', 'FFFF00', 'FFFF00', 'FFFF00'];
-      ambiance6 = ['Ambiance 6', '00FFFF', '00FFFF', '00FFFF', '00FFFF'];
+      ambiance1 = ['Ambiance 1', true, 'FF0000', true, 'FF0000', true, 'FF0000', true, 'FF0000'];
+      ambiance2 = ['Ambiance 2', true, '000000', true, '000000', true, '000000', true, '000000'];
+      ambiance3 = ['Ambiance 3', true, '00FF00', true, '00FF00', true, '00FF00', true, '00FF00'];
+      ambiance4 = ['Ambiance 4', true, '0000FF', true, '0000FF', true, '0000FF', true, '0000FF'];
+      ambiance5 = ['Ambiance 5', true, 'FFFF00', true, 'FFFF00', true, 'FFFF00', true, 'FFFF00'];
+      ambiance6 = ['Ambiance 6', true, '00FFFF', true, '00FFFF', true, '00FFFF', true, '00FFFF'];
       zonesNamesList = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4'];
     }
 
@@ -102,98 +162,63 @@ class _HomeState extends State<Home> {
         backgroundColor: backGroundColor[backGroundColorSelect],
         bottomNavigationBar: BottomAppBar(
           color: Colors.transparent,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Divider(
-                  thickness: 1.0,
-                  color: Colors.transparent,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: MyIconButton(
+                    iconColor: textColor[backGroundColorSelect],
+                    icon: Icon(Icons.alarm),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/alarm_settings').then((_) => setState(() {}));
+                    },
+                  ),
                 ),
-              ),
-              IntrinsicHeight(
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        VerticalDivider(
-                          thickness: 1.0,
-                          color: Colors.transparent,
-                        ),
-                        MyIconButton(
-                          iconColor: textColor[backGroundColorSelect],
-                          icon: Icon(Icons.alarm),
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/alarm_settings');
-                          },
-                        ),
-                        VerticalDivider(
-                          thickness: 1.0,
-                          color: Colors.transparent,
-                        ),
-                      ],
-                    ),
-                    MyElevatedButton(
-                      key: Key('bottom_bar_title'),
-                      onPressed: () {
-                        setState(() {
-                          if (bottomBarTitleState) {
-                            bottomBarTitle = 'Ambiances';
-                          } else {
-                            bottomBarTitle = 'Télécommande';
-                          }
-                          bottomBarTitleState = !bottomBarTitleState;
-                          opacityLevelAmbiances = opacityLevelAmbiances == 0 ? 1.0 : 0.0;
-                          opacityLevelRemoteControl = opacityLevelRemoteControl == 0 ? 1.0 : 0.0;
-                          remoteAndAmbVisibility[0] = !remoteAndAmbVisibility[0];
-                          remoteAndAmbVisibility[1] = !remoteAndAmbVisibility[1];
-                        });
-                        print(bottomBarTitle);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text(
-                          bottomBarTitle,
-                          style: TextStyle(color: textColor[backGroundColorSelect], fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
+                Expanded(
+                  flex: 3,
+                  child: MyElevatedButton(
+                    key: Key('bottom_bar_title'),
+                    onPressed: () {
+                      setState(() {
+                        if (bottomBarTitleState) {
+                          bottomBarTitle = 'Ambiances';
+                        } else {
+                          bottomBarTitle = 'Télécommande';
+                        }
+                        bottomBarTitleState = !bottomBarTitleState;
+                        opacityLevelAmbiances = opacityLevelAmbiances == 0 ? 1.0 : 0.0;
+                        opacityLevelRemoteControl = opacityLevelRemoteControl == 0 ? 1.0 : 0.0;
+                        remoteAndAmbVisibility[0] = !remoteAndAmbVisibility[0];
+                        remoteAndAmbVisibility[1] = !remoteAndAmbVisibility[1];
+                      });
+                      print(bottomBarTitle);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(
+                        bottomBarTitle,
+                        style: TextStyle(color: textColor[backGroundColorSelect], fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                     ),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        VerticalDivider(
-                          thickness: 1.0,
-                          color: Colors.transparent,
-                        ),
-                        MyIconButton(
-                          key: Key('settings_button'),
-                          iconColor: textColor[backGroundColorSelect],
-                          icon: Icon(Icons.settings),
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/settings');
-                          },
-                        ),
-                        VerticalDivider(
-                          thickness: 1.0,
-                          color: Colors.transparent,
-                        ),
-                      ],
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Divider(
-                  thickness: 1.0,
-                  color: Colors.transparent,
+                Expanded(
+                  flex: 1,
+                  child: MyIconButton(
+                    key: Key('settings_button'),
+                    iconColor: textColor[backGroundColorSelect],
+                    icon: Icon(Icons.settings),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/settings').then((_) => setState(() {}));
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         body: Center(
@@ -240,62 +265,37 @@ class _HomeState extends State<Home> {
 
   Widget ambianceWidget(BuildContext context) {
     //double widthScreen = MediaQuery.of(context).size.width;
-    //double heightScreen = MediaQuery.of(context).size.height;
+    double heightScreen = MediaQuery.of(context).size.height;
     return Center(
       key: Key('ambiance_widget'),
       child: IntrinsicHeight(
-        child: Column(
+        child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Expanded(
-              flex: 2,
-              child: Row(
+              flex: 1,
+              child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                    child: ambianceDisplayWidget(context, ambiance1, 1),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-                    child: ambianceDisplayWidget(context, ambiance2, 2),
-                  ),
+                  Expanded(flex: 2, child: ambianceDisplayWidget(context, ambiance1, 1)),
+                  Expanded(flex: 2, child: ambianceDisplayWidget(context, ambiance3, 3)),
+                  Expanded(flex: 2, child: ambianceDisplayWidget(context, ambiance5, 5)),
+                  Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.1)),
                 ],
               ),
             ),
             Expanded(
-              flex: 2,
-              child: Row(
+              flex: 1,
+              child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                    child: ambianceDisplayWidget(context, ambiance3, 3),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-                    child: ambianceDisplayWidget(context, ambiance4, 4),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                    child: ambianceDisplayWidget(context, ambiance5, 5),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-                    child: ambianceDisplayWidget(context, ambiance6, 6),
-                  ),
+                  Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.1)),
+                  Expanded(flex: 2, child: ambianceDisplayWidget(context, ambiance2, 2)),
+                  Expanded(flex: 2, child: ambianceDisplayWidget(context, ambiance4, 4)),
+                  Expanded(flex: 2, child: ambianceDisplayWidget(context, ambiance6, 6)),
                 ],
               ),
             ),
@@ -306,35 +306,68 @@ class _HomeState extends State<Home> {
   }
 
   Widget ambianceDisplayWidget(BuildContext context, List<String> ambiance, int ambianceID) {
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              ambiance[0],
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: textColor[backGroundColorSelect]),
+      padding: const EdgeInsets.all(8.0),
+      child: MyCustomContainer(
+        shape: BoxShape.rectangle,
+        radius: 20,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              flex: 2,
+              child: GestureDetector(
+                onTap: () async {
+                  if (myDevice.getConnectionState()) {
+                    if (bottomBarTitleState) {
+                      await characteristicMaestro.write('{\"Favoris\":\"Ambiance $ambianceID\"}'.codeUnits);
+                    }
+                  }
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          ambiance[0],
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: widthScreen * 0.01 + heightScreen * 0.015, color: textColor[backGroundColorSelect]),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ambianceCircleDisplay(context, ambiance, ambianceID),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ambianceCircleDisplay(context, ambiance, ambianceID),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: MyIconButton(
-              onPressed: () async {
-                if (bottomBarTitleState) {
-                  Navigator.pushNamed(context, '/ambiances_settings', arguments: {'ambianceID': ambianceID, 'ambiance': ambiance, 'zoneNames': zonesNamesList});
-                }
-              },
-              icon: Icon(Icons.settings),
-              iconColor: textColor[backGroundColorSelect],
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: IconButton(
+                  onPressed: () async {
+                    if (bottomBarTitleState) {
+                      Navigator.pushNamed(context, '/ambiances_settings', arguments: {'ambianceID': ambianceID, 'ambiance': ambiance, 'zoneNames': zonesNamesList}).then((_) => setState(() {}));
+                    }
+                  },
+                  icon: Icon(Icons.settings, color: textColor[backGroundColorSelect]),
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -557,153 +590,6 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Future<void> ambianceSettingWidget(BuildContext context, List<String> ambiance, int ambianceID) async {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    final ambianceNameEditor = TextEditingController();
-    final color = StringBuffer();
-    zonesInHexAmb = ambiance[2];
-    zoneStates[0] = intToBool(int.parse(zonesInHexAmb, radix: 16) ~/ 8);
-    zoneStates[1] = intToBool(int.parse(zonesInHexAmb, radix: 16) % 8 ~/ 4);
-    zoneStates[2] = intToBool(int.parse(zonesInHexAmb, radix: 16) % 4 ~/ 2);
-    zoneStates[3] = intToBool(int.parse(zonesInHexAmb, radix: 16) % 2);
-    if (ambiance[1].length == 6 || ambiance[1].length == 7) color.write('ff');
-    color.write(ambiance[1].replaceFirst('#', ''));
-    ambianceNameEditor.text = ambiance[0];
-    String colorHue = ambiance[1];
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              title: Text('Modifier l’ambiance'),
-              content: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('Nom de votre ambiance:'),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                        maxLength: 10,
-                        controller: ambianceNameEditor,
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.04,
-                          color: Colors.grey[800],
-                        ),
-                        decoration: InputDecoration(
-                            hintText: 'exp:amb123',
-                            hintStyle: TextStyle(
-                              color: Colors.grey,
-                            )),
-                      ),
-                    ),
-                    Text('Zone de votre ambiance:'),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [zoneButton(context, 0), zoneButton(context, 1)],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [zoneButton(context, 2), zoneButton(context, 3)],
-                    ),
-                    Text('Couleur de votre ambiance:'),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: HSLColorPicker(
-                        onChanged: (colorSelected) {
-                          colorHue = colorSelected.toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "");
-                        },
-                        size: screenWidth * 0.4 + screenHeight * 0.1,
-                        strokeWidth: screenWidth * 0.04,
-                        thumbSize: 0.00001,
-                        thumbStrokeSize: screenWidth * 0.005 + screenHeight * 0.005,
-                        showCenterColorIndicator: true,
-                        centerColorIndicatorSize: screenWidth * 0.05 + screenHeight * 0.05,
-                        initialColor: Color(int.parse(color.toString(), radix: 16)),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: Text(
-                    'Sauvegarder',
-                    style: TextStyle(color: Colors.green),
-                  ),
-                  onPressed: () async {
-                    zonesInHexAmb = ((boolToInt(zoneStates[3])) + (boolToInt(zoneStates[2]) * 2) + (boolToInt(zoneStates[1]) * 4) + (boolToInt(zoneStates[0]) * 8)).toRadixString(16);
-                    ambiance[0] = ambianceNameEditor.text;
-                    ambiance[1] = colorHue;
-                    ambiance[2] = zonesInHexAmb;
-                    if (bottomBarTitleState) {
-                      await characteristicMaestro.write('{\"couleur$ambianceID\":[${ambiance[0]},${ambiance[1]},${ambiance[2]}]}'.codeUnits);
-                    }
-                    switch (ambianceID) {
-                      case 1:
-                        ambiance1[0] = ambiance[0];
-                        ambiance1[1] = ambiance[1];
-                        ambiance1[2] = ambiance[2];
-                        break;
-                      case 2:
-                        ambiance2[0] = ambiance[0];
-                        ambiance2[1] = ambiance[1];
-                        ambiance2[2] = ambiance[2];
-                        break;
-                      case 3:
-                        ambiance3[0] = ambiance[0];
-                        ambiance3[1] = ambiance[1];
-                        ambiance3[2] = ambiance[2];
-                        break;
-                      case 4:
-                        ambiance4[0] = ambiance[0];
-                        ambiance4[1] = ambiance[1];
-                        ambiance4[2] = ambiance[2];
-                        break;
-                      case 5:
-                        ambiance5[0] = ambiance[0];
-                        ambiance5[1] = ambiance[1];
-                        ambiance5[2] = ambiance[2];
-                        break;
-                      case 6:
-                        ambiance6[0] = ambiance[0];
-                        ambiance6[1] = ambiance[1];
-                        ambiance6[2] = ambiance[2];
-                        break;
-                    }
-                    pageRefresh();
-                    Navigator.of(context).pop();
-                  },
-                ),
-                TextButton(
-                  child: Text(
-                    'Annuler',
-                    style: TextStyle(color: Colors.green),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
-  void pageRefresh() async {
-    await Future.delayed(Duration(milliseconds: 500));
-    setState(() {});
-  }
-
   Widget zoneButton(BuildContext context, int zoneID) {
     Color zoneState;
     double widthScreen = MediaQuery.of(context).size.width;
@@ -779,7 +665,19 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                   ),
-                  Expanded(flex: 2, child: Center(child: Text('$zoneID', style: TextStyle(fontSize: widthScreen * 0.03 + heightScreen * 0.01, color: textColor[backGroundColorSelect])))),
+                  Expanded(
+                    flex: 2,
+                    child: Center(
+                      child: Text(
+                        '$zoneID',
+                        style: TextStyle(
+                          fontSize: widthScreen * 0.03 + heightScreen * 0.01,
+                          color: textColor[backGroundColorSelect],
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
                   Expanded(
                     flex: 1,
                     child: Center(
@@ -805,8 +703,6 @@ class _HomeState extends State<Home> {
   }
 
   Widget ambianceCircleDisplay(BuildContext context, List<String> ambianceColors, int ambianceID) {
-    double widthScreen = MediaQuery.of(context).size.width;
-    double heightScreen = MediaQuery.of(context).size.height;
     final colorZone1 = getColors(ambianceColors[1]);
     final colorZone2 = getColors(ambianceColors[2]);
     final colorZone3 = getColors(ambianceColors[3]);
@@ -837,8 +733,8 @@ class _HomeState extends State<Home> {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Container(
-        width: widthScreen * 0.05,
-        height: heightScreen * 0.05,
+        width: widthScreen * 0.06,
+        height: heightScreen * 0.06,
         decoration: BoxDecoration(shape: BoxShape.circle, color: zoneColor),
       ),
     );

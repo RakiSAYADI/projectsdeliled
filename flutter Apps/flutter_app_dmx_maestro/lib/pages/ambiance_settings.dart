@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app_dmx_maestro/services/DataVariables.dart';
+import 'package:flutter_app_dmx_maestro/services/elavated_button.dart';
 import 'package:flutter_app_dmx_maestro/services/uvcToast.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hsl_colorpicker/HSLColorPicker.dart';
 
 class Ambiances extends StatefulWidget {
@@ -11,21 +13,18 @@ class Ambiances extends StatefulWidget {
 }
 
 class _AmbiancesState extends State<Ambiances> {
-  final int zonesTabPadding = 60;
-
   ToastyMessage myUvcToast;
 
   List<String> ambiance;
   List<String> zonesNamesList = ['', '', '', ''];
 
-  List<bool> zoneStates = [false, false, false, false];
+  List<Color> zoneStates = [Colors.red, Colors.red, Colors.red, Colors.red];
 
   int ambianceID;
   int zoneID = 0;
 
   Map ambiancesClassData = {};
 
-  Color saveButtonColor = Colors.blue[400];
   Color circlePickerColor = Colors.blue[400];
 
   final myAmbianceName = TextEditingController();
@@ -64,98 +63,81 @@ class _AmbiancesState extends State<Ambiances> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: backGroundColor[backGroundColorSelect],
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: modeColor[backGroundColorSelect]),
+          ),
+        ),
         title: Text(
           ambiance[0],
-          style: TextStyle(fontSize: 18),
+          style: TextStyle(fontSize: 18, color: textColor[backGroundColorSelect]),
         ),
         centerTitle: true,
       ),
       bottomNavigationBar: BottomAppBar(
         notchMargin: 10.0,
-        color: Colors.grey[200],
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Divider(
-                thickness: 1.0,
-                color: Colors.grey[600],
-              ),
-            ),
-            IntrinsicHeight(
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  VerticalDivider(
-                    thickness: 1.0,
-                    color: Colors.grey[600],
-                  ),
-                  TextButton(
-                    onPressed: () async {
-                      setState(() {
-                        saveButtonColor = Colors.blue[400];
-                      });
-                      if (myDevice.getConnectionState()) {
-                        ambiance[0] = myAmbianceName.text;
-                        await characteristicMaestro.write('{\"couleur$ambianceID\":[\"${ambiance[0]}\",\"${ambiance[1]}\",\"${ambiance[2]}\",\"${ambiance[3]}\",\"${ambiance[4]}\"]}'.codeUnits);
-                        if (Platform.isAndroid) {
-                          await Future.delayed(Duration(milliseconds: 500));
-                          dataMaestro = String.fromCharCodes(await characteristicWifi.read());
-                          await Future.delayed(Duration(milliseconds: 500));
-                          dataMaestro2 = String.fromCharCodes(await characteristicWifi.read());
-                          await Future.delayed(Duration(milliseconds: 500));
-                          dataMaestro3 = String.fromCharCodes(await characteristicWifi.read());
-                        }
-                        if (Platform.isIOS) {
-                          await Future.delayed(Duration(milliseconds: 500));
-                          dataMaestroIOS = String.fromCharCodes(await characteristicWifi.read());
-                          await Future.delayed(Duration(milliseconds: 500));
-                          dataMaestroIOS2 = String.fromCharCodes(await characteristicWifi.read());
-                          await Future.delayed(Duration(milliseconds: 500));
-                          dataMaestroIOS3 = String.fromCharCodes(await characteristicWifi.read());
-                          await Future.delayed(Duration(milliseconds: 500));
-                          dataMaestroIOS4 = String.fromCharCodes(await characteristicWifi.read());
-                          await Future.delayed(Duration(milliseconds: 500));
-                          dataMaestroIOS5 = String.fromCharCodes(await characteristicWifi.read());
-                          await Future.delayed(Duration(milliseconds: 500));
-                          dataMaestroIOS6 = String.fromCharCodes(await characteristicWifi.read());
-                        }
-                        myUvcToast.setToastDuration(5);
-                        myUvcToast.setToastMessage('Données enregistrées !');
-                        myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
-                      }
-                      Navigator.pop(context);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Text(
-                        'Enregistrer',
-                        style: TextStyle(color: Colors.white, fontSize: 15),
+        color: Colors.transparent,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 20.0),
+          child: MyElevatedButton(
+            onPressed: () async {
+              if (myDevice.getConnectionState()) {
+                ambiance[0] = myAmbianceName.text;
+                await characteristicMaestro.write('{\"couleur$ambianceID\":[\"${ambiance[0]}\",\"${ambiance[1]}\",\"${ambiance[2]}\",\"${ambiance[3]}\",\"${ambiance[4]}\"]}'.codeUnits);
+                displayAlert(
+                  context,
+                  'Enregistrement en cours',
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SpinKitCircle(
+                        color: Colors.blue[600],
+                        size: heightScreen * 0.1,
                       ),
-                    ),
-                    style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.black))),
-                        backgroundColor: MaterialStateProperty.all<Color>(saveButtonColor)),
+                    ],
                   ),
-                  VerticalDivider(
-                    thickness: 1.0,
-                    color: Colors.grey[600],
-                  ),
-                ],
+                  null,
+                );
+                if (Platform.isAndroid) {
+                  await Future.delayed(Duration(milliseconds: 500));
+                  dataMaestro = String.fromCharCodes(await characteristicWifi.read());
+                  await Future.delayed(Duration(milliseconds: 500));
+                  dataMaestro2 = String.fromCharCodes(await characteristicWifi.read());
+                  await Future.delayed(Duration(milliseconds: 500));
+                  dataMaestro3 = String.fromCharCodes(await characteristicWifi.read());
+                }
+                if (Platform.isIOS) {
+                  await Future.delayed(Duration(milliseconds: 500));
+                  dataMaestroIOS = String.fromCharCodes(await characteristicWifi.read());
+                  await Future.delayed(Duration(milliseconds: 500));
+                  dataMaestroIOS2 = String.fromCharCodes(await characteristicWifi.read());
+                  await Future.delayed(Duration(milliseconds: 500));
+                  dataMaestroIOS3 = String.fromCharCodes(await characteristicWifi.read());
+                  await Future.delayed(Duration(milliseconds: 500));
+                  dataMaestroIOS4 = String.fromCharCodes(await characteristicWifi.read());
+                  await Future.delayed(Duration(milliseconds: 500));
+                  dataMaestroIOS5 = String.fromCharCodes(await characteristicWifi.read());
+                  await Future.delayed(Duration(milliseconds: 500));
+                  dataMaestroIOS6 = String.fromCharCodes(await characteristicWifi.read());
+                }
+                myUvcToast.setToastDuration(5);
+                myUvcToast.setToastMessage('Données enregistrées !');
+                myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+              }
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text(
+                'Enregistrer',
+                style: TextStyle(color: textColor[backGroundColorSelect], fontSize: 15),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Divider(
-                thickness: 1.0,
-                color: Colors.grey[600],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
       body: Center(
@@ -168,8 +150,8 @@ class _AmbiancesState extends State<Ambiances> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'Nom du l\'ambiance :',
-                  style: TextStyle(fontSize: (widthScreen * 0.05)),
+                  'Nom de l\'ambiance :',
+                  style: TextStyle(fontSize: (widthScreen * 0.05), color: textColor[backGroundColorSelect]),
                 ),
               ),
             ),
@@ -182,107 +164,48 @@ class _AmbiancesState extends State<Ambiances> {
                   controller: myAmbianceName,
                   maxLines: 1,
                   maxLength: 12,
-                  style: TextStyle(
-                    fontSize: widthScreen * 0.02 + heightScreen * 0.02,
-                  ),
+                  cursorColor: textColor[backGroundColorSelect],
+                  style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.02, color: textColor[backGroundColorSelect]),
                   decoration: InputDecoration(
                       hintText: 'exp:ambiance1',
+                      counterStyle: TextStyle(color: textColor[backGroundColorSelect]),
                       hintStyle: TextStyle(
                         fontSize: widthScreen * 0.02 + heightScreen * 0.02,
-                        color: Colors.grey,
+                        color: textColor[backGroundColorSelect],
                       )),
                 ),
               ),
             ),
             Expanded(
               flex: 1,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [zoneButton(context, 0), zoneButton(context, 1)],
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Modifier l\'ambiance :',
+                  style: TextStyle(fontSize: (widthScreen * 0.05), color: textColor[backGroundColorSelect]),
+                ),
               ),
             ),
             Expanded(
               flex: 1,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [zoneButton(context, 2), zoneButton(context, 3)],
+                children: [
+                  Expanded(flex: 1, child: zoneButton(context, 0)),
+                  Expanded(flex: 1, child: zoneButton(context, 1)),
+                ],
               ),
-            ),/*
+            ),
             Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 10.0),
-                child: ToggleButtons(
-                  borderRadius: BorderRadius.circular(18.0),
-                  isSelected: zoneStates,
-                  onPressed: (int index) {
-                    print(index);
-                    setState(() {
-                      zoneStates[index] = !zoneStates[index];
-                      zoneID = index;
-                      circlePickerColor = Color(int.parse(getColors(ambiance[zoneID + 1]).toString(), radix: 16));
-                    });
-                    for (int buttonIndex = 0; buttonIndex < zoneStates.length; buttonIndex++) {
-                      if (buttonIndex == index) {
-                        zoneStates[buttonIndex] = true;
-                      } else {
-                        zoneStates[buttonIndex] = false;
-                      }
-                    }
-                    saveButtonColor = Colors.grey[400];
-                  },
-                  children: [
-                    Container(
-                        width: (widthScreen - zonesTabPadding) / 4,
-                        height: (heightScreen - zonesTabPadding) / 7,
-                        child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                          new SizedBox(width: 4.0),
-                          new Text(
-                            zonesNamesList[0],
-                            style: TextStyle(fontSize: widthScreen * 0.05, color: Color(0xFF264eb6), fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          )
-                        ])),
-                    Container(
-                        width: (widthScreen - zonesTabPadding) / 4,
-                        height: (heightScreen - zonesTabPadding) / 7,
-                        child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                          new SizedBox(width: 4.0),
-                          new Text(
-                            zonesNamesList[1],
-                            style: TextStyle(fontSize: widthScreen * 0.05, color: Color(0xFF264eb6), fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          )
-                        ])),
-                    Container(
-                        width: (widthScreen - zonesTabPadding) / 4,
-                        height: (heightScreen - zonesTabPadding) / 7,
-                        child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                          new SizedBox(width: 4.0),
-                          new Text(
-                            zonesNamesList[2],
-                            style: TextStyle(fontSize: widthScreen * 0.05, color: Color(0xFF264eb6), fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          )
-                        ])),
-                    Container(
-                        width: (widthScreen - zonesTabPadding) / 4,
-                        height: (heightScreen - zonesTabPadding) / 7,
-                        child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                          new SizedBox(width: 4.0),
-                          new Text(
-                            zonesNamesList[3],
-                            style: TextStyle(fontSize: widthScreen * 0.05, color: Color(0xFF264eb6), fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          )
-                        ])),
-                  ],
-                  selectedColor: Colors.black,
-                  selectedBorderColor: Colors.white,
-                  fillColor: Colors.black.withOpacity(0.5),
-                ),
+              flex: 1,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(flex: 1, child: zoneButton(context, 2)),
+                  Expanded(flex: 1, child: zoneButton(context, 3)),
+                ],
               ),
-            ),*/
+            ),
             Expanded(
               flex: 5,
               child: Stack(
@@ -290,7 +213,6 @@ class _AmbiancesState extends State<Ambiances> {
                 children: [
                   HSLColorPicker(
                     onChanged: (colorSelected) {
-                      saveButtonColor = Colors.grey[400];
                       ambiance[zoneID + 1] = colorSelected.toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "");
                       setState(() {
                         circlePickerColor = Color(int.parse(getColors(ambiance[zoneID + 1]).toString(), radix: 16));
@@ -303,7 +225,7 @@ class _AmbiancesState extends State<Ambiances> {
                     showCenterColorIndicator: false,
                     centerColorIndicatorSize: widthScreen * 0.1 + heightScreen * 0.1,
                   ),
-                  bigCircle(widthScreen * 0.3, heightScreen * 0.3, circlePickerColor),
+                  bigCircle(widthScreen * 0.3, heightScreen * 0.2, circlePickerColor),
                 ],
               ),
             ),
@@ -313,52 +235,33 @@ class _AmbiancesState extends State<Ambiances> {
     );
   }
 
-  Widget zoneButton(BuildContext context, int zoneID) {
-    Color zoneState;
+  Widget zoneButton(BuildContext context, int zoneNumber) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
-    final Color selected = Colors.green;
-    final Color notSelected = Colors.red;
-    if (zoneStates[zoneID]) {
-      zoneState = selected;
-    } else {
-      zoneState = notSelected;
-    }
-    return StatefulBuilder(
-      builder: (context, setState) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextButton(
-            onPressed: () {
-              zoneStates[zoneID] = !zoneStates[zoneID];
-              setState(() {
-                if (zoneStates[zoneID]) {
-                  zoneState = selected;
-                } else {
-                  zoneState = notSelected;
-                }
-                for (int buttonIndex = 0; buttonIndex < zoneStates.length; buttonIndex++) {
-                  if (buttonIndex == zoneID) {
-                    zoneStates[buttonIndex] = true;
-                  } else {
-                    zoneStates[buttonIndex] = false;
-                  }
-                }
-              });
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Text(
-                zonesNamesList[zoneID],
-                style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.01 + heightScreen * 0.015),
-              ),
-            ),
-            style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
-                backgroundColor: MaterialStateProperty.all<Color>(zoneState)),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: MyElevatedButton(
+        onPressed: () {
+          zoneID = zoneNumber;
+          for (int i = 0; i < 4; i++) {
+            if (i == zoneNumber) {
+              zoneStates[zoneNumber] = Colors.green;
+            } else {
+              zoneStates[i] = Colors.red;
+            }
+          }
+          setState(() {
+            circlePickerColor = Color(int.parse(getColors(ambiance[zoneNumber + 1]).toString(), radix: 16));
+          });
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Text(
+            zonesNamesList[zoneNumber],
+            style: TextStyle(color: zoneStates[zoneNumber], fontSize: widthScreen * 0.01 + heightScreen * 0.015),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

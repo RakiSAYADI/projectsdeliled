@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app_dmx_maestro/services/DataVariables.dart';
+import 'package:flutter_app_dmx_maestro/services/elavated_button.dart';
 import 'package:flutter_app_dmx_maestro/services/uvcToast.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:location_permissions/location_permissions.dart';
@@ -82,13 +84,17 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
 
     return WillPopScope(
       child: Scaffold(
-        backgroundColor: Colors.blue[400],
+        backgroundColor: backGroundColor[backGroundColorSelect],
         appBar: AppBar(
-          title: const Text('Permissions', key: Key('title'), style: TextStyle(fontSize: 18)),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: modeColor[backGroundColorSelect]),
+            ),
+          ),
+          title: Text('Permissions', key: Key('title'), style: TextStyle(fontSize: 18, color: textColor[backGroundColorSelect])),
           centerTitle: true,
         ),
         body: Container(
-          decoration: BoxDecoration(color: Colors.grey[200]),
           child: Builder(
             builder: (context) {
               return Center(
@@ -105,7 +111,7 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                             textAlign: TextAlign.center,
                             key: Key('description'),
                             style: TextStyle(
-                              color: Colors.black,
+                              color: textColor[backGroundColorSelect],
                               fontSize: screenWidth * 0.04,
                             ),
                           ),
@@ -131,15 +137,11 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
                       child: Center(
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: FlatButton(
+                          child: MyElevatedButton(
                             key: Key('understood_key'),
-                            color: Colors.blue[400],
                             child: Text(
                               'COMPRIS',
-                              style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
+                              style: TextStyle(color: textColor[backGroundColorSelect], fontSize: screenWidth * 0.04),
                             ),
                             onPressed: () {
                               print('understood_key is pressed');
@@ -172,11 +174,11 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
         title: Text('Attention'),
         content: Text('Voulez-vous vraiment quitter l\'application ?'),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text('Oui'),
             onPressed: () => Navigator.pop(c, true),
           ),
-          FlatButton(
+          TextButton(
             child: Text('Non'),
             onPressed: () => Navigator.pop(c, false),
           ),

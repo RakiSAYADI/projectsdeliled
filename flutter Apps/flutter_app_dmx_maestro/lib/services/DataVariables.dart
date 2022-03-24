@@ -28,6 +28,8 @@ bool startWithOutSettings;
 
 int backGroundColorSelect = 0;
 
+final int transitionSeconds = 25;
+
 final List<Color> backGroundColor = [Color(0xFF2F2E3E), Color(0xFFDCE2E6)];
 final List<List<Color>> modeColor = [
   [Color(0xFF494961), Color(0xFF353546)],
@@ -56,7 +58,7 @@ Widget bigCircle(double width, double height, Color color) {
   );
 }
 
-Future<void> displayAlert(BuildContext context, String title, Widget mainWidget, List<Widget> buttons) async {
+Future<void> displayAlert(BuildContext context, String title, Widget mainWidget, List<Widget> buttons) {
   return showDialog<void>(
       context: context,
       barrierDismissible: false,
