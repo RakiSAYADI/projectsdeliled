@@ -9,44 +9,58 @@
 #ifndef MAIN_UNITCFG_H_
 #define MAIN_UNITCFG_H_
 
-#define delay(ms) (vTaskDelay(ms/portTICK_RATE_MS))
+#define delay(ms) (vTaskDelay(ms / portTICK_RATE_MS))
 
 #define FIRMWAREVERSIONNAME "3.0.0"
 #define VERSION 0
 
-typedef struct {
+#define zoneNumber 4
+
+typedef struct
+{
 	uint16_t CcLevel;
 	time_t CcTime;
 } CcPoint_Typedef;
 
-typedef struct {
-	//PIR (veille)
+typedef struct
+{
+	// PIR (veille)
 	bool PIRBrEnb;
 	time_t PirTimeout;
 	char PIR_days[8];
 	char PIR_zone[8];
-	//cycle
+	// cycle
 	bool CcEnb;
 	char ZoneCc[3];
 	CcPoint_Typedef Ccp[5];
 } LightCtrProfile_Typedef;
 
-typedef struct {
+typedef struct
+{
 	char WIFI_SSID[64];
 	char WIFI_PASS[64];
 } WifiConfig_Typedef;
 
-typedef struct {
+typedef struct
+{
 	char zonename[20];
 } ZonesInfo_Typedef;
 
-typedef struct {
-	char ambname[12];
+typedef struct
+{
+	uint8_t zoneId;
+	bool zoneState;
 	char Hue[10];
-	char zone[2];
+} ZoneAmp_Typedef;
+
+typedef struct
+{
+	char ambname[12];
+	ZoneAmp_Typedef zoneAmbiance[zoneNumber];
 } ColortrProfile_Typedef;
 
-typedef struct {
+typedef struct
+{
 	bool state;
 	time_t autoTrigTime;
 	uint8_t duration;
@@ -57,7 +71,8 @@ typedef struct {
 	uint8_t alarmOption;
 } Alarm_Typedef;
 
-typedef struct {
+typedef struct
+{
 	char UnitName[64];
 	WifiConfig_Typedef WifiCfg;
 	LightCtrProfile_Typedef UserLcProfile;
@@ -71,7 +86,7 @@ typedef struct {
 	uint16_t Co2LevelWar;
 	uint16_t PirSensitivity;
 	int8_t UnitTimeZone;
-	ZonesInfo_Typedef Zones_info[4];
+	ZonesInfo_Typedef Zones_info[zoneNumber];
 	Alarm_Typedef alarmDay[7];
 	uint8_t Lum_10V;
 	char passPIN[6];
@@ -84,7 +99,8 @@ typedef struct {
 #define UNIT_STAT_REG_AUTO 1
 #define UNIT_STAT_REG_MAN 2
 
-typedef struct {
+typedef struct
+{
 	time_t UpdateTime;
 	time_t LastDetTime;
 	double Temp;

@@ -550,13 +550,7 @@ void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 					charIOSCounter++;
 					break;
 				case 2:
-					sprintf((char *)total2, "{\"Amb\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"],\"PP\":\"%s\"}",
-							UnitCfg.ColortrProfile[0].ambname, UnitCfg.ColortrProfile[0].Hue, UnitCfg.ColortrProfile[0].zone,
-							UnitCfg.ColortrProfile[1].ambname, UnitCfg.ColortrProfile[1].Hue, UnitCfg.ColortrProfile[1].zone,
-							UnitCfg.ColortrProfile[2].ambname, UnitCfg.ColortrProfile[2].Hue, UnitCfg.ColortrProfile[2].zone,
-							UnitCfg.ColortrProfile[3].ambname, UnitCfg.ColortrProfile[3].Hue, UnitCfg.ColortrProfile[3].zone,
-							UnitCfg.ColortrProfile[4].ambname, UnitCfg.ColortrProfile[4].Hue, UnitCfg.ColortrProfile[4].zone,
-							UnitCfg.ColortrProfile[5].ambname, UnitCfg.ColortrProfile[5].Hue, UnitCfg.ColortrProfile[5].zone,
+					sprintf((char *)total2, "{\"PP\":\"%s\"}",
 							UnitCfg.passPIN);
 					charIOSCounter = 0;
 					break;
@@ -566,7 +560,7 @@ void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 			{
 				sprintf((char *)total2,
 						"{\"wifi\":[\"%s\",\"%s\"],\"cc\":[%d,\"%s\"],\"tabcc\":[%d,%ld,%d,%ld,%d,%ld,%d,%ld,%d,%ld],\"ZN\":[\"%s\",\"%s\",\"%s\",\"%s\"],"
-						"\"Amb\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"],\"PP\":\"%s\"}",
+						"\"PP\":\"%s\"}",
 						UnitCfg.WifiCfg.WIFI_SSID, UnitCfg.WifiCfg.WIFI_PASS,
 						UnitCfg.UserLcProfile.CcEnb, UnitCfg.UserLcProfile.ZoneCc,
 						UnitCfg.UserLcProfile.Ccp[0].CcLevel, UnitCfg.UserLcProfile.Ccp[0].CcTime,
@@ -576,12 +570,6 @@ void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 						UnitCfg.UserLcProfile.Ccp[4].CcLevel, UnitCfg.UserLcProfile.Ccp[4].CcTime,
 						UnitCfg.Zones_info[0].zonename, UnitCfg.Zones_info[1].zonename,
 						UnitCfg.Zones_info[2].zonename, UnitCfg.Zones_info[3].zonename,
-						UnitCfg.ColortrProfile[0].ambname, UnitCfg.ColortrProfile[0].Hue, UnitCfg.ColortrProfile[0].zone,
-						UnitCfg.ColortrProfile[1].ambname, UnitCfg.ColortrProfile[1].Hue, UnitCfg.ColortrProfile[1].zone,
-						UnitCfg.ColortrProfile[2].ambname, UnitCfg.ColortrProfile[2].Hue, UnitCfg.ColortrProfile[2].zone,
-						UnitCfg.ColortrProfile[3].ambname, UnitCfg.ColortrProfile[3].Hue, UnitCfg.ColortrProfile[3].zone,
-						UnitCfg.ColortrProfile[4].ambname, UnitCfg.ColortrProfile[4].Hue, UnitCfg.ColortrProfile[4].zone,
-						UnitCfg.ColortrProfile[5].ambname, UnitCfg.ColortrProfile[5].Hue, UnitCfg.ColortrProfile[5].zone,
 						UnitCfg.passPIN);
 			}
 			break;
@@ -601,23 +589,50 @@ void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 					break;
 				case 1:
 					sprintf((char *)total2,
-							"{\"Amb1\":[\"%s\",\"%s\",\"%s\"],\"Amb2\":[\"%s\",\"%s\",\"%s\"],"
-							"\"Amb3\":[\"%s\",\"%s\",\"%s\"]}",
-							UnitCfg.ColortrProfile[0].ambname, UnitCfg.ColortrProfile[0].Hue, UnitCfg.ColortrProfile[0].zone,
-							UnitCfg.ColortrProfile[1].ambname, UnitCfg.ColortrProfile[1].Hue, UnitCfg.ColortrProfile[1].zone,
-							UnitCfg.ColortrProfile[2].ambname, UnitCfg.ColortrProfile[2].Hue, UnitCfg.ColortrProfile[2].zone);
+							"{\"Amb1\":[\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\"],\"Amb2\":[\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\"]}",
+							UnitCfg.ColortrProfile[0].ambname,
+							UnitCfg.ColortrProfile[0].zoneAmbiance[0].zoneState, UnitCfg.ColortrProfile[0].zoneAmbiance[0].Hue,
+							UnitCfg.ColortrProfile[0].zoneAmbiance[1].zoneState, UnitCfg.ColortrProfile[0].zoneAmbiance[1].Hue,
+							UnitCfg.ColortrProfile[0].zoneAmbiance[2].zoneState, UnitCfg.ColortrProfile[0].zoneAmbiance[2].Hue,
+							UnitCfg.ColortrProfile[0].zoneAmbiance[3].zoneState, UnitCfg.ColortrProfile[0].zoneAmbiance[3].Hue,
+							UnitCfg.ColortrProfile[1].ambname,
+							UnitCfg.ColortrProfile[1].zoneAmbiance[0].zoneState, UnitCfg.ColortrProfile[1].zoneAmbiance[0].Hue,
+							UnitCfg.ColortrProfile[1].zoneAmbiance[1].zoneState, UnitCfg.ColortrProfile[1].zoneAmbiance[1].Hue,
+							UnitCfg.ColortrProfile[1].zoneAmbiance[2].zoneState, UnitCfg.ColortrProfile[1].zoneAmbiance[2].Hue,
+							UnitCfg.ColortrProfile[1].zoneAmbiance[3].zoneState, UnitCfg.ColortrProfile[1].zoneAmbiance[3].Hue);
 					charIOSCounter++;
 					break;
 				case 2:
 					sprintf((char *)total2,
-							"{\"Amb4\":[\"%s\",\"%s\",\"%s\"],"
-							"\"Amb5\":[\"%s\",\"%s\",\"%s\"],\"Amb6\":[\"%s\",\"%s\",\"%s\"]}",
-							UnitCfg.ColortrProfile[3].ambname, UnitCfg.ColortrProfile[3].Hue, UnitCfg.ColortrProfile[3].zone,
-							UnitCfg.ColortrProfile[4].ambname, UnitCfg.ColortrProfile[4].Hue, UnitCfg.ColortrProfile[4].zone,
-							UnitCfg.ColortrProfile[5].ambname, UnitCfg.ColortrProfile[5].Hue, UnitCfg.ColortrProfile[5].zone);
+							"{\"Amb3\":[\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\"],\"Amb4\":[\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\"]}",
+							UnitCfg.ColortrProfile[2].ambname,
+							UnitCfg.ColortrProfile[2].zoneAmbiance[0].zoneState, UnitCfg.ColortrProfile[2].zoneAmbiance[0].Hue,
+							UnitCfg.ColortrProfile[2].zoneAmbiance[1].zoneState, UnitCfg.ColortrProfile[2].zoneAmbiance[1].Hue,
+							UnitCfg.ColortrProfile[2].zoneAmbiance[2].zoneState, UnitCfg.ColortrProfile[2].zoneAmbiance[2].Hue,
+							UnitCfg.ColortrProfile[2].zoneAmbiance[3].zoneState, UnitCfg.ColortrProfile[2].zoneAmbiance[3].Hue,
+							UnitCfg.ColortrProfile[3].ambname,
+							UnitCfg.ColortrProfile[3].zoneAmbiance[0].zoneState, UnitCfg.ColortrProfile[3].zoneAmbiance[0].Hue,
+							UnitCfg.ColortrProfile[3].zoneAmbiance[1].zoneState, UnitCfg.ColortrProfile[3].zoneAmbiance[1].Hue,
+							UnitCfg.ColortrProfile[3].zoneAmbiance[2].zoneState, UnitCfg.ColortrProfile[3].zoneAmbiance[2].Hue,
+							UnitCfg.ColortrProfile[3].zoneAmbiance[3].zoneState, UnitCfg.ColortrProfile[3].zoneAmbiance[3].Hue);
 					charIOSCounter++;
 					break;
 				case 3:
+					sprintf((char *)total2,
+							"{\"Amb5\":[\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\"],\"Amb6\":[\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\"]}",
+							UnitCfg.ColortrProfile[4].ambname,
+							UnitCfg.ColortrProfile[4].zoneAmbiance[0].zoneState, UnitCfg.ColortrProfile[4].zoneAmbiance[0].Hue,
+							UnitCfg.ColortrProfile[4].zoneAmbiance[1].zoneState, UnitCfg.ColortrProfile[4].zoneAmbiance[1].Hue,
+							UnitCfg.ColortrProfile[4].zoneAmbiance[2].zoneState, UnitCfg.ColortrProfile[4].zoneAmbiance[2].Hue,
+							UnitCfg.ColortrProfile[4].zoneAmbiance[3].zoneState, UnitCfg.ColortrProfile[4].zoneAmbiance[3].Hue,
+							UnitCfg.ColortrProfile[5].ambname,
+							UnitCfg.ColortrProfile[5].zoneAmbiance[0].zoneState, UnitCfg.ColortrProfile[5].zoneAmbiance[0].Hue,
+							UnitCfg.ColortrProfile[5].zoneAmbiance[1].zoneState, UnitCfg.ColortrProfile[5].zoneAmbiance[1].Hue,
+							UnitCfg.ColortrProfile[5].zoneAmbiance[2].zoneState, UnitCfg.ColortrProfile[5].zoneAmbiance[2].Hue,
+							UnitCfg.ColortrProfile[5].zoneAmbiance[3].zoneState, UnitCfg.ColortrProfile[5].zoneAmbiance[3].Hue);
+					charIOSCounter++;
+					break;
+				case 4:
 					sprintf((char *)total2,
 							"{\"lun\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],"
 							"\"mar\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],\"mer\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],"
@@ -636,7 +651,7 @@ void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 							UnitCfg.alarmDay[4].finishLumVal, UnitCfg.alarmDay[4].zones, UnitCfg.alarmDay[4].alarmOption);
 					charIOSCounter++;
 					break;
-				case 4:
+				case 5:
 					sprintf((char *)total2,
 							"{\"ven\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],"
 							"\"sam\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],\"dim\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d]}",
@@ -659,21 +674,50 @@ void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 				{
 				case 0:
 					sprintf((char *)total2,
-							"{\"Ver\":%d,\"FirmV\":\"%s\",\"SCR\":%d,"
-							"\"Amb\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"],\"wifiSt\":%d,"
-							"\"zone\":[\"%s\",\"%s\",\"%s\",\"%s\"]}",
+							"{\"Ver\":%d,\"FirmV\":\"%s\",\"SCR\":%d,\"wifiSt\":%d,\"zone\":[\"%s\",\"%s\",\"%s\",\"%s\"]}",
 							UnitCfg.Version, UnitCfg.versionSystem, scanResult,
-							UnitCfg.ColortrProfile[0].ambname, UnitCfg.ColortrProfile[0].Hue, UnitCfg.ColortrProfile[0].zone,
-							UnitCfg.ColortrProfile[1].ambname, UnitCfg.ColortrProfile[1].Hue, UnitCfg.ColortrProfile[1].zone,
-							UnitCfg.ColortrProfile[2].ambname, UnitCfg.ColortrProfile[2].Hue, UnitCfg.ColortrProfile[2].zone,
-							UnitCfg.ColortrProfile[3].ambname, UnitCfg.ColortrProfile[3].Hue, UnitCfg.ColortrProfile[3].zone,
-							UnitCfg.ColortrProfile[4].ambname, UnitCfg.ColortrProfile[4].Hue, UnitCfg.ColortrProfile[4].zone,
-							UnitCfg.ColortrProfile[5].ambname, UnitCfg.ColortrProfile[5].Hue, UnitCfg.ColortrProfile[5].zone,
 							WifiConnectedFlag, UnitCfg.Zones_info[0].zonename, UnitCfg.Zones_info[1].zonename,
 							UnitCfg.Zones_info[2].zonename, UnitCfg.Zones_info[3].zonename);
 					charIOSCounter++;
 					break;
 				case 1:
+					sprintf((char *)total2,
+							"{\"Amb\":[\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\",\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\","
+							"\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\",\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\","
+							"\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\",\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\",%d,\"%s\"]}",
+							UnitCfg.ColortrProfile[0].ambname,
+							UnitCfg.ColortrProfile[0].zoneAmbiance[0].zoneState, UnitCfg.ColortrProfile[0].zoneAmbiance[0].Hue,
+							UnitCfg.ColortrProfile[0].zoneAmbiance[1].zoneState, UnitCfg.ColortrProfile[0].zoneAmbiance[1].Hue,
+							UnitCfg.ColortrProfile[0].zoneAmbiance[2].zoneState, UnitCfg.ColortrProfile[0].zoneAmbiance[2].Hue,
+							UnitCfg.ColortrProfile[0].zoneAmbiance[3].zoneState, UnitCfg.ColortrProfile[0].zoneAmbiance[3].Hue,
+							UnitCfg.ColortrProfile[1].ambname,
+							UnitCfg.ColortrProfile[1].zoneAmbiance[0].zoneState, UnitCfg.ColortrProfile[1].zoneAmbiance[0].Hue,
+							UnitCfg.ColortrProfile[1].zoneAmbiance[1].zoneState, UnitCfg.ColortrProfile[1].zoneAmbiance[1].Hue,
+							UnitCfg.ColortrProfile[1].zoneAmbiance[2].zoneState, UnitCfg.ColortrProfile[1].zoneAmbiance[2].Hue,
+							UnitCfg.ColortrProfile[1].zoneAmbiance[3].zoneState, UnitCfg.ColortrProfile[1].zoneAmbiance[3].Hue,
+							UnitCfg.ColortrProfile[2].ambname,
+							UnitCfg.ColortrProfile[2].zoneAmbiance[0].zoneState, UnitCfg.ColortrProfile[2].zoneAmbiance[0].Hue,
+							UnitCfg.ColortrProfile[2].zoneAmbiance[1].zoneState, UnitCfg.ColortrProfile[2].zoneAmbiance[1].Hue,
+							UnitCfg.ColortrProfile[2].zoneAmbiance[2].zoneState, UnitCfg.ColortrProfile[2].zoneAmbiance[2].Hue,
+							UnitCfg.ColortrProfile[2].zoneAmbiance[3].zoneState, UnitCfg.ColortrProfile[2].zoneAmbiance[3].Hue,
+							UnitCfg.ColortrProfile[3].ambname,
+							UnitCfg.ColortrProfile[3].zoneAmbiance[0].zoneState, UnitCfg.ColortrProfile[3].zoneAmbiance[0].Hue,
+							UnitCfg.ColortrProfile[3].zoneAmbiance[1].zoneState, UnitCfg.ColortrProfile[3].zoneAmbiance[1].Hue,
+							UnitCfg.ColortrProfile[3].zoneAmbiance[2].zoneState, UnitCfg.ColortrProfile[3].zoneAmbiance[2].Hue,
+							UnitCfg.ColortrProfile[3].zoneAmbiance[3].zoneState, UnitCfg.ColortrProfile[3].zoneAmbiance[3].Hue,
+							UnitCfg.ColortrProfile[4].ambname,
+							UnitCfg.ColortrProfile[4].zoneAmbiance[0].zoneState, UnitCfg.ColortrProfile[4].zoneAmbiance[0].Hue,
+							UnitCfg.ColortrProfile[4].zoneAmbiance[1].zoneState, UnitCfg.ColortrProfile[4].zoneAmbiance[1].Hue,
+							UnitCfg.ColortrProfile[4].zoneAmbiance[2].zoneState, UnitCfg.ColortrProfile[4].zoneAmbiance[2].Hue,
+							UnitCfg.ColortrProfile[4].zoneAmbiance[3].zoneState, UnitCfg.ColortrProfile[4].zoneAmbiance[3].Hue,
+							UnitCfg.ColortrProfile[5].ambname,
+							UnitCfg.ColortrProfile[5].zoneAmbiance[0].zoneState, UnitCfg.ColortrProfile[5].zoneAmbiance[0].Hue,
+							UnitCfg.ColortrProfile[5].zoneAmbiance[1].zoneState, UnitCfg.ColortrProfile[5].zoneAmbiance[1].Hue,
+							UnitCfg.ColortrProfile[5].zoneAmbiance[2].zoneState, UnitCfg.ColortrProfile[5].zoneAmbiance[2].Hue,
+							UnitCfg.ColortrProfile[5].zoneAmbiance[3].zoneState, UnitCfg.ColortrProfile[5].zoneAmbiance[3].Hue);
+					charIOSCounter++;
+					break;
+				case 2:
 					sprintf((char *)total2,
 							"{\"lun\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],"
 							"\"mar\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],\"mer\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],"
@@ -819,8 +863,38 @@ bool readAlertMessage(char *jsonData, char day[4], int dayID)
 	return stateFlag;
 }
 
-uint8_t cmd = 0, subcmd = 0, subcmdhue = 0, subcmdlum = 0, subcmdstab = 0,
-		subcmdhueold = 0, subcmdlumold = 0, subcmdstabold = 0, zoneLight = 0;
+bool readAmbiance(char *jsonData, char *ambString, int ambID)
+{
+	bool stateFlag = false;
+	char tmp[64];
+	int jsonPos = 1;
+	for (int i = 0; i < 4; i++)
+	{
+		if (jsonparse(jsonData, UnitCfg.ColortrProfile[ambID].zoneAmbiance[i].Hue, ambString, jsonPos))
+		{
+			jsonPos++;
+			if (jsonparse(jsonData, tmp, ambString, jsonPos))
+			{
+				UnitCfg.ColortrProfile[ambID].zoneAmbiance[i].zoneState = atoi(tmp);
+				if (UnitCfg.ColortrProfile[ambID].zoneAmbiance[i].zoneState)
+				{
+					ESP_LOGI(GATTS_TAG, "Profile zone %d Color Hue set %s is activated", UnitCfg.ColortrProfile[ambID].zoneAmbiance[i].zoneId, UnitCfg.ColortrProfile[ambID].zoneAmbiance[i].Hue);
+				}
+				else
+				{
+					ESP_LOGE(GATTS_TAG, "Profile zone %d Color Hue set %s is desactivated", UnitCfg.ColortrProfile[ambID].zoneAmbiance[i].zoneId, UnitCfg.ColortrProfile[ambID].zoneAmbiance[i].Hue);
+				}
+				jsonPos++;
+				stateFlag = true;
+			}
+		}
+	}
+	return stateFlag;
+}
+
+uint8_t cmd = 0, subcmd = 0, zoneLight = 0;
+uint8_t subcmdhue[zoneNumber], subcmdlum[zoneNumber], subcmdstab[zoneNumber],
+	subcmdhueold[zoneNumber], subcmdlumold[zoneNumber], subcmdstabold[zoneNumber];
 
 bool transtionAmbiancesActivated = false;
 
@@ -1026,30 +1100,15 @@ bool configData(char *jsonData)
 		// Couleur 1
 
 		ESP_LOGI(GATTS_TAG, "Profile Color name set %s", UnitCfg.ColortrProfile[0].ambname);
-		saveFlag = true;
-		if (jsonparse(jsonData, UnitCfg.ColortrProfile[0].Hue, "couleur1", 1))
-		{
-			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[0].Hue);
-			if (jsonparse(jsonData, UnitCfg.ColortrProfile[0].zone, "couleur1", 2))
-			{
-				ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[0].zone);
-			}
-		}
+		saveFlag = readAmbiance(jsonData, "couleur1", 0);
 	}
 	else if (jsonparse(jsonData, UnitCfg.ColortrProfile[1].ambname, "couleur2", 0))
 	{
+
 		// Couleur 2
 
 		ESP_LOGI(GATTS_TAG, "Profile Color name set %s", UnitCfg.ColortrProfile[1].ambname);
-		saveFlag = true;
-		if (jsonparse(jsonData, UnitCfg.ColortrProfile[1].Hue, "couleur2", 1))
-		{
-			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[1].Hue);
-			if (jsonparse(jsonData, UnitCfg.ColortrProfile[1].zone, "couleur2", 2))
-			{
-				ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[1].zone);
-			}
-		}
+		saveFlag = readAmbiance(jsonData, "couleur2", 1);
 	}
 	else if (jsonparse(jsonData, UnitCfg.ColortrProfile[2].ambname, "couleur3", 0))
 	{
@@ -1057,15 +1116,7 @@ bool configData(char *jsonData)
 		// Couleur 3
 
 		ESP_LOGI(GATTS_TAG, "Profile Color name set %s", UnitCfg.ColortrProfile[2].ambname);
-		saveFlag = true;
-		if (jsonparse(jsonData, UnitCfg.ColortrProfile[2].Hue, "couleur3", 1))
-		{
-			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[2].Hue);
-			if (jsonparse(jsonData, UnitCfg.ColortrProfile[2].zone, "couleur3", 2))
-			{
-				ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[2].zone);
-			}
-		}
+		saveFlag = readAmbiance(jsonData, "couleur3", 2);
 	}
 	else if (jsonparse(jsonData, UnitCfg.ColortrProfile[3].ambname, "couleur4", 0))
 	{
@@ -1073,15 +1124,7 @@ bool configData(char *jsonData)
 		// Couleur 4
 
 		ESP_LOGI(GATTS_TAG, "Profile Color name set %s", UnitCfg.ColortrProfile[3].ambname);
-		saveFlag = true;
-		if (jsonparse(jsonData, UnitCfg.ColortrProfile[3].Hue, "couleur4", 1))
-		{
-			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[3].Hue);
-			if (jsonparse(jsonData, UnitCfg.ColortrProfile[3].zone, "couleur4", 2))
-			{
-				ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[3].zone);
-			}
-		}
+		saveFlag = readAmbiance(jsonData, "couleur4", 3);
 	}
 	else if (jsonparse(jsonData, UnitCfg.ColortrProfile[4].ambname, "couleur5", 0))
 	{
@@ -1089,15 +1132,7 @@ bool configData(char *jsonData)
 		// Couleur 5
 
 		ESP_LOGI(GATTS_TAG, "Profile Color name set %s", UnitCfg.ColortrProfile[4].ambname);
-		saveFlag = true;
-		if (jsonparse(jsonData, UnitCfg.ColortrProfile[4].Hue, "couleur5", 1))
-		{
-			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[4].Hue);
-			if (jsonparse(jsonData, UnitCfg.ColortrProfile[4].zone, "couleur5", 2))
-			{
-				ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[4].zone);
-			}
-		}
+		saveFlag = readAmbiance(jsonData, "couleur5", 4);
 	}
 	else if (jsonparse(jsonData, UnitCfg.ColortrProfile[5].ambname, "couleur6", 0))
 	{
@@ -1105,15 +1140,7 @@ bool configData(char *jsonData)
 		// Couleur 6
 
 		ESP_LOGI(GATTS_TAG, "Profile Color name set %s", UnitCfg.ColortrProfile[5].ambname);
-		saveFlag = true;
-		if (jsonparse(jsonData, UnitCfg.ColortrProfile[5].Hue, "couleur6", 1))
-		{
-			ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[5].Hue);
-			if (jsonparse(jsonData, UnitCfg.ColortrProfile[5].zone, "couleur6", 2))
-			{
-				ESP_LOGI(GATTS_TAG, "Profile Color Hue set %s", UnitCfg.ColortrProfile[5].zone);
-			}
-		}
+		saveFlag = readAmbiance(jsonData, "couleur6", 5);
 	}
 	else if (jsonparse(jsonData, tmp, "Favoris", 0))
 	{
@@ -1121,32 +1148,38 @@ bool configData(char *jsonData)
 		if (strcmp(tmp, "Ambiance 1") == 0)
 		{
 			ESP_LOGI(GATTS_TAG, "Ambiance 1 is Selected");
-			transitionAmbianceProcess(0);
+			// transitionAmbianceProcess(0);
+			secondTransitionAmbianceProcess(0);
 		}
 		else if (strcmp(tmp, "Ambiance 2") == 0)
 		{
 			ESP_LOGI(GATTS_TAG, "Ambiance 2 is Selected");
-			transitionAmbianceProcess(1);
+			// transitionAmbianceProcess(1);
+			secondTransitionAmbianceProcess(1);
 		}
 		else if (strcmp(tmp, "Ambiance 3") == 0)
 		{
 			ESP_LOGI(GATTS_TAG, "Ambiance 3 is Selected");
-			transitionAmbianceProcess(2);
+			// transitionAmbianceProcess(2);
+			secondTransitionAmbianceProcess(2);
 		}
 		else if (strcmp(tmp, "Ambiance 4") == 0)
 		{
 			ESP_LOGI(GATTS_TAG, "Ambiance 4 is Selected");
-			transitionAmbianceProcess(3);
+			// transitionAmbianceProcess(3);
+			secondTransitionAmbianceProcess(3);
 		}
 		else if (strcmp(tmp, "Ambiance 5") == 0)
 		{
 			ESP_LOGI(GATTS_TAG, "Ambiance 5 is Selected");
-			transitionAmbianceProcess(4);
+			// transitionAmbianceProcess(4);
+			secondTransitionAmbianceProcess(4);
 		}
 		else if (strcmp(tmp, "Ambiance 6") == 0)
 		{
 			ESP_LOGI(GATTS_TAG, "Ambiance 6 is Selected");
-			transitionAmbianceProcess(5);
+			// transitionAmbianceProcess(5);
+			secondTransitionAmbianceProcess(5);
 		}
 		else
 		{
@@ -1160,71 +1193,118 @@ bool configData(char *jsonData)
 	return saveFlag;
 }
 
+void secondTransitionAmbianceProcess(int ambianceId)
+{
+	uint32_t rgb = 0;
+
+	// apply off
+	cmd = LCMD_SWITCH_ON_OFF;
+	MilightHandler(cmd, LSUBCMD_SWITCH_OFF, 15);
+	delay(100);
+
+	// apply on
+	cmd = LCMD_SWITCH_ON;
+	MilightHandler(cmd, LSUBCMD_SWITCH_ON, 15);
+	delay(100);
+
+	for (int i = 0; i < zoneNumber; i++)
+	{
+		rgb = strtol(UnitCfg.ColortrProfile[ambianceId].zoneAmbiance[i].Hue, NULL, 16);
+		RgbToHSL(rgb, &HSLtmp);
+		zoneLight = UnitCfg.ColortrProfile[ambianceId].zoneAmbiance[i].zoneId;
+
+		// apply hue
+		cmd = LCMD_SET_COLOR;
+		MilightHandler(cmd, HSLtmp.Hue, zoneLight);
+		ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d zone %d", cmd, HSLtmp.Hue, zoneLight);
+		delay(50);
+
+		// apply brightness
+		cmd = LCMD_SET_BRIGTHNESS;
+		MilightHandler(cmd, HSLtmp.Bri, zoneLight);
+		ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d zone %d", cmd, HSLtmp.Bri, zoneLight);
+		delay(50);
+
+		// apply saturation
+		cmd = LCMD_SET_SAT;
+		MilightHandler(cmd, HSLtmp.Sat, zoneLight);
+		ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d zone %d", cmd, HSLtmp.Sat, zoneLight);
+		delay(50);
+	}
+}
+
 void transitionAmbianceProcess(int ambianceId)
 {
 	uint32_t rgb = 0;
-	rgb = strtol(UnitCfg.ColortrProfile[ambianceId].Hue, NULL, 16);
-	RgbToHSL(rgb, &HSLtmp);
-	zoneLight = strtol(UnitCfg.ColortrProfile[ambianceId].zone, NULL, 16);
-	if (!transtionAmbiancesActivated)
+	float penteTransHue = 0, penteTransLum = 0, penteTransStab = 0;
+	uint8_t transOutHue = 0, transOutLum = 0, transOutStab = 0;
+	uint16_t progressTime = 0;
+
+	for (int i = 0; i < zoneNumber; i++)
 	{
-		// apply hue
-		cmd = 3;
-		subcmdhue = HSLtmp.Hue;
-		MilightHandler(cmd, subcmdhue, zoneLight);
-		ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d subcmdold %d zone %d", cmd,
-				 subcmdhue, subcmdhueold, zoneLight);
-		subcmdhueold = subcmdhue;
-
-		// apply brightness
-		cmd = 7;
-		subcmdlum = HSLtmp.Bri;
-		MilightHandler(cmd, subcmdlum, zoneLight);
-		ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d subcmdold %d zone %d", cmd,
-				 subcmdlum, subcmdlumold, zoneLight);
-		subcmdlumold = subcmdlum;
-
-		// apply saturation
-		cmd = 9;
-		subcmdstab = HSLtmp.Sat;
-		MilightHandler(cmd, subcmdstab, zoneLight);
-		ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d subcmdold %d zone %d", cmd,
-				 subcmdstab, subcmdstabold, zoneLight);
-		subcmdstabold = subcmdstab;
-
-		transtionAmbiancesActivated = true;
-	}
-	else
-	{
-		float penteTransHue = 0, penteTransLum = 0, penteTransStab = 0;
-		uint8_t transOutHue = 0, transOutLum = 0, transOutStab = 0;
-		uint16_t progressTime = 0;
-		subcmdhue = HSLtmp.Hue;
-		subcmdlum = HSLtmp.Bri;
-		subcmdstab = HSLtmp.Sat;
-		penteTransHue = (subcmdhue - subcmdhueold) / 2000.0;
-		penteTransLum = (subcmdlum - subcmdlumold) / 2000.0;
-		penteTransStab = (subcmdstab - subcmdstabold) / 2000.0;
-
-		while (progressTime <= 2000)
+		rgb = strtol(UnitCfg.ColortrProfile[ambianceId].zoneAmbiance[i].Hue, NULL, 16);
+		RgbToHSL(rgb, &HSLtmp);
+		zoneLight = UnitCfg.ColortrProfile[ambianceId].zoneAmbiance[i].zoneId;
+		if (!transtionAmbiancesActivated)
 		{
-			cmd = 3;
-			transOutHue = (penteTransHue * progressTime) + subcmdhueold;
-			MilightHandler(cmd, transOutHue, zoneLight);
-			cmd = 7;
-			transOutLum = (penteTransLum * progressTime) + subcmdlumold;
-			MilightHandler(cmd, transOutLum, zoneLight);
-			cmd = 9;
-			transOutStab = (penteTransStab * progressTime) + subcmdstabold;
-			MilightHandler(cmd, transOutStab, zoneLight);
-			progressTime += 50;
+			// apply hue
+			cmd = LCMD_SET_COLOR;
+			subcmdhue[i] = HSLtmp.Hue;
+			MilightHandler(cmd, subcmdhue[i], zoneLight);
+			ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d subcmdold %d zone %d", cmd, subcmdhue[i], subcmdhueold[i], zoneLight);
+			subcmdhueold[i] = subcmdhue[i];
 			delay(50);
-			ESP_LOGI(GATTS_TAG, "Light control hue %d lum %d stab %d zone %d", transOutHue, transOutLum, transOutStab, zoneLight);
+
+			// apply brightness
+			cmd = LCMD_SET_BRIGTHNESS;
+			subcmdlum[i] = HSLtmp.Bri;
+			MilightHandler(cmd, subcmdlum[i], zoneLight);
+			ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d subcmdold %d zone %d", cmd, subcmdlum[i], subcmdlumold[i], zoneLight);
+			subcmdlumold[i] = subcmdlum[i];
+			delay(50);
+
+			// apply saturation
+			cmd = LCMD_SET_SAT;
+			subcmdstab[i] = HSLtmp.Sat;
+			MilightHandler(cmd, subcmdstab[i], zoneLight);
+			ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d subcmdold %d zone %d", cmd, subcmdstab[i], subcmdstabold[i], zoneLight);
+			subcmdstabold[i] = subcmdstab[i];
+			delay(50);
 		}
-		subcmdhueold = subcmdhue;
-		subcmdlumold = subcmdlum;
-		subcmdstabold = subcmdstab;
+		else
+		{
+			subcmdhue[i] = HSLtmp.Hue;
+			subcmdlum[i] = HSLtmp.Bri;
+			subcmdstab[i] = HSLtmp.Sat;
+			penteTransHue = (subcmdhue[i] - subcmdhueold[i]) / 2000.0;
+			penteTransLum = (subcmdlum[i] - subcmdlumold[i]) / 2000.0;
+			penteTransStab = (subcmdstab[i] - subcmdstabold[i]) / 2000.0;
+
+			while (progressTime <= 2000)
+			{
+				cmd = LCMD_SET_COLOR;
+				transOutHue = (penteTransHue * progressTime) + subcmdhueold[i];
+				MilightHandler(cmd, transOutHue, zoneLight);
+				delay(50);
+				cmd = LCMD_SET_BRIGTHNESS;
+				transOutLum = (penteTransLum * progressTime) + subcmdlumold[i];
+				MilightHandler(cmd, transOutLum, zoneLight);
+				delay(50);
+				cmd = LCMD_SET_SAT;
+				transOutStab = (penteTransStab * progressTime) + subcmdstabold[i];
+				MilightHandler(cmd, transOutStab, zoneLight);
+				progressTime += 50;
+				delay(50);
+				ESP_LOGI(GATTS_TAG, "Light control hue %d lum %d stab %d zone %d", transOutHue, transOutLum, transOutStab, zoneLight);
+			}
+			subcmdhueold[i] = subcmdhue[i];
+			subcmdlumold[i] = subcmdlum[i];
+			subcmdstabold[i] = subcmdstab[i];
+			progressTime = 0;
+		}
+		delay(100);
 	}
+	transtionAmbiancesActivated = true;
 }
 
 void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *param)

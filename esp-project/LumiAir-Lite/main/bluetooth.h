@@ -2,6 +2,7 @@
 #define MAIN_BLUETOOTH_H_
 
 void transitionAmbianceProcess(int ambianceId);
+void secondTransitionAmbianceProcess(int ambianceId);
 
 void bt_main();
 
