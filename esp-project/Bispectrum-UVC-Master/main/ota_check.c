@@ -5,6 +5,7 @@
  *      Author: raki
  */
 #include "esp_https_ota.h"
+#include "esp_ota_ops.h"
 #include "esp_err.h"
 #include "esp_partition.h"
 #include "esp_spi_flash.h"

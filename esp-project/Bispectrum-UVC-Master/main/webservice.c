@@ -80,24 +80,24 @@ void WebService_Init() {
 	tcpip_adapter_init();
 	ESP_ERROR_CHECK(esp_event_loop_init(event_handler, NULL));
 
-	if (UnitCfg.Static_IP.Enable) {
-
-		tcpip_adapter_dhcpc_stop(TCPIP_ADAPTER_IF_STA); // Don't run a DHCP client
-
-		//Set static IP
-		tcpip_adapter_ip_info_t ipInfo;
-		inet_pton(AF_INET, UnitCfg.Static_IP.IP, &ipInfo.ip);
-		inet_pton(AF_INET, UnitCfg.Static_IP.GATE_WAY, &ipInfo.gw);
-		inet_pton(AF_INET, UnitCfg.Static_IP.MASK, &ipInfo.netmask);
-		tcpip_adapter_set_ip_info(TCPIP_ADAPTER_IF_STA, &ipInfo);
-
-		//Set Main DNS server
-		tcpip_adapter_dns_info_t dnsInfo;
-		inet_pton(AF_INET, UnitCfg.Static_IP.DNS_SERVER, &dnsInfo.ip);
-		tcpip_adapter_set_dns_info(TCPIP_ADAPTER_IF_STA, TCPIP_ADAPTER_DNS_MAIN,
-				&dnsInfo);
-
-	}
+//	if (UnitCfg.Static_IP.Enable) {
+//
+//		tcpip_adapter_dhcpc_stop(TCPIP_ADAPTER_IF_STA); // Don't run a DHCP client
+//
+//		//Set static IP
+//		tcpip_adapter_ip_info_t ipInfo;
+//		inet_pton(AF_INET, UnitCfg.Static_IP.IP, &ipInfo.ip);
+//		inet_pton(AF_INET, UnitCfg.Static_IP.GATE_WAY, &ipInfo.gw);
+//		inet_pton(AF_INET, UnitCfg.Static_IP.MASK, &ipInfo.netmask);
+//		tcpip_adapter_set_ip_info(TCPIP_ADAPTER_IF_STA, &ipInfo);
+//
+//		//Set Main DNS server
+//		tcpip_adapter_dns_info_t dnsInfo;
+//		inet_pton(AF_INET, UnitCfg.Static_IP.DNS_SERVER, &dnsInfo.ip);
+//		tcpip_adapter_set_dns_info(TCPIP_ADAPTER_IF_STA, TCPIP_ADAPTER_DNS_MAIN,
+//				&dnsInfo);
+//
+//	}
 
 	wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT()
 	;

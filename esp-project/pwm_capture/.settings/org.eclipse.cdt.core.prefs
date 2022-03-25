@@ -1,6 +1,6 @@
 eclipse.preferences.version=1
 environment/project/0.1790762483/IDF_PATH/delimiter=\:
-environment/project/0.1790762483/IDF_PATH/operation=append
+environment/project/0.1790762483/IDF_PATH/operation=replace
 environment/project/0.1790762483/IDF_PATH/value=/home/raki/esp/esp-idf
 environment/project/0.1790762483/PATH/delimiter=\:
 environment/project/0.1790762483/PATH/operation=replace

@@ -4,7 +4,7 @@
 #include "freertos/event_groups.h"
 #include "esp_system.h"
 #include "esp_wifi.h"
-#include "esp_event_loop.h"
+#include "esp_event.h"
 #include "esp_log.h"
 #include "nvs_flash.h"
 #include "esp_event.h"
@@ -29,9 +29,8 @@ void systemInit() {
 
 	ESP_LOGI(INIT_TAG, "INITIATE ESP32 SYSTEM \n");
 	ESP_ERROR_CHECK(nvs_flash_init());
-	tcpip_adapter_init();
+	ESP_ERROR_CHECK(esp_netif_init());
 	ESP_ERROR_CHECK(esp_event_loop_create_default());
-
 	stateConnection = false;
 
 	ESP_LOGI(INIT_TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());

@@ -870,10 +870,10 @@ bool readAmbiance(char *jsonData, char *ambString, int ambID)
 	int jsonPos = 1;
 	for (int i = 0; i < 4; i++)
 	{
-		if (jsonparse(jsonData, UnitCfg.ColortrProfile[ambID].zoneAmbiance[i].Hue, ambString, jsonPos))
+		if (jsonparse(jsonData, tmp, ambString, jsonPos))
 		{
 			jsonPos++;
-			if (jsonparse(jsonData, tmp, ambString, jsonPos))
+			if (jsonparse(jsonData, UnitCfg.ColortrProfile[ambID].zoneAmbiance[i].Hue, ambString, jsonPos))
 			{
 				UnitCfg.ColortrProfile[ambID].zoneAmbiance[i].zoneState = atoi(tmp);
 				if (UnitCfg.ColortrProfile[ambID].zoneAmbiance[i].zoneState)
@@ -1206,6 +1206,16 @@ void secondTransitionAmbianceProcess(int ambianceId)
 	cmd = LCMD_SWITCH_ON;
 	MilightHandler(cmd, LSUBCMD_SWITCH_ON, 15);
 	delay(100);
+
+	for (int i = 0; i < zoneNumber; i++)
+	{
+		cmd = LCMD_SWITCH_ON;
+		if (UnitCfg.ColortrProfile[ambianceId].zoneAmbiance[i].zoneState)
+		{
+			MilightHandler(cmd, LSUBCMD_SWITCH_ON, UnitCfg.ColortrProfile[ambianceId].zoneAmbiance[i].zoneId);
+		}
+		delay(100);
+	}
 
 	for (int i = 0; i < zoneNumber; i++)
 	{
