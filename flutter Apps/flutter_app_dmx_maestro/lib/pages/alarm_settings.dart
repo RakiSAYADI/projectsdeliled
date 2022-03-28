@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_dmx_maestro/services/DataVariables.dart';
 import 'package:flutter_app_dmx_maestro/services/elavated_button.dart';
 import 'package:flutter_app_dmx_maestro/services/uvcToast.dart';
-import 'package:flutter_xlider/flutter_xlider.dart';
-import 'package:hsl_colorpicker/HSLColorPicker.dart';
 
 class AlarmClock extends StatefulWidget {
   @override
@@ -26,31 +24,44 @@ class _AlarmClockState extends State<AlarmClock> {
   List<int> hourList = [0, 0, 0, 0, 0, 0, 0];
   List<int> minutesList = [0, 0, 0, 0, 0, 0, 0];
   List<int> secondsList = [0, 0, 0, 0, 0, 0, 0];
-
   List<int> luminosityMinList = [0, 0, 0, 0, 0, 0, 0];
   List<int> luminosityMaxList = [100, 100, 100, 100, 100, 100, 100];
-  List<String> dayZones = ['F', 'F', 'F', 'F', 'F', 'F', 'F'];
   List<int> alarmOptionList = [0, 0, 0, 0, 0, 0, 0];
+  List<int> alarmAmbiance = [0, 0, 0, 0, 0, 0, 0];
+
+  List<String> dayZones = ['F', 'F', 'F', 'F', 'F', 'F', 'F'];
 
   String myTimeHoursData = '00';
   String myTimeMinutesData = '00';
   String myTimeSecondsData = '00';
+  String alarmAmbianceData = 'Ambiance 1';
 
   int myTimeHoursPosition = 0;
   int myTimeMinutesPosition = 0;
   int myTimeSecondsPosition = 0;
+  int alarmAmbiancePosition = 0;
 
   ToastyMessage myUvcToast;
 
-  String myAlarmTimeMinuteData = '  5 sec';
+  String myAlarmTimeMinuteData = '00';
+  String myAlarmTimeSecondData = '00';
+
   String myAlarmOptionData = 'Sun rise';
+
   List<int> myAlarmTimeMinuteList = [0, 0, 0, 0, 0, 0, 0];
+  List<int> myAlarmTimeSecondList = [0, 0, 0, 0, 0, 0, 0];
+
   int myAlarmTimeMinutePosition = 0;
+  int myAlarmTimeSecondPosition = 0;
   int myAlarmOptionPosition = 0;
+
+  Map alarmSettingsClassData = {};
 
   bool firstDisplayMainWidget = true;
 
-  List<Color> hueInitial = [Colors.blueAccent, Colors.blueAccent, Colors.blueAccent, Colors.blueAccent, Colors.blueAccent, Colors.blueAccent, Colors.blueAccent];
+  List<dynamic> ambiance1List, ambiance2List, ambiance3List, ambiance4List, ambiance5List, ambiance6List;
+
+  List<dynamic> ambianceList = ['Ambiance 1', true, 'FF0000', true, 'FF0000', true, 'FF0000', true, 'FF0000'];
 
   @override
   void initState() {
@@ -61,15 +72,12 @@ class _AlarmClockState extends State<AlarmClock> {
 
   void readWakeUpDataPerDay(List<dynamic> day, int dayID) {
     daysStates[dayID] = intToBool(day[0]);
-    int timeSelection = day[1];
-    hourList[dayID] = timeSelection ~/ 3600;
-    minutesList[dayID] = (timeSelection % 3600) ~/ 60;
-    secondsList[dayID] = timeSelection % 60;
-    myAlarmTimeMinuteList[dayID] = day[2];
-    final color = StringBuffer();
-    if (day[3].length == 6 || day[3].length == 7) color.write('ff');
-    color.write(day[3].replaceFirst('#', ''));
-    hueInitial[dayID] = Color(int.parse(color.toString(), radix: 16));
+    hourList[dayID] = day[1] ~/ 3600;
+    minutesList[dayID] = (day[1] % 3600) ~/ 60;
+    secondsList[dayID] = day[1] % 60;
+    myAlarmTimeMinuteList[dayID] = day[2] ~/ 60;
+    myAlarmTimeSecondList[dayID] = day[2] % 60;
+    alarmAmbiance[dayID] = day[3];
     luminosityMinList[dayID] = day[4];
     luminosityMaxList[dayID] = day[5];
     dayZones[dayID] = day[6];
@@ -93,9 +101,18 @@ class _AlarmClockState extends State<AlarmClock> {
     double heightScreen = MediaQuery.of(context).size.height;
     if (firstDisplayMainWidget) {
       try {
+        alarmSettingsClassData = alarmSettingsClassData.isNotEmpty ? alarmSettingsClassData : ModalRoute.of(context).settings.arguments;
+        ambiance1List = alarmSettingsClassData['ambiance1list'];
+        ambiance2List = alarmSettingsClassData['ambiance2list'];
+        ambiance3List = alarmSettingsClassData['ambiance3list'];
+        ambiance4List = alarmSettingsClassData['ambiance4list'];
+        ambiance5List = alarmSettingsClassData['ambiance5list'];
+        ambiance6List = alarmSettingsClassData['ambiance6list'];
+
+        myAmbiances = [ambiance1List[0], ambiance2List[0], ambiance3List[0], ambiance4List[0], ambiance5List[0], ambiance6List[0]];
         var parsedJson;
         if (Platform.isAndroid) {
-          parsedJson = json.decode(dataMaestro2);
+          parsedJson = json.decode(dataMaestro3);
           readWakeUpDataPerDay(parsedJson['lun'], 0);
           readWakeUpDataPerDay(parsedJson['mar'], 1);
           readWakeUpDataPerDay(parsedJson['mer'], 2);
@@ -128,19 +145,57 @@ class _AlarmClockState extends State<AlarmClock> {
         myTimeMinutesPosition = minutesList[day];
         myTimeSecondsPosition = secondsList[day];
         myAlarmTimeMinutePosition = myAlarmTimeMinuteList[day];
+        myAlarmTimeSecondPosition = myAlarmTimeSecondList[day];
+        alarmAmbiancePosition = alarmAmbiance[day];
         myAlarmOptionPosition = alarmOptionList[day];
 
         myTimeHoursData = myTimeHours.elementAt(myTimeHoursPosition);
         myTimeMinutesData = myTimeMinutes.elementAt(myTimeMinutesPosition);
         myTimeSecondsData = myTimeSeconds.elementAt(myTimeSecondsPosition);
 
-        myAlarmTimeMinuteData = myAlarmTimeMinute.elementAt(myAlarmTimeMinutePosition);
+        alarmAmbianceData = myAmbiances.elementAt(alarmAmbiancePosition);
+
+        myAlarmTimeMinuteData = myTimeMinutes.elementAt(myAlarmTimeMinutePosition);
+        myAlarmTimeSecondData = myTimeSeconds.elementAt(myAlarmTimeSecondPosition);
+
         myAlarmOptionData = myAlarmOption.elementAt(myAlarmOptionPosition);
+
+        switch (alarmAmbiancePosition) {
+          case 0:
+            ambianceList = ambiance1List;
+            break;
+          case 1:
+            ambianceList = ambiance2List;
+            break;
+          case 2:
+            ambianceList = ambiance3List;
+            break;
+          case 3:
+            ambianceList = ambiance4List;
+            break;
+          case 4:
+            ambianceList = ambiance5List;
+            break;
+          case 5:
+            ambianceList = ambiance6List;
+            break;
+        }
+
       } catch (e) {
-        print('erreur');
+        debugPrint(e.toString());
+        debugPrint('error alarm');
+        ambiance1List = ['Ambiance 1', true, 'FF0000', true, 'FF0000', true, 'FF0000', true, 'FF0000'];
+        ambiance2List = ['Ambiance 2', true, '000000', true, '000000', true, '000000', true, '000000'];
+        ambiance3List = ['Ambiance 3', true, '00FF00', true, '00FF00', true, '00FF00', true, '00FF00'];
+        ambiance4List = ['Ambiance 4', true, '0000FF', true, '0000FF', true, '0000FF', true, '0000FF'];
+        ambiance5List = ['Ambiance 5', true, 'FFFF00', true, 'FFFF00', true, 'FFFF00', true, 'FFFF00'];
+        ambiance6List = ['Ambiance 6', true, '00FFFF', true, '00FFFF', true, '00FFFF', true, '00FFFF'];
+        alarmAmbianceData = ambiance1List[0];
       }
+
       firstDisplayMainWidget = false;
     }
+
     return Scaffold(
       backgroundColor: backGroundColor[backGroundColorSelect],
       appBar: AppBar(
@@ -213,131 +268,162 @@ class _AlarmClockState extends State<AlarmClock> {
       body: Center(
         child: SingleChildScrollView(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      ToggleButtons(
-                        isSelected: days,
-                        onPressed: (int index) async {
-                          day = index;
-                          setState(() {
-                            days[day] = !days[day];
-                            for (int buttonIndex = 0; buttonIndex < days.length; buttonIndex++) {
-                              if (buttonIndex == day) {
-                                days[buttonIndex] = true;
-                              } else {
-                                days[buttonIndex] = false;
-                              }
-                            }
-                          });
-
-                          setState(() {
-                            if (daysStates[day]) {
-                              activationButtonText = 'Activé';
-                              activationButtonColor[day] = Colors.green;
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return ToggleButtons(
+                      constraints: BoxConstraints.expand(width: constraints.maxWidth / 8),
+                      isSelected: days,
+                      onPressed: (int index) {
+                        day = index;
+                        setState(() {
+                          days[day] = !days[day];
+                          for (int buttonIndex = 0; buttonIndex < days.length; buttonIndex++) {
+                            if (buttonIndex == day) {
+                              days[buttonIndex] = true;
                             } else {
-                              activationButtonText = 'Désactivé';
-                              activationButtonColor[day] = Colors.red;
+                              days[buttonIndex] = false;
                             }
-                            hueInitial[day] = hueInitial[day];
-                          });
+                          }
+                          if (daysStates[day]) {
+                            activationButtonText = 'Activé';
+                            activationButtonColor[day] = Colors.green;
+                          } else {
+                            activationButtonText = 'Désactivé';
+                            activationButtonColor[day] = Colors.red;
+                          }
+                          alarmAmbiance[day] = alarmAmbiance[day];
+                        });
 
-                          myTimeHoursPosition = hourList[day];
-                          myTimeMinutesPosition = minutesList[day];
-                          myTimeSecondsPosition = secondsList[day];
-                          myAlarmTimeMinutePosition = myAlarmTimeMinuteList[day];
-                          myAlarmOptionPosition = alarmOptionList[day];
+                        myTimeHoursPosition = hourList[day];
+                        myTimeMinutesPosition = minutesList[day];
+                        myTimeSecondsPosition = secondsList[day];
+                        myAlarmTimeMinutePosition = myAlarmTimeMinuteList[day];
+                        myAlarmTimeSecondPosition = myAlarmTimeSecondList[day];
+                        alarmAmbiancePosition = alarmAmbiance[day];
+                        myAlarmOptionPosition = alarmOptionList[day];
 
-                          myTimeHoursData = myTimeHours.elementAt(myTimeHoursPosition);
-                          myTimeMinutesData = myTimeMinutes.elementAt(myTimeMinutesPosition);
-                          myTimeSecondsData = myTimeSeconds.elementAt(myTimeSecondsPosition);
+                        myTimeHoursData = myTimeHours.elementAt(myTimeHoursPosition);
+                        myTimeMinutesData = myTimeMinutes.elementAt(myTimeMinutesPosition);
+                        myTimeSecondsData = myTimeSeconds.elementAt(myTimeSecondsPosition);
 
-                          myAlarmTimeMinuteData = myAlarmTimeMinute.elementAt(myAlarmTimeMinutePosition);
+                        alarmAmbianceData = myAmbiances.elementAt(alarmAmbiancePosition);
 
-                          myAlarmOptionData = myAlarmOption.elementAt(myAlarmOptionPosition);
-                        },
-                        children: [
-                          Container(
-                              width: (widthScreen - 60) / 7,
-                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                                new SizedBox(width: 4.0),
-                                new Text(
-                                  "Lun.",
-                                  style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.01, color: activationButtonColor[0], fontWeight: FontWeight.bold),
-                                ),
-                              ])),
-                          Container(
-                              width: (widthScreen - 60) / 7,
-                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                                new SizedBox(width: 4.0),
-                                new Text(
-                                  "Mar.",
-                                  style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.01, color: activationButtonColor[1], fontWeight: FontWeight.bold),
-                                ),
-                              ])),
-                          Container(
-                              width: (widthScreen - 60) / 7,
-                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                                new SizedBox(width: 4.0),
-                                new Text(
-                                  "Mer.",
-                                  style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.01, color: activationButtonColor[2], fontWeight: FontWeight.bold),
-                                ),
-                              ])),
-                          Container(
-                              width: (widthScreen - 60) / 7,
-                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                                new SizedBox(width: 4.0),
-                                new Text(
-                                  "Jeu.",
-                                  style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.01, color: activationButtonColor[3], fontWeight: FontWeight.bold),
-                                ),
-                              ])),
-                          Container(
-                              width: (widthScreen - 60) / 7,
-                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                                new SizedBox(width: 4.0),
-                                new Text(
-                                  "Ven.",
-                                  style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.01, color: activationButtonColor[4], fontWeight: FontWeight.bold),
-                                ),
-                              ])),
-                          Container(
-                              width: (widthScreen - 60) / 7,
-                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                                new SizedBox(width: 4.0),
-                                new Text(
-                                  "Sam.",
-                                  style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.01, color: activationButtonColor[5], fontWeight: FontWeight.bold),
-                                ),
-                              ])),
-                          Container(
-                              width: (widthScreen - 60) / 7,
-                              child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                                new SizedBox(width: 4.0),
-                                new Text(
-                                  "Dim.",
-                                  style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.01, color: activationButtonColor[6], fontWeight: FontWeight.bold),
-                                ),
-                              ])),
-                        ],
-                        borderWidth: 2,
-                        color: Colors.grey,
-                        selectedBorderColor: Colors.black,
-                        selectedColor: Colors.blue,
-                      ),
-                    ],
-                  ),
+                        switch (alarmAmbiancePosition) {
+                          case 0:
+                            ambianceList = ambiance1List;
+                            break;
+                          case 1:
+                            ambianceList = ambiance2List;
+                            break;
+                          case 2:
+                            ambianceList = ambiance3List;
+                            break;
+                          case 3:
+                            ambianceList = ambiance4List;
+                            break;
+                          case 4:
+                            ambianceList = ambiance5List;
+                            break;
+                          case 5:
+                            ambianceList = ambiance6List;
+                            break;
+                        }
+
+                        myAlarmTimeMinuteData = myTimeMinutes.elementAt(myAlarmTimeMinutePosition);
+                        myAlarmTimeSecondData = myTimeSeconds.elementAt(myAlarmTimeSecondPosition);
+
+                        myAlarmOptionData = myAlarmOption.elementAt(myAlarmOptionPosition);
+                      },
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Lun.",
+                            style: TextStyle(
+                              fontSize: widthScreen * 0.02 + heightScreen * 0.01,
+                              color: activationButtonColor[0],
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Mar.",
+                            style: TextStyle(
+                              fontSize: widthScreen * 0.02 + heightScreen * 0.01,
+                              color: activationButtonColor[1],
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Mer.",
+                            style: TextStyle(
+                              fontSize: widthScreen * 0.02 + heightScreen * 0.01,
+                              color: activationButtonColor[2],
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Jeu.",
+                            style: TextStyle(
+                              fontSize: widthScreen * 0.02 + heightScreen * 0.01,
+                              color: activationButtonColor[3],
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Ven.",
+                            style: TextStyle(
+                              fontSize: widthScreen * 0.02 + heightScreen * 0.01,
+                              color: activationButtonColor[4],
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Sam.",
+                            style: TextStyle(
+                              fontSize: widthScreen * 0.02 + heightScreen * 0.01,
+                              color: activationButtonColor[5],
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Dim.",
+                            style: TextStyle(
+                              fontSize: widthScreen * 0.02 + heightScreen * 0.01,
+                              color: activationButtonColor[6],
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                      borderWidth: 2,
+                      color: Colors.grey,
+                      selectedBorderColor: Colors.black,
+                      selectedColor: Colors.blue,
+                    );
+                  },
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
               ),
               MyElevatedButton(
                 onPressed: () {
@@ -518,6 +604,78 @@ class _AlarmClockState extends State<AlarmClock> {
                   ),
                 ],
               ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(20), color: Colors.white),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Center(
+                          child: DropdownButton<String>(
+                            value: alarmAmbianceData,
+                            icon: Icon(Icons.arrow_drop_down),
+                            iconSize: 24,
+                            elevation: 16,
+                            style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                            onChanged: (String data) {
+                              setState(() {
+                                saveButtonColor = Colors.grey[400];
+                                alarmAmbianceData = data;
+                                alarmAmbiancePosition = myAmbiances.indexOf(data);
+                                alarmAmbiance[day] = alarmAmbiancePosition;
+                                switch (alarmAmbiancePosition) {
+                                  case 0:
+                                    ambianceList = ambiance1List;
+                                    break;
+                                  case 1:
+                                    ambianceList = ambiance2List;
+                                    break;
+                                  case 2:
+                                    ambianceList = ambiance3List;
+                                    break;
+                                  case 3:
+                                    ambianceList = ambiance4List;
+                                    break;
+                                  case 4:
+                                    ambianceList = ambiance5List;
+                                    break;
+                                  case 5:
+                                    ambianceList = ambiance6List;
+                                    break;
+                                }
+                              });
+                            },
+                            items: myAmbiances.map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ambianceCircleDisplay(context, ambianceList),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -543,7 +701,7 @@ class _AlarmClockState extends State<AlarmClock> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       DropdownButton<String>(
-                        value: myTimeMinutesData,
+                        value: myAlarmTimeMinuteData,
                         icon: Icon(Icons.arrow_drop_down),
                         iconSize: 24,
                         elevation: 16,
@@ -551,9 +709,9 @@ class _AlarmClockState extends State<AlarmClock> {
                         onChanged: (String data) {
                           setState(() {
                             saveButtonColor = Colors.grey[400];
-                            myTimeMinutesData = data;
-                            myTimeMinutesPosition = myTimeMinutes.indexOf(data);
-                            minutesList[day] = myTimeMinutesPosition;
+                            myAlarmTimeMinuteData = data;
+                            myAlarmTimeMinutePosition = myTimeMinutes.indexOf(data);
+                            myAlarmTimeMinuteList[day] = myAlarmTimeMinutePosition;
                           });
                         },
                         items: myTimeMinutes.map<DropdownMenuItem<String>>((String value) {
@@ -577,7 +735,7 @@ class _AlarmClockState extends State<AlarmClock> {
                         ),
                       ),
                       DropdownButton<String>(
-                        value: myTimeSecondsData,
+                        value: myAlarmTimeSecondData,
                         icon: Icon(Icons.arrow_drop_down),
                         iconSize: 24,
                         elevation: 16,
@@ -585,12 +743,12 @@ class _AlarmClockState extends State<AlarmClock> {
                         onChanged: (String data) {
                           setState(() {
                             saveButtonColor = Colors.grey[400];
-                            myTimeSecondsData = data;
-                            myTimeSecondsPosition = myTimeSeconds.indexOf(data);
-                            secondsList[day] = myTimeSecondsPosition;
+                            myAlarmTimeSecondData = data;
+                            myAlarmTimeSecondPosition = myTimeSeconds.indexOf(data);
+                            myAlarmTimeSecondList[day] = myAlarmTimeSecondPosition;
                           });
                         },
-                        items: myTimeMinutes.map<DropdownMenuItem<String>>((String value) {
+                        items: myTimeSeconds.map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(
@@ -607,163 +765,50 @@ class _AlarmClockState extends State<AlarmClock> {
                   ),
                 ),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.1)),
-                    child: DropdownButton<String>(
-                      value: myAlarmTimeMinuteData,
-                      icon: Icon(Icons.arrow_drop_down),
-                      iconSize: 24,
-                      elevation: 16,
-                      style: TextStyle(color: Colors.grey[800], fontSize: 18),
-                      underline: Container(
-                        height: 2,
-                        color: Colors.blue[300],
-                      ),
-                      onChanged: (String data) {
-                        setState(() {
-                          saveButtonColor = Colors.grey[400];
-                          myAlarmTimeMinuteData = data;
-                          myAlarmTimeMinutePosition = myAlarmTimeMinute.indexOf(data);
-                          myAlarmTimeMinuteList[day] = myAlarmTimeMinutePosition;
-                        });
-                      },
-                      items: myAlarmTimeMinute.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Séléctionner la luminosité ',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                    ),
-                  ),
-                  Row(
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(20), color: Colors.white),
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'de départ ',
-                        textAlign: TextAlign.center,
+                        'Option de réveil',
                         style: TextStyle(
                           fontSize: 18,
                           color: Colors.black,
                         ),
                       ),
-                      Image.asset(
-                        'assets/arrivee.png',
-                        height: heightScreen * 0.05,
-                        width: widthScreen * 0.05,
-                      ),
-                      Text(
-                        ' d\'arrivée',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.1)),
+                        child: DropdownButton<String>(
+                          value: myAlarmOptionData,
+                          icon: Icon(Icons.arrow_drop_down),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.blue[300],
+                          ),
+                          onChanged: (String data) {
+                            setState(() {
+                              saveButtonColor = Colors.grey[400];
+                              myAlarmOptionData = data;
+                              myAlarmOptionPosition = myAlarmOption.indexOf(data);
+                              alarmOptionList[day] = myAlarmOptionPosition;
+                            });
+                          },
+                          items: myAlarmOption.map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
                         ),
                       ),
-                      Image.asset(
-                        'assets/depart.png',
-                        height: heightScreen * 0.05,
-                        width: widthScreen * 0.05,
-                      ),
                     ],
                   ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-                child: FlutterSlider(
-                  values: [luminosityMinList[day].toDouble(), luminosityMaxList[day].toDouble()],
-                  max: 100,
-                  min: 0,
-                  rangeSlider: true,
-                  handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
-                  onDragging: (handlerIndex, lowerValue, upperValue) {
-                    luminosityMinList[day] = lowerValue.toInt();
-                    luminosityMaxList[day] = upperValue.toInt();
-                    saveButtonColor = Colors.grey[400];
-                    setState(() {});
-                  },
-                  handler: FlutterSliderHandler(
-                    decoration: BoxDecoration(),
-                    child: Image.asset(
-                      'assets/arrivee.png',
-                      height: heightScreen * 0.1,
-                      width: widthScreen * 0.1,
-                    ),
-                  ),
-                  rightHandler: FlutterSliderHandler(
-                    decoration: BoxDecoration(),
-                    child: Image.asset(
-                      'assets/depart.png',
-                      height: heightScreen * 0.1,
-                      width: widthScreen * 0.1,
-                    ),
-                  ),
-                  trackBar: FlutterSliderTrackBar(activeTrackBar: BoxDecoration(color: Colors.grey[700]), activeTrackBarHeight: 15, inactiveTrackBarHeight: 15),
-                  hatchMark: FlutterSliderHatchMark(
-                    density: 0.5, // means 50 lines, from 0 to 100 percent
-                    labels: [
-                      FlutterSliderHatchMarkLabel(percent: 0, label: Text('0%')),
-                      FlutterSliderHatchMarkLabel(percent: 100, label: Text('100%')),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Divider(
-                  thickness: 3.0,
-                  color: Colors.grey[600],
-                ),
-              ),
-              Text(
-                'Option de reveil',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.1)),
-                child: DropdownButton<String>(
-                  value: myAlarmOptionData,
-                  icon: Icon(Icons.arrow_drop_down),
-                  iconSize: 24,
-                  elevation: 16,
-                  style: TextStyle(color: Colors.grey[800], fontSize: 18),
-                  underline: Container(
-                    height: 2,
-                    color: Colors.blue[300],
-                  ),
-                  onChanged: (String data) {
-                    setState(() {
-                      saveButtonColor = Colors.grey[400];
-                      myAlarmOptionData = data;
-                      myAlarmOptionPosition = myAlarmOption.indexOf(data);
-                      alarmOptionList[day] = myAlarmOptionPosition;
-                    });
-                  },
-                  items: myAlarmOption.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
                 ),
               ),
             ],
@@ -773,85 +818,38 @@ class _AlarmClockState extends State<AlarmClock> {
     );
   }
 
-  Widget bigCircle(double width, double height) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-      child: Container(
-        width: width,
-        height: height,
-        decoration: new BoxDecoration(
-          color: hueInitial[day],
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(color: Colors.black, spreadRadius: 3),
-          ],
-        ),
-      ),
+  Widget ambianceCircleDisplay(BuildContext context, List<dynamic> ambianceColors) {
+    final colorZone1 = getColors(ambianceColors[2].toString());
+    final colorZone2 = getColors(ambianceColors[4].toString());
+    final colorZone3 = getColors(ambianceColors[6].toString());
+    final colorZone4 = getColors(ambianceColors[8].toString());
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ambianceZoneColor(context, Color(int.parse(colorZone1.toString(), radix: 16))),
+        ambianceZoneColor(context, Color(int.parse(colorZone2.toString(), radix: 16))),
+        ambianceZoneColor(context, Color(int.parse(colorZone3.toString(), radix: 16))),
+        ambianceZoneColor(context, Color(int.parse(colorZone4.toString(), radix: 16))),
+      ],
     );
   }
 
-  Future<void> colorSettingWidget(BuildContext context) async {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Changer votre Ambiance'),
-          content: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: HSLColorPicker(
-                    onChanged: (colorSelected) {
-                      hueInitial[day] = colorSelected.toColor();
-                    },
-                    size: screenWidth * 0.4 + screenHeight * 0.1,
-                    strokeWidth: screenWidth * 0.04,
-                    thumbSize: 0.00001,
-                    thumbStrokeSize: screenWidth * 0.005 + screenHeight * 0.005,
-                    showCenterColorIndicator: true,
-                    centerColorIndicatorSize: screenWidth * 0.05 + screenHeight * 0.05,
-                    initialColor: hueInitial[day],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(
-                'Sauvgarder',
-                style: TextStyle(color: Colors.green),
-              ),
-              onPressed: () async {
-                saveButtonColor = Colors.grey[400];
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text(
-                'Annuler',
-                style: TextStyle(color: Colors.green),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
+  Widget ambianceZoneColor(BuildContext context, Color zoneColor) {
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Container(
+        width: widthScreen * 0.06,
+        height: heightScreen * 0.06,
+        decoration: BoxDecoration(shape: BoxShape.circle, color: zoneColor),
+      ),
     );
   }
 
   String alarmDayData(int dayID) {
     return '${boolToInt(daysStates[dayID])},${(hourList[dayID] * 3600) + (minutesList[dayID] * 60) + (secondsList[dayID])},'
-        '${myAlarmTimeMinuteList[dayID]},\"${hueInitial[dayID].toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")}\",'
-        '${luminosityMinList[dayID]},${luminosityMaxList[dayID]},\"${dayZones[dayID]}\",${alarmOptionList[dayID]}';
+        '${myAlarmTimeMinuteList[dayID] * 60 + (myAlarmTimeSecondList[dayID])},${alarmAmbiance[dayID]},${luminosityMinList[dayID]},${luminosityMaxList[dayID]},'
+        '\"${dayZones[dayID]}\",${alarmOptionList[dayID]}';
   }
 }

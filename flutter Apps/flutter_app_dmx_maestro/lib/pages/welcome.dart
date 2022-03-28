@@ -31,19 +31,19 @@ class _WelcomeState extends State<Welcome> {
 
     super.initState();
     if (Platform.isAndroid) {
-      print('android');
+      debugPrint('android');
     }
     if (Platform.isIOS) {
-      print('ios');
+      debugPrint('ios');
     }
     if (Platform.isWindows) {
-      print('windows');
+      debugPrint('windows');
     }
     if (Platform.isLinux) {
-      print('linux');
+      debugPrint('linux');
     }
     if (Platform.isMacOS) {
-      print('macos');
+      debugPrint('macos');
     }
 
     gettingAppInfo();
@@ -51,7 +51,7 @@ class _WelcomeState extends State<Welcome> {
     flutterBlue.state.listen((state) {
       if (state == BluetoothState.off) {
         //Alert user to turn on bluetooth.
-        print("Bluetooth is off");
+        debugPrint("Bluetooth is off");
         Future.delayed(Duration(seconds: 5), () {
           Navigator.pushReplacementNamed(context, '/check_permissions');
         });
@@ -59,7 +59,7 @@ class _WelcomeState extends State<Welcome> {
         //if bluetooth is enabled then go ahead.
         //Make sure user's device gps is on.
         flutterBlue = FlutterBlue.instance;
-        print("Bluetooth is on");
+        debugPrint("Bluetooth is on");
         Future.delayed(Duration(seconds: 5), () {
           Navigator.pushReplacementNamed(context, '/scan_ble_list');
         });
@@ -80,7 +80,7 @@ class _WelcomeState extends State<Welcome> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    print('width : $screenWidth and height : $screenHeight');
+    debugPrint('width : $screenWidth and height : $screenHeight');
     return Scaffold(
       backgroundColor: Colors.indigo[700],
       body: SafeArea(

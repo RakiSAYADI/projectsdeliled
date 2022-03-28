@@ -24,7 +24,9 @@ String dataMaestroIOS4 = '';
 String dataMaestroIOS5 = '';
 String dataMaestroIOS6 = '';
 
-bool startWithOutSettings;
+int boolToInt(bool a) => a == true ? 1 : 0;
+
+bool intToBool(int a) => a == 1 ? true : false;
 
 int backGroundColorSelect = 0;
 
@@ -74,6 +76,8 @@ Future<void> displayAlert(BuildContext context, String title, Widget mainWidget,
 }
 
 List<String> myAlarmOption = ['Sun rise', 'Vibe', 'Shock'];
+
+List<String> myAmbiances = ['Ambiance 1', 'Ambiance 2', 'Ambiance 3', 'Ambiance 4', 'Ambiance 5', 'Ambiance 6'];
 
 List<String> myTimeHours = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
 
@@ -201,37 +205,4 @@ List<String> myTimeSeconds = [
   '57',
   '58',
   '59'
-];
-
-List<String> myAlarmTimeMinute = [
-  '  5 sec',
-  ' 10 sec',
-  ' 20 sec',
-  ' 30 sec',
-  '  1 min',
-  '  2 min',
-  '  5 min',
-  ' 10 min',
-  ' 15 min',
-  ' 20 min',
-  ' 25 min',
-  ' 30 min',
-  ' 35 min',
-  ' 40 min',
-  ' 45 min',
-  ' 50 min',
-  ' 55 min',
-  ' 60 min',
-  ' 65 min',
-  ' 70 min',
-  ' 75 min',
-  ' 80 min',
-  ' 85 min',
-  ' 90 min',
-  ' 95 min',
-  '100 min',
-  '105 min',
-  '110 min',
-  '115 min',
-  '120 min',
 ];

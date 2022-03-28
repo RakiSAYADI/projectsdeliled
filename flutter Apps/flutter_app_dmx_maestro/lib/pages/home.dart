@@ -22,10 +22,6 @@ class _HomeState extends State<Home> {
 
   HSLColor hslColor = HSLColor.fromColor(Colors.blue);
 
-  int boolToInt(bool a) => a == true ? 1 : 0;
-
-  bool intToBool(int a) => a == 1 ? true : false;
-
   String bottomBarTitle = 'Ambiances';
   String zonesInHexAmb;
 
@@ -52,19 +48,19 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    print('home page');
+    debugPrint('home page');
     try {
       var parsedJson;
       if (Platform.isIOS) {
         parsedJson = json.decode(dataMaestroIOS2);
-        ambiance1 = List<String>.from(parsedJson['Amb1']);
-        ambiance2 = List<String>.from(parsedJson['Amb2']);
+        ambiance1 = List<dynamic>.from(parsedJson['Amb1']);
+        ambiance2 = List<dynamic>.from(parsedJson['Amb2']);
         parsedJson = json.decode(dataMaestroIOS3);
-        ambiance3 = List<String>.from(parsedJson['Amb3']);
-        ambiance4 = List<String>.from(parsedJson['Amb4']);
+        ambiance3 = List<dynamic>.from(parsedJson['Amb3']);
+        ambiance4 = List<dynamic>.from(parsedJson['Amb4']);
         parsedJson = json.decode(dataMaestroIOS4);
-        ambiance5 = List<String>.from(parsedJson['Amb5']);
-        ambiance6 = List<String>.from(parsedJson['Amb6']);
+        ambiance5 = List<dynamic>.from(parsedJson['Amb5']);
+        ambiance6 = List<dynamic>.from(parsedJson['Amb6']);
         parsedJson = json.decode(dataMaestroIOS);
         zonesNamesList[0] = parsedJson['zone'][0];
         zonesNamesList[1] = parsedJson['zone'][1];
@@ -146,7 +142,8 @@ class _HomeState extends State<Home> {
         zonesNamesList[3] = parsedJson['zone'][3];
       }
     } catch (e) {
-      print('erreur');
+      debugPrint(e.toString());
+      debugPrint('erreur');
       ambiance1 = ['Ambiance 1', true, 'FF0000', true, 'FF0000', true, 'FF0000', true, 'FF0000'];
       ambiance2 = ['Ambiance 2', true, '000000', true, '000000', true, '000000', true, '000000'];
       ambiance3 = ['Ambiance 3', true, '00FF00', true, '00FF00', true, '00FF00', true, '00FF00'];
@@ -174,7 +171,14 @@ class _HomeState extends State<Home> {
                     iconColor: textColor[backGroundColorSelect],
                     icon: Icon(Icons.alarm),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/alarm_settings').then((_) => setState(() {}));
+                      Navigator.pushNamed(context, '/alarm_settings', arguments: {
+                        'ambiance1list': ambiance1,
+                        'ambiance2list': ambiance2,
+                        'ambiance3list': ambiance3,
+                        'ambiance4list': ambiance4,
+                        'ambiance5list': ambiance5,
+                        'ambiance6list': ambiance6,
+                      }).then((_) => setState(() {}));
                     },
                   ),
                 ),
@@ -195,7 +199,7 @@ class _HomeState extends State<Home> {
                         remoteAndAmbVisibility[0] = !remoteAndAmbVisibility[0];
                         remoteAndAmbVisibility[1] = !remoteAndAmbVisibility[1];
                       });
-                      print(bottomBarTitle);
+                      debugPrint(bottomBarTitle);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
@@ -305,7 +309,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget ambianceDisplayWidget(BuildContext context, List<String> ambiance, int ambianceID) {
+  Widget ambianceDisplayWidget(BuildContext context, List<dynamic> ambiance, int ambianceID) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
     return Padding(
@@ -702,11 +706,11 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget ambianceCircleDisplay(BuildContext context, List<String> ambianceColors, int ambianceID) {
-    final colorZone1 = getColors(ambianceColors[1]);
-    final colorZone2 = getColors(ambianceColors[2]);
-    final colorZone3 = getColors(ambianceColors[3]);
-    final colorZone4 = getColors(ambianceColors[4]);
+  Widget ambianceCircleDisplay(BuildContext context, List<dynamic> ambianceColors, int ambianceID) {
+    final colorZone1 = getColors(ambianceColors[2].toString());
+    final colorZone2 = getColors(ambianceColors[4].toString());
+    final colorZone3 = getColors(ambianceColors[6].toString());
+    final colorZone4 = getColors(ambianceColors[8].toString());
     return GestureDetector(
       onTap: () async {
         if (myDevice.getConnectionState()) {
@@ -718,18 +722,21 @@ class _HomeState extends State<Home> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          ambianceZoneColor(context, Color(int.parse(colorZone1.toString(), radix: 16))),
-          ambianceZoneColor(context, Color(int.parse(colorZone2.toString(), radix: 16))),
-          ambianceZoneColor(context, Color(int.parse(colorZone3.toString(), radix: 16))),
-          ambianceZoneColor(context, Color(int.parse(colorZone4.toString(), radix: 16))),
+          ambianceZoneColor(context, Color(int.parse(colorZone1.toString(), radix: 16)), intToBool(ambianceColors[1])),
+          ambianceZoneColor(context, Color(int.parse(colorZone2.toString(), radix: 16)), intToBool(ambianceColors[3])),
+          ambianceZoneColor(context, Color(int.parse(colorZone3.toString(), radix: 16)), intToBool(ambianceColors[5])),
+          ambianceZoneColor(context, Color(int.parse(colorZone4.toString(), radix: 16)), intToBool(ambianceColors[7])),
         ],
       ),
     );
   }
 
-  Widget ambianceZoneColor(BuildContext context, Color zoneColor) {
+  Widget ambianceZoneColor(BuildContext context, Color zoneColor, bool zoneState) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
+    if (!zoneState) {
+      zoneColor = Colors.black;
+    }
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Container(

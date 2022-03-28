@@ -15,7 +15,7 @@ class Ambiances extends StatefulWidget {
 class _AmbiancesState extends State<Ambiances> {
   ToastyMessage myUvcToast;
 
-  List<String> ambiance;
+  List<dynamic> ambiance;
   List<String> zonesNamesList = ['', '', '', ''];
 
   List<Color> zoneStates = [Colors.red, Colors.red, Colors.red, Colors.red];
@@ -28,6 +28,8 @@ class _AmbiancesState extends State<Ambiances> {
   Color circlePickerColor = Colors.blue[400];
 
   final myAmbianceName = TextEditingController();
+
+  bool firstDisplayMainWidget = true;
 
   @override
   void initState() {
@@ -45,21 +47,24 @@ class _AmbiancesState extends State<Ambiances> {
 
   @override
   Widget build(BuildContext context) {
-    print('ambiance page');
+    debugPrint('ambiance page');
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
-    try {
-      ambiancesClassData = ambiancesClassData.isNotEmpty ? ambiancesClassData : ModalRoute.of(context).settings.arguments;
-      ambiance = ambiancesClassData['ambiance'];
-      ambianceID = ambiancesClassData['ambianceID'];
-      zonesNamesList = ambiancesClassData['zoneNames'];
-      myAmbianceName.text = ambiance[0];
-    } catch (e) {
-      debugPrint('error DATA');
-      ambianceID = 0;
-      zonesNamesList = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4'];
-      ambiance = ['Ambiance $ambianceID', 'FF0000', 'FF0000', 'FF0000', 'FF0000'];
-      myAmbianceName.text = ambiance[0];
+    if (firstDisplayMainWidget) {
+      try {
+        ambiancesClassData = ambiancesClassData.isNotEmpty ? ambiancesClassData : ModalRoute.of(context).settings.arguments;
+        ambiance = ambiancesClassData['ambiance'];
+        ambianceID = ambiancesClassData['ambianceID'];
+        zonesNamesList = ambiancesClassData['zoneNames'];
+        myAmbianceName.text = ambiance[0];
+      } catch (e) {
+        debugPrint('error DATA');
+        ambianceID = 0;
+        zonesNamesList = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4'];
+        ambiance = ['Ambiance $ambianceID', true, 'FF0000', true, 'FF0000', true, 'FF0000', true, 'FF0000'];
+        myAmbianceName.text = ambiance[0];
+      }
+      firstDisplayMainWidget = false;
     }
 
     return Scaffold(
@@ -85,7 +90,9 @@ class _AmbiancesState extends State<Ambiances> {
             onPressed: () async {
               if (myDevice.getConnectionState()) {
                 ambiance[0] = myAmbianceName.text;
-                await characteristicMaestro.write('{\"couleur$ambianceID\":[\"${ambiance[0]}\",\"${ambiance[1]}\",\"${ambiance[2]}\",\"${ambiance[3]}\",\"${ambiance[4]}\"]}'.codeUnits);
+                await characteristicMaestro.write(
+                    '{\"couleur$ambianceID\":[\"${ambiance[0]}\",${ambiance[1]},\"${ambiance[2]}\",${ambiance[3]},\"${ambiance[4]}\",${ambiance[5]},\"${ambiance[6]}\",${ambiance[7]},\"${ambiance[8]}\"]}'
+                        .codeUnits);
                 displayAlert(
                   context,
                   'Enregistrement en cours',
@@ -127,6 +134,7 @@ class _AmbiancesState extends State<Ambiances> {
                 myUvcToast.setToastMessage('Données enregistrées !');
                 myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
               }
+              // double popup for the alert dialog and the page
               Navigator.pop(context);
               Navigator.pop(context);
             },
@@ -213,9 +221,24 @@ class _AmbiancesState extends State<Ambiances> {
                 children: [
                   HSLColorPicker(
                     onChanged: (colorSelected) {
-                      ambiance[zoneID + 1] = colorSelected.toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "");
+                      int id = 0;
+                      switch (zoneID) {
+                        case 0:
+                          id = 2;
+                          break;
+                        case 1:
+                          id = 4;
+                          break;
+                        case 2:
+                          id = 6;
+                          break;
+                        case 3:
+                          id = 8;
+                          break;
+                      }
+                      ambiance[id] = colorSelected.toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "");
                       setState(() {
-                        circlePickerColor = Color(int.parse(getColors(ambiance[zoneID + 1]).toString(), radix: 16));
+                        circlePickerColor = Color(int.parse(getColors(ambiance[id]).toString(), radix: 16));
                       });
                     },
                     size: widthScreen * 0.4 + heightScreen * 0.3,
@@ -250,8 +273,23 @@ class _AmbiancesState extends State<Ambiances> {
               zoneStates[i] = Colors.red;
             }
           }
+          int id = 0;
+          switch (zoneID) {
+            case 0:
+              id = 2;
+              break;
+            case 1:
+              id = 4;
+              break;
+            case 2:
+              id = 6;
+              break;
+            case 3:
+              id = 8;
+              break;
+          }
           setState(() {
-            circlePickerColor = Color(int.parse(getColors(ambiance[zoneNumber + 1]).toString(), radix: 16));
+            circlePickerColor = Color(int.parse(getColors(ambiance[id]).toString(), radix: 16));
           });
         },
         child: Padding(
