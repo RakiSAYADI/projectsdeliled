@@ -634,35 +634,35 @@ void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 					break;
 				case 4:
 					sprintf((char *)total2,
-							"{\"lun\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],"
-							"\"mar\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],\"mer\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],"
-							"\"jeu\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d]}",
+							"{\"lun\":[%d,%ld,%ld,%d,%d,%d,\"%s\",%d],"
+							"\"mar\":[%d,%ld,%ld,%d,%d,%d,\"%s\",%d],\"mer\":[%d,%ld,%ld,%d,%d,%d,\"%s\",%d],"
+							"\"jeu\":[%d,%ld,%ld,%d,%d,%d,\"%s\",%d]}",
 							UnitCfg.alarmDay[1].state, UnitCfg.alarmDay[1].autoTrigTime,
-							UnitCfg.alarmDay[1].duration, UnitCfg.alarmDay[1].hue, UnitCfg.alarmDay[1].startLumVal,
+							UnitCfg.alarmDay[1].duration, UnitCfg.alarmDay[1].ambID, UnitCfg.alarmDay[1].startLumVal,
 							UnitCfg.alarmDay[1].finishLumVal, UnitCfg.alarmDay[1].zones, UnitCfg.alarmDay[1].alarmOption,
 							UnitCfg.alarmDay[2].state, UnitCfg.alarmDay[2].autoTrigTime,
-							UnitCfg.alarmDay[2].duration, UnitCfg.alarmDay[2].hue, UnitCfg.alarmDay[2].startLumVal,
+							UnitCfg.alarmDay[2].duration, UnitCfg.alarmDay[2].ambID, UnitCfg.alarmDay[2].startLumVal,
 							UnitCfg.alarmDay[2].finishLumVal, UnitCfg.alarmDay[2].zones, UnitCfg.alarmDay[2].alarmOption,
 							UnitCfg.alarmDay[3].state, UnitCfg.alarmDay[3].autoTrigTime,
-							UnitCfg.alarmDay[3].duration, UnitCfg.alarmDay[3].hue, UnitCfg.alarmDay[3].startLumVal,
+							UnitCfg.alarmDay[3].duration, UnitCfg.alarmDay[3].ambID, UnitCfg.alarmDay[3].startLumVal,
 							UnitCfg.alarmDay[3].finishLumVal, UnitCfg.alarmDay[3].zones, UnitCfg.alarmDay[3].alarmOption,
 							UnitCfg.alarmDay[4].state, UnitCfg.alarmDay[4].autoTrigTime,
-							UnitCfg.alarmDay[4].duration, UnitCfg.alarmDay[4].hue, UnitCfg.alarmDay[4].startLumVal,
+							UnitCfg.alarmDay[4].duration, UnitCfg.alarmDay[4].ambID, UnitCfg.alarmDay[4].startLumVal,
 							UnitCfg.alarmDay[4].finishLumVal, UnitCfg.alarmDay[4].zones, UnitCfg.alarmDay[4].alarmOption);
 					charIOSCounter++;
 					break;
 				case 5:
 					sprintf((char *)total2,
-							"{\"ven\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],"
-							"\"sam\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],\"dim\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d]}",
+							"{\"ven\":[%d,%ld,%ld,%d,%d,%d,\"%s\",%d],"
+							"\"sam\":[%d,%ld,%ld,%d,%d,%d,\"%s\",%d],\"dim\":[%d,%ld,%ld,%d,%d,%d,\"%s\",%d]}",
 							UnitCfg.alarmDay[5].state, UnitCfg.alarmDay[5].autoTrigTime,
-							UnitCfg.alarmDay[5].duration, UnitCfg.alarmDay[5].hue, UnitCfg.alarmDay[5].startLumVal,
+							UnitCfg.alarmDay[5].duration, UnitCfg.alarmDay[5].ambID, UnitCfg.alarmDay[5].startLumVal,
 							UnitCfg.alarmDay[5].finishLumVal, UnitCfg.alarmDay[5].zones, UnitCfg.alarmDay[5].alarmOption,
 							UnitCfg.alarmDay[6].state, UnitCfg.alarmDay[6].autoTrigTime,
-							UnitCfg.alarmDay[6].duration, UnitCfg.alarmDay[6].hue, UnitCfg.alarmDay[6].startLumVal,
+							UnitCfg.alarmDay[6].duration, UnitCfg.alarmDay[6].ambID, UnitCfg.alarmDay[6].startLumVal,
 							UnitCfg.alarmDay[6].finishLumVal, UnitCfg.alarmDay[6].zones, UnitCfg.alarmDay[6].alarmOption,
 							UnitCfg.alarmDay[0].state, UnitCfg.alarmDay[0].autoTrigTime,
-							UnitCfg.alarmDay[0].duration, UnitCfg.alarmDay[0].hue, UnitCfg.alarmDay[0].startLumVal,
+							UnitCfg.alarmDay[0].duration, UnitCfg.alarmDay[0].ambID, UnitCfg.alarmDay[0].startLumVal,
 							UnitCfg.alarmDay[0].finishLumVal, UnitCfg.alarmDay[0].zones, UnitCfg.alarmDay[0].alarmOption);
 					charIOSCounter = 0;
 					break;
@@ -719,30 +719,30 @@ void char_total2_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 					break;
 				case 2:
 					sprintf((char *)total2,
-							"{\"lun\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],"
-							"\"mar\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],\"mer\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],"
-							"\"jeu\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],\"ven\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],"
-							"\"sam\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d],\"dim\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\",%d]}",
+							"{\"lun\":[%d,%ld,%ld,%d,%d,%d,\"%s\",%d],"
+							"\"mar\":[%d,%ld,%ld,%d,%d,%d,\"%s\",%d],\"mer\":[%d,%ld,%ld,%d,%d,%d,\"%s\",%d],"
+							"\"jeu\":[%d,%ld,%ld,%d,%d,%d,\"%s\",%d],\"ven\":[%d,%ld,%ld,%d,%d,%d,\"%s\",%d],"
+							"\"sam\":[%d,%ld,%ld,%d,%d,%d,\"%s\",%d],\"dim\":[%d,%ld,%ld,%d,%d,%d,\"%s\",%d]}",
 							UnitCfg.alarmDay[1].state, UnitCfg.alarmDay[1].autoTrigTime,
-							UnitCfg.alarmDay[1].duration, UnitCfg.alarmDay[1].hue, UnitCfg.alarmDay[1].startLumVal,
+							UnitCfg.alarmDay[1].duration, UnitCfg.alarmDay[1].ambID, UnitCfg.alarmDay[1].startLumVal,
 							UnitCfg.alarmDay[1].finishLumVal, UnitCfg.alarmDay[1].zones, UnitCfg.alarmDay[1].alarmOption,
 							UnitCfg.alarmDay[2].state, UnitCfg.alarmDay[2].autoTrigTime,
-							UnitCfg.alarmDay[2].duration, UnitCfg.alarmDay[2].hue, UnitCfg.alarmDay[2].startLumVal,
+							UnitCfg.alarmDay[2].duration, UnitCfg.alarmDay[2].ambID, UnitCfg.alarmDay[2].startLumVal,
 							UnitCfg.alarmDay[2].finishLumVal, UnitCfg.alarmDay[2].zones, UnitCfg.alarmDay[2].alarmOption,
 							UnitCfg.alarmDay[3].state, UnitCfg.alarmDay[3].autoTrigTime,
-							UnitCfg.alarmDay[3].duration, UnitCfg.alarmDay[3].hue, UnitCfg.alarmDay[3].startLumVal,
+							UnitCfg.alarmDay[3].duration, UnitCfg.alarmDay[3].ambID, UnitCfg.alarmDay[3].startLumVal,
 							UnitCfg.alarmDay[3].finishLumVal, UnitCfg.alarmDay[3].zones, UnitCfg.alarmDay[3].alarmOption,
 							UnitCfg.alarmDay[4].state, UnitCfg.alarmDay[4].autoTrigTime,
-							UnitCfg.alarmDay[4].duration, UnitCfg.alarmDay[4].hue, UnitCfg.alarmDay[4].startLumVal,
+							UnitCfg.alarmDay[4].duration, UnitCfg.alarmDay[4].ambID, UnitCfg.alarmDay[4].startLumVal,
 							UnitCfg.alarmDay[4].finishLumVal, UnitCfg.alarmDay[4].zones, UnitCfg.alarmDay[4].alarmOption,
 							UnitCfg.alarmDay[5].state, UnitCfg.alarmDay[5].autoTrigTime,
-							UnitCfg.alarmDay[5].duration, UnitCfg.alarmDay[5].hue, UnitCfg.alarmDay[5].startLumVal,
+							UnitCfg.alarmDay[5].duration, UnitCfg.alarmDay[5].ambID, UnitCfg.alarmDay[5].startLumVal,
 							UnitCfg.alarmDay[5].finishLumVal, UnitCfg.alarmDay[5].zones, UnitCfg.alarmDay[5].alarmOption,
 							UnitCfg.alarmDay[6].state, UnitCfg.alarmDay[6].autoTrigTime,
-							UnitCfg.alarmDay[6].duration, UnitCfg.alarmDay[6].hue, UnitCfg.alarmDay[6].startLumVal,
+							UnitCfg.alarmDay[6].duration, UnitCfg.alarmDay[6].ambID, UnitCfg.alarmDay[6].startLumVal,
 							UnitCfg.alarmDay[6].finishLumVal, UnitCfg.alarmDay[6].zones, UnitCfg.alarmDay[6].alarmOption,
 							UnitCfg.alarmDay[0].state, UnitCfg.alarmDay[0].autoTrigTime,
-							UnitCfg.alarmDay[0].duration, UnitCfg.alarmDay[0].hue, UnitCfg.alarmDay[0].startLumVal,
+							UnitCfg.alarmDay[0].duration, UnitCfg.alarmDay[0].ambID, UnitCfg.alarmDay[0].startLumVal,
 							UnitCfg.alarmDay[0].finishLumVal, UnitCfg.alarmDay[0].zones, UnitCfg.alarmDay[0].alarmOption);
 					charIOSCounter = 0;
 					break;
@@ -806,7 +806,7 @@ bool readAlertMessage(char *jsonData, char day[4], int dayID)
 
 	if (jsonparse(jsonData, tmp, day, 0))
 	{
-
+		stateFlag = true;
 		UnitCfg.alarmDay[dayID].state = atoi(tmp);
 
 		if (UnitCfg.alarmDay[dayID].state)
@@ -817,47 +817,40 @@ bool readAlertMessage(char *jsonData, char day[4], int dayID)
 		{
 			ESP_LOGI(GATTS_TAG, "%s is not selected !", day);
 		}
-		stateFlag = true;
 
 		if (jsonparse(jsonData, tmp, day, 1))
 		{
 			UnitCfg.alarmDay[dayID].autoTrigTime = atoi(tmp);
 			ESP_LOGI(GATTS_TAG, "%s time is %ld", day, UnitCfg.alarmDay[dayID].autoTrigTime);
-			stateFlag = true;
 		}
 		if (jsonparse(jsonData, tmp, day, 2))
 		{
 			UnitCfg.alarmDay[dayID].duration = atoi(tmp);
-			ESP_LOGI(GATTS_TAG, "%s duration is %d", day, UnitCfg.alarmDay[dayID].duration);
-			stateFlag = true;
+			ESP_LOGI(GATTS_TAG, "%s duration is %ld", day, UnitCfg.alarmDay[dayID].duration);
 		}
-		if (jsonparse(jsonData, UnitCfg.alarmDay[dayID].hue, day, 3))
+		if (jsonparse(jsonData, tmp, day, 3))
 		{
-			ESP_LOGI(GATTS_TAG, "%s hue is %s", day, UnitCfg.alarmDay[dayID].hue);
-			stateFlag = true;
+			UnitCfg.alarmDay[dayID].ambID = atoi(tmp);
+			ESP_LOGI(GATTS_TAG, "%s ambiance is %d", day, UnitCfg.alarmDay[dayID].ambID);
 		}
 		if (jsonparse(jsonData, tmp, day, 4))
 		{
 			UnitCfg.alarmDay[dayID].startLumVal = atoi(tmp);
 			ESP_LOGI(GATTS_TAG, "%s start lum is %d", day, UnitCfg.alarmDay[dayID].startLumVal);
-			stateFlag = true;
 		}
 		if (jsonparse(jsonData, tmp, day, 5))
 		{
 			UnitCfg.alarmDay[dayID].finishLumVal = atoi(tmp);
 			ESP_LOGI(GATTS_TAG, "%s start lum is %d", day, UnitCfg.alarmDay[dayID].finishLumVal);
-			stateFlag = true;
 		}
 		if (jsonparse(jsonData, UnitCfg.alarmDay[dayID].zones, day, 6))
 		{
 			ESP_LOGI(GATTS_TAG, "%s zone is %s", day, UnitCfg.alarmDay[dayID].zones);
-			stateFlag = true;
 		}
 		if (jsonparse(jsonData, tmp, day, 7))
 		{
 			UnitCfg.alarmDay[dayID].alarmOption = atoi(tmp);
 			ESP_LOGI(GATTS_TAG, "%s option is %d\n", day, UnitCfg.alarmDay[dayID].alarmOption);
-			stateFlag = true;
 		}
 	}
 	return stateFlag;
@@ -870,12 +863,13 @@ bool readAmbiance(char *jsonData, char *ambString, int ambID)
 	int jsonPos = 1;
 	for (int i = 0; i < 4; i++)
 	{
-		if (jsonparse(jsonData, UnitCfg.ColortrProfile[ambID].zoneAmbiance[i].Hue, ambString, jsonPos))
+		if (jsonparse(jsonData, tmp, ambString, jsonPos))
 		{
+			UnitCfg.ColortrProfile[ambID].zoneAmbiance[i].zoneState = atoi(tmp);
 			jsonPos++;
-			if (jsonparse(jsonData, tmp, ambString, jsonPos))
+			if (jsonparse(jsonData, UnitCfg.ColortrProfile[ambID].zoneAmbiance[i].Hue, ambString, jsonPos))
 			{
-				UnitCfg.ColortrProfile[ambID].zoneAmbiance[i].zoneState = atoi(tmp);
+
 				if (UnitCfg.ColortrProfile[ambID].zoneAmbiance[i].zoneState)
 				{
 					ESP_LOGI(GATTS_TAG, "Profile zone %d Color Hue set %s is activated", UnitCfg.ColortrProfile[ambID].zoneAmbiance[i].zoneId, UnitCfg.ColortrProfile[ambID].zoneAmbiance[i].Hue);
@@ -1202,13 +1196,15 @@ void secondTransitionAmbianceProcess(int ambianceId)
 	MilightHandler(cmd, LSUBCMD_SWITCH_OFF, 15);
 	delay(100);
 
-	// apply on
-	cmd = LCMD_SWITCH_ON;
-	MilightHandler(cmd, LSUBCMD_SWITCH_ON, 15);
-	delay(100);
-
 	for (int i = 0; i < zoneNumber; i++)
 	{
+		cmd = LCMD_SWITCH_ON;
+		if (UnitCfg.ColortrProfile[ambianceId].zoneAmbiance[i].zoneState)
+		{
+			MilightHandler(cmd, LSUBCMD_SWITCH_ON, UnitCfg.ColortrProfile[ambianceId].zoneAmbiance[i].zoneId);
+		}
+		delay(100);
+
 		rgb = strtol(UnitCfg.ColortrProfile[ambianceId].zoneAmbiance[i].Hue, NULL, 16);
 		RgbToHSL(rgb, &HSLtmp);
 		zoneLight = UnitCfg.ColortrProfile[ambianceId].zoneAmbiance[i].zoneId;

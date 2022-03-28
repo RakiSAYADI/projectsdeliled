@@ -136,7 +136,7 @@ struct gatts_profile_inst {
 /* One gatt-based profile one app_id and one gatts_if, this array will store the gatts_if returned by ESP_GATTS_REG_EVT */
 static struct gatts_profile_inst gl_profile_tab[PROFILE_NUM] = { [SERVICE_READ
 		] = { .gatts_cb = gatts_profile_read_event_handler, .gatts_if =
-		ESP_GATT_IF_NONE, /* Not get the gatt_if, so initial is ESP_GATT_IF_NONE */
+				ESP_GATT_IF_NONE, /* Not get the gatt_if, so initial is ESP_GATT_IF_NONE */
 		} };
 
 struct gatts_char_inst {
@@ -155,18 +155,18 @@ static struct gatts_char_inst LIST_CHAR_READ[GATTS_CHAR_NUM_READ] = { //SERVICE 
 		{ .char_uuid.len = ESP_UUID_LEN_16, .char_uuid.uuid.uuid16 = // char Data
 				GATTS_UUID_TEST_READ_Total, .char_perm = ESP_GATT_PERM_READ
 				| ESP_GATT_PERM_WRITE, .char_property =
-		ESP_GATT_CHAR_PROP_BIT_WRITE | ESP_GATT_CHAR_PROP_BIT_READ,
+				ESP_GATT_CHAR_PROP_BIT_WRITE | ESP_GATT_CHAR_PROP_BIT_READ,
 				.char_control = NULL, .char_handle = 0, .char_val = &TOTAL,
 				.char_read_callback = char_total_read_handler,
 				.char_write_callback = char_total_write_handler, }, { // char Wifi
 				.char_uuid.len = ESP_UUID_LEN_16, .char_uuid.uuid.uuid16 =
 				GATTS_UUID_TEST_READ_Total2, .char_perm = ESP_GATT_PERM_READ
 						| ESP_GATT_PERM_WRITE, .char_property =
-				ESP_GATT_CHAR_PROP_BIT_WRITE | ESP_GATT_CHAR_PROP_BIT_READ,
-						.char_control = NULL, .char_handle = 0, .char_val =
-								&TOTAL, .char_read_callback =
-								char_total2_read_handler, .char_write_callback =
-								char_total2_write_handler, } };
+						ESP_GATT_CHAR_PROP_BIT_WRITE
+								| ESP_GATT_CHAR_PROP_BIT_READ, .char_control =
+				NULL, .char_handle = 0, .char_val = &TOTAL,
+						.char_read_callback = char_total2_read_handler,
+						.char_write_callback = char_total2_write_handler, } };
 
 int jsonparse(char *src, char *dst, char *label, unsigned short arrayindex) {
 	char *sp = 0, *ep = 0, *ic = 0;
@@ -332,6 +332,9 @@ void gatts_check_add_char_READ(esp_bt_uuid_t char_uuid, uint16_t attr_handle) {
 
 bool savenvsFlag = false;
 
+uint8_t counterDataRead = 0;
+const uint8_t counterDataReadMax = 1;
+
 void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 		esp_ble_gatts_cb_param_t *param) {
 	ESP_LOGD(GATTS_TAG, "char_total_read_handler %d\n", param->read.handle);
@@ -339,48 +342,70 @@ void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 	ESP_LOGI(GATTS_TAG, "[APP] Free memory: %d bytes",
 			esp_get_free_heap_size());
 
-	sprintf((char*) total,
-			"{\"Ver\":%d,\"FirmV\":\"%s\",\"SCR\":%d,"
-					"\"Amb1\":[\"%s\",\"%s\"],\"Amb2\":[\"%s\",\"%s\"],"
-					"\"Amb3\":[\"%s\",\"%s\"],\"Amb4\":[\"%s\",\"%s\"],"
-					"\"Amb5\":[\"%s\",\"%s\"],\"Amb6\":[\"%s\",\"%s\"],\"wifiSt\":%d,"
-					"\"zone\":[\"%s\",\"%s\",\"%s\",\"%s\"],\"lun\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],"
-					"\"mar\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],\"mer\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],"
-					"\"jeu\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],\"ven\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],"
-					"\"sam\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],\"dim\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"]}",
-			UnitCfg.Version, UnitCfg.FirmwareVersion, scanResult,
-			UnitCfg.ColortrProfile[0].name, UnitCfg.ColortrProfile[0].Hue,
-			UnitCfg.ColortrProfile[1].name, UnitCfg.ColortrProfile[1].Hue,
-			UnitCfg.ColortrProfile[2].name, UnitCfg.ColortrProfile[2].Hue,
-			UnitCfg.ColortrProfile[3].name, UnitCfg.ColortrProfile[3].Hue,
-			UnitCfg.ColortrProfile[4].name, UnitCfg.ColortrProfile[4].Hue,
-			UnitCfg.ColortrProfile[5].name, UnitCfg.ColortrProfile[5].Hue,
-			stateConnection, UnitCfg.Zones.ZONE1, UnitCfg.Zones.ZONE2,
-			UnitCfg.Zones.ZONE3, UnitCfg.Zones.ZONE4, UnitCfg.alarmDay[1].state,
-			UnitCfg.alarmDay[1].autoTrigTime, UnitCfg.alarmDay[1].duration,
-			UnitCfg.alarmDay[1].hue, UnitCfg.alarmDay[1].startLumVal,
-			UnitCfg.alarmDay[1].finishLumVal, UnitCfg.alarmDay[1].zones,
-			UnitCfg.alarmDay[2].state, UnitCfg.alarmDay[2].autoTrigTime,
-			UnitCfg.alarmDay[2].duration, UnitCfg.alarmDay[2].hue,
-			UnitCfg.alarmDay[2].startLumVal, UnitCfg.alarmDay[2].finishLumVal,
-			UnitCfg.alarmDay[2].zones, UnitCfg.alarmDay[3].state,
-			UnitCfg.alarmDay[3].autoTrigTime, UnitCfg.alarmDay[3].duration,
-			UnitCfg.alarmDay[3].hue, UnitCfg.alarmDay[3].startLumVal,
-			UnitCfg.alarmDay[3].finishLumVal, UnitCfg.alarmDay[3].zones,
-			UnitCfg.alarmDay[4].state, UnitCfg.alarmDay[4].autoTrigTime,
-			UnitCfg.alarmDay[4].duration, UnitCfg.alarmDay[4].hue,
-			UnitCfg.alarmDay[4].startLumVal, UnitCfg.alarmDay[4].finishLumVal,
-			UnitCfg.alarmDay[4].zones, UnitCfg.alarmDay[5].state,
-			UnitCfg.alarmDay[5].autoTrigTime, UnitCfg.alarmDay[5].duration,
-			UnitCfg.alarmDay[5].hue, UnitCfg.alarmDay[5].startLumVal,
-			UnitCfg.alarmDay[5].finishLumVal, UnitCfg.alarmDay[5].zones,
-			UnitCfg.alarmDay[6].state, UnitCfg.alarmDay[6].autoTrigTime,
-			UnitCfg.alarmDay[6].duration, UnitCfg.alarmDay[6].hue,
-			UnitCfg.alarmDay[6].startLumVal, UnitCfg.alarmDay[6].finishLumVal,
-			UnitCfg.alarmDay[6].zones, UnitCfg.alarmDay[0].state,
-			UnitCfg.alarmDay[0].autoTrigTime, UnitCfg.alarmDay[0].duration,
-			UnitCfg.alarmDay[0].hue, UnitCfg.alarmDay[0].startLumVal,
-			UnitCfg.alarmDay[0].finishLumVal, UnitCfg.alarmDay[0].zones);
+	switch (counterDataRead) {
+	case 0:
+		sprintf((char*) total,
+				"{\"Ver\":%d,\"FirmV\":\"%s\",\"SCR\":%d,"
+						"\"Amb1\":[\"%s\",\"%s\"],\"Amb2\":[\"%s\",\"%s\"],"
+						"\"Amb3\":[\"%s\",\"%s\"],\"Amb4\":[\"%s\",\"%s\"],"
+						"\"Amb5\":[\"%s\",\"%s\"],\"Amb6\":[\"%s\",\"%s\"],\"wifiSt\":%d,"
+						"\"zone\":[\"%s\",\"%s\",\"%s\",\"%s\"]}",
+				UnitCfg.Version, UnitCfg.FirmwareVersion, scanResult,
+				UnitCfg.ColortrProfile[0].name, UnitCfg.ColortrProfile[0].Hue,
+				UnitCfg.ColortrProfile[1].name, UnitCfg.ColortrProfile[1].Hue,
+				UnitCfg.ColortrProfile[2].name, UnitCfg.ColortrProfile[2].Hue,
+				UnitCfg.ColortrProfile[3].name, UnitCfg.ColortrProfile[3].Hue,
+				UnitCfg.ColortrProfile[4].name, UnitCfg.ColortrProfile[4].Hue,
+				UnitCfg.ColortrProfile[5].name, UnitCfg.ColortrProfile[5].Hue,
+				stateConnection, UnitCfg.Zones.ZONE1, UnitCfg.Zones.ZONE2,
+				UnitCfg.Zones.ZONE3, UnitCfg.Zones.ZONE4);
+		break;
+	case 1:
+		sprintf((char*) total,
+					"{\"lun\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],"
+							"\"mar\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],\"mer\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],"
+							"\"jeu\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],\"ven\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],"
+							"\"sam\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"],\"dim\":[%d,%ld,%d,\"%s\",%d,%d,\"%s\"]}",
+					UnitCfg.alarmDay[1].state, UnitCfg.alarmDay[1].autoTrigTime,
+					UnitCfg.alarmDay[1].duration, UnitCfg.alarmDay[1].hue,
+					UnitCfg.alarmDay[1].startLumVal,
+					UnitCfg.alarmDay[1].finishLumVal, UnitCfg.alarmDay[1].zones,
+					UnitCfg.alarmDay[2].state, UnitCfg.alarmDay[2].autoTrigTime,
+					UnitCfg.alarmDay[2].duration, UnitCfg.alarmDay[2].hue,
+					UnitCfg.alarmDay[2].startLumVal,
+					UnitCfg.alarmDay[2].finishLumVal, UnitCfg.alarmDay[2].zones,
+					UnitCfg.alarmDay[3].state, UnitCfg.alarmDay[3].autoTrigTime,
+					UnitCfg.alarmDay[3].duration, UnitCfg.alarmDay[3].hue,
+					UnitCfg.alarmDay[3].startLumVal,
+					UnitCfg.alarmDay[3].finishLumVal, UnitCfg.alarmDay[3].zones,
+					UnitCfg.alarmDay[4].state, UnitCfg.alarmDay[4].autoTrigTime,
+					UnitCfg.alarmDay[4].duration, UnitCfg.alarmDay[4].hue,
+					UnitCfg.alarmDay[4].startLumVal,
+					UnitCfg.alarmDay[4].finishLumVal, UnitCfg.alarmDay[4].zones,
+					UnitCfg.alarmDay[5].state, UnitCfg.alarmDay[5].autoTrigTime,
+					UnitCfg.alarmDay[5].duration, UnitCfg.alarmDay[5].hue,
+					UnitCfg.alarmDay[5].startLumVal,
+					UnitCfg.alarmDay[5].finishLumVal, UnitCfg.alarmDay[5].zones,
+					UnitCfg.alarmDay[6].state, UnitCfg.alarmDay[6].autoTrigTime,
+					UnitCfg.alarmDay[6].duration, UnitCfg.alarmDay[6].hue,
+					UnitCfg.alarmDay[6].startLumVal,
+					UnitCfg.alarmDay[6].finishLumVal, UnitCfg.alarmDay[6].zones,
+					UnitCfg.alarmDay[0].state, UnitCfg.alarmDay[0].autoTrigTime,
+					UnitCfg.alarmDay[0].duration, UnitCfg.alarmDay[0].hue,
+					UnitCfg.alarmDay[0].startLumVal,
+					UnitCfg.alarmDay[0].finishLumVal, UnitCfg.alarmDay[0].zones);
+		break;
+	default:
+		break;
+	}
+
+	if (counterDataRead == counterDataReadMax) {
+		counterDataRead = 0;
+	} else {
+		counterDataRead++;
+	}
+
+	printf("Info : total %s\n", (char*) total);
 
 	TOTAL.attr_len = strlen((char *) total);
 
@@ -451,7 +476,7 @@ void char_total2_read_handler(esp_gatts_cb_event_t event,
 
 	sprintf((char*) total, "{\"AP_RECORDS\":[\"%s\"",
 			stationRecords[0].ap_records);
-	char apSSID[33];
+	char apSSID[40];
 	for (int i = 1; i < ap_num; i++) {
 		sprintf((char*) apSSID, ",\"%s\"", stationRecords[i].ap_records);
 		strcpy((char*) total + strlen((char*) total), apSSID);
@@ -966,45 +991,217 @@ void transitionAmbianceProcess(int ambianceId) {
 	}
 }
 
+void show_bonded_devices(void) {
+	int dev_num = esp_ble_get_bond_device_num();
+
+	esp_ble_bond_dev_t *dev_list = (esp_ble_bond_dev_t *) malloc(
+			sizeof(esp_ble_bond_dev_t) * dev_num);
+	esp_ble_get_bond_device_list(&dev_num, dev_list);
+	ESP_LOGI(GATTS_TAG, "Bonded devices number : %d\n", dev_num);
+
+	ESP_LOGI(GATTS_TAG, "Bonded devices list : %d\n", dev_num);
+	for (int i = 0; i < dev_num; i++) {
+		esp_log_buffer_hex(GATTS_TAG, (void *)dev_list[i].bd_addr, sizeof(esp_bd_addr_t));
+	}
+
+	free(dev_list);
+}
+
+char *esp_key_type_to_str(esp_ble_key_type_t key_type) {
+	char *key_str = NULL;
+	switch (key_type) {
+	case ESP_LE_KEY_NONE:
+		key_str = "ESP_LE_KEY_NONE";
+		break;
+	case ESP_LE_KEY_PENC:
+		key_str = "ESP_LE_KEY_PENC";
+		break;
+	case ESP_LE_KEY_PID:
+		key_str = "ESP_LE_KEY_PID";
+		break;
+	case ESP_LE_KEY_PCSRK:
+		key_str = "ESP_LE_KEY_PCSRK";
+		break;
+	case ESP_LE_KEY_PLK:
+		key_str = "ESP_LE_KEY_PLK";
+		break;
+	case ESP_LE_KEY_LLK:
+		key_str = "ESP_LE_KEY_LLK";
+		break;
+	case ESP_LE_KEY_LENC:
+		key_str = "ESP_LE_KEY_LENC";
+		break;
+	case ESP_LE_KEY_LID:
+		key_str = "ESP_LE_KEY_LID";
+		break;
+	case ESP_LE_KEY_LCSRK:
+		key_str = "ESP_LE_KEY_LCSRK";
+		break;
+	default:
+		key_str = "INVALID BLE KEY TYPE";
+		break;
+
+	}
+
+	return key_str;
+}
+
+char *esp_auth_req_to_str(esp_ble_auth_req_t auth_req) {
+	char *auth_str = NULL;
+	switch (auth_req) {
+	case ESP_LE_AUTH_NO_BOND:
+		auth_str = "ESP_LE_AUTH_NO_BOND";
+		break;
+	case ESP_LE_AUTH_BOND:
+		auth_str = "ESP_LE_AUTH_BOND";
+		break;
+	case ESP_LE_AUTH_REQ_MITM:
+		auth_str = "ESP_LE_AUTH_REQ_MITM";
+		break;
+	case ESP_LE_AUTH_REQ_BOND_MITM:
+		auth_str = "ESP_LE_AUTH_REQ_BOND_MITM";
+		break;
+	case ESP_LE_AUTH_REQ_SC_ONLY:
+		auth_str = "ESP_LE_AUTH_REQ_SC_ONLY";
+		break;
+	case ESP_LE_AUTH_REQ_SC_BOND:
+		auth_str = "ESP_LE_AUTH_REQ_SC_BOND";
+		break;
+	case ESP_LE_AUTH_REQ_SC_MITM:
+		auth_str = "ESP_LE_AUTH_REQ_SC_MITM";
+		break;
+	case ESP_LE_AUTH_REQ_SC_MITM_BOND:
+		auth_str = "ESP_LE_AUTH_REQ_SC_MITM_BOND";
+		break;
+	default:
+		auth_str = "INVALID BLE AUTH REQ";
+		break;
+	}
+
+	return auth_str;
+}
+
 void gap_event_handler(esp_gap_ble_cb_event_t event,
 		esp_ble_gap_cb_param_t *param) {
-	switch (event) {
+	ESP_LOGV(GATTS_TAG, "GAP_EVT, event %d\n", event);
 
-	case ESP_GAP_BLE_ADV_DATA_SET_COMPLETE_EVT:
-		adv_config_done &= (~adv_config_flag);
-		if (adv_config_done == 0) {
-			esp_ble_gap_start_advertising(&adv_params);
-		}
-		break;
+	switch (event) {
 	case ESP_GAP_BLE_SCAN_RSP_DATA_SET_COMPLETE_EVT:
 		adv_config_done &= (~scan_rsp_config_flag);
 		if (adv_config_done == 0) {
 			esp_ble_gap_start_advertising(&adv_params);
 		}
 		break;
-
+	case ESP_GAP_BLE_ADV_DATA_SET_COMPLETE_EVT:
+		adv_config_done &= (~adv_config_flag);
+		if (adv_config_done == 0) {
+			esp_ble_gap_start_advertising(&adv_params);
+		}
+		break;
 	case ESP_GAP_BLE_ADV_START_COMPLETE_EVT:
 		//advertising start complete event to indicate advertising start successfully or failed
 		if (param->adv_start_cmpl.status != ESP_BT_STATUS_SUCCESS) {
-			ESP_LOGE(GATTS_TAG, "Advertising start failed\n");
+			ESP_LOGE(GATTS_TAG, "advertising start failed, error status = %x",
+					param->adv_start_cmpl.status);
+			break;
 		}
+		ESP_LOGI(GATTS_TAG, "advertising start success");
 		break;
-	case ESP_GAP_BLE_ADV_STOP_COMPLETE_EVT:
-		if (param->adv_stop_cmpl.status != ESP_BT_STATUS_SUCCESS) {
-			ESP_LOGE(GATTS_TAG, "Advertising stop failed\n");
+	case ESP_GAP_BLE_PASSKEY_REQ_EVT: /* passkey request event */
+		ESP_LOGI(GATTS_TAG, "ESP_GAP_BLE_PASSKEY_REQ_EVT");
+		/* Call the following function to input the passkey which is displayed on the remote device */
+		//esp_ble_passkey_reply(param->ble_security.ble_req.bd_addr, true, 0x00);
+		break;
+	case ESP_GAP_BLE_OOB_REQ_EVT: {
+		ESP_LOGI(GATTS_TAG, "ESP_GAP_BLE_OOB_REQ_EVT");
+		uint8_t tk[16] = { 1 }; //If you paired with OOB, both devices need to use the same tk
+		esp_ble_oob_req_reply(param->ble_security.ble_req.bd_addr, tk,
+				sizeof(tk));
+		break;
+	}
+	case ESP_GAP_BLE_LOCAL_IR_EVT: /* BLE local IR event */
+		ESP_LOGI(GATTS_TAG, "ESP_GAP_BLE_LOCAL_IR_EVT");
+		break;
+	case ESP_GAP_BLE_LOCAL_ER_EVT: /* BLE local ER event */
+		ESP_LOGI(GATTS_TAG, "ESP_GAP_BLE_LOCAL_ER_EVT");
+		break;
+	case ESP_GAP_BLE_NC_REQ_EVT:
+		/* The app will receive this evt when the IO has DisplayYesNO capability and the peer device IO also has DisplayYesNo capability.
+		 show the passkey number to the user to confirm it with the number displayed by peer device. */
+		esp_ble_confirm_reply(param->ble_security.ble_req.bd_addr, true);
+		ESP_LOGI(GATTS_TAG,
+				"ESP_GAP_BLE_NC_REQ_EVT, the passkey Notify number:%d",
+				param->ble_security.key_notif.passkey);
+		break;
+	case ESP_GAP_BLE_SEC_REQ_EVT:
+		/* send the positive(true) security response to the peer device to accept the security request.
+		 If not accept the security request, should send the security response with negative(false) accept value*/
+		esp_ble_gap_security_rsp(param->ble_security.ble_req.bd_addr, true);
+		break;
+	case ESP_GAP_BLE_PASSKEY_NOTIF_EVT: ///the app will receive this evt when the IO  has Output capability and the peer device IO has Input capability.
+		///show the passkey number to the user to input it in the peer device.
+		ESP_LOGI(GATTS_TAG, "The passkey Notify number:%06d",
+				param->ble_security.key_notif.passkey);
+		break;
+	case ESP_GAP_BLE_KEY_EVT:
+		//shows the ble key info share with peer device to the user.
+		ESP_LOGI(GATTS_TAG, "key type = %s",
+				esp_key_type_to_str(param->ble_security.ble_key.key_type));
+		break;
+	case ESP_GAP_BLE_AUTH_CMPL_EVT: {
+		esp_bd_addr_t bd_addr;
+		memcpy(bd_addr, param->ble_security.auth_cmpl.bd_addr,
+				sizeof(esp_bd_addr_t));
+		ESP_LOGI(GATTS_TAG, "remote BD_ADDR: %08x%04x",
+				(bd_addr[0] << 24) + (bd_addr[1] << 16) + (bd_addr[2] << 8)
+						+ bd_addr[3], (bd_addr[4] << 8) + bd_addr[5]);
+		ESP_LOGI(GATTS_TAG, "address type = %d",
+				param->ble_security.auth_cmpl.addr_type);
+		ESP_LOGI(GATTS_TAG, "pair status = %s",
+				param->ble_security.auth_cmpl.success ? "success" : "fail");
+		if (!param->ble_security.auth_cmpl.success) {
+			ESP_LOGI(GATTS_TAG, "fail reason = 0x%x",
+					param->ble_security.auth_cmpl.fail_reason);
 		} else {
-			ESP_LOGI(GATTS_TAG, "Stop adv successfully\n");
+			ESP_LOGI(GATTS_TAG, "auth mode = %s",
+					esp_auth_req_to_str(
+							param->ble_security.auth_cmpl.auth_mode));
 		}
+		show_bonded_devices();
 		break;
-	case ESP_GAP_BLE_UPDATE_CONN_PARAMS_EVT:
+	}
+	case ESP_GAP_BLE_REMOVE_BOND_DEV_COMPLETE_EVT: {
 		ESP_LOGD(GATTS_TAG,
-				"update connection params status = %d, min_int = %d, max_int = %d,conn_int = %d,latency = %d, timeout = %d",
-				param->update_conn_params.status,
-				param->update_conn_params.min_int,
-				param->update_conn_params.max_int,
-				param->update_conn_params.conn_int,
-				param->update_conn_params.latency,
-				param->update_conn_params.timeout);
+				"ESP_GAP_BLE_REMOVE_BOND_DEV_COMPLETE_EVT status = %d",
+				param->remove_bond_dev_cmpl.status);
+		ESP_LOGI(GATTS_TAG, "ESP_GAP_BLE_REMOVE_BOND_DEV");
+		ESP_LOGI(GATTS_TAG, "-----ESP_GAP_BLE_REMOVE_BOND_DEV----");
+		esp_log_buffer_hex(GATTS_TAG, (void *)param->remove_bond_dev_cmpl.bd_addr, sizeof(esp_bd_addr_t));
+		ESP_LOGI(GATTS_TAG, "------------------------------------");
+		break;
+	}
+	case ESP_GAP_BLE_SET_LOCAL_PRIVACY_COMPLETE_EVT:
+		if (param->local_privacy_cmpl.status != ESP_BT_STATUS_SUCCESS) {
+			ESP_LOGE(GATTS_TAG,
+					"config local privacy failed, error status = %x",
+					param->local_privacy_cmpl.status);
+			break;
+		}
+
+		esp_err_t ret = esp_ble_gap_config_adv_data(&adv_data);
+		if (ret) {
+			ESP_LOGE(GATTS_TAG, "config adv data failed, error code = %x", ret);
+		} else {
+			adv_config_done |= adv_config_flag;
+		}
+
+		ret = esp_ble_gap_config_adv_data(&scan_rsp_data);
+		if (ret) {
+			ESP_LOGE(GATTS_TAG, "scan adv data failed, error code = %x", ret);
+		} else {
+			adv_config_done |= scan_rsp_config_flag;
+		}
+
 		break;
 	default:
 		break;
@@ -1189,8 +1386,7 @@ void bt_main() {
 
 	ESP_ERROR_CHECK(esp_bt_controller_mem_release(ESP_BT_MODE_CLASSIC_BT));
 
-	esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT()
-	;
+	esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
 	ret = esp_bt_controller_init(&bt_cfg);
 	if (ret) {
 		ESP_LOGE(GATTS_TAG, "%s initialize controller failed\n", __func__);
@@ -1234,6 +1430,37 @@ void bt_main() {
 		ESP_LOGE(GATTS_TAG, "set local  MTU failed, error code = %x",
 				local_mtu_ret);
 	}
+
+	/* set the security iocap & auth_req & key size & init key response key parameters to the stack*/
+	esp_ble_auth_req_t auth_req = ESP_LE_AUTH_REQ_SC_MITM_BOND; //bonding with peer device after authentication
+	esp_ble_io_cap_t iocap = ESP_IO_CAP_OUT; //set the IO capability to No output No input
+	uint8_t key_size = 16;      //the key size should be 7~16 bytes
+	uint8_t init_key = ESP_BLE_ENC_KEY_MASK | ESP_BLE_ID_KEY_MASK;
+	uint8_t rsp_key = ESP_BLE_ENC_KEY_MASK | ESP_BLE_ID_KEY_MASK;
+	//set static passkey
+	uint32_t passkey = 123456;
+	uint8_t auth_option = ESP_BLE_ONLY_ACCEPT_SPECIFIED_AUTH_DISABLE;
+	uint8_t oob_support = ESP_BLE_OOB_DISABLE;
+	esp_ble_gap_set_security_param(ESP_BLE_SM_SET_STATIC_PASSKEY, &passkey,
+			sizeof(uint32_t));
+	esp_ble_gap_set_security_param(ESP_BLE_SM_AUTHEN_REQ_MODE, &auth_req,
+			sizeof(uint8_t));
+	esp_ble_gap_set_security_param(ESP_BLE_SM_IOCAP_MODE, &iocap,
+			sizeof(uint8_t));
+	esp_ble_gap_set_security_param(ESP_BLE_SM_MAX_KEY_SIZE, &key_size,
+			sizeof(uint8_t));
+	esp_ble_gap_set_security_param(ESP_BLE_SM_ONLY_ACCEPT_SPECIFIED_SEC_AUTH,
+			&auth_option, sizeof(uint8_t));
+	esp_ble_gap_set_security_param(ESP_BLE_SM_OOB_SUPPORT, &oob_support,
+			sizeof(uint8_t));
+	/* If your BLE device acts as a Slave, the init_key means you hope which types of key of the master should distribute to you,
+	 and the response key means which key you can distribute to the master;
+	 If your BLE device acts as a master, the response key means you hope which types of key of the slave should distribute to you,
+	 and the init key means which key you can distribute to the slave. */
+	esp_ble_gap_set_security_param(ESP_BLE_SM_SET_INIT_KEY, &init_key,
+			sizeof(uint8_t));
+	esp_ble_gap_set_security_param(ESP_BLE_SM_SET_RSP_KEY, &rsp_key,
+			sizeof(uint8_t));
 
 	ESP_LOGI(GATTS_TAG, "BLUETOOTH IS ACTIVATED \n");
 

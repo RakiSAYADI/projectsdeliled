@@ -63,8 +63,8 @@ typedef struct
 {
 	bool state;
 	time_t autoTrigTime;
-	uint8_t duration;
-	char hue[7];
+	time_t duration;
+	uint8_t ambID;
 	char zones[3];
 	uint8_t startLumVal;
 	uint8_t finishLumVal;

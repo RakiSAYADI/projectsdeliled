@@ -32,15 +32,15 @@ typedef struct {
 	bool state;
 	time_t autoTrigTime;
 	uint8_t duration;
-	char hue[8];
-	char zones[4];
+	char hue[7];
+	char zones[3];
 	uint8_t startLumVal;
 	uint8_t finishLumVal;
 } Alarm_Typedef;
 
 typedef struct {
 	char name[12];
-	char Hue[8];
+	char Hue[7];
 } ColortrProfile_Typedef;
 
 typedef struct {
@@ -51,7 +51,7 @@ typedef struct {
 typedef struct {
 	char UnitName[64];
 	uint8_t Version;
-	char FirmwareVersion[7];
+	char FirmwareVersion[6];
 	int8_t timeZone;
 	Zones_Typedef Zones;
 	WifiConfig_Typedef WifiCfg;
@@ -63,7 +63,7 @@ typedef struct {
 extern UnitConfig_Typedef UnitCfg;
 
 void saveDataTask(bool savenvsFlag);
-void syncTime(time_t t, uint32_t tzone);
+void syncTime(time_t t, uint8_t tzone);
 
 void Default_saving();
 int InitLoadCfg();

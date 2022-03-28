@@ -50,6 +50,9 @@
 									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/driver/esp32/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/nghttp/nghttp2/third-party/mruby/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/newlib/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/esp32/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/esp_rom/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${IDF_PATH}/components/bt/bluedroid/api/include/api&quot;"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1905172127" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>

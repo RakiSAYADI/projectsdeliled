@@ -440,8 +440,7 @@ void char_total_read_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
 {
 	ESP_LOGD(GATTS_TAG, "char_total_read_handler %d\n", param->read.handle);
 
-	ESP_LOGI(GATTS_TAG, "[APP] Free memory: %d bytes",
-			 esp_get_free_heap_size());
+	ESP_LOGI(GATTS_TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
 
 	sprintf((char *)total,
 			"{\"Company\":\"%s\",\"UserName\":\"%s\",\"Detection\":%d,\"RoomName\":\"%s\",\"security\":%d,\"Version\":%d,"
@@ -489,8 +488,7 @@ void char_total_write_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if
 		LIST_CHAR_READ[0].char_val->attr_len = param->write.len;
 		for (uint32_t pos = 0; pos < param->write.len; pos++)
 		{
-			LIST_CHAR_READ[0].char_val->attr_value[pos] =
-				param->write.value[pos];
+			LIST_CHAR_READ[0].char_val->attr_value[pos] = param->write.value[pos];
 		}
 		ESP_LOGD(GATTS_TAG, "char_light_write_handler = %.*s\n",
 				 LIST_CHAR_READ[0].char_val->attr_len,

@@ -150,7 +150,7 @@ void Default_saving()
 		UnitCfg.alarmDay[i].state = false;
 		UnitCfg.alarmDay[i].autoTrigTime = 0;
 		UnitCfg.alarmDay[i].duration = 0;
-		sprintf(UnitCfg.alarmDay[i].hue, "00A6FF");
+		UnitCfg.alarmDay[i].ambID = 0;
 		sprintf(UnitCfg.alarmDay[i].zones, "F");
 		UnitCfg.alarmDay[i].startLumVal = 0;
 		UnitCfg.alarmDay[i].finishLumVal = 100;
@@ -216,9 +216,9 @@ void syncTime(time_t t, uint32_t tzone)
 	// set timezone
 
 	char tz[50];
-	int8_t tzc = 0;
+	int8_t tzc = 1;
 
-	tzc = tzone / 3600;
+	//tzc = tzone / 3600;
 
 	sprintf(tz, "CET-%dCEST-%d,M3.5.0/02:00:00,M10.5.0/03:00:00", abs(tzc), abs(tzc) + 1);
 

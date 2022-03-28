@@ -157,7 +157,7 @@ void Default_saving() {
 		UnitCfg.alarmDay[i].finishLumVal = 100;
 	}
 
-	for (int i = 0; i < 6; i++) {
+	for (uint8_t i = 0; i < 6; i++) {
 		sprintf(UnitCfg.ColortrProfile[i].name, "Ambiance %d", i + 1);
 		sprintf(UnitCfg.ColortrProfile[i].Hue, "00A6FF");
 	}
@@ -186,7 +186,7 @@ void saveDataTask(bool savenvsFlag) {
 	}
 }
 
-void syncTime(time_t t, uint32_t tzone) {
+void syncTime(time_t t, uint8_t tzone) {
 	struct tm tm_time;
 	struct timeval tv_time;
 	time_t epoch = t;
@@ -195,7 +195,7 @@ void syncTime(time_t t, uint32_t tzone) {
 	//set timezone
 
 	char tz[10];
-	int32_t tzc = 0;
+	int8_t tzc = 0;
 
 	tzc = tzone / 3600;
 

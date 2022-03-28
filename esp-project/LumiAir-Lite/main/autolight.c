@@ -33,8 +33,7 @@ AutoLightStateDef AutoLightState = AUTOL_STATE_OFF;
 struct tm now = {0};
 time_t CurrentTime = 0;
 
-uint32_t cparttime = 0, phaseTimeStart = 0, phaseTimeEnd = 0, rgb = 0,
-		 durationLumTransition = 0;
+uint32_t cparttime = 0, phaseTimeStart = 0, phaseTimeEnd = 0, rgb = 0;
 uint8_t Curday = 0;
 HSLStruct HSLtmp;
 
@@ -202,133 +201,40 @@ void ColorTemp_Controller()
 
 void autoLightWakeUpTask(uint8_t zone)
 {
+	uint8_t cmd = 0, subcmdhue = 0, subcmdstab = 0, transOutLum = 0;
+	uint32_t progressTime = 0;
+	float penteTransLum = 0;
+	const uint8_t transPeriode = 100;
+	const uint8_t transFrequancy = transPeriode * 2;
 
-	uint8_t cmd = 0, subcmdhue = 0, subcmdstab = 0;
 	// radio apply LIGHT ON
 	MilightHandler(LCMD_SWITCH_ON_OFF, LSUBCMD_SWITCH_ON, zone);
 	delay(10);
 
-	rgb = strtol(UnitCfg.alarmDay[Curday].hue, NULL, 16);
-	RgbToHSL(rgb, &HSLtmp);
-
-	// apply hue
-	cmd = 3;
-	subcmdhue = HSLtmp.Hue;
-
-	MilightHandler(cmd, subcmdhue, zone);
-	ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", cmd, subcmdhue, zone);
-	delay(10);
-
-	// apply saturation
-	cmd = 9;
-	subcmdstab = HSLtmp.Sat;
-	MilightHandler(cmd, subcmdstab, zone);
-	ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", cmd, subcmdstab, zone);
-	delay(10);
-	switch (UnitCfg.alarmDay[Curday].duration)
+	for (int i = 0; i < zoneNumber; i++)
 	{
-	case 0:
-		durationLumTransition = 5000;
-		break;
-	case 1:
-		durationLumTransition = 10000;
-		break;
-	case 2:
-		durationLumTransition = 20000;
-		break;
-	case 3:
-		durationLumTransition = 30000;
-		break;
-	case 4:
-		durationLumTransition = 60000;
-		break;
-	case 5:
-		durationLumTransition = 120000;
-		break;
-	case 6:
-		durationLumTransition = 300000;
-		break;
-	case 7:
-		durationLumTransition = 600000;
-		break;
-	case 8:
-		durationLumTransition = 900000;
-		break;
-	case 9:
-		durationLumTransition = 1200000;
-		break;
-	case 10:
-		durationLumTransition = 1500000;
-		break;
-	case 11:
-		durationLumTransition = 1800000;
-		break;
-	case 12:
-		durationLumTransition = 2100000;
-		break;
-	case 13:
-		durationLumTransition = 2400000;
-		break;
-	case 14:
-		durationLumTransition = 2700000;
-		break;
-	case 15:
-		durationLumTransition = 3000000;
-		break;
-	case 16:
-		durationLumTransition = 3300000;
-		break;
-	case 17:
-		durationLumTransition = 3600000;
-		break;
-	case 18:
-		durationLumTransition = 3900000;
-		break;
-	case 19:
-		durationLumTransition = 4200000;
-		break;
-	case 20:
-		durationLumTransition = 4500000;
-		break;
-	case 21:
-		durationLumTransition = 4800000;
-		break;
-	case 22:
-		durationLumTransition = 5100000;
-		break;
-	case 23:
-		durationLumTransition = 5400000;
-		break;
-	case 24:
-		durationLumTransition = 5700000;
-		break;
-	case 25:
-		durationLumTransition = 6000000;
-		break;
-	case 26:
-		durationLumTransition = 6300000;
-		break;
-	case 27:
-		durationLumTransition = 6600000;
-		break;
-	case 28:
-		durationLumTransition = 6900000;
-		break;
-	case 29:
-		durationLumTransition = 7200000;
-		break;
-	default:
-		durationLumTransition = 1000;
-		break;
+		rgb = strtol(UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].Hue, NULL, 16);
+		RgbToHSL(rgb, &HSLtmp);
+
+		// apply hue
+		cmd = 3;
+		subcmdhue = HSLtmp.Hue;
+
+		MilightHandler(cmd, subcmdhue, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
+		ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", cmd, subcmdhue, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
+		delay(10);
+
+		// apply saturation
+		cmd = 9;
+		subcmdstab = HSLtmp.Sat;
+		MilightHandler(cmd, subcmdstab, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
+		ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", cmd, subcmdstab, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
+		delay(10);
 	}
-	uint32_t progressTime = 0;
-	float penteTransLum = 0;
-	uint8_t transOutLum = 0;
-	const uint8_t transPeriode = 100;
-	const uint8_t transFrequancy = transPeriode * 2;
-	penteTransLum = (UnitCfg.alarmDay[Curday].finishLumVal - UnitCfg.alarmDay[Curday].startLumVal) / (float)durationLumTransition;
+
+	penteTransLum = (UnitCfg.alarmDay[Curday].finishLumVal - UnitCfg.alarmDay[Curday].startLumVal) / (float)(UnitCfg.alarmDay[Curday].duration * 1000);
 	cmd = 7;
-	while (progressTime < durationLumTransition)
+	while (progressTime < (UnitCfg.alarmDay[Curday].duration * 1000))
 	{
 		switch (UnitCfg.alarmDay[Curday].alarmOption)
 		{
