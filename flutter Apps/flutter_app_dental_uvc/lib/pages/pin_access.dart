@@ -5,7 +5,6 @@ import 'dart:io' as io;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutterappdentaluvc/services/AutoUVCService.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
@@ -24,14 +23,12 @@ class AlwaysDisabledFocusNode extends FocusNode {
   bool get hasFocus => false;
 }
 
-class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
+class _AccessPinState extends State<AccessPin> {
   final TextEditingController _pinPutController = TextEditingController();
 
   ToastyMessage myUvcToast;
 
   Animation colorInfoQrCode;
-
-  GifController gifController;
 
   Widget mainWidgetScreen;
 
@@ -71,7 +68,6 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   void initState() {
     // TODO: implement initState
     super.initState();
-    gifController = GifController(vsync: this);
     checkAutoFileExists();
     myUvcToast = ToastyMessage(toastContext: context);
     pinCodeAccess = '';
@@ -396,19 +392,16 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
   Widget sleepWidget(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
-    // loop from 0 frame to 29 frame
-    gifController.repeat(min: 0, max: 11, period: Duration(milliseconds: 1000));
     return WillPopScope(
       onWillPop: () => exitMessage(context),
       child: Scaffold(
         backgroundColor: Colors.blue[400],
         body: Center(
-          child: GifImage(
-            controller: gifController,
+          child: Image.asset(
+            'assets/logo-delitech-animation.gif',
             fit: BoxFit.cover,
             height: heightScreen,
             width: widthScreen,
-            image: AssetImage('assets/logo-delitech-animation.gif'),
           ),
         ),
       ),
@@ -537,12 +530,6 @@ class _AccessPinState extends State<AccessPin> with TickerProviderStateMixin {
     final file = File('${directory.path}/my_pin_code.txt');
     await file.writeAsString(pinCode);
     print('saved');
-  }
-
-  @override
-  void dispose() {
-    gifController.dispose();
-    super.dispose();
   }
 
   void _showSnackBar(String pin, BuildContext context) async {

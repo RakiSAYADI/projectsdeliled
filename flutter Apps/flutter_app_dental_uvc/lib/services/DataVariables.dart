@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutterappdentaluvc/services/bleDeviceClass.dart';
 import 'package:flutterappdentaluvc/services/uvcClass.dart';
 
@@ -10,7 +9,6 @@ final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
 bool sleepIsInactivePinAccess = false;
 bool sleepIsInactiveEndUVC = false;
-GifController gifController;
 Widget mainWidgetScreen;
 final int timeSleep = 60000;
 

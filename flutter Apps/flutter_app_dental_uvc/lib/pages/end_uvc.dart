@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutterappdentaluvc/services/CSVfileClass.dart';
 import 'package:flutterappdentaluvc/services/DataVariables.dart';
 import 'package:flutterappdentaluvc/services/LEDControl.dart';
@@ -17,7 +16,7 @@ class EndUVC extends StatefulWidget {
   _EndUVCState createState() => _EndUVCState();
 }
 
-class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
+class _EndUVCState extends State<EndUVC> {
   final TextEditingController _pinPutController = TextEditingController();
 
   String pinCodeAccess = '';
@@ -39,16 +38,8 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
   @override
   void initState() {
     // TODO: implement initState
-    gifController = GifController(vsync: this);
     myUvcToast = ToastyMessage(toastContext: context);
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    gifController.dispose();
-    super.dispose();
   }
 
   void csvDataFile() async {
@@ -99,19 +90,16 @@ class _EndUVCState extends State<EndUVC> with TickerProviderStateMixin {
   Widget sleepWidget(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
-    // loop from 0 frame to 29 frame
-    gifController.repeat(min: 0, max: 11, period: Duration(milliseconds: 1000));
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
         backgroundColor: Colors.blue[400],
         body: Center(
-          child: GifImage(
-            controller: gifController,
+          child: Image.asset(
+            'assets/logo-delitech-animation.gif',
             fit: BoxFit.cover,
             height: heightScreen,
             width: widthScreen,
-            image: AssetImage('assets/logo-delitech-animation.gif'),
           ),
         ),
       ),

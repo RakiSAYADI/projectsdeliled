@@ -36,7 +36,6 @@ dependencies:
   mailer: ^5.0.2
   wakelock: ^0.5.3+3
   super_easy_permissions: ^0.1.1
-  flutter_gifimage: ^1.0.1
   get: ^4.3.8
   restart_app: ^1.0.3
   device_info_plus: ^3.2.2
