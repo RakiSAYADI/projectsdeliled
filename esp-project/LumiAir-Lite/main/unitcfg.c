@@ -157,7 +157,7 @@ void Default_saving()
 		UnitCfg.alarmDay[i].alarmOption = 0;
 	}
 
-	for (uint8_t i = 0; i < 4; i++)
+	for (uint8_t i = 0; i < zoneNumber; i++)
 	{
 		sprintf(UnitCfg.Zones_info[i].zonename, "Zone %d", i + 1);
 	}
@@ -165,7 +165,7 @@ void Default_saving()
 	for (uint8_t i = 0; i < 6; i++)
 	{
 		sprintf(UnitCfg.ColortrProfile[i].ambname, "Ambiance %d", i + 1);
-		for (uint8_t j = 0; j < 4; j++)
+		for (uint8_t j = 0; j < zoneNumber; j++)
 		{
 			UnitCfg.ColortrProfile[i].zoneAmbiance[j].zoneId = (uint8_t)pow(2, j);
 			UnitCfg.ColortrProfile[i].zoneAmbiance[j].zoneState = true;
@@ -216,7 +216,7 @@ void syncTime(time_t t, uint32_t tzone)
 	// set timezone
 
 	char tz[50];
-	int8_t tzc = 1;
+	const int8_t tzc = 1;
 
 	//tzc = tzone / 3600;
 
