@@ -17,9 +17,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final String zonesInHex = 'F';
-  final double hueCoefficient = (256 / 360);
-
   HSLColor hslColor = HSLColor.fromColor(Colors.blue);
 
   String bottomBarTitle = 'Ambiances';
@@ -54,12 +51,15 @@ class _HomeState extends State<Home> {
       if (Platform.isIOS) {
         parsedJson = json.decode(dataMaestroIOS2);
         ambiance1 = List<dynamic>.from(parsedJson['Amb1']);
-        ambiance2 = List<dynamic>.from(parsedJson['Amb2']);
         parsedJson = json.decode(dataMaestroIOS3);
-        ambiance3 = List<dynamic>.from(parsedJson['Amb3']);
-        ambiance4 = List<dynamic>.from(parsedJson['Amb4']);
+        ambiance2 = List<dynamic>.from(parsedJson['Amb2']);
         parsedJson = json.decode(dataMaestroIOS4);
+        ambiance3 = List<dynamic>.from(parsedJson['Amb3']);
+        parsedJson = json.decode(dataMaestroIOS5);
+        ambiance4 = List<dynamic>.from(parsedJson['Amb4']);
+        parsedJson = json.decode(dataMaestroIOS6);
         ambiance5 = List<dynamic>.from(parsedJson['Amb5']);
+        parsedJson = json.decode(dataMaestroIOS7);
         ambiance6 = List<dynamic>.from(parsedJson['Amb6']);
         parsedJson = json.decode(dataMaestroIOS);
         zonesNamesList[0] = parsedJson['zone'][0];
@@ -72,68 +72,141 @@ class _HomeState extends State<Home> {
         ambiance1 = [
           parsedJson['Amb'][0].toString(),
           parsedJson['Amb'][1],
-          parsedJson['Amb'][2].toString(),
-          parsedJson['Amb'][3],
-          parsedJson['Amb'][4].toString(),
+          parsedJson['Amb'][2],
+          parsedJson['Amb'][3].toString(),
+          parsedJson['Amb'][4],
           parsedJson['Amb'][5],
-          parsedJson['Amb'][6].toString(),
+          parsedJson['Amb'][6],
           parsedJson['Amb'][7],
-          parsedJson['Amb'][8].toString()
-        ];
-        ambiance2 = [
-          parsedJson['Amb'][9].toString(),
+          parsedJson['Amb'][8].toString(),
+          parsedJson['Amb'][9],
           parsedJson['Amb'][10],
-          parsedJson['Amb'][11].toString(),
+          parsedJson['Amb'][11],
           parsedJson['Amb'][12],
           parsedJson['Amb'][13].toString(),
           parsedJson['Amb'][14],
-          parsedJson['Amb'][15].toString(),
+          parsedJson['Amb'][15],
           parsedJson['Amb'][16],
-          parsedJson['Amb'][17].toString()
-        ];
-        ambiance3 = [
+          parsedJson['Amb'][17],
           parsedJson['Amb'][18].toString(),
           parsedJson['Amb'][19],
-          parsedJson['Amb'][20].toString(),
-          parsedJson['Amb'][21],
-          parsedJson['Amb'][22].toString(),
+          parsedJson['Amb'][20]
+        ];
+        ambiance2 = [
+          parsedJson['Amb'][21].toString(),
+          parsedJson['Amb'][22],
           parsedJson['Amb'][23],
           parsedJson['Amb'][24].toString(),
           parsedJson['Amb'][25],
-          parsedJson['Amb'][26].toString()
-        ];
-        ambiance4 = [
-          parsedJson['Amb'][27].toString(),
+          parsedJson['Amb'][26],
+          parsedJson['Amb'][27],
           parsedJson['Amb'][28],
           parsedJson['Amb'][29].toString(),
           parsedJson['Amb'][30],
-          parsedJson['Amb'][31].toString(),
+          parsedJson['Amb'][31],
           parsedJson['Amb'][32],
-          parsedJson['Amb'][33].toString(),
-          parsedJson['Amb'][34],
-          parsedJson['Amb'][35].toString()
-        ];
-        ambiance5 = [
-          parsedJson['Amb'][36].toString(),
+          parsedJson['Amb'][33],
+          parsedJson['Amb'][34].toString(),
+          parsedJson['Amb'][35],
+          parsedJson['Amb'][36],
           parsedJson['Amb'][37],
-          parsedJson['Amb'][38].toString(),
-          parsedJson['Amb'][39],
-          parsedJson['Amb'][40].toString(),
-          parsedJson['Amb'][41],
+          parsedJson['Amb'][38],
+          parsedJson['Amb'][39].toString(),
+          parsedJson['Amb'][40],
+          parsedJson['Amb'][41]
+        ];
+        ambiance3 = [
           parsedJson['Amb'][42].toString(),
           parsedJson['Amb'][43],
-          parsedJson['Amb'][44].toString()
-        ];
-        ambiance6 = [
+          parsedJson['Amb'][44],
           parsedJson['Amb'][45].toString(),
           parsedJson['Amb'][46],
-          parsedJson['Amb'][47].toString(),
+          parsedJson['Amb'][47],
           parsedJson['Amb'][48],
-          parsedJson['Amb'][49].toString(),
-          parsedJson['Amb'][50],
-          parsedJson['Amb'][51].toString(),
+          parsedJson['Amb'][49],
+          parsedJson['Amb'][50].toString(),
+          parsedJson['Amb'][51],
           parsedJson['Amb'][52],
-          parsedJson['Amb'][53].toString()
+          parsedJson['Amb'][53],
+          parsedJson['Amb'][54],
+          parsedJson['Amb'][55].toString(),
+          parsedJson['Amb'][56],
+          parsedJson['Amb'][57],
+          parsedJson['Amb'][58],
+          parsedJson['Amb'][59],
+          parsedJson['Amb'][60].toString(),
+          parsedJson['Amb'][61],
+          parsedJson['Amb'][62]
+        ];
+        parsedJson = json.decode(dataMaestro3);
+        ambiance4 = [
+          parsedJson['Amb'][0].toString(),
+          parsedJson['Amb'][1],
+          parsedJson['Amb'][2],
+          parsedJson['Amb'][3].toString(),
+          parsedJson['Amb'][4],
+          parsedJson['Amb'][5],
+          parsedJson['Amb'][6],
+          parsedJson['Amb'][7],
+          parsedJson['Amb'][8].toString(),
+          parsedJson['Amb'][9],
+          parsedJson['Amb'][10],
+          parsedJson['Amb'][11],
+          parsedJson['Amb'][12],
+          parsedJson['Amb'][13].toString(),
+          parsedJson['Amb'][14],
+          parsedJson['Amb'][15],
+          parsedJson['Amb'][16],
+          parsedJson['Amb'][17],
+          parsedJson['Amb'][18].toString(),
+          parsedJson['Amb'][19],
+          parsedJson['Amb'][20]
+        ];
+        ambiance5 = [
+          parsedJson['Amb'][21].toString(),
+          parsedJson['Amb'][22],
+          parsedJson['Amb'][23],
+          parsedJson['Amb'][24].toString(),
+          parsedJson['Amb'][25],
+          parsedJson['Amb'][26],
+          parsedJson['Amb'][27],
+          parsedJson['Amb'][28],
+          parsedJson['Amb'][29].toString(),
+          parsedJson['Amb'][30],
+          parsedJson['Amb'][31],
+          parsedJson['Amb'][32],
+          parsedJson['Amb'][33],
+          parsedJson['Amb'][34].toString(),
+          parsedJson['Amb'][35],
+          parsedJson['Amb'][36],
+          parsedJson['Amb'][37],
+          parsedJson['Amb'][38],
+          parsedJson['Amb'][39].toString(),
+          parsedJson['Amb'][40],
+          parsedJson['Amb'][41]
+        ];
+        ambiance6 = [
+          parsedJson['Amb'][42].toString(),
+          parsedJson['Amb'][43],
+          parsedJson['Amb'][44],
+          parsedJson['Amb'][45].toString(),
+          parsedJson['Amb'][46],
+          parsedJson['Amb'][47],
+          parsedJson['Amb'][48],
+          parsedJson['Amb'][49],
+          parsedJson['Amb'][50].toString(),
+          parsedJson['Amb'][51],
+          parsedJson['Amb'][52],
+          parsedJson['Amb'][53],
+          parsedJson['Amb'][54],
+          parsedJson['Amb'][55].toString(),
+          parsedJson['Amb'][56],
+          parsedJson['Amb'][57],
+          parsedJson['Amb'][58],
+          parsedJson['Amb'][59],
+          parsedJson['Amb'][60].toString(),
+          parsedJson['Amb'][61],
+          parsedJson['Amb'][62]
         ];
         parsedJson = json.decode(dataMaestro);
         zonesNamesList[0] = parsedJson['zone'][0];
@@ -143,13 +216,13 @@ class _HomeState extends State<Home> {
       }
     } catch (e) {
       debugPrint(e.toString());
-      debugPrint('erreur');
-      ambiance1 = ['Ambiance 1', true, 'FF0000', true, 'FF0000', true, 'FF0000', true, 'FF0000'];
-      ambiance2 = ['Ambiance 2', true, '000000', true, '000000', true, '000000', true, '000000'];
-      ambiance3 = ['Ambiance 3', true, '00FF00', true, '00FF00', true, '00FF00', true, '00FF00'];
-      ambiance4 = ['Ambiance 4', true, '0000FF', true, '0000FF', true, '0000FF', true, '0000FF'];
-      ambiance5 = ['Ambiance 5', true, 'FFFF00', true, 'FFFF00', true, 'FFFF00', true, 'FFFF00'];
-      ambiance6 = ['Ambiance 6', true, '00FFFF', true, '00FFFF', true, '00FFFF', true, '00FFFF'];
+      debugPrint('error');
+      ambiance1 = ['Ambiance 1', true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100];
+      ambiance2 = ['Ambiance 2', true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100];
+      ambiance3 = ['Ambiance 3', true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100];
+      ambiance4 = ['Ambiance 4', true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100];
+      ambiance5 = ['Ambiance 5', true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100];
+      ambiance6 = ['Ambiance 6', true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100];
       zonesNamesList = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4'];
     }
 
@@ -245,7 +318,7 @@ class _HomeState extends State<Home> {
         ),
       ),
       onWillPop: () =>
-          displayAlert(context, 'Attention', Text('Êtes-vous sûr de vouloir revenir à la page de sélection des cartes Maestro™ ?', style: TextStyle(color: textColor[backGroundColorSelect])), [
+          displayAlert(context, 'Attention', Text('Êtes-vous sûr de vouloir revenir à la page de sélection des cartes Maestro™?', style: TextStyle(color: textColor[backGroundColorSelect])), [
         TextButton(
             child: Text(
               'Oui',
@@ -445,7 +518,7 @@ class _HomeState extends State<Home> {
                     } else {
                       colorPickerSelected = true;
                       characteristicMaestro
-                          .write('{\"hue\":${hslColor.toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")},\"zone\":\"$zonesInHex\"}'.codeUnits);
+                          .write('{\"hue\":\"${hslColor.toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")}\",\"zone\":\"$zonesInHex\"}'.codeUnits);
                     }
                     hslColor = colorSelected;
                   }
@@ -594,48 +667,6 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget zoneButton(BuildContext context, int zoneID) {
-    Color zoneState;
-    double widthScreen = MediaQuery.of(context).size.width;
-    double heightScreen = MediaQuery.of(context).size.height;
-    final Color selected = Colors.green;
-    final Color notSelected = Colors.red;
-    if (zoneStates[zoneID]) {
-      zoneState = selected;
-    } else {
-      zoneState = notSelected;
-    }
-    return StatefulBuilder(
-      builder: (context, setState) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextButton(
-            onPressed: () {
-              zoneStates[zoneID] = !zoneStates[zoneID];
-              setState(() {
-                if (zoneStates[zoneID]) {
-                  zoneState = selected;
-                } else {
-                  zoneState = notSelected;
-                }
-              });
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(
-                zonesNamesList[zoneID],
-                style: TextStyle(color: Colors.white, fontSize: widthScreen * 0.01 + heightScreen * 0.015),
-              ),
-            ),
-            style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
-                backgroundColor: MaterialStateProperty.all<Color>(zoneState)),
-          ),
-        );
-      },
-    );
-  }
-
   Widget zoneOnOff(BuildContext context, String zoneName, String zoneNumber, int zoneID) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
@@ -707,10 +738,10 @@ class _HomeState extends State<Home> {
   }
 
   Widget ambianceCircleDisplay(BuildContext context, List<dynamic> ambianceColors, int ambianceID) {
-    final colorZone1 = getColors(ambianceColors[2].toString());
-    final colorZone2 = getColors(ambianceColors[4].toString());
-    final colorZone3 = getColors(ambianceColors[6].toString());
-    final colorZone4 = getColors(ambianceColors[8].toString());
+    final colorZone1 = getColors(ambianceColors[3].toString());
+    final colorZone2 = getColors(ambianceColors[8].toString());
+    final colorZone3 = getColors(ambianceColors[13].toString());
+    final colorZone4 = getColors(ambianceColors[18].toString());
     return GestureDetector(
       onTap: () async {
         if (myDevice.getConnectionState()) {
@@ -722,27 +753,34 @@ class _HomeState extends State<Home> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          ambianceZoneColor(context, Color(int.parse(colorZone1.toString(), radix: 16)), intToBool(ambianceColors[1])),
-          ambianceZoneColor(context, Color(int.parse(colorZone2.toString(), radix: 16)), intToBool(ambianceColors[3])),
-          ambianceZoneColor(context, Color(int.parse(colorZone3.toString(), radix: 16)), intToBool(ambianceColors[5])),
-          ambianceZoneColor(context, Color(int.parse(colorZone4.toString(), radix: 16)), intToBool(ambianceColors[7])),
+          ambianceZoneColor(context, Color(int.parse(colorZone1.toString(), radix: 16)), whiteSelection(ambianceColors[4]), intToBool(ambianceColors[1]), intToBool(ambianceColors[2])),
+          ambianceZoneColor(context, Color(int.parse(colorZone2.toString(), radix: 16)), whiteSelection(ambianceColors[9]), intToBool(ambianceColors[6]), intToBool(ambianceColors[7])),
+          ambianceZoneColor(context, Color(int.parse(colorZone3.toString(), radix: 16)), whiteSelection(ambianceColors[14]), intToBool(ambianceColors[11]), intToBool(ambianceColors[12])),
+          ambianceZoneColor(context, Color(int.parse(colorZone4.toString(), radix: 16)), whiteSelection(ambianceColors[19]), intToBool(ambianceColors[16]), intToBool(ambianceColors[17])),
         ],
       ),
     );
   }
 
-  Widget ambianceZoneColor(BuildContext context, Color zoneColor, bool zoneState) {
+  Widget ambianceZoneColor(BuildContext context, Color zoneColor, Color zoneWhite, bool zoneState, bool colorState) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
-    if (!zoneState) {
-      zoneColor = Colors.black;
+    Color finalColor;
+    if (zoneState) {
+      if (colorState) {
+        finalColor = zoneWhite;
+      } else {
+        finalColor = zoneColor;
+      }
+    } else {
+      finalColor = Colors.black;
     }
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Container(
         width: widthScreen * 0.06,
         height: heightScreen * 0.06,
-        decoration: BoxDecoration(shape: BoxShape.circle, color: zoneColor),
+        decoration: BoxDecoration(shape: BoxShape.circle, color: finalColor),
       ),
     );
   }

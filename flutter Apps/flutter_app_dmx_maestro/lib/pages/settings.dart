@@ -67,7 +67,7 @@ class _SettingsState extends State<Settings> {
         firstDisplayMainWidget = false;
       }
     } catch (e) {
-      print('erreur');
+      print('error');
       zonesNamesList = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4'];
     }
   }
@@ -87,7 +87,7 @@ class _SettingsState extends State<Settings> {
         ),
         title: Text(
           'Réglages',
-          style: TextStyle(fontSize: 18,color: textColor[backGroundColorSelect]),
+          style: TextStyle(fontSize: 18, color: textColor[backGroundColorSelect]),
         ),
         centerTitle: true,
       ),
@@ -499,7 +499,7 @@ class _SettingsState extends State<Settings> {
     return displayAlert(
       context,
       'Attention',
-      Text('La carte DMX va redémarrer afin de finaliser la connexion au WiFi'),
+      Text(widgetMessage, style: TextStyle(color: textColor[backGroundColorSelect])),
       [
         TextButton(
           child: Text(
@@ -519,28 +519,7 @@ class _SettingsState extends State<Settings> {
             style: TextStyle(color: Colors.red),
           ),
           onPressed: () async {
-            if (Platform.isIOS) {
-              await Future.delayed(Duration(milliseconds: 500));
-              dataMaestroIOS = String.fromCharCodes(await characteristicWifi.read());
-              await Future.delayed(Duration(milliseconds: 500));
-              dataMaestroIOS2 = String.fromCharCodes(await characteristicWifi.read());
-              await Future.delayed(Duration(milliseconds: 500));
-              dataMaestroIOS3 = String.fromCharCodes(await characteristicWifi.read());
-              await Future.delayed(Duration(milliseconds: 500));
-              dataMaestroIOS4 = String.fromCharCodes(await characteristicWifi.read());
-              await Future.delayed(Duration(milliseconds: 500));
-              dataMaestroIOS5 = String.fromCharCodes(await characteristicWifi.read());
-              await Future.delayed(Duration(milliseconds: 500));
-              dataMaestroIOS6 = String.fromCharCodes(await characteristicWifi.read());
-            }
-            if (Platform.isAndroid) {
-              await Future.delayed(Duration(milliseconds: 500));
-              dataMaestro = String.fromCharCodes(await characteristicWifi.read());
-              await Future.delayed(Duration(milliseconds: 500));
-              dataMaestro2 = String.fromCharCodes(await characteristicWifi.read());
-              await Future.delayed(Duration(milliseconds: 500));
-              dataMaestro3 = String.fromCharCodes(await characteristicWifi.read());
-            }
+            await readBLEData();
             Navigator.of(context).pop();
           },
         ),
@@ -762,28 +741,7 @@ class _SettingsState extends State<Settings> {
               String zoneNames = "{\"zones\":[${zonesNamesList[0]},${zonesNamesList[1]},${zonesNamesList[2]},${zonesNamesList[3]}]}";
               await characteristicMaestro.write(zoneNames.codeUnits);
               Navigator.of(context).pop();
-              if (Platform.isIOS) {
-                await Future.delayed(Duration(milliseconds: 500));
-                dataMaestroIOS = String.fromCharCodes(await characteristicWifi.read());
-                await Future.delayed(Duration(milliseconds: 500));
-                dataMaestroIOS2 = String.fromCharCodes(await characteristicWifi.read());
-                await Future.delayed(Duration(milliseconds: 500));
-                dataMaestroIOS3 = String.fromCharCodes(await characteristicWifi.read());
-                await Future.delayed(Duration(milliseconds: 500));
-                dataMaestroIOS4 = String.fromCharCodes(await characteristicWifi.read());
-                await Future.delayed(Duration(milliseconds: 500));
-                dataMaestroIOS5 = String.fromCharCodes(await characteristicWifi.read());
-                await Future.delayed(Duration(milliseconds: 500));
-                dataMaestroIOS6 = String.fromCharCodes(await characteristicWifi.read());
-              }
-              if (Platform.isAndroid) {
-                await Future.delayed(Duration(milliseconds: 500));
-                dataMaestro = String.fromCharCodes(await characteristicWifi.read());
-                await Future.delayed(Duration(milliseconds: 500));
-                dataMaestro2 = String.fromCharCodes(await characteristicWifi.read());
-                await Future.delayed(Duration(milliseconds: 500));
-                dataMaestro3 = String.fromCharCodes(await characteristicWifi.read());
-              }
+              await readBLEData();
               setState(() {});
             },
           ),

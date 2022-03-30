@@ -132,7 +132,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
     return Scaffold(
       backgroundColor: backGroundColor[backGroundColorSelect],
       appBar: AppBar(
-        title: Text('Liste des convertisseurs DMX :', style: TextStyle(fontSize: 18), key: Key('title')),
+        title: Text('Liste des HuBBoX :', style: TextStyle(fontSize: 18), key: Key('title')),
         centerTitle: true,
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -233,37 +233,10 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                         Future.delayed(const Duration(seconds: 1), () async {
                           await characteristicMaestro.write('{\"APP\":1}'.codeUnits);
                           await Future.delayed(Duration(milliseconds: 500));
-                          if (Platform.isAndroid) {
-                            dataMaestro = String.fromCharCodes(await characteristicWifi.read());
-                            debugPrint(dataMaestro);
-                            await Future.delayed(Duration(milliseconds: 500));
-                            dataMaestro2 = String.fromCharCodes(await characteristicWifi.read());
-                            debugPrint(dataMaestro2);
-                            await Future.delayed(Duration(milliseconds: 500));
-                            dataMaestro3 = String.fromCharCodes(await characteristicWifi.read());
-                            debugPrint(dataMaestro3);
-                          }
                           if (Platform.isIOS) {
                             await characteristicMaestro.write('{\"IOS\":1}'.codeUnits);
-                            await Future.delayed(Duration(milliseconds: 500));
-                            dataMaestroIOS = String.fromCharCodes(await characteristicWifi.read());
-                            debugPrint(dataMaestroIOS);
-                            await Future.delayed(Duration(milliseconds: 500));
-                            dataMaestroIOS2 = String.fromCharCodes(await characteristicWifi.read());
-                            debugPrint(dataMaestroIOS2);
-                            await Future.delayed(Duration(milliseconds: 500));
-                            dataMaestroIOS3 = String.fromCharCodes(await characteristicWifi.read());
-                            debugPrint(dataMaestroIOS3);
-                            await Future.delayed(Duration(milliseconds: 500));
-                            dataMaestroIOS4 = String.fromCharCodes(await characteristicWifi.read());
-                            debugPrint(dataMaestroIOS4);
-                            await Future.delayed(Duration(milliseconds: 500));
-                            dataMaestroIOS5 = String.fromCharCodes(await characteristicWifi.read());
-                            debugPrint(dataMaestroIOS5);
-                            await Future.delayed(Duration(milliseconds: 500));
-                            dataMaestroIOS6 = String.fromCharCodes(await characteristicWifi.read());
-                            debugPrint(dataMaestroIOS6);
                           }
+                          await readBLEData();
                           // clear the remaining toast message
                           myUvcToast.clearCurrentToast();
                           DateTime dateTime = DateTime.now();

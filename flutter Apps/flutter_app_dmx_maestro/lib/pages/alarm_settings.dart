@@ -61,7 +61,7 @@ class _AlarmClockState extends State<AlarmClock> {
 
   List<dynamic> ambiance1List, ambiance2List, ambiance3List, ambiance4List, ambiance5List, ambiance6List;
 
-  List<dynamic> ambianceList = ['Ambiance 1', true, 'FF0000', true, 'FF0000', true, 'FF0000', true, 'FF0000'];
+  List<dynamic> ambianceList = ['Ambiance 1', true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100];
 
   @override
   void initState() {
@@ -112,7 +112,7 @@ class _AlarmClockState extends State<AlarmClock> {
         myAmbiances = [ambiance1List[0], ambiance2List[0], ambiance3List[0], ambiance4List[0], ambiance5List[0], ambiance6List[0]];
         var parsedJson;
         if (Platform.isAndroid) {
-          parsedJson = json.decode(dataMaestro3);
+          parsedJson = json.decode(dataMaestro4);
           readWakeUpDataPerDay(parsedJson['lun'], 0);
           readWakeUpDataPerDay(parsedJson['mar'], 1);
           readWakeUpDataPerDay(parsedJson['mer'], 2);
@@ -122,12 +122,12 @@ class _AlarmClockState extends State<AlarmClock> {
           readWakeUpDataPerDay(parsedJson['dim'], 6);
         }
         if (Platform.isIOS) {
-          parsedJson = json.decode(dataMaestroIOS5);
+          parsedJson = json.decode(dataMaestroIOS8);
           readWakeUpDataPerDay(parsedJson['lun'], 0);
           readWakeUpDataPerDay(parsedJson['mar'], 1);
           readWakeUpDataPerDay(parsedJson['mer'], 2);
           readWakeUpDataPerDay(parsedJson['jeu'], 3);
-          parsedJson = json.decode(dataMaestroIOS6);
+          parsedJson = json.decode(dataMaestroIOS9);
           readWakeUpDataPerDay(parsedJson['ven'], 4);
           readWakeUpDataPerDay(parsedJson['sam'], 5);
           readWakeUpDataPerDay(parsedJson['dim'], 6);
@@ -180,16 +180,15 @@ class _AlarmClockState extends State<AlarmClock> {
             ambianceList = ambiance6List;
             break;
         }
-
       } catch (e) {
         debugPrint(e.toString());
         debugPrint('error alarm');
-        ambiance1List = ['Ambiance 1', true, 'FF0000', true, 'FF0000', true, 'FF0000', true, 'FF0000'];
-        ambiance2List = ['Ambiance 2', true, '000000', true, '000000', true, '000000', true, '000000'];
-        ambiance3List = ['Ambiance 3', true, '00FF00', true, '00FF00', true, '00FF00', true, '00FF00'];
-        ambiance4List = ['Ambiance 4', true, '0000FF', true, '0000FF', true, '0000FF', true, '0000FF'];
-        ambiance5List = ['Ambiance 5', true, 'FFFF00', true, 'FFFF00', true, 'FFFF00', true, 'FFFF00'];
-        ambiance6List = ['Ambiance 6', true, '00FFFF', true, '00FFFF', true, '00FFFF', true, '00FFFF'];
+        ambiance1List = ['Ambiance 1', true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100];
+        ambiance2List = ['Ambiance 2', true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100];
+        ambiance3List = ['Ambiance 3', true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100];
+        ambiance4List = ['Ambiance 4', true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100];
+        ambiance5List = ['Ambiance 5', true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100];
+        ambiance6List = ['Ambiance 6', true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100, true, true, 'FF0000', 50, 100];
         alarmAmbianceData = ambiance1List[0];
       }
 
@@ -225,11 +224,6 @@ class _AlarmClockState extends State<AlarmClock> {
                           '\"sam\":[${alarmDayData(5)}],\"dim\":[${alarmDayData(6)}]}'
                       .codeUnits);
                   await Future.delayed(Duration(milliseconds: 500));
-                  dataMaestro = String.fromCharCodes(await characteristicWifi.read());
-                  await Future.delayed(Duration(milliseconds: 500));
-                  dataMaestro2 = String.fromCharCodes(await characteristicWifi.read());
-                  await Future.delayed(Duration(milliseconds: 500));
-                  dataMaestro3 = String.fromCharCodes(await characteristicWifi.read());
                 }
                 if (Platform.isIOS) {
                   await characteristicMaestro.write('{\"lun\":[${alarmDayData(0)}],'
@@ -241,18 +235,9 @@ class _AlarmClockState extends State<AlarmClock> {
                           '\"sam\":[${alarmDayData(5)}],\"dim\":[${alarmDayData(6)}]}'
                       .codeUnits);
                   await Future.delayed(Duration(milliseconds: 500));
-                  dataMaestroIOS = String.fromCharCodes(await characteristicWifi.read());
-                  await Future.delayed(Duration(milliseconds: 500));
-                  dataMaestroIOS2 = String.fromCharCodes(await characteristicWifi.read());
-                  await Future.delayed(Duration(milliseconds: 500));
-                  dataMaestroIOS3 = String.fromCharCodes(await characteristicWifi.read());
-                  await Future.delayed(Duration(milliseconds: 500));
-                  dataMaestroIOS4 = String.fromCharCodes(await characteristicWifi.read());
-                  await Future.delayed(Duration(milliseconds: 500));
-                  dataMaestroIOS5 = String.fromCharCodes(await characteristicWifi.read());
-                  await Future.delayed(Duration(milliseconds: 500));
-                  dataMaestroIOS6 = String.fromCharCodes(await characteristicWifi.read());
                 }
+                await readBLEData();
+                Navigator.pop(context);
               }
             },
             child: Padding(
@@ -342,9 +327,9 @@ class _AlarmClockState extends State<AlarmClock> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            "Lun.",
+                            "L",
                             style: TextStyle(
-                              fontSize: widthScreen * 0.02 + heightScreen * 0.01,
+                              fontSize: widthScreen * 0.03 + heightScreen * 0.01,
                               color: activationButtonColor[0],
                               fontWeight: FontWeight.bold,
                             ),
@@ -353,9 +338,9 @@ class _AlarmClockState extends State<AlarmClock> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            "Mar.",
+                            "M",
                             style: TextStyle(
-                              fontSize: widthScreen * 0.02 + heightScreen * 0.01,
+                              fontSize: widthScreen * 0.03 + heightScreen * 0.01,
                               color: activationButtonColor[1],
                               fontWeight: FontWeight.bold,
                             ),
@@ -364,9 +349,9 @@ class _AlarmClockState extends State<AlarmClock> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            "Mer.",
+                            "M",
                             style: TextStyle(
-                              fontSize: widthScreen * 0.02 + heightScreen * 0.01,
+                              fontSize: widthScreen * 0.03 + heightScreen * 0.01,
                               color: activationButtonColor[2],
                               fontWeight: FontWeight.bold,
                             ),
@@ -375,9 +360,9 @@ class _AlarmClockState extends State<AlarmClock> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            "Jeu.",
+                            "J",
                             style: TextStyle(
-                              fontSize: widthScreen * 0.02 + heightScreen * 0.01,
+                              fontSize: widthScreen * 0.03 + heightScreen * 0.01,
                               color: activationButtonColor[3],
                               fontWeight: FontWeight.bold,
                             ),
@@ -386,9 +371,9 @@ class _AlarmClockState extends State<AlarmClock> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            "Ven.",
+                            "V",
                             style: TextStyle(
-                              fontSize: widthScreen * 0.02 + heightScreen * 0.01,
+                              fontSize: widthScreen * 0.03 + heightScreen * 0.01,
                               color: activationButtonColor[4],
                               fontWeight: FontWeight.bold,
                             ),
@@ -397,9 +382,9 @@ class _AlarmClockState extends State<AlarmClock> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            "Sam.",
+                            "S",
                             style: TextStyle(
-                              fontSize: widthScreen * 0.02 + heightScreen * 0.01,
+                              fontSize: widthScreen * 0.03 + heightScreen * 0.01,
                               color: activationButtonColor[5],
                               fontWeight: FontWeight.bold,
                             ),
@@ -408,9 +393,9 @@ class _AlarmClockState extends State<AlarmClock> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            "Dim.",
+                            "D",
                             style: TextStyle(
-                              fontSize: widthScreen * 0.02 + heightScreen * 0.01,
+                              fontSize: widthScreen * 0.03 + heightScreen * 0.01,
                               color: activationButtonColor[6],
                               fontWeight: FontWeight.bold,
                             ),
@@ -819,30 +804,40 @@ class _AlarmClockState extends State<AlarmClock> {
   }
 
   Widget ambianceCircleDisplay(BuildContext context, List<dynamic> ambianceColors) {
-    final colorZone1 = getColors(ambianceColors[2].toString());
-    final colorZone2 = getColors(ambianceColors[4].toString());
-    final colorZone3 = getColors(ambianceColors[6].toString());
-    final colorZone4 = getColors(ambianceColors[8].toString());
+    final colorZone1 = getColors(ambianceColors[3].toString());
+    final colorZone2 = getColors(ambianceColors[8].toString());
+    final colorZone3 = getColors(ambianceColors[13].toString());
+    final colorZone4 = getColors(ambianceColors[18].toString());
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        ambianceZoneColor(context, Color(int.parse(colorZone1.toString(), radix: 16))),
-        ambianceZoneColor(context, Color(int.parse(colorZone2.toString(), radix: 16))),
-        ambianceZoneColor(context, Color(int.parse(colorZone3.toString(), radix: 16))),
-        ambianceZoneColor(context, Color(int.parse(colorZone4.toString(), radix: 16))),
+        ambianceZoneColor(context, Color(int.parse(colorZone1.toString(), radix: 16)), whiteSelection(ambianceColors[4]), intToBool(ambianceColors[1]), intToBool(ambianceColors[2])),
+        ambianceZoneColor(context, Color(int.parse(colorZone2.toString(), radix: 16)), whiteSelection(ambianceColors[9]), intToBool(ambianceColors[6]), intToBool(ambianceColors[7])),
+        ambianceZoneColor(context, Color(int.parse(colorZone3.toString(), radix: 16)), whiteSelection(ambianceColors[14]), intToBool(ambianceColors[11]), intToBool(ambianceColors[12])),
+        ambianceZoneColor(context, Color(int.parse(colorZone4.toString(), radix: 16)), whiteSelection(ambianceColors[19]), intToBool(ambianceColors[16]), intToBool(ambianceColors[17])),
       ],
     );
   }
 
-  Widget ambianceZoneColor(BuildContext context, Color zoneColor) {
+  Widget ambianceZoneColor(BuildContext context, Color zoneColor, Color zoneWhite, bool zoneState, bool colorState) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
+    Color finalColor;
+    if (zoneState) {
+      if (colorState) {
+        finalColor = zoneWhite;
+      } else {
+        finalColor = zoneColor;
+      }
+    } else {
+      finalColor = Colors.black;
+    }
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Container(
         width: widthScreen * 0.06,
         height: heightScreen * 0.06,
-        decoration: BoxDecoration(shape: BoxShape.circle, color: zoneColor),
+        decoration: BoxDecoration(shape: BoxShape.circle, color: finalColor),
       ),
     );
   }
