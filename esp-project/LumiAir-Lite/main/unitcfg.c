@@ -169,7 +169,10 @@ void Default_saving()
 		{
 			UnitCfg.ColortrProfile[i].zoneAmbiance[j].zoneId = (uint8_t)pow(2, j);
 			UnitCfg.ColortrProfile[i].zoneAmbiance[j].zoneState = true;
+			UnitCfg.ColortrProfile[i].zoneAmbiance[j].colorState = false;
 			sprintf(UnitCfg.ColortrProfile[i].zoneAmbiance[j].Hue, "00A6FF");
+			UnitCfg.ColortrProfile[i].zoneAmbiance[j].white = 50;
+			UnitCfg.ColortrProfile[i].zoneAmbiance[j].lumWhite = 100;
 		}
 	}
 

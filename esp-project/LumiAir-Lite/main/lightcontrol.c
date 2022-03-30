@@ -383,9 +383,8 @@ void SimLightCommand()
 
 void RgbToHSL(uint32_t rgb, HSLStruct *tmp)
 {
-
 	float R = 0, G = 0, B = 0;
-	;
+	
 	uint8_t r = 0, g = 0, b = 0;
 
 	r = rgb >> 16;

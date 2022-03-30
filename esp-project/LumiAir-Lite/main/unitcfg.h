@@ -50,7 +50,10 @@ typedef struct
 {
 	uint8_t zoneId;
 	bool zoneState;
+	bool colorState;
 	char Hue[10];
+	uint8_t white;
+	uint8_t lumWhite;
 } ZoneAmp_Typedef;
 
 typedef struct
