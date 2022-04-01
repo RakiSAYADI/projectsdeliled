@@ -6,7 +6,6 @@ import 'package:flutter_blue/flutter_blue.dart';
 
 final String appName = 'Lumi\'Home';
 
-final String zonesInHex = 'F';
 final double hueCoefficient = (256 / 360);
 
 String dataRobotUVC;
@@ -35,6 +34,8 @@ String dataMaestroIOS9 = '';
 
 int backGroundColorSelect = 0;
 
+bool appMode = true;
+
 final int transitionSeconds = 25;
 
 final List<Color> backGroundColor = [Color(0xFF2F2E3E), Color(0xFFDCE2E6)];
@@ -43,6 +44,11 @@ final List<List<Color>> modeColor = [
   [Color(0xFFF3FAFF), Color(0xFFC6C9CB)]
 ];
 final List<Color> textColor = [Colors.white, Color(0xFF656574)];
+
+final List<List<Color>> textZoneSelectorColor = [
+  [Colors.white, Color(0xFF656574)],
+  [Color(0xFF656574), Colors.grey[400]]
+];
 
 final List<Color> positiveButton = [Colors.white, Colors.black];
 final List<Color> negativeButton = [Colors.grey, Colors.grey];
@@ -100,6 +106,9 @@ Future<void> readBLEData() async {
     await Future.delayed(Duration(milliseconds: 500));
     dataMaestroIOS8 = String.fromCharCodes(await characteristicWifi.read());
     debugPrint(dataMaestroIOS8);
+    await Future.delayed(Duration(milliseconds: 500));
+    dataMaestroIOS9 = String.fromCharCodes(await characteristicWifi.read());
+    debugPrint(dataMaestroIOS9);
   }
 }
 

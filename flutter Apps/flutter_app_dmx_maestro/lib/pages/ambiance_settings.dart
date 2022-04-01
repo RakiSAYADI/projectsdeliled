@@ -12,7 +12,7 @@ class Ambiances extends StatefulWidget {
   _AmbiancesState createState() => _AmbiancesState();
 }
 
-class _AmbiancesState extends State<Ambiances> {
+class _AmbiancesState extends State<Ambiances> with SingleTickerProviderStateMixin {
   ToastyMessage myUvcToast;
 
   List<dynamic> ambiance;
@@ -29,9 +29,12 @@ class _AmbiancesState extends State<Ambiances> {
 
   bool firstDisplayMainWidget = true;
 
+  TabController tabController;
+
   @override
   void initState() {
     myUvcToast = ToastyMessage(toastContext: context);
+    tabController = TabController(length: 2, vsync: this);
     // TODO: implement initState
     super.initState();
   }
@@ -40,6 +43,7 @@ class _AmbiancesState extends State<Ambiances> {
   void dispose() {
     // TODO: implement dispose
     myAmbianceName.dispose();
+    tabController.dispose();
     super.dispose();
   }
 
@@ -48,6 +52,11 @@ class _AmbiancesState extends State<Ambiances> {
     debugPrint('ambiance page');
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
+    if (appMode) {
+      backGroundColorSelect = 0;
+    } else {
+      backGroundColorSelect = 1;
+    }
     if (firstDisplayMainWidget) {
       try {
         ambiancesClassData = ambiancesClassData.isNotEmpty ? ambiancesClassData : ModalRoute.of(context).settings.arguments;
@@ -77,6 +86,9 @@ class _AmbiancesState extends State<Ambiances> {
         title: Text(
           ambiance[0],
           style: TextStyle(fontSize: 18, color: textColor[backGroundColorSelect]),
+        ),
+        iconTheme: IconThemeData(
+          color: textColor[backGroundColorSelect],
         ),
         centerTitle: true,
       ),
@@ -289,7 +301,7 @@ class _AmbiancesState extends State<Ambiances> {
             child: IconButton(
               icon: Icon(Icons.settings, color: textColor[backGroundColorSelect]),
               onPressed: () {
-                modifyAmbianceWidget(context, zonesNamesList[zoneNumber], whiteID, whiteIDLum, colorID, zoneCommand);
+                modifyAmbianceWidget(context, zonesNamesList[zoneNumber], colorState, colorID, whiteID, whiteIDLum, zoneCommand);
               },
             ),
           ),
@@ -298,237 +310,331 @@ class _AmbiancesState extends State<Ambiances> {
     );
   }
 
-  Future<void> modifyAmbianceWidget(BuildContext context, String zoneName, int hueID, int whiteID, int whiteLumID, int zoneCommand) {
-    double hueValue = HSLColor.fromColor(Color(int.parse(getColors(ambiance[hueID].toString()).toString(), radix: 16))).hue * (256 / 360);
-    double lumValue = HSLColor.fromColor(Color(int.parse(getColors(ambiance[hueID].toString()).toString(), radix: 16))).lightness * 100;
+  Future<void> modifyAmbianceWidget(BuildContext context, String zoneName, int colorState, int hueID, int whiteID, int whiteLumID, int zoneCommand) {
+    double hueValue = HSLColor.fromColor(Color(int.parse(getColors(ambiance[hueID].toString()).toString(), radix: 16))).hue * (255 / 359);
+    double lumValue = HSLColor.fromColor(Color(int.parse(getColors(ambiance[hueID].toString()).toString(), radix: 16))).lightness * 200;
     double satValue = HSLColor.fromColor(Color(int.parse(getColors(ambiance[hueID].toString()).toString(), radix: 16))).saturation * 100;
     double whiteValue = double.parse(ambiance[whiteID].toString());
     double whiteLumValue = double.parse(ambiance[whiteLumID].toString());
+    int ambianceSelector = int.parse(ambiance[colorState].toString());
     final Color lumMaxColor = Colors.white;
     final Color stabMaxColor = Colors.transparent;
     final Color stabMinColor = Colors.white;
-    return displayAlert(
-      context,
-      zoneName,
-      DefaultTabController(
-        length: 2,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const TabBar(
-              tabs: [
-                Tab(icon: Icon(Icons.directions_car)),
-                Tab(icon: Icon(Icons.directions_transit)),
-              ],
-            ),
-            /*TabBarView(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
+    tabController.index = ambianceSelector;
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return Dialog(
+            backgroundColor: backGroundColor[backGroundColorSelect],
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32.0))),
+            child: Scaffold(
+              bottomNavigationBar: BottomAppBar(
+                notchMargin: 10.0,
+                color: Colors.transparent,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 20.0),
+                  child: MyElevatedButton(
+                    onPressed: () {
+                      debugPrint(
+                          HSLColor.fromAHSL(1.0, hueValue * (359 / 255), satValue / 100, lumValue / 200).toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", ""));
+                      debugPrint(tabController.index.toString());
+                      debugPrint(whiteValue.toString());
+                      debugPrint(whiteLumValue.toString());
+                      ambiance[colorState] = tabController.index;
+                      ambiance[hueID] =
+                          HSLColor.fromAHSL(1.0, hueValue * (359 / 255), satValue / 100, lumValue / 200).toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "");
+                      ambiance[whiteID] = whiteValue.toInt();
+                      ambiance[whiteLumID] = whiteLumValue.toInt();
+                      Navigator.pop(context);
+                      setState(() {});
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(
+                        'Enregistrer',
+                        style: TextStyle(color: textColor[backGroundColorSelect], fontSize: 15),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              backgroundColor: backGroundColor[backGroundColorSelect],
+              body: NestedScrollView(
+                headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                  return <Widget>[
+                    new SliverAppBar(
+                      iconTheme: IconThemeData(
+                        color: textColor[backGroundColorSelect],
+                      ),
+                      title: Text(zoneName, textAlign: TextAlign.center, style: TextStyle(color: textColor[backGroundColorSelect])),
+                      pinned: true,
+                      centerTitle: true,
+                      floating: true,
+                      flexibleSpace: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: modeColor[backGroundColorSelect]),
+                        ),
+                      ),
+                      bottom: TabBar(
+                        controller: tabController,
+                        isScrollable: true,
+                        tabs: [
+                          Tab(icon: Icon(Icons.color_lens, color: textColor[backGroundColorSelect])),
+                          Tab(
+                            icon: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.ac_unit, color: textColor[backGroundColorSelect]),
+                                Text('/', style: TextStyle(color: textColor[backGroundColorSelect])),
+                                Icon(Icons.wb_sunny, color: textColor[backGroundColorSelect]),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ];
+                },
+                body: TabBarView(
+                  controller: tabController,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: FlutterSlider(
-                        tooltip: FlutterSliderTooltip(disabled: true),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18.0),
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.purpleAccent[400],
-                              Colors.red,
-                              Colors.yellow,
-                              Colors.green,
-                              Colors.lightBlue[200],
-                              Colors.lightBlue,
-                              Colors.blue,
-                              Colors.purple[300],
-                              Colors.purple,
-                              Colors.purpleAccent[400],
-                            ],
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FlutterSlider(
+                            tooltip: FlutterSliderTooltip(disabled: true),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(18.0),
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.purpleAccent[400],
+                                  Colors.red,
+                                  Colors.yellow,
+                                  Colors.green,
+                                  Colors.lightBlue[200],
+                                  Colors.lightBlue,
+                                  Colors.blue,
+                                  Colors.purple[300],
+                                  Colors.purple,
+                                  Colors.purpleAccent[400],
+                                ],
+                              ),
+                            ),
+                            values: [hueValue],
+                            max: 255,
+                            min: 0,
+                            onDragging: (handlerIndex, lowerValue, upperValue) {
+                              if (Platform.isAndroid) {
+                                setState(() {
+                                  hueValue = lowerValue;
+                                });
+                                if (myDevice.getConnectionState()) {
+                                  characteristicMaestro.write('{\"light\":[3,${hueValue.toInt()},\"$zoneCommand\"]}'.codeUnits);
+                                }
+                              }
+                            },
+                            onDragCompleted: (handlerIndex, lowerValue, upperValue) {
+                              if (Platform.isIOS) {
+                                setState(() {
+                                  hueValue = lowerValue;
+                                });
+                                if (myDevice.getConnectionState()) {
+                                  characteristicMaestro.write('{\"light\":[3,${hueValue.toInt()},\"$zoneCommand\"]}'.codeUnits);
+                                }
+                              }
+                            },
+                            handler: FlutterSliderHandler(child: Icon(Icons.color_lens)),
+                            trackBar: FlutterSliderTrackBar(
+                                inactiveTrackBar: BoxDecoration(color: Colors.transparent),
+                                activeTrackBar: BoxDecoration(color: Colors.transparent),
+                                activeTrackBarHeight: 12,
+                                inactiveTrackBarHeight: 12),
                           ),
                         ),
-                        values: [hueValue],
-                        max: 255,
-                        min: 0,
-                        onDragging: (handlerIndex, lowerValue, upperValue) {
-                          if (Platform.isAndroid) {
-                            setState(() {
-                              hueValue = lowerValue;
-                            });
-                            if (myDevice.getConnectionState()) {
-                              characteristicMaestro.write('{\"light\":[3,${hueValue.toInt()},\"$zoneCommand\"]}'.codeUnits);
-                            }
-                          }
-                        },
-                        onDragCompleted: (handlerIndex, lowerValue, upperValue) {
-                          if (Platform.isIOS) {
-                            setState(() {
-                              hueValue = lowerValue;
-                            });
-                            if (myDevice.getConnectionState()) {
-                              characteristicMaestro.write('{\"light\":[3,${hueValue.toInt()},\"$zoneCommand\"]}'.codeUnits);
-                            }
-                          }
-                        },
-                        handler: FlutterSliderHandler(child: Icon(Icons.color_lens)),
-                        trackBar: FlutterSliderTrackBar(
-                            inactiveTrackBar: BoxDecoration(color: Colors.transparent), activeTrackBar: BoxDecoration(color: Colors.transparent), activeTrackBarHeight: 12, inactiveTrackBarHeight: 12),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: FlutterSlider(
-                        tooltip: FlutterSliderTooltip(disabled: true),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18.0),
-                          gradient: LinearGradient(colors: [Colors.black, lumMaxColor]),
-                        ),
-                        values: [lumValue],
-                        max: 100,
-                        min: 0,
-                        centeredOrigin: true,
-                        handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
-                        onDragging: (handlerIndex, lowerValue, upperValue) {
-                          if (Platform.isAndroid) {
-                            lumValue = lowerValue;
-                            setState(() {});
-                            if (myDevice.getConnectionState()) {
-                              characteristicMaestro.write('{\"light\":[7,${lumValue.toInt()},\"$zoneCommand\"]}'.codeUnits);
-                            }
-                          }
-                        },
-                        onDragCompleted: (handlerIndex, lowerValue, upperValue) {
-                          if (Platform.isIOS) {
-                            lumValue = lowerValue;
-                            setState(() {});
-                            if (myDevice.getConnectionState()) {
-                              characteristicMaestro.write('{\"light\":[7,${lumValue.toInt()},\"$zoneCommand\"]}'.codeUnits);
-                            }
-                          }
-                        },
-                        handler: FlutterSliderHandler(child: Icon(Icons.highlight)),
-                        trackBar: FlutterSliderTrackBar(
-                            inactiveTrackBar: BoxDecoration(color: Colors.transparent), activeTrackBar: BoxDecoration(color: Colors.transparent), activeTrackBarHeight: 12, inactiveTrackBarHeight: 12),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: FlutterSlider(
-                        tooltip: FlutterSliderTooltip(disabled: true),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18.0),
-                          gradient: LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: [stabMinColor, stabMaxColor],
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FlutterSlider(
+                            tooltip: FlutterSliderTooltip(disabled: true),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(18.0),
+                              gradient: LinearGradient(colors: [Colors.black, lumMaxColor]),
+                            ),
+                            values: [lumValue],
+                            max: 100,
+                            min: 0,
+                            centeredOrigin: true,
+                            handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
+                            onDragging: (handlerIndex, lowerValue, upperValue) {
+                              if (Platform.isAndroid) {
+                                lumValue = lowerValue;
+                                setState(() {});
+                                if (myDevice.getConnectionState()) {
+                                  characteristicMaestro.write('{\"light\":[7,${lumValue.toInt()},\"$zoneCommand\"]}'.codeUnits);
+                                }
+                              }
+                            },
+                            onDragCompleted: (handlerIndex, lowerValue, upperValue) {
+                              if (Platform.isIOS) {
+                                lumValue = lowerValue;
+                                setState(() {});
+                                if (myDevice.getConnectionState()) {
+                                  characteristicMaestro.write('{\"light\":[7,${lumValue.toInt()},\"$zoneCommand\"]}'.codeUnits);
+                                }
+                              }
+                            },
+                            handler: FlutterSliderHandler(child: Icon(Icons.highlight)),
+                            trackBar: FlutterSliderTrackBar(
+                                inactiveTrackBar: BoxDecoration(color: Colors.transparent),
+                                activeTrackBar: BoxDecoration(color: Colors.transparent),
+                                activeTrackBarHeight: 12,
+                                inactiveTrackBarHeight: 12),
                           ),
                         ),
-                        values: [satValue],
-                        max: 100,
-                        min: 0,
-                        centeredOrigin: true,
-                        handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
-                        onDragging: (handlerIndex, lowerValue, upperValue) {
-                          if (Platform.isAndroid) {
-                            satValue = lowerValue;
-                            setState(() {});
-                            if (myDevice.getConnectionState()) {
-                              characteristicMaestro.write('{\"light\":[9,${satValue.toInt()},\"$zoneCommand\"]}'.codeUnits);
-                            }
-                          }
-                        },
-                        onDragCompleted: (handlerIndex, lowerValue, upperValue) {
-                          if (Platform.isIOS) {
-                            satValue = lowerValue;
-                            setState(() {});
-                            if (myDevice.getConnectionState()) {
-                              characteristicMaestro.write('{\"light\":[9,${satValue.toInt()},\"$zoneCommand\"]}'.codeUnits);
-                            }
-                          }
-                        },
-                        handler: FlutterSliderHandler(child: Icon(Icons.wb_twighlight)),
-                        trackBar: FlutterSliderTrackBar(
-                            inactiveTrackBar: BoxDecoration(color: Colors.transparent), activeTrackBar: BoxDecoration(color: Colors.transparent), activeTrackBarHeight: 12, inactiveTrackBarHeight: 12),
-                      ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FlutterSlider(
+                            tooltip: FlutterSliderTooltip(disabled: true),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(18.0),
+                              gradient: LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors: [stabMinColor, stabMaxColor],
+                              ),
+                            ),
+                            values: [satValue],
+                            max: 100,
+                            min: 0,
+                            centeredOrigin: true,
+                            handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
+                            onDragging: (handlerIndex, lowerValue, upperValue) {
+                              if (Platform.isAndroid) {
+                                satValue = lowerValue;
+                                setState(() {});
+                                if (myDevice.getConnectionState()) {
+                                  characteristicMaestro.write('{\"light\":[9,${satValue.toInt()},\"$zoneCommand\"]}'.codeUnits);
+                                }
+                              }
+                            },
+                            onDragCompleted: (handlerIndex, lowerValue, upperValue) {
+                              if (Platform.isIOS) {
+                                satValue = lowerValue;
+                                setState(() {});
+                                if (myDevice.getConnectionState()) {
+                                  characteristicMaestro.write('{\"light\":[9,${satValue.toInt()},\"$zoneCommand\"]}'.codeUnits);
+                                }
+                              }
+                            },
+                            handler: FlutterSliderHandler(child: Icon(Icons.wb_twighlight)),
+                            trackBar: FlutterSliderTrackBar(
+                                inactiveTrackBar: BoxDecoration(color: Colors.transparent),
+                                activeTrackBar: BoxDecoration(color: Colors.transparent),
+                                activeTrackBarHeight: 12,
+                                inactiveTrackBarHeight: 12),
+                          ),
+                        ),
+                      ],
                     ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FlutterSlider(
+                            tooltip: FlutterSliderTooltip(disabled: true),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(18.0),
+                              gradient: LinearGradient(colors: [Colors.blueAccent, Colors.white, Colors.yellowAccent]),
+                            ),
+                            values: [whiteValue],
+                            max: 100,
+                            min: 0,
+                            centeredOrigin: true,
+                            handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
+                            onDragging: (handlerIndex, lowerValue, upperValue) {
+                              if (Platform.isAndroid) {
+                                whiteValue = lowerValue;
+                                setState(() {});
+                                if (myDevice.getConnectionState()) {
+                                  characteristicMaestro.write('{\"light\":[8,${whiteValue.toInt()},\"$zoneCommand\"]}'.codeUnits);
+                                }
+                              }
+                            },
+                            onDragCompleted: (handlerIndex, lowerValue, upperValue) {
+                              if (Platform.isIOS) {
+                                whiteValue = lowerValue;
+                                setState(() {});
+                                if (myDevice.getConnectionState()) {
+                                  characteristicMaestro.write('{\"light\":[8,${whiteValue.toInt()},\"$zoneCommand\"]}'.codeUnits);
+                                }
+                              }
+                            },
+                            handler: FlutterSliderHandler(child: Icon(Icons.code)),
+                            trackBar: FlutterSliderTrackBar(
+                                inactiveTrackBar: BoxDecoration(color: Colors.transparent),
+                                activeTrackBar: BoxDecoration(color: Colors.transparent),
+                                activeTrackBarHeight: 12,
+                                inactiveTrackBarHeight: 12),
+                            hatchMark: FlutterSliderHatchMark(
+                              density: 0.5, // means 50 lines, from 0 to 100 percent
+                              labels: [
+                                FlutterSliderHatchMarkLabel(percent: 0, label: Icon(Icons.ac_unit, size: 30)),
+                                FlutterSliderHatchMarkLabel(percent: 100, label: Icon(Icons.wb_sunny, size: 30)),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FlutterSlider(
+                            tooltip: FlutterSliderTooltip(disabled: true),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(18.0),
+                              gradient: LinearGradient(colors: [Colors.black, lumMaxColor]),
+                            ),
+                            values: [whiteLumValue],
+                            max: 100,
+                            min: 0,
+                            centeredOrigin: true,
+                            handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
+                            onDragging: (handlerIndex, lowerValue, upperValue) {
+                              if (Platform.isAndroid) {
+                                whiteLumValue = lowerValue;
+                                setState(() {});
+                                if (myDevice.getConnectionState()) {
+                                  characteristicMaestro.write('{\"light\":[7,${whiteLumValue.toInt()},\"$zoneCommand\"]}'.codeUnits);
+                                }
+                              }
+                            },
+                            onDragCompleted: (handlerIndex, lowerValue, upperValue) {
+                              if (Platform.isIOS) {
+                                whiteLumValue = lowerValue;
+                                setState(() {});
+                                if (myDevice.getConnectionState()) {
+                                  characteristicMaestro.write('{\"light\":[7,${whiteLumValue.toInt()},\"$zoneCommand\"]}'.codeUnits);
+                                }
+                              }
+                            },
+                            handler: FlutterSliderHandler(child: Icon(Icons.highlight)),
+                            trackBar: FlutterSliderTrackBar(
+                                inactiveTrackBar: BoxDecoration(color: Colors.transparent),
+                                activeTrackBar: BoxDecoration(color: Colors.transparent),
+                                activeTrackBarHeight: 12,
+                                inactiveTrackBarHeight: 12),
+                          ),
+                        ),
+                      ],
+                    )
                   ],
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: FlutterSlider(
-                        tooltip: FlutterSliderTooltip(disabled: true),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18.0),
-                          gradient: LinearGradient(colors: [Colors.blueAccent, Colors.white, Colors.yellowAccent]),
-                        ),
-                        values: [whiteValue],
-                        max: 100,
-                        min: 0,
-                        centeredOrigin: true,
-                        handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
-                        onDragging: (handlerIndex, lowerValue, upperValue) {
-                          if (Platform.isAndroid) {
-                            whiteValue = lowerValue;
-                            setState(() {});
-                            if (myDevice.getConnectionState()) {
-                              characteristicMaestro.write('{\"light\":[8,${whiteValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
-                            }
-                          }
-                        },
-                        onDragCompleted: (handlerIndex, lowerValue, upperValue) {
-                          if (Platform.isIOS) {
-                            whiteValue = lowerValue;
-                            setState(() {});
-                            if (myDevice.getConnectionState()) {
-                              characteristicMaestro.write('{\"light\":[8,${whiteValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
-                            }
-                          }
-                        },
-                        handler: FlutterSliderHandler(child: Icon(Icons.code)),
-                        trackBar: FlutterSliderTrackBar(
-                            inactiveTrackBar: BoxDecoration(color: Colors.transparent), activeTrackBar: BoxDecoration(color: Colors.transparent), activeTrackBarHeight: 12, inactiveTrackBarHeight: 12),
-                        hatchMark: FlutterSliderHatchMark(
-                          density: 0.5, // means 50 lines, from 0 to 100 percent
-                          labels: [
-                            FlutterSliderHatchMarkLabel(percent: 0, label: Icon(Icons.ac_unit, size: 30)),
-                            FlutterSliderHatchMarkLabel(percent: 100, label: Icon(Icons.wb_sunny, size: 30)),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),*/
-          ],
-        ),
-      ),
-      [
-        TextButton(
-          child: Text(
-            'Valider',
-            style: TextStyle(color: Colors.green),
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        TextButton(
-          child: Text(
-            'Annuler',
-            style: TextStyle(color: Colors.red),
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
-    );
+              ),
+            ),
+          );
+        });
   }
 }

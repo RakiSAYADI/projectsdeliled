@@ -129,11 +129,19 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+    if (appMode) {
+      backGroundColorSelect = 0;
+    } else {
+      backGroundColorSelect = 1;
+    }
     return Scaffold(
       backgroundColor: backGroundColor[backGroundColorSelect],
       appBar: AppBar(
-        title: Text('Liste des HuBBoX :', style: TextStyle(fontSize: 18), key: Key('title')),
+        title: Text('Liste des HuBBoX :', style: TextStyle(fontSize: 18, color: textColor[backGroundColorSelect]), key: Key('title')),
         centerTitle: true,
+        iconTheme: IconThemeData(
+          color: textColor[backGroundColorSelect],
+        ),
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: modeColor[backGroundColorSelect]),

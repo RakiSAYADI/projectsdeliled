@@ -9,7 +9,6 @@ import 'package:flutter_app_dmx_maestro/services/custom_container.dart';
 import 'package:flutter_app_dmx_maestro/services/elavated_button.dart';
 import 'package:flutter_app_dmx_maestro/services/icon_button.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
-import 'package:hsl_colorpicker/HSLColorPicker.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -17,29 +16,29 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  HSLColor hslColor = HSLColor.fromColor(Colors.blue);
-
   String bottomBarTitle = 'Ambiances';
-  String zonesInHexAmb;
 
   bool bottomBarTitleState = false;
-  bool colorPickerSelected = false;
 
   double opacityLevelRemoteControl = 1.0;
   double opacityLevelAmbiances = 0.0;
-  double _lowerValue = 50;
+  double _lowerColorValue = 125;
+  double _lowerLumValue = 50;
+  double _lowerSatValue = 50;
+  double _lowerTempValue = 50;
 
   List<dynamic> ambiance1, ambiance2, ambiance3, ambiance4, ambiance5, ambiance6;
-  List<bool> remoteAndAmbVisibility = [true, false];
   List<String> zonesNamesList = ['', '', '', ''];
-  List<bool> zoneStates;
+  List<bool> remoteAndAmbVisibility = [true, false];
+  List<bool> zoneStates = [false, false, false, false];
+  List<bool> zoneSelector = [true, true, true, true];
+
+  String zonesInHex = 'F';
 
   @override
   void initState() {
     // TODO: implement initState
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.bottom]);
-    zoneStates = [false, false, false, false];
-    zonesInHexAmb = '0';
     super.initState();
   }
 
@@ -471,7 +470,10 @@ class _HomeState extends State<Home> {
                     onPressed: () async {
                       if (myDevice.getConnectionState()) {
                         if (!bottomBarTitleState) {
+                          zonesInHex = 'F';
+                          zoneSelector = [true, true, true, true];
                           await characteristicMaestro.write('{\"light\":[1,0,\"$zonesInHex\"]}'.codeUnits);
+                          setState(() {});
                         }
                       }
                     },
@@ -488,7 +490,10 @@ class _HomeState extends State<Home> {
                     onPressed: () async {
                       if (myDevice.getConnectionState()) {
                         if (!bottomBarTitleState) {
+                          zonesInHex = 'F';
+                          zoneSelector = [true, true, true, true];
                           await characteristicMaestro.write('{\"light\":[1,1,\"$zonesInHex\"]}'.codeUnits);
+                          setState(() {});
                         }
                       }
                     },
@@ -499,37 +504,150 @@ class _HomeState extends State<Home> {
           ),
         ),
         Expanded(
-          flex: 6,
-          child: MyCustomContainer(
-            child: HSLColorPicker(
-              onChanged: (colorSelected) {
-                if (myDevice.getConnectionState()) {
-                  if (!bottomBarTitleState) {
-                    if (colorPickerSelected) {
-                      if (hslColor.lightness != colorSelected.lightness) {
-                        characteristicMaestro.write('{\"light\":[7,${(hslColor.lightness * 100).toInt()},\"$zonesInHex\"]}'.codeUnits);
-                      }
-                      if (hslColor.hue != colorSelected.hue) {
-                        characteristicMaestro.write('{\"light\":[3,${(hslColor.hue * hueCoefficient).toInt()},\"$zonesInHex\"]}'.codeUnits);
-                      }
-                      if (hslColor.saturation != colorSelected.saturation) {
-                        characteristicMaestro.write('{\"light\":[9,${(hslColor.saturation * 100).toInt()},\"$zonesInHex\"]}'.codeUnits);
-                      }
-                    } else {
-                      colorPickerSelected = true;
-                      characteristicMaestro
-                          .write('{\"hue\":\"${hslColor.toColor().toString().split("0x")[1].toUpperCase().replaceFirst("FF", "").replaceAll(")", "")}\",\"zone\":\"$zonesInHex\"}'.codeUnits);
-                    }
-                    hslColor = colorSelected;
+          flex: 2,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 20.0),
+            child: FlutterSlider(
+              tooltip: FlutterSliderTooltip(disabled: true),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.purpleAccent[400],
+                    Colors.red,
+                    Colors.yellow,
+                    Colors.green,
+                    Colors.lightBlue[200],
+                    Colors.lightBlue,
+                    Colors.blue,
+                    Colors.purple[300],
+                    Colors.purple,
+                    Colors.purpleAccent[400],
+                  ],
+                ),
+              ),
+              values: [_lowerColorValue],
+              max: 255,
+              min: 0,
+              onDragging: (handlerIndex, lowerValue, upperValue) {
+                if (Platform.isAndroid) {
+                  _lowerColorValue = lowerValue;
+                  setState(() {});
+                  if (myDevice.getConnectionState()) {
+                    characteristicMaestro.write('{\"light\":[3,${_lowerColorValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
                   }
                 }
               },
-              size: widthScreen * 0.45 + heightScreen * 0.15,
-              strokeWidth: widthScreen * 0.045,
-              thumbStrokeSize: widthScreen * 0.005 + heightScreen * 0.005,
-              showCenterColorIndicator: false,
-              centerColorIndicatorSize: widthScreen * 0.005 + heightScreen * 0.005,
-              initialColor: Colors.blue[900],
+              onDragCompleted: (handlerIndex, lowerValue, upperValue) {
+                if (Platform.isIOS) {
+                  _lowerColorValue = lowerValue;
+                  setState(() {});
+                  if (myDevice.getConnectionState()) {
+                    characteristicMaestro.write('{\"light\":[3,${_lowerColorValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                  }
+                }
+              },
+              trackBar: FlutterSliderTrackBar(
+                inactiveTrackBar: BoxDecoration(color: Colors.transparent),
+                activeTrackBar: BoxDecoration(color: Colors.transparent),
+                activeTrackBarHeight: heightScreen * 0.001,
+                inactiveTrackBarHeight: heightScreen * 0.001,
+              ),
+              handler: FlutterSliderHandler(
+                  child: Icon(
+                Icons.color_lens,
+                size: widthScreen * 0.02 + heightScreen * 0.02,
+              )),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 20.0),
+            child: FlutterSlider(
+              tooltip: FlutterSliderTooltip(disabled: true),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30.0),
+                gradient: LinearGradient(colors: [Colors.black, Colors.white]),
+              ),
+              values: [_lowerLumValue],
+              max: 100,
+              min: 0,
+              centeredOrigin: true,
+              handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
+              onDragging: (handlerIndex, lowerValue, upperValue) {
+                if (Platform.isAndroid) {
+                  _lowerLumValue = lowerValue;
+                  setState(() {});
+                  if (myDevice.getConnectionState()) {
+                    characteristicMaestro.write('{\"light\":[7,${_lowerLumValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                  }
+                }
+              },
+              onDragCompleted: (handlerIndex, lowerValue, upperValue) {
+                if (Platform.isIOS) {
+                  _lowerLumValue = lowerValue;
+                  setState(() {});
+                  if (myDevice.getConnectionState()) {
+                    characteristicMaestro.write('{\"light\":[7,${_lowerLumValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                  }
+                }
+              },
+              handler: FlutterSliderHandler(
+                  child: Icon(
+                Icons.highlight,
+                size: widthScreen * 0.02 + heightScreen * 0.02,
+              )),
+              trackBar: FlutterSliderTrackBar(
+                  inactiveTrackBar: BoxDecoration(color: Colors.transparent), activeTrackBar: BoxDecoration(color: Colors.transparent), activeTrackBarHeight: 12, inactiveTrackBarHeight: 12),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 20.0),
+            child: FlutterSlider(
+              tooltip: FlutterSliderTooltip(disabled: true),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30.0),
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [Colors.white, Colors.transparent],
+                ),
+              ),
+              values: [_lowerSatValue],
+              max: 100,
+              min: 0,
+              centeredOrigin: true,
+              handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
+              onDragging: (handlerIndex, lowerValue, upperValue) {
+                if (Platform.isAndroid) {
+                  _lowerSatValue = lowerValue;
+                  setState(() {});
+                  if (myDevice.getConnectionState()) {
+                    characteristicMaestro.write('{\"light\":[9,${_lowerSatValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                  }
+                }
+              },
+              onDragCompleted: (handlerIndex, lowerValue, upperValue) {
+                if (Platform.isIOS) {
+                  _lowerSatValue = lowerValue;
+                  setState(() {});
+                  if (myDevice.getConnectionState()) {
+                    characteristicMaestro.write('{\"light\":[9,${_lowerSatValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                  }
+                }
+              },
+              handler: FlutterSliderHandler(
+                  child: Icon(
+                Icons.wb_twighlight,
+                size: widthScreen * 0.02 + heightScreen * 0.02,
+              )),
+              trackBar: FlutterSliderTrackBar(
+                  inactiveTrackBar: BoxDecoration(color: Colors.transparent), activeTrackBar: BoxDecoration(color: Colors.transparent), activeTrackBarHeight: 12, inactiveTrackBarHeight: 12),
             ),
           ),
         ),
@@ -546,30 +664,30 @@ class _HomeState extends State<Home> {
                   child: Center(
                     child: FlutterSlider(
                       tooltip: FlutterSliderTooltip(disabled: true),
-                      values: [_lowerValue],
+                      values: [_lowerTempValue],
                       max: 100,
                       min: 0,
                       centeredOrigin: true,
                       disabled: bottomBarTitleState,
                       handlerAnimation: FlutterSliderHandlerAnimation(curve: Curves.elasticOut, reverseCurve: null, duration: Duration(milliseconds: 700), scale: 1.4),
                       onDragging: (handlerIndex, lowerValue, upperValue) {
-                        _lowerValue = lowerValue;
+                        _lowerTempValue = lowerValue;
                         setState(() {});
                         if (Platform.isAndroid) {
                           if (myDevice.getConnectionState()) {
                             if (!bottomBarTitleState) {
-                              characteristicMaestro.write('{\"light\":[8,${100 - _lowerValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                              characteristicMaestro.write('{\"light\":[8,${100 - _lowerTempValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
                             }
                           }
                         }
                       },
                       onDragCompleted: (handlerIndex, lowerValue, upperValue) {
-                        _lowerValue = lowerValue;
+                        _lowerTempValue = lowerValue;
                         setState(() {});
                         if (Platform.isIOS) {
                           if (myDevice.getConnectionState()) {
                             if (!bottomBarTitleState) {
-                              characteristicMaestro.write('{\"light\":[8,${100 - _lowerValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
+                              characteristicMaestro.write('{\"light\":[8,${100 - _lowerTempValue.toInt()},\"$zonesInHex\"]}'.codeUnits);
                             }
                           }
                         }
@@ -654,10 +772,10 @@ class _HomeState extends State<Home> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Expanded(flex: 3, child: zoneOnOff(context, zonesNamesList[0], '1', 1)),
-                  Expanded(flex: 3, child: zoneOnOff(context, zonesNamesList[1], '2', 2)),
-                  Expanded(flex: 3, child: zoneOnOff(context, zonesNamesList[2], '4', 3)),
-                  Expanded(flex: 3, child: zoneOnOff(context, zonesNamesList[3], '8', 4)),
+                  Expanded(flex: 3, child: zoneOnOff(context, 0, zonesNamesList[0], '1', 1)),
+                  Expanded(flex: 3, child: zoneOnOff(context, 1, zonesNamesList[1], '2', 2)),
+                  Expanded(flex: 3, child: zoneOnOff(context, 2, zonesNamesList[2], '4', 3)),
+                  Expanded(flex: 3, child: zoneOnOff(context, 3, zonesNamesList[3], '8', 4)),
                 ],
               ),
             ),
@@ -667,17 +785,51 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget zoneOnOff(BuildContext context, String zoneName, String zoneNumber, int zoneID) {
+  Widget zoneOnOff(BuildContext context, int zoneSelectorColor, String zoneName, String zoneNumber, int zoneID) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
+    TextDecoration textDecoration;
+    Color zoneColor;
+    if (zoneSelector[zoneSelectorColor]) {
+      textDecoration = TextDecoration.underline;
+      zoneColor = textZoneSelectorColor[backGroundColorSelect][0];
+    } else {
+      textDecoration = TextDecoration.none;
+      zoneColor = textZoneSelectorColor[backGroundColorSelect][1];
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 17.0, vertical: 3.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
-              flex: 1,
-              child: Center(child: Text(zoneName, textAlign: TextAlign.center, style: TextStyle(fontSize: widthScreen * 0.02 + heightScreen * 0.009, color: textColor[backGroundColorSelect])))),
+            flex: 1,
+            child: Center(
+              child: GestureDetector(
+                onTap: () {
+                  for (int i = 0; i < zoneSelector.length; i++) {
+                    if (i == zoneSelectorColor) {
+                      zoneSelector[zoneSelectorColor] = true;
+                      zonesInHex = zoneNumber;
+                    } else {
+                      zoneSelector[i] = false;
+                    }
+                  }
+                  setState(() {});
+                },
+                child: Text(
+                  zoneName,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    decoration: textDecoration,
+                    fontWeight: FontWeight.bold,
+                    fontSize: widthScreen * 0.02 + heightScreen * 0.009,
+                    color: zoneColor,
+                  ),
+                ),
+              ),
+            ),
+          ),
           Expanded(
             flex: 4,
             child: MyCustomContainer(

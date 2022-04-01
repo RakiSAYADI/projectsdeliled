@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_dmx_maestro/services/DataVariables.dart';
 import 'package:flutter_app_dmx_maestro/services/elavated_button.dart';
 import 'package:flutter_app_dmx_maestro/services/uvcToast.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class AlarmClock extends StatefulWidget {
   @override
@@ -99,6 +100,11 @@ class _AlarmClockState extends State<AlarmClock> {
   Widget build(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
+    if (appMode) {
+      backGroundColorSelect = 0;
+    } else {
+      backGroundColorSelect = 1;
+    }
     if (firstDisplayMainWidget) {
       try {
         alarmSettingsClassData = alarmSettingsClassData.isNotEmpty ? alarmSettingsClassData : ModalRoute.of(context).settings.arguments;
@@ -203,6 +209,9 @@ class _AlarmClockState extends State<AlarmClock> {
             gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: modeColor[backGroundColorSelect]),
           ),
         ),
+        iconTheme: IconThemeData(
+          color: textColor[backGroundColorSelect],
+        ),
         title: Text(
           'Planning d\'ambiances',
           style: TextStyle(fontSize: 18, color: textColor[backGroundColorSelect]),
@@ -217,6 +226,21 @@ class _AlarmClockState extends State<AlarmClock> {
           child: MyElevatedButton(
             onPressed: () async {
               if (myDevice.getConnectionState()) {
+                displayAlert(
+                  context,
+                  'Enregistrement en cours',
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SpinKitCircle(
+                        color: Colors.blue[600],
+                        size: heightScreen * 0.1,
+                      ),
+                    ],
+                  ),
+                  null,
+                );
                 if (Platform.isAndroid) {
                   await characteristicMaestro.write('{\"lun\":[${alarmDayData(0)}],'
                           '\"mar\":[${alarmDayData(1)}],\"mer\":[${alarmDayData(2)}],'
@@ -237,6 +261,11 @@ class _AlarmClockState extends State<AlarmClock> {
                   await Future.delayed(Duration(milliseconds: 500));
                 }
                 await readBLEData();
+                myUvcToast.setToastDuration(5);
+                myUvcToast.setToastMessage('Données enregistrées !');
+                myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+                // double popup for the alert dialog and the page
+                Navigator.pop(context);
                 Navigator.pop(context);
               }
             },

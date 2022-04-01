@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app_dmx_maestro/services/DataVariables.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:package_info/package_info.dart';
@@ -81,6 +82,11 @@ class _WelcomeState extends State<Welcome> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     debugPrint('width : $screenWidth and height : $screenHeight');
+    if (appMode) {
+      backGroundColorSelect = 0;
+    } else {
+      backGroundColorSelect = 1;
+    }
     return Scaffold(
       backgroundColor: Colors.indigo[700],
       body: SafeArea(

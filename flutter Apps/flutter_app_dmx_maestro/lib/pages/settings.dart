@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app_dmx_maestro/services/DataVariables.dart';
+import 'package:flutter_app_dmx_maestro/services/app_mode_service.dart';
 import 'package:flutter_app_dmx_maestro/services/custom_container.dart';
 import 'package:flutter_app_dmx_maestro/services/elavated_button.dart';
 import 'package:flutter_app_dmx_maestro/services/uvcToast.dart';
@@ -77,6 +78,11 @@ class _SettingsState extends State<Settings> {
     readDataMaestro();
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    if (appMode) {
+      backGroundColorSelect = 0;
+    } else {
+      backGroundColorSelect = 1;
+    }
     print('width : $screenWidth and height : $screenHeight');
     return Scaffold(
       appBar: AppBar(
@@ -84,6 +90,9 @@ class _SettingsState extends State<Settings> {
           decoration: BoxDecoration(
             gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: modeColor[backGroundColorSelect]),
           ),
+        ),
+        iconTheme: IconThemeData(
+          color: textColor[backGroundColorSelect],
         ),
         title: Text(
           'Réglages',
@@ -157,7 +166,7 @@ class _SettingsState extends State<Settings> {
                             },
                             child: Text(
                               'Changer le nom',
-                              style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
+                              style: TextStyle(color: textColor[backGroundColorSelect], fontSize: screenWidth * 0.04),
                             ),
                           ),
                         ),
@@ -404,6 +413,35 @@ class _SettingsState extends State<Settings> {
                         ),
                       ],
                     ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Text(
+                        'Mode sombre :',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: (screenWidth * 0.05),
+                          color: textColor[backGroundColorSelect],
+                        ),
+                      ),
+                      Switch(
+                        value: appMode,
+                        onChanged: (value) async {
+                          appMode = value;
+                          AppMode appModeClass = AppMode();
+                          await appModeClass.saveAppModeDATA(appMode);
+                          setState(() {});
+                        },
+                        activeTrackColor: Colors.grey,
+                        activeColor: Colors.white,
+                        inactiveThumbColor: Colors.black,
+                      ),
+                    ],
                   ),
                 ),
                 Padding(

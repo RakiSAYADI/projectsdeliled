@@ -81,11 +81,18 @@ class _CheckPermissionsState extends State<CheckPermissions> with TickerProvider
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-
+    if (appMode) {
+      backGroundColorSelect = 0;
+    } else {
+      backGroundColorSelect = 1;
+    }
     return WillPopScope(
       child: Scaffold(
         backgroundColor: backGroundColor[backGroundColorSelect],
         appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: textColor[backGroundColorSelect],
+          ),
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: modeColor[backGroundColorSelect]),
