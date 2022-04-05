@@ -28,6 +28,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
 
   @override
   void initState() {
+    flutterBlue = FlutterBlue.instance;
     myUvcToast = ToastyMessage(toastContext: context);
     // initialise the animation
     animationRefreshIcon = new AnimationController(

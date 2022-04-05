@@ -845,6 +845,15 @@ class _HomeState extends State<Home> {
                         onPressed: () async {
                           if (myDevice.getConnectionState()) {
                             if (!bottomBarTitleState) {
+                              for (int i = 0; i < zoneSelector.length; i++) {
+                                if (i == zoneSelectorColor) {
+                                  zoneSelector[zoneSelectorColor] = true;
+                                  zonesInHex = zoneNumber;
+                                } else {
+                                  zoneSelector[i] = false;
+                                }
+                              }
+                              setState(() {});
                               await characteristicMaestro.write('{\"light\":[1,0,\"$zoneNumber\"]}'.codeUnits);
                             }
                           }
@@ -873,6 +882,15 @@ class _HomeState extends State<Home> {
                         onPressed: () async {
                           if (myDevice.getConnectionState()) {
                             if (!bottomBarTitleState) {
+                              for (int i = 0; i < zoneSelector.length; i++) {
+                                if (i == zoneSelectorColor) {
+                                  zoneSelector[zoneSelectorColor] = true;
+                                  zonesInHex = zoneNumber;
+                                } else {
+                                  zoneSelector[i] = false;
+                                }
+                              }
+                              setState(() {});
                               await characteristicMaestro.write('{\"light\":[1,1,\"$zoneNumber\"]}'.codeUnits);
                             }
                           }

@@ -42,7 +42,6 @@ class _SettingsState extends State<Settings> {
 
   void readDataMaestro() async {
     try {
-      myBleDeviceName.text = myDevice.device.name.substring(4);
       var parsedJson;
       if (Platform.isIOS) {
         parsedJson = json.decode(dataMaestroIOS);
@@ -54,8 +53,9 @@ class _SettingsState extends State<Settings> {
       zonesNamesList[1] = parsedJson['zone'][1];
       zonesNamesList[2] = parsedJson['zone'][2];
       zonesNamesList[3] = parsedJson['zone'][3];
-      await Future.delayed(Duration(seconds: 2));
       if (firstDisplayMainWidget) {
+        myBleDeviceName.text = myDevice.device.name.substring(4);
+        await Future.delayed(Duration(seconds: 2));
         if (parsedJson['wifiSt'] == 0) {
           myUvcToast.setToastDuration(5);
           myUvcToast.setToastMessage('Votre carte n\'est pas connectée avec votre modem !');
@@ -119,7 +119,7 @@ class _SettingsState extends State<Settings> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            'Nom du convertisseur DMX :',
+                            'Nom du HuBBoX:',
                             style: TextStyle(fontSize: (screenWidth * 0.05), color: textColor[backGroundColorSelect]),
                           ),
                         ),
