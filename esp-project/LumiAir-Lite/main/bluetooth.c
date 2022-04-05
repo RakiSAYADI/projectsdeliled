@@ -1279,44 +1279,43 @@ void secondTransitionAmbianceProcess(int ambianceId)
 		{
 			MilightHandler(cmd, LSUBCMD_SWITCH_ON, zoneLight);
 			delay(100);
-		}
+			if (!UnitCfg.ColortrProfile[ambianceId].zoneAmbiance[i].colorState)
+			{
+				rgb = strtol(UnitCfg.ColortrProfile[ambianceId].zoneAmbiance[i].Hue, NULL, 16);
+				RgbToHSL(rgb, &HSLtmp);
 
-		if (UnitCfg.ColortrProfile[ambianceId].zoneAmbiance[i].colorState)
-		{
-			rgb = strtol(UnitCfg.ColortrProfile[ambianceId].zoneAmbiance[i].Hue, NULL, 16);
-			RgbToHSL(rgb, &HSLtmp);
+				// apply hue
+				cmd = LCMD_SET_COLOR;
+				MilightHandler(cmd, HSLtmp.Hue, zoneLight);
+				ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d zone %d", cmd, HSLtmp.Hue, zoneLight);
+				delay(100);
 
-			// apply hue
-			cmd = LCMD_SET_COLOR;
-			MilightHandler(cmd, HSLtmp.Hue, zoneLight);
-			ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d zone %d", cmd, HSLtmp.Hue, zoneLight);
-			delay(100);
+				// apply brightness
+				cmd = LCMD_SET_BRIGTHNESS;
+				MilightHandler(cmd, HSLtmp.Bri * 2, zoneLight);
+				ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d zone %d", cmd, HSLtmp.Bri, zoneLight);
+				delay(100);
 
-			// apply brightness
-			cmd = LCMD_SET_BRIGTHNESS;
-			MilightHandler(cmd, HSLtmp.Bri, zoneLight);
-			ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d zone %d", cmd, HSLtmp.Bri, zoneLight);
-			delay(100);
+				// apply saturation
+				cmd = LCMD_SET_SAT;
+				MilightHandler(cmd, HSLtmp.Sat, zoneLight);
+				ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d zone %d", cmd, HSLtmp.Sat, zoneLight);
+				delay(100);
+			}
+			else
+			{
+				// apply white
+				cmd = LCMD_SET_TEMP;
+				MilightHandler(cmd, UnitCfg.ColortrProfile[ambianceId].zoneAmbiance[i].white, zoneLight);
+				ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d zone %d", cmd, UnitCfg.ColortrProfile[ambianceId].zoneAmbiance[i].white, zoneLight);
+				delay(100);
 
-			// apply saturation
-			cmd = LCMD_SET_SAT;
-			MilightHandler(cmd, HSLtmp.Sat, zoneLight);
-			ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d zone %d", cmd, HSLtmp.Sat, zoneLight);
-			delay(100);
-		}
-		else
-		{
-			// apply hue
-			cmd = LCMD_SET_WHITE;
-			MilightHandler(cmd, UnitCfg.ColortrProfile[ambianceId].zoneAmbiance[i].white, zoneLight);
-			ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d zone %d", cmd, UnitCfg.ColortrProfile[ambianceId].zoneAmbiance[i].white, zoneLight);
-			delay(100);
-
-			// apply brightness
-			cmd = LCMD_SET_BRIGTHNESS;
-			MilightHandler(cmd, UnitCfg.ColortrProfile[ambianceId].zoneAmbiance[i].lumWhite, zoneLight);
-			ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d zone %d", cmd, UnitCfg.ColortrProfile[ambianceId].zoneAmbiance[i].lumWhite, zoneLight);
-			delay(100);
+				// apply brightness
+				cmd = LCMD_SET_BRIGTHNESS;
+				MilightHandler(cmd, UnitCfg.ColortrProfile[ambianceId].zoneAmbiance[i].lumWhite, zoneLight);
+				ESP_LOGI(GATTS_TAG, "Light control cmd %d subcmd %d zone %d", cmd, UnitCfg.ColortrProfile[ambianceId].zoneAmbiance[i].lumWhite, zoneLight);
+				delay(100);
+			}
 		}
 	}
 }

@@ -218,30 +218,41 @@ void autoLightWakeUpTask()
 			MilightHandler(LCMD_SWITCH_ON_OFF, LSUBCMD_SWITCH_ON, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
 			ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", LCMD_SWITCH_ON_OFF, LSUBCMD_SWITCH_ON, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
 			delay(100);
-
-			rgb = strtol(UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].Hue, NULL, 16);
-			RgbToHSL(rgb, &HSLtmp);
-
-			// apply hue
-			cmd = 3;
-			subcmdhue = HSLtmp.Hue;
-
-			MilightHandler(cmd, subcmdhue, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
-			ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", cmd, subcmdhue, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
-			delay(100);
-
-			// apply saturation
-			cmd = 9;
-			subcmdstab = HSLtmp.Sat;
 			
-			MilightHandler(cmd, subcmdstab, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
-			ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", cmd, subcmdstab, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
-			delay(100);
+			if (!UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].colorState)
+			{
+				rgb = strtol(UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].Hue, NULL, 16);
+				RgbToHSL(rgb, &HSLtmp);
+
+				// apply hue
+				cmd = LCMD_SET_COLOR;
+				subcmdhue = HSLtmp.Hue;
+
+				MilightHandler(cmd, subcmdhue, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
+				ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", cmd, subcmdhue, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
+				delay(100);
+
+				// apply saturation
+				cmd = LCMD_SET_SAT;
+				subcmdstab = HSLtmp.Sat;
+
+				MilightHandler(cmd, subcmdstab, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
+				ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", cmd, subcmdstab, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
+				delay(100);
+			}
+			else
+			{
+				// apply white
+				cmd = LCMD_SET_TEMP;
+				MilightHandler(cmd, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].white, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
+				ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", cmd, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].white, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
+				delay(100);
+			}
 		}
 	}
 
 	penteTransLum = (UnitCfg.alarmDay[Curday].finishLumVal - UnitCfg.alarmDay[Curday].startLumVal) / (float)(UnitCfg.alarmDay[Curday].duration * 1000);
-	cmd = 7;
+	cmd = LCMD_SET_BRIGTHNESS;
 	while (progressTime < (UnitCfg.alarmDay[Curday].duration * 1000))
 	{
 		switch (UnitCfg.alarmDay[Curday].alarmOption)
