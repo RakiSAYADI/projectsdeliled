@@ -27,6 +27,8 @@
 #define 	LSUBCMD_PAIR	1
 #define 	LSUBCMD_UNPAIR	0
 
+#define 	DELAY_LIGHT_TRANSITION 200
+
 extern int8_t PID_Out;
 
 typedef struct {

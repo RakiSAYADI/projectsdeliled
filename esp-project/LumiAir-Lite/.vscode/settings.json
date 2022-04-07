@@ -33,7 +33,10 @@
     "math.h": "c",
     "cmath": "c",
     "adc.h": "c",
-    "autolight.h": "c"
+    "autolight.h": "c",
+    "array": "c",
+    "string": "c",
+    "string_view": "c"
   },
   "idf.adapterTargetName": "esp32",
   "idf.portWin": "COM16",

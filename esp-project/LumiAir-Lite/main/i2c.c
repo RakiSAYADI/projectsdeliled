@@ -16,10 +16,10 @@
 
 void I2cRestart();
 
-OPT3001_Typedef OPT3001_HoldReg = {0, 0, 0, 0, 0, 0, 0, 0}; //light meter
-IAQ_CORE_Typedef iaq_data;									//CO2 TVOC
-HDC1080_Typedef HDC1080_data;								//temperature Humidity
-MCP7940_Time_Typedef time_MCP7940;							//battery Timer
+OPT3001_Typedef OPT3001_HoldReg = {0, 0, 0, 0, 0, 0, 0, 0}; // light meter
+IAQ_CORE_Typedef iaq_data;									// CO2 TVOC
+HDC1080_Typedef HDC1080_data;								// temperature Humidity
+MCP7940_Time_Typedef time_MCP7940;							// battery Timer
 
 bool clockSavorEnabled = false;
 bool saveTimeOnBattery = false;
@@ -105,7 +105,7 @@ esp_err_t i2c_read_IAQ_CORE_C(i2c_port_t i2c_num, IAQ_CORE_Typedef *data)
 		printf("tmp (%d) = %x, ", i, tmp[i]);
 	}*/
 
-	//printf("\n");
+	// printf("\n");
 
 	if (ret == ESP_OK)
 	{
@@ -122,8 +122,8 @@ esp_err_t i2c_read_IAQ_CORE_C(i2c_port_t i2c_num, IAQ_CORE_Typedef *data)
 		data->Tvoc = 250;
 	}
 
-	//printf("CO2 : %u, State : %02X, resistance : %d , TVOC : %u \n", data->pred, data->status, data->resistance, data->Tvoc);
-	//printf("\n");
+	// printf("CO2 : %u, State : %02X, resistance : %d , TVOC : %u \n", data->pred, data->status, data->resistance, data->Tvoc);
+	// printf("\n");
 
 	return ret;
 }
@@ -520,7 +520,7 @@ void i2c_test_task(void *arg)
 
 			OPT3001_HoldReg.result = 0.01 * power(2, exp) * frc;
 
-			//printf("I2C MASTER READ SENSOR( OPT3001 ) : lux %0.2f config %04X\r\n",OPT3001_HoldReg.result,OPT3001_HoldReg.config);
+			// printf("I2C MASTER READ SENSOR( OPT3001 ) : lux %0.2f config %04X\r\n",OPT3001_HoldReg.result,OPT3001_HoldReg.config);
 		}
 		else
 		{
@@ -545,7 +545,7 @@ void i2c_test_task(void *arg)
 			HDC1080_data.temp_result = ((HDC1080_data.temp_raw / 65536.0) * 165) - 40;
 			HDC1080_data.humidity_result = (HDC1080_data.humidity_raw / 65536.0) * 100;
 
-			//printf("I2C MASTER READ SENSOR( HDC1080 ) : Config %04X Temp %0.2f Humidty %0.2f \r\n",HDC1080_data.Config,HDC1080_data.temp_result,HDC1080_data.humidity_result);
+			// printf("I2C MASTER READ SENSOR( HDC1080 ) : Config %04X Temp %0.2f Humidty %0.2f \r\n",HDC1080_data.Config,HDC1080_data.temp_result,HDC1080_data.humidity_result);
 		}
 		else
 		{
@@ -584,7 +584,7 @@ void i2c_test_task(void *arg)
 				badCO2Counter++;
 			}
 			time(&i2c_now);
-			i2c_now = i2c_now % (3600 * 24) + (UnitCfg.UnitTimeZone * 3600);
+			i2c_now = i2c_now % (3600 * 24) + (UnitCfg.timeZone * 3600);
 			if (normalCO2Counter > 180 || badCO2Counter > 30 || (i2c_now >= 0 && i2c_now <= 3) || i2cHourRestart == 360)
 			{
 				i2cReadCounter = 0;
@@ -594,10 +594,10 @@ void i2c_test_task(void *arg)
 				break;
 			}
 			i2cHourRestart++;
-			//ESP_LOGI(TAG, "(IAQ_CORE_C READ) time %ld ", i2c_now);
-			//ESP_LOGI(TAG, "(IAQ_CORE_C READ) CO2Array[0] %d, CO2Array[1] %d, CO2Array[2] %d, CO2Array[3] %d, CO2Array[4] %d", CO2Array[0], CO2Array[1], CO2Array[2], CO2Array[3], CO2Array[4]);
-			//ESP_LOGI(TAG, "(IAQ_CORE_C READ) middleCO2 %d, lastMiddleCO2 %d, i2cReadCounter %d, normalCO2Counter %d, badCO2Counter %d", middleCO2, lastMiddleCO2, i2cReadCounter, normalCO2Counter, badCO2Counter);
-			//ESP_LOGI(TAG, "(IAQ_CORE_C READ) PRED %u , status %02X, resistance %d, Tvox %u\r\n", iaq_data.pred, iaq_data.status, iaq_data.resistance, iaq_data.Tvoc);
+			// ESP_LOGI(TAG, "(IAQ_CORE_C READ) time %ld ", i2c_now);
+			// ESP_LOGI(TAG, "(IAQ_CORE_C READ) CO2Array[0] %d, CO2Array[1] %d, CO2Array[2] %d, CO2Array[3] %d, CO2Array[4] %d", CO2Array[0], CO2Array[1], CO2Array[2], CO2Array[3], CO2Array[4]);
+			// ESP_LOGI(TAG, "(IAQ_CORE_C READ) middleCO2 %d, lastMiddleCO2 %d, i2cReadCounter %d, normalCO2Counter %d, badCO2Counter %d", middleCO2, lastMiddleCO2, i2cReadCounter, normalCO2Counter, badCO2Counter);
+			// ESP_LOGI(TAG, "(IAQ_CORE_C READ) PRED %u , status %02X, resistance %d, Tvox %u\r\n", iaq_data.pred, iaq_data.status, iaq_data.resistance, iaq_data.Tvoc);
 		}
 		else
 		{
@@ -630,21 +630,13 @@ void i2c_test_task(void *arg)
 				localtime_r(&i2c_now, &i2c_timeinfo);
 				if (time_MCP7940.osillater_start == 0 || time_MCP7940.vBat_en == 0)
 				{
-					if (i2c_timeinfo.tm_year > (2016 - 1900))
+					ESP_LOGI(TAG, "time %d", i2c_timeinfo.tm_year);
+					if (saveTimeOnBattery)
 					{
-						printf("time of esp");
 						ret = saveTimeInsideBattery(i2c_timeinfo);
+						ESP_LOGI(TAG, "time of phone");
 						ESP_ERROR_CHECK(ret);
-					}
-					else
-					{
-						if (saveTimeOnBattery)
-						{
-							ret = saveTimeInsideBattery(i2c_timeinfo);
-							printf("time of phone");
-							ESP_ERROR_CHECK(ret);
-							saveTimeOnBattery = false;
-						}
+						saveTimeOnBattery = false;
 					}
 				}
 				else
@@ -668,6 +660,7 @@ void i2c_test_task(void *arg)
 							tm.tm_min = time_MCP7940.minute;
 							tm.tm_sec = time_MCP7940.second;
 							time_t t = mktime(&tm);
+							syncTime(t, UnitCfg.UnitTimeZone);
 							ESP_LOGI(TAG, "sec : %d, min : %d, hour : %d, weekday : %d, day : %d, month : %d, year : %d\n",
 									 tm.tm_sec, tm.tm_min, tm.tm_hour, tm.tm_wday, tm.tm_mday, tm.tm_mon, tm.tm_year);
 							ESP_LOGI(TAG, "I2C MASTER Setting time: %s", asctime(&tm));
@@ -676,9 +669,7 @@ void i2c_test_task(void *arg)
 									 time_MCP7940.year, time_MCP7940.month, time_MCP7940.day,
 									 time_MCP7940.day_of_week, time_MCP7940.hour, time_MCP7940.minute, time_MCP7940.second);
 							ESP_LOGI(TAG, "The current date/time in ESP32 is: %s", strftime_buf);
-							struct timeval now = {.tv_sec = t};
 							saveTimeBattery = true;
-							settimeofday(&now, NULL);
 						}
 					}
 				}
@@ -731,9 +722,9 @@ void I2c_Init()
 
 void I2cRestart()
 {
-	gpio_set_level(I2C_DEATH_SWITCH_GPIO, 0); //I2C OFF
+	gpio_set_level(I2C_DEATH_SWITCH_GPIO, 0); // I2C OFF
 	vTaskDelay(1000 / portTICK_RATE_MS);
-	gpio_set_level(I2C_DEATH_SWITCH_GPIO, 1); //I2C ON
+	gpio_set_level(I2C_DEATH_SWITCH_GPIO, 1); // I2C ON
 	vTaskDelay(1000 / portTICK_RATE_MS);
 	i2c_slave_init();
 	xTaskCreatePinnedToCore(i2c_test_task, "i2c_test_task_0", 1024 * 2, (void *)0, 1, NULL, 1);

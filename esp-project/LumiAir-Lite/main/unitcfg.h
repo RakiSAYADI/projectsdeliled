@@ -72,6 +72,7 @@ typedef struct
 	uint8_t startLumVal;
 	uint8_t finishLumVal;
 	uint8_t alarmOption;
+	bool alarmOff;
 } Alarm_Typedef;
 
 typedef struct
@@ -88,7 +89,8 @@ typedef struct
 	char Co2LevelSelect[8];
 	uint16_t Co2LevelWar;
 	uint16_t PirSensitivity;
-	int8_t UnitTimeZone;
+	int8_t timeZone;
+	char UnitTimeZone[64];
 	ZonesInfo_Typedef Zones_info[zoneNumber];
 	Alarm_Typedef alarmDay[7];
 	uint8_t Lum_10V;
@@ -123,6 +125,7 @@ void Default_saving();
 bool InitLoadCfg();
 bool SaveNVS(UnitConfig_Typedef *data);
 
-void syncTime(time_t t, uint32_t tzone);
+bool checker(char input[], char check[]);
+void syncTime(time_t t, char tz[64]);
 
 #endif /* MAIN_UNITCFG_H_ */

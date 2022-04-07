@@ -58,19 +58,12 @@ void sntp_task()
         }
         // Set timezone to Eastern Standard Time and print local time
         char strftime_buf[64];
-        char tz[50];
 
-        // Tunisia time zone
-        sprintf(tz, "UTC+%d", abs(UnitCfg.UnitTimeZone));
-
-        // France time zone
-        sprintf(tz, "CET-%dCEST-%d,M3.5.0/02:00:00,M10.5.0/03:00:00", abs(UnitCfg.UnitTimeZone), abs(UnitCfg.UnitTimeZone) + 1);
-
-        setenv("TZ", tz, 1);
+        setenv("TZ", UnitCfg.UnitTimeZone, 1);
         tzset();
         localtime_r(&sntp_now, &sntp_timeinfo);
         strftime(strftime_buf, sizeof(strftime_buf), "%c", &sntp_timeinfo);
-        ESP_LOGI(TAG_SNTP, "The current date/time in Timezone GMT %d [%s] is: %s", UnitCfg.UnitTimeZone, tz, strftime_buf);
+        ESP_LOGI(TAG_SNTP, "The current date/time in Timezone GMT [%s] is: %s", UnitCfg.UnitTimeZone, strftime_buf);
 
         sntpTimeSetFlag = true;
         saveTimeOnBattery = true;

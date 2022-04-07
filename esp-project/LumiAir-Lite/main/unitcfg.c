@@ -155,6 +155,7 @@ void Default_saving()
 		UnitCfg.alarmDay[i].startLumVal = 0;
 		UnitCfg.alarmDay[i].finishLumVal = 100;
 		UnitCfg.alarmDay[i].alarmOption = 0;
+		UnitCfg.alarmDay[i].alarmOff = false;
 	}
 
 	for (uint8_t i = 0; i < zoneNumber; i++)
@@ -190,7 +191,8 @@ void Default_saving()
 	UnitCfg.Co2LevelWar = 1500;
 
 	UnitCfg.PirSensitivity = 500;
-	UnitCfg.UnitTimeZone = 0;
+	sprintf(UnitCfg.UnitTimeZone, "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00");
+	UnitCfg.timeZone = 0;
 
 	sprintf(UnitCfg.passPIN, "1234");
 
@@ -209,7 +211,22 @@ void Default_saving()
 	}
 }
 
-void syncTime(time_t t, uint32_t tzone)
+bool checker(char input[], char check[])
+{
+	int i = 0;
+	bool result = true;
+	for (i = 0; input[i] != '\0' || check[i] != '\0'; i++)
+	{
+		if (input[i] != check[i])
+		{
+			result = false;
+			break;
+		}
+	}
+	return result;
+}
+
+void syncTime(time_t t, char tz[64])
 {
 	struct tm tm_time;
 	struct timeval tv_time;
@@ -217,13 +234,6 @@ void syncTime(time_t t, uint32_t tzone)
 	char strftime_buf[64];
 
 	// set timezone
-
-	char tz[50];
-	const int8_t tzc = 1;
-
-	//tzc = tzone / 3600;
-
-	sprintf(tz, "CET-%dCEST-%d,M3.5.0/02:00:00,M10.5.0/03:00:00", abs(tzc), abs(tzc) + 1);
 
 	setenv("TZ", tz, 1);
 	tzset();

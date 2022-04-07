@@ -41,24 +41,25 @@ char MI_MODE[] = {0x31, 0x00, 0x00, 0x08, 0x06, 0x00, 0x00, 0x00, 0x00};
 char MI_SPEEDUP[] = {0x31, 0x00, 0x00, 0x08, 0x04, 0x03, 0x00, 0x00, 0x00};
 char MI_SPEEDDW[] = {0x31, 0x00, 0x00, 0x08, 0x04, 0x04, 0x00, 0x00, 0x00};
 
-char TxBuffer[] = {0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-				   0x00, 0x00};
+char TxBuffer[] = {0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 /*void rx_task()
- {
- static const char *RX_TASK_TAG = "RX_TASK";
- esp_log_level_set(RX_TASK_TAG, ESP_LOG_INFO);
- uint8_t* data = (uint8_t*) malloc(RX_BUF_SIZE+1);
- while (1) {
- const int rxBytes = uart_read_bytes(UART_NUM_1, data, RX_BUF_SIZE, 1000 / portTICK_RATE_MS);
- if (rxBytes > 0) {
- data[rxBytes] = 0;
- ESP_LOGI(RX_TASK_TAG, "Read %d bytes: '%s'", rxBytes, data);
- ESP_LOG_BUFFER_HEXDUMP(RX_TASK_TAG, data, rxBytes, ESP_LOG_INFO);
- }
- }
- free(data);
- }*/
+{
+	static const char *RX_TASK_TAG = "RX_TASK";
+	esp_log_level_set(RX_TASK_TAG, ESP_LOG_INFO);
+	uint8_t *data = (uint8_t *)malloc(RX_BUF_SIZE + 1);
+	while (1)
+	{
+		const int rxBytes = uart_read_bytes(UART_NUM_1, data, RX_BUF_SIZE, 1000 / portTICK_RATE_MS);
+		if (rxBytes > 0)
+		{
+			data[rxBytes] = 0;
+			ESP_LOGI(RX_TASK_TAG, "Read %d bytes: '%s'", rxBytes, data);
+			ESP_LOG_BUFFER_HEXDUMP(RX_TASK_TAG, data, rxBytes, ESP_LOG_INFO);
+		}
+	}
+	free(data);
+}*/
 
 uint8_t MI_calc_cs()
 {
@@ -93,7 +94,7 @@ void UartTxTask()
 			{
 				// ESP_LOG_BUFFER_HEXDUMP("TX_TASK_TAG", BufferArray[TxBufferitemPassedCount].bufferitem, 12, ESP_LOG_INFO);
 				uart_write_bytes(UART_NUM_1, BufferArray[TxBufferitemPassedCount].bufferitem, 12);
-				vTaskDelay(30 / portTICK_PERIOD_MS);
+				vTaskDelay(50 / portTICK_PERIOD_MS);
 			}
 			TxBufferitemPassedCount++;
 		}
@@ -370,21 +371,10 @@ void MilightHandler(uint8_t cmd, uint8_t subcmd, uint8_t zonecode)
 	//}
 }
 
-void SimLightCommand()
-{
-	while (1)
-	{
-		MilightHandler(LCMD_SWITCH_ON_OFF, 0, 7);
-		vTaskDelay(500 / portTICK_PERIOD_MS);
-		MilightHandler(LCMD_SWITCH_ON_OFF, 1, 7);
-		vTaskDelay(500 / portTICK_PERIOD_MS);
-	}
-}
-
 void RgbToHSL(uint32_t rgb, HSLStruct *tmp)
 {
 	float R = 0, G = 0, B = 0;
-	
+
 	uint8_t r = 0, g = 0, b = 0;
 
 	r = rgb >> 16;
@@ -488,26 +478,25 @@ void HueToHSL(char hueChar[64], char hueZone[3])
 
 void lightControl_Init()
 {
-
 	// radio
 
-	const uart_config_t uart_config = {.baud_rate = 38400, .data_bits = UART_DATA_8_BITS, .parity = UART_PARITY_DISABLE, .stop_bits = UART_STOP_BITS_1, .flow_ctrl = UART_HW_FLOWCTRL_DISABLE};
-	uart_param_config(UART_NUM_1, &uart_config);
-	uart_set_pin(UART_NUM_1, TXD_PIN, RXD_PIN, UART_PIN_NO_CHANGE,
-				 UART_PIN_NO_CHANGE);
+	const uart_config_t uart_config = {
+		.baud_rate = 38400,
+		.data_bits = UART_DATA_8_BITS,
+		.parity = UART_PARITY_DISABLE,
+		.stop_bits = UART_STOP_BITS_1,
+		.flow_ctrl = UART_HW_FLOWCTRL_DISABLE};
 
+	uart_param_config(UART_NUM_1, &uart_config);
+	uart_set_pin(UART_NUM_1, TXD_PIN, RXD_PIN, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
 	uart_driver_install(UART_NUM_1, RX_BUF_SIZE * 2, 0, 0, NULL, 0);
 
 	// xTaskCreatePinnedToCore(rx_task, "uart_rx_task", 1024*2, NULL, 1, NULL,1);
-	xTaskCreatePinnedToCore(UartTxTask, "UartTxTask", 1024 * 2, NULL, 1, NULL,
-							1);
+	xTaskCreatePinnedToCore(UartTxTask, "UartTxTask", 1024 * 2, NULL, 1, NULL, 1);
 
 	// 0-10
 	dac_output_enable(DAC_CHANNEL_1);
 
-	// xTaskCreatePinnedToCore(&SimLightCommand, "SimLightCommand", 2048*2, NULL, 1, NULL,1);
-	xTaskCreatePinnedToCore(&AutoLightStateMachine, "AutoLightStateMachine",
-							2048 * 8, NULL, 5, NULL, 1);
-	xTaskCreatePinnedToCore(&Co2_MonitorTask, "Co2_MonitorTask", 1024 * 2, NULL,
-							1, NULL, 1);
+	xTaskCreatePinnedToCore(&AutoLightStateMachine, "AutoLightStateMachine", 2048 * 8, NULL, 5, NULL, 1);
+	xTaskCreatePinnedToCore(&Co2_MonitorTask, "Co2_MonitorTask", 1024 * 2, NULL, 1, NULL, 1);
 }

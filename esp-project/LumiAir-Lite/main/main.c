@@ -46,7 +46,7 @@ void app_main()
 		return;
 	}
 
-	if (!(strcmp(UnitCfg.FLASH_MEMORY, "OK") == 0))
+	if (!checker(UnitCfg.FLASH_MEMORY, "OK"))
 	{
 		ESP_LOGW(TAG, "Saving the default configuration ..");
 		Default_saving();
