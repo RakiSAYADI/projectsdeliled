@@ -249,7 +249,7 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                           // clear the remaining toast message
                           myUvcToast.clearCurrentToast();
                           DateTime dateTime = DateTime.now();
-                          await characteristicMaestro.write('{\"Time\":[${dateTime.millisecondsSinceEpoch ~/ 1000},${dateTime.timeZoneOffset.inSeconds}]}'.codeUnits);
+                          await characteristicMaestro.write('{\"Time\":[${dateTime.millisecondsSinceEpoch ~/ 1000},\"$embeddedTimeZone\",${dateTime.timeZoneOffset.inSeconds}]}'.codeUnits);
                           Navigator.pushNamed(context, '/home');
                         });
                       }

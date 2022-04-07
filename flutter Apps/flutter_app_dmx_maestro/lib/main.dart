@@ -11,6 +11,7 @@ import 'package:flutter_app_dmx_maestro/pages/welcome.dart';
 import 'package:flutter_app_dmx_maestro/services/DataVariables.dart';
 import 'package:flutter_app_dmx_maestro/services/app_mode_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -80,6 +81,9 @@ void main() async {
     appMode = true;
   }
 
+  embeddedTimeZone = WidgetsBinding.instance.window.locale.countryCode;
+  print(embeddedTimeZone);
+
   runApp(MyApp());
 }
 
@@ -87,7 +91,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: appName,
       initialRoute: '/',
       routes: {

@@ -24,16 +24,16 @@ class Device {
         _connectionState = state.index;
         switch (state) {
           case BluetoothDeviceState.connected:
-            print('connected');
+            debugPrint('connected');
             break;
           case BluetoothDeviceState.disconnected:
-            print('disconnected');
+            debugPrint('disconnected');
             break;
           case BluetoothDeviceState.connecting:
-            print('connecting');
+            debugPrint('connecting');
             break;
           case BluetoothDeviceState.disconnecting:
-            print('disconnecting');
+            debugPrint('disconnecting');
             break;
         }
       });
@@ -46,7 +46,7 @@ class Device {
           await device.requestMtu(512);
         }
       }
-      print('the mtu is changed');
+      debugPrint('the mtu is changed');
     }
 
     try {
@@ -69,9 +69,9 @@ class Device {
         return false;
       }
     } on TimeoutException catch(e) {
-      print('this should not be reached if the exception is raised $e');
+      debugPrint('this should not be reached if the exception is raised $e');
     } on Exception catch(e) {
-      print('exception: $e');
+      debugPrint('exception: $e');
     }
     return false;
   }

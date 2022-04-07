@@ -20,6 +20,7 @@ class _AlarmClockState extends State<AlarmClock> {
   Color saveButtonColor = Colors.blue[400];
   List<bool> days = [true, false, false, false, false, false, false];
   List<bool> daysStates = [false, false, false, false, false, false, false];
+  List<bool> alarmOffList = [false, false, false, false, false, false, false];
   int day = 0;
 
   List<int> hourList = [0, 0, 0, 0, 0, 0, 0];
@@ -47,7 +48,7 @@ class _AlarmClockState extends State<AlarmClock> {
   String myAlarmTimeMinuteData = '00';
   String myAlarmTimeSecondData = '00';
 
-  String myAlarmOptionData = 'Sun rise';
+  String myAlarmOptionData = 'Basic';
 
   List<int> myAlarmTimeMinuteList = [0, 0, 0, 0, 0, 0, 0];
   List<int> myAlarmTimeSecondList = [0, 0, 0, 0, 0, 0, 0];
@@ -59,6 +60,7 @@ class _AlarmClockState extends State<AlarmClock> {
   Map alarmSettingsClassData = {};
 
   bool firstDisplayMainWidget = true;
+  bool alarmOffState = false;
 
   List<dynamic> ambiance1List, ambiance2List, ambiance3List, ambiance4List, ambiance5List, ambiance6List;
 
@@ -83,6 +85,7 @@ class _AlarmClockState extends State<AlarmClock> {
     luminosityMaxList[dayID] = day[5];
     dayZones[dayID] = day[6];
     alarmOptionList[dayID] = day[7];
+    alarmOffList[dayID] = intToBool(day[8]);
     if (daysStates[dayID]) {
       activationButtonText = 'Activé';
       activationButtonColor[dayID] = Colors.green;
@@ -154,6 +157,7 @@ class _AlarmClockState extends State<AlarmClock> {
         myAlarmTimeSecondPosition = myAlarmTimeSecondList[day];
         alarmAmbiancePosition = alarmAmbiance[day];
         myAlarmOptionPosition = alarmOptionList[day];
+        alarmOffState = alarmOffList[day];
 
         myTimeHoursData = myTimeHours.elementAt(myTimeHoursPosition);
         myTimeMinutesData = myTimeMinutes.elementAt(myTimeMinutesPosition);
@@ -319,6 +323,7 @@ class _AlarmClockState extends State<AlarmClock> {
                         myAlarmTimeSecondPosition = myAlarmTimeSecondList[day];
                         alarmAmbiancePosition = alarmAmbiance[day];
                         myAlarmOptionPosition = alarmOptionList[day];
+                        alarmOffState = alarmOffList[day];
 
                         myTimeHoursData = myTimeHours.elementAt(myTimeHoursPosition);
                         myTimeMinutesData = myTimeMinutes.elementAt(myTimeMinutesPosition);
@@ -479,7 +484,7 @@ class _AlarmClockState extends State<AlarmClock> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            'Heure de réveil :',
+                            'Heure d\'activation :',
                             style: TextStyle(
                               fontSize: 18,
                               color: textColor[backGroundColorSelect],
@@ -699,7 +704,7 @@ class _AlarmClockState extends State<AlarmClock> {
                     color: textColor[backGroundColorSelect],
                   ),
                   Text(
-                    'Durée de réveil :',
+                    'Durée d\'activation :',
                     style: TextStyle(
                       fontSize: 18,
                       color: textColor[backGroundColorSelect],
@@ -825,6 +830,35 @@ class _AlarmClockState extends State<AlarmClock> {
                   ),
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(20), color: Colors.white),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Switch(
+                        value: alarmOffState,
+                        onChanged: (value) async {
+                          alarmOffState = value;
+                          alarmOffList[day] = alarmOffState;
+                          setState(() {});
+                        },
+                        activeTrackColor: Colors.grey,
+                        activeColor: Colors.green,
+                        inactiveThumbColor: Colors.red,
+                      ),
+                      Text(
+                        'Extinction au fin durée',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -874,6 +908,6 @@ class _AlarmClockState extends State<AlarmClock> {
   String alarmDayData(int dayID) {
     return '${boolToInt(daysStates[dayID])},${(hourList[dayID] * 3600) + (minutesList[dayID] * 60) + (secondsList[dayID])},'
         '${myAlarmTimeMinuteList[dayID] * 60 + (myAlarmTimeSecondList[dayID])},${alarmAmbiance[dayID]},${luminosityMinList[dayID]},${luminosityMaxList[dayID]},'
-        '\"${dayZones[dayID]}\",${alarmOptionList[dayID]}';
+        '\"${dayZones[dayID]}\",${alarmOptionList[dayID]},${boolToInt(alarmOffList[dayID])}';
   }
 }

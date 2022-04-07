@@ -292,7 +292,13 @@ class _AmbiancesState extends State<Ambiances> with SingleTickerProviderStateMix
               child: Container(
                 width: widthScreen * 0.06,
                 height: heightScreen * 0.06,
-                decoration: BoxDecoration(shape: BoxShape.circle, color: finalColor),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: finalColor,
+                    border: Border.all(
+                      color: positiveButton[backGroundColorSelect],
+                      width: 2,
+                    )),
               ),
             ),
           ),

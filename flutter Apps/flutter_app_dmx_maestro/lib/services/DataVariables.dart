@@ -32,11 +32,11 @@ String dataMaestroIOS7 = '';
 String dataMaestroIOS8 = '';
 String dataMaestroIOS9 = '';
 
+String embeddedTimeZone = '';
+
 int backGroundColorSelect = 0;
 
 bool appMode = true;
-
-final int transitionSeconds = 25;
 
 final List<Color> backGroundColor = [Color(0xFF2F2E3E), Color(0xFFDCE2E6)];
 final List<List<Color>> modeColor = [
@@ -138,7 +138,7 @@ Future<void> displayAlert(BuildContext context, String title, Widget mainWidget,
       });
 }
 
-List<String> myAlarmOption = ['Sun rise', 'Vibe', 'Shock'];
+List<String> myAlarmOption = ['Basic', 'Sun rise', 'Vibe', 'Shock'];
 
 List<String> myAmbiances = ['Ambiance 1', 'Ambiance 2', 'Ambiance 3', 'Ambiance 4', 'Ambiance 5', 'Ambiance 6'];
 

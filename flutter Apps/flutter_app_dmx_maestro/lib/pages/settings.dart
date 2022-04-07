@@ -117,7 +117,7 @@ class _SettingsState extends State<Settings> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.fromLTRB(0, 16.0, 0, 8.0),
                           child: Text(
                             'Nom du HuBBoX:',
                             style: TextStyle(fontSize: (screenWidth * 0.05), color: textColor[backGroundColorSelect]),
@@ -153,15 +153,11 @@ class _SettingsState extends State<Settings> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 16.0),
                           child: MyElevatedButton(
-                            onPressed: () async {
+                            onPressed: () {
                               if (myDevice.getConnectionState()) {
-                                // write the new ble device name
-                                await characteristicMaestro.write('{\"dname\":\"${myDevice.device.name.substring(0, 4)}${myBleDeviceName.text}\"}'.codeUnits);
-                                myUvcToast.setToastDuration(5);
-                                myUvcToast.setToastMessage('Nom de carte modifié , faudrais redémarrer la carte pour appliquer cette modification !');
-                                myUvcToast.showToast(Colors.green, Icons.thumb_up, Colors.white);
+                                deviceNameAlertWidget(context, '${myDevice.device.name.substring(0, 4)}${myBleDeviceName.text}');
                               }
                             },
                             child: Text(
@@ -183,81 +179,30 @@ class _SettingsState extends State<Settings> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(16.0),
+                          padding: const EdgeInsets.fromLTRB(0, 16.0, 0, 0),
                           child: Text(
-                            'Vos Zones :',
+                            'Réglages des zones:',
                             style: TextStyle(fontSize: (screenWidth * 0.05), color: textColor[backGroundColorSelect]),
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: MyElevatedButton(
-                                onPressed: () async {
-                                  zoneAssociateOrDissociate(context, zonesNamesList[0], '1');
-                                },
-                                child: Text(
-                                  zonesNamesList[0],
-                                  style: TextStyle(color: textColor[backGroundColorSelect], fontSize: screenWidth * 0.02 + screenHeight * 0.02),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: MyElevatedButton(
-                                onPressed: () {
-                                  zoneAssociateOrDissociate(context, zonesNamesList[1], '2');
-                                },
-                                child: Text(
-                                  zonesNamesList[1],
-                                  style: TextStyle(color: textColor[backGroundColorSelect], fontSize: screenWidth * 0.02 + screenHeight * 0.02),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: MyElevatedButton(
-                                onPressed: () {
-                                  zoneAssociateOrDissociate(context, zonesNamesList[2], '4');
-                                },
-                                child: Text(
-                                  zonesNamesList[2],
-                                  style: TextStyle(color: textColor[backGroundColorSelect], fontSize: screenWidth * 0.02 + screenHeight * 0.02),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: MyElevatedButton(
-                                onPressed: () {
-                                  zoneAssociateOrDissociate(context, zonesNamesList[3], '8');
-                                },
-                                child: Text(
-                                  zonesNamesList[3],
-                                  style: TextStyle(color: textColor[backGroundColorSelect], fontSize: screenWidth * 0.02 + screenHeight * 0.02),
-                                ),
-                              ),
-                            ),
-                          ],
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              zoneButton(context, zonesNamesList[0], '1'),
+                              zoneButton(context, zonesNamesList[1], '2'),
+                            ],
+                          ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: MyElevatedButton(
-                            onPressed: () {
-                              // write the new zone names
-                              zoneNamesSettingsWidget(context);
-                            },
-                            child: Text(
-                              'Renommer',
-                              style: TextStyle(color: textColor[backGroundColorSelect], fontSize: screenWidth * 0.04),
-                            ),
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              zoneButton(context, zonesNamesList[2], '4'),
+                              zoneButton(context, zonesNamesList[3], '8'),
+                            ],
                           ),
                         ),
                       ],
@@ -398,12 +343,14 @@ class _SettingsState extends State<Settings> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 16.0),
                           child: MyElevatedButton(
                             onPressed: () async {
-                              // write the new access point and it's password
-                              await characteristicMaestro.write('{\"wa\":\"$wifiModemsData\",\"wp\":\"${passwordEditor.text}\"}'.codeUnits);
-                              restartAlertWidget(context, 'Voulez vous redemarrer la carte pour assurer la connection avec votre modem ?');
+                              if (myDevice.getConnectionState()) {
+                                // write the new access point and it's password
+                                await characteristicMaestro.write('{\"wa\":\"$wifiModemsData\",\"wp\":\"${passwordEditor.text}\"}'.codeUnits);
+                                restartAlertWidget(context, 'Voulez vous redemarrer la carte pour assurer la connection avec votre modem ?');
+                              }
                             },
                             child: Text(
                               'Connecter',
@@ -456,6 +403,23 @@ class _SettingsState extends State<Settings> {
     );
   }
 
+  Widget zoneButton(BuildContext context, String zoneName, String zoneID) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: MyElevatedButton(
+        onPressed: () {
+          zoneAssociateOrDissociate(context, zoneID);
+        },
+        child: Text(
+          zoneName,
+          style: TextStyle(color: textColor[backGroundColorSelect], fontSize: screenWidth * 0.02 + screenHeight * 0.02),
+        ),
+      ),
+    );
+  }
+
   Widget restartAndResetWidget(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     if (screenWidth < 480.0) {
@@ -466,11 +430,13 @@ class _SettingsState extends State<Settings> {
             padding: const EdgeInsets.all(4.0),
             child: MyElevatedButton(
               onPressed: () async {
-                // write the restart command
-                characteristicMaestro.write('{\"system\":1}'.codeUnits);
-                await Future.delayed(Duration(milliseconds: 500));
-                myDevice.disconnect();
-                Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+                if (myDevice.getConnectionState()) {
+                  // write the restart command
+                  characteristicMaestro.write('{\"system\":1}'.codeUnits);
+                  await Future.delayed(Duration(milliseconds: 500));
+                  myDevice.disconnect();
+                  Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+                }
               },
               child: Text(
                 'Redémarrage',
@@ -482,9 +448,11 @@ class _SettingsState extends State<Settings> {
             padding: const EdgeInsets.all(4.0),
             child: MyElevatedButton(
               onPressed: () async {
-                // write the reset command
-                await characteristicMaestro.write('{\"system\":0}'.codeUnits);
-                restartAlertWidget(context, 'Voulez vous redemarrer la carte pour assurer ces modifications?');
+                if (myDevice.getConnectionState()) {
+                  // write the reset command
+                  await characteristicMaestro.write('{\"system\":0}'.codeUnits);
+                  restartAlertWidget(context, 'Voulez vous redemarrer la carte pour assurer ces modifications?');
+                }
               },
               child: Text(
                 'Configuration par défault',
@@ -502,11 +470,13 @@ class _SettingsState extends State<Settings> {
             padding: const EdgeInsets.all(4.0),
             child: MyElevatedButton(
               onPressed: () async {
-                // write the restart command
-                characteristicMaestro.write('{\"system\":1}'.codeUnits);
-                await Future.delayed(Duration(milliseconds: 500));
-                myDevice.disconnect();
-                Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+                if (myDevice.getConnectionState()) {
+                  // write the restart command
+                  characteristicMaestro.write('{\"system\":1}'.codeUnits);
+                  await Future.delayed(Duration(milliseconds: 500));
+                  myDevice.disconnect();
+                  Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+                }
               },
               child: Text(
                 'Redémarrage',
@@ -518,9 +488,11 @@ class _SettingsState extends State<Settings> {
             padding: const EdgeInsets.all(4.0),
             child: MyElevatedButton(
               onPressed: () async {
-                // write the reset command
-                await characteristicMaestro.write('{\"system\":0}'.codeUnits);
-                restartAlertWidget(context, 'Voulez vous redemarrer la carte pour assurer ces modifications?');
+                if (myDevice.getConnectionState()) {
+                  // write the reset command
+                  await characteristicMaestro.write('{\"system\":0}'.codeUnits);
+                  restartAlertWidget(context, 'Voulez vous redemarrer la carte pour assurer ces modifications?');
+                }
               },
               child: Text(
                 'Configuration par défault',
@@ -545,10 +517,12 @@ class _SettingsState extends State<Settings> {
             style: TextStyle(color: Colors.green),
           ),
           onPressed: () async {
-            characteristicMaestro.write('{\"system\":1}'.codeUnits);
-            myDevice.disconnect();
-            Navigator.of(context).pop();
-            Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+            if (myDevice.getConnectionState()) {
+              characteristicMaestro.write('{\"system\":1}'.codeUnits);
+              myDevice.disconnect();
+              Navigator.of(context).pop();
+              Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+            }
           },
         ),
         TextButton(
@@ -565,272 +539,153 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-  Future<void> zoneNamesSettingsWidget(BuildContext context) async {
-    double screenWidth = MediaQuery.of(context).size.width;
-    //double screenHeight = MediaQuery.of(context).size.height;
-    final zone1NameEditor = TextEditingController();
-    final zone2NameEditor = TextEditingController();
-    final zone3NameEditor = TextEditingController();
-    final zone4NameEditor = TextEditingController();
-    zone1NameEditor.text = zonesNamesList[0];
-    zone2NameEditor.text = zonesNamesList[1];
-    zone3NameEditor.text = zonesNamesList[2];
-    zone4NameEditor.text = zonesNamesList[3];
+  Future<void> deviceNameAlertWidget(BuildContext context, String deviceName) async {
     displayAlert(
-        context,
-        'Changer les noms de vos zones:',
-        SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
+      context,
+      'Nouveau nom de HuBBoX',
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(deviceName, style: TextStyle(color: textColor[backGroundColorSelect])),
+          ),
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.max,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
-                child: MyCustomContainer(
-                  shape: BoxShape.rectangle,
-                  radius: 20,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                            flex: 1,
-                            child: Text('Zone 1 :',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: textColor[backGroundColorSelect],
-                                ))),
-                        Expanded(
-                          flex: 2,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
-                            child: TextField(
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              maxLength: 10,
-                              controller: zone1NameEditor,
-                              cursorColor: textColor[backGroundColorSelect],
-                              style: TextStyle(
-                                fontSize: screenWidth * 0.04,
-                                color: textColor[backGroundColorSelect],
-                              ),
-                              decoration: InputDecoration(
-                                  counterStyle: TextStyle(
-                                    color: textColor[backGroundColorSelect],
-                                  ),
-                                  hintText: 'exp:chamb123',
-                                  hintStyle: TextStyle(
-                                    color: textColor[backGroundColorSelect],
-                                  )),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(Icons.warning, size: 15),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
-                child: MyCustomContainer(
-                  shape: BoxShape.rectangle,
-                  radius: 20,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                            flex: 1,
-                            child: Text('Zone 2 :',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: textColor[backGroundColorSelect],
-                                ))),
-                        Expanded(
-                          flex: 2,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
-                            child: TextField(
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              maxLength: 10,
-                              controller: zone2NameEditor,
-                              cursorColor: textColor[backGroundColorSelect],
-                              style: TextStyle(
-                                fontSize: screenWidth * 0.04,
-                                color: textColor[backGroundColorSelect],
-                              ),
-                              decoration: InputDecoration(
-                                  counterStyle: TextStyle(
-                                    color: textColor[backGroundColorSelect],
-                                  ),
-                                  hintText: 'exp:chamb123',
-                                  hintStyle: TextStyle(
-                                    color: textColor[backGroundColorSelect],
-                                  )),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
-                child: MyCustomContainer(
-                  shape: BoxShape.rectangle,
-                  radius: 20,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(flex: 1, child: Text('Zone 3 :', style: TextStyle(fontSize: 14, color: textColor[backGroundColorSelect]))),
-                        Expanded(
-                          flex: 2,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
-                            child: TextField(
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              maxLength: 10,
-                              controller: zone3NameEditor,
-                              cursorColor: textColor[backGroundColorSelect],
-                              style: TextStyle(
-                                fontSize: screenWidth * 0.04,
-                                color: textColor[backGroundColorSelect],
-                              ),
-                              decoration: InputDecoration(
-                                  counterStyle: TextStyle(
-                                    color: textColor[backGroundColorSelect],
-                                  ),
-                                  hintText: 'exp:chamb123',
-                                  hintStyle: TextStyle(
-                                    color: textColor[backGroundColorSelect],
-                                  )),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
-                child: MyCustomContainer(
-                  shape: BoxShape.rectangle,
-                  radius: 20,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(flex: 1, child: Text('Zone 4 :', style: TextStyle(fontSize: 14, color: textColor[backGroundColorSelect]))),
-                        Expanded(
-                          flex: 2,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
-                            child: TextField(
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              maxLength: 10,
-                              controller: zone4NameEditor,
-                              cursorColor: textColor[backGroundColorSelect],
-                              style: TextStyle(
-                                fontSize: screenWidth * 0.04,
-                                color: textColor[backGroundColorSelect],
-                              ),
-                              decoration: InputDecoration(
-                                  counterStyle: TextStyle(
-                                    color: textColor[backGroundColorSelect],
-                                  ),
-                                  hintText: 'exp:chamb123',
-                                  hintStyle: TextStyle(
-                                    color: textColor[backGroundColorSelect],
-                                  )),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+              Flexible(
+                child: Text(
+                  'Attention: La validation  le redémarrage de l\'application et l\'HuBBoX.',
+                  style: TextStyle(color: textColor[backGroundColorSelect], fontSize: 12),
                 ),
               ),
             ],
           ),
+        ],
+      ),
+      [
+        TextButton(
+          child: Text(
+            'Valider',
+            style: TextStyle(color: positiveButton[backGroundColorSelect]),
+          ),
+          onPressed: () async {
+            if (myDevice.getConnectionState()) {
+              // write the new ble device name
+              await characteristicMaestro.write('{\"dname\":\"$deviceName\"}'.codeUnits);
+              await Future.delayed(Duration(milliseconds: 300));
+              characteristicMaestro.write('{\"system\":1}'.codeUnits);
+              myDevice.disconnect();
+              Navigator.of(context).pop();
+              Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+            }
+          },
         ),
-        [
-          TextButton(
-            child: Text(
-              'Renommer',
-              style: TextStyle(color: positiveButton[backGroundColorSelect]),
-            ),
-            onPressed: () async {
-              zonesNamesList[0] = zone1NameEditor.text;
-              zonesNamesList[1] = zone2NameEditor.text;
-              zonesNamesList[2] = zone3NameEditor.text;
-              zonesNamesList[3] = zone4NameEditor.text;
-              String zoneNames = "{\"zones\":[${zonesNamesList[0]},${zonesNamesList[1]},${zonesNamesList[2]},${zonesNamesList[3]}]}";
-              await characteristicMaestro.write(zoneNames.codeUnits);
-              Navigator.of(context).pop();
-              await readBLEData();
-              setState(() {});
-            },
+        TextButton(
+          child: Text(
+            'Annuler',
+            style: TextStyle(color: negativeButton[backGroundColorSelect]),
           ),
-          TextButton(
-            child: Text(
-              'Annuler',
-              style: TextStyle(color: negativeButton[backGroundColorSelect]),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ]);
+          onPressed: () {
+            Navigator.of(context).pop();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+        ),
+      ],
+    );
   }
 
-  void zoneAssociateOrDissociate(BuildContext context, String zoneName, String zoneID) {
+  void zoneAssociateOrDissociate(BuildContext context, String zoneID) {
     double screenWidth = MediaQuery.of(context).size.width;
+    int zoneIdentifier;
+    switch (zoneID) {
+      case '1':
+        zoneIdentifier = 0;
+        break;
+      case '2':
+        zoneIdentifier = 1;
+        break;
+      case '4':
+        zoneIdentifier = 2;
+        break;
+      case '8':
+        zoneIdentifier = 3;
+        break;
+    }
+    final zoneNameEditor = TextEditingController();
+    zoneNameEditor.text = zonesNamesList[zoneIdentifier];
     displayAlert(
         context,
-        zoneName,
-        Row(
+        'Zone ${zoneIdentifier + 1}',
+        Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: MyElevatedButton(
-                onPressed: () async {
-                  // write the associate command
-                  await characteristicMaestro.write('{\"light\":[5,1,\"$zoneID\"]}'.codeUnits);
-                  myUvcToast.setToastDuration(5);
-                  myUvcToast.setToastMessage('Votre carte n\'est pas connectée avec votre modem !');
-                  myUvcToast.showToast(Colors.red, Icons.info, Colors.white);
-                },
-                child: Text(
-                  'Associer',
-                  style: TextStyle(color: Colors.green, fontSize: screenWidth * 0.04),
+              padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
+              child: TextField(
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                maxLength: 6,
+                controller: zoneNameEditor,
+                cursorColor: textColor[backGroundColorSelect],
+                style: TextStyle(
+                  fontSize: screenWidth * 0.04,
+                  color: textColor[backGroundColorSelect],
                 ),
+                decoration: InputDecoration(
+                    counterStyle: TextStyle(
+                      color: textColor[backGroundColorSelect],
+                    ),
+                    hintText: 'exp:chamb123',
+                    hintStyle: TextStyle(
+                      color: textColor[backGroundColorSelect],
+                    )),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: MyElevatedButton(
-                onPressed: () async {
-                  // write the dissociate command
-                  await characteristicMaestro.write('{\"light\":[5,0,\"$zoneID\"]}'.codeUnits);
-                },
-                child: Text(
-                  'Dissocier',
-                  style: TextStyle(color: Colors.red, fontSize: screenWidth * 0.04),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: MyElevatedButton(
+                    onPressed: () async {
+                      if (myDevice.getConnectionState()) {
+                        // write the associate command
+                        await characteristicMaestro.write('{\"light\":[5,1,\"$zoneID\"]}'.codeUnits);
+                        myUvcToast.setToastDuration(5);
+                        myUvcToast.setToastMessage('Votre carte n\'est pas connectée avec votre modem !');
+                        myUvcToast.showToast(Colors.red, Icons.info, Colors.white);
+                      }
+                    },
+                    child: Text(
+                      'Associer',
+                      style: TextStyle(color: Colors.green, fontSize: screenWidth * 0.04),
+                    ),
+                  ),
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: MyElevatedButton(
+                    onPressed: () async {
+                      if (myDevice.getConnectionState()) {
+                        // write the dissociate command
+                        await characteristicMaestro.write('{\"light\":[5,0,\"$zoneID\"]}'.codeUnits);
+                      }
+                    },
+                    child: Text(
+                      'Dissocier',
+                      style: TextStyle(color: Colors.red, fontSize: screenWidth * 0.04),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -840,8 +695,15 @@ class _SettingsState extends State<Settings> {
               'Terminer',
               style: TextStyle(color: positiveButton[backGroundColorSelect]),
             ),
-            onPressed: () {
-              Navigator.of(context).pop();
+            onPressed: () async {
+              if (myDevice.getConnectionState()) {
+                zonesNamesList[zoneIdentifier] = zoneNameEditor.text;
+                String zoneNames = "{\"zones\":[${zonesNamesList[0]},${zonesNamesList[1]},${zonesNamesList[2]},${zonesNamesList[3]}]}";
+                await characteristicMaestro.write(zoneNames.codeUnits);
+                Navigator.of(context).pop();
+                await readBLEData();
+                setState(() {});
+              }
             },
           ),
         ]);
