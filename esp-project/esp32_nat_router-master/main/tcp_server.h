@@ -8,6 +8,6 @@
 #ifndef MAIN_TCP_SERVER_H_
 #define MAIN_TCP_SERVER_H_
 
-void TCPServer(void *pvParameters);
+void TCPServer(void);
 
 #endif /* MAIN_TCP_SERVER_H_ */
