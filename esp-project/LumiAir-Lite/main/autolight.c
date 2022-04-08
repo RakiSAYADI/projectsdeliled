@@ -30,27 +30,23 @@ void autoLightWakeUpTask();
 
 AutoLightStateDef AutoLightState = AUTOL_STATE_OFF;
 
-struct tm now = {0};
-time_t CurrentTime = 0;
+struct tm nowStruct = {0};
+time_t now = 0;
 
-uint32_t cparttime = 0, phaseTimeStart = 0, phaseTimeEnd = 0, rgb = 0;
+uint32_t rgb = 0;
 uint8_t Curday = 0;
 HSLStruct HSLtmp;
 
 void AutoLightStateMachine()
 {
-	struct timeval tv;
+	time(&now);
+	localtime_r(&now, &nowStruct);
 
-	time_t nows = 0;
-
-	time(&CurrentTime);
-	localtime_r(&CurrentTime, &now);
-
-	while ((now.tm_year < (2016 - 1900)))
+	while ((nowStruct.tm_year < (2016 - 1900)))
 	{
-		time(&CurrentTime);
-		localtime_r(&CurrentTime, &now);
-		vTaskDelay(1000 / portTICK_PERIOD_MS);
+		time(&now);
+		localtime_r(&now, &nowStruct);
+		delay(1000);
 	}
 
 	// xTaskCreatePinnedToCore(&Pir_MonitorTask, "Pir_MonitorTask", 1024 * 2, NULL, 10, NULL, 1);
@@ -60,18 +56,10 @@ void AutoLightStateMachine()
 
 	while (1)
 	{
-		gettimeofday(&tv, NULL);
-
-		localtime_r(&tv.tv_sec, &now);
-
-		time(&nows);
-		Curday = now.tm_wday;
-		cparttime = nows % (3600 * 24) + (UnitCfg.timeZone * 3600);
-
-		if ((cparttime == UnitCfg.alarmDay[Curday].autoTrigTime) && (UnitCfg.alarmDay[Curday].state))
+		if ((now == UnitCfg.alarmDay[Curday].autoTrigTime) && (UnitCfg.alarmDay[Curday].state))
 		{
 			printf("AutoTrigger Timer Switch light on\n");
-			printf("Info : Now %d @ %d start at : %ld \n", Curday, cparttime, UnitCfg.alarmDay[Curday].autoTrigTime);
+			printf("Info : Now %d @ %ld start at : %ld \n", Curday, now, UnitCfg.alarmDay[Curday].autoTrigTime);
 			autoLightWakeUpTask();
 		}
 		delay(100);
@@ -81,10 +69,10 @@ void AutoLightStateMachine()
 
 // Color temp Control routine
 
-int8_t CtempOut = 0;
-
 void ColorTemp_Controller()
 {
+
+	int8_t CtempOut = 0;
 
 	float h1 = 0, h2 = 0, h3 = 0, h4 = 0, h5 = 0;
 	float t1 = 0, t2 = 0, t3 = 0, t4 = 0, t5 = 0;
@@ -92,14 +80,16 @@ void ColorTemp_Controller()
 	float a1 = 0, a2 = 0, a3 = 0, a4 = 0;
 	float b1 = 0, b2 = 0, b3 = 0, b4 = 0;
 
-	time_t now = 0;
-
 	uint16_t cc_zone_int;
+
+	struct tm auto_timeinfo = {0};
 
 	while (1)
 	{
+		// check time
 		time(&now);
-		now = now % (3600 * 24) + (UnitCfg.timeZone * 3600);
+		localtime_r(&now, &auto_timeinfo);
+		now = auto_timeinfo.tm_hour * 3600 + auto_timeinfo.tm_min * 60 + auto_timeinfo.tm_sec;
 
 		h1 = UnitCfg.UserLcProfile.Ccp[0].CcTime;
 		h2 = UnitCfg.UserLcProfile.Ccp[1].CcTime;
@@ -191,7 +181,7 @@ void ColorTemp_Controller()
 
 			MilightHandler(LCMD_SET_TEMP, (uint8_t)CtempOut, cc_zone_int & 0x0F);
 		}
-		vTaskDelay(1000 / portTICK_RATE_MS);
+		delay(1000);
 	}
 	ESP_LOGI(TAG, "ACTC TASK EXIT");
 	vTaskDelete(NULL);
