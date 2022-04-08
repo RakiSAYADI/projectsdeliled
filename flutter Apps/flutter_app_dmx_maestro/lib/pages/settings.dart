@@ -557,7 +557,7 @@ class _SettingsState extends State<Settings> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Icon(Icons.warning, size: 15),
+                child: Icon(Icons.warning, color: textColor[backGroundColorSelect], size: 15),
               ),
               Flexible(
                 child: Text(
@@ -659,9 +659,6 @@ class _SettingsState extends State<Settings> {
                       if (myDevice.getConnectionState()) {
                         // write the associate command
                         await characteristicMaestro.write('{\"light\":[5,1,\"$zoneID\"]}'.codeUnits);
-                        myUvcToast.setToastDuration(5);
-                        myUvcToast.setToastMessage('Votre carte n\'est pas connectée avec votre modem !');
-                        myUvcToast.showToast(Colors.red, Icons.info, Colors.white);
                       }
                     },
                     child: Text(
@@ -683,6 +680,22 @@ class _SettingsState extends State<Settings> {
                       'Dissocier',
                       style: TextStyle(color: Colors.red, fontSize: screenWidth * 0.04),
                     ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(Icons.info, color: textColor[backGroundColorSelect], size: 15),
+                ),
+                Flexible(
+                  child: Text(
+                    'Afin de réaliser l\'opération associer/dissocier, veuillez mettre le luminaire sous tension et appuyer sur le boutton associer/dissocier dans les 3 secondes qui suivent.',
+                    style: TextStyle(color: textColor[backGroundColorSelect], fontSize: 12),
                   ),
                 ),
               ],
