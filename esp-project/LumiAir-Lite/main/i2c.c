@@ -628,11 +628,12 @@ void i2c_test_task(void *arg)
 
 				time(&i2c_now);
 				localtime_r(&i2c_now, &i2c_timeinfo);
+				strftime(strftime_buf, sizeof(strftime_buf), "%c", &i2c_timeinfo);
 				if (time_MCP7940.osillater_start == 0 || time_MCP7940.vBat_en == 0)
 				{
-					ESP_LOGI(TAG, "time %d", i2c_timeinfo.tm_year);
 					if (saveTimeOnBattery)
 					{
+						gmtime_r(&i2c_now, &i2c_timeinfo);
 						ret = saveTimeInsideBattery(i2c_timeinfo);
 						ESP_LOGI(TAG, "time of phone");
 						ESP_ERROR_CHECK(ret);
@@ -643,44 +644,28 @@ void i2c_test_task(void *arg)
 				{
 					if (!saveTimeBattery)
 					{
-						if (UnitStat == UNIT_STATUS_WIFI_GOT_IP && sntpTimeSetFlag)
-						{
-							strftime(strftime_buf, sizeof(strftime_buf), "%c", &i2c_timeinfo);
-							ESP_LOGI(TAG, "ESP32 got time from internet: %s", strftime_buf);
-							saveTimeBattery = true;
-						}
-						if (UnitStat == UNIT_STATUS_WIFI_NO_IP)
-						{
-							struct tm tm;
-							tm.tm_year = time_MCP7940.year;
-							tm.tm_mon = time_MCP7940.month;
-							tm.tm_mday = time_MCP7940.day;
-							tm.tm_wday = time_MCP7940.day_of_week;
-							tm.tm_hour = time_MCP7940.hour;
-							tm.tm_min = time_MCP7940.minute;
-							tm.tm_sec = time_MCP7940.second;
-							time_t t = mktime(&tm);
-							syncTime(t, UnitCfg.UnitTimeZone);
-							ESP_LOGI(TAG, "sec : %d, min : %d, hour : %d, weekday : %d, day : %d, month : %d, year : %d\n",
-									 tm.tm_sec, tm.tm_min, tm.tm_hour, tm.tm_wday, tm.tm_mday, tm.tm_mon, tm.tm_year);
-							ESP_LOGI(TAG, "I2C MASTER Setting time: %s", asctime(&tm));
-							strftime(strftime_buf, sizeof(strftime_buf), "%c", &i2c_timeinfo);
-							ESP_LOGI(TAG, "I2C MASTER Read TIMER( MCP7940 ) : %d/%d/%d in %d at %d:%d:%d",
-									 time_MCP7940.year, time_MCP7940.month, time_MCP7940.day,
-									 time_MCP7940.day_of_week, time_MCP7940.hour, time_MCP7940.minute, time_MCP7940.second);
-							ESP_LOGI(TAG, "The current date/time in ESP32 is: %s", strftime_buf);
-							saveTimeBattery = true;
-						}
+						struct tm tm;
+						tm.tm_year = time_MCP7940.year;
+						tm.tm_mon = time_MCP7940.month;
+						tm.tm_mday = time_MCP7940.day;
+						tm.tm_wday = time_MCP7940.day_of_week;
+						tm.tm_hour = time_MCP7940.hour;
+						tm.tm_min = time_MCP7940.minute;
+						tm.tm_sec = time_MCP7940.second;
+						time_t t = mktime(&tm);
+						syncTime(t,UnitCfg.UnitTimeZone);
+						ESP_LOGI(TAG, "I2C MASTER Setting time GMT: %s", asctime(&tm));
+						ESP_LOGI(TAG, "The current date/time in ESP32 is: %s", strftime_buf);
+						saveTimeBattery = true;
 					}
 				}
-				strftime(strftime_buf, sizeof(strftime_buf), "%c", &i2c_timeinfo);
 				ESP_LOGI(TAG, "I2C MASTER Read TIMER( MCP7940 ) : %d/%d/%d in %d at %d:%d:%d", time_MCP7940.year, time_MCP7940.month, time_MCP7940.day, time_MCP7940.day_of_week, time_MCP7940.hour, time_MCP7940.minute, time_MCP7940.second);
 				ESP_LOGI(TAG, "I2C MASTER Read TIMER( MCP7940 ) : osillator %d, battery enable :%d", time_MCP7940.osillater_start, time_MCP7940.vBat_en);
 				ESP_LOGI(TAG, "The current date/time in ESP32 is: %s", strftime_buf);
 			}
 			else
 			{
-				ESP_LOGE(TAG, "MCP7940: No ack, battery is not connected...skip...\n");
+				ESP_LOGE(TAG, "MCP7940: No ack, battery is not connected...skip...");
 			}
 		}
 
