@@ -268,19 +268,20 @@ class _SettingsState extends State<Settings> {
                           child: MyElevatedButton(
                             onPressed: () async {
                               displayAlert(
-                                  context,
-                                  'Recherche des réseaux WiFi disponibles',
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SpinKitCircle(
-                                        color: Colors.blue[600],
-                                        size: screenHeight * 0.1,
-                                      ),
-                                    ],
-                                  ),
-                                  null);
+                                context: context,
+                                title: 'Recherche des réseaux WiFi disponibles',
+                                mainWidget: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SpinKitCircle(
+                                      color: Colors.blue[600],
+                                      size: screenHeight * 0.1,
+                                    ),
+                                  ],
+                                ),
+                                buttons: null,
+                              );
                               // write the scan command
                               if (myDevice.getConnectionState()) {
                                 try {
@@ -507,10 +508,10 @@ class _SettingsState extends State<Settings> {
 
   Future<void> restartAlertWidget(BuildContext context, String widgetMessage) {
     return displayAlert(
-      context,
-      'Attention',
-      Text(widgetMessage, style: TextStyle(color: textColor[backGroundColorSelect])),
-      [
+      context: context,
+      title: 'Attention',
+      mainWidget: Text(widgetMessage, style: TextStyle(color: textColor[backGroundColorSelect])),
+      buttons: [
         TextButton(
           child: Text(
             'OK',
@@ -541,9 +542,9 @@ class _SettingsState extends State<Settings> {
 
   Future<void> deviceNameAlertWidget(BuildContext context, String deviceName) async {
     displayAlert(
-      context,
-      'Nouveau nom de HuBBoX',
-      Column(
+      context: context,
+      title: 'Nouveau nom de HuBBoX',
+      mainWidget: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -569,7 +570,7 @@ class _SettingsState extends State<Settings> {
           ),
         ],
       ),
-      [
+      buttons: [
         TextButton(
           child: Text(
             'Valider',
@@ -621,9 +622,9 @@ class _SettingsState extends State<Settings> {
     final zoneNameEditor = TextEditingController();
     zoneNameEditor.text = zonesNamesList[zoneIdentifier];
     displayAlert(
-        context,
-        'Zone ${zoneIdentifier + 1}',
-        Column(
+        context: context,
+        title: 'Zone ${zoneIdentifier + 1}',
+        mainWidget: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -702,7 +703,7 @@ class _SettingsState extends State<Settings> {
             ),
           ],
         ),
-        [
+        buttons: [
           TextButton(
             child: Text(
               'Terminer',

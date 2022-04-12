@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app_dmx_maestro/services/DataVariables.dart';
+import 'package:flutter_app_dmx_maestro/services/custom_container_white.dart';
 import 'package:flutter_app_dmx_maestro/services/elavated_button.dart';
 import 'package:flutter_app_dmx_maestro/services/uvcToast.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -17,7 +18,6 @@ class _AlarmClockState extends State<AlarmClock> {
   String activationButtonText = 'Désactivé';
   List<Color> activationButtonColor = [Colors.red, Colors.red, Colors.red, Colors.red, Colors.red, Colors.red, Colors.red];
   bool activationButtonState = false;
-  Color saveButtonColor = Colors.blue[400];
   List<bool> days = [true, false, false, false, false, false, false];
   List<bool> daysStates = [false, false, false, false, false, false, false];
   List<bool> alarmOffList = [false, false, false, false, false, false, false];
@@ -231,9 +231,9 @@ class _AlarmClockState extends State<AlarmClock> {
             onPressed: () async {
               if (myDevice.getConnectionState()) {
                 displayAlert(
-                  context,
-                  'Enregistrement en cours',
-                  Column(
+                  context: context,
+                  title: 'Enregistrement en cours',
+                  mainWidget: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -243,7 +243,7 @@ class _AlarmClockState extends State<AlarmClock> {
                       ),
                     ],
                   ),
-                  null,
+                  buttons: null,
                 );
                 if (Platform.isAndroid) {
                   await characteristicMaestro.write('{\"lun\":[${alarmDayData(0)}],'
@@ -438,8 +438,8 @@ class _AlarmClockState extends State<AlarmClock> {
                       ],
                       borderWidth: 2,
                       color: Colors.grey,
-                      selectedBorderColor: Colors.black,
-                      selectedColor: Colors.blue,
+                      selectedBorderColor: Colors.transparent,
+                      fillColor: textColor[backGroundColorSelect],
                     );
                   },
                 ),
@@ -449,7 +449,6 @@ class _AlarmClockState extends State<AlarmClock> {
                   activationButtonState = daysStates[day];
                   activationButtonState = !activationButtonState;
                   setState(() {
-                    saveButtonColor = Colors.grey[400];
                     if (activationButtonState) {
                       activationButtonText = 'Activé';
                       activationButtonColor[day] = Colors.green;
@@ -496,8 +495,9 @@ class _AlarmClockState extends State<AlarmClock> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      decoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(20), color: Colors.white),
+                    child: MyCustomWhiteContainer(
+                      shape: BoxShape.rectangle,
+                      radius: 20,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -509,7 +509,6 @@ class _AlarmClockState extends State<AlarmClock> {
                             style: TextStyle(color: Colors.grey[800], fontSize: 18),
                             onChanged: (String data) {
                               setState(() {
-                                saveButtonColor = Colors.grey[400];
                                 myTimeHoursData = data;
                                 myTimeHoursPosition = myTimeHours.indexOf(data);
                                 hourList[day] = myTimeHoursPosition;
@@ -543,7 +542,6 @@ class _AlarmClockState extends State<AlarmClock> {
                             style: TextStyle(color: Colors.grey[800], fontSize: 18),
                             onChanged: (String data) {
                               setState(() {
-                                saveButtonColor = Colors.grey[400];
                                 myTimeMinutesData = data;
                                 myTimeMinutesPosition = myTimeMinutes.indexOf(data);
                                 minutesList[day] = myTimeMinutesPosition;
@@ -577,7 +575,6 @@ class _AlarmClockState extends State<AlarmClock> {
                             style: TextStyle(color: Colors.grey[800], fontSize: 18),
                             onChanged: (String data) {
                               setState(() {
-                                saveButtonColor = Colors.grey[400];
                                 myTimeSecondsData = data;
                                 myTimeSecondsPosition = myTimeSeconds.indexOf(data);
                                 secondsList[day] = myTimeSecondsPosition;
@@ -625,8 +622,9 @@ class _AlarmClockState extends State<AlarmClock> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(20), color: Colors.white),
+                child: MyCustomWhiteContainer(
+                  shape: BoxShape.rectangle,
+                  radius: 20,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -641,7 +639,6 @@ class _AlarmClockState extends State<AlarmClock> {
                             style: TextStyle(color: Colors.grey[800], fontSize: 18),
                             onChanged: (String data) {
                               setState(() {
-                                saveButtonColor = Colors.grey[400];
                                 alarmAmbianceData = data;
                                 alarmAmbiancePosition = myAmbiances.indexOf(data);
                                 alarmAmbiance[day] = alarmAmbiancePosition;
@@ -714,8 +711,9 @@ class _AlarmClockState extends State<AlarmClock> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(20), color: Colors.white),
+                child: MyCustomWhiteContainer(
+                  shape: BoxShape.rectangle,
+                  radius: 20,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -727,7 +725,6 @@ class _AlarmClockState extends State<AlarmClock> {
                         style: TextStyle(color: Colors.grey[800], fontSize: 18),
                         onChanged: (String data) {
                           setState(() {
-                            saveButtonColor = Colors.grey[400];
                             myAlarmTimeMinuteData = data;
                             myAlarmTimeMinutePosition = myTimeMinutes.indexOf(data);
                             myAlarmTimeMinuteList[day] = myAlarmTimeMinutePosition;
@@ -761,7 +758,6 @@ class _AlarmClockState extends State<AlarmClock> {
                         style: TextStyle(color: Colors.grey[800], fontSize: 18),
                         onChanged: (String data) {
                           setState(() {
-                            saveButtonColor = Colors.grey[400];
                             myAlarmTimeSecondData = data;
                             myAlarmTimeSecondPosition = myTimeSeconds.indexOf(data);
                             myAlarmTimeSecondList[day] = myAlarmTimeSecondPosition;
@@ -786,13 +782,14 @@ class _AlarmClockState extends State<AlarmClock> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(20), color: Colors.white),
+                child: MyCustomWhiteContainer(
+                  shape: BoxShape.rectangle,
+                  radius: 20,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Option de réveil',
+                        'Style ambiance :',
                         style: TextStyle(
                           fontSize: 18,
                           color: Colors.black,
@@ -812,7 +809,6 @@ class _AlarmClockState extends State<AlarmClock> {
                           ),
                           onChanged: (String data) {
                             setState(() {
-                              saveButtonColor = Colors.grey[400];
                               myAlarmOptionData = data;
                               myAlarmOptionPosition = myAlarmOption.indexOf(data);
                               alarmOptionList[day] = myAlarmOptionPosition;
@@ -832,8 +828,9 @@ class _AlarmClockState extends State<AlarmClock> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(20), color: Colors.white),
+                child: MyCustomWhiteContainer(
+                  shape: BoxShape.rectangle,
+                  radius: 20,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

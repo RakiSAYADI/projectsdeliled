@@ -123,7 +123,7 @@ Widget bigCircle(double width, double height, Color color) {
   );
 }
 
-Future<void> displayAlert(BuildContext context, String title, Widget mainWidget, List<Widget> buttons) {
+Future<void> displayAlert({BuildContext context, String title, Widget mainWidget, List<Widget> buttons}) {
   return showDialog<void>(
       context: context,
       barrierDismissible: false,

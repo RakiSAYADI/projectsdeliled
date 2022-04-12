@@ -197,13 +197,14 @@ class _ScanListBleState extends State<ScanListBle> with SingleTickerProviderStat
                         debugPrint(e);
                       }
                       displayAlert(
-                          context,
-                          'Connexion en cours',
-                          Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [SpinKitCircle(color: Colors.blue[600], size: MediaQuery.of(context).size.height * 0.1)]),
-                          null);
+                        context: context,
+                        title: 'Connexion en cours',
+                        mainWidget: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [SpinKitCircle(color: Colors.blue[600], size: MediaQuery.of(context).size.height * 0.1)]),
+                        buttons: null,
+                      );
                       String deviceName = myDeviceBluetooth.name;
                       // stop scanning and start connecting
                       await flutterBlue.stopScan();
