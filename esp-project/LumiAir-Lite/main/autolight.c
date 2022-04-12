@@ -26,11 +26,12 @@
 
 void Pir_MonitorTask();
 void ColorTemp_Controller();
+void autoLightTime();
 void autoLightWakeUpTask();
 
 AutoLightStateDef AutoLightState = AUTOL_STATE_OFF;
 
-struct tm nowStruct = {0};
+struct tm auto_timeinfo = {0};
 time_t now = 0;
 
 uint32_t rgb = 0;
@@ -40,27 +41,123 @@ HSLStruct HSLtmp;
 void AutoLightStateMachine()
 {
 	time(&now);
-	localtime_r(&now, &nowStruct);
+	localtime_r(&now, &auto_timeinfo);
 
-	while ((nowStruct.tm_year < (2016 - 1900)))
+	while ((auto_timeinfo.tm_year < (2016 - 1900)))
 	{
 		time(&now);
-		localtime_r(&now, &nowStruct);
+		localtime_r(&now, &auto_timeinfo);
 		delay(1000);
 	}
 
+	ESP_LOGI(TAG, "Time is correct , begin checking");
+
 	// xTaskCreatePinnedToCore(&Pir_MonitorTask, "Pir_MonitorTask", 1024 * 2, NULL, 10, NULL, 1);
 	xTaskCreatePinnedToCore(&ColorTemp_Controller, "ColorTemp_Controller", 2048, NULL, 10, NULL, 1);
+	xTaskCreatePinnedToCore(&autoLightTime, "autoLightTime", 2048, NULL, 10, NULL, 1);
 
-	ESP_LOGI(TAG, "Time is correct , begin checking");
+	vTaskDelete(NULL);
+}
+
+// auto time Control routine
+
+void autoLightTime()
+{
+	uint8_t cmd = 0, subcmdhue = 0, subcmdstab = 0, transOutLum = 0;
+	uint32_t progressTime = 0;
+	float penteTransLum = 0;
+	const uint16_t transPeriode = DELAY_LIGHT_TRANSITION;
+	const uint16_t transFrequancy = transPeriode * 2;
+	const uint8_t zone = 15;
 
 	while (1)
 	{
 		if ((now == UnitCfg.alarmDay[Curday].autoTrigTime) && (UnitCfg.alarmDay[Curday].state))
 		{
-			printf("AutoTrigger Timer Switch light on\n");
-			printf("Info : Now %d @ %ld start at : %ld \n", Curday, now, UnitCfg.alarmDay[Curday].autoTrigTime);
-			autoLightWakeUpTask();
+			ESP_LOGI(TAG,"AutoTrigger Timer Switch light on");
+			ESP_LOGI(TAG,"Info : Now %d @ %ld start at : %ld ", Curday, now, UnitCfg.alarmDay[Curday].autoTrigTime);
+
+			// radio apply LIGHT ALL OFF
+			MilightHandler(LCMD_SWITCH_ON_OFF, LSUBCMD_SWITCH_OFF, zone);
+			delay(DELAY_LIGHT_TRANSITION);
+
+			for (int i = 0; i < zoneNumber; i++)
+			{
+				if (UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneState)
+				{
+					// radio apply LIGHT ON
+					MilightHandler(LCMD_SWITCH_ON_OFF, LSUBCMD_SWITCH_ON, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
+					ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", LCMD_SWITCH_ON_OFF, LSUBCMD_SWITCH_ON, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
+					delay(DELAY_LIGHT_TRANSITION);
+
+					if (!UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].colorState)
+					{
+						rgb = strtol(UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].Hue, NULL, 16);
+						RgbToHSL(rgb, &HSLtmp);
+
+						// apply hue
+						cmd = LCMD_SET_COLOR;
+						subcmdhue = HSLtmp.Hue;
+
+						MilightHandler(cmd, subcmdhue, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
+						ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", cmd, subcmdhue, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
+						delay(DELAY_LIGHT_TRANSITION);
+
+						// apply saturation
+						cmd = LCMD_SET_SAT;
+						subcmdstab = HSLtmp.Sat;
+
+						MilightHandler(cmd, subcmdstab, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
+						ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", cmd, subcmdstab, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
+						delay(DELAY_LIGHT_TRANSITION);
+					}
+					else
+					{
+						// apply white
+						cmd = LCMD_SET_TEMP;
+						MilightHandler(cmd, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].white, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
+						ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", cmd, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].white, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
+						delay(DELAY_LIGHT_TRANSITION);
+					}
+				}
+			}
+
+			penteTransLum = (UnitCfg.alarmDay[Curday].finishLumVal - UnitCfg.alarmDay[Curday].startLumVal) / (float)(UnitCfg.alarmDay[Curday].duration * 1000);
+			cmd = LCMD_SET_BRIGTHNESS;
+			while (progressTime < (UnitCfg.alarmDay[Curday].duration * 1000))
+			{
+				switch (UnitCfg.alarmDay[Curday].alarmOption)
+				{
+				case 0:
+					transOutLum = 100;
+					break;
+				case 1:
+					transOutLum = (penteTransLum * progressTime) + UnitCfg.alarmDay[Curday].startLumVal;
+					break;
+				case 2:
+					transOutLum = ((UnitCfg.alarmDay[Curday].finishLumVal - UnitCfg.alarmDay[Curday].startLumVal) / 2) *
+									  sin(((M_TWOPI / (transFrequancy * 5)) * progressTime) - M_PI_2) +
+								  ((UnitCfg.alarmDay[Curday].finishLumVal + UnitCfg.alarmDay[Curday].startLumVal) / 2);
+					break;
+				case 3:
+					transOutLum = (((UnitCfg.alarmDay[Curday].finishLumVal - UnitCfg.alarmDay[Curday].startLumVal) / 2) *
+									   (sin(((M_TWOPI / (transFrequancy * 5)) * progressTime) - M_PI_2) / abs(sin(((M_TWOPI / (transFrequancy * 5)) * progressTime) - M_PI_2))) +
+								   ((UnitCfg.alarmDay[Curday].finishLumVal + UnitCfg.alarmDay[Curday].startLumVal) / 2));
+					break;
+				}
+				MilightHandler(cmd, transOutLum, zone);
+				progressTime += transPeriode;
+				delay(transPeriode);
+			}
+			delay(DELAY_LIGHT_TRANSITION);
+			if (UnitCfg.alarmDay[Curday].alarmOff)
+			{
+				MilightHandler(LCMD_SWITCH_ON_OFF, LSUBCMD_SWITCH_OFF, zone);
+			}
+			else
+			{
+				MilightHandler(cmd, UnitCfg.alarmDay[Curday].finishLumVal, zone);
+			}
 		}
 		delay(100);
 	}
@@ -82,13 +179,12 @@ void ColorTemp_Controller()
 
 	uint16_t cc_zone_int;
 
-	struct tm auto_timeinfo = {0};
-
 	while (1)
 	{
 		// check time
 		time(&now);
 		localtime_r(&now, &auto_timeinfo);
+		Curday = auto_timeinfo.tm_wday;
 		now = auto_timeinfo.tm_hour * 3600 + auto_timeinfo.tm_min * 60 + auto_timeinfo.tm_sec;
 
 		h1 = UnitCfg.UserLcProfile.Ccp[0].CcTime;
@@ -187,98 +283,6 @@ void ColorTemp_Controller()
 	vTaskDelete(NULL);
 }
 
-void autoLightWakeUpTask()
-{
-	uint8_t cmd = 0, subcmdhue = 0, subcmdstab = 0, transOutLum = 0;
-	uint32_t progressTime = 0;
-	float penteTransLum = 0;
-	const uint16_t transPeriode = DELAY_LIGHT_TRANSITION;
-	const uint16_t transFrequancy = transPeriode * 2;
-	const uint8_t zone = 15;
-
-	// radio apply LIGHT ALL OFF
-	MilightHandler(LCMD_SWITCH_ON_OFF, LSUBCMD_SWITCH_OFF, zone);
-	delay(DELAY_LIGHT_TRANSITION);
-
-	for (int i = 0; i < zoneNumber; i++)
-	{
-		if (UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneState)
-		{
-			// radio apply LIGHT ON
-			MilightHandler(LCMD_SWITCH_ON_OFF, LSUBCMD_SWITCH_ON, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
-			ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", LCMD_SWITCH_ON_OFF, LSUBCMD_SWITCH_ON, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
-			delay(DELAY_LIGHT_TRANSITION);
-
-			if (!UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].colorState)
-			{
-				rgb = strtol(UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].Hue, NULL, 16);
-				RgbToHSL(rgb, &HSLtmp);
-
-				// apply hue
-				cmd = LCMD_SET_COLOR;
-				subcmdhue = HSLtmp.Hue;
-
-				MilightHandler(cmd, subcmdhue, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
-				ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", cmd, subcmdhue, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
-				delay(DELAY_LIGHT_TRANSITION);
-
-				// apply saturation
-				cmd = LCMD_SET_SAT;
-				subcmdstab = HSLtmp.Sat;
-
-				MilightHandler(cmd, subcmdstab, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
-				ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", cmd, subcmdstab, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
-				delay(DELAY_LIGHT_TRANSITION);
-			}
-			else
-			{
-				// apply white
-				cmd = LCMD_SET_TEMP;
-				MilightHandler(cmd, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].white, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
-				ESP_LOGI(TAG, "Light control cmd %d subcmd %d zone %d", cmd, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].white, UnitCfg.ColortrProfile[UnitCfg.alarmDay[Curday].ambID].zoneAmbiance[i].zoneId);
-				delay(DELAY_LIGHT_TRANSITION);
-			}
-		}
-	}
-
-	penteTransLum = (UnitCfg.alarmDay[Curday].finishLumVal - UnitCfg.alarmDay[Curday].startLumVal) / (float)(UnitCfg.alarmDay[Curday].duration * 1000);
-	cmd = LCMD_SET_BRIGTHNESS;
-	while (progressTime < (UnitCfg.alarmDay[Curday].duration * 1000))
-	{
-		switch (UnitCfg.alarmDay[Curday].alarmOption)
-		{
-		case 0:
-			transOutLum = 100;
-			break;
-		case 1:
-			transOutLum = (penteTransLum * progressTime) + UnitCfg.alarmDay[Curday].startLumVal;
-			break;
-		case 2:
-			transOutLum = ((UnitCfg.alarmDay[Curday].finishLumVal - UnitCfg.alarmDay[Curday].startLumVal) / 2) *
-							  sin(((M_TWOPI / (transFrequancy * 5)) * progressTime) - M_PI_2) +
-						  ((UnitCfg.alarmDay[Curday].finishLumVal + UnitCfg.alarmDay[Curday].startLumVal) / 2);
-			break;
-		case 3:
-			transOutLum = (((UnitCfg.alarmDay[Curday].finishLumVal - UnitCfg.alarmDay[Curday].startLumVal) / 2) *
-							   (sin(((M_TWOPI / (transFrequancy * 5)) * progressTime) - M_PI_2) / abs(sin(((M_TWOPI / (transFrequancy * 5)) * progressTime) - M_PI_2))) +
-						   ((UnitCfg.alarmDay[Curday].finishLumVal + UnitCfg.alarmDay[Curday].startLumVal) / 2));
-			break;
-		}
-		MilightHandler(cmd, transOutLum, zone);
-		progressTime += transPeriode;
-		delay(transPeriode);
-	}
-	delay(DELAY_LIGHT_TRANSITION);
-	if (UnitCfg.alarmDay[Curday].alarmOff)
-	{
-		MilightHandler(LCMD_SWITCH_ON_OFF, LSUBCMD_SWITCH_OFF, zone);
-	}
-	else
-	{
-		MilightHandler(cmd, UnitCfg.alarmDay[Curday].finishLumVal, zone);
-	}
-}
-
 // PIR Low level Handler
 
 bool PirTimeoutTask = false;
@@ -294,7 +298,7 @@ void PirTimeoutRoutine()
 	{
 		PirTimeout--;
 		// sprintf ("time of detection : %ld\n",PirTimeout);
-		vTaskDelay(1000 / portTICK_RATE_MS);
+		delay(1000);
 	}
 
 	PirOutCmd = false;
@@ -322,7 +326,7 @@ void Pir_MonitorTask()
 			}
 		}
 
-		vTaskDelay(100 / portTICK_RATE_MS);
+		delay(100);
 	}
 }
 
@@ -351,9 +355,9 @@ void Co2_MonitorTask()
 					UnitData.state = 0;
 					ESP_LOGI(TAG, "Co2 zone Warning triggered");
 					MilightHandler(LCMD_SWITCH_ON_OFF, LSUBCMD_SWITCH_ON, zone & 0x0F);
-					vTaskDelay(50 / portTICK_RATE_MS);
+					delay(50);
 					MilightHandler(LCMD_SET_SAT, 100, zone & 0x0F);
-					vTaskDelay(50 / portTICK_RATE_MS);
+					delay(50);
 					MilightHandler(LCMD_SET_MODE, 6, zone & 0x0F);
 				}
 			}
@@ -367,9 +371,9 @@ void Co2_MonitorTask()
 				{
 					UnitData.state = 0;
 					MilightHandler(LCMD_SET_WHITE, 0, zone & 0x0F);
-					vTaskDelay(100 / portTICK_RATE_MS);
+					delay(100);
 					MilightHandler(LCMD_SET_WHITE, 0, zone & 0x0F);
-					vTaskDelay(50 / portTICK_RATE_MS);
+					delay(50);
 					MilightHandler(LCMD_SET_BRIGTHNESS, 100, zone & 0x0F);
 				}
 			}
@@ -386,6 +390,6 @@ void Co2_MonitorTask()
 		{
 			UnitSetStatus(UNIT_STATUS_ALERT_CO2);
 		}
-		vTaskDelay(1000 / portTICK_RATE_MS);
+		delay(1000);
 	}
 }
