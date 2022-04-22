@@ -21,7 +21,7 @@
 #define delay(ms) (vTaskDelay(ms / portTICK_RATE_MS))
 
 #define DEFAULT_AP_SSID "Router"
-#define DEFAULT_AP_IP "192.168.4.1"
+#define DEFAULT_AP_IP "192.168.2.1"
 #define DEFAULT_DNS "8.8.8.8"
 
 typedef struct
@@ -41,7 +41,7 @@ typedef struct
 	char UnitName[32];
 	uint8_t Version;
 	char FirmwareVersion[6];
-	int8_t timeZone;
+	char UnitTimeZone[64];
 	WifiConfig_Typedef WifiCfg;
 	char FLASH_MEMORY[3];
 } UnitConfig_Typedef;
@@ -51,8 +51,10 @@ extern UnitConfig_Typedef UnitCfg;
 void saveDataTask(bool savenvsFlag);
 void syncTime(time_t t, char tzone[64]);
 
+bool checker(char input[], char check[]);
+
 void Default_saving();
-int InitLoadCfg();
-int SaveNVS(UnitConfig_Typedef *data);
+bool InitLoadCfg();
+bool SaveNVS(UnitConfig_Typedef *data);
 
 #endif /* MAIN_UNITCFG_H_ */

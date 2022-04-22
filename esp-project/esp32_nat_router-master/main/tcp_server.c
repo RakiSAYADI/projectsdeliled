@@ -26,23 +26,19 @@
 #include <lwip/netdb.h>
 
 #include "tcp_server.h"
+#include "unitcfg.h"
+#include "aes.h"
 
 #include "sdkconfig.h"
-
-#define ADDRESS "192.168.4.1"
-#define PORT 3333
-#define KEEPALIVE_IDLE 5
-#define KEEPALIVE_INTERVAL 5
-#define KEEPALIVE_COUNT 3
-
-#define UVCROBOTNAME "DEEPLIGHT-X001"
-#define PASSWORD "123456789"
 
 const char *TCP_TAG = "TCP-IP";
 
 wifi_mode_t wifi_mode_server;
 
 char addr_str[128];
+
+char tx_buffer[1024];
+char rx_buffer[1024];
 
 esp_err_t event_handler_server(void *ctx, system_event_t *event)
 {
@@ -96,8 +92,6 @@ esp_err_t event_handler_server(void *ctx, system_event_t *event)
 void do_retransmit(const int sock)
 {
     int len;
-    char rx_buffer[128];
-
     do
     {
         len = recv(sock, rx_buffer, sizeof(rx_buffer) - 1, 0);
@@ -114,12 +108,28 @@ void do_retransmit(const int sock)
             rx_buffer[len] = 0; // Null-terminate whatever is received and treat it like a string
             ESP_LOGI(TCP_TAG, "Received %d bytes: %s", len, rx_buffer);
 
+            memset(encryptedHex, 0, sizeof(encryptedHex));
+            sprintf(encryptedHex, rx_buffer);
+
+            decodeAESCBC();
+
+            if (checker(plaintext, "App TEST"))
+            {
+                sprintf(tx_buffer, "GOOD MESSAGE received !");
+            }
+            else
+            {
+                sprintf(tx_buffer, "BAD MESSAGE");
+            }
+
+            len = strlen(tx_buffer);
+
             // send() can return less bytes than supplied length.
             // Walk-around for robust implementation.
             int to_write = len;
             while (to_write > 0)
             {
-                int written = send(sock, rx_buffer + (len - to_write), to_write, 0);
+                int written = send(sock, tx_buffer + (len - to_write), to_write, 0);
                 if (written < 0)
                 {
                     ESP_LOGE(TCP_TAG, "Error occurred during sending: errno %d", errno);

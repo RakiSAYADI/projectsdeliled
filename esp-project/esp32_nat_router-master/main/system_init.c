@@ -21,7 +21,7 @@
 
 #include "sdkconfig.h"
 
-char *INIT_TAG = "app_init";
+const char *INIT_TAG = "app_init";
 
 void systemInit()
 {

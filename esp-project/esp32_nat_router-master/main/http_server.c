@@ -23,8 +23,6 @@
 
 const char *HTTP_TAG = "HTTPServer";
 
-esp_timer_handle_t restart_timer;
-
 void preprocess_string(char *str)
 {
     char *p, *q;
@@ -60,18 +58,6 @@ void preprocess_string(char *str)
     *q = '\0';
 }
 
-void restart_timer_callback(void *arg)
-{
-    ESP_LOGI(HTTP_TAG, "Restarting now...");
-    esp_restart();
-}
-
-esp_timer_create_args_t restart_timer_args = {
-    .callback = &restart_timer_callback,
-    /* argument specified here will be passed to timer callback function */
-    .arg = (void *)0,
-    .name = "restart_timer"};
-
 /* An HTTP GET handler */
 esp_err_t index_get_handler(httpd_req_t *req)
 {
@@ -103,7 +89,7 @@ esp_err_t index_get_handler(httpd_req_t *req)
             ESP_LOGI(HTTP_TAG, "Found URL query => %s", buf);
             if (strcmp(buf, "reset=Restart") == 0)
             {
-                esp_timer_start_once(restart_timer, 500000);
+                 esp_restart();
             }
             char param1[64];
             char param2[64];
@@ -121,7 +107,7 @@ esp_err_t index_get_handler(httpd_req_t *req)
                     sprintf(UnitCfg.WifiCfg.AP_PASS, param2);
                     ESP_LOGI(HTTP_TAG, "ssid=%s => password=%s", UnitCfg.WifiCfg.AP_SSID, UnitCfg.WifiCfg.AP_PASS);
                     saveDataTask(true);
-                    esp_timer_start_once(restart_timer, 500000);
+                     esp_restart();
                 }
             }
             if (httpd_query_key_value(buf, "ssid", param1, sizeof(param1)) == ESP_OK)
@@ -136,7 +122,7 @@ esp_err_t index_get_handler(httpd_req_t *req)
                     sprintf(UnitCfg.WifiCfg.STA_PASS, param2);
                     ESP_LOGI(HTTP_TAG, "ssid=%s => password=%s", UnitCfg.WifiCfg.STA_SSID, UnitCfg.WifiCfg.STA_PASS);
                     saveDataTask(true);
-                    esp_timer_start_once(restart_timer, 500000);
+                     esp_restart();
                 }
             }
             if (httpd_query_key_value(buf, "staticip", param1, sizeof(param1)) == ESP_OK)
@@ -159,7 +145,7 @@ esp_err_t index_get_handler(httpd_req_t *req)
                                  UnitCfg.WifiCfg.STA_SUBNET_MASK,
                                  UnitCfg.WifiCfg.STA_GATEWAY);
                         saveDataTask(true);
-                        esp_timer_start_once(restart_timer, 500000);
+                        esp_restart();
                     }
                 }
             }
@@ -203,8 +189,6 @@ httpd_handle_t start_webserver(void)
             UnitCfg.WifiCfg.STA_SUBNET_MASK,
             UnitCfg.WifiCfg.STA_GATEWAY);
     indexp.user_ctx = config_page;
-
-    esp_timer_create(&restart_timer_args, &restart_timer);
 
     // Start the httpd server
     ESP_LOGI(HTTP_TAG, "Starting server on port: '%d'", config.server_port);

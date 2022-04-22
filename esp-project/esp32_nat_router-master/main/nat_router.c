@@ -36,7 +36,7 @@
 #include "lwip/lwip_napt.h"
 
 /* FreeRTOS event group to signal when we are connected*/
-static EventGroupHandle_t wifi_event_group;
+EventGroupHandle_t wifi_event_group;
 
 /* The event group allows multiple bits for each event, but we only care about one event
  * - are we connected to the AP with an IP? */
@@ -50,7 +50,6 @@ esp_netif_t *wifiSTA;
 
 uint16_t CONNECT_COUNT = 0;
 bool AP_CONNECT = false;
-bool HAS_STATIC_IP = false;
 
 const char *NAT_TAG = "ESP32 NAT router";
 
@@ -97,7 +96,14 @@ esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
 const int CONNECTED_BIT = BIT0;
 #define JOIN_TIMEOUT_MS (2000)
 
-void wifi_init(const char *ssid, const char *passwd, const char *static_ip, const char *subnet_mask, const char *gateway_addr, const char *ap_ssid, const char *ap_passwd, const char *ap_ip)
+void wifi_init(const char *ssid,
+               const char *passwd,
+               const char *static_ip,
+               const char *subnet_mask,
+               const char *gateway_addr,
+               const char *ap_ssid,
+               const char *ap_passwd,
+               const char *ap_ip)
 {
     ip_addr_t dnsserver;
 
@@ -108,7 +114,6 @@ void wifi_init(const char *ssid, const char *passwd, const char *static_ip, cons
     tcpip_adapter_ip_info_t ipInfo_sta;
     if ((strlen(ssid) > 0) && (strlen(static_ip) > 0) && (strlen(subnet_mask) > 0) && (strlen(gateway_addr) > 0))
     {
-        HAS_STATIC_IP = true;
         my_ip = ipInfo_sta.ip.addr = ipaddr_addr(static_ip);
         ipInfo_sta.gw.addr = ipaddr_addr(gateway_addr);
         ipInfo_sta.netmask.addr = ipaddr_addr(subnet_mask);
@@ -158,13 +163,13 @@ void wifi_init(const char *ssid, const char *passwd, const char *static_ip, cons
         strlcpy((char *)wifi_config.sta.password, passwd, sizeof(wifi_config.sta.password));
         ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_APSTA));
         ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config));
-        ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_AP, &ap_config));
     }
     else
     {
         ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_AP));
-        ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_AP, &ap_config));
     }
+
+    ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_AP, &ap_config));
 
     // Enable DNS (offer) for dhcp server
     dhcps_offer_t dhcps_dns_value = OFFER_DNS;

@@ -1,22 +1,12 @@
 /*
  * main.c
  *
- *  Created on: 19 août 2020
+ *  Created on: 19 août 2022
  *      Author: raki
  */
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "esp_system.h"
-#include "esp_log.h"
-#include "driver/uart.h"
 #include "string.h"
-#include <stdio.h>
-#include <esp_log.h>
-#include <nvs.h>
-#include <nvs_flash.h>
+#include "esp_log.h"
 #include "sdkconfig.h"
-#include <stdlib.h>
-#include "stdbool.h"
 
 #include "main.h"
 
@@ -27,8 +17,9 @@
 #include "app_gpio.h"
 #include "http_server.h"
 #include "base_mac_address.h"
+#include "aes.h"
 
-char *MAIN_TAG = "app_main";
+const char *MAIN_TAG = "app_main";
 
 int app_main(void)
 {
@@ -37,10 +28,10 @@ int app_main(void)
 	systemInit();
 
 	// Initiate basic mac address
-	//BaseMacInit();
+	// BaseMacInit();
 
 	// Initiate and restore the storage data
-	if (InitLoadCfg() != 0)
+	if (!InitLoadCfg())
 	{
 		return -1;
 	}
@@ -56,6 +47,13 @@ int app_main(void)
 
 	// Initiate TCP protocol
 	TCPServer();
+
+	memset(plaintext, 0, sizeof(plaintext));
+
+	sprintf(plaintext, "Hello ");
+
+	encodeAESCBC();
+	decodeAESCBC();
 
 	return 0;
 }

@@ -38,9 +38,9 @@ UnitConfig_Typedef UnitCfg;
 #define KEY_VERSION "key"
 #define KEY_VERSION_VAL 0x01
 
-char *NVS_TAG = "NVS";
+const char *NVS_TAG = "NVS";
 
-int SaveNVS(UnitConfig_Typedef *data)
+bool SaveNVS(UnitConfig_Typedef *data)
 {
 	nvs_handle handle;
 	esp_err_t err = ESP_FAIL;
@@ -50,17 +50,16 @@ int SaveNVS(UnitConfig_Typedef *data)
 	if (err != ESP_OK)
 	{
 		ESP_LOGE(NVS_TAG, "nvs_open: %x", err);
-		return -1;
+		return false;
 	}
 
-	err = nvs_set_blob(handle, KEY_CONNECTION_INFO, data,
-					   sizeof(UnitConfig_Typedef));
+	err = nvs_set_blob(handle, KEY_CONNECTION_INFO, data, sizeof(UnitConfig_Typedef));
 
 	if (err != ESP_OK)
 	{
 		ESP_LOGE(NVS_TAG, "Error Setting NVS Blob (%d).", err);
 		nvs_close(handle);
-		return -1;
+		return false;
 	}
 
 	err = nvs_set_u32(handle, KEY_VERSION, KEY_VERSION_VAL);
@@ -69,7 +68,7 @@ int SaveNVS(UnitConfig_Typedef *data)
 	{
 		ESP_LOGE(NVS_TAG, "Error Setting Key version (%d).", err);
 		nvs_close(handle);
-		return -1;
+		return false;
 	}
 
 	err = nvs_commit(handle);
@@ -78,17 +77,17 @@ int SaveNVS(UnitConfig_Typedef *data)
 	{
 		ESP_LOGE(NVS_TAG, "Error Writing NVS (%d).", err);
 		nvs_close(handle);
-		return -1;
+		return false;
 	}
 
 	nvs_close(handle);
 
 	ESP_LOGI(NVS_TAG, "Configuration saved");
 
-	return (0);
+	return true;
 }
 
-int LoadNVS(UnitConfig_Typedef *data)
+bool LoadNVS(UnitConfig_Typedef *data)
 {
 	nvs_handle handle;
 	size_t size;
@@ -100,7 +99,7 @@ int LoadNVS(UnitConfig_Typedef *data)
 	if (err != 0)
 	{
 		ESP_LOGE(NVS_TAG, "nvs_open: %x", err);
-		return -1;
+		return false;
 	}
 
 	err = nvs_get_u32(handle, KEY_VERSION, &version);
@@ -108,7 +107,7 @@ int LoadNVS(UnitConfig_Typedef *data)
 	{
 		ESP_LOGE(NVS_TAG, "Incompatible versions (%d).", err);
 		nvs_close(handle);
-		return -1;
+		return false;
 	}
 
 	size = sizeof(UnitConfig_Typedef);
@@ -118,16 +117,14 @@ int LoadNVS(UnitConfig_Typedef *data)
 	{
 		ESP_LOGE(NVS_TAG, "No Unit config record found (%d)", err);
 		nvs_close(handle);
-		return -1;
+		return false;
 	}
 
 	nvs_close(handle);
 
 	ESP_LOGI(NVS_TAG, "Configuration Loaded (%d) bytes", size);
 
-	// ESP_LOGI(NVS_TAG, "Configuration Loaded (%d) bytes", sizeof(UnitCfg));
-
-	return 0;
+	return true;
 }
 
 bool checker(char input[], char check[])
@@ -145,9 +142,9 @@ bool checker(char input[], char check[])
 	return result;
 }
 
-int InitLoadCfg()
+bool InitLoadCfg()
 {
-	if (LoadNVS(&UnitCfg) != 0)
+	if (!LoadNVS(&UnitCfg))
 	{
 		Default_saving();
 	}
@@ -161,7 +158,7 @@ int InitLoadCfg()
 			Default_saving();
 		}
 	}
-	return (0);
+	return true;
 }
 
 void Default_saving()
@@ -179,13 +176,15 @@ void Default_saving()
 	strncpy(UnitCfg.WifiCfg.STA_SUBNET_MASK, "", sizeof(UnitCfg.WifiCfg.STA_SUBNET_MASK));
 	strncpy(UnitCfg.WifiCfg.STA_GATEWAY, "", sizeof(UnitCfg.WifiCfg.STA_GATEWAY));
 
+	sprintf(UnitCfg.UnitTimeZone, "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00");
+
 	UnitCfg.Version = VERSION;
 
 	sprintf(UnitCfg.FirmwareVersion, FIRMWAREVERSIONNAME);
 
 	sprintf(UnitCfg.FLASH_MEMORY, "OK");
 
-	if (SaveNVS(&UnitCfg) == 0)
+	if (SaveNVS(&UnitCfg))
 	{
 		ESP_LOGI(NVS_TAG, "Unit Config saving OK");
 	}
@@ -216,15 +215,7 @@ void syncTime(time_t t, char tzone[64])
 	char strftime_buf[64];
 
 	// set timezone
-
-	char tz[50];
-	const int8_t tzc = 1;
-
-	// tzc = tzone / 3600;
-
-	sprintf(tz, "CET-%dCEST-%d,M3.5.0/02:00:00,M10.5.0/03:00:00", abs(tzc), abs(tzc) + 1);
-
-	setenv("TZ", tz, 1);
+	setenv("TZ", tzone, 1);
 	tzset();
 
 	// set time

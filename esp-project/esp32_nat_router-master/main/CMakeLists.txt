@@ -7,4 +7,5 @@ idf_component_register(SRCS
                         "tcp_server.c" 
                         "base_mac_address.c"
                         "http_server.c"
+                        "aes.c"
                     INCLUDE_DIRS ".")
