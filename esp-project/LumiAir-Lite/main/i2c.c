@@ -23,7 +23,7 @@ MCP7940_Time_Typedef time_MCP7940;							// battery Timer
 
 bool clockSavorEnabled = false;
 bool saveTimeOnBattery = false;
-bool saveTimeBattery = false;
+bool saveTimeFromBattery = false;
 
 time_t i2c_now = 0;
 struct tm i2c_timeinfo = {0};
@@ -642,7 +642,7 @@ void i2c_test_task(void *arg)
 				}
 				else
 				{
-					if (!saveTimeBattery)
+					if (!saveTimeFromBattery)
 					{
 						struct tm tm;
 						tm.tm_year = time_MCP7940.year;
@@ -656,7 +656,7 @@ void i2c_test_task(void *arg)
 						syncTime(t,UnitCfg.UnitTimeZone);
 						ESP_LOGI(TAG, "I2C MASTER Setting time GMT: %s", asctime(&tm));
 						ESP_LOGI(TAG, "The current date/time in ESP32 is: %s", strftime_buf);
-						saveTimeBattery = true;
+						saveTimeFromBattery = true;
 					}
 				}
 				ESP_LOGI(TAG, "I2C MASTER Read TIMER( MCP7940 ) : %d/%d/%d in %d at %d:%d:%d", time_MCP7940.year, time_MCP7940.month, time_MCP7940.day, time_MCP7940.day_of_week, time_MCP7940.hour, time_MCP7940.minute, time_MCP7940.second);
