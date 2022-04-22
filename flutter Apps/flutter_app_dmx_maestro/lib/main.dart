@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app_dmx_maestro/pages/alarm_settings.dart';
 import 'package:flutter_app_dmx_maestro/pages/ambiance_settings.dart';
@@ -82,7 +80,7 @@ void main() async {
   }
 
   embeddedTimeZone = WidgetsBinding.instance.window.locale.countryCode;
-  print(embeddedTimeZone);
+  debugPrint(embeddedTimeZone);
 
   runApp(MyApp());
 }

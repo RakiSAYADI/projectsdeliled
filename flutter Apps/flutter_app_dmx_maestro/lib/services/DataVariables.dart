@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_dmx_maestro/services/bleDeviceClass.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
-final String appName = 'Lumi\'Home';
+final String appName = 'LumyHome';
 
 final double hueCoefficient = (256 / 360);
 
@@ -123,7 +123,7 @@ Widget bigCircle(double width, double height, Color color) {
   );
 }
 
-Future<void> displayAlert(BuildContext context, String title, Widget mainWidget, List<Widget> buttons) {
+Future<void> displayAlert({BuildContext context, String title, Widget mainWidget, List<Widget> buttons}) {
   return showDialog<void>(
       context: context,
       barrierDismissible: false,
