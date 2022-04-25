@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:get/get.dart';
 
 class Device {
   BluetoothDevice device;
@@ -14,13 +15,16 @@ class Device {
   String _readCharMessage;
 
   bool _readIsReady = false;
+  bool _userDisconnected = false;
+
+  StreamSubscription _subscription;
 
   Future<bool> connect({bool autoConnection}) async {
     // Not available for reading
     _readIsReady = false;
     //defining the methods
     void checkConnectionState() {
-      device.state.listen((state) {
+      _subscription = device.state.listen((state) {
         _connectionState = state.index;
         switch (state) {
           case BluetoothDeviceState.connected:
@@ -28,6 +32,32 @@ class Device {
             break;
           case BluetoothDeviceState.disconnected:
             debugPrint('disconnected');
+            if (_userDisconnected) {
+              Get.defaultDialog(
+                title: 'Attention',
+                barrierDismissible: false,
+                content: Text('Connexion avec le dispositif perdue, reconnection en cours',
+                    style: TextStyle(
+                      fontSize: 14,
+                    )),
+                actions: [
+                  TextButton(
+                    child: Text(
+                      'Compris',
+                      style: TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                    onPressed: () {
+                      Get.toNamed('/');
+                      Get.resetRootNavigator();
+                      disconnect();
+                    },
+                  ),
+                ],
+              );
+              _userDisconnected = false;
+            }
             break;
           case BluetoothDeviceState.connecting:
             debugPrint('connecting');
@@ -49,6 +79,8 @@ class Device {
       debugPrint('the mtu is changed');
     }
 
+    _userDisconnected = true;
+
     try {
       // connect
       await device.connect(autoConnect: autoConnection);
@@ -68,9 +100,9 @@ class Device {
       } else {
         return false;
       }
-    } on TimeoutException catch(e) {
+    } on TimeoutException catch (e) {
       debugPrint('this should not be reached if the exception is raised $e');
-    } on Exception catch(e) {
+    } on Exception catch (e) {
       debugPrint('exception: $e');
     }
     return false;
@@ -85,6 +117,8 @@ class Device {
   }
 
   Future<void> disconnect() async {
+    _userDisconnected = false;
+    _subscription.cancel();
     // disconnect
     await device.disconnect();
     // Not available for reading

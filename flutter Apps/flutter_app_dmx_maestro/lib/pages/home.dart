@@ -359,10 +359,11 @@ class _HomeState extends State<Home> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(flex: 2, child: ambianceDisplayWidget(context, ambiance1, 1)),
-                  Expanded(flex: 2, child: ambianceDisplayWidget(context, ambiance3, 3)),
-                  Expanded(flex: 2, child: ambianceDisplayWidget(context, ambiance5, 5)),
-                  Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.1)),
+                  Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.05)),
+                  Expanded(flex: 3, child: ambianceDisplayWidget(context, ambiance1, 1)),
+                  Expanded(flex: 3, child: ambianceDisplayWidget(context, ambiance3, 3)),
+                  Expanded(flex: 3, child: ambianceDisplayWidget(context, ambiance5, 5)),
+                  Expanded(flex: 2, child: SizedBox(height: heightScreen * 0.1)),
                 ],
               ),
             ),
@@ -372,10 +373,11 @@ class _HomeState extends State<Home> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.1)),
-                  Expanded(flex: 2, child: ambianceDisplayWidget(context, ambiance2, 2)),
-                  Expanded(flex: 2, child: ambianceDisplayWidget(context, ambiance4, 4)),
-                  Expanded(flex: 2, child: ambianceDisplayWidget(context, ambiance6, 6)),
+                  Expanded(flex: 2, child: SizedBox(height: heightScreen * 0.1)),
+                  Expanded(flex: 3, child: ambianceDisplayWidget(context, ambiance2, 2)),
+                  Expanded(flex: 3, child: ambianceDisplayWidget(context, ambiance4, 4)),
+                  Expanded(flex: 3, child: ambianceDisplayWidget(context, ambiance6, 6)),
+                  Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.05)),
                 ],
               ),
             ),
@@ -442,7 +444,7 @@ class _HomeState extends State<Home> {
                       Navigator.pushNamed(context, '/ambiances_settings', arguments: {'ambianceID': ambianceID, 'ambiance': ambiance, 'zoneNames': zonesNamesList}).then((_) => setState(() {}));
                     }
                   },
-                  icon: Icon(Icons.settings, color: textColor[backGroundColorSelect]),
+                  icon: Icon(Icons.settings,size: widthScreen * 0.01 + heightScreen * 0.015, color: textColor[backGroundColorSelect]),
                 ),
               ),
             ),
@@ -460,6 +462,7 @@ class _HomeState extends State<Home> {
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
+        Expanded(flex: 1, child: SizedBox(height: heightScreen * 0.1)),
         Expanded(
           flex: 2,
           child: Row(

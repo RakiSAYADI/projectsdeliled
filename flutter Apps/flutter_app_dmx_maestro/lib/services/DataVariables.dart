@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_dmx_maestro/services/bleDeviceClass.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
-final String appName = 'LumyHome';
+final String appName = 'Lum\'Home';
 
 final double hueCoefficient = (256 / 360);
 
