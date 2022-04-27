@@ -21,6 +21,7 @@
 #define delay(ms) (vTaskDelay(ms / portTICK_RATE_MS))
 
 #define DEFAULT_AP_SSID "Router"
+#define DEFAULT_AP_PASSWORD "Deliled9318"
 #define DEFAULT_AP_IP "192.168.2.1"
 #define DEFAULT_DNS "8.8.8.8"
 
@@ -51,7 +52,7 @@ extern UnitConfig_Typedef UnitCfg;
 void saveDataTask(bool savenvsFlag);
 void syncTime(time_t t, char tzone[64]);
 
-bool checker(char input[], char check[]);
+bool strContains(char* string, char* toFind);
 
 void Default_saving();
 bool InitLoadCfg();

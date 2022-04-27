@@ -33,61 +33,10 @@
 
 const char *TCP_TAG = "TCP-IP";
 
-wifi_mode_t wifi_mode_server;
-
 char addr_str[128];
 
-char tx_buffer[1024];
-char rx_buffer[1024];
-
-esp_err_t event_handler_server(void *ctx, system_event_t *event)
-{
-    ESP_LOGI(TCP_TAG, "SYSTEM EVENT : %d", event->event_id);
-    switch (event->event_id)
-    {
-    case SYSTEM_EVENT_AP_START:
-        // AP has started up. Now start the DHCP server.
-        ESP_LOGI(TCP_TAG, "SYSTEM EVENT AP START");
-        // Configure the IP address and DHCP server.
-        tcpip_adapter_ip_info_t ipInfo;
-        IP4_ADDR(&ipInfo.ip, 192, 168, 1, 1);
-        IP4_ADDR(&ipInfo.gw, 192, 168, 1, 1);
-        IP4_ADDR(&ipInfo.netmask, 255, 255, 255, 0);
-        tcpip_adapter_dhcps_stop(TCPIP_ADAPTER_IF_AP);
-        if (tcpip_adapter_set_ip_info(TCPIP_ADAPTER_IF_AP, &ipInfo) == ESP_OK)
-        {
-            ESP_LOGI(TCP_TAG, "starting DHCP server");
-            esp_err_t espResult;
-            espResult = tcpip_adapter_dhcps_start(TCPIP_ADAPTER_IF_AP);
-            if (espResult == ESP_OK)
-            {
-                ESP_LOGI(TCP_TAG, "DHCP server is started !");
-                return espResult;
-            }
-            else
-            {
-                ESP_LOGE(TCP_TAG, "DHCP server is not started , err = %x", espResult);
-                return espResult;
-            }
-        }
-        break;
-    case SYSTEM_EVENT_AP_STOP:
-        // AP is STOPPING
-        ESP_LOGI(TCP_TAG, "SYSTEM EVENT AP STOP");
-        break;
-    case SYSTEM_EVENT_AP_STACONNECTED:
-        // user is connected to the AP station
-        ESP_LOGI(TCP_TAG, "A USER IS CONNECTED");
-        break;
-    case SYSTEM_EVENT_AP_STADISCONNECTED:
-        // user is disconnected from the AP station
-        ESP_LOGI(TCP_TAG, "A USER IS DISCONNECTED");
-        break;
-    default:
-        break;
-    }
-    return ESP_OK;
-}
+char tx_buffer[4096];
+char rx_buffer[4096];
 
 void do_retransmit(const int sock)
 {
@@ -108,14 +57,15 @@ void do_retransmit(const int sock)
             rx_buffer[len] = 0; // Null-terminate whatever is received and treat it like a string
             ESP_LOGI(TCP_TAG, "Received %d bytes: %s", len, rx_buffer);
 
-            memset(encryptedHex, 0, sizeof(encryptedHex));
-            sprintf(encryptedHex, rx_buffer);
-
+            setTextToDecrypt(rx_buffer);
             decodeAESCBC();
 
-            if (checker(plaintext, "App TEST"))
+            if (strContains(plaintext, "Hello_Testing"))
             {
-                sprintf(tx_buffer, "GOOD MESSAGE received !");
+                setTextToEncrypt("Thank_you_ESP32!");
+                encodeAESCBC();
+                
+                sprintf(tx_buffer, encryptedHex);
             }
             else
             {

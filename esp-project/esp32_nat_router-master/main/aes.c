@@ -13,6 +13,7 @@ int hex_to_ascii(char c, char d);
 void string2hexString(char *input, char *output);
 void hexstring2String(char *input, char *output);
 int stringCheckForEncryption(char *input);
+char *removeWhiteSpaces(char *str);
 
 const char key[32] = "12345678901234567890123456789012";
 
@@ -20,8 +21,20 @@ esp_aes_context ctxEncode;
 esp_aes_context ctxDecode;
 
 char plaintext[1024];
-char encrypted[1024];
-char encryptedHex[1024];
+char encrypted[2048];
+char encryptedHex[4096];
+
+void setTextToEncrypt(char *input)
+{
+    memset(plaintext, 0, sizeof(plaintext));
+    sprintf(plaintext, input);
+}
+
+void setTextToDecrypt(char *input)
+{
+    memset(encryptedHex, 0, sizeof(encryptedHex));
+    sprintf(encryptedHex, input);
+}
 
 void encodeAESCBC()
 {
@@ -29,7 +42,7 @@ void encodeAESCBC()
 
     char enc_iv[16] = "1234567890123456";
 
-    // initialize the output String
+    // Initialize the output String
     memset(encrypted, 0, sizeof(encrypted));
 
     esp_aes_init(&ctxEncode);
@@ -37,11 +50,13 @@ void encodeAESCBC()
     esp_aes_crypt_cbc(&ctxEncode, ESP_AES_ENCRYPT, stringCheckForEncryption(plaintext), (unsigned char *)enc_iv, (uint8_t *)plaintext, (uint8_t *)encrypted);
     esp_aes_free(&ctxEncode);
 
-    // initialize the output hex String
+    // Initialize the output hex String
     memset(encryptedHex, 0, sizeof(encryptedHex));
 
-    // converting ascii string to hex string
+    // Converting ascii string to hex string
     string2hexString(encrypted, encryptedHex);
+
+    printf("Text after crypt hex : %s\n", encryptedHex);
 
     // Verify output
     /*for (int i = 0; i < 128; i++)
@@ -53,23 +68,25 @@ void encodeAESCBC()
 
 void decodeAESCBC()
 {
-    // initialize the output String
+    // Initialize the output String
     memset(encrypted, 0, sizeof(encrypted));
 
     printf("Text after crypt hex : %s\n", encryptedHex);
 
     char dec_iv[16] = "1234567890123456";
 
-    // converting hex string to ascii string
+    // Converting hex string to ascii string
     hexstring2String(encryptedHex, encrypted);
 
-    // initialize the output String
+    // Initialize the output String
     memset(plaintext, 0, sizeof(plaintext));
 
     esp_aes_init(&ctxDecode);
     esp_aes_setkey(&ctxDecode, (unsigned char *)key, 256);
     esp_aes_crypt_cbc(&ctxDecode, ESP_AES_DECRYPT, strlen(encrypted), (unsigned char *)dec_iv, (uint8_t *)encrypted, (uint8_t *)plaintext);
     esp_aes_free(&ctxDecode);
+
+    removeWhiteSpaces(plaintext);
 
     printf("Text after crypt : %s\n", plaintext);
 }
@@ -131,4 +148,17 @@ int stringCheckForEncryption(char *input)
     }
     else
         return lengthInput;
+}
+
+char *removeWhiteSpaces(char *str)
+{
+    int i = 0, j = 0;
+    while (str[i])
+    {
+        if (str[i] != ' ')
+            str[j++] = str[i];
+        i++;
+    }
+    str[j] = '\0';
+    return str;
 }

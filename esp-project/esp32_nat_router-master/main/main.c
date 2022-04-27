@@ -48,9 +48,7 @@ int app_main(void)
 	// Initiate TCP protocol
 	TCPServer();
 
-	memset(plaintext, 0, sizeof(plaintext));
-
-	sprintf(plaintext, "Hello ");
+	setTextToEncrypt("Hello");
 
 	encodeAESCBC();
 	decodeAESCBC();

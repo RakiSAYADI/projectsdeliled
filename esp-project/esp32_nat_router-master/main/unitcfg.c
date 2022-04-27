@@ -127,19 +127,31 @@ bool LoadNVS(UnitConfig_Typedef *data)
 	return true;
 }
 
-bool checker(char input[], char check[])
-{
-	int i = 0;
-	bool result = true;
-	for (i = 0; input[i] != '\0' || check[i] != '\0'; i++)
-	{
-		if (input[i] != check[i])
-		{
-			result = false;
-			break;
+bool strContains(char* string, char* toFind) {
+	uint8_t slen = strlen(string);
+	uint8_t tFlen = strlen(toFind);
+	uint8_t found = 0;
+
+	if (slen >= tFlen) {
+		for (uint8_t s = 0, t = 0; s < slen; s++) {
+			do {
+
+				if (string[s] == toFind[t]) {
+					if (++found == tFlen)
+						return 1;
+					s++;
+					t++;
+				} else {
+					s -= found;
+					found = 0;
+					t = 0;
+				}
+
+			} while (found);
 		}
-	}
-	return result;
+		return true;
+	} else
+		return false;
 }
 
 bool InitLoadCfg()
@@ -152,7 +164,7 @@ bool InitLoadCfg()
 	{
 		ESP_LOGI(NVS_TAG, "Unit Config Loading OK");
 		// checking the data storage health
-		if (!checker(UnitCfg.FLASH_MEMORY, "OK"))
+		if (!strContains(UnitCfg.FLASH_MEMORY, "OK"))
 		{
 			ESP_LOGE(NVS_TAG, "Saving the default configuration ..");
 			Default_saving();
@@ -168,7 +180,7 @@ void Default_saving()
 	sprintf(UnitCfg.UnitName, "HuBBoX-%02X:%02X:%02X", mac[3], mac[4], mac[5]);
 
 	sprintf(UnitCfg.WifiCfg.AP_SSID, "%s-%s", UnitCfg.UnitName, DEFAULT_AP_SSID);
-	strncpy(UnitCfg.WifiCfg.AP_PASS, "", sizeof(UnitCfg.WifiCfg.AP_PASS));
+	strncpy(UnitCfg.WifiCfg.AP_PASS, DEFAULT_AP_PASSWORD, sizeof(UnitCfg.WifiCfg.AP_PASS));
 	sprintf(UnitCfg.WifiCfg.AP_IP, DEFAULT_AP_IP);
 	strncpy(UnitCfg.WifiCfg.STA_SSID, "", sizeof(UnitCfg.WifiCfg.STA_SSID));
 	strncpy(UnitCfg.WifiCfg.STA_PASS, "", sizeof(UnitCfg.WifiCfg.STA_PASS));
