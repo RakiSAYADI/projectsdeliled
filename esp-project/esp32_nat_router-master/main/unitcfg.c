@@ -8,24 +8,13 @@
 #include "freertos/task.h"
 #include "esp_system.h"
 #include "esp_log.h"
-#include "driver/uart.h"
-#include "driver/gpio.h"
-#include "soc/uart_struct.h"
 #include <stdio.h>
 #include <string.h>
-#include <freertos/FreeRTOS.h>
-#include <freertos/task.h>
-#include <esp_log.h>
 #include <esp_err.h>
-#include <esp_system.h>
 #include <esp_event.h>
-#include "esp_wifi.h"
 #include <nvs.h>
 #include <nvs_flash.h>
-#include <driver/gpio.h>
-#include <tcpip_adapter.h>
 #include "sdkconfig.h"
-#include "esp_system.h"
 #include <stdlib.h>
 #include "stdbool.h"
 
@@ -127,21 +116,28 @@ bool LoadNVS(UnitConfig_Typedef *data)
 	return true;
 }
 
-bool strContains(char* string, char* toFind) {
+bool strContains(char *string, char *toFind)
+{
 	uint8_t slen = strlen(string);
 	uint8_t tFlen = strlen(toFind);
 	uint8_t found = 0;
 
-	if (slen >= tFlen) {
-		for (uint8_t s = 0, t = 0; s < slen; s++) {
-			do {
+	if (slen >= tFlen)
+	{
+		for (uint8_t s = 0, t = 0; s < slen; s++)
+		{
+			do
+			{
 
-				if (string[s] == toFind[t]) {
+				if (string[s] == toFind[t])
+				{
 					if (++found == tFlen)
 						return 1;
 					s++;
 					t++;
-				} else {
+				}
+				else
+				{
 					s -= found;
 					found = 0;
 					t = 0;
@@ -150,7 +146,8 @@ bool strContains(char* string, char* toFind) {
 			} while (found);
 		}
 		return true;
-	} else
+	}
+	else
 		return false;
 }
 
@@ -187,6 +184,14 @@ void Default_saving()
 	strncpy(UnitCfg.WifiCfg.STA_IP_STATIC, "", sizeof(UnitCfg.WifiCfg.STA_IP_STATIC));
 	strncpy(UnitCfg.WifiCfg.STA_SUBNET_MASK, "", sizeof(UnitCfg.WifiCfg.STA_SUBNET_MASK));
 	strncpy(UnitCfg.WifiCfg.STA_GATEWAY, "", sizeof(UnitCfg.WifiCfg.STA_GATEWAY));
+
+	UnitCfg.DisinfictionTime = 0;
+	UnitCfg.ActivationTime = 0;
+
+	UnitCfg.UVCTimeExecution = 0;
+	UnitCfg.UVCLifeTime = 32400000;
+
+	UnitCfg.NumberOfDisinfection = 0;
 
 	sprintf(UnitCfg.UnitTimeZone, "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00");
 
@@ -241,4 +246,90 @@ void syncTime(time_t t, char tzone[64])
 	localtime_r(&epoch, &tm_time);
 	strftime(strftime_buf, sizeof(strftime_buf), "%c", &tm_time);
 	ESP_LOGW(NVS_TAG, "The current date/time UTC is: %s", strftime_buf);
+}
+
+bool jsonparse(char *src, char *dst, char *label, unsigned short arrayindex)
+{
+	char *sp = 0, *ep = 0, *ic = 0;
+	char tmp[64];
+
+	sp = strstr(src, label);
+
+	if (sp == NULL)
+	{
+		// ESP_LOGE(NVS_TAG, "label %s not found",label);
+		return false;
+	}
+
+	sp = strchr(sp, ':');
+	if (sp == NULL)
+	{
+		ESP_LOGE(NVS_TAG, "value start not found");
+		return false;
+	}
+
+	if (sp[1] == '"')
+	{
+		sp++;
+		ep = strchr(sp + 1, '"');
+		ic = strchr(sp + 1, ',');
+		if ((ep == NULL) || ((ep > ic) && (ic != NULL)))
+		{
+			ESP_LOGE(NVS_TAG, "type string parsing error");
+			return false;
+		}
+	}
+	else if (sp[1] == '[')
+	{
+		sp++;
+		ep = strchr(sp + 1, ']');
+		ic = strchr(sp + 1, ':');
+		if ((ep == NULL) || ((ep > ic) && (ic != NULL)))
+		{
+			ESP_LOGE(NVS_TAG, "type array parsing error");
+			return false;
+		}
+
+		ic = strchr(sp + 1, ',');
+		if ((ic < ep) && (ic != NULL))
+			ep = ic;
+
+		for (int i = 0; i < arrayindex; i++)
+		{
+			sp = ep;
+			ep = strchr(sp + 1, ',');
+
+			if (ep == NULL)
+			{
+				ic = strchr(sp + 1, ']');
+				ep = ic;
+			}
+		}
+
+		if (sp[1] == '"')
+		{
+			sp++;
+			ep = strchr(sp + 1, '"');
+		}
+	}
+	else
+	{
+		ep = strchr(sp + 1, ',');
+		if (ep == NULL)
+			ep = strchr(sp + 1, '}');
+		ic = strchr(sp + 1, ':');
+		if ((ep == NULL) || ((ep > ic) && (ic != NULL)))
+		{
+			ESP_LOGE(NVS_TAG, "type int parsing error");
+			return false;
+		}
+	}
+
+	strncpy(tmp, sp + 1, ep - sp - 1);
+	tmp[ep - sp - 1] = 0;
+
+	memset(dst, 0x00, strlen(tmp) + 1);
+	memcpy(dst, tmp, strlen(tmp));
+
+	return true;
 }

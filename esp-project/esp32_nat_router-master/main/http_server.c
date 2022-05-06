@@ -1,12 +1,3 @@
-/* Simple HTTP Server Example
-
-   This example code is in the Public Domain (or CC0 licensed, at your option.)
-
-   Unless required by applicable law or agreed to in writing, this
-   software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-   CONDITIONS OF ANY KIND, either express or implied.
-*/
-
 #include <esp_wifi.h>
 #include <esp_event.h>
 #include <esp_log.h>
@@ -23,7 +14,7 @@
 
 const char *HTTP_TAG = "HTTPServer";
 
-void preprocess_string(char *str)
+void preprocessString(char *str)
 {
     char *p, *q;
 
@@ -59,7 +50,7 @@ void preprocess_string(char *str)
 }
 
 /* An HTTP GET handler */
-esp_err_t index_get_handler(httpd_req_t *req)
+esp_err_t indexGetHandler(httpd_req_t *req)
 {
     char *buf;
     size_t buf_len;
@@ -87,9 +78,9 @@ esp_err_t index_get_handler(httpd_req_t *req)
         if (httpd_req_get_url_query_str(req, buf, buf_len) == ESP_OK)
         {
             ESP_LOGI(HTTP_TAG, "Found URL query => %s", buf);
-            if (strcmp(buf, "reset=Restart") == 0)
+            if (strcmp(buf, "reset=Reboot") == 0)
             {
-                 esp_restart();
+                esp_restart();
             }
             char param1[64];
             char param2[64];
@@ -98,45 +89,45 @@ esp_err_t index_get_handler(httpd_req_t *req)
             if (httpd_query_key_value(buf, "ap_ssid", param1, sizeof(param1)) == ESP_OK)
             {
                 ESP_LOGI(HTTP_TAG, "Found URL query parameter => ap_ssid=%s", param1);
-                preprocess_string(param1);
+                preprocessString(param1);
                 if (httpd_query_key_value(buf, "ap_password", param2, sizeof(param2)) == ESP_OK)
                 {
                     ESP_LOGI(HTTP_TAG, "Found URL query parameter => ap_password=%s", param2);
-                    preprocess_string(param2);
+                    preprocessString(param2);
                     sprintf(UnitCfg.WifiCfg.AP_SSID, param1);
                     sprintf(UnitCfg.WifiCfg.AP_PASS, param2);
                     ESP_LOGI(HTTP_TAG, "ssid=%s => password=%s", UnitCfg.WifiCfg.AP_SSID, UnitCfg.WifiCfg.AP_PASS);
                     saveDataTask(true);
-                     esp_restart();
+                    esp_restart();
                 }
             }
             if (httpd_query_key_value(buf, "ssid", param1, sizeof(param1)) == ESP_OK)
             {
                 ESP_LOGI(HTTP_TAG, "Found URL query parameter => ssid=%s", param1);
-                preprocess_string(param1);
+                preprocessString(param1);
                 if (httpd_query_key_value(buf, "password", param2, sizeof(param2)) == ESP_OK)
                 {
                     ESP_LOGI(HTTP_TAG, "Found URL query parameter => password=%s", param2);
-                    preprocess_string(param2);
+                    preprocessString(param2);
                     sprintf(UnitCfg.WifiCfg.STA_SSID, param1);
                     sprintf(UnitCfg.WifiCfg.STA_PASS, param2);
                     ESP_LOGI(HTTP_TAG, "ssid=%s => password=%s", UnitCfg.WifiCfg.STA_SSID, UnitCfg.WifiCfg.STA_PASS);
                     saveDataTask(true);
-                     esp_restart();
+                    esp_restart();
                 }
             }
             if (httpd_query_key_value(buf, "staticip", param1, sizeof(param1)) == ESP_OK)
             {
                 ESP_LOGI(HTTP_TAG, "Found URL query parameter => staticip=%s", param1);
-                preprocess_string(param1);
+                preprocessString(param1);
                 if (httpd_query_key_value(buf, "subnetmask", param2, sizeof(param2)) == ESP_OK)
                 {
                     ESP_LOGI(HTTP_TAG, "Found URL query parameter => subnetmask=%s", param2);
-                    preprocess_string(param2);
+                    preprocessString(param2);
                     if (httpd_query_key_value(buf, "gateway", param3, sizeof(param3)) == ESP_OK)
                     {
                         ESP_LOGI(HTTP_TAG, "Found URL query parameter => gateway=%s", param3);
-                        preprocess_string(param3);
+                        preprocessString(param3);
                         sprintf(UnitCfg.WifiCfg.STA_IP_STATIC, param1);
                         sprintf(UnitCfg.WifiCfg.STA_SUBNET_MASK, param2);
                         sprintf(UnitCfg.WifiCfg.STA_GATEWAY, param3);
@@ -152,19 +143,17 @@ esp_err_t index_get_handler(httpd_req_t *req)
         }
         free(buf);
     }
-
     /* Send response with custom headers and body set as the
      * string passed in user context*/
     const char *resp_str = (const char *)req->user_ctx;
     httpd_resp_send(req, resp_str, strlen(resp_str));
-
     return ESP_OK;
 }
 
 httpd_uri_t indexp = {
     .uri = "/",
     .method = HTTP_GET,
-    .handler = index_get_handler,
+    .handler = indexGetHandler,
 };
 
 esp_err_t http_404_error_handler(httpd_req_t *req, httpd_err_code_t err)
@@ -173,7 +162,7 @@ esp_err_t http_404_error_handler(httpd_req_t *req, httpd_err_code_t err)
     return ESP_FAIL;
 }
 
-httpd_handle_t start_webserver(void)
+void startWebserver(void)
 {
     httpd_handle_t server = NULL;
     httpd_config_t config = HTTPD_DEFAULT_CONFIG();
@@ -197,14 +186,15 @@ httpd_handle_t start_webserver(void)
         // Set URI handlers
         ESP_LOGI(HTTP_TAG, "Registering URI handlers");
         httpd_register_uri_handler(server, &indexp);
-        return server;
     }
+    else
+    {
 
-    ESP_LOGI(HTTP_TAG, "Error starting server!");
-    return NULL;
+        ESP_LOGE(HTTP_TAG, "Error starting server!");
+    }
 }
 
-void stop_webserver(httpd_handle_t server)
+void stopWebserver(httpd_handle_t server)
 {
     // Stop the httpd server
     httpd_stop(server);

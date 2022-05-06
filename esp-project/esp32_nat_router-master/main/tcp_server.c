@@ -13,7 +13,6 @@
 #include "freertos/event_groups.h"
 #include "esp_system.h"
 #include "esp_wifi.h"
-#include "tcpip_adapter.h"
 #include "esp_event.h"
 #include "esp_log.h"
 #include "nvs_flash.h"
@@ -26,6 +25,7 @@
 #include <lwip/netdb.h>
 
 #include "tcp_server.h"
+#include "udp_server.h"
 #include "unitcfg.h"
 #include "aes.h"
 
@@ -33,61 +33,125 @@
 
 const char *TCP_TAG = "TCP-IP";
 
-char addr_str[128];
-
 char tx_buffer[4096];
 char rx_buffer[4096];
 
-void do_retransmit(const int sock)
+bool tcpDiconnect = false;
+bool tcpReadOrWrite = false;
+bool tcpDecryptMessages = false;
+
+bool UVTaskIsOn = false;
+bool stopEventTrigerred = false;
+bool detectionTriggered = false;
+
+void checkMessageInput(char *text)
+{
+}
+
+void rxTransmission(void *pvParameters)
 {
     int len;
+    int sock = (int)pvParameters;
     do
     {
-        len = recv(sock, rx_buffer, sizeof(rx_buffer) - 1, 0);
-        if (len < 0)
+        if (tcpDiconnect)
         {
-            ESP_LOGE(TCP_TAG, "Error occurred during receiving: errno %d", errno);
-        }
-        else if (len == 0)
-        {
-            ESP_LOGW(TCP_TAG, "Connection closed");
+            break;
         }
         else
         {
-            rx_buffer[len] = 0; // Null-terminate whatever is received and treat it like a string
-            ESP_LOGI(TCP_TAG, "Received %d bytes: %s", len, rx_buffer);
-
-            setTextToDecrypt(rx_buffer);
-            decodeAESCBC();
-
-            if (strContains(plaintext, "Hello_Testing"))
+            len = recv(sock, rx_buffer, sizeof(rx_buffer) - 1, 0);
+            if (len < 0)
             {
-                setTextToEncrypt("Thank_you_ESP32!");
-                encodeAESCBC();
-                
-                sprintf(tx_buffer, encryptedHex);
+                ESP_LOGE(TCP_TAG, "Error occurred during receiving: errno %d", errno);
+            }
+            else if (len == 0)
+            {
+                ESP_LOGW(TCP_TAG, "Connection closed");
+                tcpDiconnect = true;
             }
             else
             {
-                sprintf(tx_buffer, "BAD MESSAGE");
-            }
+                rx_buffer[len] = 0; // Null-terminate whatever is received and treat it like a string
+                ESP_LOGI(TCP_TAG, "Received %d bytes: %s", len, rx_buffer);
 
-            len = strlen(tx_buffer);
-
-            // send() can return less bytes than supplied length.
-            // Walk-around for robust implementation.
-            int to_write = len;
-            while (to_write > 0)
-            {
-                int written = send(sock, tx_buffer + (len - to_write), to_write, 0);
-                if (written < 0)
+                if (tcpDecryptMessages)
                 {
-                    ESP_LOGE(TCP_TAG, "Error occurred during sending: errno %d", errno);
+                    setTextToDecrypt(rx_buffer);
+                    decodeAESCBC();
+                    ESP_LOGI(TCP_TAG, "Text received after crypt : %s", plaintext);
+                    checkMessageInput(plaintext);
                 }
-                to_write -= written;
+                else
+                {
+                    if (strContains(rx_buffer, "$dicover HuBBoX DELILED"))
+                    {
+                        uint8_t mac[6];
+                        esp_efuse_mac_get_default(mac);
+                        sprintf(tx_buffer, "{\"man\":\"%s\",\"name\":\"%s\",\"mac\":\"%02X%02X%02X%02X%02X%02X\",\"sn\":\"%s\"}",
+                                DEFAULT_MANUFACTURE, UnitCfg.UnitName, mac[0], mac[1], mac[2], mac[3], mac[4], mac[5], DEFAULT_SERIAL_NUMBER);
+                        tcpDecryptMessages = true;
+                    }
+                    else
+                    {
+                        sprintf(tx_buffer, "WRONG MESSAGE");
+                        tcpDecryptMessages = false;
+                    }
+                }
+                tcpReadOrWrite = true;
             }
         }
+        delay(200);
     } while (len > 0);
+    vTaskDelete(NULL);
+}
+
+void txTransmission(void *pvParameters)
+{
+    int len;
+    int sock = (int)pvParameters;
+    while (true)
+    {
+        if (tcpDiconnect)
+        {
+            break;
+        }
+        else
+        {
+            if (tcpReadOrWrite)
+            {
+                len = strlen(tx_buffer);
+                int to_write = len;
+                while (to_write > 0)
+                {
+                    int written = send(sock, tx_buffer + (len - to_write), to_write, 0);
+                    if (written < 0)
+                    {
+                        ESP_LOGE(TCP_TAG, "Error occurred during sending: errno %d", errno);
+                    }
+                    to_write -= written;
+                }
+                tcpReadOrWrite = false;
+            }
+        }
+        delay(200);
+    }
+    vTaskDelete(NULL);
+}
+
+void TCPCommunication(const int sock)
+{
+    xTaskCreate(txTransmission, "txTransmission", 8192, (void *)sock, 3, NULL);
+    xTaskCreate(rxTransmission, "rxTransmission", 8192, (void *)sock, 3, NULL);
+    while (true)
+    {
+        if (tcpDiconnect)
+        {
+            break;
+        }
+        delay(100);
+    }
+    ESP_LOGE(TCP_TAG, "Communication ended, Shutdown !");
 }
 
 void TCPInit(void *pvParameters)
@@ -104,8 +168,8 @@ void TCPInit(void *pvParameters)
     if (addr_family == AF_INET)
     {
         struct sockaddr_in *dest_addr_ip4 = (struct sockaddr_in *)&dest_addr;
-        dest_addr_ip4->sin_port = htons(PORT);
-        dest_addr_ip4->sin_addr.s_addr = inet_addr(ADDRESS); /*htonl(INADDR_ANY);*/
+        dest_addr_ip4->sin_addr.s_addr = inet_addr(ADDRESS_TCP);
+        dest_addr_ip4->sin_port = htons(PORT_TCP);
         dest_addr_ip4->sin_family = AF_INET;
         ip_protocol = IPPROTO_IP;
     }
@@ -129,7 +193,7 @@ void TCPInit(void *pvParameters)
         ESP_LOGE(TCP_TAG, "IPPROTO: %d", addr_family);
         goto CLEAN_UP;
     }
-    ESP_LOGI(TCP_TAG, "Socket bound, port %d", PORT);
+    ESP_LOGI(TCP_TAG, "Socket bound, port %d", PORT_TCP);
 
     err = listen(listen_sock, 1);
     if (err != 0)
@@ -149,25 +213,42 @@ void TCPInit(void *pvParameters)
         if (sock < 0)
         {
             ESP_LOGE(TCP_TAG, "Unable to accept connection: errno %d", errno);
-            break;
+            goto CLEAN_UP;
         }
-
-        // Set tcp keepalive option
-        setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, &keepAlive, sizeof(int));
-        setsockopt(sock, IPPROTO_TCP, TCP_KEEPIDLE, &keepIdle, sizeof(int));
-        setsockopt(sock, IPPROTO_TCP, TCP_KEEPINTVL, &keepInterval, sizeof(int));
-        setsockopt(sock, IPPROTO_TCP, TCP_KEEPCNT, &keepCount, sizeof(int));
-        // Convert ip address to string
-        if (source_addr.ss_family == PF_INET)
+        else
         {
-            inet_ntoa_r(((struct sockaddr_in *)&source_addr)->sin_addr, addr_str, sizeof(addr_str) - 1);
+            struct timeval receiving_timeout;
+            receiving_timeout.tv_sec = 0;
+            receiving_timeout.tv_usec = 100000;
+            if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &receiving_timeout, sizeof(receiving_timeout)) < 0)
+            {
+                ESP_LOGE(TCP_TAG, "... failed to set socket receiving timeout");
+                goto CLEAN_UP;
+            }
+
+            ESP_LOGI(TCP_TAG, "Timeout Successful");
+            // Set tcp keepalive option
+            setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, &keepAlive, sizeof(int));
+            setsockopt(sock, IPPROTO_TCP, TCP_KEEPIDLE, &keepIdle, sizeof(int));
+            setsockopt(sock, IPPROTO_TCP, TCP_KEEPINTVL, &keepInterval, sizeof(int));
+            setsockopt(sock, IPPROTO_TCP, TCP_KEEPCNT, &keepCount, sizeof(int));
+            // Convert ip address to string
+            if (source_addr.ss_family == PF_INET)
+            {
+                inet_ntoa_r(((struct sockaddr_in *)&source_addr)->sin_addr, addr_str, sizeof(addr_str) - 1);
+            }
+            ESP_LOGI(TCP_TAG, "Socket accepted ip address: %s", addr_str);
+
+            TCPCommunication(sock);
+
+            tcpDecryptMessages = false;
+            tcpReadOrWrite = false;
+            tcpDiconnect = false;
+
+            shutdown(sock, 0);
+            close(sock);
         }
-        ESP_LOGI(TCP_TAG, "Socket accepted ip address: %s", addr_str);
-
-        do_retransmit(sock);
-
-        shutdown(sock, 0);
-        close(sock);
+        delay(100);
     }
 
 CLEAN_UP:
@@ -178,4 +259,12 @@ CLEAN_UP:
 void TCPServer(void)
 {
     xTaskCreate(TCPInit, "TCPInit", 4096, (void *)AF_INET, 5, NULL);
+}
+
+void sendTCPCryptedMessage(const char *text)
+{
+    setTextToEncrypt(text);
+    encodeAESCBC();
+    sprintf(tx_buffer, encryptedHex);
+    tcpReadOrWrite = true;
 }

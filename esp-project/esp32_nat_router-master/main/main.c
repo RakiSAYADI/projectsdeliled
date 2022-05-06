@@ -13,13 +13,14 @@
 #include "unitcfg.h"
 #include "system_init.h"
 #include "tcp_server.h"
+#include "udp_server.h"
 #include "nat_router.h"
 #include "app_gpio.h"
 #include "http_server.h"
 #include "base_mac_address.h"
 #include "aes.h"
 
-const char *MAIN_TAG = "app_main";
+const char *MAIN_TAG = "MAIN";
 
 int app_main(void)
 {
@@ -36,22 +37,20 @@ int app_main(void)
 		return -1;
 	}
 
-	// Initiate nat WIFI
-	natRouter();
-
 	// Initiate LED indicator
 	LedStatInit();
 
+	// Initiate nat WIFI
+	natRouter();
+
 	// Initiate WEB server
-	start_webserver();
+	startWebserver();
 
 	// Initiate TCP protocol
 	TCPServer();
 
-	setTextToEncrypt("Hello");
-
-	encodeAESCBC();
-	decodeAESCBC();
+	// Initiate UDP protocol
+	//UDPServer();
 
 	return 0;
 }

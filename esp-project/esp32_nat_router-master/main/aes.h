@@ -1,8 +1,11 @@
 #ifndef MAIN_AES_H_
 #define MAIN_AES_H_
 
-void setTextToEncrypt(char *input);
-void setTextToDecrypt(char *input);
+#define KEY_AES "12345678901234567890123456789012"
+#define IV_AES  "1234567890123456"
+
+void setTextToEncrypt(const char *input);
+void setTextToDecrypt(const char *input);
 void encodeAESCBC();
 void decodeAESCBC();
 

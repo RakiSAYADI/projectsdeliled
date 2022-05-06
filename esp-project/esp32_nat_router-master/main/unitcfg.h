@@ -25,6 +25,9 @@
 #define DEFAULT_AP_IP "192.168.2.1"
 #define DEFAULT_DNS "8.8.8.8"
 
+#define DEFAULT_MANUFACTURE "DELILED"
+#define DEFAULT_SERIAL_NUMBER "00001233154"
+
 typedef struct
 {
 	char AP_SSID[64];
@@ -41,6 +44,11 @@ typedef struct
 {
 	char UnitName[32];
 	uint8_t Version;
+	uint8_t DisinfictionTime;
+	uint8_t ActivationTime;
+	uint32_t UVCTimeExecution;
+	uint32_t UVCLifeTime;
+	uint32_t NumberOfDisinfection;
 	char FirmwareVersion[6];
 	char UnitTimeZone[64];
 	WifiConfig_Typedef WifiCfg;
@@ -53,6 +61,7 @@ void saveDataTask(bool savenvsFlag);
 void syncTime(time_t t, char tzone[64]);
 
 bool strContains(char* string, char* toFind);
+bool jsonparse(char *src, char *dst, char *label, unsigned short arrayindex);
 
 void Default_saving();
 bool InitLoadCfg();
