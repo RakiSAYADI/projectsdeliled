@@ -193,7 +193,7 @@ final List<String> profileMessageTextLanguageArray = [
 
 final List<String> nextTextLanguageArray = ['SUIVANT', 'NEXT'];
 
-final List<String> quitProfileMessageTextLanguageArray = ['Voulez-vous vraiment quitter la page \"Profil\" ?', 'Are you sure to exit the \ "Profile \" page?'];
+final List<String> quitProfileMessageTextLanguageArray = ['Voulez-vous vraiment quitter la page \"Profil\" ?', 'Are you sure to exit the \"Profile\" page?'];
 
 final List<String> saveDeviceMessageTextLanguageArray = ['Voulez-vous vraiment enregistrer ce dispositif ?', 'Are you sure to register this device?'];
 

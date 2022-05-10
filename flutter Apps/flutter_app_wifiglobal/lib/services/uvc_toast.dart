@@ -28,7 +28,6 @@ class ToastyMessage {
   }
 
   void showToast(Color toastColor, IconData messageIcon, Color toastMessageColor) {
-
     flutterToast.init(toastContext!);
     Widget toast;
     try {

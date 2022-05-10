@@ -11,6 +11,7 @@ import 'package:wifiglobalapp/services/uvc_toast.dart';
 
 class AccessPin extends StatefulWidget {
   const AccessPin({Key? key}) : super(key: key);
+
   @override
   _AccessPinState createState() => _AccessPinState();
 }
@@ -135,25 +136,17 @@ class _AccessPinState extends State<AccessPin> {
                       SizedBox(height: heightScreen * 0.05),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
                         children: [
                           buttonNumbers('0', context),
-                          SizedBox(width: widthScreen * 0.003),
                           buttonNumbers('1', context),
-                          SizedBox(width: widthScreen * 0.003),
                           buttonNumbers('2', context),
-                          SizedBox(width: widthScreen * 0.003),
                           buttonNumbers('3', context),
-                          SizedBox(width: widthScreen * 0.003),
                           buttonNumbers('4', context),
-                          SizedBox(width: widthScreen * 0.003),
                           buttonNumbers('5', context),
-                          SizedBox(width: widthScreen * 0.003),
                           buttonNumbers('6', context),
-                          SizedBox(width: widthScreen * 0.003),
                           buttonNumbers('7', context),
-                          SizedBox(width: widthScreen * 0.003),
                           buttonNumbers('8', context),
-                          SizedBox(width: widthScreen * 0.003),
                           buttonNumbers('9', context),
                         ],
                       ),
@@ -169,10 +162,11 @@ class _AccessPinState extends State<AccessPin> {
             sleepIsInactivePinAccess = true;
             Navigator.pushNamed(context, '/advanced_settings');
           },
-          label: Text(settingsTextLanguageArray[languageArrayIdentifier]),
+          label: Text(settingsTextLanguageArray[languageArrayIdentifier], style: TextStyle(fontSize: heightScreen * 0.001 + widthScreen * 0.03)),
           icon: Icon(
             Icons.settings,
             color: Colors.white,
+            size: heightScreen * 0.001 + widthScreen * 0.03,
           ),
           backgroundColor: Colors.blue[400],
         ),
@@ -228,40 +222,46 @@ class _AccessPinState extends State<AccessPin> {
     } while (true);
   }
 
-  ButtonTheme buttonNumbers(String number, BuildContext context) {
+  Expanded buttonNumbers(String number, BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
-    return ButtonTheme(
-      minWidth: widthScreen * 0.09,
-      height: heightScreen * 0.07,
-      child: TextButton(
-        style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+    return Expanded(
+      flex: 1,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        child: ButtonTheme(
+          minWidth: widthScreen * 0.09,
+          height: heightScreen * 0.07,
+          child: TextButton(
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+              ),
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.grey),
+            ),
+            child: Text(
+              number,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: widthScreen * 0.02,
+              ),
+            ),
+            onPressed: () async {
+              timeToSleep = timeSleep;
+              myPinCode += number;
+              _pinPutController.text += '*';
+              if (_pinPutController.text.length == 4) {
+                _showSnackBar(myPinCode, context);
+                myPinCode = '';
+              }
+            },
           ),
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.grey),
         ),
-        child: Text(
-          number,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: widthScreen * 0.02,
-          ),
-        ),
-        onPressed: () async {
-          timeToSleep = timeSleep;
-          myPinCode += number;
-          _pinPutController.text += '*';
-          if (_pinPutController.text.length == 4) {
-            _showSnackBar(myPinCode, context);
-            myPinCode = '';
-          }
-        },
       ),
     );
   }
 
-   exitMessage(BuildContext context) async {
+  exitMessage(BuildContext context) async {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
     return showDialog<bool>(

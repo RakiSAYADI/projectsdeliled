@@ -1,10 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:wifiglobalapp/services/aes_cbc_crypt.dart';
 import 'package:wifiglobalapp/services/data_variables.dart';
+import 'package:wifiglobalapp/services/uvc_toast.dart';
+import 'package:wifiglobalapp/services/wifi_tcp.dart';
 
 class Welcome extends StatefulWidget {
   const Welcome({Key? key}) : super(key: key);
@@ -14,64 +14,26 @@ class Welcome extends StatefulWidget {
 }
 
 class _WelcomeState extends State<Welcome> {
+  ToastyMessage toastyMessage = ToastyMessage();
+
   void scanDevices(BuildContext context) async {
+    toastyMessage.setContext(context);
+    toastyMessage.setToastDuration(5);
+    TCPSocket _tcpSocket = TCPSocket();
+    await _tcpSocket.scanForDevices();
     try {
-      //ping to check the network
-      /*for (int i = 1; i < 256; i++) {
-        try {
-          Socket socket = await Socket.connect('192.168.2.$i', port, timeout: const Duration(milliseconds: 100));
-          debugPrint('we have good connection => 192.168.2.$i');
-          // wait 5 milliseconds
-          await Future.delayed(const Duration(milliseconds: 300));
-          // .. and close the socket
-          socket.close();
-          debugPrint('disconnected');
-        } catch (e) {
-          debugPrint(e.toString());
-        }
-      }*/
-
-      Socket socket = await Socket.connect('192.168.2.1', port);
-      debugPrint('connected');
-
-      final plainText = 'Hello_Testing';
-
-      final key = '12345678901234567890123456789012';
-      final iv = '1234567890123456';
-
-      AESCbcCrypt aesCbcCrypt = AESCbcCrypt(key, iv, textString: plainText);
-
-      // listen to the received data event stream
-      socket.listen((List<int> message) {
-        debugPrint('message received : ${utf8.decode(message)}');
-        aesCbcCrypt.setText(utf8.decode(message).toLowerCase());
-        aesCbcCrypt.decrypt();
-        debugPrint(aesCbcCrypt.getDecryptedText());
-      });
-
-      aesCbcCrypt.setText(plainText);
-
-      aesCbcCrypt.encrypt();
-
-      String cryptMessage = aesCbcCrypt.getCrypted16Text();
-
-      debugPrint(cryptMessage);
-
-      aesCbcCrypt.setText(cryptMessage);
-
-      // send crypt message
-      socket.add(utf8.encode(cryptMessage));
-
-      // wait 5 seconds
-      await Future.delayed(const Duration(seconds: 2));
-
-      // .. and close the socket
-      socket.close();
-      debugPrint('disconnected');
+      _tcpSocket.setDevice(listOfDevices.first);
+      if (await _tcpSocket.sendMessage('HELLO')) {
+        toastyMessage.setToastMessage('appareil connectée');
+        toastyMessage.showToast(Colors.green, Icons.thumb_up, Colors.white);
+      } else {
+        throw Exception('No DELILED device has been found !');
+      }
     } catch (e) {
       debugPrint(e.toString());
+      toastyMessage.setToastMessage('aucune appareil trouvée');
+      toastyMessage.showToast(Colors.red, Icons.thumb_down, Colors.white);
     }
-
     Future.delayed(const Duration(seconds: 5), () {
       Navigator.pushReplacementNamed(context, '/pin_access');
     });
