@@ -36,6 +36,10 @@ void main() async {
       languageArrayIdentifier = 1;
       break;
   }
+
+  embeddedTimeZone = WidgetsBinding.instance!.window.locale.countryCode!;
+  debugPrint(embeddedTimeZone);
+
   // run the main App class
   runApp(MyApp());
 }

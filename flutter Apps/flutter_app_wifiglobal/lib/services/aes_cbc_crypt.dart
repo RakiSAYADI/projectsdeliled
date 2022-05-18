@@ -5,8 +5,8 @@ class AESCbcCrypt {
   String textString = 'test';
   String macAddress = '';
 
-  String _crypt16String = 'test';
-  String _decryptString = 'test';
+  String _crypt16String = '';
+  String _decryptString = '';
   String _keyString = '12345678901234567890123456789012';
   String _IVString = '1234567890123456';
 
@@ -34,6 +34,7 @@ class AESCbcCrypt {
       _crypt16String = encrypted.base16.toUpperCase();
       return true;
     } catch (e) {
+      debugPrint(e.toString());
       return false;
     }
   }
@@ -46,6 +47,7 @@ class AESCbcCrypt {
       _decryptString = encrypt.decrypt16(textString, iv: iv);
       return true;
     } catch (e) {
+      debugPrint(e.toString());
       return false;
     }
   }

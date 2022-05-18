@@ -19,21 +19,24 @@ class _WelcomeState extends State<Welcome> {
   void scanDevices(BuildContext context) async {
     toastyMessage.setContext(context);
     toastyMessage.setToastDuration(5);
-    TCPSocket _tcpSocket = TCPSocket();
-    await _tcpSocket.scanForDevices();
-    try {
-      _tcpSocket.setDevice(listOfDevices.first);
-      if (await _tcpSocket.sendMessage('HELLO')) {
-        toastyMessage.setToastMessage('appareil connectée');
+    TCPScan _tcpScan = TCPScan();
+    if (await _tcpScan.checkWifiConnection()) {
+      await _tcpScan.scanTCP(noAllScan: true);
+      if (_tcpScan.getScanList().isNotEmpty) {
+        toastyMessage.setToastMessage('des appareils DELILED trouvées dans le réseau');
         toastyMessage.showToast(Colors.green, Icons.thumb_up, Colors.white);
+        myDevice = _tcpScan.selectDevice(0);
+        await myDevice.getDeviceData();
+        await myDevice.setDeviceTime();
       } else {
-        throw Exception('No DELILED device has been found !');
+        toastyMessage.setToastMessage('aucune appareils trouvées dans le réseau');
+        toastyMessage.showToast(Colors.red, Icons.thumb_down, Colors.white);
       }
-    } catch (e) {
-      debugPrint(e.toString());
-      toastyMessage.setToastMessage('aucune appareil trouvée');
+    } else {
+      toastyMessage.setToastMessage('Application n\'est pas connectée avec une modem WIFI');
       toastyMessage.showToast(Colors.red, Icons.thumb_down, Colors.white);
     }
+
     Future.delayed(const Duration(seconds: 5), () {
       Navigator.pushReplacementNamed(context, '/pin_access');
     });
