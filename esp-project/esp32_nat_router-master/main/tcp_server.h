@@ -19,6 +19,7 @@ void sendTCPCryptedMessage(const char *text);
 void TCPServer(void);
 
 extern bool UVTaskIsOn;
+extern bool tcpDiconnect;
 extern bool stopEventTrigerred;
 extern bool detectionTriggered;
 

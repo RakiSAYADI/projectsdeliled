@@ -34,7 +34,7 @@ void systemInit()
 	}
 	ESP_ERROR_CHECK(err);
 
-	ESP_LOGI(INIT_TAG, "INITIATE ESP32 SYSTEM \n");
+	ESP_LOGI(INIT_TAG, "INITIATE ESP32 SYSTEM");
 	ESP_ERROR_CHECK(esp_netif_init());
 	ESP_ERROR_CHECK(esp_event_loop_create_default());
 

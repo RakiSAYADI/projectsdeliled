@@ -50,7 +50,7 @@ int app_main(void)
 	TCPServer();
 
 	// Initiate UDP protocol
-	//UDPServer();
+	UDPServer();
 
 	return 0;
 }

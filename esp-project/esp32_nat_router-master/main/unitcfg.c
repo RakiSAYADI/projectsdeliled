@@ -132,7 +132,7 @@ bool strContains(char *string, char *toFind)
 				if (string[s] == toFind[t])
 				{
 					if (++found == tFlen)
-						return 1;
+						return true;
 					s++;
 					t++;
 				}
@@ -161,7 +161,7 @@ bool InitLoadCfg()
 	{
 		ESP_LOGI(NVS_TAG, "Unit Config Loading OK");
 		// checking the data storage health
-		if (!strContains(UnitCfg.FLASH_MEMORY, "OK"))
+		if (!strstr(UnitCfg.FLASH_MEMORY, "OK"))
 		{
 			ESP_LOGE(NVS_TAG, "Saving the default configuration ..");
 			Default_saving();
@@ -176,7 +176,7 @@ void Default_saving()
 	esp_efuse_mac_get_default(mac);
 	sprintf(UnitCfg.UnitName, "HuBBoX-%02X:%02X:%02X", mac[3], mac[4], mac[5]);
 
-	sprintf(UnitCfg.WifiCfg.AP_SSID, "%s-%s", UnitCfg.UnitName, DEFAULT_AP_SSID);
+	sprintf(UnitCfg.WifiCfg.AP_SSID, "%s-HuBBoX-%s",DEVICE_NAME_DEFAULT, DEFAULT_AP_SSID);
 	strncpy(UnitCfg.WifiCfg.AP_PASS, DEFAULT_AP_PASSWORD, sizeof(UnitCfg.WifiCfg.AP_PASS));
 	sprintf(UnitCfg.WifiCfg.AP_IP, DEFAULT_AP_IP);
 	strncpy(UnitCfg.WifiCfg.STA_SSID, "", sizeof(UnitCfg.WifiCfg.STA_SSID));
@@ -185,13 +185,19 @@ void Default_saving()
 	strncpy(UnitCfg.WifiCfg.STA_SUBNET_MASK, "", sizeof(UnitCfg.WifiCfg.STA_SUBNET_MASK));
 	strncpy(UnitCfg.WifiCfg.STA_GATEWAY, "", sizeof(UnitCfg.WifiCfg.STA_GATEWAY));
 
+	sprintf(UnitCfg.Company, "Deliled");
+	sprintf(UnitCfg.OperatorName, "ROBOT-D001");
+	sprintf(UnitCfg.RoomName, "Room 1");
+
 	UnitCfg.DisinfictionTime = 0;
 	UnitCfg.ActivationTime = 0;
 
-	UnitCfg.UVCTimeExecution = 0;
-	UnitCfg.UVCLifeTime = 32400000;
-
-	UnitCfg.NumberOfDisinfection = 0;
+	for (int i = 0; i < MAXSLAVES; i++)
+	{
+		UnitCfg.UVCSlaves[i].UVCTimeExecution = 0;
+		UnitCfg.UVCSlaves[i].UVCLifeTime = 32400000;
+		UnitCfg.UVCSlaves[i].NumberOfDisinfection = 0;
+	}
 
 	sprintf(UnitCfg.UnitTimeZone, "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00");
 

@@ -7,7 +7,6 @@
    CONDITIONS OF ANY KIND, either express or implied.
 */
 #include <string.h>
-#include <sys/param.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/event_groups.h"
@@ -33,125 +32,189 @@
 
 const char *TCP_TAG = "TCP-IP";
 
-char tx_buffer[4096];
-char rx_buffer[4096];
+char tx_buffer[sizeof(encryptedHex)];
+char rx_buffer[sizeof(encryptedHex)];
+
+int sock;
 
 bool tcpDiconnect = false;
-bool tcpReadOrWrite = false;
-bool tcpDecryptMessages = false;
 
 bool UVTaskIsOn = false;
 bool stopEventTrigerred = false;
 bool detectionTriggered = false;
 
+bool saveNVSData = false;
+
 void checkMessageInput(char *text)
 {
+    if (strstr(text, "PING"))
+    {
+        sendTCPCryptedMessage("PONG");
+    }
+    else if (strstr(text, "GETINFO_1.1"))
+    {
+        char bufferTCP[sizeof(plaintext)];
+        sprintf(bufferTCP, "{\'data\':\'INFO\',\'name\':\'%s\',\'wifi\':[\'%s\',\'%s\'],\'timeDYS\':[%d,%d],\'dataDYS\':[\'%s\',\'%s\',\'%s\']}",
+                UnitCfg.UnitName,
+                UnitCfg.WifiCfg.AP_SSID, UnitCfg.WifiCfg.AP_PASS,
+                UnitCfg.DisinfictionTime, UnitCfg.ActivationTime,
+                UnitCfg.Company, UnitCfg.OperatorName, UnitCfg.RoomName);
+        sendTCPCryptedMessage(bufferTCP);
+    }
+    else if (strstr(text, "STARTDESYNFECTIONPROCESS"))
+    {
+        time_t t;
+        time(&t);
+        char bufferTCP[sizeof(plaintext)];
+        sprintf(bufferTCP, "{\'data\':\'STARTPROCESS\',\'timeSTAMP\':%ld,\'timeZONE\':\'%s\'}", t, UnitCfg.UnitTimeZone);
+        sendTCPCryptedMessage(bufferTCP);
+    }
+    else if (strstr(text, "GOODDATA"))
+    {
+        char bufferTCP[sizeof(plaintext)];
+        sprintf(bufferTCP, "{\'data\':\'success\'}");
+        sendTCPCryptedMessage(bufferTCP);
+    }
+    else
+    {
+        sendTCPCryptedMessage("WRONG MESSAGE");
+    }
 }
 
-void rxTransmission(void *pvParameters)
+void checkMessageOut()
 {
-    int len;
-    int sock = (int)pvParameters;
-    do
+    if (strstr(rx_buffer, "$discover HuBBoX DELILED"))
     {
-        if (tcpDiconnect)
+        uint8_t mac[6];
+        esp_efuse_mac_get_default(mac);
+        sprintf(tx_buffer, "{\"man\":\"%s\",\"name\":\"%s\",\"mac\":\"%02X%02X%02X%02X%02X%02X\",\"sn\":\"%s\"}",
+                DEFAULT_MANUFACTURE, UnitCfg.UnitName, mac[0], mac[1], mac[2], mac[3], mac[4], mac[5], DEFAULT_SERIAL_NUMBER);
+    }
+    else
+    {
+        setTextToDecrypt(rx_buffer);
+        ESP_LOGI(TCP_TAG, "Text received after crypt : %s", plaintext);
+        char tmp[64];
+        if (jsonparse(plaintext, tmp, "mode", 0))
         {
+            if (strstr(tmp, "SETTIME"))
+            {
+                if (jsonparse(plaintext, tmp, "Time", 0))
+                {
+                    // time
+                    time_t t = 0;
+                    time_t tl = 0;
+                    struct tm ti;
+
+                    time(&tl);
+                    localtime_r(&tl, &ti);
+
+                    t = atoi(tmp);
+                    ESP_LOGI(TCP_TAG, "Time sync epoch %ld", t);
+
+                    if (jsonparse(plaintext, tmp, "Time", 1))
+                    {
+                        if (strstr(tmp, "FR"))
+                        {
+                            sprintf(UnitCfg.UnitTimeZone, "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00");
+                        }
+                        if (strstr(tmp, "TN"))
+                        {
+                            sprintf(UnitCfg.UnitTimeZone, "UTC+1");
+                        }
+                        ESP_LOGI(TCP_TAG, "Time zone %s", UnitCfg.UnitTimeZone);
+                        syncTime(t, UnitCfg.UnitTimeZone);
+                        saveNVSData = true;
+                        sprintf(plaintext, "GOODDATA");
+                    }
+                }
+            }
+            else if (strstr(tmp, "SETDISINFECT"))
+            {
+                if (jsonparse(plaintext, UnitCfg.Company, "data", 0))
+                {
+                    ESP_LOGI(TCP_TAG, "Company :  %s", UnitCfg.Company);
+                    if (jsonparse(plaintext, UnitCfg.OperatorName, "data", 1))
+                    {
+                        ESP_LOGI(TCP_TAG, "Operator :  %s", UnitCfg.OperatorName);
+                    }
+                    if (jsonparse(plaintext, UnitCfg.RoomName, "data", 2))
+                    {
+                        ESP_LOGI(TCP_TAG, "Room :  %s", UnitCfg.RoomName);
+                    }
+                    if (jsonparse(plaintext, tmp, "Time", 0))
+                    {
+                        UnitCfg.DisinfictionTime = atoi(tmp);
+                        ESP_LOGI(TCP_TAG, "Disinfection time :  %d", UnitCfg.DisinfictionTime);
+                        if (jsonparse(plaintext, tmp, "Time", 1))
+                        {
+                            UnitCfg.ActivationTime = atoi(tmp);
+                            ESP_LOGI(TCP_TAG, "Activation time :  %d", UnitCfg.ActivationTime);
+                        }
+                    }
+                    saveNVSData = true;
+                    sprintf(plaintext, "STARTDESYNFECTIONPROCESS");
+                }
+            }
+        }
+        checkMessageInput(plaintext);
+    }
+}
+
+void sendTCPCryptedMessage(const char *text)
+{
+    setTextToEncrypt(text);
+    memset(tx_buffer, 0, sizeof(tx_buffer));
+    sprintf(tx_buffer, encryptedHex);
+}
+
+void txTransmission()
+{
+    int length = strlen(tx_buffer);
+    int to_write = length;
+    ESP_LOGI(TCP_TAG, "Message to send : %s", tx_buffer);
+    while (to_write > 0)
+    {
+        int written = send(sock, tx_buffer + (length - to_write), to_write, 0);
+        if (written < 0)
+        {
+            ESP_LOGE(TCP_TAG, "Error occurred during sending: errno %d", errno);
+        }
+        to_write -= written;
+    }
+    memset(rx_buffer, 0, sizeof(rx_buffer));
+}
+
+void rxTransmission()
+{
+    saveNVSData = false;
+    int len;
+    while (true)
+    {
+        len = recv(sock, rx_buffer, sizeof(rx_buffer) - 1, 0);
+        if (len < 0)
+        {
+            ESP_LOGE(TCP_TAG, "Error occurred during receiving: errno %d", errno);
+        }
+        else if (len == 0)
+        {
+            ESP_LOGW(TCP_TAG, "Connection closed");
+            tcpDiconnect = true;
             break;
         }
         else
         {
-            len = recv(sock, rx_buffer, sizeof(rx_buffer) - 1, 0);
-            if (len < 0)
-            {
-                ESP_LOGE(TCP_TAG, "Error occurred during receiving: errno %d", errno);
-            }
-            else if (len == 0)
-            {
-                ESP_LOGW(TCP_TAG, "Connection closed");
-                tcpDiconnect = true;
-            }
-            else
-            {
-                rx_buffer[len] = 0; // Null-terminate whatever is received and treat it like a string
-                ESP_LOGI(TCP_TAG, "Received %d bytes: %s", len, rx_buffer);
-
-                if (tcpDecryptMessages)
-                {
-                    setTextToDecrypt(rx_buffer);
-                    decodeAESCBC();
-                    ESP_LOGI(TCP_TAG, "Text received after crypt : %s", plaintext);
-                    checkMessageInput(plaintext);
-                }
-                else
-                {
-                    if (strContains(rx_buffer, "$dicover HuBBoX DELILED"))
-                    {
-                        uint8_t mac[6];
-                        esp_efuse_mac_get_default(mac);
-                        sprintf(tx_buffer, "{\"man\":\"%s\",\"name\":\"%s\",\"mac\":\"%02X%02X%02X%02X%02X%02X\",\"sn\":\"%s\"}",
-                                DEFAULT_MANUFACTURE, UnitCfg.UnitName, mac[0], mac[1], mac[2], mac[3], mac[4], mac[5], DEFAULT_SERIAL_NUMBER);
-                        tcpDecryptMessages = true;
-                    }
-                    else
-                    {
-                        sprintf(tx_buffer, "WRONG MESSAGE");
-                        tcpDecryptMessages = false;
-                    }
-                }
-                tcpReadOrWrite = true;
-            }
+            rx_buffer[len] = 0; // Null-terminate whatever is received and treat it like a string
+            ESP_LOGI(TCP_TAG, "Received %d bytes: %s", len, rx_buffer);
+            checkMessageOut();
+            txTransmission();
         }
-        delay(200);
-    } while (len > 0);
-    vTaskDelete(NULL);
-}
-
-void txTransmission(void *pvParameters)
-{
-    int len;
-    int sock = (int)pvParameters;
-    while (true)
-    {
-        if (tcpDiconnect)
-        {
-            break;
-        }
-        else
-        {
-            if (tcpReadOrWrite)
-            {
-                len = strlen(tx_buffer);
-                int to_write = len;
-                while (to_write > 0)
-                {
-                    int written = send(sock, tx_buffer + (len - to_write), to_write, 0);
-                    if (written < 0)
-                    {
-                        ESP_LOGE(TCP_TAG, "Error occurred during sending: errno %d", errno);
-                    }
-                    to_write -= written;
-                }
-                tcpReadOrWrite = false;
-            }
-        }
-        delay(200);
+        delay(50);
     }
-    vTaskDelete(NULL);
-}
-
-void TCPCommunication(const int sock)
-{
-    xTaskCreate(txTransmission, "txTransmission", 8192, (void *)sock, 3, NULL);
-    xTaskCreate(rxTransmission, "rxTransmission", 8192, (void *)sock, 3, NULL);
-    while (true)
-    {
-        if (tcpDiconnect)
-        {
-            break;
-        }
-        delay(100);
-    }
+    tcpDiconnect = false;
     ESP_LOGE(TCP_TAG, "Communication ended, Shutdown !");
+    // Save Data when disconnecting
+    saveDataTask(saveNVSData);
 }
 
 void TCPInit(void *pvParameters)
@@ -209,7 +272,7 @@ void TCPInit(void *pvParameters)
 
         struct sockaddr_storage source_addr; // Large enough for both IPv4 or IPv6
         socklen_t addr_len = sizeof(source_addr);
-        int sock = accept(listen_sock, (struct sockaddr *)&source_addr, &addr_len);
+        sock = accept(listen_sock, (struct sockaddr *)&source_addr, &addr_len);
         if (sock < 0)
         {
             ESP_LOGE(TCP_TAG, "Unable to accept connection: errno %d", errno);
@@ -218,20 +281,21 @@ void TCPInit(void *pvParameters)
         else
         {
             struct timeval receiving_timeout;
-            receiving_timeout.tv_sec = 0;
-            receiving_timeout.tv_usec = 100000;
+            receiving_timeout.tv_sec = 1;
+            receiving_timeout.tv_usec = 0;
             if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &receiving_timeout, sizeof(receiving_timeout)) < 0)
             {
                 ESP_LOGE(TCP_TAG, "... failed to set socket receiving timeout");
                 goto CLEAN_UP;
             }
-
             ESP_LOGI(TCP_TAG, "Timeout Successful");
+
             // Set tcp keepalive option
             setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, &keepAlive, sizeof(int));
             setsockopt(sock, IPPROTO_TCP, TCP_KEEPIDLE, &keepIdle, sizeof(int));
             setsockopt(sock, IPPROTO_TCP, TCP_KEEPINTVL, &keepInterval, sizeof(int));
             setsockopt(sock, IPPROTO_TCP, TCP_KEEPCNT, &keepCount, sizeof(int));
+
             // Convert ip address to string
             if (source_addr.ss_family == PF_INET)
             {
@@ -239,11 +303,7 @@ void TCPInit(void *pvParameters)
             }
             ESP_LOGI(TCP_TAG, "Socket accepted ip address: %s", addr_str);
 
-            TCPCommunication(sock);
-
-            tcpDecryptMessages = false;
-            tcpReadOrWrite = false;
-            tcpDiconnect = false;
+            rxTransmission();
 
             shutdown(sock, 0);
             close(sock);
@@ -258,13 +318,5 @@ CLEAN_UP:
 
 void TCPServer(void)
 {
-    xTaskCreate(TCPInit, "TCPInit", 4096, (void *)AF_INET, 5, NULL);
-}
-
-void sendTCPCryptedMessage(const char *text)
-{
-    setTextToEncrypt(text);
-    encodeAESCBC();
-    sprintf(tx_buffer, encryptedHex);
-    tcpReadOrWrite = true;
+    xTaskCreate(TCPInit, "TCPInit", 8192, (void *)AF_INET, 3, NULL);
 }

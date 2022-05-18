@@ -20,13 +20,16 @@
 #define VERSION 0
 #define delay(ms) (vTaskDelay(ms / portTICK_RATE_MS))
 
-#define DEFAULT_AP_SSID "Router"
+#define DEVICE_NAME_DEFAULT "DEEPLIGHT"
+#define DEFAULT_AP_SSID "X001"
 #define DEFAULT_AP_PASSWORD "Deliled9318"
 #define DEFAULT_AP_IP "192.168.2.1"
 #define DEFAULT_DNS "8.8.8.8"
 
 #define DEFAULT_MANUFACTURE "DELILED"
 #define DEFAULT_SERIAL_NUMBER "00001233154"
+
+#define MAXSLAVES 5
 
 typedef struct
 {
@@ -42,13 +45,21 @@ typedef struct
 
 typedef struct
 {
-	char UnitName[32];
-	uint8_t Version;
-	uint8_t DisinfictionTime;
-	uint8_t ActivationTime;
 	uint32_t UVCTimeExecution;
 	uint32_t UVCLifeTime;
 	uint32_t NumberOfDisinfection;
+} SlaveConfig_Typedef;
+
+typedef struct
+{
+	char UnitName[32];
+	char Company[64];
+	char OperatorName[64];
+	char RoomName[64];
+	uint8_t Version;
+	uint32_t DisinfictionTime;
+	uint32_t ActivationTime;
+	SlaveConfig_Typedef UVCSlaves[MAXSLAVES];
 	char FirmwareVersion[6];
 	char UnitTimeZone[64];
 	WifiConfig_Typedef WifiCfg;
@@ -60,7 +71,7 @@ extern UnitConfig_Typedef UnitCfg;
 void saveDataTask(bool savenvsFlag);
 void syncTime(time_t t, char tzone[64]);
 
-bool strContains(char* string, char* toFind);
+bool strContains(char *string, char *toFind);
 bool jsonparse(char *src, char *dst, char *label, unsigned short arrayindex);
 
 void Default_saving();
