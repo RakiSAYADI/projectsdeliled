@@ -11,7 +11,7 @@ import 'package:flutter_app_bispectrum/services/languageDataBase.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:package_info/package_info.dart';
-import 'package:super_easy_permissions/super_easy_permissions.dart';
+//import 'package:super_easy_permissions/super_easy_permissions.dart';
 
 class Welcome extends StatefulWidget {
   @override
@@ -69,14 +69,14 @@ class _WelcomeState extends State<Welcome> {
   }
 
   void checkPermissions() async {
-    await SuperEasyPermissions.askPermission(Permissions.locationWhenInUse).then((value) {
+    /*await SuperEasyPermissions.askPermission(Permissions.locationWhenInUse).then((value) {
       if (value) {
         print("permission granted");
         SuperEasyPermissions.askPermission(Permissions.bluetooth);
       } else {
         print("permission denied");
       }
-    });
+    });*/
   }
 
   @override

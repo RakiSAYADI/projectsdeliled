@@ -100,6 +100,9 @@ void main() async {
       break;
   }
 
+  embeddedTimeZone = WidgetsBinding.instance.window.locale.countryCode;
+  debugPrint(embeddedTimeZone);
+
   runApp(MyApp());
 }
 

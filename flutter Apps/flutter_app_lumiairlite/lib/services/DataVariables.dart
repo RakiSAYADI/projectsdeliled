@@ -15,6 +15,7 @@ bool homePageState = false;
 
 String languageCode = 'fr';
 int languageArrayIdentifier = 0;
+String embeddedTimeZone = 'FR';
 
 Device myDevice;
 BluetoothCharacteristic characteristicSensors;

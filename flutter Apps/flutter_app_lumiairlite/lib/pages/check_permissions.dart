@@ -7,7 +7,7 @@ import 'package:flutter_app_bispectrum/services/animation_between_pages.dart';
 import 'package:flutter_app_bispectrum/services/languageDataBase.dart';
 import 'package:flutter_app_bispectrum/services/uvcToast.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:permission_handler/permission_handler.dart';
+//import 'package:permission_handler/permission_handler.dart';
 
 class CheckPermissions extends StatefulWidget {
   @override
@@ -31,8 +31,8 @@ class _CheckPermissionsState extends State<CheckPermissions> {
       myUvcToast.setToastMessage(internetToastLanguageArray[languageArrayIdentifier]);
       myUvcToast.showToast(Colors.red, Icons.close, Colors.white);
     }
-    await Permission.locationWhenInUse.request();
-    await Permission.locationAlways.request();
+    //await Permission.locationWhenInUse.request();
+    //await Permission.locationAlways.request();
   }
 
   @override

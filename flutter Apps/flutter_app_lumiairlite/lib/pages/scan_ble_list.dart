@@ -188,7 +188,7 @@ class _ScanListBleState extends State<ScanListBle> {
           Navigator.of(context).pop();
           DateTime dateTime = DateTime.now();
           homePageState = true;
-          await characteristicData.write('{\"Time\":[${dateTime.millisecondsSinceEpoch ~/ 1000},${dateTime.timeZoneOffset.inSeconds}]}'.codeUnits);
+          await characteristicData.write('{\"Time\":[${dateTime.millisecondsSinceEpoch ~/ 1000},\"$embeddedTimeZone\",${dateTime.timeZoneOffset.inSeconds}]}'.codeUnits);
           createRoute(context, Home());
         });
       }
@@ -210,7 +210,7 @@ class _ScanListBleState extends State<ScanListBle> {
           Navigator.of(context).pop();
           DateTime dateTime = DateTime.now();
           homePageState = true;
-          await characteristicData.write('{\"Time\":[${dateTime.millisecondsSinceEpoch ~/ 1000},${dateTime.timeZoneOffset.inSeconds}]}'.codeUnits);
+          await characteristicData.write('{\"Time\":[${dateTime.millisecondsSinceEpoch ~/ 1000},\"$embeddedTimeZone\",${dateTime.timeZoneOffset.inSeconds}]}'.codeUnits);
           createRoute(context, Home());
         });
       }
