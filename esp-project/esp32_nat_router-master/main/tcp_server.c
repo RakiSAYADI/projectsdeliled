@@ -47,9 +47,9 @@ bool saveNVSData = false;
 
 void checkMessageInput(char *text)
 {
-    if (strstr(text, "PING"))
+    if (strstr(text, "PONG"))
     {
-        sendTCPCryptedMessage("PONG");
+        sendTCPCryptedMessage("{\'data\':\'PONG\'}");
     }
     else if (strstr(text, "GETINFO_1.1"))
     {
@@ -66,7 +66,7 @@ void checkMessageInput(char *text)
         time_t t;
         time(&t);
         char bufferTCP[sizeof(plaintext)];
-        sprintf(bufferTCP, "{\'data\':\'STARTPROCESS\',\'timeSTAMP\':%ld,\'timeZONE\':\'%s\'}", t, UnitCfg.UnitTimeZone);
+        sprintf(bufferTCP, "{\'data\':\'START\',\'timeSTAMP\':%ld}", t);
         sendTCPCryptedMessage(bufferTCP);
     }
     else if (strstr(text, "GOODDATA"))
@@ -153,8 +153,16 @@ void checkMessageOut()
                         }
                     }
                     saveNVSData = true;
-                    sprintf(plaintext, "STARTDESYNFECTIONPROCESS");
+                    sprintf(plaintext, "GOODDATA");
                 }
+            }
+            else if (strstr(tmp, "START"))
+            {
+                sprintf(plaintext, "GOODDATA");
+            }
+            else if (strstr(tmp, "PING"))
+            {
+                sprintf(plaintext, "PONG");
             }
         }
         checkMessageInput(plaintext);

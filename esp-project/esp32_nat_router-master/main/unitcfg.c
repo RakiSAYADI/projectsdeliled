@@ -189,8 +189,8 @@ void Default_saving()
 	sprintf(UnitCfg.OperatorName, "ROBOT-D001");
 	sprintf(UnitCfg.RoomName, "Room 1");
 
-	UnitCfg.DisinfictionTime = 0;
-	UnitCfg.ActivationTime = 0;
+	UnitCfg.DisinfictionTime = 10;
+	UnitCfg.ActivationTime = 30;
 
 	for (int i = 0; i < MAXSLAVES; i++)
 	{
