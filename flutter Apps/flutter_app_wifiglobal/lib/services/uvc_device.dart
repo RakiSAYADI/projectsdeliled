@@ -29,7 +29,7 @@ class Device {
 
   Device(this.deviceAddress, {required this.macDevice, required this.manufacture, required this.nameDevice, required this.serialNumberDevice});
 
-  Future<bool> checkConnection(bool noScan) async {
+  Future<bool> checkConnection() async {
     try {
       if (await _tcpScan.checkWifiConnection()) {
         return true;
@@ -42,22 +42,43 @@ class Device {
     }
   }
 
+  Future<bool> setDeviceToStop() async {
+    await _tcpSocket.sendMessage(this, '{\"mode\":\"STOP\"}');
+    final bool result = await checkData(_tcpSocket.getMessage());
+    return result;
+  }
+
+  Future<bool> getDeviceConnectionState() async {
+    await _tcpSocket.sendMessage(this, '{\"mode\":\"PING\"}');
+    final bool result = await checkData(_tcpSocket.getMessage());
+    return result;
+  }
+
   Future<bool> getDeviceData() async {
     await _tcpSocket.sendMessage(this, 'GETINFO_1.1');
-    return checkData(_tcpSocket.getMessage());
+    final bool result = await checkData(_tcpSocket.getMessage());
+    return result;
+  }
+
+  Future<bool> setDisinfectionProcess() async {
+    String disinfectionData = '{\"mode\":\"SETDISINFECT\",\"Time\":[$disinfectionTime,$activationTime],\"data\":[\"$deviceCompanyName\",\"$deviceOperatorName\",\"$deviceRoomName\"]}';
+    await _tcpSocket.sendMessage(this, disinfectionData);
+    final bool result = await checkData(_tcpSocket.getMessage());
+    return result;
   }
 
   Future<bool> startDisinfectionProcess() async {
-    String disinfectionData = '{\"mode\":\"SETDISINFECT\",\"Time\":[$disinfectionTime,$activationTime],\"data\":[\"$deviceCompanyName\",\"$deviceOperatorName\",\"$deviceRoomName\"]}';
+    String disinfectionData = '{\"mode\":\"START\"}';
     await _tcpSocket.sendMessage(this, disinfectionData);
-    return checkData(_tcpSocket.getMessage());
+    return await checkData(_tcpSocket.getMessage());
   }
 
   Future<bool> setDeviceTime() async {
     DateTime dateTime = DateTime.now();
     String timeData = '{\"mode\":\"SETTIME\",\"Time\":[${dateTime.millisecondsSinceEpoch ~/ 1000},\"$embeddedTimeZone\",${dateTime.timeZoneOffset.inSeconds}]}';
     await _tcpSocket.sendMessage(this, timeData);
-    return checkData(_tcpSocket.getMessage());
+    final bool result = await checkData(_tcpSocket.getMessage());
+    return result;
   }
 
   Map<String, dynamic> getData() {
@@ -69,7 +90,7 @@ class Device {
     };
   }
 
-  bool checkData(String dataMessage) {
+  Future<bool> checkData(String dataMessage) {
     String data = dataMessage.replaceAll('\'', '\"');
     Map<String, dynamic> mapData;
     // subtract data
@@ -95,22 +116,24 @@ class Device {
           deviceAPSSID = wifiList.first;
           deviceAPPassword = wifiList.last;
           break;
-        case 'STARTPROCESS':
+        case 'START':
           debugPrint(mapData['timeSTAMP']);
-          debugPrint(mapData['timeZONE']);
           debugPrint('Disinfection Started');
           break;
         case 'success':
           debugPrint('DATA is correct and well received');
           break;
+        case 'PONG':
+          debugPrint('we have PONG from device');
+          break;
         default:
           result = false;
           break;
       }
-      return result;
+      return Future<bool>.value(result);
     } catch (e) {
       debugPrint(e.toString());
-      return false;
+      return Future<bool>.value(false);
     }
   }
 }

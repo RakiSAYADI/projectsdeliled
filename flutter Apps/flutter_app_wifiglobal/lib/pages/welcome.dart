@@ -20,6 +20,7 @@ class _WelcomeState extends State<Welcome> {
     toastyMessage.setContext(context);
     toastyMessage.setToastDuration(5);
     TCPScan _tcpScan = TCPScan();
+    pinCodeAccess = await myPinCodeClass.readPINFile();
     if (await _tcpScan.checkWifiConnection()) {
       await _tcpScan.scanTCP(noAllScan: true);
       if (_tcpScan.getScanList().isNotEmpty) {

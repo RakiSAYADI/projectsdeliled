@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:wifiglobalapp/services/aes_cbc_crypt.dart';
 import 'package:wifiglobalapp/services/data_variables.dart';
 import 'package:wifiglobalapp/services/uvc_device.dart';
+import 'package:wifiglobalapp/services/wifi_tcp.dart';
 
 class TCPCommunication {
   String _messageReceived = '';
@@ -16,6 +17,16 @@ class TCPCommunication {
 
   Future<bool> sendMessage(Device device, String message) async {
     try {
+      if (device.macDevice.isEmpty) {
+        TCPScan _tcpScan = TCPScan();
+        await _tcpScan.scanTCP(noAllScan: true);
+        if (_tcpScan.getScanList().isNotEmpty) {
+          myDevice = _tcpScan.selectDevice(0);
+          device = myDevice;
+        } else {
+          return false;
+        }
+      }
       _socket = await Socket.connect(device.deviceAddress, port);
       debugPrint('connected');
 

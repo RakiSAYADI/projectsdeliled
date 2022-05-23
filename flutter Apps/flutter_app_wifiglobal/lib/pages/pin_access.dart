@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:wifiglobalapp/services/data_variables.dart';
 import 'package:wifiglobalapp/services/language_database.dart';
@@ -24,18 +21,12 @@ class AlwaysDisabledFocusNode extends FocusNode {
 class _AccessPinState extends State<AccessPin> {
   final TextEditingController _pinPutController = TextEditingController();
 
-  ToastyMessage myUvcToast = ToastyMessage();
-
   Widget? mainWidgetScreen;
 
   int timeToSleep = 0;
 
   bool firstDisplayMainWidget = true;
-  bool modifyNameEnable = false;
 
-  String dataRobotUVC = '';
-  String deviceName = deviceNameMessageTextLanguageArray[languageArrayIdentifier];
-  String deviceSurName = '';
   String pinCode = '';
   String myPinCode = '';
 
@@ -50,16 +41,12 @@ class _AccessPinState extends State<AccessPin> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    myUvcToast.setContext(context);
-    Future.delayed(const Duration(seconds: 1), () async {
-      pinCodeAccess = await _readPINFile();
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     if (firstDisplayMainWidget) {
-      print('build sleep page');
+      debugPrint('build sleep page');
       mainWidgetScreen = appWidget(context);
       screenSleep(context);
       firstDisplayMainWidget = false;
@@ -207,7 +194,7 @@ class _AccessPinState extends State<AccessPin> {
               mainWidgetScreen = sleepWidget(context);
             });
           } catch (e) {
-            print(e.toString());
+            debugPrint(e.toString());
             break;
           }
         }
@@ -215,8 +202,6 @@ class _AccessPinState extends State<AccessPin> {
         if (timeToSleep < 0) {
           timeToSleep = (-1000);
         }
-
-        //print(timeToSleep);
       }
       await Future.delayed(Duration(seconds: 1));
     } while (true);
@@ -301,29 +286,9 @@ class _AccessPinState extends State<AccessPin> {
     );
   }
 
-  Future<String> _readPINFile() async {
-    try {
-      final directory = await getApplicationDocumentsDirectory();
-      final file = File('${directory.path}/my_pin_code.txt');
-      String pinCode = await file.readAsString();
-      return pinCode;
-    } catch (e) {
-      print("Couldn't read file");
-      _savePINFile('1234');
-      return '1234';
-    }
-  }
-
-  _savePINFile(String pinCode) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final file = File('${directory.path}/my_pin_code.txt');
-    await file.writeAsString(pinCode);
-    print('saved');
-  }
-
-  void _showSnackBar(String pin, BuildContext context) async {
+  _showSnackBar(String pin, BuildContext context) async {
     double widthScreen = MediaQuery.of(context).size.width;
-    pinCodeAccess = await _readPINFile();
+    pinCodeAccess = await myPinCodeClass.readPINFile();
     String messagePin;
     Color messageColor;
     if (pin == pinCodeAccess && pin.isNotEmpty) {
@@ -347,20 +312,21 @@ class _AccessPinState extends State<AccessPin> {
       backgroundColor: messageColor,
       onVisible: () async {
         if (pin == pinCodeAccess && pin.isNotEmpty) {
-          if (dataRobotUVC.isEmpty) {
-            myUvcToast.setToastDuration(3);
-            myUvcToast.setToastMessage(selectDeviceToastTextLanguageArray[languageArrayIdentifier]);
-            myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+          final bool result = await myDevice.getDeviceData();
+          if (result) {
+            sleepIsInactivePinAccess = true;
+            ScaffoldMessenger.of(context).hideCurrentSnackBar(reason: SnackBarClosedReason.hide);
+            Navigator.pushNamed(context, '/profiles');
           } else {
-            /*if (myDevice != null) {
-              sleepIsInactivePinAccess = true;
-              Navigator.pushNamed(context, '/profiles');
-            }*/
+            ToastyMessage toastyMessage = ToastyMessage();
+            toastyMessage.setContext(context);
+            toastyMessage.setToastDuration(5);
+            toastyMessage.setToastMessage('Connexion perdue avec dispositif !');
+            toastyMessage.showToast(Colors.yellow, Icons.warning, Colors.white);
           }
         }
       },
     );
-    ScaffoldMessenger.of(context).hideCurrentSnackBar(reason: SnackBarClosedReason.hide);
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
