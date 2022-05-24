@@ -316,47 +316,53 @@ class _EndUVCState extends State<EndUVC> {
     );
   }
 
-  ButtonTheme buttonNumbers(String number, BuildContext context) {
+  Expanded buttonNumbers(String number, BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
-    return ButtonTheme(
-      minWidth: widthScreen * 0.07,
-      height: heightScreen * 0.05,
-      child: TextButton(
-        child: Text(
-          number,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: widthScreen * 0.02,
+    return Expanded(
+      flex: 1,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        child: ButtonTheme(
+          minWidth: widthScreen * 0.07,
+          height: heightScreen * 0.05,
+          child: TextButton(
+            child: Text(
+              number,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: widthScreen * 0.02,
+              ),
+            ),
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+              ),
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+            ),
+            onPressed: () async {
+              myPinCode += number;
+              _pinPutController.text += '*';
+              if (_pinPutController.text.length == 4) {
+                pinCodeAccess = await _readPINFile();
+                //_showSnackBar(myPinCode, context);
+                if (myPinCode == pinCodeAccess) {
+                  Navigator.pop(context);
+                  setState(() {
+                    timeToSleep = timeSleep;
+                    mainWidgetScreen = appWidget(myContext!);
+                  });
+                } else {
+                  myUvcToast.setToastDuration(3);
+                  myUvcToast.setToastMessage(invalidPinCodeTextLanguageArray[languageArrayIdentifier]);
+                  myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                }
+                _pinPutController.text = '';
+                myPinCode = '';
+              }
+            },
           ),
         ),
-        style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
-          ),
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-        ),
-        onPressed: () async {
-          myPinCode += number;
-          _pinPutController.text += '*';
-          if (_pinPutController.text.length == 4) {
-            pinCodeAccess = await _readPINFile();
-            //_showSnackBar(myPinCode, context);
-            if (myPinCode == pinCodeAccess) {
-              Navigator.pop(context);
-              setState(() {
-                timeToSleep = timeSleep;
-                mainWidgetScreen = appWidget(myContext!);
-              });
-            } else {
-              myUvcToast.setToastDuration(3);
-              myUvcToast.setToastMessage(invalidPinCodeTextLanguageArray[languageArrayIdentifier]);
-              myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
-            }
-            _pinPutController.text = '';
-            myPinCode = '';
-          }
-        },
       ),
     );
   }

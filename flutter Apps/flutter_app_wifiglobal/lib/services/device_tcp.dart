@@ -42,7 +42,7 @@ class TCPCommunication {
           debugPrint(_aesCbcCrypt.getDecryptedText());
           _messageReceived = _aesCbcCrypt.getDecryptedText();
         } catch (e) {
-          debugPrint(e.toString());
+          debugPrint('device tcp read : ${e.toString()}');
           _messageReceived = 'NULL';
         }
       });
@@ -64,7 +64,7 @@ class TCPCommunication {
       }
       return true;
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint('device tcp write : ${e.toString()}');
       _messageReceived = 'NULL';
       return false;
     }

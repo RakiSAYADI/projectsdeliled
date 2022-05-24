@@ -98,6 +98,7 @@ class Device {
       //eliminate the unwanted space inside data
       String finalData = data.substring(0, data.indexOf('}'));
       finalData = '$finalData}';
+      debugPrint(finalData);
       // JSON data
       mapData = jsonDecode(finalData);
       bool result = true;
@@ -107,7 +108,6 @@ class Device {
           List<int> timeList = List<int>.from(mapData['timeDYS']);
           List<String> wifiList = List<String>.from(mapData['wifi']);
           List<String> dataList = List<String>.from(mapData['dataDYS']);
-          debugPrint(finalData);
           deviceCompanyName = dataList.first;
           deviceOperatorName = dataList.elementAt(1);
           deviceRoomName = dataList.last;
@@ -132,7 +132,7 @@ class Device {
       }
       return Future<bool>.value(result);
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint('uvc device : ${e.toString()}');
       return Future<bool>.value(false);
     }
   }

@@ -78,11 +78,10 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     do {
       if (treatmentIsOnProgress) {
         try {
-          result = await myDevice.getDeviceConnectionState();
+          result = await myDevice.getDeviceData();
           if (result) {
-            await myDevice.getDeviceData();
             dataRead = myDevice.getData();
-            //detectionResult = int.parse(dataRead['Detection'].toString());
+            detectionResult = int.parse(dataRead['detec'].toString());
           }
           /*if (detectionResult == 0) {
             debugPrint('No detection , KEEP THE TREATMENT PROCESS !');
@@ -102,7 +101,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
       } else {
         break;
       }
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 3));
     } while (true);
   }
 
@@ -157,7 +156,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                   AnimatedOpacity(
                                     curve: Curves.linear,
                                     opacity: opacityLevelActivation,
-                                    duration: Duration(seconds: myDevice.disinfectionTime),
+                                    duration: const Duration(seconds: 5),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -192,8 +191,6 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                               setState(() {
                                                 circleColor = Colors.green;
                                                 controllerAnimationTimeBackground.duration = Duration(seconds: (durationOfActivate.inSeconds - durationOfDisinfect.inSeconds));
-                                                debugPrint(durationOfActivate.inSeconds.toString());
-                                                debugPrint(myDevice.disinfectionTime.toString());
                                                 controllerAnimationTimeBackground.reverse(from: controllerAnimationTimeBackground.value == 0.0 ? 1.0 : controllerAnimationTimeBackground.value);
                                               });
                                             },
@@ -227,7 +224,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                   AnimatedOpacity(
                                     curve: Curves.linear,
                                     opacity: opacityLevelDisinfection,
-                                    duration: Duration(seconds: myDevice.activationTime),
+                                    duration: const Duration(seconds: 5),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment: CrossAxisAlignment.center,
