@@ -25,40 +25,49 @@
 
 #include "tcp_server.h"
 #include "udp_server.h"
+#include "system_init.h"
 #include "unitcfg.h"
+#include "uvc_task.h"
 #include "aes.h"
 
 #include "sdkconfig.h"
 
 const char *TCP_TAG = "TCP-IP";
 
+void sendTCPCryptedMessage(const char *text);
+
 char tx_buffer[sizeof(encryptedHex)];
 char rx_buffer[sizeof(encryptedHex)];
 
 int sock;
 
-bool tcpDiconnect = false;
-
-bool UVTaskIsOn = false;
-bool stopEventTrigerred = false;
-bool detectionTriggered = false;
-
+bool tcpDisconnect = false;
 bool saveNVSData = false;
 
 void checkMessageInput(char *text)
 {
     if (strstr(text, "PONG"))
     {
-        sendTCPCryptedMessage("{\'data\':\'PONG\'}");
+        sendTCPCryptedMessage("{\"data\":\"PONG\"}");
     }
     else if (strstr(text, "GETINFO_1.1"))
     {
         char bufferTCP[sizeof(plaintext)];
-        sprintf(bufferTCP, "{\'data\':\'INFO\',\'name\':\'%s\',\'wifi\':[\'%s\',\'%s\'],\'timeDYS\':[%d,%d],\'dataDYS\':[\'%s\',\'%s\',\'%s\']}",
-                UnitCfg.UnitName,
-                UnitCfg.WifiCfg.AP_SSID, UnitCfg.WifiCfg.AP_PASS,
-                UnitCfg.DisinfictionTime, UnitCfg.ActivationTime,
-                UnitCfg.Company, UnitCfg.OperatorName, UnitCfg.RoomName);
+        if ((getUnitState() == UNIT_STATUS_UVC_STARTING) || (getUnitState() == UNIT_STATUS_UVC_TREATEMENT))
+        {
+            sprintf(bufferTCP, "{\"data\":\"INFOUVC\",\"name\":\"%s\",\"detec\":%d}", UnitCfg.UnitName, stopEventTrigerred);
+        }
+        else
+        {
+            sprintf(bufferTCP, "{\"data\":\"INFO\",\"name\":\"%s\",\"state\":%d,\"wifi\":[\"%s\",\"%s\"],\"timeDYS\":[%d,%d],\"dataDYS\":[\"%s\",\"%s\",\"%s\"]}",
+                    UnitCfg.UnitName, getUnitState(),
+                    UnitCfg.WifiCfg.AP_SSID, UnitCfg.WifiCfg.AP_PASS,
+                    UnitCfg.DisinfictionTime, UnitCfg.ActivationTime,
+                    UnitCfg.Company, UnitCfg.OperatorName, UnitCfg.RoomName);
+        }
+
+        ESP_LOGI(TCP_TAG, "text to send and encrypt %s", bufferTCP);
+
         sendTCPCryptedMessage(bufferTCP);
     }
     else if (strstr(text, "STARTDESYNFECTIONPROCESS"))
@@ -66,13 +75,13 @@ void checkMessageInput(char *text)
         time_t t;
         time(&t);
         char bufferTCP[sizeof(plaintext)];
-        sprintf(bufferTCP, "{\'data\':\'START\',\'timeSTAMP\':%ld}", t);
+        sprintf(bufferTCP, "{\"data\":\"START\",\"timeSTAMP\":%ld}", t);
         sendTCPCryptedMessage(bufferTCP);
     }
     else if (strstr(text, "GOODDATA"))
     {
         char bufferTCP[sizeof(plaintext)];
-        sprintf(bufferTCP, "{\'data\':\'success\'}");
+        sprintf(bufferTCP, "{\"data\":\"success\"}");
         sendTCPCryptedMessage(bufferTCP);
     }
     else
@@ -158,11 +167,21 @@ void checkMessageOut()
             }
             else if (strstr(tmp, "START"))
             {
-                sprintf(plaintext, "GOODDATA");
+                if ((getUnitState() == UNIT_STATUS_IDLE) || (getUnitState() == UNIT_STATUS_UVC_ERROR))
+                {
+                    stopEventTrigerred = false;
+                    setUnitStatus(UNIT_STATUS_UVC_STARTING);
+                    sprintf(plaintext, "GOODDATA");
+                }
             }
             else if (strstr(tmp, "PING"))
             {
                 sprintf(plaintext, "PONG");
+            }
+            else if (strstr(tmp, "STOP"))
+            {
+                stopEventTrigerred = true;
+                sprintf(plaintext, "GOODDATA");
             }
         }
         checkMessageInput(plaintext);
@@ -207,7 +226,7 @@ void rxTransmission()
         else if (len == 0)
         {
             ESP_LOGW(TCP_TAG, "Connection closed");
-            tcpDiconnect = true;
+            tcpDisconnect = true;
             break;
         }
         else
@@ -219,7 +238,7 @@ void rxTransmission()
         }
         delay(50);
     }
-    tcpDiconnect = false;
+    tcpDisconnect = false;
     ESP_LOGE(TCP_TAG, "Communication ended, Shutdown !");
     // Save Data when disconnecting
     saveDataTask(saveNVSData);
@@ -257,6 +276,15 @@ void TCPInit(void *pvParameters)
 
     ESP_LOGI(TCP_TAG, "Socket created");
 
+    // Marking the socket as non-blocking
+    /*int flags = fcntl(listen_sock, F_GETFL);
+    if (fcntl(listen_sock, F_SETFL, flags | O_NONBLOCK) == -1)
+    {
+        ESP_LOGE(TCP_TAG, "Unable to set socket non blocking : %d", errno);
+        goto CLEAN_UP;
+    }
+    ESP_LOGI(TCP_TAG, "Socket marked as non blocking");*/
+
     int err = bind(listen_sock, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
     if (err != 0)
     {
@@ -275,7 +303,6 @@ void TCPInit(void *pvParameters)
 
     while (1)
     {
-
         ESP_LOGI(TCP_TAG, "Socket listening");
 
         struct sockaddr_storage source_addr; // Large enough for both IPv4 or IPv6
@@ -304,6 +331,15 @@ void TCPInit(void *pvParameters)
             setsockopt(sock, IPPROTO_TCP, TCP_KEEPINTVL, &keepInterval, sizeof(int));
             setsockopt(sock, IPPROTO_TCP, TCP_KEEPCNT, &keepCount, sizeof(int));
 
+            // ...and set the client's socket non-blocking
+            /*flags = fcntl(sock, F_GETFL);
+            if (fcntl(sock, F_SETFL, flags | O_NONBLOCK) == -1)
+            {
+                ESP_LOGE(TCP_TAG, "Unable to set socket non blocking : %d", errno);
+                goto CLEAN_UP;
+            }
+            ESP_LOGI(TCP_TAG, "sock=%d: Socket marked as non blocking", sock);*/
+
             // Convert ip address to string
             if (source_addr.ss_family == PF_INET)
             {
@@ -326,5 +362,5 @@ CLEAN_UP:
 
 void TCPServer(void)
 {
-    xTaskCreate(TCPInit, "TCPInit", 8192, (void *)AF_INET, 3, NULL);
+    xTaskCreate(TCPInit, "TCPInit", 8192 * 2, (void *)AF_INET, 3, NULL);
 }

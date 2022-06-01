@@ -11,6 +11,7 @@
 
 #include "app_gpio.h"
 #include "nat_router.h"
+#include "unitcfg.h"
 
 const char *GPIO_TAG = "GPIO";
 
@@ -29,12 +30,11 @@ void *led_status_thread(void *p)
 		for (int i = 0; i < CONNECT_COUNT; i++)
 		{
 			gpio_set_level(BLINK_GPIO, 1 - AP_CONNECT);
-			vTaskDelay(50 / portTICK_PERIOD_MS);
+			delay(50);
 			gpio_set_level(BLINK_GPIO, AP_CONNECT);
-			vTaskDelay(50 / portTICK_PERIOD_MS);
+			delay(50);
 		}
-
-		vTaskDelay(1000 / portTICK_PERIOD_MS);
+		delay(1000);
 	}
 }
 

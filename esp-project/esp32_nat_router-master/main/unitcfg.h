@@ -71,7 +71,6 @@ extern UnitConfig_Typedef UnitCfg;
 void saveDataTask(bool savenvsFlag);
 void syncTime(time_t t, char tzone[64]);
 
-bool strContains(char *string, char *toFind);
 bool jsonparse(char *src, char *dst, char *label, unsigned short arrayindex);
 
 void Default_saving();

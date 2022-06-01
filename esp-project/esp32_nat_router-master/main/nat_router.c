@@ -13,7 +13,6 @@
 #include "esp_system.h"
 #include "esp_log.h"
 #include "esp_vfs_dev.h"
-#include "driver/uart.h"
 #include "linenoise/linenoise.h"
 #include "argtable3/argtable3.h"
 #include "esp_vfs_fat.h"
@@ -23,6 +22,7 @@
 #include "sdkconfig.h"
 #include "unitcfg.h"
 #include "nat_router.h"
+#include "system_init.h"
 
 #include "freertos/event_groups.h"
 #include "esp_wifi.h"
@@ -56,6 +56,8 @@ const char *NAT_TAG = "ESP32 NAT router";
 esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
 {
     esp_netif_dns_info_t dns;
+
+    ESP_LOGI(NAT_TAG, "event id: %d" ,event->event_id);
 
     switch (event->event_id)
     {
@@ -181,6 +183,7 @@ void wifi_init(const char *ssid,
     dhcps_dns_setserver(&dnsserver);
 
     xEventGroupWaitBits(wifi_event_group, CONNECTED_BIT, pdFALSE, pdTRUE, JOIN_TIMEOUT_MS / portTICK_PERIOD_MS);
+
     ESP_ERROR_CHECK(esp_wifi_start());
 
     if (strlen(ssid) > 0)
