@@ -2,7 +2,7 @@ import 'package:wifiglobalapp/services/pin_code_access.dart';
 import 'package:wifiglobalapp/services/uvc_device.dart';
 
 const String appName = 'Global WIFI';
-const int port = 3333;
+const int port = 201;
 const String ipAddressDevice = '192.168.2.1';
 final int timeSleep = 60000;
 

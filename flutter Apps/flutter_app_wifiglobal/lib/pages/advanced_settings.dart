@@ -65,7 +65,7 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                         backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
                       ),
                     ),
-                    SizedBox(height: heightScreen * 0.05),
+                    /*SizedBox(height: heightScreen * 0.05),
                     TextButton(
                       onPressed: () async {
                         alertSecurity(context, 'autouvc');
@@ -83,7 +83,7 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                         ),
                         backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
                       ),
-                    ),
+                    ),*/
                     SizedBox(height: heightScreen * 0.05),
                     TextButton(
                       onPressed: () async {

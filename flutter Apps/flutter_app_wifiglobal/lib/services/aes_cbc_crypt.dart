@@ -34,7 +34,7 @@ class AESCbcCrypt {
       _crypt16String = encrypted.base16.toUpperCase();
       return true;
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint('aes encrypt : ${e.toString()}');
       return false;
     }
   }
@@ -47,7 +47,7 @@ class AESCbcCrypt {
       _decryptString = encrypt.decrypt16(textString, iv: iv);
       return true;
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint('aes decrypt : ${e.toString()}');
       return false;
     }
   }

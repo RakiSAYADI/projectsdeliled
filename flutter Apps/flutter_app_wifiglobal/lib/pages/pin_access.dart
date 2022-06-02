@@ -316,6 +316,9 @@ class _AccessPinState extends State<AccessPin> {
           if (result) {
             sleepIsInactivePinAccess = true;
             ScaffoldMessenger.of(context).hideCurrentSnackBar(reason: SnackBarClosedReason.hide);
+            if (myDevice.deviceCompanyName.isEmpty && myDevice.deviceRoomName.isEmpty && myDevice.deviceOperatorName.isEmpty) {
+              await myDevice.getDeviceData();
+            }
             Navigator.pushNamed(context, '/profiles');
           } else {
             ToastyMessage toastyMessage = ToastyMessage();

@@ -81,9 +81,9 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
           result = await myDevice.getDeviceData();
           if (result) {
             dataRead = myDevice.getData();
-            detectionResult = int.parse(dataRead['detec'].toString());
+            detectionResult = int.parse(dataRead['detect'].toString());
           }
-          /*if (detectionResult == 0) {
+          if (detectionResult == 0) {
             debugPrint('No detection , KEEP THE TREATMENT PROCESS !');
           } else {
             debugPrint('detection captured , STOP EVERYTHING !');
@@ -94,9 +94,9 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
             sleepIsInactiveEndUVC = false;
             Navigator.pushNamed(context, '/end_uvc');
             break;
-          }*/
+          }
         } catch (e) {
-          debugPrint(e.toString());
+          debugPrint('uvc data : ${e.toString()}');
         }
       } else {
         break;

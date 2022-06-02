@@ -22,6 +22,7 @@ class Device {
 
   int activationTime = 0;
   int disinfectionTime = 0;
+  int detection = 0;
 
   TCPScan _tcpScan = TCPScan();
 
@@ -86,7 +87,8 @@ class Device {
       'name': deviceName,
       'wifi': [deviceAPSSID, deviceAPPassword],
       'timeDYS': [disinfectionTime, activationTime],
-      'dataDYS': [deviceCompanyName, deviceOperatorName, deviceRoomName]
+      'dataDYS': [deviceCompanyName, deviceOperatorName, deviceRoomName],
+      'detect': detection
     };
   }
 
@@ -115,6 +117,7 @@ class Device {
           activationTime = timeList.last;
           deviceAPSSID = wifiList.first;
           deviceAPPassword = wifiList.last;
+          detection = mapData['detect'];
           break;
         case 'START':
           debugPrint(mapData['timeSTAMP']);
