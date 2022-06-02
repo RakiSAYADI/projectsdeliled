@@ -11,7 +11,6 @@ void setTextToEncrypt(const char *input);
 void setTextToDecrypt(const char *input);
 
 extern char plaintext[TEXTSIZE];
-extern char encrypted[sizeof(plaintext) * 2];
 extern char encryptedHex[sizeof(plaintext) * 4];
 
 #endif /* MAIN_AES_H_ */

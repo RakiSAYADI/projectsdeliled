@@ -14,13 +14,8 @@
 #define KEEPALIVE_INTERVAL 5
 #define KEEPALIVE_COUNT 3
 
-void sendTCPCryptedMessage(const char *text);
-
 void TCPServer(void);
 
-extern bool UVTaskIsOn;
-extern bool tcpDiconnect;
-extern bool stopEventTrigerred;
-extern bool detectionTriggered;
+extern bool tcpDisconnect;
 
 #endif /* MAIN_TCP_SERVER_H_ */

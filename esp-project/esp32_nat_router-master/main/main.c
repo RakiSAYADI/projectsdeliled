@@ -19,6 +19,7 @@
 #include "http_server.h"
 #include "base_mac_address.h"
 #include "aes.h"
+#include "uvc_task.h"
 
 const char *MAIN_TAG = "MAIN";
 
@@ -28,14 +29,20 @@ int app_main(void)
 	// Initiate ESP32 SYSTEM
 	systemInit();
 
+	setUnitStatus(UNIT_STATUS_LOADING);
+
 	// Initiate basic mac address
 	// BaseMacInit();
 
 	// Initiate and restore the storage data
 	if (!InitLoadCfg())
 	{
+		setUnitStatus(UNIT_STATUS_NONE);
 		return -1;
 	}
+
+	// Initiate UVC task
+	uvcStatInit();
 
 	// Initiate LED indicator
 	LedStatInit();
@@ -51,6 +58,12 @@ int app_main(void)
 
 	// Initiate UDP protocol
 	UDPServer();
+
+	setUnitStatus(UNIT_STATUS_IDLE);
+	
+	//delay(60000);
+
+	//setUnitStatus(UNIT_STATUS_UVC_STARTING);
 
 	return 0;
 }

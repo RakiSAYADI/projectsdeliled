@@ -20,12 +20,33 @@
 #include <lwip/netdb.h>
 
 #include "sdkconfig.h"
+#include "system_init.h"
 
 const char *INIT_TAG = "app_init";
 
+UnitStatDef UnitStat = UNIT_STATUS_LOADING;
+UnitStatDef LastUnitStat = UNIT_STATUS_NONE;
+
+void setUnitStatus(UnitStatDef NewStat)
+{
+	if (NewStat == UnitStat)
+		return;
+	LastUnitStat = UnitStat;
+	UnitStat = NewStat;
+}
+
+UnitStatDef getUnitState()
+{
+	return UnitStat;
+}
+
+UnitStatDef getUnitLastState()
+{
+	return LastUnitStat;
+}
+
 void systemInit()
 {
-
 	esp_err_t err = nvs_flash_init();
 	if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND)
 	{

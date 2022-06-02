@@ -8,5 +8,6 @@ idf_component_register(SRCS
                         "udp_server.c" 
                         "base_mac_address.c"
                         "http_server.c"
+                        "uvc_task.c"
                         "aes.c"
                     INCLUDE_DIRS ".")

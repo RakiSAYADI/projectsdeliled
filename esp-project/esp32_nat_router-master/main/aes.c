@@ -40,7 +40,7 @@ void setTextToDecrypt(const char *input)
 
 void encodeAESCBC()
 {
-    printf("Text to crypt : %s\n", plaintext);
+    //printf("Text to crypt : %s\n", plaintext);
 
     char enc_iv[17] = IV_AES;
     char key[33] = KEY_AES;
@@ -59,10 +59,10 @@ void encodeAESCBC()
     // Initialize the output String
     memset(encrypted, 0, sizeof(encrypted));
 
-    esp_aes_init(&ctxEncode);
-    esp_aes_setkey(&ctxEncode, (unsigned char *)key, 256);
-    esp_aes_crypt_cbc(&ctxEncode, ESP_AES_ENCRYPT, stringCheckForEncryption(plaintext), (unsigned char *)enc_iv, (uint8_t *)plaintext, (uint8_t *)encrypted);
-    esp_aes_free(&ctxEncode);
+    mbedtls_aes_init(&ctxEncode);
+    mbedtls_aes_setkey_enc(&ctxEncode, (unsigned char *)key, 256);
+    int result = mbedtls_aes_crypt_cbc(&ctxEncode, ESP_AES_ENCRYPT, stringCheckForEncryption(plaintext), (unsigned char *)enc_iv, (uint8_t *)plaintext, (uint8_t *)encrypted);
+    mbedtls_aes_free(&ctxEncode);
 
     // Initialize the output hex String
     memset(encryptedHex, 0, sizeof(encryptedHex));
@@ -70,7 +70,7 @@ void encodeAESCBC()
     // Converting ascii string to hex string
     string2hexString(encrypted, encryptedHex);
 
-    printf("Text after crypt hex : %s\n", encryptedHex);
+    //printf("Text after crypt result %d text %s\n", result, encryptedHex);
 }
 
 void decodeAESCBC()
@@ -78,7 +78,7 @@ void decodeAESCBC()
     // Initialize the output String
     memset(encrypted, 0, sizeof(encrypted));
 
-    printf("Text after crypt hex : %s\n", encryptedHex);
+    //printf("Text after crypt hex : %s\n", encryptedHex);
 
     char dec_iv[17] = IV_AES;
     char key[33] = KEY_AES;
@@ -100,12 +100,12 @@ void decodeAESCBC()
     // Initialize the output String
     memset(plaintext, 0, sizeof(plaintext));
 
-    esp_aes_init(&ctxDecode);
-    esp_aes_setkey(&ctxDecode, (unsigned char *)key, 256);
-    esp_aes_crypt_cbc(&ctxDecode, ESP_AES_DECRYPT, stringCheckForEncryption(encrypted), (unsigned char *)dec_iv, (uint8_t *)encrypted, (uint8_t *)plaintext);
-    esp_aes_free(&ctxDecode);
+    mbedtls_aes_init(&ctxDecode);
+    mbedtls_aes_setkey_dec(&ctxDecode, (unsigned char *)key, 256);
+    int result = mbedtls_aes_crypt_cbc(&ctxDecode, ESP_AES_DECRYPT, stringCheckForEncryption(encrypted), (unsigned char *)dec_iv, (uint8_t *)encrypted, (uint8_t *)plaintext);
+    mbedtls_aes_free(&ctxDecode);
 
-    printf("Text after decrypt : %s\n", plaintext);
+    //printf("Text after decrypt result %d : %s\n", result, plaintext);
 }
 
 int hex_to_int(char c)
@@ -131,6 +131,7 @@ void string2hexString(char *input, char *output)
     for (int loop = 0; loop < strlen(input); loop++)
     {
         sprintf((char *)(output + i), "%02X", input[loop]);
+        // printf("%c %u %02X %x\n", input[loop], input[loop], input[loop], input[loop]);
         i += 2;
     }
 }
