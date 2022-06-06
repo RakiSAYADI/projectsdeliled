@@ -11,9 +11,16 @@ class TCPCommunication {
   String _messageReceived = '';
   Socket? _socket;
 
+  final bool _enableAESEncryption = false;
+
   TCPCommunication();
 
   String getMessage() => _messageReceived;
+
+  String _hexToAscii(String hexString) => List.generate(
+        hexString.length ~/ 2,
+        (i) => String.fromCharCode(int.parse(hexString.substring(i * 2, (i * 2) + 2), radix: 16)),
+      ).join();
 
   Future<bool> sendMessage(Device device, String message) async {
     try {
@@ -30,28 +37,38 @@ class TCPCommunication {
       _socket = await Socket.connect(device.deviceAddress, port);
       debugPrint('connected');
 
-      AESCbcCrypt _aesCbcCrypt = AESCbcCrypt(device.macDevice, textString: '');
-      _aesCbcCrypt.setKeysEnvironment();
-
-      // listen to the received data event stream
-      _socket!.listen((List<int> message) {
-        try {
-          debugPrint('message received : ${utf8.decode(message)}');
-          _aesCbcCrypt.setText(utf8.decode(message).toLowerCase());
-          _aesCbcCrypt.decrypt();
-          debugPrint(_aesCbcCrypt.getDecryptedText());
-          _messageReceived = _aesCbcCrypt.getDecryptedText();
-        } catch (e) {
-          debugPrint('device tcp read : ${e.toString()}');
-          _messageReceived = 'NULL';
-        }
-      });
-
-      // send crypt message
-      _aesCbcCrypt.setText(message);
-      _aesCbcCrypt.encrypt();
-      debugPrint(_aesCbcCrypt.getCrypted16Text());
-      _socket!.write(_aesCbcCrypt.getCrypted16Text());
+      if (_enableAESEncryption) {
+        AESCbcCrypt _aesCbcCrypt = AESCbcCrypt(device.macDevice, textString: '');
+        _aesCbcCrypt.setKeysEnvironment();
+        // listen to the received data event stream
+        _socket!.listen((List<int> message) async {
+          try {
+            debugPrint('message received : ${utf8.decode(message)}');
+            _aesCbcCrypt.setText(utf8.decode(message).toLowerCase());
+            _aesCbcCrypt.decrypt();
+            _messageReceived = _hexToAscii(_aesCbcCrypt.getDecryptedText());
+          } catch (e) {
+            debugPrint('device tcp read : ${e.toString()}');
+            _messageReceived = 'NULL';
+          }
+        });
+        // send crypt message
+        _aesCbcCrypt.setText(message);
+        _aesCbcCrypt.encrypt();
+        _socket!.write(_aesCbcCrypt.getCrypted16Text());
+      } else {
+        // listen to the received data event stream
+        _socket!.listen((List<int> message) async {
+          try {
+            debugPrint('message received : ${utf8.decode(message)}');
+            _messageReceived = utf8.decode(message);
+          } catch (e) {
+            debugPrint('device tcp read : ${e.toString()}');
+            _messageReceived = 'NULL';
+          }
+        });
+        _socket!.write(message);
+      }
 
       // .. and close the socket
       _socket!.close();

@@ -22,7 +22,7 @@ class Device {
 
   int activationTime = 0;
   int disinfectionTime = 0;
-  int detection = 0;
+  int state = 0;
 
   TCPScan _tcpScan = TCPScan();
 
@@ -88,7 +88,7 @@ class Device {
       'wifi': [deviceAPSSID, deviceAPPassword],
       'timeDYS': [disinfectionTime, activationTime],
       'dataDYS': [deviceCompanyName, deviceOperatorName, deviceRoomName],
-      'detect': detection
+      'state': state
     };
   }
 
@@ -117,7 +117,30 @@ class Device {
           activationTime = timeList.last;
           deviceAPSSID = wifiList.first;
           deviceAPPassword = wifiList.last;
-          detection = mapData['detect'];
+          //state = mapData['state'];
+          switch (mapData['state']) {
+            case 'NONE':
+              state = 0;
+              break;
+            case 'LOADING':
+              state = 1;
+              break;
+            case 'ERROR':
+              state = 2;
+              break;
+            case 'STARTING':
+              state = 3;
+              break;
+            case 'UVC':
+              state = 4;
+              break;
+            case 'IDLE':
+              state = 5;
+              break;
+            default:
+              state = -1;
+              break;
+          }
           break;
         case 'START':
           debugPrint(mapData['timeSTAMP']);

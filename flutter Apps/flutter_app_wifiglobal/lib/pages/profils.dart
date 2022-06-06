@@ -11,6 +11,7 @@ class _ProfilesState extends State<Profiles> {
   final myCompany = TextEditingController();
   final myName = TextEditingController();
   final myRoomName = TextEditingController();
+  bool displayTextData = true;
 
   @override
   void dispose() {
@@ -24,9 +25,12 @@ class _ProfilesState extends State<Profiles> {
   @override
   Widget build(BuildContext context) {
     try {
-      myName.text = myDevice.deviceOperatorName;
-      myRoomName.text = myDevice.deviceRoomName;
-      myCompany.text = myDevice.deviceCompanyName;
+      if (displayTextData) {
+        myName.text = myDevice.deviceOperatorName;
+        myRoomName.text = myDevice.deviceRoomName;
+        myCompany.text = myDevice.deviceCompanyName;
+        displayTextData = false;
+      }
     } catch (e) {
       debugPrint(e.toString());
     }

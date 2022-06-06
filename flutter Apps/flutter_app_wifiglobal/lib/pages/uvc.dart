@@ -73,7 +73,7 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
   void _readingCharacteristic() async {
     debugPrint('the read methode !');
     Map<String, dynamic> dataRead;
-    int detectionResult = 0;
+    int stateResult = 0;
     bool result = false;
     do {
       if (treatmentIsOnProgress) {
@@ -81,9 +81,9 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
           result = await myDevice.getDeviceData();
           if (result) {
             dataRead = myDevice.getData();
-            detectionResult = int.parse(dataRead['detect'].toString());
+            stateResult = int.parse(dataRead['state'].toString());
           }
-          if (detectionResult == 0) {
+          if (stateResult == 3 || stateResult == 4) {
             debugPrint('No detection , KEEP THE TREATMENT PROCESS !');
           } else {
             debugPrint('detection captured , STOP EVERYTHING !');

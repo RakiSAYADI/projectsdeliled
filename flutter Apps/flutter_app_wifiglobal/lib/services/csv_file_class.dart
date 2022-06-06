@@ -109,9 +109,9 @@ class UVCDataFile {
     for (int j = 0; j < uvcData.length; j++) {
       for (int i = 0; i < uvcData.elementAt(j).length; i++) {
         if (i == uvcData.elementAt(j).length - 1) {
-          uvcDATA += '${uvcData.elementAt(j).elementAt(i)} ';
+          uvcDATA += '${uvcData.elementAt(j).elementAt(i)}';
         } else {
-          uvcDATA += '${uvcData.elementAt(j).elementAt(i)} ;';
+          uvcDATA += '${uvcData.elementAt(j).elementAt(i)};';
         }
       }
       uvcDATA += '\n';
@@ -134,9 +134,9 @@ class UVCDataFile {
     for (int j = 0; j < uvcData.length; j++) {
       for (int i = 0; i < uvcData.elementAt(j).length; i++) {
         if (i == uvcData.elementAt(j).length - 1) {
-          uvcDATA += '${uvcData.elementAt(j).elementAt(i)} ';
+          uvcDATA += '${uvcData.elementAt(j).elementAt(i)}';
         } else {
-          uvcDATA += '${uvcData.elementAt(j).elementAt(i)} ;';
+          uvcDATA += '${uvcData.elementAt(j).elementAt(i)};';
         }
       }
       uvcDATA += '\n';
