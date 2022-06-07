@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:wifiglobalapp/pages/Automatique_UVC.dart';
 import 'package:wifiglobalapp/pages/advanced_settings.dart';
 import 'package:wifiglobalapp/pages/data_modification_view.dart';
 import 'package:wifiglobalapp/pages/data_view.dart';
@@ -71,6 +72,7 @@ class MyApp extends StatelessWidget {
           '/pin_access': (context) => AccessPin(),
           '/pin_settings': (context) => PinSettings(),
           '/advanced_settings': (context) => AdvancedSettings(),
+          '/uvc_auto': (context) => UVCAuto(),
           '/rapport_modification': (context) => DataViewModification(),
           '/profiles': (context) => Profiles(),
           '/settings': (context) => Settings(),

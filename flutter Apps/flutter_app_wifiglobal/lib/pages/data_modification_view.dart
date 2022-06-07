@@ -17,9 +17,9 @@ class _DataViewModificationState extends State<DataViewModification> {
   String _myStartDataTimeMonthData = '01';
   String _myStartDataTimeYearsData = '2020';
 
-  String _myEndDataTimeDayData = '01';
+  String _myEndDataTimeDayData = '31';
   String _myEndDataTimeMonthData = '12';
-  String _myEndDataTimeYearsData = '2020';
+  String _myEndDataTimeYearsData = '2025';
 
   bool _allData = true;
   bool _timedData = false;

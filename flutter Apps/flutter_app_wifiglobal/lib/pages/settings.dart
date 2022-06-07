@@ -11,40 +11,6 @@ class _SettingsState extends State<Settings> {
   String myExtinctionTimeMinuteData = ' 10 sec';
   String myActivationTimeMinuteData = ' 30 sec';
 
-  int timeToDisinfectionArrayPosition(int time) {
-    return (time - 10) ~/ 10;
-  }
-
-  int timeToActivationArrayPosition(int time) {
-    if (time <= 30) {
-      return 0;
-    }
-    if (time > 30 && time <= 300) {
-      return time ~/ 60;
-    }
-    if (time > 300) {
-      return (time - 240) ~/ 60;
-    }
-    return 0;
-  }
-
-  int disinfectionArrayPositionToTime(int position) {
-    return (position * 10) + 10;
-  }
-
-  int activationArrayPositionToTime(int position) {
-    if (position == 0) {
-      return 30;
-    }
-    if (position >= 1 && position <= 5) {
-      return position * 60;
-    }
-    if (position > 5) {
-      return (position * 60) + 240;
-    }
-    return 0;
-  }
-
   @override
   Widget build(BuildContext context) {
     myExtinctionTimeMinuteData = myExtinctionTimeMinute.elementAt(timeToDisinfectionArrayPosition(myDevice.disinfectionTime));

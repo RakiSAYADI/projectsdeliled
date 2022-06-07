@@ -64,31 +64,31 @@ final List<String> invalidPinCodeTextLanguageArray = ['PIN invalide !', 'Invalid
 
 final List<String> savedConfigurationTextLanguageArray = ['Configuration sauvegardée !', 'Saved settings!'];
 
-final List<String> durationDisinfectionTextLanguageArray = ['Durée de la désinfection :', 'Disinfection time:'];
+final List<String> durationDisinfectionTextLanguageArray = ['Durée de la désinfection:', 'Disinfection time:'];
 
-final List<String> ignitionTimeTextLanguageArray = ['Délais avant allumage :', 'Holding time:'];
+final List<String> ignitionTimeTextLanguageArray = ['Délais avant allumage:', 'Holding time:'];
 
-final List<String> activationTimeTextLanguageArray = ['Heure d\'activation :', 'Start hour:'];
+final List<String> activationTimeTextLanguageArray = ['Heure d\'activation:', 'Start hour:'];
 
 final List<String> activatedTextLanguageArray = ['Activé', 'Activated'];
 
-final List<String> deactivatedTextLanguageArray = ['Désactivé :', 'Deactivated'];
+final List<String> deactivatedTextLanguageArray = ['Désactivé', 'Deactivated'];
 
-final List<String> mondayTextLanguageArray = ['Lundi :', 'Monday'];
+final List<String> mondayTextLanguageArray = ['Lun', 'Mon'];
 
-final List<String> tuesdayTextLanguageArray = ['Mardi :', 'Tuesday'];
+final List<String> tuesdayTextLanguageArray = ['Mar', 'Tue'];
 
-final List<String> wednesdayTextLanguageArray = ['Mercredi :', 'Wednesday'];
+final List<String> wednesdayTextLanguageArray = ['Mer', 'Wed'];
 
-final List<String> thursdayTextLanguageArray = ['Jeudi :', 'Thursday'];
+final List<String> thursdayTextLanguageArray = ['Jeu', 'Thu'];
 
-final List<String> fridayTextLanguageArray = ['Vendredi :', 'Friday'];
+final List<String> fridayTextLanguageArray = ['Ven', 'Fri'];
 
-final List<String> saturdayTextLanguageArray = ['Samedi :', 'Saturday'];
+final List<String> saturdayTextLanguageArray = ['Sam', 'Sat'];
 
-final List<String> sundayTextLanguageArray = ['Dimanche :', 'Sunday'];
+final List<String> sundayTextLanguageArray = ['Dim', 'Sun'];
 
-final List<String> autoUVCTitleTextLanguageArray = ['UV-C automatique :', 'Automatic UV-C'];
+final List<String> autoUVCTitleTextLanguageArray = ['UV-C automatique', 'Automatic UV-C'];
 
 final List<String> uvcReportTitleTextLanguageArray = ['rapport CSV', 'CSV report'];
 
@@ -125,11 +125,11 @@ final List<String> emailMessageTextLanguageArray = [
       'Thank you for trusting DEEPLIGHT®.'
 ];
 
-final List<String> oldPinTextLanguageArray = ['Entrer l\'ancien code PIN :', 'Enter old PIN code:'];
+final List<String> oldPinTextLanguageArray = ['Entrer l\'ancien code PIN:', 'Enter old PIN code:'];
 
-final List<String> newPinTextLanguageArray = ['Entrer le nouveau code PIN :', 'Enter new PIN code:'];
+final List<String> newPinTextLanguageArray = ['Entrer le nouveau code PIN:', 'Enter new PIN code:'];
 
-final List<String> sameNewPinTextLanguageArray = ['Vérifiez le nouveau PIN :', 'Check new PIN code:'];
+final List<String> sameNewPinTextLanguageArray = ['Vérifiez le nouveau PIN:', 'Check new PIN code:'];
 
 final List<String> emailSentToastTextLanguageArray = ['E-mail envoyé, vérifiez votre boite de réception !', 'E-mail sent, please check your e-mail box!'];
 

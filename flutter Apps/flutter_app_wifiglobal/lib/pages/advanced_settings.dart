@@ -65,10 +65,10 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                         backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
                       ),
                     ),
-                    /*SizedBox(height: heightScreen * 0.05),
+                    SizedBox(height: heightScreen * 0.05),
                     TextButton(
                       onPressed: () async {
-                        alertSecurity(context, 'autouvc');
+                        alertSecurity(context, '/uvc_auto');
                       },
                       child: Text(
                         planningTextLanguageArray[languageArrayIdentifier],
@@ -83,7 +83,7 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                         ),
                         backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
                       ),
-                    ),*/
+                    ),
                     SizedBox(height: heightScreen * 0.05),
                     TextButton(
                       onPressed: () async {
@@ -196,23 +196,14 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               buttonNumbers('0', context, accessPath),
-                              SizedBox(width: widthScreen * 0.003),
                               buttonNumbers('1', context, accessPath),
-                              SizedBox(width: widthScreen * 0.003),
                               buttonNumbers('2', context, accessPath),
-                              SizedBox(width: widthScreen * 0.003),
                               buttonNumbers('3', context, accessPath),
-                              SizedBox(width: widthScreen * 0.003),
                               buttonNumbers('4', context, accessPath),
-                              SizedBox(width: widthScreen * 0.003),
                               buttonNumbers('5', context, accessPath),
-                              SizedBox(width: widthScreen * 0.003),
                               buttonNumbers('6', context, accessPath),
-                              SizedBox(width: widthScreen * 0.003),
                               buttonNumbers('7', context, accessPath),
-                              SizedBox(width: widthScreen * 0.003),
                               buttonNumbers('8', context, accessPath),
-                              SizedBox(width: widthScreen * 0.003),
                               buttonNumbers('9', context, accessPath),
                             ],
                           ),
@@ -227,48 +218,56 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
         });
   }
 
-  ButtonTheme buttonNumbers(String number, BuildContext context, String accessPath) {
-    double widthScreen = MediaQuery.of(context).size.width;
-    double heightScreen = MediaQuery.of(context).size.height;
-    return ButtonTheme(
-      minWidth: widthScreen * 0.07,
-      height: heightScreen * 0.05,
-      child: TextButton(
-        child: Text(
-          number,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: widthScreen * 0.02,
-          ),
-        ),
-        style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
-          ),
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.grey),
-        ),
-        onPressed: () async {
-          myPinCode += number;
-          _pinPutController.text += '*';
-          if (_pinPutController.text.length == 4) {
-            pinCodeAccess = await myPinCodeClass.readPINFile();
-            //_showSnackBar(myPinCode, context);
-            if (myPinCode == pinCodeAccess) {
-              Navigator.pop(context);
-              switch (accessPath) {
-                case 'autouvc':
-                  Navigator.pushNamed(context, '/auto_uvc');
-                  break;
+  Expanded buttonNumbers(String number, BuildContext buildContext, String accessPath) {
+    double widthScreen = MediaQuery.of(buildContext).size.width;
+    double heightScreen = MediaQuery.of(buildContext).size.height;
+    return Expanded(
+      flex: 1,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        child: ButtonTheme(
+          minWidth: widthScreen * 0.07,
+          height: heightScreen * 0.05,
+          child: TextButton(
+            child: Text(
+              number,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: widthScreen * 0.02,
+              ),
+            ),
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+              ),
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.grey),
+            ),
+            onPressed: () async {
+              myPinCode += number;
+              _pinPutController.text += '*';
+              if (_pinPutController.text.length == 4) {
+                pinCodeAccess = await myPinCodeClass.readPINFile();
+                if (myPinCode == pinCodeAccess) {
+                  Navigator.pop(buildContext);
+                  switch (accessPath) {
+                    case '/uvc_auto':
+                      final bool result = await myDevice.getDeviceAutoData();
+                      if (result) {
+                        Navigator.pushNamed(context, accessPath);
+                      }
+                      break;
+                  }
+                } else {
+                  myUvcToast.setToastDuration(3);
+                  myUvcToast.setToastMessage(invalidPinCodeTextLanguageArray[languageArrayIdentifier]);
+                  myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
+                }
+                _pinPutController.text = '';
+                myPinCode = '';
               }
-            } else {
-              myUvcToast.setToastDuration(3);
-              myUvcToast.setToastMessage(invalidPinCodeTextLanguageArray[languageArrayIdentifier]);
-              myUvcToast.showToast(Colors.red, Icons.warning, Colors.white);
-            }
-            _pinPutController.text = '';
-            myPinCode = '';
-          }
-        },
+            },
+          ),
+        ),
       ),
     );
   }

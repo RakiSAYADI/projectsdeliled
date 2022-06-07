@@ -6,6 +6,45 @@ const int port = 201;
 const String ipAddressDevice = '192.168.2.1';
 final int timeSleep = 60000;
 
+bool enableAESEncryption = false;
+
+bool intToBool(int i) => i == 1 ? true : false;
+int boolToInt(bool b) => b == true ? 1 : 0;
+
+int timeToDisinfectionArrayPosition(int time) {
+  return (time - 10) ~/ 10;
+}
+
+int timeToActivationArrayPosition(int time) {
+  if (time <= 30) {
+    return 0;
+  }
+  if (time > 30 && time <= 300) {
+    return time ~/ 60;
+  }
+  if (time > 300) {
+    return (time - 240) ~/ 60;
+  }
+  return 0;
+}
+
+int disinfectionArrayPositionToTime(int position) {
+  return (position * 10) + 10;
+}
+
+int activationArrayPositionToTime(int position) {
+  if (position == 0) {
+    return 30;
+  }
+  if (position >= 1 && position <= 5) {
+    return position * 60;
+  }
+  if (position > 5) {
+    return (position * 60) + 240;
+  }
+  return 0;
+}
+
 Device myDevice = Device(ipAddressDevice, macDevice: '', manufacture: '', nameDevice: '', serialNumberDevice: '');
 PINCode myPinCodeClass = PINCode();
 

@@ -11,8 +11,6 @@ class TCPCommunication {
   String _messageReceived = '';
   Socket? _socket;
 
-  final bool _enableAESEncryption = false;
-
   TCPCommunication();
 
   String getMessage() => _messageReceived;
@@ -37,7 +35,7 @@ class TCPCommunication {
       _socket = await Socket.connect(device.deviceAddress, port);
       debugPrint('connected');
 
-      if (_enableAESEncryption) {
+      if (enableAESEncryption) {
         AESCbcCrypt _aesCbcCrypt = AESCbcCrypt(device.macDevice, textString: '');
         _aesCbcCrypt.setKeysEnvironment();
         // listen to the received data event stream

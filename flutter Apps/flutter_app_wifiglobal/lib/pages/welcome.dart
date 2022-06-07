@@ -28,6 +28,7 @@ class _WelcomeState extends State<Welcome> {
         toastyMessage.showToast(Colors.green, Icons.thumb_up, Colors.white);
         myDevice = _tcpScan.selectDevice(0);
         await myDevice.getDeviceData();
+        await myDevice.getDeviceAutoData();
         await myDevice.setDeviceTime();
       } else {
         toastyMessage.setToastMessage('aucune appareils trouvées dans le réseau');
