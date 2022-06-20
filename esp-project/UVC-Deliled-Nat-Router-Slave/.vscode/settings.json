@@ -1,0 +1,15 @@
+{
+  "C_Cpp.intelliSenseEngine": "Tag Parser",
+  "files.associations": {
+    "stdlib.h": "c",
+    "base_mac_address.h": "c",
+    "system_init.h": "c",
+    "uvc_task.h": "c",
+    "*.inc": "c",
+    "unitcfg.h": "c",
+    "udp_client.h": "c",
+    "*.ipp": "c"
+  },
+  "idf.adapterTargetName": "esp32",
+  "idf.portWin": "COM3"
+}
