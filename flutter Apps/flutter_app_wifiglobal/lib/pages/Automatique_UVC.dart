@@ -63,7 +63,15 @@ class _UVCAutoState extends State<UVCAuto> {
       } else {
         j++;
       }
+      if (daysStates[i]) {
+        activationButtonText = activatedTextLanguageArray[languageArrayIdentifier];
+        activationButtonColor[i] = Colors.green;
+      } else {
+        activationButtonText = deactivatedTextLanguageArray[languageArrayIdentifier];
+        activationButtonColor[i] = Colors.red;
+      }
     }
+
     // set monday by default
     setDaySettings(0);
   }
@@ -93,6 +101,7 @@ class _UVCAutoState extends State<UVCAuto> {
         days[buttonIndex] = false;
       }
     }
+
     if (daysStates[day]) {
       activationButtonText = activatedTextLanguageArray[languageArrayIdentifier];
       activationButtonColor[day] = Colors.green;

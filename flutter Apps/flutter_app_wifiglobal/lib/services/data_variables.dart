@@ -1,3 +1,4 @@
+import 'package:wifiglobalapp/services/auto_uvc.dart';
 import 'package:wifiglobalapp/services/pin_code_access.dart';
 import 'package:wifiglobalapp/services/uvc_device.dart';
 
@@ -8,7 +9,10 @@ final int timeSleep = 60000;
 
 bool enableAESEncryption = false;
 
+AutoUVCService autoUVCService = AutoUVCService();
+
 bool intToBool(int i) => i == 1 ? true : false;
+
 int boolToInt(bool b) => b == true ? 1 : 0;
 
 int timeToDisinfectionArrayPosition(int time) {

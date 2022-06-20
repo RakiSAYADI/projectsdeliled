@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:wifiglobalapp/services/data_variables.dart';
@@ -17,6 +18,23 @@ class _WelcomeState extends State<Welcome> {
   ToastyMessage toastyMessage = ToastyMessage();
 
   void scanDevices(BuildContext context) async {
+/*    var headers = {
+      'client_id': 'dwsusswhbiqnqkrfovhe',
+      'sign': '4F4666044B5FCEF384067D6712D4B2FE9803ABF8526A6C6705247D6921439F4B',
+      't': '1654678883532',
+      'sign_method': 'HMAC-SHA256',
+      'nonce': '',
+      'stringToSign': ''
+    };
+    var request = http.Request('GET', Uri.parse('https://openapi.tuyaeu.com/v1.0/token?grant_type=1'));
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+    } else {
+      print(response.reasonPhrase);
+    }*/
+
     toastyMessage.setContext(context);
     toastyMessage.setToastDuration(5);
     TCPScan _tcpScan = TCPScan();
@@ -28,7 +46,10 @@ class _WelcomeState extends State<Welcome> {
         toastyMessage.showToast(Colors.green, Icons.thumb_up, Colors.white);
         myDevice = _tcpScan.selectDevice(0);
         await myDevice.getDeviceData();
-        await myDevice.getDeviceAutoData();
+        bool enable = await myDevice.getDeviceAutoData();
+        if (enable) {
+          autoUVCService.startUVCService();
+        }
         await myDevice.setDeviceTime();
       } else {
         toastyMessage.setToastMessage('aucune appareils trouvées dans le réseau');

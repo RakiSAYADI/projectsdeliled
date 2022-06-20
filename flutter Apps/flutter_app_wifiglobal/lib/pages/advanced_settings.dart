@@ -140,7 +140,7 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
     double heightScreen = MediaQuery.of(context).size.height;
 
     return showDialog<void>(
-        barrierDismissible: false,
+        barrierDismissible: true,
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -249,14 +249,7 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                 pinCodeAccess = await myPinCodeClass.readPINFile();
                 if (myPinCode == pinCodeAccess) {
                   Navigator.pop(buildContext);
-                  switch (accessPath) {
-                    case '/uvc_auto':
-                      final bool result = await myDevice.getDeviceAutoData();
-                      if (result) {
-                        Navigator.pushNamed(context, accessPath);
-                      }
-                      break;
-                  }
+                  _showSnackBar(context, accessPath);
                 } else {
                   myUvcToast.setToastDuration(3);
                   myUvcToast.setToastMessage(invalidPinCodeTextLanguageArray[languageArrayIdentifier]);
@@ -270,6 +263,39 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
         ),
       ),
     );
+  }
+
+  _showSnackBar(BuildContext context, String accessPath) async {
+    double widthScreen = MediaQuery.of(context).size.width;
+    String messagePin = validCodeTextLanguageArray[languageArrayIdentifier];
+    Color messageColor = Colors.green;
+    final snackBar = SnackBar(
+      duration: Duration(seconds: 2),
+      content: Container(
+          height: widthScreen * 0.1,
+          child: Center(
+            child: Text(
+              messagePin,
+              style: TextStyle(fontSize: 25.0),
+            ),
+          )),
+      backgroundColor: messageColor,
+      onVisible: () async {
+        switch (accessPath) {
+          case '/uvc_auto':
+            final bool result = await myDevice.getDeviceAutoData();
+            if (result) {
+              if (myDevice.deviceCompanyName.isEmpty && myDevice.deviceRoomName.isEmpty && myDevice.deviceOperatorName.isEmpty) {
+                await myDevice.setDeviceTime();
+                await myDevice.getDeviceAutoData();
+              }
+              Navigator.pushNamed(context, accessPath);
+            }
+            break;
+        }
+      },
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   BoxDecoration get _pinPutDecoration {
