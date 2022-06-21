@@ -16,6 +16,8 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
   String myPinCode = '';
   String pinCode = '';
 
+  bool onDisplay = true;
+
   ToastyMessage myUvcToast = ToastyMessage();
 
   UVCDataFile uvcDataFile = UVCDataFile();
@@ -250,6 +252,7 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                 if (myPinCode == pinCodeAccess) {
                   Navigator.pop(buildContext);
                   _showSnackBar(context, accessPath);
+                  onDisplay = true;
                 } else {
                   myUvcToast.setToastDuration(3);
                   myUvcToast.setToastMessage(invalidPinCodeTextLanguageArray[languageArrayIdentifier]);
@@ -281,17 +284,20 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
           )),
       backgroundColor: messageColor,
       onVisible: () async {
-        switch (accessPath) {
-          case '/uvc_auto':
-            final bool result = await myDevice.getDeviceAutoData();
-            if (result) {
-              if (myDevice.deviceCompanyName.isEmpty && myDevice.deviceRoomName.isEmpty && myDevice.deviceOperatorName.isEmpty) {
-                await myDevice.setDeviceTime();
-                await myDevice.getDeviceAutoData();
+        if (onDisplay) {
+          onDisplay = false;
+          switch (accessPath) {
+            case '/uvc_auto':
+              final bool result = await myDevice.getDeviceAutoData();
+              if (result) {
+                if (myDevice.deviceCompanyName.isEmpty && myDevice.deviceRoomName.isEmpty && myDevice.deviceOperatorName.isEmpty) {
+                  await myDevice.setDeviceTime();
+                  await myDevice.getDeviceAutoData();
+                }
+                Navigator.pushNamed(context, accessPath);
               }
-              Navigator.pushNamed(context, accessPath);
-            }
-            break;
+              break;
+          }
         }
       },
     );
