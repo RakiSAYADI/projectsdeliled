@@ -145,6 +145,19 @@ bool InitLoadCfg()
 	return true;
 }
 
+void saveDataTask(bool savenvsFlag)
+{
+	if (savenvsFlag)
+	{
+		SaveNVS(&UnitCfg);
+		savenvsFlag = false;
+	}
+	else
+	{
+		ESP_LOGE(NVS_TAG, "Unit Config NOT saved");
+	}
+}
+
 void Default_saving()
 {
 	sprintf(UnitCfg.UnitName, UVCROBOTNAME);
@@ -152,7 +165,7 @@ void Default_saving()
 	sprintf(UnitCfg.OperatorName, "ROBOT-D001");
 	sprintf(UnitCfg.RoomName, "Room 1");
 
-	UnitCfg.DisinfictionTime = 0;
+	UnitCfg.DisinfictionTime = 10;
 	UnitCfg.ActivationTime = 30;
 
 	sprintf(UnitCfg.FirmwareVersion, FIRMWAREVERSIONNAME);
@@ -167,4 +180,90 @@ void Default_saving()
 	{
 		ESP_LOGE(NVS_TAG, "Unit Config saving NOT OK");
 	}
+}
+
+bool jsonparse(char *src, char *dst, char *label, unsigned short arrayindex)
+{
+	char *sp = 0, *ep = 0, *ic = 0;
+	char tmp[64];
+
+	sp = strstr(src, label);
+
+	if (sp == NULL)
+	{
+		// ESP_LOGE(NVS_TAG, "label %s not found",label);
+		return false;
+	}
+
+	sp = strchr(sp, ':');
+	if (sp == NULL)
+	{
+		ESP_LOGE(NVS_TAG, "value start not found");
+		return false;
+	}
+
+	if (sp[1] == '"')
+	{
+		sp++;
+		ep = strchr(sp + 1, '"');
+		ic = strchr(sp + 1, ',');
+		if ((ep == NULL) || ((ep > ic) && (ic != NULL)))
+		{
+			ESP_LOGE(NVS_TAG, "type string parsing error");
+			return false;
+		}
+	}
+	else if (sp[1] == '[')
+	{
+		sp++;
+		ep = strchr(sp + 1, ']');
+		ic = strchr(sp + 1, ':');
+		if ((ep == NULL) || ((ep > ic) && (ic != NULL)))
+		{
+			ESP_LOGE(NVS_TAG, "type array parsing error");
+			return false;
+		}
+
+		ic = strchr(sp + 1, ',');
+		if ((ic < ep) && (ic != NULL))
+			ep = ic;
+
+		for (int i = 0; i < arrayindex; i++)
+		{
+			sp = ep;
+			ep = strchr(sp + 1, ',');
+
+			if (ep == NULL)
+			{
+				ic = strchr(sp + 1, ']');
+				ep = ic;
+			}
+		}
+
+		if (sp[1] == '"')
+		{
+			sp++;
+			ep = strchr(sp + 1, '"');
+		}
+	}
+	else
+	{
+		ep = strchr(sp + 1, ',');
+		if (ep == NULL)
+			ep = strchr(sp + 1, '}');
+		ic = strchr(sp + 1, ':');
+		if ((ep == NULL) || ((ep > ic) && (ic != NULL)))
+		{
+			ESP_LOGE(NVS_TAG, "type int parsing error");
+			return false;
+		}
+	}
+
+	strncpy(tmp, sp + 1, ep - sp - 1);
+	tmp[ep - sp - 1] = 0;
+
+	memset(dst, 0x00, strlen(tmp) + 1);
+	memcpy(dst, tmp, strlen(tmp));
+
+	return true;
 }

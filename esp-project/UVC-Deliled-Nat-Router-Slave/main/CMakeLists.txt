@@ -9,5 +9,6 @@ idf_component_register(SRCS
                         "system_init.c" 
                         "main.c" 
                         "unitcfg.c" 
+                        "espnow_slave.c" 
                               INCLUDE_DIRS "")
 # register_component()

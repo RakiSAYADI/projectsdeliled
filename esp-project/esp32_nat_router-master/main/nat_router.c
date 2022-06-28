@@ -23,6 +23,8 @@
 #include "unitcfg.h"
 #include "nat_router.h"
 #include "system_init.h"
+#include "smtp_client.h"
+#include "emailclient.h"
 
 #include "freertos/event_groups.h"
 #include "esp_wifi.h"
@@ -57,7 +59,7 @@ esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
 {
     esp_netif_dns_info_t dns;
 
-    ESP_LOGI(NAT_TAG, "event id: %d" ,event->event_id);
+    ESP_LOGI(NAT_TAG, "event id: %d", event->event_id);
 
     switch (event->event_id)
     {
@@ -74,6 +76,8 @@ esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
             ESP_LOGI(NAT_TAG, "set dns to:" IPSTR, IP2STR(&dns.ip.u_addr.ip4));
         }
         xEventGroupSetBits(wifi_event_group, WIFI_CONNECTED_BIT);
+        sendEmail = true;
+        sendEmailClient = true;
         break;
     case SYSTEM_EVENT_STA_DISCONNECTED:
         ESP_LOGI(NAT_TAG, "disconnected - retry to connect to the AP");
@@ -96,7 +100,7 @@ esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
 }
 
 const int CONNECTED_BIT = BIT0;
-#define JOIN_TIMEOUT_MS (2000)
+#define JOIN_TIMEOUT_MS (10000)
 
 void wifi_init(const char *ssid,
                const char *passwd,
@@ -159,7 +163,7 @@ void wifi_init(const char *ssid,
         strlcpy((char *)ap_config.sta.password, ap_passwd, sizeof(ap_config.sta.password));
     }
 
-    if (strlen(ssid) > 0)
+    if (strlen(ssid) > 0 && strlen(passwd) > 0)
     {
         strlcpy((char *)wifi_config.sta.ssid, ssid, sizeof(wifi_config.sta.ssid));
         strlcpy((char *)wifi_config.sta.password, passwd, sizeof(wifi_config.sta.password));

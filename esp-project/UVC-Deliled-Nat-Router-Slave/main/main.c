@@ -18,6 +18,7 @@
 #include "udp_client.h"
 #include "uvc_task.h"
 #include "system_init.h"
+#include "espnow_slave.h"
 
 char *TAG = "app_main";
 
@@ -29,7 +30,7 @@ int app_main(void)
 	setUnitStatus(UNIT_STATUS_LOADING);
 
 	// Initialize Base Mac Address.
-	// BaseMacInit();
+	BaseMacInit();
 
 	// Initiate UVC task
 	uvcStatInit();
@@ -45,7 +46,10 @@ int app_main(void)
 	}
 
 	// Intialize WIFI NETWORK for the client
-	UDPClient();
+	//UDPClient();
+
+	// Intialize WIFINOW NETWORK for the client
+	espnowSlave();
 
 	setUnitStatus(UNIT_STATUS_IDLE);
 

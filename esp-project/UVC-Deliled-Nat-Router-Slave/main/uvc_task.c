@@ -17,12 +17,15 @@ const char *UVC_TAG = "UVC";
 const int uvcTimeTransition = 50;
 
 bool stopEventTrigered = false;
+bool detectionEventTrigered = false;
 
 void startUVC(uint32_t alertTime, uint32_t uvcTime)
 {
 	alertTime *= 1000;
 	uvcTime *= 1000;
 	ESP_LOGI(UVC_TAG, "Starting UVC treatement with alert : %d", alertTime);
+	stopEventTrigered = false;
+	detectionEventTrigered = false;
 	while (alertTime > 0)
 	{
 		alertTime -= uvcTimeTransition;
@@ -41,11 +44,15 @@ void startUVC(uint32_t alertTime, uint32_t uvcTime)
 		while (uvcTime > 0)
 		{
 			uvcTime -= uvcTimeTransition;
-			if (stopEventTrigered)
+			if (detectionEventTrigered)
 			{
-				sendUDPData("{\"Detection\":1}");
 				setUnitStatus(UNIT_STATUS_UVC_STARTING);
 				delay(10000);
+				setUnitStatus(UNIT_STATUS_UVC_ERROR);
+				break;
+			}
+			if (stopEventTrigered)
+			{
 				setUnitStatus(UNIT_STATUS_UVC_ERROR);
 				break;
 			}
@@ -71,6 +78,7 @@ void *uvc_status_thread(void *p)
 				setUnitStatus(UNIT_STATUS_IDLE);
 				ESP_LOGI(UVC_TAG, "UVC treatement is successfull ");
 			}
+			saveDataTask(true);
 		}
 		delay(uvcTimeTransition);
 	}

@@ -29,64 +29,192 @@
 #include "unitcfg.h"
 #include "uvc_task.h"
 #include "aes.h"
+#include "i2c.h"
 
 #include "sdkconfig.h"
 
 const char *TCP_TAG = "TCP-IP";
 
+const bool readWithEncryption = false;
+
 void sendTCPCryptedMessage(const char *text);
 
 char tx_buffer[sizeof(encryptedHex)];
 char rx_buffer[sizeof(encryptedHex)];
+char bufferTCP[sizeof(plaintext)];
 
 int sock;
 
 bool tcpDisconnect = false;
 bool saveNVSData = false;
 
+time_t timeSt;
+
+char *getStateToString(UnitStatDef UnitStat)
+{
+    switch (UnitStat)
+    {
+    case UNIT_STATUS_NONE:
+        return "NONE";
+        break;
+    case UNIT_STATUS_LOADING:
+        return "LOADING";
+        break;
+    case UNIT_STATUS_UVC_ERROR:
+        return "ERROR";
+        break;
+    case UNIT_STATUS_UVC_STARTING:
+        return "STARTING";
+        break;
+    case UNIT_STATUS_UVC_TREATEMENT:
+        return "UVC";
+        break;
+    case UNIT_STATUS_IDLE:
+        return "IDLE";
+        break;
+    }
+    return "error";
+}
+
+bool readAutoData(char *jsonData, char day[4], int dayID)
+{
+    char tmp[64];
+    bool stateFlag = false;
+
+    if (jsonparse(jsonData, tmp, day, 0))
+    {
+        stateFlag = true;
+        UnitCfg.autoUvc[dayID].state = atoi(tmp);
+
+        if (UnitCfg.autoUvc[dayID].state)
+        {
+            ESP_LOGI(TCP_TAG, "%s is selected !", day);
+        }
+        else
+        {
+            ESP_LOGI(TCP_TAG, "%s is not selected !", day);
+        }
+
+        if (jsonparse(jsonData, tmp, day, 1))
+        {
+            UnitCfg.autoUvc[dayID].autoTrigTime = atoi(tmp);
+            ESP_LOGI(TCP_TAG, "%s time is %ld", day, UnitCfg.autoUvc[dayID].autoTrigTime);
+        }
+        if (jsonparse(jsonData, tmp, day, 2))
+        {
+            UnitCfg.autoUvc[dayID].DisinfictionTime = atoi(tmp);
+            ESP_LOGI(TCP_TAG, "%s disinfection is %d", day, UnitCfg.autoUvc[dayID].DisinfictionTime);
+        }
+        if (jsonparse(jsonData, tmp, day, 3))
+        {
+            UnitCfg.autoUvc[dayID].ActivationTime = atoi(tmp);
+            ESP_LOGI(TCP_TAG, "%s activation is %d", day, UnitCfg.autoUvc[dayID].ActivationTime);
+        }
+    }
+    return stateFlag;
+}
+
 void checkMessageInput(char *text)
 {
     if (strstr(text, "PONG"))
     {
-        sendTCPCryptedMessage("{\"data\":\"PONG\"}");
-    }
-    else if (strstr(text, "GETINFO_1.1"))
-    {
-        char bufferTCP[sizeof(plaintext)];
-        if ((getUnitState() == UNIT_STATUS_UVC_STARTING) || (getUnitState() == UNIT_STATUS_UVC_TREATEMENT))
+        if (readWithEncryption)
         {
-            sprintf(bufferTCP, "{\"data\":\"INFOUVC\",\"name\":\"%s\",\"detec\":%d}", UnitCfg.UnitName, stopEventTrigerred);
+            sendTCPCryptedMessage("{\"data\":\"PONG\"}");
         }
         else
         {
-            sprintf(bufferTCP, "{\"data\":\"INFO\",\"name\":\"%s\",\"state\":%d,\"wifi\":[\"%s\",\"%s\"],\"timeDYS\":[%d,%d],\"dataDYS\":[\"%s\",\"%s\",\"%s\"]}",
-                    UnitCfg.UnitName, getUnitState(),
-                    UnitCfg.WifiCfg.AP_SSID, UnitCfg.WifiCfg.AP_PASS,
+            sprintf(tx_buffer, "{\"data\":\"PONG\"}");
+        }
+    }
+    else if (strstr(text, "GETINFO_1.1"))
+    {
+        time(&timeSt);
+        if (readWithEncryption)
+        {
+            sprintf(bufferTCP, "{\"data\":\"INFO\",\"name\":\"%s\",\"state\":\"%s\",\"timeSt\":%ld,\"timeUVC\":%d,\"wifi\":[\"%s\",\"%s\"],\"encrypt\":%d,\"timeDYS\":[%d,%d],\"dataDYS\":[\"%s\",\"%s\",\"%s\"]}",
+                    UnitCfg.UnitName, getStateToString(getUnitState()), timeSt, timeUVC,
+                    UnitCfg.WifiCfg.AP_SSID, UnitCfg.WifiCfg.AP_PASS, readWithEncryption,
                     UnitCfg.DisinfictionTime, UnitCfg.ActivationTime,
                     UnitCfg.Company, UnitCfg.OperatorName, UnitCfg.RoomName);
+            ESP_LOGI(TCP_TAG, "text to send and encrypt %s", bufferTCP);
+            sendTCPCryptedMessage(bufferTCP);
         }
-
-        ESP_LOGI(TCP_TAG, "text to send and encrypt %s", bufferTCP);
-
-        sendTCPCryptedMessage(bufferTCP);
+        else
+        {
+            sprintf(tx_buffer, "{\"data\":\"INFO\",\"name\":\"%s\",\"state\":\"%s\",\"timeSt\":%ld,\"timeUVC\":%d,\"wifi\":[\"%s\",\"%s\"],\"encrypt\":%d,\"timeDYS\":[%d,%d],\"dataDYS\":[\"%s\",\"%s\",\"%s\"]}",
+                    UnitCfg.UnitName, getStateToString(getUnitState()), timeSt, timeUVC,
+                    UnitCfg.WifiCfg.AP_SSID, UnitCfg.WifiCfg.AP_PASS, readWithEncryption,
+                    UnitCfg.DisinfictionTime, UnitCfg.ActivationTime,
+                    UnitCfg.Company, UnitCfg.OperatorName, UnitCfg.RoomName);
+            ESP_LOGI(TCP_TAG, "text to send and encrypt %s", tx_buffer);
+        }
+    }
+    else if (strstr(text, "GETINFO_2.1"))
+    {
+        if (readWithEncryption)
+        {
+            sprintf(bufferTCP, "{\"data\":\"AUTO\",\"name\":\"%s\",\"state\":\"%s\",\"Mon\":[%d,%ld,%d,%d],\"Tue\":[%d,%ld,%d,%d],\"Wed\":[%d,%ld,%d,%d],\"Thu\":[%d,%ld,%d,%d],\"Fri\":[%d,%ld,%d,%d],\"Sat\":[%d,%ld,%d,%d],\"Sun\":[%d,%ld,%d,%d]}",
+                    UnitCfg.UnitName, getStateToString(getUnitState()),
+                    UnitCfg.autoUvc[1].state, UnitCfg.autoUvc[1].autoTrigTime, UnitCfg.autoUvc[1].DisinfictionTime, UnitCfg.autoUvc[1].ActivationTime,
+                    UnitCfg.autoUvc[2].state, UnitCfg.autoUvc[2].autoTrigTime, UnitCfg.autoUvc[2].DisinfictionTime, UnitCfg.autoUvc[2].ActivationTime,
+                    UnitCfg.autoUvc[3].state, UnitCfg.autoUvc[3].autoTrigTime, UnitCfg.autoUvc[3].DisinfictionTime, UnitCfg.autoUvc[3].ActivationTime,
+                    UnitCfg.autoUvc[4].state, UnitCfg.autoUvc[4].autoTrigTime, UnitCfg.autoUvc[4].DisinfictionTime, UnitCfg.autoUvc[4].ActivationTime,
+                    UnitCfg.autoUvc[5].state, UnitCfg.autoUvc[5].autoTrigTime, UnitCfg.autoUvc[5].DisinfictionTime, UnitCfg.autoUvc[5].ActivationTime,
+                    UnitCfg.autoUvc[6].state, UnitCfg.autoUvc[6].autoTrigTime, UnitCfg.autoUvc[6].DisinfictionTime, UnitCfg.autoUvc[6].ActivationTime,
+                    UnitCfg.autoUvc[0].state, UnitCfg.autoUvc[0].autoTrigTime, UnitCfg.autoUvc[0].DisinfictionTime, UnitCfg.autoUvc[0].ActivationTime);
+            ESP_LOGI(TCP_TAG, "text to send and encrypt %s", bufferTCP);
+            sendTCPCryptedMessage(bufferTCP);
+        }
+        else
+        {
+            sprintf(tx_buffer, "{\"data\":\"AUTO\",\"name\":\"%s\",\"state\":\"%s\",\"Mon\":[%d,%ld,%d,%d],\"Tue\":[%d,%ld,%d,%d],\"Wed\":[%d,%ld,%d,%d],\"Thu\":[%d,%ld,%d,%d],\"Fri\":[%d,%ld,%d,%d],\"Sat\":[%d,%ld,%d,%d],\"Sun\":[%d,%ld,%d,%d]}",
+                    UnitCfg.UnitName, getStateToString(getUnitState()),
+                    UnitCfg.autoUvc[1].state, UnitCfg.autoUvc[1].autoTrigTime, UnitCfg.autoUvc[1].DisinfictionTime, UnitCfg.autoUvc[1].ActivationTime,
+                    UnitCfg.autoUvc[2].state, UnitCfg.autoUvc[2].autoTrigTime, UnitCfg.autoUvc[2].DisinfictionTime, UnitCfg.autoUvc[2].ActivationTime,
+                    UnitCfg.autoUvc[3].state, UnitCfg.autoUvc[3].autoTrigTime, UnitCfg.autoUvc[3].DisinfictionTime, UnitCfg.autoUvc[3].ActivationTime,
+                    UnitCfg.autoUvc[4].state, UnitCfg.autoUvc[4].autoTrigTime, UnitCfg.autoUvc[4].DisinfictionTime, UnitCfg.autoUvc[4].ActivationTime,
+                    UnitCfg.autoUvc[5].state, UnitCfg.autoUvc[5].autoTrigTime, UnitCfg.autoUvc[5].DisinfictionTime, UnitCfg.autoUvc[5].ActivationTime,
+                    UnitCfg.autoUvc[6].state, UnitCfg.autoUvc[6].autoTrigTime, UnitCfg.autoUvc[6].DisinfictionTime, UnitCfg.autoUvc[6].ActivationTime,
+                    UnitCfg.autoUvc[0].state, UnitCfg.autoUvc[0].autoTrigTime, UnitCfg.autoUvc[0].DisinfictionTime, UnitCfg.autoUvc[0].ActivationTime);
+            ESP_LOGI(TCP_TAG, "text to send and encrypt %s", tx_buffer);
+        }
     }
     else if (strstr(text, "STARTDESYNFECTIONPROCESS"))
     {
-        time_t t;
-        time(&t);
-        char bufferTCP[sizeof(plaintext)];
-        sprintf(bufferTCP, "{\"data\":\"START\",\"timeSTAMP\":%ld}", t);
-        sendTCPCryptedMessage(bufferTCP);
+        time(&timeSt);
+        if (readWithEncryption)
+        {
+            sprintf(bufferTCP, "{\"data\":\"START\",\"timeSTAMP\":%ld}", timeSt);
+            sendTCPCryptedMessage(bufferTCP);
+        }
+        else
+        {
+            sprintf(tx_buffer, "{\"data\":\"START\",\"timeSTAMP\":%ld}", timeSt);
+        }
     }
     else if (strstr(text, "GOODDATA"))
     {
-        char bufferTCP[sizeof(plaintext)];
-        sprintf(bufferTCP, "{\"data\":\"success\"}");
-        sendTCPCryptedMessage(bufferTCP);
+        if (readWithEncryption)
+        {
+            sprintf(bufferTCP, "{\"data\":\"success\"}");
+            sendTCPCryptedMessage(bufferTCP);
+        }
+        else
+        {
+            sprintf(tx_buffer, "{\"data\":\"success\"}");
+        }
     }
     else
     {
-        sendTCPCryptedMessage("WRONG MESSAGE");
+        if (readWithEncryption)
+        {
+            sendTCPCryptedMessage("WRONG MESSAGE");
+        }
+        else
+        {
+            sprintf(tx_buffer, "WRONG MESSAGE");
+        }
     }
 }
 
@@ -101,14 +229,18 @@ void checkMessageOut()
     }
     else
     {
-        setTextToDecrypt(rx_buffer);
-        ESP_LOGI(TCP_TAG, "Text received after crypt : %s", plaintext);
+        if (readWithEncryption)
+        {
+            setTextToDecrypt(rx_buffer);
+            ESP_LOGI(TCP_TAG, "Text received after crypt : %s", plaintext);
+            sprintf(rx_buffer, plaintext);
+        }
         char tmp[64];
-        if (jsonparse(plaintext, tmp, "mode", 0))
+        if (jsonparse(rx_buffer, tmp, "mode", 0))
         {
             if (strstr(tmp, "SETTIME"))
             {
-                if (jsonparse(plaintext, tmp, "Time", 0))
+                if (jsonparse(rx_buffer, tmp, "Time", 0))
                 {
                     // time
                     time_t t = 0;
@@ -121,7 +253,7 @@ void checkMessageOut()
                     t = atoi(tmp);
                     ESP_LOGI(TCP_TAG, "Time sync epoch %ld", t);
 
-                    if (jsonparse(plaintext, tmp, "Time", 1))
+                    if (jsonparse(rx_buffer, tmp, "Time", 1))
                     {
                         if (strstr(tmp, "FR"))
                         {
@@ -134,35 +266,36 @@ void checkMessageOut()
                         ESP_LOGI(TCP_TAG, "Time zone %s", UnitCfg.UnitTimeZone);
                         syncTime(t, UnitCfg.UnitTimeZone);
                         saveNVSData = true;
-                        sprintf(plaintext, "GOODDATA");
+                        saveTimeOnBattery = true;
+                        sprintf(rx_buffer, "GOODDATA");
                     }
                 }
             }
             else if (strstr(tmp, "SETDISINFECT"))
             {
-                if (jsonparse(plaintext, UnitCfg.Company, "data", 0))
+                if (jsonparse(rx_buffer, UnitCfg.Company, "data", 0))
                 {
                     ESP_LOGI(TCP_TAG, "Company :  %s", UnitCfg.Company);
-                    if (jsonparse(plaintext, UnitCfg.OperatorName, "data", 1))
+                    if (jsonparse(rx_buffer, UnitCfg.OperatorName, "data", 1))
                     {
                         ESP_LOGI(TCP_TAG, "Operator :  %s", UnitCfg.OperatorName);
                     }
-                    if (jsonparse(plaintext, UnitCfg.RoomName, "data", 2))
+                    if (jsonparse(rx_buffer, UnitCfg.RoomName, "data", 2))
                     {
                         ESP_LOGI(TCP_TAG, "Room :  %s", UnitCfg.RoomName);
                     }
-                    if (jsonparse(plaintext, tmp, "Time", 0))
+                    if (jsonparse(rx_buffer, tmp, "Time", 0))
                     {
                         UnitCfg.DisinfictionTime = atoi(tmp);
                         ESP_LOGI(TCP_TAG, "Disinfection time :  %d", UnitCfg.DisinfictionTime);
-                        if (jsonparse(plaintext, tmp, "Time", 1))
+                        if (jsonparse(rx_buffer, tmp, "Time", 1))
                         {
                             UnitCfg.ActivationTime = atoi(tmp);
                             ESP_LOGI(TCP_TAG, "Activation time :  %d", UnitCfg.ActivationTime);
                         }
                     }
                     saveNVSData = true;
-                    sprintf(plaintext, "GOODDATA");
+                    sprintf(rx_buffer, "GOODDATA");
                 }
             }
             else if (strstr(tmp, "START"))
@@ -171,20 +304,36 @@ void checkMessageOut()
                 {
                     stopEventTrigerred = false;
                     setUnitStatus(UNIT_STATUS_UVC_STARTING);
-                    sprintf(plaintext, "GOODDATA");
+                    sprintf(rx_buffer, "GOODDATA");
                 }
+            }
+            else if (strstr(tmp, "AUTOUVC"))
+            {
+                saveNVSData = readAutoData(rx_buffer, "Mon", 1);
+                saveNVSData = readAutoData(rx_buffer, "Tue", 2);
+                saveNVSData = readAutoData(rx_buffer, "Wed", 3);
+                saveNVSData = readAutoData(rx_buffer, "Thu", 4);
+                saveNVSData = readAutoData(rx_buffer, "Fri", 5);
+                saveNVSData = readAutoData(rx_buffer, "Sat", 6);
+                saveNVSData = readAutoData(rx_buffer, "Sun", 0);
+                sprintf(rx_buffer, "GOODDATA");
             }
             else if (strstr(tmp, "PING"))
             {
-                sprintf(plaintext, "PONG");
+                sprintf(rx_buffer, "PONG");
             }
             else if (strstr(tmp, "STOP"))
             {
                 stopEventTrigerred = true;
-                sprintf(plaintext, "GOODDATA");
+                sprintf(rx_buffer, "GOODDATA");
+            }
+            else if (strstr(tmp, "ENCRYPT"))
+            {
+                // readWithEncryption = !readWithEncryption;
+                sprintf(rx_buffer, "GOODDATA");
             }
         }
-        checkMessageInput(plaintext);
+        checkMessageInput(rx_buffer);
     }
 }
 
@@ -199,7 +348,7 @@ void txTransmission()
 {
     int length = strlen(tx_buffer);
     int to_write = length;
-    ESP_LOGI(TCP_TAG, "Message to send : %s", tx_buffer);
+    ESP_LOGI(TCP_TAG, "Message to send length %d : %s", strlen(tx_buffer), tx_buffer);
     while (to_write > 0)
     {
         int written = send(sock, tx_buffer + (length - to_write), to_write, 0);
@@ -244,52 +393,30 @@ void rxTransmission()
     saveDataTask(saveNVSData);
 }
 
-void TCPInit(void *pvParameters)
+void TCPInit()
 {
     char addr_str[128];
-    int addr_family = (int)pvParameters;
-    int ip_protocol = 0;
-    int keepAlive = 1;
-    int keepIdle = KEEPALIVE_IDLE;
-    int keepInterval = KEEPALIVE_INTERVAL;
-    int keepCount = KEEPALIVE_COUNT;
     struct sockaddr_storage dest_addr;
+    struct sockaddr_in *dest_addr_ip4 = (struct sockaddr_in *)&dest_addr;
+    dest_addr_ip4->sin_addr.s_addr = inet_addr(ADDRESS_TCP);
+    dest_addr_ip4->sin_port = htons(PORT_TCP);
+    dest_addr_ip4->sin_family = AF_INET;
 
-    if (addr_family == AF_INET)
-    {
-        struct sockaddr_in *dest_addr_ip4 = (struct sockaddr_in *)&dest_addr;
-        dest_addr_ip4->sin_addr.s_addr = inet_addr(ADDRESS_TCP);
-        dest_addr_ip4->sin_port = htons(PORT_TCP);
-        dest_addr_ip4->sin_family = AF_INET;
-        ip_protocol = IPPROTO_IP;
-    }
-
-    int listen_sock = socket(addr_family, SOCK_STREAM, ip_protocol);
+    int listen_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
     if (listen_sock < 0)
     {
         ESP_LOGE(TCP_TAG, "Unable to create socket: errno %d", errno);
         vTaskDelete(NULL);
         return;
     }
-    int opt = 1;
-    setsockopt(listen_sock, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 
     ESP_LOGI(TCP_TAG, "Socket created");
-
-    // Marking the socket as non-blocking
-    /*int flags = fcntl(listen_sock, F_GETFL);
-    if (fcntl(listen_sock, F_SETFL, flags | O_NONBLOCK) == -1)
-    {
-        ESP_LOGE(TCP_TAG, "Unable to set socket non blocking : %d", errno);
-        goto CLEAN_UP;
-    }
-    ESP_LOGI(TCP_TAG, "Socket marked as non blocking");*/
 
     int err = bind(listen_sock, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
     if (err != 0)
     {
         ESP_LOGE(TCP_TAG, "Socket unable to bind: errno %d", errno);
-        ESP_LOGE(TCP_TAG, "IPPROTO: %d", addr_family);
+        ESP_LOGE(TCP_TAG, "IPPROTO: %d", AF_INET);
         goto CLEAN_UP;
     }
     ESP_LOGI(TCP_TAG, "Socket bound, port %d", PORT_TCP);
@@ -325,21 +452,6 @@ void TCPInit(void *pvParameters)
             }
             ESP_LOGI(TCP_TAG, "Timeout Successful");
 
-            // Set tcp keepalive option
-            setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, &keepAlive, sizeof(int));
-            setsockopt(sock, IPPROTO_TCP, TCP_KEEPIDLE, &keepIdle, sizeof(int));
-            setsockopt(sock, IPPROTO_TCP, TCP_KEEPINTVL, &keepInterval, sizeof(int));
-            setsockopt(sock, IPPROTO_TCP, TCP_KEEPCNT, &keepCount, sizeof(int));
-
-            // ...and set the client's socket non-blocking
-            /*flags = fcntl(sock, F_GETFL);
-            if (fcntl(sock, F_SETFL, flags | O_NONBLOCK) == -1)
-            {
-                ESP_LOGE(TCP_TAG, "Unable to set socket non blocking : %d", errno);
-                goto CLEAN_UP;
-            }
-            ESP_LOGI(TCP_TAG, "sock=%d: Socket marked as non blocking", sock);*/
-
             // Convert ip address to string
             if (source_addr.ss_family == PF_INET)
             {
@@ -362,5 +474,5 @@ CLEAN_UP:
 
 void TCPServer(void)
 {
-    xTaskCreate(TCPInit, "TCPInit", 8192 * 2, (void *)AF_INET, 3, NULL);
+    xTaskCreate(TCPInit, "TCPInit", 8192 * 4, NULL, 3, NULL);
 }

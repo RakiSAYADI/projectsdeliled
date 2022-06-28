@@ -157,7 +157,7 @@ void RelayStatusTask()
 	{
 		if ((gpio_get_level(GPIO_NUM_16) == 1) && (getUnitState() == UNIT_STATUS_UVC_TREATEMENT))
 		{
-			stopEventTrigered = true;
+			detectionEventTrigered = true;
 			ESP_LOGI(GPIO_TAG, "STOP UVC TREATEMENT, WE HAVE DETECTION !");
 		}
 		delay(50);

@@ -15,10 +15,10 @@ int hex_to_ascii(char c, char d);
 char *removeWhiteSpaces(char *str);
 void string2hexString(char *input, char *output);
 void hexstring2String(char *input, char *output);
-int stringCheckForEncryption(char *input);
+void stringCheckForEncryption(char *input);
 
-esp_aes_context ctxEncode;
-esp_aes_context ctxDecode;
+mbedtls_aes_context ctxEncode;
+mbedtls_aes_context ctxDecode;
 
 char plaintext[TEXTSIZE];
 char encrypted[sizeof(plaintext) * 2];
@@ -40,7 +40,7 @@ void setTextToDecrypt(const char *input)
 
 void encodeAESCBC()
 {
-    //printf("Text to crypt : %s\n", plaintext);
+    // printf("Text to crypt : %s\n", plaintext);
 
     char enc_iv[17] = IV_AES;
     char key[33] = KEY_AES;
@@ -59,18 +59,27 @@ void encodeAESCBC()
     // Initialize the output String
     memset(encrypted, 0, sizeof(encrypted));
 
-    mbedtls_aes_init(&ctxEncode);
-    mbedtls_aes_setkey_enc(&ctxEncode, (unsigned char *)key, 256);
-    int result = mbedtls_aes_crypt_cbc(&ctxEncode, ESP_AES_ENCRYPT, stringCheckForEncryption(plaintext), (unsigned char *)enc_iv, (uint8_t *)plaintext, (uint8_t *)encrypted);
-    mbedtls_aes_free(&ctxEncode);
-
     // Initialize the output hex String
     memset(encryptedHex, 0, sizeof(encryptedHex));
+
+    stringCheckForEncryption(plaintext);
+
+    string2hexString(plaintext, encryptedHex);
+
+    mbedtls_aes_init(&ctxEncode);
+    mbedtls_aes_setkey_enc(&ctxEncode, (unsigned char *)key, 256);
+    int result = mbedtls_aes_crypt_cbc(&ctxEncode,
+                                       MBEDTLS_AES_DECRYPT,
+                                       strlen(encryptedHex),
+                                       (unsigned char *)enc_iv,
+                                       (uint8_t *)encryptedHex,
+                                       (uint8_t *)encrypted);
+    mbedtls_aes_free(&ctxEncode);
 
     // Converting ascii string to hex string
     string2hexString(encrypted, encryptedHex);
 
-    //printf("Text after crypt result %d text %s\n", result, encryptedHex);
+    // printf("Text after crypt result %d text %s\n", result, encryptedHex);
 }
 
 void decodeAESCBC()
@@ -78,7 +87,7 @@ void decodeAESCBC()
     // Initialize the output String
     memset(encrypted, 0, sizeof(encrypted));
 
-    //printf("Text after crypt hex : %s\n", encryptedHex);
+    // printf("Text after crypt hex : %s\n", encryptedHex);
 
     char dec_iv[17] = IV_AES;
     char key[33] = KEY_AES;
@@ -102,10 +111,15 @@ void decodeAESCBC()
 
     mbedtls_aes_init(&ctxDecode);
     mbedtls_aes_setkey_dec(&ctxDecode, (unsigned char *)key, 256);
-    int result = mbedtls_aes_crypt_cbc(&ctxDecode, ESP_AES_DECRYPT, stringCheckForEncryption(encrypted), (unsigned char *)dec_iv, (uint8_t *)encrypted, (uint8_t *)plaintext);
+    int result = mbedtls_aes_crypt_cbc(&ctxDecode,
+                                       MBEDTLS_AES_DECRYPT,
+                                       strlen(encrypted),
+                                       (unsigned char *)dec_iv,
+                                       (uint8_t *)encrypted,
+                                       (uint8_t *)plaintext);
     mbedtls_aes_free(&ctxDecode);
 
-    //printf("Text after decrypt result %d : %s\n", result, plaintext);
+    // printf("Text after decrypt result %d : %s\n", result, plaintext);
 }
 
 int hex_to_int(char c)
@@ -131,9 +145,10 @@ void string2hexString(char *input, char *output)
     for (int loop = 0; loop < strlen(input); loop++)
     {
         sprintf((char *)(output + i), "%02X", input[loop]);
-        // printf("%c %u %02X %x\n", input[loop], input[loop], input[loop], input[loop]);
+        // printf("%c %02X\n", input[loop], input[loop]);
         i += 2;
     }
+    // printf("END conversion \ninput : %s size %d \noutput : %s \n", input, strlen(input), output);
 }
 
 void hexstring2String(char *input, char *output)
@@ -154,16 +169,15 @@ void hexstring2String(char *input, char *output)
     }
 }
 
-int stringCheckForEncryption(char *input)
+void stringCheckForEncryption(char *input)
 {
     int lengthInput = strlen(input);
     if (lengthInput % 16)
     {
         while (lengthInput % 16)
-            lengthInput++;
-
-        return lengthInput;
+        {
+            strcat(input, "0");
+            lengthInput = strlen(input);
+        }
     }
-    else
-        return lengthInput;
 }

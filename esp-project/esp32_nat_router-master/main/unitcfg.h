@@ -52,6 +52,14 @@ typedef struct
 
 typedef struct
 {
+	bool state;
+	time_t autoTrigTime;
+	uint32_t DisinfictionTime;
+	uint32_t ActivationTime;
+} AutoUVC_Typedef;
+
+typedef struct
+{
 	char UnitName[32];
 	char Company[64];
 	char OperatorName[64];
@@ -59,6 +67,7 @@ typedef struct
 	uint8_t Version;
 	uint32_t DisinfictionTime;
 	uint32_t ActivationTime;
+	AutoUVC_Typedef autoUvc[7];
 	SlaveConfig_Typedef UVCSlaves[MAXSLAVES];
 	char FirmwareVersion[6];
 	char UnitTimeZone[64];
@@ -66,6 +75,21 @@ typedef struct
 	char FLASH_MEMORY[3];
 } UnitConfig_Typedef;
 
+typedef struct
+{
+	time_t UpdateTime;
+	time_t LastDetTime;
+	double Temp;
+	double Humidity;
+	uint16_t Als;
+	uint16_t aq_Co2Level;
+	uint16_t aq_Tvoc;
+	uint8_t aq_status;
+	uint8_t UpdateInfo;
+	uint8_t state;
+} UnitData_Typedef;
+
+extern UnitData_Typedef UnitData;
 extern UnitConfig_Typedef UnitCfg;
 
 void saveDataTask(bool savenvsFlag);

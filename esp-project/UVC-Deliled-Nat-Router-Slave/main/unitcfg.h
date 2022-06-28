@@ -20,8 +20,11 @@ typedef struct {
 
 extern UnitConfig_Typedef UnitCfg;
 
+bool jsonparse(char *src, char *dst, char *label, unsigned short arrayindex);
+
 void Default_saving();
 bool InitLoadCfg();
+void saveDataTask(bool savenvsFlag);
 bool SaveNVS(UnitConfig_Typedef *data);
 
 #endif /* MAIN_UNITCFG_H_ */

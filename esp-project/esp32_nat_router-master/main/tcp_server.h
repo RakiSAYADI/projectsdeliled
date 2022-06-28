@@ -9,7 +9,7 @@
 #define MAIN_TCP_SERVER_H_
 
 #define ADDRESS_TCP "192.168.2.1"
-#define PORT_TCP 3333
+#define PORT_TCP 201
 #define KEEPALIVE_IDLE 5
 #define KEEPALIVE_INTERVAL 5
 #define KEEPALIVE_COUNT 3

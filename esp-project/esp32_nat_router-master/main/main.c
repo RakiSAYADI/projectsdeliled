@@ -19,7 +19,12 @@
 #include "http_server.h"
 #include "base_mac_address.h"
 #include "aes.h"
+#include "i2c.h"
 #include "uvc_task.h"
+#include "autouvc.h"
+#include "smtp_client.h"
+#include "emailclient.h"
+#include "espnow_master.h"
 
 const char *MAIN_TAG = "MAIN";
 
@@ -32,7 +37,10 @@ int app_main(void)
 	setUnitStatus(UNIT_STATUS_LOADING);
 
 	// Initiate basic mac address
-	// BaseMacInit();
+	BaseMacInit();
+
+	// Initiate i2c communication
+	I2c_Init();
 
 	// Initiate and restore the storage data
 	if (!InitLoadCfg())
@@ -44,6 +52,9 @@ int app_main(void)
 	// Initiate UVC task
 	uvcStatInit();
 
+	// Initiate auto uvc
+	AutoUVCDevice();
+
 	// Initiate LED indicator
 	LedStatInit();
 
@@ -53,17 +64,36 @@ int app_main(void)
 	// Initiate WEB server
 	startWebserver();
 
+	// Initiate UDP protocol
+	//UDPServer();
+
+	// Initiate ESPNOW protocol
+	espnowMaster();
+
 	// Initiate TCP protocol
 	TCPServer();
 
-	// Initiate UDP protocol
-	UDPServer();
+	// Initiate SMTP protocol
+	//smtpClient();
+
+	// Initiate SMTP 2 protocol
+	emailClient();
 
 	setUnitStatus(UNIT_STATUS_IDLE);
-	
-	//delay(60000);
 
-	//setUnitStatus(UNIT_STATUS_UVC_STARTING);
+	// /*
+
+	/*char hex[sizeof(encryptedHex)];
+	memset(hex, 0, sizeof(hex));
+	setTextToEncrypt("{\"data\":\"INFO\",\"name\":\"HuBBoX-39:19:84\",\"state\":\"IDLE\",\"wifi\":[\"DEEPLIGHT-HuBBoX-X001\",\"Deliled9318\"],\"timeDYS\":[10,300],\"dataDYS\":[\"Deliled\",\"ROBOT-D001\",\"Room 1\"]}");
+	ESP_LOGI(MAIN_TAG, "the text is %s with size %d \nthe encrypted hex is %s with size %d", plaintext, strlen(plaintext), encryptedHex, strlen(encryptedHex));
+	sprintf(encryptedHex, hex);
+	setTextToDecrypt(hex);
+	ESP_LOGI(MAIN_TAG, "the decrypted hex is %s with size %d", plaintext, strlen(plaintext));
+	ESP_LOGI(MAIN_TAG, "Free memory: %d bytes", esp_get_free_heap_size());
+	*/
+
+	// */
 
 	return 0;
 }

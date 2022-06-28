@@ -10,4 +10,10 @@ idf_component_register(SRCS
                         "http_server.c"
                         "uvc_task.c"
                         "aes.c"
-                    INCLUDE_DIRS ".")
+                        "i2c.c"
+                        "autouvc.c"
+                        "smtp_client.c"
+                        "emailclient.c"
+                        "espnow_master.c"
+                    INCLUDE_DIRS "."
+                    EMBED_TXTFILES server_root_cert.pem esp_logo.png)

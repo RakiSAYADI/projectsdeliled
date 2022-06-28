@@ -21,6 +21,7 @@
 #include "unitcfg.h"
 
 UnitConfig_Typedef UnitCfg;
+UnitData_Typedef UnitData;
 
 #define UNITCFG_NAMESPACE "unitcfgnvs"
 #define KEY_CONNECTION_INFO "unitcfg"
@@ -162,6 +163,14 @@ void Default_saving()
 		UnitCfg.UVCSlaves[i].UVCTimeExecution = 0;
 		UnitCfg.UVCSlaves[i].UVCLifeTime = 32400000;
 		UnitCfg.UVCSlaves[i].NumberOfDisinfection = 0;
+	}
+
+	for (int i = 0; i < 7; i++)
+	{
+		UnitCfg.autoUvc[i].state = false;
+		UnitCfg.autoUvc[i].autoTrigTime = 0;
+		UnitCfg.autoUvc[i].DisinfictionTime = 10;
+		UnitCfg.autoUvc[i].ActivationTime = 30;
 	}
 
 	sprintf(UnitCfg.UnitTimeZone, "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00");
