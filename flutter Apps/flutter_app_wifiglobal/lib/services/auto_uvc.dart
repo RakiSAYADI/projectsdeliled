@@ -17,6 +17,9 @@ class AutoUVCService {
             myDevice.activationTime = myDevice.autoDaysActivationTime[day];
             myDevice.disinfectionTime = myDevice.autoDaysDisinfectionTime[day];
             if (await myDevice.getDeviceData()) {
+              if (myDevice.date.millisecondsSinceEpoch < date.millisecondsSinceEpoch) {
+                await Future.delayed(Duration(seconds: (date.millisecondsSinceEpoch - myDevice.date.millisecondsSinceEpoch) ~/ 1000));
+              }
               Get.toNamed('/uvc');
             }
           }

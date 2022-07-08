@@ -29,6 +29,8 @@ class Device {
   List<int> autoDaysDisinfectionTime = [10, 10, 10, 10, 10, 10, 10];
   List<int> autoDaysActivationTime = [30, 30, 30, 30, 30, 30, 30];
 
+  DateTime date = DateTime.now();
+
   TCPScan _tcpScan = TCPScan();
 
   TCPCommunication _tcpSocket = TCPCommunication();
@@ -145,6 +147,7 @@ class Device {
       switch (mapData['data'].toString()) {
         case 'INFO':
           deviceName = mapData['name'];
+          date = DateTime.fromMillisecondsSinceEpoch(mapData['timeSt']*1000);
           List<int> timeList = List<int>.from(mapData['timeDYS']);
           List<String> wifiList = List<String>.from(mapData['wifi']);
           List<String> dataList = List<String>.from(mapData['dataDYS']);
@@ -155,6 +158,7 @@ class Device {
           activationTime = timeList.last;
           deviceAPSSID = wifiList.first;
           deviceAPPassword = wifiList.last;
+          debugPrint(date.toString());
           //enableAESEncryption = intToBool(mapData['encrypt']);
           switch (mapData['state']) {
             case 'NONE':

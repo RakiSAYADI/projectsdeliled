@@ -75,7 +75,9 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
     Map<String, dynamic> dataRead;
     int stateResult = 0;
     bool result = false;
+    await myDevice.setDeviceTime();
     do {
+      await Future.delayed(const Duration(seconds: 3));
       if (treatmentIsOnProgress) {
         try {
           result = await myDevice.getDeviceData();
@@ -101,7 +103,6 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
       } else {
         break;
       }
-      await Future.delayed(const Duration(seconds: 3));
     } while (true);
   }
 
@@ -174,6 +175,8 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                           padding: EdgeInsets.all(10),
                                           child: SlideCountdownSeparated(
                                             duration: durationOfDisinfect,
+                                            width: widthScreen * 0.1,
+                                            height: heightScreen * 0.1,
                                             slideDirection: SlideDirection.down,
                                             separator: ":",
                                             textStyle: TextStyle(
@@ -242,6 +245,8 @@ class _UVCState extends State<UVC> with TickerProviderStateMixin {
                                           padding: EdgeInsets.all(10),
                                           child: SlideCountdownSeparated(
                                             duration: durationOfActivate,
+                                            width: widthScreen * 0.1,
+                                            height: heightScreen * 0.1,
                                             slideDirection: SlideDirection.down,
                                             separator: ":",
                                             textStyle: TextStyle(
