@@ -3,9 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/pages/welcome.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
+import 'package:flutter_delismart_desktop_app/services/intenet_check_service.dart';
 import 'package:get/get.dart';
 
-void main() async {
+CheckInternet checkInternet = CheckInternet();
+
+void main() {
   languageCode = Platform.localeName.split('_')[0];
   debugPrint('le language de telephone : $languageCode');
 
@@ -24,7 +27,8 @@ void main() async {
       languageArrayIdentifier = 1;
       break;
   }
-  debugPrint('connection is : ${await hasNetwork()}');
+
+  checkInternet.startChecking();
   runApp(const MyApp());
 }
 
@@ -35,7 +39,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      onDispose: () {},
+      onDispose: () {
+        checkInternet.stopChecking();
+      },
       title: appName,
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
