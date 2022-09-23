@@ -1,3 +1,6 @@
+import 'package:flutter_delismart_desktop_app/classes/tuya_token.dart';
+import 'package:flutter_delismart_desktop_app/services/request_api.dart';
+
 const String appName = 'DeliSmart';
 
 String languageCode = 'fr';
@@ -27,3 +30,7 @@ List<String> uidList = [];
 List<String> homeIds = [];
 List<String> roomIds = [];
 List<String> groupId = [];
+
+final TokenClass tokenClass = TokenClass();
+
+final APIRequest tokenAPIRequest = APIRequest();

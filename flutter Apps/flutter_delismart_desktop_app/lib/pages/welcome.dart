@@ -40,8 +40,10 @@ class _WelcomeState extends State<Welcome> {
       debugPrint('macos');
     }
 
-    Future.delayed(const Duration(seconds: 3), () {
-      //Navigator.pushNamed(context, '/demo');
+    tokenClass.init();
+
+    Future.delayed(const Duration(seconds: 5), () {
+      Navigator.pushNamed(context, '/user_list');
     });
 
     super.initState();

@@ -19,18 +19,10 @@ class CheckInternet {
         Get.defaultDialog(
           title: 'Attention',
           barrierDismissible: false,
-          content: const Text('Connexion internet perdue',
-              style: TextStyle(
-                fontSize: 14,
-              )),
+          content: const Text('Connexion internet perdue', style: TextStyle(fontSize: 14)),
           actions: [
             TextButton(
-              child: const Text(
-                'Reconnecter',
-                style: TextStyle(
-                  fontSize: 14,
-                ),
-              ),
+              child: const Text('Reconnecter', style: TextStyle(fontSize: 14)),
               onPressed: () {
                 Get.back();
                 startChecking();

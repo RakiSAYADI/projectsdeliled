@@ -14,18 +14,34 @@ class APIRequest {
   Future<void> sendRequest(String method, String query, {String body = ''}) async {
     DateTime dateTime = DateTime.now();
     String timestamp = (dateTime.millisecondsSinceEpoch).toString();
-    var headers = {
-      'client_id': clientId,
-      'sign': '',
-      't': timestamp,
-      'sign_method': signMethod,
-      'nonce': nonce,
-      'stringToSign': '',
-    };
     var request = http.Request(method.toUpperCase(), Uri.parse(url + query));
+    Map<String, String> headers;
+    if (query.contains('/v1.0/token')) {
+      headers = {
+        'client_id': clientId,
+        'sign': '',
+        't': timestamp,
+        'sign_method': signMethod,
+        'nonce': nonce,
+        'stringToSign': '',
+      };
+    } else {
+      headers = {
+        'client_id': clientId,
+        'access_token': easyAccessToken,
+        'sign': '',
+        't': timestamp,
+        'sign_method': signMethod,
+      };
+    }
     var hMacSha256 = Hmac(sha256, utf8.encode(secret));
     _signStr = _stringToSign(hMacSha256, method, body, headers, query);
-    String str = clientId + timestamp + nonce + _signStr;
+    String str;
+    if (query.contains('/v1.0/token')) {
+      str = clientId + timestamp + nonce + _signStr;
+    } else {
+      str = clientId + easyAccessToken + timestamp + nonce + _signStr;
+    }
     var digest = hMacSha256.convert(utf8.encode(str));
     if (body.isNotEmpty) {
       request.body = body;

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_delismart_desktop_app/pages/user_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/welcome.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/intenet_check_service.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const Welcome(),
+        '/user_list': (context) => const ScanListUser(),
       },
     );
   }
