@@ -15,6 +15,8 @@ class Welcome extends StatefulWidget {
 }
 
 class _WelcomeState extends State<Welcome> {
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -40,10 +42,8 @@ class _WelcomeState extends State<Welcome> {
       debugPrint('macos');
     }
 
-    tokenClass.init();
-
     Future.delayed(const Duration(seconds: 5), () {
-      Navigator.pushNamed(context, '/user_list');
+      Navigator.pushReplacementNamed(context, '/user_list');
     });
 
     super.initState();

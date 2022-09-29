@@ -1,28 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_delismart_desktop_app/cards/univers_widget.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
-import 'package:flutter_delismart_desktop_app/cards/user_widget.dart';
-import 'package:oktoast/oktoast.dart';
 
-class ScanListUser extends StatefulWidget {
-  const ScanListUser({Key? key}) : super(key: key);
+class ScanListUniverse extends StatefulWidget {
+  const ScanListUniverse({Key? key}) : super(key: key);
 
   @override
-  _ScanListUserState createState() => _ScanListUserState();
+  _ScanListUniverseState createState() => _ScanListUniverseState();
 }
 
-class _ScanListUserState extends State<ScanListUser> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
+class _ScanListUniverseState extends State<ScanListUniverse> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text(scanUserPageTitleTextLanguageArray[languageArrayIdentifier]),
+        title: Text(scanUniversePageTitleTextLanguageArray[languageArrayIdentifier]),
         centerTitle: true,
         backgroundColor: Colors.blue[400],
       ),
@@ -30,9 +24,9 @@ class _ScanListUserState extends State<ScanListUser> {
         child: const Icon(Icons.search),
         backgroundColor: Colors.blue,
         onPressed: () async {
-          appClass.users.clear();
+          appClass.users[userIdentifier].universes.clear();
           waitingRequestWidget();
-          await appClass.getUserList();
+          await appClass.users[userIdentifier].getUniverses();
           if (!requestResponse) {
             showToastMessage('Error request');
           }
@@ -43,17 +37,17 @@ class _ScanListUserState extends State<ScanListUser> {
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
-            children: appClass.users
-                .map((user) => UserCard(
-                    userClass: user,
+            children: appClass.users[userIdentifier].universes
+                .map((universe) => UniverseCard(
+                    universeClass: universe,
                     connect: () async {
-                      user.universes.clear();
-                      await user.getUniverses();
-                      userIdentifier = appClass.users.indexOf(user);
+                      universe.devices.clear();
+                      await universe.getDevices();
+                      universeIdentifier = appClass.users[userIdentifier].universes.indexOf(universe);
                       if (!requestResponse) {
                         showToastMessage('Error request');
                       } else {
-                        Navigator.pushNamed(context, '/universe_list');
+                        Navigator.pushNamed(context, '/device_list');
                       }
                     }))
                 .toList()),

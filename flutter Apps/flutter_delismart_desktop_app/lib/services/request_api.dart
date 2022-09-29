@@ -1,20 +1,41 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
-import 'package:http/http.dart' as http;
 
 class APIRequest {
   String _signStr = '';
-  String _response = '';
+  Map<String, dynamic> _response = {};
 
-  String getResponse() => _response;
+  Dio? _dio;
 
-  Future<void> sendRequest(String method, String query, {String body = ''}) async {
+  Map<String, dynamic> getResponse() => _response;
+
+  void init() {
+    _dio!.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (requestOptions, handler) {
+          debugPrint("REQUEST[${requestOptions.method}] => PATH: ${requestOptions.path}"
+              "=> REQUEST VALUES: ${requestOptions.queryParameters} => HEADERS: ${requestOptions.headers}");
+          return handler.next(requestOptions);
+        },
+        onResponse: (response, handler) {
+          debugPrint("RESPONSE[${response.statusCode}] => DATA: ${response.data}");
+          return handler.next(response);
+        },
+        onError: (err, handler) {
+          debugPrint("Error[${err.response?.statusCode}]");
+          return handler.next(err);
+        },
+      ),
+    );
+  }
+
+  Future<void> sendRequest(Method method, String query, {String body = ''}) async {
     DateTime dateTime = DateTime.now();
     String timestamp = (dateTime.millisecondsSinceEpoch).toString();
-    var request = http.Request(method.toUpperCase(), Uri.parse(url + query));
     Map<String, String> headers;
     if (query.contains('/v1.0/token')) {
       headers = {
@@ -35,7 +56,7 @@ class APIRequest {
       };
     }
     var hMacSha256 = Hmac(sha256, utf8.encode(secret));
-    _signStr = _stringToSign(hMacSha256, method, body, headers, query);
+    _signStr = _stringToSign(hMacSha256, method, body.toString(), headers, query);
     String str;
     if (query.contains('/v1.0/token')) {
       str = clientId + timestamp + nonce + _signStr;
@@ -43,27 +64,33 @@ class APIRequest {
       str = clientId + easyAccessToken + timestamp + nonce + _signStr;
     }
     var digest = hMacSha256.convert(utf8.encode(str));
-    if (body.isNotEmpty) {
-      request.body = body;
-    }
     headers['sign'] = digest.toString().toUpperCase();
-    request.headers.addAll(headers);
+    _dio = Dio(BaseOptions(baseUrl: url, headers: headers));
     try {
-      http.StreamedResponse response = await request.send();
-      if (response.statusCode == 200) {
-        _response = await response.stream.bytesToString();
-        debugPrint(_response);
-      } else {
-        _response = response.reasonPhrase!;
-        debugPrint(_response);
+      Response response;
+      switch (method) {
+        case Method.get:
+          response = await _dio!.get(query);
+          break;
+        case Method.post:
+          response = await _dio!.post(query, data: body);
+          break;
+        case Method.put:
+          response = await _dio!.put(query);
+          break;
+        case Method.delete:
+          response = await _dio!.delete(query);
+          break;
       }
+      _response = response.data as Map<String, dynamic>;
+      debugPrint(response.data.toString());
     } catch (e) {
-      _response = '';
+      _response = {};
       debugPrint('API request ' + e.toString());
     }
   }
 
-  String _stringToSign(Hmac hMac, String method, String body, Map headers, String query) {
+  String _stringToSign(Hmac hMac, Method method, String body, Map headers, String query) {
     String bodyCrypt = '';
     if (body.isNotEmpty) {
       var digest = hMac.convert(utf8.encode(body));
@@ -83,6 +110,21 @@ class APIRequest {
         headersStr += item + ':' + value + '\n';
       }
     }
-    return method + '\n' + bodyCrypt + '\n' + headersStr + '\n' + query;
+    String methodString = '';
+    switch (method) {
+      case Method.get:
+        methodString = 'GET';
+        break;
+      case Method.post:
+        methodString = 'POST';
+        break;
+      case Method.put:
+        methodString = 'PUT';
+        break;
+      case Method.delete:
+        methodString = 'DELETE';
+        break;
+    }
+    return methodString + '\n' + bodyCrypt + '\n' + headersStr + '\n' + query;
   }
 }

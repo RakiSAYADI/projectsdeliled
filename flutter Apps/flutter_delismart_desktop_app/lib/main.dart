@@ -1,11 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_delismart_desktop_app/pages/device_scan.dart';
+import 'package:flutter_delismart_desktop_app/pages/universe_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/user_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/welcome.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/intenet_check_service.dart';
 import 'package:get/get.dart';
+import 'package:oktoast/oktoast.dart';
 
 CheckInternet checkInternet = CheckInternet();
 
@@ -30,7 +33,16 @@ void main() {
   }
 
   checkInternet.startChecking();
+
+  getTuyaData();
+
   runApp(const MyApp());
+}
+
+void getTuyaData() async {
+  await tokenClass.init();
+  appClass.getInfo();
+  appClass.getUserList();
 }
 
 class MyApp extends StatelessWidget {
@@ -39,17 +51,21 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      onDispose: () {
-        checkInternet.stopChecking();
-      },
-      title: appName,
-      debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const Welcome(),
-        '/user_list': (context) => const ScanListUser(),
-      },
+    return OKToast(
+      child: GetMaterialApp(
+        onDispose: () {
+          checkInternet.stopChecking();
+        },
+        title: appName,
+        debugShowCheckedModeBanner: false,
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const Welcome(),
+          '/user_list': (context) => const ScanListUser(),
+          '/universe_list': (context) => const ScanListUniverse(),
+          '/device_list': (context) => const ScanListDevice(),
+        },
+      ),
     );
   }
 }

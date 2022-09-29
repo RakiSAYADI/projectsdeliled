@@ -11,7 +11,6 @@ class DeviceClass {
   String lon = '';
   String model = '';
   String name = '';
-  String nodeId = '';
   bool online = false;
   String ownerId = '';
   String productId = '';
@@ -22,4 +21,28 @@ class DeviceClass {
   String uid = '';
   int updateTime = 0;
   String uuid = '';
+
+  DeviceClass({
+    required this.activeTime,
+    required this.bizType,
+    required this.category,
+    required this.createTime,
+    required this.imageUrl,
+    required this.id,
+    required this.ip,
+    required this.lat,
+    this.localKey = '',
+    required this.lon,
+    required this.model,
+    required this.name,
+    required this.online,
+    required this.ownerId,
+    required this.productId,
+    required this.productName,
+    required this.sub,
+    required this.timeZone,
+    required this.uid,
+    required this.updateTime,
+    required this.uuid
+  });
 }
