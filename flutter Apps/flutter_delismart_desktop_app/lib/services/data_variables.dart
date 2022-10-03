@@ -7,7 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:oktoast/oktoast.dart';
 
-const String appName = 'DeliSmart';
+const String appName = 'DeliSmartConfig';
 
 String languageCode = 'fr';
 int languageArrayIdentifier = 0;

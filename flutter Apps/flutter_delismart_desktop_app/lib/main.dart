@@ -3,18 +3,25 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/pages/device_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/universe_scan.dart';
+import 'package:flutter_delismart_desktop_app/pages/user_login.dart';
 import 'package:flutter_delismart_desktop_app/pages/user_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/welcome.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/intenet_check_service.dart';
 import 'package:get/get.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 CheckInternet checkInternet = CheckInternet();
 
 void main() {
-  languageCode = Platform.localeName.split('_')[0];
-  debugPrint('le language de telephone : $languageCode');
+  if (!kIsWeb) {
+    languageCode = Platform.localeName.split('_')[0];
+    debugPrint('le language de telephone : $languageCode');
+    checkInternet.startChecking();
+  } else {
+    debugPrint('web');
+  }
 
   if (languageCode.isEmpty) {
     languageCode = 'en';
@@ -31,8 +38,6 @@ void main() {
       languageArrayIdentifier = 1;
       break;
   }
-
-  checkInternet.startChecking();
 
   getTuyaData();
 
@@ -64,6 +69,7 @@ class MyApp extends StatelessWidget {
           '/user_list': (context) => const ScanListUser(),
           '/universe_list': (context) => const ScanListUniverse(),
           '/device_list': (context) => const ScanListDevice(),
+          '/user_login': (context) => const UserLogin(),
         },
       ),
     );

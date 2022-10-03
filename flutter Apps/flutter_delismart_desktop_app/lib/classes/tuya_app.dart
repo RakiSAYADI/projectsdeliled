@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_user.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
@@ -10,6 +8,8 @@ class AppClass {
   int id = 0;
   int createTime = 0;
   List<UserClass> users = [];
+
+  List<String> _usersEmail = [];
 
   final String queryGetAppInfo = '/v1.1/apps/$schema';
   final String queryGetUserList = '/v1.0/apps/$schema/users?page_no=1&page_size=100';
@@ -34,6 +34,8 @@ class AppClass {
     }
   }
 
+  List<String> getUsersEmail() => _usersEmail;
+
   Future getUserList() async {
     await tokenAPIRequest.sendRequest(Method.get, queryGetUserList);
     if (tokenAPIRequest.getResponse().isNotEmpty) {
@@ -49,9 +51,8 @@ class AppClass {
           for (int i = 0; i < list.length; i++) {
             if (list[i].containsKey('email')) {
               email = list[i]['email'];
-            } else {
-              email = 'No email';
             }
+            _usersEmail.add(email);
             users.add(UserClass(userName: list[i]['username'], email: email, createTime: list[i]['create_time'], uid: list[i]['uid'], updateTime: list[i]['update_time']));
           }
         }

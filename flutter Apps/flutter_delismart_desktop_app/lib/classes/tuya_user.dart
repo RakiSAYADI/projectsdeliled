@@ -14,7 +14,7 @@ class UserClass {
 
   String _queryGetUniversesList = '';
 
-  UserClass({required this.userName, required this.email, required this.createTime, required this.uid, required this.updateTime});
+  UserClass({required this.userName, this.email = '', required this.createTime, required this.uid, required this.updateTime});
 
   Future getUniverses() async {
     waitingRequestWidget();

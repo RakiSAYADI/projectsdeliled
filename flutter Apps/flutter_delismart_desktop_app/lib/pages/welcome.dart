@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class Welcome extends StatefulWidget {
   const Welcome({Key? key}) : super(key: key);
@@ -15,8 +16,6 @@ class Welcome extends StatefulWidget {
 }
 
 class _WelcomeState extends State<Welcome> {
-
-
   @override
   void initState() {
     // TODO: implement initState
@@ -26,24 +25,26 @@ class _WelcomeState extends State<Welcome> {
       DeviceOrientation.landscapeRight,
     ]);
 
-    if (Platform.isAndroid) {
-      debugPrint('android');
-    }
-    if (Platform.isIOS) {
-      debugPrint('ios');
-    }
-    if (Platform.isWindows) {
-      debugPrint('windows');
-    }
-    if (Platform.isLinux) {
-      debugPrint('linux');
-    }
-    if (Platform.isMacOS) {
-      debugPrint('macos');
+    if (!kIsWeb) {
+      if (Platform.isAndroid) {
+        debugPrint('android');
+      }
+      if (Platform.isIOS) {
+        debugPrint('ios');
+      }
+      if (Platform.isWindows) {
+        debugPrint('windows');
+      }
+      if (Platform.isLinux) {
+        debugPrint('linux');
+      }
+      if (Platform.isMacOS) {
+        debugPrint('macos');
+      }
     }
 
     Future.delayed(const Duration(seconds: 5), () {
-      Navigator.pushReplacementNamed(context, '/user_list');
+      Navigator.pushReplacementNamed(context, '/user_login');
     });
 
     super.initState();

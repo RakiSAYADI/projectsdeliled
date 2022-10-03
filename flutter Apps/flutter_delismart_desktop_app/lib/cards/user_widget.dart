@@ -34,7 +34,7 @@ class UserCard extends StatelessWidget {
               onPressed: connect,
               icon: Icon(Icons.connect_without_contact, size: heightScreen * 0.009 + widthScreen * 0.009),
               label: Text(
-                deviceConnectButtonTextLanguageArray[languageArrayIdentifier],
+                connectButtonTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(fontSize: heightScreen * 0.009 + widthScreen * 0.009),
               ),
             )

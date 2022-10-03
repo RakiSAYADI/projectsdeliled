@@ -15,13 +15,8 @@ class _ScanListUniverseState extends State<ScanListUniverse> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
-      appBar: AppBar(
-        title: Text(scanUniversePageTitleTextLanguageArray[languageArrayIdentifier]),
-        centerTitle: true,
-        backgroundColor: Colors.blue[400],
-      ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.search),
+        child: const Icon(Icons.refresh),
         backgroundColor: Colors.blue,
         onPressed: () async {
           appClass.users[userIdentifier].universes.clear();

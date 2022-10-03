@@ -13,11 +13,6 @@ class ScanListUser extends StatefulWidget {
 
 class _ScanListUserState extends State<ScanListUser> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
