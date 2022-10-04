@@ -22,9 +22,17 @@ final requestMessageTextLanguageArray= ['Attendez', 'Wait'];
 
 final userLoginPageTitleTextLanguageArray= ['Utilisateur', 'User'];
 
+final userRegisterPageTitleTextLanguageArray= ['Enregistrement', 'Register'];
+
 final enterUserEmailTextLanguageArray= ['Entrer une addresse email :', 'Enter an Email Address :'];
 
 final connectUserButtonTextLanguageArray= ['Connecter', 'Login'];
+
+final registerUserButtonTextLanguageArray= ['Enregistrer', 'Register'];
+
+final deleteUserButtonTextLanguageArray= ['Supprimer', 'Delete'];
+
+final createUserButtonTextLanguageArray= ['Créer', 'Create'];
 
 final notSupportedDeviceTextLanguageArray= ['Appareil non supporté', 'Not supported device'];
 
@@ -33,3 +41,9 @@ final universeOwnerTextLanguageArray= ['Propriétaire', 'Owner'];
 final universeAdminDeviceTextLanguageArray= ['Administrateur', 'Admin'];
 
 final universeMemberDeviceTextLanguageArray= ['Membre ordinaire', 'Member'];
+
+final userEmailTextLanguageArray= ['Email', 'Email'];
+
+final userPasswordTextLanguageArray= ['Mot de passe', 'Password'];
+
+final userNameTextLanguageArray= ['Nom', 'Name'];

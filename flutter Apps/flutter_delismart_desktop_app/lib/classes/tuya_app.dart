@@ -12,6 +12,7 @@ class AppClass {
   List<String> _usersEmail = [];
 
   final String queryGetAppInfo = '/v1.1/apps/$schema';
+  final String queryPostCreateUser = '/v1.0/apps/$schema/user';
   final String queryGetUserList = '/v1.0/apps/$schema/users?page_no=1&page_size=100';
 
   void getInfo() async {
@@ -56,6 +57,19 @@ class AppClass {
             users.add(UserClass(userName: list[i]['username'], email: email, createTime: list[i]['create_time'], uid: list[i]['uid'], updateTime: list[i]['update_time']));
           }
         }
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+  }
+
+  Future postCreateUser(String body) async {
+    await tokenAPIRequest.sendRequest(Method.post, queryPostCreateUser, body: body);
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
       } catch (e) {
         requestResponse = false;
         debugPrint(e.toString());

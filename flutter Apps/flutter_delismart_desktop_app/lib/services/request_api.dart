@@ -9,29 +9,11 @@ class APIRequest {
   String _signStr = '';
   Map<String, dynamic> _response = {};
 
+  static const Map<String, dynamic> _defaultValue = {};
+
   Dio? _dio;
 
   Map<String, dynamic> getResponse() => _response;
-
-  void init() {
-    _dio!.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (requestOptions, handler) {
-          debugPrint("REQUEST[${requestOptions.method}] => PATH: ${requestOptions.path}"
-              "=> REQUEST VALUES: ${requestOptions.queryParameters} => HEADERS: ${requestOptions.headers}");
-          return handler.next(requestOptions);
-        },
-        onResponse: (response, handler) {
-          debugPrint("RESPONSE[${response.statusCode}] => DATA: ${response.data}");
-          return handler.next(response);
-        },
-        onError: (err, handler) {
-          debugPrint("Error[${err.response?.statusCode}]");
-          return handler.next(err);
-        },
-      ),
-    );
-  }
 
   Future<void> sendRequest(Method method, String query, {String body = ''}) async {
     DateTime dateTime = DateTime.now();
@@ -55,8 +37,11 @@ class APIRequest {
         'sign_method': signMethod,
       };
     }
+    if (body.isNotEmpty) {
+      headers.addAll({'Content-Type': 'application/json'});
+    }
     var hMacSha256 = Hmac(sha256, utf8.encode(secret));
-    _signStr = _stringToSign(hMacSha256, method, body.toString(), headers, query);
+    _signStr = _stringToSign(hMacSha256, method, body, headers, query);
     String str;
     if (query.contains('/v1.0/token')) {
       str = clientId + timestamp + nonce + _signStr;
@@ -65,6 +50,8 @@ class APIRequest {
     }
     var digest = hMacSha256.convert(utf8.encode(str));
     headers['sign'] = digest.toString().toUpperCase();
+    debugPrint(_signStr);
+    //debugPrint(headers.toString());
     _dio = Dio(BaseOptions(baseUrl: url, headers: headers));
     try {
       Response response;
@@ -73,7 +60,7 @@ class APIRequest {
           response = await _dio!.get(query);
           break;
         case Method.post:
-          response = await _dio!.post(query, data: body);
+          response = await _dio!.post(query, data: json.decode(body));
           break;
         case Method.put:
           response = await _dio!.put(query);
@@ -93,6 +80,7 @@ class APIRequest {
   String _stringToSign(Hmac hMac, Method method, String body, Map headers, String query) {
     String bodyCrypt = '';
     if (body.isNotEmpty) {
+      debugPrint(body);
       var digest = hMac.convert(utf8.encode(body));
       bodyCrypt = digest.toString();
     } else {

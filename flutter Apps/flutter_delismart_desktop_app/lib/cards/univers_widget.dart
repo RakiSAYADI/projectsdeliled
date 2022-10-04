@@ -49,17 +49,11 @@ class UniverseCard extends StatelessWidget {
           children: [
             // A SlidableAction can have an icon and/or a label.
             SlidableAction(
-              backgroundColor: Color(0xFFFE4A49),
+              backgroundColor: const Color(0xFFFE4A49),
               foregroundColor: Colors.white,
               icon: Icons.delete,
-              label: 'Delete', onPressed: (BuildContext context) {  },
-            ),
-            SlidableAction(
-              onPressed: (BuildContext context) {  },
-              backgroundColor: Color(0xFF21B7CA),
-              foregroundColor: Colors.white,
-              icon: Icons.share,
-              label: 'Share',
+              label: 'Delete',
+              onPressed: (BuildContext context) {},
             ),
           ],
         ),
@@ -71,15 +65,15 @@ class UniverseCard extends StatelessWidget {
             SlidableAction(
               // An action can be bigger than the others.
               flex: 2,
-              onPressed: (BuildContext context) {  },
-              backgroundColor: Color(0xFF7BC043),
+              onPressed: (BuildContext context) {},
+              backgroundColor: const Color(0xFF7BC043),
               foregroundColor: Colors.white,
               icon: Icons.archive,
               label: 'Archive',
             ),
             SlidableAction(
-              onPressed: (BuildContext context) {  },
-              backgroundColor: Color(0xFF0392CF),
+              onPressed: (BuildContext context) {},
+              backgroundColor: const Color(0xFF0392CF),
               foregroundColor: Colors.white,
               icon: Icons.save,
               label: 'Save',
@@ -89,7 +83,7 @@ class UniverseCard extends StatelessWidget {
 
         // The child of the Slidable is what the user sees when the
         // component is not dragged.
-        child:  Padding(
+        child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

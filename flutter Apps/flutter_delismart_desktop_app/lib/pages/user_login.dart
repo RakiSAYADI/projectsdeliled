@@ -12,6 +12,10 @@ class UserLogin extends StatefulWidget {
 class _UserLoginState extends State<UserLogin> {
   final myEmail = TextEditingController();
 
+  bool registerVisibility = false;
+
+  int counterRegisterVisibility = 0;
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -22,70 +26,121 @@ class _UserLoginState extends State<UserLogin> {
         title: Text(userLoginPageTitleTextLanguageArray[languageArrayIdentifier]),
         centerTitle: true,
       ),
-      body: Container(
-        decoration: BoxDecoration(color: Colors.grey[200]),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      enterUserEmailTextLanguageArray[languageArrayIdentifier],
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: (screenWidth * 0.05), fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: screenHeight * 0.05),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
-                      child: TextField(
-                        textAlign: TextAlign.center,
-                        controller: myEmail,
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: (screenWidth * 0.05),
-                        ),
-                        decoration: InputDecoration(
-                            hintText: 'user@exemple.fr',
-                            hintStyle: TextStyle(
-                              fontSize: (screenWidth * 0.05),
-                              color: Colors.grey,
-                            )),
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.1),
-                    TextButton(
-                      onPressed: () async {
-                        if (appClass.getUsersEmail().contains(myEmail.text)) {
-                          int pos = appClass.getUsersEmail().indexOf(myEmail.text);
-                          appClass.users[pos].universes.clear();
-                          await appClass.users[pos].getUniverses();
-                          userIdentifier = appClass.users.indexOf(appClass.users[pos]);
-                          if (!requestResponse) {
-                            showToastMessage('Error request');
-                          } else {
-                            Navigator.pushNamed(context, '/universe_list');
-                          }
-                        } else {
-                          showToastMessage('the user: ${myEmail.text} is not registered');
-                        }
-                      },
-                      child: Text(
-                        connectUserButtonTextLanguageArray[languageArrayIdentifier],
-                        style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04),
-                      ),
-                      style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-                      ),
-                    ),
-                  ],
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                enterUserEmailTextLanguageArray[languageArrayIdentifier],
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: (screenWidth * 0.03 + screenHeight * 0.03), fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: screenHeight * 0.05),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
+                child: TextField(
+                  textAlign: TextAlign.center,
+                  controller: myEmail,
+                  maxLines: 1,
+                  style: TextStyle(
+                    fontSize: (screenWidth * 0.05),
+                  ),
+                  decoration: InputDecoration(
+                      hintText: 'user@exemple.fr',
+                      hintStyle: TextStyle(
+                        fontSize: (screenWidth * 0.025 + screenHeight * 0.025),
+                        color: Colors.grey,
+                      )),
                 ),
-              ],
-            ),
+              ),
+              SizedBox(height: screenHeight * 0.1),
+              TextButton(
+                onPressed: () async {
+                  if (appClass.getUsersEmail().contains(myEmail.text)) {
+                    int pos = appClass.getUsersEmail().indexOf(myEmail.text);
+                    appClass.users[pos].universes.clear();
+                    await appClass.users[pos].getUniverses();
+                    userIdentifier = appClass.users.indexOf(appClass.users[pos]);
+                    if (!requestResponse) {
+                      showToastMessage('Error request');
+                    } else {
+                      Navigator.pushNamed(context, '/universe_list');
+                    }
+                  } else {
+                    showToastMessage('the user: ${myEmail.text} is not registered');
+                    counterRegisterVisibility++;
+                    if (counterRegisterVisibility == 5) {
+                      registerVisibility = true;
+                      setState(() {});
+                    }
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    connectUserButtonTextLanguageArray[languageArrayIdentifier],
+                    style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.02 + screenHeight * 0.02),
+                  ),
+                ),
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(60.0))),
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                ),
+              ),
+              AnimatedOpacity(
+                opacity: registerVisibility ? 1.0 : 0.0,
+                duration: const Duration(seconds: 1),
+                child: Visibility(
+                  visible: registerVisibility,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: screenHeight * 0.1),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextButton(
+                            onPressed: () async {
+                              debugPrint('delete');
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                deleteUserButtonTextLanguageArray[languageArrayIdentifier],
+                                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.02 + screenHeight * 0.02),
+                              ),
+                            ),
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(60.0))),
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                            ),
+                          ),
+                          SizedBox(width: screenWidth * 0.05),
+                          TextButton(
+                            onPressed: () async {
+                              Navigator.pushNamed(context, '/user_create');
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                registerUserButtonTextLanguageArray[languageArrayIdentifier],
+                                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.02 + screenHeight * 0.02),
+                              ),
+                            ),
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(60.0))),
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

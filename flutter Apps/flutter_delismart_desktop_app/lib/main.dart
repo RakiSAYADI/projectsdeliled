@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/pages/device_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/universe_scan.dart';
+import 'package:flutter_delismart_desktop_app/pages/user_create.dart';
 import 'package:flutter_delismart_desktop_app/pages/user_login.dart';
 import 'package:flutter_delismart_desktop_app/pages/user_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/welcome.dart';
@@ -70,6 +71,7 @@ class MyApp extends StatelessWidget {
           '/universe_list': (context) => const ScanListUniverse(),
           '/device_list': (context) => const ScanListDevice(),
           '/user_login': (context) => const UserLogin(),
+          '/user_create': (context) => const UserCreate(),
         },
       ),
     );
