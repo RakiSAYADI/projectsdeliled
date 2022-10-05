@@ -30,8 +30,8 @@ class UserClass {
             universes.add(UniverseClass(
               geoName: result[i]['geo_name'],
               homeId: result[i]['home_id'],
-              lat: double.parse(result[i]['lat'].toString()),
-              lon: double.parse(result[i]['lon'].toString()),
+              lat: (result[i] as Map<String, dynamic>).containsKey('lat') ? double.parse(result[i]['lat'].toString()) : 0.0,
+              lon: (result[i] as Map<String, dynamic>).containsKey('lon') ? double.parse(result[i]['lon'].toString()) : 0.0,
               name: result[i]['name'],
               role: result[i]['role'],
             ));

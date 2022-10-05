@@ -9,8 +9,6 @@ class APIRequest {
   String _signStr = '';
   Map<String, dynamic> _response = {};
 
-  static const Map<String, dynamic> _defaultValue = {};
-
   Dio? _dio;
 
   Map<String, dynamic> getResponse() => _response;
@@ -40,18 +38,16 @@ class APIRequest {
     if (body.isNotEmpty) {
       headers.addAll({'Content-Type': 'application/json'});
     }
-    var hMacSha256 = Hmac(sha256, utf8.encode(secret));
-    _signStr = _stringToSign(hMacSha256, method, body, headers, query);
+    _signStr = _stringToSign(method, body, headers, query);
     String str;
     if (query.contains('/v1.0/token')) {
       str = clientId + timestamp + nonce + _signStr;
     } else {
       str = clientId + easyAccessToken + timestamp + nonce + _signStr;
     }
+    var hMacSha256 = Hmac(sha256, utf8.encode(secret));
     var digest = hMacSha256.convert(utf8.encode(str));
     headers['sign'] = digest.toString().toUpperCase();
-    debugPrint(_signStr);
-    //debugPrint(headers.toString());
     _dio = Dio(BaseOptions(baseUrl: url, headers: headers));
     try {
       Response response;
@@ -60,7 +56,7 @@ class APIRequest {
           response = await _dio!.get(query);
           break;
         case Method.post:
-          response = await _dio!.post(query, data: json.decode(body));
+          response = await _dio!.post(query, data: body);
           break;
         case Method.put:
           response = await _dio!.put(query);
@@ -71,17 +67,17 @@ class APIRequest {
       }
       _response = response.data as Map<String, dynamic>;
       debugPrint(response.data.toString());
+      _dio!.close();
     } catch (e) {
       _response = {};
       debugPrint('API request ' + e.toString());
     }
   }
 
-  String _stringToSign(Hmac hMac, Method method, String body, Map headers, String query) {
+  String _stringToSign(Method method, String body, Map headers, String query) {
     String bodyCrypt = '';
     if (body.isNotEmpty) {
-      debugPrint(body);
-      var digest = hMac.convert(utf8.encode(body));
+      var digest = sha256.convert(utf8.encode(body));
       bodyCrypt = digest.toString();
     } else {
       bodyCrypt = emptyBodyEncrypted;

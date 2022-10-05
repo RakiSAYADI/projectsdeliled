@@ -102,8 +102,8 @@ class _UserLoginState extends State<UserLogin> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextButton(
-                            onPressed: () async {
-                              debugPrint('delete');
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/user_delete');
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -119,7 +119,7 @@ class _UserLoginState extends State<UserLogin> {
                           ),
                           SizedBox(width: screenWidth * 0.05),
                           TextButton(
-                            onPressed: () async {
+                            onPressed: () {
                               Navigator.pushNamed(context, '/user_create');
                             },
                             child: Padding(

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
@@ -130,9 +132,9 @@ class _UserCreateState extends State<UserCreate> {
               ),
               TextButton(
                 onPressed: () async {
-                  if (myEmail.text.isNotEmpty && myPassword.text.isNotEmpty && myName.text.isNotEmpty) {
+                  if (myEmail.text.isNotEmpty || myPassword.text.isNotEmpty || myName.text.isNotEmpty) {
                     await appClass.postCreateUser(
-                        "{\"country_code\": \"33\", \"username\": \"${myEmail.text}\", \"password\": \"${myPassword.text}\", \"nick_name\": \"${myName.text}\", \"username_type\": \"2\"}");
+                        "{\n\"country_code\": \"33\", \n\"username\": \"${myEmail.text}\", \n\"password\": \"${myPassword.text}\", \n\"nick_name\": \"${myName.text}\", \n\"username_type\": \"2\"\n}");
                     if (!requestResponse) {
                       showToastMessage('Error request');
                     } else {

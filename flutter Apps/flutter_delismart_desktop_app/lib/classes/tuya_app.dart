@@ -65,6 +65,7 @@ class AppClass {
   }
 
   Future postCreateUser(String body) async {
+    waitingRequestWidget();
     await tokenAPIRequest.sendRequest(Method.post, queryPostCreateUser, body: body);
     if (tokenAPIRequest.getResponse().isNotEmpty) {
       try {
@@ -75,5 +76,22 @@ class AppClass {
         debugPrint(e.toString());
       }
     }
+    exitRequestWidget();
+  }
+
+  Future postDeleteUser(String uid) async {
+    waitingRequestWidget();
+    final String queryPostDeleteUser = '/v1.0/users/$uid/actions/pre-delete';
+    await tokenAPIRequest.sendRequest(Method.post, queryPostDeleteUser);
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
   }
 }

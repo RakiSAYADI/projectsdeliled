@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_device.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_room.dart';
@@ -16,7 +15,7 @@ class UniverseClass {
 
   String _queryGetDevicesList = '';
 
-  UniverseClass({required this.geoName, required this.homeId, required this.lat, required this.lon, required this.name, required this.role});
+  UniverseClass({required this.geoName, required this.homeId, this.lat = 0.0, this.lon = 0.0, required this.name, required this.role});
 
   Future getDevices() async {
     waitingRequestWidget();
