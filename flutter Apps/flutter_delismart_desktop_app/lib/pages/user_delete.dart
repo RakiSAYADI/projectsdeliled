@@ -65,7 +65,7 @@ class _UserDeleteState extends State<UserDelete> {
                       showToastMessage('the user: ${myEmail.text} is deleted');
                     }
                   } else {
-                    showToastMessage('the user: ${myEmail.text} is not find');
+                    showToastMessage('the user: ${myEmail.text} is not on the database');
                   }
                 },
                 child: Padding(

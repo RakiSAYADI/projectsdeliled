@@ -89,52 +89,48 @@ class _UserLoginState extends State<UserLogin> {
                   backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
                 ),
               ),
+
+              SizedBox(height: screenHeight * 0.1),
               AnimatedOpacity(
                 opacity: registerVisibility ? 1.0 : 0.0,
                 duration: const Duration(seconds: 1),
                 child: Visibility(
                   visible: registerVisibility,
-                  child: Column(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(height: screenHeight * 0.1),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/user_delete');
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                deleteUserButtonTextLanguageArray[languageArrayIdentifier],
-                                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.02 + screenHeight * 0.02),
-                              ),
-                            ),
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(60.0))),
-                              backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-                            ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/user_delete');
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            deleteUserButtonTextLanguageArray[languageArrayIdentifier],
+                            style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.02 + screenHeight * 0.02),
                           ),
-                          SizedBox(width: screenWidth * 0.05),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/user_create');
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                registerUserButtonTextLanguageArray[languageArrayIdentifier],
-                                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.02 + screenHeight * 0.02),
-                              ),
-                            ),
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(60.0))),
-                              backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-                            ),
+                        ),
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(60.0))),
+                          backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                        ),
+                      ),
+                      SizedBox(width: screenWidth * 0.05),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/user_create');
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            registerUserButtonTextLanguageArray[languageArrayIdentifier],
+                            style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.02 + screenHeight * 0.02),
                           ),
-                        ],
+                        ),
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(60.0))),
+                          backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                        ),
                       ),
                     ],
                   ),
