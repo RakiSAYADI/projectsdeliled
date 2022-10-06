@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_delismart_desktop_app/cards/device_widget.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_universe.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
@@ -8,7 +9,9 @@ class UniverseCard extends StatelessWidget {
   final UniverseClass universeClass;
   final Function() connect;
 
-  const UniverseCard({required this.universeClass, required this.connect});
+  bool _universeMembersVisibility = false;
+
+  UniverseCard({Key? key, required this.universeClass, required this.connect}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -83,86 +86,108 @@ class UniverseCard extends StatelessWidget {
 
         // The child of the Slidable is what the user sees when the
         // component is not dragged.
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                flex: 9,
-                child: Column(
-                  //crossAxisAlignment: CrossAxisAlignment.stretch,
-                  //mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      universeClass.name,
-                      style: TextStyle(fontSize: heightScreen * 0.013 + widthScreen * 0.013, color: Colors.grey[800]),
-                    ),
-                    Text(
-                      universeClass.geoName,
-                      style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.grey[600]),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    flex: 9,
+                    child: Column(
+                      //crossAxisAlignment: CrossAxisAlignment.stretch,
+                      //mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
                         Text(
-                          'lon : ${universeClass.lon}',
-                          style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.grey[800]),
+                          universeClass.name,
+                          style: TextStyle(fontSize: heightScreen * 0.013 + widthScreen * 0.013, color: Colors.grey[800]),
                         ),
                         Text(
-                          ' lat : ${universeClass.lat}',
-                          style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.grey[800]),
+                          universeClass.geoName,
+                          style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.grey[600]),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'lon : ${universeClass.lon}',
+                              style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.grey[800]),
+                            ),
+                            Text(
+                              ' lat : ${universeClass.lat}',
+                              style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.grey[800]),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton.icon(
+                              onPressed: connect,
+                              icon: Icon(Icons.supervised_user_circle, size: heightScreen * 0.009 + widthScreen * 0.009),
+                              label: Text(
+                                usersButtonTextLanguageArray[languageArrayIdentifier],
+                                style: TextStyle(fontSize: heightScreen * 0.009 + widthScreen * 0.009),
+                              ),
+                            ),
+                            TextButton.icon(
+                              onPressed: () async {
+                                universeClass.devices.clear();
+                                await universeClass.getDevices();
+                                if (!requestResponse) {
+                                  showToastMessage('Error request');
+                                } else {
+                                  _universeMembersVisibility = true;
+                                  setState(() {});
+                                }
+                              },
+                              icon: Icon(Icons.devices, size: heightScreen * 0.009 + widthScreen * 0.009),
+                              label: Text(
+                                devicesButtonTextLanguageArray[languageArrayIdentifier],
+                                style: TextStyle(fontSize: heightScreen * 0.009 + widthScreen * 0.009),
+                              ),
+                            ),
+                            TextButton.icon(
+                              onPressed: connect,
+                              icon: Icon(Icons.check_box_outlined, size: heightScreen * 0.009 + widthScreen * 0.009),
+                              label: Text(
+                                scenesButtonTextLanguageArray[languageArrayIdentifier],
+                                style: TextStyle(fontSize: heightScreen * 0.009 + widthScreen * 0.009),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    Row(
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        TextButton.icon(
-                          onPressed: connect,
-                          icon: Icon(Icons.supervised_user_circle, size: heightScreen * 0.009 + widthScreen * 0.009),
-                          label: Text(
-                            usersButtonTextLanguageArray[languageArrayIdentifier],
-                            style: TextStyle(fontSize: heightScreen * 0.009 + widthScreen * 0.009),
-                          ),
-                        ),
-                        TextButton.icon(
-                          onPressed: connect,
-                          icon: Icon(Icons.devices, size: heightScreen * 0.009 + widthScreen * 0.009),
-                          label: Text(
-                            devicesButtonTextLanguageArray[languageArrayIdentifier],
-                            style: TextStyle(fontSize: heightScreen * 0.009 + widthScreen * 0.009),
-                          ),
-                        ),
-                        TextButton.icon(
-                          onPressed: connect,
-                          icon: Icon(Icons.check_box_outlined, size: heightScreen * 0.009 + widthScreen * 0.009),
-                          label: Text(
-                            scenesButtonTextLanguageArray[languageArrayIdentifier],
-                            style: TextStyle(fontSize: heightScreen * 0.009 + widthScreen * 0.009),
-                          ),
+                        Icon(accessTypeIcon, size: heightScreen * 0.01 + widthScreen * 0.01, color: accessTypeIconColor),
+                        Text(
+                          accessTypeText,
+                          style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: accessTypeIconColor),
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(accessTypeIcon, size: heightScreen * 0.01 + widthScreen * 0.01, color: accessTypeIconColor),
-                    Text(
-                      accessTypeText,
-                      style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: accessTypeIconColor),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
+            ),
+            AnimatedOpacity(
+              opacity: _universeMembersVisibility ? 1.0 : 0.0,
+              duration: const Duration(seconds: 1),
+              child: Visibility(
+                visible: _universeMembersVisibility,
+                child: Column(children: universeClass.devices.map((device) => DeviceCard(deviceClass: device, connect: () {})).toList()),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
