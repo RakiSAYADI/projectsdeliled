@@ -18,6 +18,8 @@ final scanUniversePageTitleTextLanguageArray= ['Tous les univers', 'All universe
 
 final scanDevicePageTitleTextLanguageArray= ['Tous les appareils', 'All devices'];
 
+final scanUniverseUsersPageTitleTextLanguageArray= ['Tous les utilisateurs d\'Univers', 'All universe users'];
+
 final requestMessageTextLanguageArray= ['Attendez', 'Wait'];
 
 final userLoginPageTitleTextLanguageArray= ['Utilisateur', 'User'];

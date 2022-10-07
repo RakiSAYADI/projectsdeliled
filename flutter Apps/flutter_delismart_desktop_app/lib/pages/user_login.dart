@@ -94,6 +94,7 @@ class _UserLoginState extends State<UserLogin> {
               AnimatedOpacity(
                 opacity: registerVisibility ? 1.0 : 0.0,
                 duration: const Duration(seconds: 1),
+                curve: Curves.ease,
                 child: Visibility(
                   visible: registerVisibility,
                   child: Row(

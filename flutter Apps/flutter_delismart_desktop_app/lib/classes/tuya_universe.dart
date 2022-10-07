@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_device.dart';
+import 'package:flutter_delismart_desktop_app/classes/tuya_home_user.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_room.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 
@@ -12,10 +13,42 @@ class UniverseClass {
   String role = '';
   List<RoomClass> rooms = [];
   List<DeviceClass> devices = [];
+  List<UniverseUserClass> users = [];
 
   String _queryGetDevicesList = '';
+  String _queryGetMembersList = '';
 
   UniverseClass({required this.geoName, required this.homeId, this.lat = 0.0, this.lon = 0.0, required this.name, required this.role});
+
+  Future getUsers() async {
+    waitingRequestWidget();
+    _queryGetMembersList = '/v1.0/homes/$homeId/members';
+    await tokenAPIRequest.sendRequest(Method.get, _queryGetMembersList);
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+        if (requestResponse) {
+          List<dynamic> result = message['result'] as List<dynamic>;
+          for (int i = 0; i < result.length; i++) {
+            users.add(UniverseUserClass(
+              admin: result[i]['admin'] as bool,
+              avatarImage: result[i]['avatar'],
+              countryCode: result[i]['country_code'],
+              memberAccount: result[i]['member_account'],
+              name: result[i]['name'],
+              owner: result[i]['owner'] as bool,
+              uid: result[i]['uid'],
+            ));
+          }
+        }
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
 
   Future getDevices() async {
     waitingRequestWidget();
@@ -28,7 +61,6 @@ class UniverseClass {
         if (requestResponse) {
           List<dynamic> result = message['result'] as List<dynamic>;
           for (int i = 0; i < result.length; i++) {
-            debugPrint(result[i].toString());
             devices.add(DeviceClass(
               activeTime: int.parse(result[i]['active_time'].toString()),
               bizType: int.parse(result[i]['biz_type'].toString()),

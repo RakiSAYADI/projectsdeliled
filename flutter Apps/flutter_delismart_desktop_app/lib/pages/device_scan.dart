@@ -25,12 +25,10 @@ class _ScanListDeviceState extends State<ScanListDevice> {
         backgroundColor: Colors.blue,
         onPressed: () async {
           appClass.users[userIdentifier].universes[universeIdentifier].devices.clear();
-          waitingRequestWidget();
           await appClass.users[userIdentifier].universes[universeIdentifier].getDevices();
           if (!requestResponse) {
             showToastMessage('test toast message');
           }
-          exitRequestWidget();
           setState(() {});
         },
       ),
