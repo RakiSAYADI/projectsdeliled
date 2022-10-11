@@ -44,9 +44,30 @@ class _UserLoginState extends State<UserLogin> {
                   textAlign: TextAlign.center,
                   controller: myEmail,
                   maxLines: 1,
+                  keyboardType: TextInputType.emailAddress,
                   style: TextStyle(
                     fontSize: (screenWidth * 0.05),
                   ),
+                  onSubmitted: (value) async {
+                    if (appClass.getUsersEmail().contains(value)) {
+                      int pos = appClass.getUsersEmail().indexOf(value);
+                      appClass.users[pos].universes.clear();
+                      await appClass.users[pos].getUniverses();
+                      userIdentifier = appClass.users.indexOf(appClass.users[pos]);
+                      if (!requestResponse) {
+                        showToastMessage('Error request');
+                      } else {
+                        Navigator.pushNamed(context, '/universe_list');
+                      }
+                    } else {
+                      showToastMessage('the user: $value is not registered');
+                      counterRegisterVisibility++;
+                      if (counterRegisterVisibility == 5) {
+                        registerVisibility = true;
+                        setState(() {});
+                      }
+                    }
+                  },
                   decoration: InputDecoration(
                       hintText: 'user@exemple.fr',
                       hintStyle: TextStyle(
@@ -89,7 +110,6 @@ class _UserLoginState extends State<UserLogin> {
                   backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
                 ),
               ),
-
               SizedBox(height: screenHeight * 0.1),
               AnimatedOpacity(
                 opacity: registerVisibility ? 1.0 : 0.0,

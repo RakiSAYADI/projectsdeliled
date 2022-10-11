@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_delismart_desktop_app/classes/tuya_automation.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_device.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_home_user.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_room.dart';
+import 'package:flutter_delismart_desktop_app/classes/tuya_scene.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 
 class UniverseClass {
@@ -14,11 +16,73 @@ class UniverseClass {
   List<RoomClass> rooms = [];
   List<DeviceClass> devices = [];
   List<UniverseUserClass> users = [];
+  List<SceneClass> scenes = [];
+  List<AutomationClass> automations = [];
 
   String _queryGetDevicesList = '';
   String _queryGetMembersList = '';
+  String _queryGetScenesList = '';
+  String _queryGetAutomationsList = '';
 
   UniverseClass({required this.geoName, required this.homeId, this.lat = 0.0, this.lon = 0.0, required this.name, required this.role});
+
+  Future getScenes() async {
+    waitingRequestWidget();
+    _queryGetScenesList = '/v1.0/homes/$homeId/scenes';
+    await tokenAPIRequest.sendRequest(Method.get, _queryGetScenesList);
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+        if (requestResponse) {
+          List<dynamic> result = message['result'] as List<dynamic>;
+          for (int i = 0; i < result.length; i++) {
+            scenes.add(SceneClass(
+              name: result[i]['name'],
+              background: (result[i] as Map).containsKey('background') ? result[i]['background'] : '',
+              enabled: result[i]['enabled'] as bool,
+              sceneId: result[i]['scene_id'],
+              actions: _getListMapFromApi(result[i]['actions']),
+            ));
+          }
+        }
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
+
+  Future getAutomations() async {
+    waitingRequestWidget();
+    _queryGetAutomationsList = '/v1.0/homes/$homeId/automations';
+    await tokenAPIRequest.sendRequest(Method.get, _queryGetAutomationsList);
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+        if (requestResponse) {
+          List<dynamic> result = message['result'] as List<dynamic>;
+          for (int i = 0; i < result.length; i++) {
+            automations.add(AutomationClass(
+              name: result[i]['name'],
+              enabled: result[i]['enabled'] as bool,
+              matchType: result[i]['match_type'] as int,
+              automationId: result[i]['automation_id'],
+              actions: _getListMapFromApi(result[i]['actions']),
+              conditions: _getListMapFromApi(result[i]['conditions']),
+              preconditions: _getListMapFromApi(result[i]['preconditions']),
+            ));
+          }
+        }
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
 
   Future getUsers() async {
     waitingRequestWidget();
@@ -91,5 +155,13 @@ class UniverseClass {
       }
     }
     exitRequestWidget();
+  }
+
+  List<Map<String, dynamic>> _getListMapFromApi(List<dynamic> data) {
+    List<Map<String, dynamic>> argument = [];
+    for (int i = 0; i < data.length; i++) {
+      argument.add(data[i] as Map<String, dynamic>);
+    }
+    return argument;
   }
 }

@@ -8,44 +8,64 @@ final List<String> devicesButtonTextLanguageArray = ['Appareils', 'Devices'];
 
 final List<String> scenesButtonTextLanguageArray = ['Scènes', 'Scenes'];
 
+final List<String> automationButtonTextLanguageArray = ['Automatisation', 'Automation'];
+
 final List<String> deleteButtonTextLanguageArray = ['Delete', 'Supprimer'];
 
 final List<String> deviceExecuteButtonTextLanguageArray = ['Exécuter', 'Execute'];
 
-final scanUserPageTitleTextLanguageArray= ['Tous les users', 'All users'];
+final List<String> scanUserPageTitleTextLanguageArray = ['Tous les users', 'All users'];
 
-final scanUniversePageTitleTextLanguageArray= ['Tous les univers', 'All universes'];
+final List<String> scanUniversePageTitleTextLanguageArray = ['Tous les univers', 'All universes'];
 
-final scanDevicePageTitleTextLanguageArray= ['Tous les appareils', 'All devices'];
+final List<String> scanDevicePageTitleTextLanguageArray = ['Tous les appareils', 'All devices'];
 
-final scanUniverseUsersPageTitleTextLanguageArray= ['Tous les utilisateurs d\'Univers', 'All universe users'];
+final List<String> scanAutomationPageTitleTextLanguageArray = ['Tous les automatisations', 'All automations'];
 
-final requestMessageTextLanguageArray= ['Attendez', 'Wait'];
+final List<String> scanScenesPageTitleTextLanguageArray = ['Tous les scènes', 'All scenes'];
 
-final userLoginPageTitleTextLanguageArray= ['Utilisateur', 'User'];
+final List<String> scanUniverseUsersPageTitleTextLanguageArray = ['Tous les utilisateurs d\'Univers', 'All universe users'];
 
-final userRegisterPageTitleTextLanguageArray= ['Enregistrement', 'Register'];
+final List<String> requestMessageTextLanguageArray = ['Attendez', 'Wait'];
 
-final enterUserEmailTextLanguageArray= ['Entrer une addresse email :', 'Enter an Email Address :'];
+final List<String> userLoginPageTitleTextLanguageArray = ['Utilisateur', 'User'];
 
-final connectUserButtonTextLanguageArray= ['Connecter', 'Login'];
+final List<String> userRegisterPageTitleTextLanguageArray = ['Enregistrement', 'Register'];
 
-final registerUserButtonTextLanguageArray= ['Enregistrer', 'Register'];
+final List<String> enterUserEmailTextLanguageArray = ['Entrer une addresse email :', 'Enter an Email Address :'];
 
-final deleteUserButtonTextLanguageArray= ['Supprimer', 'Delete'];
+final List<String> connectUserButtonTextLanguageArray = ['Connecter', 'Login'];
 
-final createUserButtonTextLanguageArray= ['Créer', 'Create'];
+final List<String> registerUserButtonTextLanguageArray = ['Enregistrer', 'Register'];
 
-final notSupportedDeviceTextLanguageArray= ['Appareil non supporté', 'Not supported device'];
+final List<String> deleteUserButtonTextLanguageArray = ['Supprimer', 'Delete'];
 
-final universeOwnerTextLanguageArray= ['Propriétaire', 'Owner'];
+final List<String> createUserButtonTextLanguageArray = ['Créer', 'Create'];
 
-final universeAdminDeviceTextLanguageArray= ['Administrateur', 'Admin'];
+final List<String> notSupportedDeviceTextLanguageArray = ['Appareil non supporté', 'Not supported device'];
 
-final universeMemberDeviceTextLanguageArray= ['Membre ordinaire', 'Member'];
+final List<String> universeOwnerTextLanguageArray = ['Propriétaire', 'Owner'];
 
-final userEmailTextLanguageArray= ['Email', 'Email'];
+final List<String> universeAdminDeviceTextLanguageArray = ['Administrateur', 'Admin'];
 
-final userPasswordTextLanguageArray= ['Mot de passe', 'Password'];
+final List<String> universeMemberDeviceTextLanguageArray = ['Membre ordinaire', 'Member'];
 
-final userNameTextLanguageArray= ['Nom', 'Name'];
+final List<String> userEmailTextLanguageArray = ['Email', 'Email'];
+
+final List<String> userPasswordTextLanguageArray = ['Mot de passe', 'Password'];
+
+final List<String> userNameTextLanguageArray = ['Nom', 'Name'];
+
+final List<String> addUniverseButtonTextLanguageArray = ['Ajouter un univers', 'Add a universe'];
+
+final List<String> newUniverseMessageTextLanguageArray = ['Nouveau univers', 'New universe'];
+
+final List<String> confirmButtonTextLanguageArray = ['Valider', 'Confirm'];
+
+final List<String> cancelButtonTextLanguageArray = ['Annuler', 'Cancel'];
+
+final List<String> universeNameTextLanguageArray = ['Nom', 'Name'];
+
+final List<String> universeLonTextLanguageArray = ['Lon:', 'Lon:'];
+
+final List<String> universeLatTextLanguageArray = ['Lat:', 'Lat:'];

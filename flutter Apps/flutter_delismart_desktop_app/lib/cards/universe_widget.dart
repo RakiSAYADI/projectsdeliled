@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_delismart_desktop_app/cards/device_widget.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_universe.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
@@ -186,10 +185,39 @@ class UniverseCard extends StatelessWidget {
                   Expanded(
                     flex: 2,
                     child: TextButton.icon(
-                      onPressed: () {},
+                      onPressed: () async {
+                        universeClass.scenes.clear();
+                        await universeClass.getScenes();
+                        universeIdentifier = appClass.users[userIdentifier].universes.indexOf(universeClass);
+                        if (!requestResponse) {
+                          showToastMessage('Error request');
+                        } else {
+                          Navigator.pushNamed(context, '/scene_list');
+                        }
+                      },
                       icon: Icon(Icons.check_box_outlined, size: heightScreen * 0.009 + widthScreen * 0.009),
                       label: Text(
                         scenesButtonTextLanguageArray[languageArrayIdentifier],
+                        style: TextStyle(fontSize: heightScreen * 0.009 + widthScreen * 0.009),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: TextButton.icon(
+                      onPressed: () async {
+                        universeClass.automations.clear();
+                        await universeClass.getAutomations();
+                        universeIdentifier = appClass.users[userIdentifier].universes.indexOf(universeClass);
+                        if (!requestResponse) {
+                          showToastMessage('Error request');
+                        } else {
+                          Navigator.pushNamed(context, '/automation_list');
+                        }
+                      },
+                      icon: Icon(Icons.alarm, size: heightScreen * 0.009 + widthScreen * 0.009),
+                      label: Text(
+                        automationButtonTextLanguageArray[languageArrayIdentifier],
                         style: TextStyle(fontSize: heightScreen * 0.009 + widthScreen * 0.009),
                       ),
                     ),

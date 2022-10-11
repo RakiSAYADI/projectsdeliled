@@ -12,7 +12,24 @@ class UserClass {
 
   String _queryGetUniversesList = '';
 
+  final String _queryCreateUniversesList = '/v1.0/home/create-homes';
+
   UserClass({required this.userName, this.email = '', required this.createTime, required this.uid, required this.updateTime});
+
+  Future postCreateUniverse(String body) async {
+    waitingRequestWidget();
+    await tokenAPIRequest.sendRequest(Method.post, _queryCreateUniversesList, body: body);
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
 
   Future getUniverses() async {
     waitingRequestWidget();
