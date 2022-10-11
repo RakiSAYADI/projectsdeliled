@@ -42,6 +42,8 @@ final List<String> deleteUserButtonTextLanguageArray = ['Supprimer', 'Delete'];
 
 final List<String> createUserButtonTextLanguageArray = ['Créer', 'Create'];
 
+final List<String> createUniverseButtonTextLanguageArray = ['Créer', 'Create'];
+
 final List<String> notSupportedDeviceTextLanguageArray = ['Appareil non supporté', 'Not supported device'];
 
 final List<String> universeOwnerTextLanguageArray = ['Propriétaire', 'Owner'];
@@ -69,3 +71,5 @@ final List<String> universeNameTextLanguageArray = ['Nom', 'Name'];
 final List<String> universeLonTextLanguageArray = ['Lon:', 'Lon:'];
 
 final List<String> universeLatTextLanguageArray = ['Lat:', 'Lat:'];
+
+final List<String> universeRoomsTextLanguageArray = ['Chambres:', 'Rooms:'];

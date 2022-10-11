@@ -64,9 +64,16 @@ class AppClass {
     }
   }
 
-  Future postCreateUser(String body) async {
+  Future postCreateUser(String email, String password, String name) async {
     waitingRequestWidget();
-    await tokenAPIRequest.sendRequest(Method.post, queryPostCreateUser, body: body);
+    await tokenAPIRequest.sendRequest(Method.post, queryPostCreateUser,
+        body: "{\n"
+            "\"country_code\": \"33\", \n"
+            "\"username\": \"$email\", \n"
+            "\"password\": \"$password\", \n"
+            "\"nick_name\": \"$name\", \n"
+            "\"username_type\": \"2\"\n"
+            "}");
     if (tokenAPIRequest.getResponse().isNotEmpty) {
       try {
         Map<String, dynamic> message = tokenAPIRequest.getResponse();

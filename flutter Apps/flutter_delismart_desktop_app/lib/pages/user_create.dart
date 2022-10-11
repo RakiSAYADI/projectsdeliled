@@ -15,6 +15,15 @@ class _UserCreateState extends State<UserCreate> {
   final myName = TextEditingController();
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    myEmail.dispose();
+    myPassword.dispose();
+    myName.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
@@ -131,8 +140,7 @@ class _UserCreateState extends State<UserCreate> {
               TextButton(
                 onPressed: () async {
                   if (myEmail.text.isNotEmpty || myPassword.text.isNotEmpty || myName.text.isNotEmpty) {
-                    await appClass.postCreateUser(
-                        "{\n\"country_code\": \"33\", \n\"username\": \"${myEmail.text}\", \n\"password\": \"${myPassword.text}\", \n\"nick_name\": \"${myName.text}\", \n\"username_type\": \"2\"\n}");
+                    await appClass.postCreateUser(myEmail.text, myPassword.text, myName.text);
                     if (!requestResponse) {
                       showToastMessage('Error request');
                     } else {

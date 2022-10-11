@@ -16,9 +16,24 @@ class UserClass {
 
   UserClass({required this.userName, this.email = '', required this.createTime, required this.uid, required this.updateTime});
 
-  Future postCreateUniverse(String body) async {
+  Future postCreateUniverse(String geoName, String name, String lat, String lon, List<String> rooms) async {
     waitingRequestWidget();
-    await tokenAPIRequest.sendRequest(Method.post, _queryCreateUniversesList, body: body);
+    String roomsString = '';
+    /// to do after verification 
+    //roomsString = rooms.toString().replaceAll(',', ',\n');
+    //roomsString.replaceAll('[', '[\n');
+    //roomsString.replaceAll(']', ']\n');
+    await tokenAPIRequest.sendRequest(Method.post, _queryCreateUniversesList,
+        body: "{\n"
+            "\"uid\":\"$uid\",\n"
+            "\"home\":{\n"
+            "\"geo_name\":\"$geoName\",\n"
+            "\"name\":\"$name\",\n"
+            "\"lat\":\"$lat\",\n"
+            "\"lon\":\"$lon\"\n"
+            "},\n"
+            "\"rooms\":$roomsString"
+            "}");
     if (tokenAPIRequest.getResponse().isNotEmpty) {
       try {
         Map<String, dynamic> message = tokenAPIRequest.getResponse();

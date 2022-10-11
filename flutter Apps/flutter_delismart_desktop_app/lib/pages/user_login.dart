@@ -17,6 +17,13 @@ class _UserLoginState extends State<UserLogin> {
   int counterRegisterVisibility = 0;
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    myEmail.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;

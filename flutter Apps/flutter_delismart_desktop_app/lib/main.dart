@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/pages/automation_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/device_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/scene_scan.dart';
+import 'package:flutter_delismart_desktop_app/pages/universe_create.dart';
 import 'package:flutter_delismart_desktop_app/pages/universe_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/universe_user_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/user_create.dart';
@@ -12,7 +13,7 @@ import 'package:flutter_delismart_desktop_app/pages/user_login.dart';
 import 'package:flutter_delismart_desktop_app/pages/user_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/welcome.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
-import 'package:flutter_delismart_desktop_app/services/intenet_check_service.dart';
+import 'package:flutter_delismart_desktop_app/services/internet_check_service.dart';
 import 'package:get/get.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -80,6 +81,7 @@ class MyApp extends StatelessWidget {
           '/user_login': (context) => const UserLogin(),
           '/user_create': (context) => const UserCreate(),
           '/user_delete': (context) => const UserDelete(),
+          '/universe_create': (context) => const UniverseCreate(),
         },
       ),
     );
