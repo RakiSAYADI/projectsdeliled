@@ -68,8 +68,18 @@ final List<String> cancelButtonTextLanguageArray = ['Annuler', 'Cancel'];
 
 final List<String> universeNameTextLanguageArray = ['Nom', 'Name'];
 
+final List<String> universeAddressTextLanguageArray = ['Adresse', 'Address'];
+
 final List<String> universeLonTextLanguageArray = ['Lon:', 'Lon:'];
 
 final List<String> universeLatTextLanguageArray = ['Lat:', 'Lat:'];
 
-final List<String> universeRoomsTextLanguageArray = ['Chambres:', 'Rooms:'];
+final List<String> universeRoomsTextLanguageArray = ['Pièces:', 'Rooms:'];
+
+final List<String> universeDeleteTextLanguageArray = ['Voulez vous vraiment supprimer ce Univers ?', 'Do you really want to delete this universe ?'];
+
+final List<String> attentionMessageTextLanguageArray = ['Attention', 'Attention'];
+
+final List<String> universeUserAddMessageTextLanguageArray = ['Ajouter un membre', 'Add member'];
+
+final List<String> universeUserInvitationMessageTextLanguageArray = ['Invitation du membre', 'Member Invitation'];

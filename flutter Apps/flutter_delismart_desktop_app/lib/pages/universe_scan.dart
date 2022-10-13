@@ -18,7 +18,7 @@ class _ScanListUniverseState extends State<ScanListUniverse> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       bottomNavigationBar: BottomAppBar(
-        color: Colors.black,
+        color: Colors.blue,
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Row(
@@ -27,10 +27,10 @@ class _ScanListUniverseState extends State<ScanListUniverse> {
             children: <Widget>[
               TextButton.icon(
                 onPressed: () => Navigator.pushNamed(context, '/universe_create'),
-                icon: Icon(Icons.add, size: heightScreen * 0.01 + widthScreen * 0.01),
+                icon: Icon(Icons.add, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.white),
                 label: Text(
                   addUniverseButtonTextLanguageArray[languageArrayIdentifier],
-                  style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01),
+                  style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.white),
                 ),
               ),
             ],
@@ -47,12 +47,10 @@ class _ScanListUniverseState extends State<ScanListUniverse> {
         backgroundColor: Colors.blue,
         onPressed: () async {
           appClass.users[userIdentifier].universes.clear();
-          waitingRequestWidget();
           await appClass.users[userIdentifier].getUniverses();
           if (!requestResponse) {
             showToastMessage('Error request');
           }
-          exitRequestWidget();
           setState(() {});
         },
       ),

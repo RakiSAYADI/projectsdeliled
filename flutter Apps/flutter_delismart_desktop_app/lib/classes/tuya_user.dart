@@ -11,29 +11,59 @@ class UserClass {
   List<UniverseClass> universes = [];
 
   String _queryGetUniversesList = '';
+  String _queryDeleteUniverse = '';
 
-  final String _queryCreateUniversesList = '/v1.0/home/create-homes';
+  final String _queryCreateUniversesList = '/v1.0/home/create-home';
 
   UserClass({required this.userName, this.email = '', required this.createTime, required this.uid, required this.updateTime});
 
   Future postCreateUniverse(String geoName, String name, String lat, String lon, List<String> rooms) async {
     waitingRequestWidget();
-    String roomsString = '';
-    /// to do after verification 
-    //roomsString = rooms.toString().replaceAll(',', ',\n');
-    //roomsString.replaceAll('[', '[\n');
-    //roomsString.replaceAll(']', ']\n');
-    await tokenAPIRequest.sendRequest(Method.post, _queryCreateUniversesList,
-        body: "{\n"
-            "\"uid\":\"$uid\",\n"
-            "\"home\":{\n"
-            "\"geo_name\":\"$geoName\",\n"
-            "\"name\":\"$name\",\n"
-            "\"lat\":\"$lat\",\n"
-            "\"lon\":\"$lon\"\n"
-            "},\n"
-            "\"rooms\":$roomsString"
-            "}");
+    if (rooms.isEmpty) {
+      await tokenAPIRequest.sendRequest(Method.post, _queryCreateUniversesList,
+          body: "{\n"
+              "\"uid\":\"$uid\",\n"
+              "\"home\":{\n"
+              "\"geo_name\":\"$geoName\",\n"
+              "\"name\":\"$name\",\n"
+              "\"lat\":\"${lat.isEmpty ? 0.0 : lat}\",\n"
+              "\"lon\":\"${lon.isEmpty ? 0.0 : lon}\"\n"
+              "}\n"
+              "}");
+    } else {
+      String roomsString = rooms.toString();
+      roomsString = rooms.toString().replaceAll(',', '",\n"');
+      roomsString = roomsString.replaceAll('[', '[\n"');
+      roomsString = roomsString.replaceAll(']', '"\n]');
+      await tokenAPIRequest.sendRequest(Method.post, _queryCreateUniversesList,
+          body: "{\n"
+              "\"uid\":\"$uid\",\n"
+              "\"home\":{\n"
+              "\"geo_name\":\"$geoName\",\n"
+              "\"name\":\"$name\",\n"
+              "\"lat\":\"${lat.isEmpty ? 0.0 : lat}\",\n"
+              "\"lon\":\"${lon.isEmpty ? 0.0 : lon}\"\n"
+              "},\n"
+              "\"rooms\":$roomsString"
+              "\n}");
+    }
+
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
+
+  Future deleteUniverse(String homeId) async {
+    waitingRequestWidget();
+    _queryDeleteUniverse = '/v1.0/homes/$homeId';
+    await tokenAPIRequest.sendRequest(Method.delete, _queryDeleteUniverse);
     if (tokenAPIRequest.getResponse().isNotEmpty) {
       try {
         Map<String, dynamic> message = tokenAPIRequest.getResponse();

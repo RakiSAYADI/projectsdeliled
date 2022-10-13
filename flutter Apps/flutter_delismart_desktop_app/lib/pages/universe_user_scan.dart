@@ -13,8 +13,30 @@ class ScanListUniverseUser extends StatefulWidget {
 class _ScanListUniverseUserState extends State<ScanListUniverseUser> {
   @override
   Widget build(BuildContext context) {
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.grey[200],
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.blue,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              TextButton.icon(
+                onPressed: () => Navigator.pushNamed(context, '/universe_user_add'),
+                icon: Icon(Icons.add, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.white),
+                label: Text(
+                  universeUserInvitationMessageTextLanguageArray[languageArrayIdentifier],
+                  style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
       appBar: AppBar(
         title: Text(scanUniverseUsersPageTitleTextLanguageArray[languageArrayIdentifier]),
         centerTitle: true,

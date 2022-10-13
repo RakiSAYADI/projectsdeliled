@@ -12,6 +12,7 @@ class UniverseCreate extends StatefulWidget {
 
 class _UniverseCreateState extends State<UniverseCreate> {
   final myUniverseName = TextEditingController();
+  final myUniverseAddress = TextEditingController();
   final myUniverseLon = TextEditingController();
   final myUniverseLat = TextEditingController();
   final myUniverseRoom = TextEditingController();
@@ -22,6 +23,7 @@ class _UniverseCreateState extends State<UniverseCreate> {
   void dispose() {
     // TODO: implement dispose
     myUniverseName.dispose();
+    myUniverseAddress.dispose();
     myUniverseLon.dispose();
     myUniverseLat.dispose();
     myUniverseRoom.dispose();
@@ -67,6 +69,28 @@ class _UniverseCreateState extends State<UniverseCreate> {
                 ),
               ),
               SizedBox(height: screenHeight * 0.05),
+              Text(
+                universeAddressTextLanguageArray[languageArrayIdentifier],
+                style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
+                child: TextField(
+                  textAlign: TextAlign.center,
+                  controller: myUniverseAddress,
+                  maxLines: 1,
+                  maxLength: 100,
+                  style: TextStyle(
+                    fontSize: screenHeight * 0.01 + screenWidth * 0.01,
+                  ),
+                  decoration: InputDecoration(
+                      hintText: 'Exp: 123 Rue de France',
+                      hintStyle: TextStyle(
+                        fontSize: screenHeight * 0.01 + screenWidth * 0.01,
+                        color: Colors.grey,
+                      )),
+                ),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
@@ -206,8 +230,8 @@ class _UniverseCreateState extends State<UniverseCreate> {
               SizedBox(height: screenHeight * 0.05),
               TextButton(
                 onPressed: () async {
-                  if (myUniverseName.text.isNotEmpty || myUniverseLon.text.isNotEmpty || myUniverseLat.text.isNotEmpty) {
-                    await appClass.postCreateUser(myEmail.text, myPassword.text, myName.text);
+                  if (myUniverseName.text.isNotEmpty || myUniverseAddress.text.isNotEmpty) {
+                    await appClass.users[userIdentifier].postCreateUniverse(myUniverseAddress.text, myUniverseName.text, myUniverseLon.text, myUniverseLat.text, rooms);
                     if (!requestResponse) {
                       showToastMessage('Error request');
                     } else {

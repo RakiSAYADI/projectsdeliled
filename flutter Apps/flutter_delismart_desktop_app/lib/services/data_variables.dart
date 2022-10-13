@@ -59,6 +59,63 @@ void waitingRequestWidget() {
 
 void exitRequestWidget() => Get.back();
 
+void deleteUniverseRequestWidget(String universeID) {
+  double screenWidth = MediaQuery.of(Get.context!).size.width;
+  double screenHeight = MediaQuery.of(Get.context!).size.height;
+  Get.defaultDialog(
+    title: attentionMessageTextLanguageArray[languageArrayIdentifier],
+    content: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          universeDeleteTextLanguageArray[languageArrayIdentifier],
+          style: TextStyle(fontSize: screenHeight * 0.007 + screenWidth * 0.007, color: Colors.red),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+    textConfirm: confirmButtonTextLanguageArray[languageArrayIdentifier],
+    textCancel: cancelButtonTextLanguageArray[languageArrayIdentifier],
+    onConfirm: () async {
+      await appClass.users[userIdentifier].deleteUniverse(universeID);
+      if (!requestResponse) {
+        showToastMessage('Error request');
+      } else {
+        showToastMessage('create request is valid');
+      }
+      Get.back();
+    },
+  );
+}
+
+void modifyUserUniverseRequestWidget(String universeID) {
+  double screenWidth = MediaQuery.of(Get.context!).size.width;
+  double screenHeight = MediaQuery.of(Get.context!).size.height;
+  Get.defaultDialog(
+    title: attentionMessageTextLanguageArray[languageArrayIdentifier],
+    content: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+
+      ],
+    ),
+    textConfirm: confirmButtonTextLanguageArray[languageArrayIdentifier],
+    textCancel: cancelButtonTextLanguageArray[languageArrayIdentifier],
+    onConfirm: () async {
+      await appClass.users[userIdentifier].deleteUniverse(universeID);
+      if (!requestResponse) {
+        showToastMessage('Error request');
+      } else {
+        showToastMessage('create request is valid');
+      }
+      Get.back();
+    },
+    onCancel: () => Get.back(),
+  );
+}
+
 void showToastMessage(String text) {
   showToastWidget(
     Container(

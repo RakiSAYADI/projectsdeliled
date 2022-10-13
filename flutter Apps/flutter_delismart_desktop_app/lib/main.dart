@@ -6,6 +6,7 @@ import 'package:flutter_delismart_desktop_app/pages/device_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/scene_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/universe_create.dart';
 import 'package:flutter_delismart_desktop_app/pages/universe_scan.dart';
+import 'package:flutter_delismart_desktop_app/pages/universe_user_add.dart';
 import 'package:flutter_delismart_desktop_app/pages/universe_user_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/user_create.dart';
 import 'package:flutter_delismart_desktop_app/pages/user_delete.dart';
@@ -82,6 +83,7 @@ class MyApp extends StatelessWidget {
           '/user_create': (context) => const UserCreate(),
           '/user_delete': (context) => const UserDelete(),
           '/universe_create': (context) => const UniverseCreate(),
+          '/universe_user_add': (context) => const UniverseUserAdd(),
         },
       ),
     );
