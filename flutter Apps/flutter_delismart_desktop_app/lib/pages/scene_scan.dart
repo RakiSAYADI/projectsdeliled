@@ -16,7 +16,7 @@ class _ScanListSceneState extends State<ScanListScene> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text(scanScenesPageTitleTextLanguageArray[languageArrayIdentifier]),
+        title: Text(scanScenesPageTitleTextLanguageArray[languageArrayIdentifier] + appClass.users[userIdentifier].universes[universeIdentifier].name),
         centerTitle: true,
         backgroundColor: Colors.blue[400],
       ),

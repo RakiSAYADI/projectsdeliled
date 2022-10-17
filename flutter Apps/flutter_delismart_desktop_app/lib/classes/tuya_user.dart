@@ -17,7 +17,7 @@ class UserClass {
 
   UserClass({required this.userName, this.email = '', required this.createTime, required this.uid, required this.updateTime});
 
-  Future postCreateUniverse(String geoName, String name, String lat, String lon, List<String> rooms) async {
+  Future createUniverse(String geoName, String name, String lat, String lon, List<String> rooms) async {
     waitingRequestWidget();
     if (rooms.isEmpty) {
       await tokenAPIRequest.sendRequest(Method.post, _queryCreateUniversesList,

@@ -194,7 +194,7 @@ class _UniverseCreateState extends State<UniverseCreate> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          SelectableText(
                             rooms.toString(),
                             style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01),
                           ),
@@ -231,11 +231,11 @@ class _UniverseCreateState extends State<UniverseCreate> {
               TextButton(
                 onPressed: () async {
                   if (myUniverseName.text.isNotEmpty || myUniverseAddress.text.isNotEmpty) {
-                    await appClass.users[userIdentifier].postCreateUniverse(myUniverseAddress.text, myUniverseName.text, myUniverseLon.text, myUniverseLat.text, rooms);
+                    await appClass.users[userIdentifier].createUniverse(myUniverseAddress.text, myUniverseName.text, myUniverseLon.text, myUniverseLat.text, rooms);
                     if (!requestResponse) {
                       showToastMessage('Error request');
                     } else {
-                      showToastMessage('create request is valid');
+                      showToastMessage('request is valid');
                     }
                   } else {
                     showToastMessage('empty text fields !');

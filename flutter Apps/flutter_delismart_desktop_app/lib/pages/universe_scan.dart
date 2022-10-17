@@ -38,7 +38,7 @@ class _ScanListUniverseState extends State<ScanListUniverse> {
         ),
       ),
       appBar: AppBar(
-        title: Text(scanUniversePageTitleTextLanguageArray[languageArrayIdentifier]),
+        title: Text(scanUniversePageTitleTextLanguageArray[languageArrayIdentifier] + appClass.users[userIdentifier].userName),
         centerTitle: true,
         backgroundColor: Colors.blue[400],
       ),

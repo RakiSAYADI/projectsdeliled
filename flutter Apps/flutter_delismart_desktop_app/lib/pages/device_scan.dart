@@ -16,7 +16,7 @@ class _ScanListDeviceState extends State<ScanListDevice> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text(scanDevicePageTitleTextLanguageArray[languageArrayIdentifier]),
+        title: Text(scanDevicePageTitleTextLanguageArray[languageArrayIdentifier] + appClass.users[userIdentifier].universes[universeIdentifier].name),
         centerTitle: true,
         backgroundColor: Colors.blue[400],
       ),
@@ -34,16 +34,7 @@ class _ScanListDeviceState extends State<ScanListDevice> {
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        child: Column(
-            children: appClass.users[userIdentifier].universes[universeIdentifier].devices
-                .map((device) => DeviceCard(
-                deviceClass: device,
-                connect: () async {
-                  if (requestResponse) {
-                    showToastMessage('test toast message');
-                  }
-                }))
-                .toList()),
+        child: Column(children: appClass.users[userIdentifier].universes[universeIdentifier].devices.map((device) => DeviceCard(deviceClass: device)).toList()),
       ),
     );
   }

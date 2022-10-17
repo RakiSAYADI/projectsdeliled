@@ -16,15 +16,15 @@ final List<String> deviceExecuteButtonTextLanguageArray = ['Exécuter', 'Execute
 
 final List<String> scanUserPageTitleTextLanguageArray = ['Tous les users', 'All users'];
 
-final List<String> scanUniversePageTitleTextLanguageArray = ['Tous les univers', 'All universes'];
+final List<String> scanUniversePageTitleTextLanguageArray = ['Tous les univers de ', 'All universes of '];
 
-final List<String> scanDevicePageTitleTextLanguageArray = ['Tous les appareils', 'All devices'];
+final List<String> scanDevicePageTitleTextLanguageArray = ['Tous les appareils dans ', 'All devices inside '];
 
-final List<String> scanAutomationPageTitleTextLanguageArray = ['Tous les automatisations', 'All automations'];
+final List<String> scanAutomationPageTitleTextLanguageArray = ['Tous les automatisations de ', 'All automations of '];
 
-final List<String> scanScenesPageTitleTextLanguageArray = ['Tous les scènes', 'All scenes'];
+final List<String> scanScenesPageTitleTextLanguageArray = ['Toutes les scènes de ', 'All scenes inside '];
 
-final List<String> scanUniverseUsersPageTitleTextLanguageArray = ['Tous les utilisateurs d\'Univers', 'All universe users'];
+final List<String> scanUniverseUsersPageTitleTextLanguageArray = ['Tous les utilisateurs de ', 'All users inside'];
 
 final List<String> requestMessageTextLanguageArray = ['Attendez', 'Wait'];
 
@@ -83,3 +83,11 @@ final List<String> attentionMessageTextLanguageArray = ['Attention', 'Attention'
 final List<String> universeUserAddMessageTextLanguageArray = ['Ajouter un membre', 'Add member'];
 
 final List<String> universeUserInvitationMessageTextLanguageArray = ['Invitation du membre', 'Member Invitation'];
+
+final List<String> stateUserChoiceMessageTextLanguageArray = ['Choisir le type d\'accès du membre: ', 'Choose member access type: '];
+
+final List<String> administratorUserChoiceMessageTextLanguageArray = ['Administrateur', 'Administrator'];
+
+final List<String> ordinaryMemberUserChoiceMessageTextLanguageArray = ['Membre ordinaire', 'Member'];
+
+final List<String> addButtonTextLanguageArray = ['Ajouter', 'Add'];

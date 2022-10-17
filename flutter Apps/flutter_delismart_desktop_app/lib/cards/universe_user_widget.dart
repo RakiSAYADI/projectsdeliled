@@ -56,11 +56,20 @@ class UniverseUserCard extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(accessTypeIcon, size: heightScreen * 0.01 + widthScreen * 0.01, color: accessTypeIconColor),
-                  Text(
-                    accessTypeText,
-                    style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: accessTypeIconColor),
-                    textAlign: TextAlign.center,
+                  TextButton.icon(
+                    onPressed: universeUserClass.owner
+                        ? () {
+                            showToastMessage('This is owner');
+                          }
+                        : () {
+                            modifyUserUniverseRequestWidget(universeUserClass.admin, universeUserClass.uid);
+                          },
+                    icon: Icon(accessTypeIcon, size: heightScreen * 0.01 + widthScreen * 0.01, color: accessTypeIconColor),
+                    label: Text(
+                      accessTypeText,
+                      style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: accessTypeIconColor),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ],
               ),

@@ -39,6 +39,8 @@ int universeIdentifier = 0;
 int roomIdentifier = 0;
 int deviceIdentifier = 0;
 
+List<String> accessTypeUserList = [ordinaryMemberUserChoiceMessageTextLanguageArray[languageArrayIdentifier], administratorUserChoiceMessageTextLanguageArray[languageArrayIdentifier]];
+
 void waitingRequestWidget() {
   //double screenWidth = MediaQuery.of(context).size.width;
   double screenHeight = MediaQuery.of(Get.context!).size.height;
@@ -82,37 +84,68 @@ void deleteUniverseRequestWidget(String universeID) {
       if (!requestResponse) {
         showToastMessage('Error request');
       } else {
-        showToastMessage('create request is valid');
+        showToastMessage('request is valid');
       }
       Get.back();
     },
   );
 }
 
-void modifyUserUniverseRequestWidget(String universeID) {
+void modifyUserUniverseRequestWidget(bool state, String userID) {
   double screenWidth = MediaQuery.of(Get.context!).size.width;
   double screenHeight = MediaQuery.of(Get.context!).size.height;
+  String accessTypeUserData = state ? administratorUserChoiceMessageTextLanguageArray[languageArrayIdentifier] : ordinaryMemberUserChoiceMessageTextLanguageArray[languageArrayIdentifier];
   Get.defaultDialog(
     title: attentionMessageTextLanguageArray[languageArrayIdentifier],
     content: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-
+        Text(
+          stateUserChoiceMessageTextLanguageArray[languageArrayIdentifier],
+          style: TextStyle(fontSize: screenHeight * 0.007 + screenWidth * 0.007, color: Colors.black),
+          textAlign: TextAlign.center,
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
+          child: StatefulBuilder(builder: (BuildContext context, StateSetter dropDownState) {
+            return DropdownButton<String>(
+              value: accessTypeUserData,
+              icon: const Icon(Icons.arrow_drop_down),
+              iconSize: 24,
+              elevation: 16,
+              style: TextStyle(color: Colors.grey[800], fontSize: 18),
+              underline: Container(
+                height: 2,
+                color: Colors.blue[300],
+              ),
+              onChanged: (String? data) {
+                dropDownState(() {
+                  accessTypeUserData = data!;
+                });
+              },
+              items: accessTypeUserList.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            );
+          }),
+        ),
       ],
     ),
     textConfirm: confirmButtonTextLanguageArray[languageArrayIdentifier],
     textCancel: cancelButtonTextLanguageArray[languageArrayIdentifier],
     onConfirm: () async {
-      await appClass.users[userIdentifier].deleteUniverse(universeID);
+      await appClass.users[userIdentifier].universes[universeIdentifier].changeStateUserUniverse(accessTypeUserList.indexOf(accessTypeUserData) == 0 ? false : true, userID);
       if (!requestResponse) {
         showToastMessage('Error request');
       } else {
-        showToastMessage('create request is valid');
+        showToastMessage('request is valid');
       }
       Get.back();
     },
-    onCancel: () => Get.back(),
   );
 }
 

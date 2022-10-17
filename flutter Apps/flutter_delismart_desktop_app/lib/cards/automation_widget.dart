@@ -22,9 +22,14 @@ class AutomationCard extends StatelessWidget {
               style: TextStyle(fontSize: heightScreen * 0.013 + widthScreen * 0.013),
             ),
             SizedBox(height: heightScreen * 0.001, width: widthScreen * 0.001),
-            Text(
-              automationClass.automationId,
-              style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007),
+            automationClass.enabled
+                ? Text(
+              'Enabled',
+              style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.green),
+            )
+                : Text(
+              'Disabled',
+              style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.red),
             ),
             SizedBox(height: heightScreen * 0.001, width: widthScreen * 0.001),
           ],

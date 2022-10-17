@@ -16,7 +16,7 @@ class _ScanListAutomationState extends State<ScanListAutomation> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text(scanAutomationPageTitleTextLanguageArray[languageArrayIdentifier]),
+        title: Text(scanAutomationPageTitleTextLanguageArray[languageArrayIdentifier] + appClass.users[userIdentifier].universes[universeIdentifier].name),
         centerTitle: true,
         backgroundColor: Colors.blue[400],
       ),

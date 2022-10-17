@@ -59,7 +59,7 @@ class APIRequest {
           response = await _dio!.post(query, data: body);
           break;
         case Method.put:
-          response = await _dio!.put(query);
+          response = await _dio!.put(query, data: body);
           break;
         case Method.delete:
           response = await _dio!.delete(query);

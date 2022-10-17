@@ -45,22 +45,22 @@ class UniverseCard extends StatelessWidget {
                     //crossAxisAlignment: CrossAxisAlignment.stretch,
                     //mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text(
+                      SelectableText(
                         universeClass.name,
                         style: TextStyle(fontSize: heightScreen * 0.013 + widthScreen * 0.013, color: Colors.grey[800]),
                       ),
-                      Text(
+                      SelectableText(
                         universeClass.geoName,
                         style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.grey[600]),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          SelectableText(
                             'lon : ${universeClass.lon}',
                             style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.grey[800]),
                           ),
-                          Text(
+                          SelectableText(
                             ' lat : ${universeClass.lat}',
                             style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.grey[800]),
                           ),

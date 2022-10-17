@@ -26,6 +26,50 @@ class UniverseClass {
 
   UniverseClass({required this.geoName, required this.homeId, this.lat = 0.0, this.lon = 0.0, required this.name, required this.role});
 
+  Future addUserUniverse(bool state, String userName, String userId) async {
+    waitingRequestWidget();
+    final String _queryChangeStateUserUniversesList = '/v1.0/homes/${homeId.toString()}/members';
+    await tokenAPIRequest.sendRequest(Method.post, _queryChangeStateUserUniversesList,
+        body: "{\n"
+            "\"app_schema\": ${state.toString()},\n"
+            "\"member\": {\n"
+            "\"country_code\": 33,\n"
+            "\"member_account\": $userId,\n"
+            "\"admin\": ${state.toString()},\n"
+            "\"name\": $userName"
+            "\n}"
+            "\n}");
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
+
+  Future changeStateUserUniverse(bool state, String userId) async {
+    waitingRequestWidget();
+    final String _queryChangeStateUserUniversesList = '/v1.0/homes/${homeId.toString()}/members/$userId';
+    await tokenAPIRequest.sendRequest(Method.put, _queryChangeStateUserUniversesList,
+        body: "{\n"
+            "\"admin\": ${state.toString()}"
+            "\n}");
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
+
   Future getScenes() async {
     waitingRequestWidget();
     _queryGetScenesList = '/v1.0/homes/$homeId/scenes';
