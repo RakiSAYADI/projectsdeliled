@@ -53,6 +53,18 @@ class UniverseUserCard extends StatelessWidget {
             ),
             Expanded(
               flex: 2,
+              child: TextButton.icon(
+                onPressed: () => deleteUniverseUserRequestWidget(universeUserClass.uid),
+                icon: Icon(Icons.delete, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.red),
+                label: Text(
+                  deleteUserButtonTextLanguageArray[languageArrayIdentifier],
+                  style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.red),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

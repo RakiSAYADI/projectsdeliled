@@ -230,7 +230,7 @@ class _UniverseCreateState extends State<UniverseCreate> {
               SizedBox(height: screenHeight * 0.05),
               TextButton(
                 onPressed: () async {
-                  if (myUniverseName.text.isNotEmpty || myUniverseAddress.text.isNotEmpty) {
+                  if (myUniverseName.text.isNotEmpty && myUniverseAddress.text.isNotEmpty) {
                     await appClass.users[userIdentifier].createUniverse(myUniverseAddress.text, myUniverseName.text, myUniverseLon.text, myUniverseLat.text, rooms);
                     if (!requestResponse) {
                       showToastMessage('Error request');

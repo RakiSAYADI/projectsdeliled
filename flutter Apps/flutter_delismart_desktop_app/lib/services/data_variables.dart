@@ -149,6 +149,83 @@ void modifyUserUniverseRequestWidget(bool state, String userID) {
   );
 }
 
+void deleteUniverseWarningWidget(String universeID) {
+  double screenWidth = MediaQuery.of(Get.context!).size.width;
+  double screenHeight = MediaQuery.of(Get.context!).size.height;
+  final myPassword = TextEditingController();
+  Get.defaultDialog(
+    title: attentionMessageTextLanguageArray[languageArrayIdentifier],
+    content: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          deleteUniverseSecurityMessageTextLanguageArray[languageArrayIdentifier],
+          style: TextStyle(fontSize: screenHeight * 0.007 + screenWidth * 0.007, color: Colors.black),
+          textAlign: TextAlign.center,
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: (screenHeight * 0.05)),
+          child: TextField(
+            textAlign: TextAlign.center,
+            controller: myPassword,
+            maxLines: 1,
+            style: TextStyle(
+              fontSize: (screenWidth * 0.05),
+            ),
+            decoration: InputDecoration(
+                hintText: '****',
+                hintStyle: TextStyle(
+                  fontSize: (screenWidth * 0.025 + screenHeight * 0.025),
+                  color: Colors.grey,
+                )),
+          ),
+        ),
+      ],
+    ),
+    textConfirm: confirmButtonTextLanguageArray[languageArrayIdentifier],
+    textCancel: cancelButtonTextLanguageArray[languageArrayIdentifier],
+    onConfirm: () {
+      Get.back();
+      if (myPassword.text == '1234') {
+        deleteUniverseRequestWidget(universeID);
+      } else {
+        showToastMessage('wrong code');
+      }
+    },
+  );
+}
+
+void deleteUniverseUserRequestWidget(String userId) {
+  double screenWidth = MediaQuery.of(Get.context!).size.width;
+  double screenHeight = MediaQuery.of(Get.context!).size.height;
+  Get.defaultDialog(
+    title: attentionMessageTextLanguageArray[languageArrayIdentifier],
+    content: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          universeUserDeleteTextLanguageArray[languageArrayIdentifier],
+          style: TextStyle(fontSize: screenHeight * 0.007 + screenWidth * 0.007, color: Colors.red),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+    textConfirm: confirmButtonTextLanguageArray[languageArrayIdentifier],
+    textCancel: cancelButtonTextLanguageArray[languageArrayIdentifier],
+    onConfirm: () async {
+      await appClass.users[userIdentifier].universes[universeIdentifier].deleteUserUniverse(userId);
+      if (!requestResponse) {
+        showToastMessage('Error request');
+      } else {
+        showToastMessage('request is valid');
+      }
+      Get.back();
+    },
+  );
+}
+
 void showToastMessage(String text) {
   showToastWidget(
     Container(

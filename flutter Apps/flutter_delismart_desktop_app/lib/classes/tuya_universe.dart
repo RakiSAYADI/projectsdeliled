@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_automation.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_device.dart';
@@ -22,21 +24,38 @@ class UniverseClass {
   String _queryGetDevicesList = '';
   String _queryGetMembersList = '';
   String _queryGetScenesList = '';
+  String _queryGetRoomsList = '';
   String _queryGetAutomationsList = '';
 
   UniverseClass({required this.geoName, required this.homeId, this.lat = 0.0, this.lon = 0.0, required this.name, required this.role});
+
+  Future deleteUserUniverse(String userId) async {
+    waitingRequestWidget();
+    final String _queryDeleteUserUniversesList = '/v1.0/homes/${homeId.toString()}/members/$userId';
+    await tokenAPIRequest.sendRequest(Method.delete, _queryDeleteUserUniversesList);
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
 
   Future addUserUniverse(bool state, String userName, String userId) async {
     waitingRequestWidget();
     final String _queryChangeStateUserUniversesList = '/v1.0/homes/${homeId.toString()}/members';
     await tokenAPIRequest.sendRequest(Method.post, _queryChangeStateUserUniversesList,
         body: "{\n"
-            "\"app_schema\": ${state.toString()},\n"
+            "\"app_schema\": \"$schema\",\n"
             "\"member\": {\n"
-            "\"country_code\": 33,\n"
-            "\"member_account\": $userId,\n"
+            "\"country_code\": \"33\",\n"
+            "\"member_account\": \"$userId\",\n"
             "\"admin\": ${state.toString()},\n"
-            "\"name\": $userName"
+            "\"name\": \"$userName\""
             "\n}"
             "\n}");
     if (tokenAPIRequest.getResponse().isNotEmpty) {
@@ -87,6 +106,33 @@ class UniverseClass {
               enabled: result[i]['enabled'] as bool,
               sceneId: result[i]['scene_id'],
               actions: _getListMapFromApi(result[i]['actions']),
+            ));
+          }
+        }
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
+
+  Future getRooms() async {
+    waitingRequestWidget();
+    _queryGetRoomsList = '/v1.0/homes/$homeId/rooms';
+    await tokenAPIRequest.sendRequest(Method.get, _queryGetRoomsList);
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+        if (requestResponse) {
+          Map<String, dynamic> result = message['result'] as Map<String, dynamic>;
+          List<dynamic> resultRooms = result['rooms'] as List<dynamic>;
+          for (int i = 0; i < resultRooms.length; i++) {
+            rooms.add(RoomClass(
+              name: resultRooms[i]['name'],
+              id: resultRooms[i]['room_id'],
+              homeId: result['home_id'],
             ));
           }
         }

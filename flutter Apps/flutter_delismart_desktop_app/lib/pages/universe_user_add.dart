@@ -116,7 +116,7 @@ class _UniverseUserAddState extends State<UniverseUserAdd> {
               SizedBox(height: screenHeight * 0.05),
               TextButton(
                 onPressed: () async {
-                  if (myUniverseUserName.text.isNotEmpty || myUniverseUserAddress.text.isNotEmpty || !appClass.getUsersEmail().contains(myUniverseUserAddress.text)) {
+                  if (myUniverseUserName.text.isNotEmpty && myUniverseUserAddress.text.isNotEmpty && appClass.getUsersEmail().contains(myUniverseUserAddress.text)) {
                     await appClass.users[userIdentifier].universes[universeIdentifier].addUserUniverse(accessTypeUserList.indexOf(accessTypeUserData) == 0 ? false : true, myUniverseUserName.text,
                         appClass.users.elementAt(appClass.getUsersEmail().indexOf(myUniverseUserAddress.text)).uid);
                     if (!requestResponse) {

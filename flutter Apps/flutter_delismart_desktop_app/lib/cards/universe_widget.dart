@@ -86,7 +86,7 @@ class UniverseCard extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: TextButton.icon(
-                    onPressed: () => deleteUniverseRequestWidget(universeClass.homeId.toString()),
+                    onPressed: () => deleteUniverseWarningWidget(universeClass.homeId.toString()),
                     icon: Icon(Icons.delete, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.red),
                     label: Text(
                       deleteUserButtonTextLanguageArray[languageArrayIdentifier],
@@ -139,6 +139,46 @@ class UniverseCard extends StatelessWidget {
                     icon: Icon(Icons.devices, size: heightScreen * 0.009 + widthScreen * 0.009),
                     label: Text(
                       devicesButtonTextLanguageArray[languageArrayIdentifier],
+                      style: TextStyle(fontSize: heightScreen * 0.009 + widthScreen * 0.009),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: TextButton.icon(
+                    onPressed: () async {
+                      universeClass.rooms.clear();
+                      await universeClass.getRooms();
+                      universeIdentifier = appClass.users[userIdentifier].universes.indexOf(universeClass);
+                      if (!requestResponse) {
+                        showToastMessage('Error request');
+                      } else {
+                        Navigator.pushNamed(context, '/room_list');
+                      }
+                    },
+                    icon: Icon(Icons.room_preferences, size: heightScreen * 0.009 + widthScreen * 0.009),
+                    label: Text(
+                      roomsButtonTextLanguageArray[languageArrayIdentifier],
+                      style: TextStyle(fontSize: heightScreen * 0.009 + widthScreen * 0.009),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: TextButton.icon(
+                    onPressed: () async {/*
+                      universeClass.devices.clear();
+                      await universeClass.getDevices();
+                      universeIdentifier = appClass.users[userIdentifier].universes.indexOf(universeClass);
+                      if (!requestResponse) {
+                        showToastMessage('Error request');
+                      } else {
+                        Navigator.pushNamed(context, '/group_list');
+                      }*/
+                    },
+                    icon: Icon(Icons.group, size: heightScreen * 0.009 + widthScreen * 0.009),
+                    label: Text(
+                      groupsButtonTextLanguageArray[languageArrayIdentifier],
                       style: TextStyle(fontSize: heightScreen * 0.009 + widthScreen * 0.009),
                     ),
                   ),
