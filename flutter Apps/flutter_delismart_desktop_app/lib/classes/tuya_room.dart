@@ -12,9 +12,114 @@ class RoomClass {
 
   RoomClass({required this.homeId, required this.name, required this.id});
 
+  Future moveDevice(String deviceId) async {
+    List<String> deviceIds = [];
+    for (var device in devices) {
+      deviceIds.add(device.id);
+    }
+    deviceIds.add(deviceId);
+    String devicesString = deviceIds.toString();
+    devicesString = deviceIds.toString().replaceAll(',', '",\n"');
+    devicesString = devicesString.replaceAll('[', '[\n"');
+    devicesString = devicesString.replaceAll(']', '"\n]');
+    waitingRequestWidget();
+    final String _queryDeleteDevice = '/v1.0/homes/${homeId.toString()}/rooms/$id/devices';
+    await tokenAPIRequest.sendRequest(Method.put, _queryDeleteDevice,
+        body: "{\n"
+            "\"device_ids\": $deviceIds"
+            "\n}");
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
+
+  Future addDevice(String deviceId) async {
+    waitingRequestWidget();
+    final String _queryAddDevice = '/v1.0/homes/${homeId.toString()}/rooms/$id/devices';
+    await tokenAPIRequest.sendRequest(Method.post, _queryAddDevice,
+        body: "{\n"
+            "\"device_ids\": [\n"
+            "\"$deviceId\""
+            "\n]"
+            "\n}");
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
+
+  Future deleteDevice(String deviceId) async {
+    waitingRequestWidget();
+    final String _queryDeleteDevice = '/v1.0/homes/${homeId.toString()}/rooms/$id/devices';
+    await tokenAPIRequest.sendRequest(Method.delete, _queryDeleteDevice,
+        body: "{\n"
+            "\"device_ids\": [\n"
+            "\"$deviceId\""
+            "\n]"
+            "\n}");
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
+
+  Future deleteRoom(String name) async {
+    waitingRequestWidget();
+    final String _queryDeleteRoom = '/v1.0/homes/${homeId.toString()}/rooms/$id';
+    await tokenAPIRequest.sendRequest(Method.delete, _queryDeleteRoom);
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
+
+  Future changeRoomName(String name) async {
+    waitingRequestWidget();
+    final String _queryChangeRoomName = '/v1.0/homes/${homeId.toString()}/rooms/$id';
+    await tokenAPIRequest.sendRequest(Method.put, _queryChangeRoomName,
+        body: "{\n"
+            "\"name\": \"$name\""
+            "\n}");
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
+
   Future getDevices() async {
     waitingRequestWidget();
-    _queryGetRoomDevicesList = '/v1.0/homes/${homeId.toString()}/rooms/devices';
+    _queryGetRoomDevicesList = '/v1.0/homes/${homeId.toString()}/rooms/$id/devices';
     await tokenAPIRequest.sendRequest(Method.get, _queryGetRoomDevicesList);
     if (tokenAPIRequest.getResponse().isNotEmpty) {
       try {

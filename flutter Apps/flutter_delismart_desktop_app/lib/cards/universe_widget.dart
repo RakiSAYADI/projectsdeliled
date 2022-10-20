@@ -163,10 +163,10 @@ class UniverseCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                Expanded(
+                /*Expanded(
                   flex: 2,
                   child: TextButton.icon(
-                    onPressed: () async {/*
+                    onPressed: () async {
                       universeClass.devices.clear();
                       await universeClass.getDevices();
                       universeIdentifier = appClass.users[userIdentifier].universes.indexOf(universeClass);
@@ -174,7 +174,7 @@ class UniverseCard extends StatelessWidget {
                         showToastMessage('Error request');
                       } else {
                         Navigator.pushNamed(context, '/group_list');
-                      }*/
+                      }
                     },
                     icon: Icon(Icons.group, size: heightScreen * 0.009 + widthScreen * 0.009),
                     label: Text(
@@ -182,7 +182,7 @@ class UniverseCard extends StatelessWidget {
                       style: TextStyle(fontSize: heightScreen * 0.009 + widthScreen * 0.009),
                     ),
                   ),
-                ),
+                ),*/
                 Expanded(
                   flex: 2,
                   child: TextButton.icon(

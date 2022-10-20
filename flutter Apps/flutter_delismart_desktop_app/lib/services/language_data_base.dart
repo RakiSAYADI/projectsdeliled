@@ -44,7 +44,11 @@ final List<String> connectUserButtonTextLanguageArray = ['Connecter', 'Login'];
 
 final List<String> registerUserButtonTextLanguageArray = ['Enregistrer', 'Register'];
 
-final List<String> deleteUserButtonTextLanguageArray = ['Supprimer', 'Delete'];
+final List<String> deleteUserButtonTextLanguageArray = ['Supprimer de la pièce', 'Delete from room'];
+
+final List<String> modifyUserButtonTextLanguageArray = ['Modifier', 'Modify'];
+
+final List<String> moveRoomButtonTextLanguageArray = ['Déplacer', 'Move'];
 
 final List<String> createUserButtonTextLanguageArray = ['Créer', 'Create'];
 
@@ -66,6 +70,10 @@ final List<String> userNameTextLanguageArray = ['Nom', 'Name'];
 
 final List<String> addUniverseButtonTextLanguageArray = ['Ajouter un univers', 'Add a universe'];
 
+final List<String> addRoomButtonTextLanguageArray = ['Ajouter une pièce', 'Add a room'];
+
+final List<String> addDeviceButtonTextLanguageArray = ['Ajouter une appareil', 'Add a device'];
+
 final List<String> newUniverseMessageTextLanguageArray = ['Nouveau univers', 'New universe'];
 
 final List<String> confirmButtonTextLanguageArray = ['Valider', 'Confirm'];
@@ -84,6 +92,10 @@ final List<String> universeRoomsTextLanguageArray = ['Pièces:', 'Rooms:'];
 
 final List<String> universeDeleteTextLanguageArray = ['Voulez vous vraiment supprimer ce Univers ?', 'Do you really want to delete this universe ?'];
 
+final List<String> roomDeleteTextLanguageArray = ['Voulez vous vraiment supprimer cette pièce ?', 'Do you really want to delete this room ?'];
+
+final List<String> roomDeviceDeleteTextLanguageArray = ['Voulez vous vraiment enlever cette appareil de cette pièce ?', 'Do you really want to remove this device from this room ?'];
+
 final List<String> attentionMessageTextLanguageArray = ['Attention', 'Attention'];
 
 final List<String> universeUserAddMessageTextLanguageArray = ['Ajouter un membre', 'Add member'];
@@ -93,6 +105,8 @@ final List<String> universeUserInvitationMessageTextLanguageArray = ['Invitation
 final List<String> stateUserChoiceMessageTextLanguageArray = ['Choisir le type d\'accès du membre: ', 'Choose member access type: '];
 
 final List<String> deleteUniverseSecurityMessageTextLanguageArray = ['Entrer le code de sécurité ', 'Enter the security code: '];
+
+final List<String> changeRoomNameMessageTextLanguageArray = ['Entrer le nom de pièce: ', 'Enter room name: '];
 
 final List<String> administratorUserChoiceMessageTextLanguageArray = ['Administrateur', 'Administrator'];
 

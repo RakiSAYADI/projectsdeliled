@@ -61,6 +61,140 @@ void waitingRequestWidget() {
 
 void exitRequestWidget() => Get.back();
 
+void renameRoomRequestWidget(String roomName) {
+  double screenWidth = MediaQuery.of(Get.context!).size.width;
+  double screenHeight = MediaQuery.of(Get.context!).size.height;
+  final myRoomName = TextEditingController(text: roomName);
+  Get.defaultDialog(
+    title: attentionMessageTextLanguageArray[languageArrayIdentifier],
+    content: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          changeRoomNameMessageTextLanguageArray[languageArrayIdentifier],
+          style: TextStyle(fontSize: screenHeight * 0.007 + screenWidth * 0.007, color: Colors.black),
+          textAlign: TextAlign.center,
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: (screenHeight * 0.05)),
+          child: TextField(
+            textAlign: TextAlign.center,
+            controller: myRoomName,
+            maxLines: 1,
+            style: TextStyle(
+              fontSize: (screenWidth * 0.05),
+            ),
+            decoration: InputDecoration(
+                hintText: 'exp: Cuisine',
+                hintStyle: TextStyle(
+                  fontSize: (screenWidth * 0.025 + screenHeight * 0.025),
+                  color: Colors.grey,
+                )),
+          ),
+        ),
+      ],
+    ),
+    textConfirm: confirmButtonTextLanguageArray[languageArrayIdentifier],
+    textCancel: cancelButtonTextLanguageArray[languageArrayIdentifier],
+    onConfirm: () async {
+      if (myRoomName.text.isNotEmpty) {
+        await appClass.users[userIdentifier].universes[universeIdentifier].rooms[roomIdentifier].changeRoomName(myRoomName.text);
+        if (!requestResponse) {
+          showToastMessage('Error request');
+        } else {
+          showToastMessage('request is valid');
+        }
+      } else {
+        showToastMessage('empty field text');
+      }
+      Get.back();
+    },
+  );
+}
+
+void addRoomRequestWidget() {
+  double screenWidth = MediaQuery.of(Get.context!).size.width;
+  double screenHeight = MediaQuery.of(Get.context!).size.height;
+  final myRoomName = TextEditingController();
+  Get.defaultDialog(
+    title: attentionMessageTextLanguageArray[languageArrayIdentifier],
+    content: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          changeRoomNameMessageTextLanguageArray[languageArrayIdentifier],
+          style: TextStyle(fontSize: screenHeight * 0.007 + screenWidth * 0.007, color: Colors.black),
+          textAlign: TextAlign.center,
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: (screenHeight * 0.05)),
+          child: TextField(
+            textAlign: TextAlign.center,
+            controller: myRoomName,
+            maxLines: 1,
+            style: TextStyle(
+              fontSize: (screenWidth * 0.05),
+            ),
+            decoration: InputDecoration(
+                hintText: 'exp: Cuisine',
+                hintStyle: TextStyle(
+                  fontSize: (screenWidth * 0.025 + screenHeight * 0.025),
+                  color: Colors.grey,
+                )),
+          ),
+        ),
+      ],
+    ),
+    textConfirm: confirmButtonTextLanguageArray[languageArrayIdentifier],
+    textCancel: cancelButtonTextLanguageArray[languageArrayIdentifier],
+    onConfirm: () async {
+      if (myRoomName.text.isNotEmpty) {
+        await appClass.users[userIdentifier].universes[universeIdentifier].addRoomUniverse(myRoomName.text);
+        if (!requestResponse) {
+          showToastMessage('Error request');
+        } else {
+          showToastMessage('request is valid');
+        }
+      } else {
+        showToastMessage('empty field text');
+      }
+      Get.back();
+    },
+  );
+}
+
+void deleteRoomRequestWidget(String roomID) {
+  double screenWidth = MediaQuery.of(Get.context!).size.width;
+  double screenHeight = MediaQuery.of(Get.context!).size.height;
+  Get.defaultDialog(
+    title: attentionMessageTextLanguageArray[languageArrayIdentifier],
+    content: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          roomDeleteTextLanguageArray[languageArrayIdentifier],
+          style: TextStyle(fontSize: screenHeight * 0.007 + screenWidth * 0.007, color: Colors.red),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+    textConfirm: confirmButtonTextLanguageArray[languageArrayIdentifier],
+    textCancel: cancelButtonTextLanguageArray[languageArrayIdentifier],
+    onConfirm: () async {
+      await appClass.users[userIdentifier].universes[universeIdentifier].rooms[roomIdentifier].deleteRoom(roomID);
+      if (!requestResponse) {
+        showToastMessage('Error request');
+      } else {
+        showToastMessage('request is valid');
+      }
+      Get.back();
+    },
+  );
+}
+
 void deleteUniverseRequestWidget(String universeID) {
   double screenWidth = MediaQuery.of(Get.context!).size.width;
   double screenHeight = MediaQuery.of(Get.context!).size.height;
@@ -81,6 +215,100 @@ void deleteUniverseRequestWidget(String universeID) {
     textCancel: cancelButtonTextLanguageArray[languageArrayIdentifier],
     onConfirm: () async {
       await appClass.users[userIdentifier].deleteUniverse(universeID);
+      if (!requestResponse) {
+        showToastMessage('Error request');
+      } else {
+        showToastMessage('request is valid');
+      }
+      Get.back();
+    },
+  );
+}
+
+void deleteDeviceRoomRequestWidget(String deviceID) {
+  double screenWidth = MediaQuery.of(Get.context!).size.width;
+  double screenHeight = MediaQuery.of(Get.context!).size.height;
+  Get.defaultDialog(
+    title: attentionMessageTextLanguageArray[languageArrayIdentifier],
+    content: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          roomDeviceDeleteTextLanguageArray[languageArrayIdentifier],
+          style: TextStyle(fontSize: screenHeight * 0.007 + screenWidth * 0.007, color: Colors.red),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+    textConfirm: confirmButtonTextLanguageArray[languageArrayIdentifier],
+    textCancel: cancelButtonTextLanguageArray[languageArrayIdentifier],
+    onConfirm: () async {
+      await appClass.users[userIdentifier].universes[universeIdentifier].rooms[roomIdentifier].deleteDevice(deviceID);
+      if (!requestResponse) {
+        showToastMessage('Error request');
+      } else {
+        showToastMessage('request is valid');
+      }
+      Get.back();
+    },
+  );
+}
+
+void moveDeviceRoomRequestWidget(String deviceId) {
+  double screenWidth = MediaQuery.of(Get.context!).size.width;
+  double screenHeight = MediaQuery.of(Get.context!).size.height;
+  List<String> roomList = [];
+  int roomPosition = 0;
+  for (var room in appClass.users[userIdentifier].universes[universeIdentifier].rooms) {
+    roomList.add(room.name);
+  }
+  String roomNameData = roomList.elementAt(roomIdentifier);
+  Get.defaultDialog(
+    title: attentionMessageTextLanguageArray[languageArrayIdentifier],
+    content: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          stateUserChoiceMessageTextLanguageArray[languageArrayIdentifier],
+          style: TextStyle(fontSize: screenHeight * 0.007 + screenWidth * 0.007, color: Colors.black),
+          textAlign: TextAlign.center,
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
+          child: StatefulBuilder(builder: (BuildContext context, StateSetter dropDownState) {
+            return DropdownButton<String>(
+              value: roomNameData,
+              icon: const Icon(Icons.arrow_drop_down),
+              iconSize: 24,
+              elevation: 16,
+              style: TextStyle(color: Colors.grey[800], fontSize: 18),
+              underline: Container(
+                height: 2,
+                color: Colors.blue[300],
+              ),
+              onChanged: (String? data) {
+                dropDownState(() {
+                  roomNameData = data!;
+                });
+                roomPosition = roomList.indexOf(roomNameData);
+              },
+              items: roomList.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            );
+          }),
+        ),
+      ],
+    ),
+    textConfirm: confirmButtonTextLanguageArray[languageArrayIdentifier],
+    textCancel: cancelButtonTextLanguageArray[languageArrayIdentifier],
+    onConfirm: () async {
+      await appClass.users[userIdentifier].universes[universeIdentifier].rooms[roomPosition].moveDevice(deviceId);
       if (!requestResponse) {
         showToastMessage('Error request');
       } else {

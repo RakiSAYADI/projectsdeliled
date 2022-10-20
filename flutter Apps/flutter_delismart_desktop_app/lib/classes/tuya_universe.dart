@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_automation.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_device.dart';
@@ -31,8 +29,8 @@ class UniverseClass {
 
   Future deleteUserUniverse(String userId) async {
     waitingRequestWidget();
-    final String _queryDeleteUserUniversesList = '/v1.0/homes/${homeId.toString()}/members/$userId';
-    await tokenAPIRequest.sendRequest(Method.delete, _queryDeleteUserUniversesList);
+    final String _queryDeleteUserUniverse = '/v1.0/homes/${homeId.toString()}/members/$userId';
+    await tokenAPIRequest.sendRequest(Method.delete, _queryDeleteUserUniverse);
     if (tokenAPIRequest.getResponse().isNotEmpty) {
       try {
         Map<String, dynamic> message = tokenAPIRequest.getResponse();
@@ -47,8 +45,8 @@ class UniverseClass {
 
   Future addUserUniverse(bool state, String userName, String userId) async {
     waitingRequestWidget();
-    final String _queryChangeStateUserUniversesList = '/v1.0/homes/${homeId.toString()}/members';
-    await tokenAPIRequest.sendRequest(Method.post, _queryChangeStateUserUniversesList,
+    final String _queryChangeStateUserUniverse = '/v1.0/homes/${homeId.toString()}/members';
+    await tokenAPIRequest.sendRequest(Method.post, _queryChangeStateUserUniverse,
         body: "{\n"
             "\"app_schema\": \"$schema\",\n"
             "\"member\": {\n"
@@ -70,10 +68,29 @@ class UniverseClass {
     exitRequestWidget();
   }
 
+  Future addRoomUniverse(String name) async {
+    waitingRequestWidget();
+    final String _queryAddRoomUniverse = '/v1.0/homes/${homeId.toString()}/room';
+    await tokenAPIRequest.sendRequest(Method.post, _queryAddRoomUniverse,
+        body: "{\n"
+            "\"name\": \"$name\""
+            "\n}");
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
+
   Future changeStateUserUniverse(bool state, String userId) async {
     waitingRequestWidget();
-    final String _queryChangeStateUserUniversesList = '/v1.0/homes/${homeId.toString()}/members/$userId';
-    await tokenAPIRequest.sendRequest(Method.put, _queryChangeStateUserUniversesList,
+    final String _queryChangeStateUserUniverse = '/v1.0/homes/${homeId.toString()}/members/$userId';
+    await tokenAPIRequest.sendRequest(Method.put, _queryChangeStateUserUniverse,
         body: "{\n"
             "\"admin\": ${state.toString()}"
             "\n}");
