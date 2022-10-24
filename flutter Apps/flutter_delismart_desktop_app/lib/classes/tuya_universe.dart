@@ -116,6 +116,7 @@ class UniverseClass {
         requestResponse = message['success'] as bool;
         if (requestResponse) {
           List<dynamic> result = message['result'] as List<dynamic>;
+          scenes.clear();
           for (int i = 0; i < result.length; i++) {
             scenes.add(SceneClass(
               name: result[i]['name'],
@@ -145,6 +146,7 @@ class UniverseClass {
         if (requestResponse) {
           Map<String, dynamic> result = message['result'] as Map<String, dynamic>;
           List<dynamic> resultRooms = result['rooms'] as List<dynamic>;
+          rooms.clear();
           for (int i = 0; i < resultRooms.length; i++) {
             rooms.add(RoomClass(
               name: resultRooms[i]['name'],
@@ -171,6 +173,7 @@ class UniverseClass {
         requestResponse = message['success'] as bool;
         if (requestResponse) {
           List<dynamic> result = message['result'] as List<dynamic>;
+          automations.clear();
           for (int i = 0; i < result.length; i++) {
             automations.add(AutomationClass(
               name: result[i]['name'],
@@ -201,6 +204,7 @@ class UniverseClass {
         requestResponse = message['success'] as bool;
         if (requestResponse) {
           List<dynamic> result = message['result'] as List<dynamic>;
+          users.clear();
           for (int i = 0; i < result.length; i++) {
             users.add(UniverseUserClass(
               admin: result[i]['admin'] as bool,
@@ -231,6 +235,7 @@ class UniverseClass {
         requestResponse = message['success'] as bool;
         if (requestResponse) {
           List<dynamic> result = message['result'] as List<dynamic>;
+          devices.clear();
           for (int i = 0; i < result.length; i++) {
             devices.add(DeviceClass(
               activeTime: int.parse(result[i]['active_time'].toString()),

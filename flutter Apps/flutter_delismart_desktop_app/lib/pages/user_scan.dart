@@ -24,7 +24,6 @@ class _ScanListUserState extends State<ScanListUser> {
         child: const Icon(Icons.search),
         backgroundColor: Colors.blue,
         onPressed: () async {
-          appClass.users.clear();
           waitingRequestWidget();
           await appClass.getUserList();
           if (!requestResponse) {
@@ -41,7 +40,6 @@ class _ScanListUserState extends State<ScanListUser> {
                 .map((user) => UserCard(
                     userClass: user,
                     connect: () async {
-                      user.universes.clear();
                       await user.getUniverses();
                       userIdentifier = appClass.users.indexOf(user);
                       if (!requestResponse) {

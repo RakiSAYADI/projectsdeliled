@@ -89,7 +89,7 @@ class UniverseCard extends StatelessWidget {
                     onPressed: () => deleteUniverseWarningWidget(universeClass.homeId.toString()),
                     icon: Icon(Icons.delete, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.red),
                     label: Text(
-                      deleteUserButtonTextLanguageArray[languageArrayIdentifier],
+                      deleteButtonTextLanguageArray[languageArrayIdentifier],
                       style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.red),
                       textAlign: TextAlign.center,
                     ),

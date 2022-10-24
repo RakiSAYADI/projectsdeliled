@@ -24,7 +24,6 @@ class _ScanListAutomationState extends State<ScanListAutomation> {
         child: const Icon(Icons.search),
         backgroundColor: Colors.blue,
         onPressed: () async {
-          appClass.users[userIdentifier].universes[universeIdentifier].automations.clear();
           await appClass.users[userIdentifier].universes[universeIdentifier].getDevices();
           if (!requestResponse) {
             showToastMessage('test toast message');

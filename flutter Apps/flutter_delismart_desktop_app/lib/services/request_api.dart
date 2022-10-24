@@ -62,7 +62,7 @@ class APIRequest {
           response = await _dio!.put(query, data: body);
           break;
         case Method.delete:
-          response = await _dio!.delete(query);
+          response = await _dio!.delete(query, data: body);
           break;
       }
       _response = response.data as Map<String, dynamic>;

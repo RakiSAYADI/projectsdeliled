@@ -46,7 +46,6 @@ class _ScanListRoomState extends State<ScanListRoom> {
         child: const Icon(Icons.search),
         backgroundColor: Colors.blue,
         onPressed: () async {
-          appClass.users[userIdentifier].universes[universeIdentifier].rooms.clear();
           await appClass.users[userIdentifier].universes[universeIdentifier].getRooms();
           if (!requestResponse) {
             showToastMessage('test toast message');

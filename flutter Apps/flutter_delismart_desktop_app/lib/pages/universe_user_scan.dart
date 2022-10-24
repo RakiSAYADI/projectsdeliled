@@ -46,7 +46,6 @@ class _ScanListUniverseUserState extends State<ScanListUniverseUser> {
         child: const Icon(Icons.refresh),
         backgroundColor: Colors.blue,
         onPressed: () async {
-          appClass.users[userIdentifier].universes[universeIdentifier].users.clear();
           await appClass.users[userIdentifier].universes[universeIdentifier].getUsers();
           if (!requestResponse) {
             showToastMessage('Error request');

@@ -18,7 +18,8 @@ class RoomClass {
       deviceIds.add(device.id);
     }
     deviceIds.add(deviceId);
-    String devicesString = deviceIds.toString();
+    String devicesString = deviceIds.toString().replaceAll(' ', '');
+    debugPrint(devicesString);
     devicesString = deviceIds.toString().replaceAll(',', '",\n"');
     devicesString = devicesString.replaceAll('[', '[\n"');
     devicesString = devicesString.replaceAll(']', '"\n]');
@@ -26,7 +27,7 @@ class RoomClass {
     final String _queryDeleteDevice = '/v1.0/homes/${homeId.toString()}/rooms/$id/devices';
     await tokenAPIRequest.sendRequest(Method.put, _queryDeleteDevice,
         body: "{\n"
-            "\"device_ids\": $deviceIds"
+            "\"device_ids\": $devicesString"
             "\n}");
     if (tokenAPIRequest.getResponse().isNotEmpty) {
       try {
@@ -40,14 +41,16 @@ class RoomClass {
     exitRequestWidget();
   }
 
-  Future addDevice(String deviceId) async {
+  Future addDevice(List<String> devices) async {
+    String devicesString = devices.toString().replaceAll(',', '",\n"');
+    devicesString = devicesString.replaceAll('[', '[\n"');
+    devicesString = devicesString.replaceAll(']', '"\n]');
+    debugPrint(devicesString);
     waitingRequestWidget();
     final String _queryAddDevice = '/v1.0/homes/${homeId.toString()}/rooms/$id/devices';
     await tokenAPIRequest.sendRequest(Method.post, _queryAddDevice,
         body: "{\n"
-            "\"device_ids\": [\n"
-            "\"$deviceId\""
-            "\n]"
+            "\"device_ids\": $devicesString"
             "\n}");
     if (tokenAPIRequest.getResponse().isNotEmpty) {
       try {
@@ -127,6 +130,7 @@ class RoomClass {
         requestResponse = message['success'] as bool;
         if (requestResponse) {
           List<dynamic> result = message['result'] as List<dynamic>;
+          devices.clear();
           for (int i = 0; i < result.length; i++) {
             devices.add(DeviceClass(
               activeTime: int.parse(result[i]['active_time'].toString()),

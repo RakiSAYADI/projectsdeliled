@@ -42,6 +42,20 @@ class DeviceRoomCard extends StatelessWidget {
               ),
             ),
             Expanded(
+              flex: 1,
+              child: deviceClass.imageUrl.isEmpty
+                  ? Image.asset(
+                'assets/device.png',
+                height: heightScreen * 0.1,
+                width: widthScreen * 0.1,
+              )
+                  : Image.network(
+                'https://images.tuyaeu.com/' + deviceClass.imageUrl,
+                height: heightScreen * 0.1,
+                width: widthScreen * 0.1,
+              ),
+            ),
+            Expanded(
               flex: 2,
               child: TextButton.icon(
                 onPressed: () {
@@ -67,20 +81,6 @@ class DeviceRoomCard extends StatelessWidget {
                   style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.red),
                   textAlign: TextAlign.center,
                 ),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: deviceClass.imageUrl.isEmpty
-                  ? Image.asset(
-                'assets/device.png',
-                height: heightScreen * 0.1,
-                width: widthScreen * 0.1,
-              )
-                  : Image.network(
-                'https://images.tuyaeu.com/' + deviceClass.imageUrl,
-                height: heightScreen * 0.1,
-                width: widthScreen * 0.1,
               ),
             ),
           ],

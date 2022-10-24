@@ -58,7 +58,6 @@ class _UserLoginState extends State<UserLogin> {
                   onSubmitted: (value) async {
                     if (appClass.getUsersEmail().contains(value)) {
                       int pos = appClass.getUsersEmail().indexOf(value);
-                      appClass.users[pos].universes.clear();
                       await appClass.users[pos].getUniverses();
                       userIdentifier = appClass.users.indexOf(appClass.users[pos]);
                       if (!requestResponse) {
@@ -88,7 +87,6 @@ class _UserLoginState extends State<UserLogin> {
                 onPressed: () async {
                   if (appClass.getUsersEmail().contains(myEmail.text)) {
                     int pos = appClass.getUsersEmail().indexOf(myEmail.text);
-                    appClass.users[pos].universes.clear();
                     await appClass.users[pos].getUniverses();
                     userIdentifier = appClass.users.indexOf(appClass.users[pos]);
                     if (!requestResponse) {

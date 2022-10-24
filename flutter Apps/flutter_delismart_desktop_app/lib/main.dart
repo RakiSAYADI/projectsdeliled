@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/pages/automation_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/device_scan.dart';
+import 'package:flutter_delismart_desktop_app/pages/room_device_add.dart';
 import 'package:flutter_delismart_desktop_app/pages/room_device_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/room_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/scene_scan.dart';
@@ -88,6 +89,7 @@ class MyApp extends StatelessWidget {
           '/user_delete': (context) => const UserDelete(),
           '/universe_create': (context) => const UniverseCreate(),
           '/universe_user_add': (context) => const UniverseUserAdd(),
+          '/room_device_add': (context) => const RoomDeviceAdd(),
         },
       ),
     );

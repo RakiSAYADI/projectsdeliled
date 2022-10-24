@@ -31,7 +31,10 @@ class _ScanListRoomDeviceState extends State<ScanListRoomDevice> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextButton.icon(
-                onPressed: () {},
+                onPressed: () async {
+                  await appClass.users[userIdentifier].universes[universeIdentifier].getDevices();
+                  Navigator.pushNamed(context, '/room_device_add');
+                },
                 icon: Icon(Icons.add, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.white),
                 label: Text(
                   addDeviceButtonTextLanguageArray[languageArrayIdentifier],
@@ -46,7 +49,6 @@ class _ScanListRoomDeviceState extends State<ScanListRoomDevice> {
         child: const Icon(Icons.search),
         backgroundColor: Colors.blue,
         onPressed: () async {
-          appClass.users[userIdentifier].universes[universeIdentifier].rooms[roomIdentifier].devices.clear();
           await appClass.users[userIdentifier].universes[universeIdentifier].rooms[roomIdentifier].getDevices();
           if (!requestResponse) {
             showToastMessage('test toast message');

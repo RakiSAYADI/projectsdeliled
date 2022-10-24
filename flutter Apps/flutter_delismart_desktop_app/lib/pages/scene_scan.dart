@@ -24,7 +24,6 @@ class _ScanListSceneState extends State<ScanListScene> {
         child: const Icon(Icons.search),
         backgroundColor: Colors.blue,
         onPressed: () async {
-          appClass.users[userIdentifier].universes[universeIdentifier].scenes.clear();
           await appClass.users[userIdentifier].universes[universeIdentifier].getDevices();
           if (!requestResponse) {
             showToastMessage('test toast message');

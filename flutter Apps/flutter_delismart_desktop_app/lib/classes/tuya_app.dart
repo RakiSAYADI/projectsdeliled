@@ -49,6 +49,7 @@ class AppClass {
           bool hasMore = result['has_more'] as bool; // will check it out with Windy
           int total = result['total'] as int;
           String email = '';
+          users.clear();
           for (int i = 0; i < list.length; i++) {
             if (list[i].containsKey('email')) {
               email = list[i]['email'];

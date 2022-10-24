@@ -14,8 +14,6 @@ final List<String> scenesButtonTextLanguageArray = ['Scènes', 'Scenes'];
 
 final List<String> automationButtonTextLanguageArray = ['Automatisation', 'Automation'];
 
-final List<String> deleteButtonTextLanguageArray = ['Delete', 'Supprimer'];
-
 final List<String> deviceExecuteButtonTextLanguageArray = ['Exécuter', 'Execute'];
 
 final List<String> scanUserPageTitleTextLanguageArray = ['Tous les users', 'All users'];
@@ -45,6 +43,8 @@ final List<String> connectUserButtonTextLanguageArray = ['Connecter', 'Login'];
 final List<String> registerUserButtonTextLanguageArray = ['Enregistrer', 'Register'];
 
 final List<String> deleteUserButtonTextLanguageArray = ['Supprimer de la pièce', 'Delete from room'];
+
+final List<String> deleteButtonTextLanguageArray = ['Supprimer', 'Delete'];
 
 final List<String> modifyUserButtonTextLanguageArray = ['Modifier', 'Modify'];
 
@@ -115,3 +115,5 @@ final List<String> ordinaryMemberUserChoiceMessageTextLanguageArray = ['Membre o
 final List<String> addButtonTextLanguageArray = ['Ajouter', 'Add'];
 
 final List<String> universeUserDeleteTextLanguageArray = ['Voulez vous vraiment retirer ce user ?', 'Do you really want to remove this user ?'];
+
+final List<String> addRoomDevicePageTitleTextLanguageArray = ['Ajouter des appareils à ', 'Add devices to '];

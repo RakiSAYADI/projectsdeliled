@@ -86,6 +86,7 @@ class UserClass {
         requestResponse = message['success'] as bool;
         if (requestResponse) {
           List<dynamic> result = message['result'] as List<dynamic>;
+          universes.clear();
           for (int i = 0; i < result.length; i++) {
             universes.add(UniverseClass(
               geoName: result[i]['geo_name'],
