@@ -48,6 +48,8 @@ final List<String> deleteButtonTextLanguageArray = ['Supprimer', 'Delete'];
 
 final List<String> modifyUserButtonTextLanguageArray = ['Modifier', 'Modify'];
 
+final List<String> modifyDeviceNameButtonTextLanguageArray = ['Modifier le nom', 'Modify name'];
+
 final List<String> moveRoomButtonTextLanguageArray = ['Déplacer', 'Move'];
 
 final List<String> createUserButtonTextLanguageArray = ['Créer', 'Create'];
@@ -107,6 +109,8 @@ final List<String> stateUserChoiceMessageTextLanguageArray = ['Choisir le type d
 final List<String> deleteUniverseSecurityMessageTextLanguageArray = ['Entrer le code de sécurité ', 'Enter the security code: '];
 
 final List<String> changeRoomNameMessageTextLanguageArray = ['Entrer le nom de pièce: ', 'Enter room name: '];
+
+final List<String> changeDeviceNameMessageTextLanguageArray = ['Entrer le nom de l\'appareil ', 'Enter device name: '];
 
 final List<String> administratorUserChoiceMessageTextLanguageArray = ['Administrateur', 'Administrator'];
 

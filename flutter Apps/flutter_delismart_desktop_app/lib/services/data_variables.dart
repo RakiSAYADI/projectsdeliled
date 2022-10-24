@@ -113,6 +113,58 @@ void renameRoomRequestWidget(String roomName) {
   );
 }
 
+void renameDeviceRequestWidget(String deviceName, String deviceID) {
+  double screenWidth = MediaQuery.of(Get.context!).size.width;
+  double screenHeight = MediaQuery.of(Get.context!).size.height;
+  final myDeviceName = TextEditingController(text: deviceName);
+  Get.defaultDialog(
+    title: attentionMessageTextLanguageArray[languageArrayIdentifier],
+    content: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          changeDeviceNameMessageTextLanguageArray[languageArrayIdentifier],
+          style: TextStyle(fontSize: screenHeight * 0.007 + screenWidth * 0.007, color: Colors.black),
+          textAlign: TextAlign.center,
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: (screenHeight * 0.05)),
+          child: TextField(
+            textAlign: TextAlign.center,
+            controller: myDeviceName,
+            maxLines: 1,
+            style: TextStyle(
+              fontSize: (screenWidth * 0.05),
+            ),
+            decoration: InputDecoration(
+                hintText: 'exp: Robot 1',
+                hintStyle: TextStyle(
+                  fontSize: (screenWidth * 0.025 + screenHeight * 0.025),
+                  color: Colors.grey,
+                )),
+          ),
+        ),
+      ],
+    ),
+    textConfirm: confirmButtonTextLanguageArray[languageArrayIdentifier],
+    textCancel: cancelButtonTextLanguageArray[languageArrayIdentifier],
+    onConfirm: () async {
+      if (myDeviceName.text.isNotEmpty) {
+        await appClass.renameDevice(myDeviceName.text, deviceID);
+        if (!requestResponse) {
+          showToastMessage('Error request');
+        } else {
+          showToastMessage('request is valid');
+        }
+      } else {
+        showToastMessage('empty field text');
+      }
+      Get.back();
+    },
+  );
+}
+
 void addRoomRequestWidget() {
   double screenWidth = MediaQuery.of(Get.context!).size.width;
   double screenHeight = MediaQuery.of(Get.context!).size.height;

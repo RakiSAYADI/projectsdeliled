@@ -18,10 +18,16 @@ class _RoomDeviceAddState extends State<RoomDeviceAdd> {
   @override
   void initState() {
     // TODO: implement initState
-    for (var device in appClass.users[userIdentifier].universes[universeIdentifier].devices) {
-      for (var deviceRoom in appClass.users[userIdentifier].universes[universeIdentifier].rooms[roomIdentifier].devices) {
-        if (deviceRoom.id != device.id) {
-          devices.addAll({device: false});
+    if (appClass.users[userIdentifier].universes[universeIdentifier].rooms[roomIdentifier].devices.isEmpty) {
+      for (var device in appClass.users[userIdentifier].universes[universeIdentifier].devices) {
+        devices.addAll({device: false});
+      }
+    } else {
+      for (var device in appClass.users[userIdentifier].universes[universeIdentifier].devices) {
+        for (var deviceRoom in appClass.users[userIdentifier].universes[universeIdentifier].rooms[roomIdentifier].devices) {
+          if (deviceRoom.id != device.id) {
+            devices.addAll({device: false});
+          }
         }
       }
     }

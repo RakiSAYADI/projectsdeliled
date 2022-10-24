@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_device.dart';
+import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
+import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
 
 class DeviceCard extends StatelessWidget {
   final DeviceClass deviceClass;
@@ -37,6 +39,18 @@ class DeviceCard extends StatelessWidget {
                         ),
                   SizedBox(height: heightScreen * 0.001, width: widthScreen * 0.001),
                 ],
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: TextButton.icon(
+                onPressed: () => renameDeviceRequestWidget(deviceClass.name, deviceClass.id),
+                icon: Icon(Icons.edit, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.blue),
+                label: Text(
+                  modifyDeviceNameButtonTextLanguageArray[languageArrayIdentifier],
+                  style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.blue),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
             Expanded(

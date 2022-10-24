@@ -15,6 +15,25 @@ class AppClass {
   final String queryPostCreateUser = '/v1.0/apps/$schema/user';
   final String queryGetUserList = '/v1.0/apps/$schema/users?page_no=1&page_size=100';
 
+  Future renameDevice(String deviceName, String deviceID) async {
+    waitingRequestWidget();
+    final String _queryChangeDeviceName = '/v1.0/devices/$deviceID';
+    await tokenAPIRequest.sendRequest(Method.put, _queryChangeDeviceName,
+        body: "{\n"
+            "\"name\": \"$deviceName\""
+            "\n}");
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
+
   void getInfo() async {
     await tokenAPIRequest.sendRequest(Method.get, queryGetAppInfo);
     if (tokenAPIRequest.getResponse().isNotEmpty) {

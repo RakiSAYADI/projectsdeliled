@@ -19,8 +19,7 @@ class RoomClass {
     }
     deviceIds.add(deviceId);
     String devicesString = deviceIds.toString().replaceAll(' ', '');
-    debugPrint(devicesString);
-    devicesString = deviceIds.toString().replaceAll(',', '",\n"');
+    devicesString = devicesString.replaceAll(',', '",\n"');
     devicesString = devicesString.replaceAll('[', '[\n"');
     devicesString = devicesString.replaceAll(']', '"\n]');
     waitingRequestWidget();
@@ -42,10 +41,10 @@ class RoomClass {
   }
 
   Future addDevice(List<String> devices) async {
-    String devicesString = devices.toString().replaceAll(',', '",\n"');
+    String devicesString = devices.toString().replaceAll(' ', '');
+    devicesString = devicesString.replaceAll(',', '",\n"');
     devicesString = devicesString.replaceAll('[', '[\n"');
     devicesString = devicesString.replaceAll(']', '"\n]');
-    debugPrint(devicesString);
     waitingRequestWidget();
     final String _queryAddDevice = '/v1.0/homes/${homeId.toString()}/rooms/$id/devices';
     await tokenAPIRequest.sendRequest(Method.post, _queryAddDevice,
