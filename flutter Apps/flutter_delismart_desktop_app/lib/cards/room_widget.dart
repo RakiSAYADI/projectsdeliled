@@ -63,7 +63,6 @@ class RoomCard extends StatelessWidget {
             SizedBox(height: heightScreen * 0.001, width: widthScreen * 0.001),
             TextButton.icon(
               onPressed: () async {
-                roomClass.devices.clear();
                 await roomClass.getDevices();
                 roomIdentifier = appClass.users[userIdentifier].universes[universeIdentifier].rooms.indexOf(roomClass);
                 if (!requestResponse) {

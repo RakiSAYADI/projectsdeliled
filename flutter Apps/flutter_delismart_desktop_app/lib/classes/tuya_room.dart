@@ -84,7 +84,7 @@ class RoomClass {
     exitRequestWidget();
   }
 
-  Future deleteRoom(String name) async {
+  Future deleteRoom() async {
     waitingRequestWidget();
     final String _queryDeleteRoom = '/v1.0/homes/${homeId.toString()}/rooms/$id';
     await tokenAPIRequest.sendRequest(Method.delete, _queryDeleteRoom);

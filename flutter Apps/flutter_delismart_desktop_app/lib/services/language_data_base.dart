@@ -78,6 +78,8 @@ final List<String> addDeviceButtonTextLanguageArray = ['Ajouter une appareil', '
 
 final List<String> newUniverseMessageTextLanguageArray = ['Nouveau univers', 'New universe'];
 
+final List<String> newSceneMessageTextLanguageArray = ['Nouvelle scène', 'New scene'];
+
 final List<String> confirmButtonTextLanguageArray = ['Valider', 'Confirm'];
 
 final List<String> cancelButtonTextLanguageArray = ['Annuler', 'Cancel'];
@@ -95,6 +97,8 @@ final List<String> universeRoomsTextLanguageArray = ['Pièces:', 'Rooms:'];
 final List<String> universeDeleteTextLanguageArray = ['Voulez vous vraiment supprimer ce Univers ?', 'Do you really want to delete this universe ?'];
 
 final List<String> roomDeleteTextLanguageArray = ['Voulez vous vraiment supprimer cette pièce ?', 'Do you really want to delete this room ?'];
+
+final List<String> sceneDeleteTextLanguageArray = ['Voulez vous vraiment supprimer cette scène ?', 'Do you really want to delete this scene ?'];
 
 final List<String> roomDeviceDeleteTextLanguageArray = ['Voulez vous vraiment enlever cette appareil de cette pièce ?', 'Do you really want to remove this device from this room ?'];
 

@@ -37,6 +37,8 @@ final APIRequest tokenAPIRequest = APIRequest();
 int userIdentifier = 0;
 int universeIdentifier = 0;
 int roomIdentifier = 0;
+int sceneIdentifier = 0;
+int automationIdentifier = 0;
 int deviceIdentifier = 0;
 
 List<String> accessTypeUserList = [ordinaryMemberUserChoiceMessageTextLanguageArray[languageArrayIdentifier], administratorUserChoiceMessageTextLanguageArray[languageArrayIdentifier]];
@@ -217,6 +219,36 @@ void addRoomRequestWidget() {
   );
 }
 
+void deleteSceneRequestWidget() {
+  double screenWidth = MediaQuery.of(Get.context!).size.width;
+  double screenHeight = MediaQuery.of(Get.context!).size.height;
+  Get.defaultDialog(
+    title: attentionMessageTextLanguageArray[languageArrayIdentifier],
+    content: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          sceneDeleteTextLanguageArray[languageArrayIdentifier],
+          style: TextStyle(fontSize: screenHeight * 0.007 + screenWidth * 0.007, color: Colors.red),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+    textConfirm: confirmButtonTextLanguageArray[languageArrayIdentifier],
+    textCancel: cancelButtonTextLanguageArray[languageArrayIdentifier],
+    onConfirm: () async {
+      await appClass.users[userIdentifier].universes[universeIdentifier].scenes[sceneIdentifier].deleteScene();
+      if (!requestResponse) {
+        showToastMessage('Error request');
+      } else {
+        showToastMessage('request is valid');
+      }
+      Get.back();
+    },
+  );
+}
+
 void deleteRoomRequestWidget(String roomID) {
   double screenWidth = MediaQuery.of(Get.context!).size.width;
   double screenHeight = MediaQuery.of(Get.context!).size.height;
@@ -236,7 +268,7 @@ void deleteRoomRequestWidget(String roomID) {
     textConfirm: confirmButtonTextLanguageArray[languageArrayIdentifier],
     textCancel: cancelButtonTextLanguageArray[languageArrayIdentifier],
     onConfirm: () async {
-      await appClass.users[userIdentifier].universes[universeIdentifier].rooms[roomIdentifier].deleteRoom(roomID);
+      await appClass.users[userIdentifier].universes[universeIdentifier].rooms[roomIdentifier].deleteRoom();
       if (!requestResponse) {
         showToastMessage('Error request');
       } else {

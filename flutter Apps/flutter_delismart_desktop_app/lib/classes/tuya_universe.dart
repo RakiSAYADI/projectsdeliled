@@ -120,9 +120,10 @@ class UniverseClass {
           for (int i = 0; i < result.length; i++) {
             scenes.add(SceneClass(
               name: result[i]['name'],
+              homeId: homeId.toString(),
               background: (result[i] as Map).containsKey('background') ? result[i]['background'] : '',
               enabled: result[i]['enabled'] as bool,
-              sceneId: result[i]['scene_id'],
+              id: result[i]['scene_id'],
               actions: _getListMapFromApi(result[i]['actions']),
             ));
           }

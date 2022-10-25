@@ -107,7 +107,6 @@ class UniverseCard extends StatelessWidget {
                   flex: 2,
                   child: TextButton.icon(
                     onPressed: () async {
-                      universeClass.users.clear();
                       await universeClass.getUsers();
                       universeIdentifier = appClass.users[userIdentifier].universes.indexOf(universeClass);
                       if (!requestResponse) {
@@ -127,7 +126,6 @@ class UniverseCard extends StatelessWidget {
                   flex: 2,
                   child: TextButton.icon(
                     onPressed: () async {
-                      universeClass.devices.clear();
                       await universeClass.getDevices();
                       universeIdentifier = appClass.users[userIdentifier].universes.indexOf(universeClass);
                       if (!requestResponse) {
@@ -147,7 +145,6 @@ class UniverseCard extends StatelessWidget {
                   flex: 2,
                   child: TextButton.icon(
                     onPressed: () async {
-                      universeClass.rooms.clear();
                       await universeClass.getRooms();
                       universeIdentifier = appClass.users[userIdentifier].universes.indexOf(universeClass);
                       if (!requestResponse) {
@@ -167,7 +164,6 @@ class UniverseCard extends StatelessWidget {
                   flex: 2,
                   child: TextButton.icon(
                     onPressed: () async {
-                      universeClass.devices.clear();
                       await universeClass.getDevices();
                       universeIdentifier = appClass.users[userIdentifier].universes.indexOf(universeClass);
                       if (!requestResponse) {
@@ -187,7 +183,6 @@ class UniverseCard extends StatelessWidget {
                   flex: 2,
                   child: TextButton.icon(
                     onPressed: () async {
-                      universeClass.scenes.clear();
                       await universeClass.getScenes();
                       universeIdentifier = appClass.users[userIdentifier].universes.indexOf(universeClass);
                       if (!requestResponse) {
@@ -207,7 +202,6 @@ class UniverseCard extends StatelessWidget {
                   flex: 2,
                   child: TextButton.icon(
                     onPressed: () async {
-                      universeClass.automations.clear();
                       await universeClass.getAutomations();
                       universeIdentifier = appClass.users[userIdentifier].universes.indexOf(universeClass);
                       if (!requestResponse) {
