@@ -43,7 +43,7 @@ class UniverseClass {
     exitRequestWidget();
   }
 
-  Future addUserUniverse(bool state, String userName, String userId) async {
+  Future addUserUniverse(bool state, String userName, String userEmail) async {
     waitingRequestWidget();
     final String _queryChangeStateUserUniverse = '/v1.0/homes/${homeId.toString()}/members';
     await tokenAPIRequest.sendRequest(Method.post, _queryChangeStateUserUniverse,
@@ -51,7 +51,7 @@ class UniverseClass {
             "\"app_schema\": \"$schema\",\n"
             "\"member\": {\n"
             "\"country_code\": \"33\",\n"
-            "\"member_account\": \"$userId\",\n"
+            "\"member_account\": \"$userEmail\",\n"
             "\"admin\": ${state.toString()},\n"
             "\"name\": \"$userName\""
             "\n}"

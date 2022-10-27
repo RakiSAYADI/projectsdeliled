@@ -39,7 +39,7 @@ class _UniverseUserAddState extends State<UniverseUserAdd> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                universeNameTextLanguageArray[languageArrayIdentifier],
+                nameTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01),
               ),
               Padding(
@@ -117,8 +117,8 @@ class _UniverseUserAddState extends State<UniverseUserAdd> {
               TextButton(
                 onPressed: () async {
                   if (myUniverseUserName.text.isNotEmpty && myUniverseUserAddress.text.isNotEmpty && appClass.getUsersEmail().contains(myUniverseUserAddress.text)) {
-                    await appClass.users[userIdentifier].universes[universeIdentifier].addUserUniverse(accessTypeUserList.indexOf(accessTypeUserData) == 0 ? false : true, myUniverseUserName.text,
-                        appClass.users.elementAt(appClass.getUsersEmail().indexOf(myUniverseUserAddress.text)).uid);
+                    await appClass.users[userIdentifier].universes[universeIdentifier]
+                        .addUserUniverse(accessTypeUserList.indexOf(accessTypeUserData) == 0 ? false : true, myUniverseUserName.text, myUniverseUserAddress.text);
                     if (!requestResponse) {
                       showToastMessage('Error request');
                     } else {

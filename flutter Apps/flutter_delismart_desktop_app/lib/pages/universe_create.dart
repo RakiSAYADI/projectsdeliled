@@ -47,7 +47,7 @@ class _UniverseCreateState extends State<UniverseCreate> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                universeNameTextLanguageArray[languageArrayIdentifier],
+                nameTextLanguageArray[languageArrayIdentifier],
                 style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01),
               ),
               Padding(
@@ -244,7 +244,7 @@ class _UniverseCreateState extends State<UniverseCreate> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    createUniverseButtonTextLanguageArray[languageArrayIdentifier],
+                    createButtonTextLanguageArray[languageArrayIdentifier],
                     style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.02 + screenHeight * 0.02),
                   ),
                 ),
