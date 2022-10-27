@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/cards/scene_element_mini_widgets.dart';
+import 'package:flutter_delismart_desktop_app/classes/tuya_device.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
 
@@ -12,7 +13,13 @@ class SceneCreate extends StatefulWidget {
 
 class _SceneCreateState extends State<SceneCreate> {
   final mySceneName = TextEditingController();
-  List<Map<String, dynamic>> sceneActions = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    sceneActions.clear();
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -65,29 +72,42 @@ class _SceneCreateState extends State<SceneCreate> {
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.05),
-                Row(
-                  children: [
-                    Container(
-                      color: Colors.grey,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Column(
-                          children: sceneActions.map((element) {
-                            switch (element['action_executor']) {
-                              case 'delay':
-                                return DelayCard(delayData: element);
-                              case 'dpIssue':
-                                return DeviceSceneCard(deviceSceneData: element);
-                              case 'deviceGroupDpIssue':
-                                return DeviceSceneCard(deviceSceneData: element);
-                              default:
-                                return Container();
-                            }
-                          }).toList(),
-                        ),
+                Center(
+                  child: Container(
+                    color: Colors.grey,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        children: sceneActions.map((element) {
+                          switch (element['action_executor']) {
+                            case 'delay':
+                              return DelayCard(delayData: element);
+                            case 'dpIssue':
+                              for (DeviceClass device in appClass.users[userIdentifier].universes[universeIdentifier].devices) {
+                                if (element['entity_id'] == device.id) {
+                                  return DeviceSceneCard(deviceClass: device, mapData: element);
+                                }
+                              }
+                              return Container();
+                            /*case 'deviceGroupDpIssue':
+                              return DeviceSceneCard(deviceClass: element);*/
+                            default:
+                              return Container();
+                          }
+                        }).toList(),
                       ),
                     ),
-                  ],
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.05),
+                TextButton.icon(
+                  onPressed: () => addSceneElementRequestWidget(),
+                  icon: Icon(Icons.add, size: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.blue),
+                  label: Text(
+                    addElementButtonTextLanguageArray[languageArrayIdentifier],
+                    style: TextStyle(fontSize: screenHeight * 0.007 + screenWidth * 0.007, color: Colors.blue),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
                 SizedBox(height: screenHeight * 0.05),
                 TextButton(

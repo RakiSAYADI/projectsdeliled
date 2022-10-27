@@ -31,7 +31,10 @@ class _ScanListSceneState extends State<ScanListScene> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextButton.icon(
-                onPressed: () => Navigator.pushNamed(context, '/scene_create'),
+                onPressed: () async {
+                  await appClass.users[userIdentifier].universes[universeIdentifier].getDevices();
+                  Navigator.pushNamed(context, '/scene_create');
+                },
                 icon: Icon(Icons.add, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.white),
                 label: Text(
                   addSceneButtonTextLanguageArray[languageArrayIdentifier],

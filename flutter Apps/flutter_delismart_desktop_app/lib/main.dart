@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/pages/automation_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/device_scan.dart';
+import 'package:flutter_delismart_desktop_app/pages/device_scene_add.dart';
 import 'package:flutter_delismart_desktop_app/pages/room_device_add.dart';
 import 'package:flutter_delismart_desktop_app/pages/room_device_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/room_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/scene_create.dart';
 import 'package:flutter_delismart_desktop_app/pages/scene_scan.dart';
+import 'package:flutter_delismart_desktop_app/pages/timer_scene_add.dart';
 import 'package:flutter_delismart_desktop_app/pages/universe_create.dart';
 import 'package:flutter_delismart_desktop_app/pages/universe_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/universe_user_add.dart';
@@ -92,6 +94,8 @@ class MyApp extends StatelessWidget {
           '/universe_user_add': (context) => const UniverseUserAdd(),
           '/room_device_add': (context) => const RoomDeviceAdd(),
           '/scene_create': (context) => const SceneCreate(),
+          '/device_scene_add': (context) => const DeviceSceneAdd(),
+          '/timer_scene_add': (context) => const TimerSceneAdd(),
         },
       ),
     );

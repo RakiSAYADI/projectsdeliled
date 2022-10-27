@@ -131,28 +131,32 @@ class RoomClass {
           List<dynamic> result = message['result'] as List<dynamic>;
           devices.clear();
           for (int i = 0; i < result.length; i++) {
+            List<Map<String, dynamic>> functions = [];
+            for (var function in result[i]['status']) {
+              functions.add(function);
+            }
             devices.add(DeviceClass(
-              activeTime: int.parse(result[i]['active_time'].toString()),
-              bizType: int.parse(result[i]['biz_type'].toString()),
-              category: result[i]['category'],
-              createTime: int.parse(result[i]['create_time'].toString()),
-              imageUrl: result[i]['icon'],
-              id: result[i]['id'],
-              ip: result[i]['ip'],
-              lat: result[i]['lat'],
-              lon: result[i]['lon'],
-              model: result[i]['model'],
-              name: result[i]['name'],
-              online: result[i]['online'] as bool,
-              ownerId: result[i]['owner_id'],
-              productId: result[i]['product_id'],
-              productName: result[i]['product_name'],
-              sub: result[i]['sub'] as bool,
-              timeZone: result[i]['time_zone'],
-              uid: result[i]['uid'],
-              updateTime: int.parse(result[i]['update_time'].toString()),
-              uuid: result[i]['uuid'],
-            ));
+                activeTime: int.parse(result[i]['active_time'].toString()),
+                bizType: int.parse(result[i]['biz_type'].toString()),
+                category: result[i]['category'],
+                createTime: int.parse(result[i]['create_time'].toString()),
+                imageUrl: result[i]['icon'],
+                id: result[i]['id'],
+                ip: result[i]['ip'],
+                lat: result[i]['lat'],
+                lon: result[i]['lon'],
+                model: result[i]['model'],
+                name: result[i]['name'],
+                online: result[i]['online'] as bool,
+                ownerId: result[i]['owner_id'],
+                productId: result[i]['product_id'],
+                productName: result[i]['product_name'],
+                sub: result[i]['sub'] as bool,
+                timeZone: result[i]['time_zone'],
+                uid: result[i]['uid'],
+                updateTime: int.parse(result[i]['update_time'].toString()),
+                uuid: result[i]['uuid'],
+                functions: functions));
           }
         }
       } catch (e) {

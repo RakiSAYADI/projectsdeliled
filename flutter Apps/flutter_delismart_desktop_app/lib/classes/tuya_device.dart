@@ -43,6 +43,7 @@ class DeviceClass {
     required this.timeZone,
     required this.uid,
     required this.updateTime,
-    required this.uuid
+    required this.uuid,
+    required this.functions
   });
 }

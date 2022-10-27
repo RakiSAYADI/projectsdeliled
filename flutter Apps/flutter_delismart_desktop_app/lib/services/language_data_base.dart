@@ -46,6 +46,8 @@ final List<String> deleteUserButtonTextLanguageArray = ['Supprimer de la pièce'
 
 final List<String> timeTextLanguageArray = ['Temps :', 'Time :'];
 
+final List<String> timerTextLanguageArray = ['Temps', 'Timer'];
+
 final List<String> deleteButtonTextLanguageArray = ['Supprimer', 'Delete'];
 
 final List<String> modifyUserButtonTextLanguageArray = ['Modifier', 'Modify'];
@@ -79,6 +81,8 @@ final List<String> addSceneButtonTextLanguageArray = ['Ajouter une scène', 'Add
 final List<String> addRoomButtonTextLanguageArray = ['Ajouter une pièce', 'Add a room'];
 
 final List<String> addDeviceButtonTextLanguageArray = ['Ajouter une appareil', 'Add a device'];
+
+final List<String> addElementButtonTextLanguageArray = ['Ajouter un element', 'Add an element'];
 
 final List<String> newUniverseMessageTextLanguageArray = ['Nouveau univers', 'New universe'];
 
@@ -129,3 +133,5 @@ final List<String> addButtonTextLanguageArray = ['Ajouter', 'Add'];
 final List<String> universeUserDeleteTextLanguageArray = ['Voulez vous vraiment retirer ce user ?', 'Do you really want to remove this user ?'];
 
 final List<String> addRoomDevicePageTitleTextLanguageArray = ['Ajouter des appareils à ', 'Add devices to '];
+
+final List<String> addTimePageTitleTextLanguageArray = ['Ajouter un temps ', 'Add a time '];

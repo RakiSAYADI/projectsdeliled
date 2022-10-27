@@ -41,6 +41,8 @@ int sceneIdentifier = 0;
 int automationIdentifier = 0;
 int deviceIdentifier = 0;
 
+List<Map<String, dynamic>> sceneActions = [];
+
 List<String> accessTypeUserList = [ordinaryMemberUserChoiceMessageTextLanguageArray[languageArrayIdentifier], administratorUserChoiceMessageTextLanguageArray[languageArrayIdentifier]];
 
 void waitingRequestWidget() {
@@ -164,6 +166,36 @@ void renameDeviceRequestWidget(String deviceName, String deviceID) {
       }
       Get.back();
     },
+  );
+}
+
+void addSceneElementRequestWidget() {
+  double screenWidth = MediaQuery.of(Get.context!).size.width;
+  double screenHeight = MediaQuery.of(Get.context!).size.height;
+  Get.defaultDialog(
+    title: attentionMessageTextLanguageArray[languageArrayIdentifier],
+    content: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TextButton.icon(
+          onPressed: () => Get.toNamed('/device_scene_add'),
+          icon: Icon(Icons.devices, size: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.blue),
+          label: Text(
+            devicesButtonTextLanguageArray[languageArrayIdentifier],
+            style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.blue),
+          ),
+        ),
+        TextButton.icon(
+          onPressed: () => Get.toNamed('/timer_scene_add'),
+          icon: Icon(Icons.timer, size: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.green),
+          label: Text(
+            timerTextLanguageArray[languageArrayIdentifier],
+            style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.green),
+          ),
+        ),
+      ],
+    ),
   );
 }
 
