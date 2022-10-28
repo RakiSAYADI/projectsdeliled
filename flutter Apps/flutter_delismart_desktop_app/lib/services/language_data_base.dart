@@ -134,4 +134,8 @@ final List<String> universeUserDeleteTextLanguageArray = ['Voulez vous vraiment 
 
 final List<String> addRoomDevicePageTitleTextLanguageArray = ['Ajouter des appareils à ', 'Add devices to '];
 
+final List<String> addAndModifyFunctionsPageTitleTextLanguageArray = ['Ajouter et modifier les fonctions ', 'Add and modify the functions'];
+
 final List<String> addTimePageTitleTextLanguageArray = ['Ajouter un temps ', 'Add a time '];
+
+final List<String> addTimeDelayMaxTextLanguageArray = ['Max 05:00:00', 'Max 05:00:00'];

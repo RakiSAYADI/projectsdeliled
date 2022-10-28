@@ -43,6 +43,13 @@ class _SceneCreateState extends State<SceneCreate> {
           title: Text(newSceneMessageTextLanguageArray[languageArrayIdentifier]),
           centerTitle: true,
         ),
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.refresh),
+          backgroundColor: Colors.blue,
+          onPressed: () {
+            setState(() {});
+          },
+        ),
         body: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -74,6 +81,7 @@ class _SceneCreateState extends State<SceneCreate> {
                 SizedBox(height: screenHeight * 0.05),
                 Center(
                   child: Container(
+                    width: screenWidth * 0.7,
                     color: Colors.grey,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,

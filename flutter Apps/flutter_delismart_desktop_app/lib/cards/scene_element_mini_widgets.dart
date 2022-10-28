@@ -14,6 +14,7 @@ class DelayCard extends StatelessWidget {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
     return Card(
+      semanticContainer: false,
       child: Padding(
         padding: const EdgeInsets.all(5.0),
         child: Row(
@@ -27,7 +28,7 @@ class DelayCard extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     timeTextLanguageArray[languageArrayIdentifier],
-                    style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
+                    style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
                     textAlign: TextAlign.center,
                   ),
                   Row(
@@ -35,18 +36,18 @@ class DelayCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        '${delayData['action_executor']['hours']} : ',
-                        style: TextStyle(fontSize: heightScreen * 0.003 + widthScreen * 0.003, color: Colors.black),
+                        '${(delayData['executor_property'] as Map<String, String>)['hours'].toString()} : ',
+                        style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        '${delayData['action_executor']['minutes']} : ',
-                        style: TextStyle(fontSize: heightScreen * 0.003 + widthScreen * 0.003, color: Colors.black),
+                        '${(delayData['executor_property'] as Map<String, String>)['minutes'].toString()} : ',
+                        style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        '${delayData['action_executor']['seconds']}',
-                        style: TextStyle(fontSize: heightScreen * 0.003 + widthScreen * 0.003, color: Colors.black),
+                        (delayData['executor_property'] as Map<String, String>)['seconds'].toString(),
+                        style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007 ,color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -63,7 +64,7 @@ class DelayCard extends StatelessWidget {
                 icon: Icon(Icons.delete, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.red),
                 label: Text(
                   deleteButtonTextLanguageArray[languageArrayIdentifier],
-                  style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.red),
+                  style: TextStyle(fontSize: heightScreen * 0.008 + widthScreen * 0.008, color: Colors.red),
                 ),
               ),
             ),

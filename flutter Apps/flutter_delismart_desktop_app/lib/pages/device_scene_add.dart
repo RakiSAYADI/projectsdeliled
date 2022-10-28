@@ -21,18 +21,13 @@ class _DeviceSceneAddState extends State<DeviceSceneAdd> {
         centerTitle: true,
         backgroundColor: Colors.blue[400],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.check),
-        backgroundColor: Colors.green,
-        onPressed: () => Get.back(),
-      ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
             children: appClass.users[userIdentifier].universes[universeIdentifier].devices
                 .map(
                   (device) => GestureDetector(
-                    onTap: () {},
+                    onTap: () => Get.toNamed('/device_functions_scene_modify', arguments: {'device': device}),
                     child: DeviceCard(deviceClass: device),
                   ),
                 )
