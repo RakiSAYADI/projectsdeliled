@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_automation.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_device.dart';
@@ -10,7 +8,7 @@ import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 
 class UniverseClass {
   String geoName = '';
-  int homeId = 0;
+  int id = 0;
   double lat = 0;
   double lon = 0;
   String name = '';
@@ -27,11 +25,64 @@ class UniverseClass {
   String _queryGetRoomsList = '';
   String _queryGetAutomationsList = '';
 
-  UniverseClass({required this.geoName, required this.homeId, this.lat = 0.0, this.lon = 0.0, required this.name, required this.role});
+  UniverseClass({required this.geoName, required this.id, this.lat = 0.0, this.lon = 0.0, required this.name, required this.role});
+
+  Future addScene(String name, String background, List<Map<String, dynamic>> actions) async {
+    waitingRequestWidget();
+    String actionsData = "[ ";
+    String dpIssueData = '';
+    for (var element in actions) {
+      switch (element['action_executor']) {
+        case 'delay':
+          actionsData += "\n{\n"
+              "\"executor_property\":{\n"
+              "\"hours\":\"${(element['executor_property'] as Map<String, dynamic>)['hours']}\",\n"
+              "\"minutes\":\"${(element['executor_property'] as Map<String, dynamic>)['minutes']}\",\n"
+              "\"seconds\":\"${(element['executor_property'] as Map<String, dynamic>)['seconds']}\"\n"
+              "},\n"
+              "\"action_executor\":\"delay\"\n"
+              "},";
+          break;
+        case 'dpIssue':
+          (element['executor_property'] as Map<String, dynamic>).forEach((key, value) {
+            if (value is String) {
+              dpIssueData = "\"$key\":\"$value\"\n";
+            } else {
+              dpIssueData = "\"$key\":$value\n";
+            }
+          });
+          actionsData += "\n{\n"
+              "\"executor_property\":{\n$dpIssueData},\n"
+              "\"action_executor\":\"dpIssue\",\n"
+              "\"entity_id\":\"${element['entity_id']}\"\n"
+              "},";
+          break;
+      }
+    }
+    actionsData = actionsData.substring(0, actionsData.length - 1);
+    actionsData += "\n]";
+    final String _queryAddScene = '/v1.0/homes/${id.toString()}/scenes';
+    await tokenAPIRequest.sendRequest(Method.post, _queryAddScene,
+        body: "{\n"
+            "\"name\":\"$name\",\n"
+            "\"background\":\"$background\",\n"
+            "\"actions\":$actionsData\n"
+            "}");
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
 
   Future deleteUserUniverse(String userId) async {
     waitingRequestWidget();
-    final String _queryDeleteUserUniverse = '/v1.0/homes/${homeId.toString()}/members/$userId';
+    final String _queryDeleteUserUniverse = '/v1.0/homes/${id.toString()}/members/$userId';
     await tokenAPIRequest.sendRequest(Method.delete, _queryDeleteUserUniverse);
     if (tokenAPIRequest.getResponse().isNotEmpty) {
       try {
@@ -47,7 +98,7 @@ class UniverseClass {
 
   Future addUserUniverse(bool state, String userName, String userEmail) async {
     waitingRequestWidget();
-    final String _queryChangeStateUserUniverse = '/v1.0/homes/${homeId.toString()}/members';
+    final String _queryChangeStateUserUniverse = '/v1.0/homes/${id.toString()}/members';
     await tokenAPIRequest.sendRequest(Method.post, _queryChangeStateUserUniverse,
         body: "{\n"
             "\"app_schema\": \"$schema\",\n"
@@ -72,7 +123,7 @@ class UniverseClass {
 
   Future addRoomUniverse(String name) async {
     waitingRequestWidget();
-    final String _queryAddRoomUniverse = '/v1.0/homes/${homeId.toString()}/room';
+    final String _queryAddRoomUniverse = '/v1.0/homes/${id.toString()}/room';
     await tokenAPIRequest.sendRequest(Method.post, _queryAddRoomUniverse,
         body: "{\n"
             "\"name\": \"$name\""
@@ -91,7 +142,7 @@ class UniverseClass {
 
   Future changeStateUserUniverse(bool state, String userId) async {
     waitingRequestWidget();
-    final String _queryChangeStateUserUniverse = '/v1.0/homes/${homeId.toString()}/members/$userId';
+    final String _queryChangeStateUserUniverse = '/v1.0/homes/${id.toString()}/members/$userId';
     await tokenAPIRequest.sendRequest(Method.put, _queryChangeStateUserUniverse,
         body: "{\n"
             "\"admin\": ${state.toString()}"
@@ -110,7 +161,7 @@ class UniverseClass {
 
   Future getScenes() async {
     waitingRequestWidget();
-    _queryGetScenesList = '/v1.0/homes/$homeId/scenes';
+    _queryGetScenesList = '/v1.0/homes/$id/scenes';
     await tokenAPIRequest.sendRequest(Method.get, _queryGetScenesList);
     if (tokenAPIRequest.getResponse().isNotEmpty) {
       try {
@@ -122,7 +173,7 @@ class UniverseClass {
           for (int i = 0; i < result.length; i++) {
             scenes.add(SceneClass(
               name: result[i]['name'],
-              homeId: homeId.toString(),
+              homeId: id.toString(),
               background: (result[i] as Map).containsKey('background') ? result[i]['background'] : '',
               enabled: result[i]['enabled'] as bool,
               id: result[i]['scene_id'],
@@ -140,7 +191,7 @@ class UniverseClass {
 
   Future getRooms() async {
     waitingRequestWidget();
-    _queryGetRoomsList = '/v1.0/homes/$homeId/rooms';
+    _queryGetRoomsList = '/v1.0/homes/$id/rooms';
     await tokenAPIRequest.sendRequest(Method.get, _queryGetRoomsList);
     if (tokenAPIRequest.getResponse().isNotEmpty) {
       try {
@@ -168,7 +219,7 @@ class UniverseClass {
 
   Future getAutomations() async {
     waitingRequestWidget();
-    _queryGetAutomationsList = '/v1.0/homes/$homeId/automations';
+    _queryGetAutomationsList = '/v1.0/homes/$id/automations';
     await tokenAPIRequest.sendRequest(Method.get, _queryGetAutomationsList);
     if (tokenAPIRequest.getResponse().isNotEmpty) {
       try {
@@ -182,7 +233,8 @@ class UniverseClass {
               name: result[i]['name'],
               enabled: result[i]['enabled'] as bool,
               matchType: result[i]['match_type'] as int,
-              automationId: result[i]['automation_id'],
+              id: result[i]['automation_id'],
+              homeId: id.toString(),
               actions: _getListMapFromApi(result[i]['actions']),
               conditions: _getListMapFromApi(result[i]['conditions']),
               preconditions: _getListMapFromApi(result[i]['preconditions']),
@@ -199,7 +251,7 @@ class UniverseClass {
 
   Future getUsers() async {
     waitingRequestWidget();
-    _queryGetMembersList = '/v1.0/homes/$homeId/members';
+    _queryGetMembersList = '/v1.0/homes/$id/members';
     await tokenAPIRequest.sendRequest(Method.get, _queryGetMembersList);
     if (tokenAPIRequest.getResponse().isNotEmpty) {
       try {
@@ -230,7 +282,7 @@ class UniverseClass {
 
   Future getDevices() async {
     waitingRequestWidget();
-    _queryGetDevicesList = '/v1.0/homes/$homeId/devices';
+    _queryGetDevicesList = '/v1.0/homes/$id/devices';
     await tokenAPIRequest.sendRequest(Method.get, _queryGetDevicesList);
     if (tokenAPIRequest.getResponse().isNotEmpty) {
       try {

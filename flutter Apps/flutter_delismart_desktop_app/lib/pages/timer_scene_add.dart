@@ -121,18 +121,18 @@ class _TimerSceneAddState extends State<TimerSceneAdd> {
                   ),
                 ],
               ),
-              Text(
-                addTimeDelayMaxTextLanguageArray[languageArrayIdentifier],
-                style: TextStyle(color: Colors.grey[800], fontSize: heightScreen * 0.02 + widthScreen * 0.02),
-                textAlign: TextAlign.center,
-              ),
+              SizedBox(height: heightScreen * 0.05),
               TextButton(
                 onPressed: () {
-                  sceneActions.add({
-                    'action_executor': 'delay',
-                    'executor_property': {'hours': sceneDelayHour, 'minutes': sceneDelayMinute, 'seconds': sceneDelaySecond}
-                  });
-                  Get.back();
+                  if (sceneDelayHour == '05' && (sceneDelayMinute != '00' || sceneDelaySecond != '00')) {
+                    showToastMessage('Max timer is : 05:00:00');
+                  } else {
+                    sceneActions.add({
+                      'action_executor': 'delay',
+                      'executor_property': {'hours': sceneDelayHour, 'minutes': sceneDelayMinute, 'seconds': sceneDelaySecond}
+                    });
+                    Get.back();
+                  }
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),

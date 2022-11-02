@@ -4,20 +4,22 @@ import 'package:flutter_delismart_desktop_app/classes/tuya_device.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
 
-class SceneCreate extends StatefulWidget {
-  const SceneCreate({Key? key}) : super(key: key);
+class SceneModify extends StatefulWidget {
+  const SceneModify({Key? key}) : super(key: key);
 
   @override
-  State<SceneCreate> createState() => _SceneCreateState();
+  State<SceneModify> createState() => _SceneModifyState();
 }
 
-class _SceneCreateState extends State<SceneCreate> {
+class _SceneModifyState extends State<SceneModify> {
   final mySceneName = TextEditingController();
 
   @override
   void initState() {
     // TODO: implement initState
-    sceneActions.clear();
+    sceneActions = appClass.users[userIdentifier].universes[universeIdentifier].scenes[sceneIdentifier].actions;
+    debugPrint(sceneActions.toString());
+    mySceneName.text = appClass.users[userIdentifier].universes[universeIdentifier].scenes[sceneIdentifier].name;
     super.initState();
   }
 
@@ -40,7 +42,7 @@ class _SceneCreateState extends State<SceneCreate> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text(newSceneMessageTextLanguageArray[languageArrayIdentifier]),
+          title: Text(modifySceneTitleMessageTextLanguageArray[languageArrayIdentifier]),
           centerTitle: true,
         ),
         floatingActionButton: FloatingActionButton(
@@ -98,7 +100,7 @@ class _SceneCreateState extends State<SceneCreate> {
                               }
                               return Container();
                             /*case 'deviceGroupDpIssue':
-                              return DeviceSceneCard(deviceClass: element);*/
+                              return GroupSceneCard(deviceClass: element);*/
                             default:
                               return Container();
                           }
@@ -123,7 +125,7 @@ class _SceneCreateState extends State<SceneCreate> {
                     if (mySceneName.text.isNotEmpty) {
                       if (sceneActions.isNotEmpty) {
                         if (sceneActions.last['action_executor'] != 'delay') {
-                          await appClass.users[userIdentifier].universes[universeIdentifier].addScene(mySceneName.text, '', sceneActions);
+                          await appClass.users[userIdentifier].universes[universeIdentifier].scenes[sceneIdentifier].modifyScene(mySceneName.text, '', sceneActions);
                           if (!requestResponse) {
                             showToastMessage('Error request');
                           } else {
@@ -142,7 +144,7 @@ class _SceneCreateState extends State<SceneCreate> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      createButtonTextLanguageArray[languageArrayIdentifier],
+                      modifyUserButtonTextLanguageArray[languageArrayIdentifier],
                       style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.02 + screenHeight * 0.02),
                     ),
                   ),

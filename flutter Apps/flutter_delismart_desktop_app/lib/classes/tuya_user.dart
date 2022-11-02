@@ -90,7 +90,7 @@ class UserClass {
           for (int i = 0; i < result.length; i++) {
             universes.add(UniverseClass(
               geoName: result[i]['geo_name'],
-              homeId: result[i]['home_id'],
+              id: result[i]['home_id'],
               lat: (result[i] as Map<String, dynamic>).containsKey('lat') ? double.parse(result[i]['lat'].toString()) : 0.0,
               lon: (result[i] as Map<String, dynamic>).containsKey('lon') ? double.parse(result[i]['lon'].toString()) : 0.0,
               name: result[i]['name'],

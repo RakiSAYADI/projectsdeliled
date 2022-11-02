@@ -52,6 +52,8 @@ final List<String> deleteButtonTextLanguageArray = ['Supprimer', 'Delete'];
 
 final List<String> modifyUserButtonTextLanguageArray = ['Modifier', 'Modify'];
 
+final List<String> activateDeactivateButtonTextLanguageArray = ['Activer/Désactiver', 'Activate/Deactivate'];
+
 final List<String> modifyDeviceNameButtonTextLanguageArray = ['Modifier le nom', 'Modify name'];
 
 final List<String> moveRoomButtonTextLanguageArray = ['Déplacer', 'Move'];
@@ -88,6 +90,8 @@ final List<String> newUniverseMessageTextLanguageArray = ['Nouveau univers', 'Ne
 
 final List<String> newSceneMessageTextLanguageArray = ['Nouvelle scène', 'New scene'];
 
+final List<String> modifySceneTitleMessageTextLanguageArray = ['Modifier le', 'Modify the '];
+
 final List<String> confirmButtonTextLanguageArray = ['Valider', 'Confirm'];
 
 final List<String> cancelButtonTextLanguageArray = ['Annuler', 'Cancel'];
@@ -107,6 +111,8 @@ final List<String> universeDeleteTextLanguageArray = ['Voulez vous vraiment supp
 final List<String> roomDeleteTextLanguageArray = ['Voulez vous vraiment supprimer cette pièce ?', 'Do you really want to delete this room ?'];
 
 final List<String> sceneDeleteTextLanguageArray = ['Voulez vous vraiment supprimer cette scène ?', 'Do you really want to delete this scene ?'];
+
+final List<String> automationDeleteTextLanguageArray = ['Voulez vous vraiment supprimer cette automation ?', 'Do you really want to delete this automation ?'];
 
 final List<String> roomDeviceDeleteTextLanguageArray = ['Voulez vous vraiment enlever cette appareil de cette pièce ?', 'Do you really want to remove this device from this room ?'];
 

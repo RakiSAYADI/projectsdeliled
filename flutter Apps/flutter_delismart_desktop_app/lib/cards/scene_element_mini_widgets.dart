@@ -47,7 +47,7 @@ class DelayCard extends StatelessWidget {
                       ),
                       Text(
                         (delayData['executor_property'] as Map<String, String>)['seconds'].toString(),
-                        style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007 ,color: Colors.black),
+                        style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -96,11 +96,21 @@ class DeviceSceneCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Expanded(
-                  flex: 5,
-                  child: Text(
-                    deviceClass.name,
-                    style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
-                    textAlign: TextAlign.center,
+                  flex: 3,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        deviceClass.name,
+                        style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        mapData['executor_property'].toString(),
+                        style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
                 ),
                 Expanded(
@@ -108,13 +118,13 @@ class DeviceSceneCard extends StatelessWidget {
                   child: deviceClass.imageUrl.isEmpty
                       ? Image.asset(
                           'assets/device.png',
-                          height: heightScreen * 0.1,
-                          width: widthScreen * 0.1,
+                          height: heightScreen * 0.09,
+                          width: widthScreen * 0.09,
                         )
                       : Image.network(
                           'https://images.tuyaeu.com/' + deviceClass.imageUrl,
-                          height: heightScreen * 0.1,
-                          width: widthScreen * 0.1,
+                          height: heightScreen * 0.09,
+                          width: widthScreen * 0.09,
                         ),
                 ),
                 Expanded(
@@ -126,7 +136,7 @@ class DeviceSceneCard extends StatelessWidget {
                     icon: Icon(Icons.delete, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.red),
                     label: Text(
                       deleteButtonTextLanguageArray[languageArrayIdentifier],
-                      style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.red),
+                      style: TextStyle(fontSize: heightScreen * 0.008 + widthScreen * 0.008, color: Colors.red),
                     ),
                   ),
                 ),

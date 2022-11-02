@@ -426,6 +426,36 @@ void deleteSceneRequestWidget() {
   );
 }
 
+void deleteAutomationRequestWidget() {
+  double screenWidth = MediaQuery.of(Get.context!).size.width;
+  double screenHeight = MediaQuery.of(Get.context!).size.height;
+  Get.defaultDialog(
+    title: attentionMessageTextLanguageArray[languageArrayIdentifier],
+    content: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          automationDeleteTextLanguageArray[languageArrayIdentifier],
+          style: TextStyle(fontSize: screenHeight * 0.007 + screenWidth * 0.007, color: Colors.red),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+    textConfirm: confirmButtonTextLanguageArray[languageArrayIdentifier],
+    textCancel: cancelButtonTextLanguageArray[languageArrayIdentifier],
+    onConfirm: () async {
+      await appClass.users[userIdentifier].universes[universeIdentifier].automations[automationIdentifier].deleteAutomation();
+      if (!requestResponse) {
+        showToastMessage('Error request');
+      } else {
+        showToastMessage('request is valid');
+      }
+      Get.back();
+    },
+  );
+}
+
 void deleteRoomRequestWidget(String roomID) {
   double screenWidth = MediaQuery.of(Get.context!).size.width;
   double screenHeight = MediaQuery.of(Get.context!).size.height;
