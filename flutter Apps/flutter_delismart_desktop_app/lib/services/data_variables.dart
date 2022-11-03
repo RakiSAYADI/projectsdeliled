@@ -42,6 +42,9 @@ int automationIdentifier = 0;
 int deviceIdentifier = 0;
 
 List<Map<String, dynamic>> sceneActions = [];
+List<Map<String, dynamic>> automationActions = [];
+List<Map<String, dynamic>> automationConditions = [];
+Map<String, dynamic> automationPreconditions = {};
 
 List<String> accessTypeUserList = [ordinaryMemberUserChoiceMessageTextLanguageArray[languageArrayIdentifier], administratorUserChoiceMessageTextLanguageArray[languageArrayIdentifier]];
 
@@ -184,6 +187,16 @@ List<String> sceneSecond = [
   '59'
 ];
 
+bool intToBool(int i) => i == 1 ? true : false;
+
+int boolToInt(bool b) => b == true ? 1 : 0;
+
+bool charToBool(String c) => c == '0' ? false : true;
+
+String boolToChar(bool b) => b == false ? '0' : '1';
+
+String changeCharState(String c) => c == '0' ? '1' : '0';
+
 void waitingRequestWidget() {
   //double screenWidth = MediaQuery.of(context).size.width;
   double screenHeight = MediaQuery.of(Get.context!).size.height;
@@ -305,6 +318,42 @@ void renameDeviceRequestWidget(String deviceName, String deviceID) {
       }
       Get.back();
     },
+  );
+}
+
+void addAutomationActionsRequestWidget() {
+  double screenWidth = MediaQuery.of(Get.context!).size.width;
+  double screenHeight = MediaQuery.of(Get.context!).size.height;
+  Get.defaultDialog(
+    title: attentionMessageTextLanguageArray[languageArrayIdentifier],
+    content: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TextButton.icon(
+          onPressed: () {
+            Get.back();
+            Get.toNamed('/device_automation_add');
+          },
+          icon: Icon(Icons.devices, size: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.blue),
+          label: Text(
+            devicesButtonTextLanguageArray[languageArrayIdentifier],
+            style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.blue),
+          ),
+        ),
+        TextButton.icon(
+          onPressed: () {
+            Get.back();
+            Get.toNamed('/timer_automation_add');
+          },
+          icon: Icon(Icons.timer, size: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.green),
+          label: Text(
+            timerTextLanguageArray[languageArrayIdentifier],
+            style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.green),
+          ),
+        ),
+      ],
+    ),
   );
 }
 

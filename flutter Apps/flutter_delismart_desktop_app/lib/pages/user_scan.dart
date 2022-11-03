@@ -21,7 +21,7 @@ class _ScanListUserState extends State<ScanListUser> {
         backgroundColor: Colors.blue[400],
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.search),
+        child: const Icon(Icons.refresh),
         backgroundColor: Colors.blue,
         onPressed: () async {
           waitingRequestWidget();

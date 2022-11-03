@@ -27,6 +27,75 @@ class UniverseClass {
 
   UniverseClass({required this.geoName, required this.id, this.lat = 0.0, this.lon = 0.0, required this.name, required this.role});
 
+  Future addAnimation(String name, String background, List<Map<String, dynamic>> actions, List<Map<String, dynamic>> conditions, Map<String, dynamic> preconditions) async {
+    waitingRequestWidget();
+    String actionsData = "[ ";
+    String dpIssueData = '';
+    for (var element in actions) {
+      switch (element['action_executor']) {
+        case 'delay':
+          actionsData += "\n{\n"
+              "\"executor_property\":{\n"
+              "\"hours\":\"${(element['executor_property'] as Map<String, dynamic>)['hours']}\",\n"
+              "\"minutes\":\"${(element['executor_property'] as Map<String, dynamic>)['minutes']}\",\n"
+              "\"seconds\":\"${(element['executor_property'] as Map<String, dynamic>)['seconds']}\"\n"
+              "},\n"
+              "\"action_executor\":\"delay\"\n"
+              "},";
+          break;
+        case 'dpIssue':
+          (element['executor_property'] as Map<String, dynamic>).forEach((key, value) {
+            if (value is String) {
+              dpIssueData = "\"$key\":\"$value\"\n";
+            } else {
+              dpIssueData = "\"$key\":$value\n";
+            }
+          });
+          actionsData += "\n{\n"
+              "\"executor_property\":{\n$dpIssueData},\n"
+              "\"action_executor\":\"dpIssue\",\n"
+              "\"entity_id\":\"${element['entity_id']}\"\n"
+              "},";
+          break;
+      }
+    }
+    actionsData = actionsData.substring(0, actionsData.length - 1);
+    actionsData += "\n]";
+    String conditionsData = "[ ";
+    for (var element in conditions) {
+      switch (element['entity_type']) {
+        case 1:
+          break;
+        case 3:
+          break;
+        case 6:
+          break;
+        case 15:
+          break;
+      }
+    }
+    conditionsData = conditionsData.substring(0, conditionsData.length - 1);
+    conditionsData += "\n]";
+    final String _queryAddScene = '/v1.0/homes/${id.toString()}/automations';
+    await tokenAPIRequest.sendRequest(Method.post, _queryAddScene,
+        body: "{\n"
+            "\"name\":\"$name\",\n"
+            "\"background\":\"$background\",\n"
+            "\"actions\":$actionsData\n"
+            "\"conditions\":$conditionsData\n"
+            "}");
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
+
   Future addScene(String name, String background, List<Map<String, dynamic>> actions) async {
     waitingRequestWidget();
     String actionsData = "[ ";

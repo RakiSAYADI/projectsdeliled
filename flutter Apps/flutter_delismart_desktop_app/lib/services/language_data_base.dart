@@ -80,6 +80,8 @@ final List<String> addUniverseButtonTextLanguageArray = ['Ajouter un univers', '
 
 final List<String> addSceneButtonTextLanguageArray = ['Ajouter une scène', 'Add a scene'];
 
+final List<String> addAutomationButtonTextLanguageArray = ['Ajouter une automation', 'Add a automation'];
+
 final List<String> addRoomButtonTextLanguageArray = ['Ajouter une pièce', 'Add a room'];
 
 final List<String> addDeviceButtonTextLanguageArray = ['Ajouter une appareil', 'Add a device'];
@@ -90,7 +92,9 @@ final List<String> newUniverseMessageTextLanguageArray = ['Nouveau univers', 'Ne
 
 final List<String> newSceneMessageTextLanguageArray = ['Nouvelle scène', 'New scene'];
 
-final List<String> modifySceneTitleMessageTextLanguageArray = ['Modifier le', 'Modify the '];
+final List<String> newAutomationMessageTextLanguageArray = ['Nouvelle automation', 'New automation'];
+
+final List<String> modifySceneTitleMessageTextLanguageArray = ['Modifier scène', 'Modify scene'];
 
 final List<String> confirmButtonTextLanguageArray = ['Valider', 'Confirm'];
 
@@ -145,3 +149,29 @@ final List<String> addAndModifyFunctionsPageTitleTextLanguageArray = ['Ajouter e
 final List<String> addTimePageTitleTextLanguageArray = ['Ajouter un temps ', 'Add a time '];
 
 final List<String> addTimeDelayMaxTextLanguageArray = ['Max 05:00:00', 'Max 05:00:00'];
+
+final List<String> preconditionsTextLanguageArray = ['Preconditions', 'Preconditions'];
+
+final List<String> noPreconditionsTextLanguageArray = ['Pas de preconditions', 'No preconditions'];
+
+final List<String> conditionsTextLanguageArray = ['Conditions', 'Conditions'];
+
+final List<String> actionsTextLanguageArray = ['Actions', 'Actions'];
+
+final List<String> sundayTextLanguageArray = ['Dimanche', 'Sunday'];
+
+final List<String> mondayTextLanguageArray = ['Lundi', 'Monday'];
+
+final List<String> tuesdayTextLanguageArray = ['Mardi', 'Tuesday'];
+
+final List<String> wednesdayTextLanguageArray = ['Mercredi', 'Wednesday'];
+
+final List<String> thursdayTextLanguageArray = ['Jeudi', 'Thursday'];
+
+final List<String> fridayTextLanguageArray = ['Vendredi', 'Friday'];
+
+final List<String> saturdayTextLanguageArray = ['Samedi', 'Saturday'];
+
+final List<String> startTextLanguageArray = ['Départ', 'Start'];
+
+final List<String> endTextLanguageArray = ['Fin', 'End'];

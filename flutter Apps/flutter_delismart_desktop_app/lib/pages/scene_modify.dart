@@ -17,8 +17,9 @@ class _SceneModifyState extends State<SceneModify> {
   @override
   void initState() {
     // TODO: implement initState
-    sceneActions = appClass.users[userIdentifier].universes[universeIdentifier].scenes[sceneIdentifier].actions;
-    debugPrint(sceneActions.toString());
+    for (var element in appClass.users[userIdentifier].universes[universeIdentifier].scenes[sceneIdentifier].actions) {
+      sceneActions.add(element);
+    }
     mySceneName.text = appClass.users[userIdentifier].universes[universeIdentifier].scenes[sceneIdentifier].name;
     super.initState();
   }

@@ -50,12 +50,12 @@ class SceneClass {
             } else {
               dpIssueData = "\"$key\":$value\n";
             }
+            actionsData += "\n{\n"
+                "\"executor_property\":{\n$dpIssueData},\n"
+                "\"action_executor\":\"dpIssue\",\n"
+                "\"entity_id\":\"${element['entity_id']}\"\n"
+                "},";
           });
-          actionsData += "\n{\n"
-              "\"executor_property\":{\n$dpIssueData},\n"
-              "\"action_executor\":\"dpIssue\",\n"
-              "\"entity_id\":\"${element['entity_id']}\"\n"
-              "},";
           break;
       }
     }

@@ -14,7 +14,7 @@ class AutomationClass {
   AutomationClass(
       {required this.enabled, required this.id, required this.homeId, required this.name, required this.matchType, required this.actions, required this.conditions, required this.preconditions});
 
-  Future addAnimation(String name, String background, List<Map<String, dynamic>> actions, List<Map<String, dynamic>> conditions) async {
+  Future modifyAnimation(String name, String background, List<Map<String, dynamic>> actions, List<Map<String, dynamic>> conditions, Map<String, dynamic> preconditions) async {
     waitingRequestWidget();
     String actionsData = "[ ";
     String dpIssueData = '';
@@ -37,23 +37,39 @@ class AutomationClass {
             } else {
               dpIssueData = "\"$key\":$value\n";
             }
+            actionsData += "\n{\n"
+                "\"executor_property\":{\n$dpIssueData},\n"
+                "\"action_executor\":\"dpIssue\",\n"
+                "\"entity_id\":\"${element['entity_id']}\"\n"
+                "},";
           });
-          actionsData += "\n{\n"
-              "\"executor_property\":{\n$dpIssueData},\n"
-              "\"action_executor\":\"dpIssue\",\n"
-              "\"entity_id\":\"${element['entity_id']}\"\n"
-              "},";
           break;
       }
     }
     actionsData = actionsData.substring(0, actionsData.length - 1);
     actionsData += "\n]";
-    final String _queryAddScene = '/v1.0/homes/${id.toString()}/automations';
-    await tokenAPIRequest.sendRequest(Method.post, _queryAddScene,
+    String conditionsData = "[ ";
+    for (var element in conditions) {
+      switch (element['entity_type']) {
+        case 1:
+          break;
+        case 3:
+          break;
+        case 6:
+          break;
+        case 15:
+          break;
+      }
+    }
+    conditionsData = conditionsData.substring(0, conditionsData.length - 1);
+    conditionsData += "\n]";
+    final String _queryModifyScene = '/v1.0/homes/${id.toString()}/automations/$id';
+    await tokenAPIRequest.sendRequest(Method.put, _queryModifyScene,
         body: "{\n"
             "\"name\":\"$name\",\n"
             "\"background\":\"$background\",\n"
-            "\"actions\":$actionsData\n"
+            "\"actions\":$actionsData,\n"
+            "\"conditions\":$conditionsData\n"
             "}");
     if (tokenAPIRequest.getResponse().isNotEmpty) {
       try {

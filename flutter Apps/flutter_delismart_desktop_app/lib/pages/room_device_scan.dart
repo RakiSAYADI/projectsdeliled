@@ -46,7 +46,7 @@ class _ScanListRoomDeviceState extends State<ScanListRoomDevice> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.search),
+        child: const Icon(Icons.refresh),
         backgroundColor: Colors.blue,
         onPressed: () async {
           await appClass.users[userIdentifier].universes[universeIdentifier].rooms[roomIdentifier].getDevices();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_automation.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
+import 'package:get/get.dart';
 
 class AutomationCard extends StatelessWidget {
   final AutomationClass automationClass;
@@ -39,6 +40,22 @@ class AutomationCard extends StatelessWidget {
                         ),
                   SizedBox(height: heightScreen * 0.001, width: widthScreen * 0.001),
                 ],
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: TextButton.icon(
+                onPressed: () async {
+                  await appClass.users[userIdentifier].universes[universeIdentifier].getDevices();
+                  automationIdentifier = appClass.users[userIdentifier].universes[universeIdentifier].automations.indexOf(automationClass);
+                  Get.toNamed('/automation_modify');
+                },
+                icon: Icon(Icons.edit, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.blue),
+                label: Text(
+                  modifyUserButtonTextLanguageArray[languageArrayIdentifier],
+                  style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.blue),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
             Expanded(

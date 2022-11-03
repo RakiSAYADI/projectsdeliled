@@ -21,7 +21,7 @@ class _ScanListDeviceState extends State<ScanListDevice> {
         backgroundColor: Colors.blue[400],
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.search),
+        child: const Icon(Icons.refresh),
         backgroundColor: Colors.blue,
         onPressed: () async {
           await appClass.users[userIdentifier].universes[universeIdentifier].getDevices();
