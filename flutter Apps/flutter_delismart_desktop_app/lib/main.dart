@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/pages/automation_create.dart';
+import 'package:flutter_delismart_desktop_app/pages/automation_modify.dart';
 import 'package:flutter_delismart_desktop_app/pages/automation_scan.dart';
+import 'package:flutter_delismart_desktop_app/pages/device_automation_add.dart';
+import 'package:flutter_delismart_desktop_app/pages/device_functions_automation_modify.dart';
 import 'package:flutter_delismart_desktop_app/pages/device_functions_scene_modify.dart';
 import 'package:flutter_delismart_desktop_app/pages/device_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/device_scene_add.dart';
@@ -12,6 +15,8 @@ import 'package:flutter_delismart_desktop_app/pages/room_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/scene_create.dart';
 import 'package:flutter_delismart_desktop_app/pages/scene_modify.dart';
 import 'package:flutter_delismart_desktop_app/pages/scene_scan.dart';
+import 'package:flutter_delismart_desktop_app/pages/time_condition_automation_add.dart';
+import 'package:flutter_delismart_desktop_app/pages/timer_automation_add.dart';
 import 'package:flutter_delismart_desktop_app/pages/timer_scene_add.dart';
 import 'package:flutter_delismart_desktop_app/pages/universe_create.dart';
 import 'package:flutter_delismart_desktop_app/pages/universe_scan.dart';
@@ -99,9 +104,14 @@ class MyApp extends StatelessWidget {
           '/scene_create': (context) => const SceneCreate(),
           '/scene_modify': (context) => const SceneModify(),
           '/automation_create': (context) => const AutomationCreate(),
+          '/automation_modify': (context) => const AutomationModify(),
           '/device_scene_add': (context) => const DeviceSceneAdd(),
+          '/device_automation_add': (context) => const DeviceAutomationAdd(),
           '/timer_scene_add': (context) => const TimerSceneAdd(),
+          '/timer_automation_add': (context) => const TimerAutomationAdd(),
           '/device_functions_scene_modify': (context) => const DeviceFunctionsSceneModify(),
+          '/device_functions_automation_modify': (context) => const DeviceFunctionsAutomationModify(),
+          '/timer_condition_automation_add': (context) => const TimeConditionAutomationAdd(),
         },
       ),
     );

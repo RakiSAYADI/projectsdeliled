@@ -44,6 +44,32 @@ class AutomationCard extends StatelessWidget {
             ),
             Expanded(
               flex: 1,
+              child: automationClass.enabled
+                  ? TextButton.icon(
+                      onPressed: () async {
+                        await automationClass.disableAutomation();
+                      },
+                      icon: Icon(Icons.clear, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.red),
+                      label: Text(
+                        deactivateButtonTextLanguageArray[languageArrayIdentifier],
+                        style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.red),
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  : TextButton.icon(
+                      onPressed: () async {
+                        await automationClass.enableAutomation();
+                      },
+                      icon: Icon(Icons.check, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.green),
+                      label: Text(
+                        activateButtonTextLanguageArray[languageArrayIdentifier],
+                        style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.green),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+            ),
+            Expanded(
+              flex: 1,
               child: TextButton.icon(
                 onPressed: () async {
                   await appClass.users[userIdentifier].universes[universeIdentifier].getDevices();

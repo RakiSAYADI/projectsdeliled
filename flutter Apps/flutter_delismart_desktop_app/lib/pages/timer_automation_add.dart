@@ -3,17 +3,17 @@ import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
 import 'package:get/get.dart';
 
-class TimerSceneAdd extends StatefulWidget {
-  const TimerSceneAdd({Key? key}) : super(key: key);
+class TimerAutomationAdd extends StatefulWidget {
+  const TimerAutomationAdd({Key? key}) : super(key: key);
 
   @override
-  State<TimerSceneAdd> createState() => _TimerSceneAddState();
+  State<TimerAutomationAdd> createState() => _TimerAutomationAddState();
 }
 
-class _TimerSceneAddState extends State<TimerSceneAdd> {
-  String sceneDelayHour = '00';
-  String sceneDelayMinute = '00';
-  String sceneDelaySecond = '00';
+class _TimerAutomationAddState extends State<TimerAutomationAdd> {
+  String automationDelayHour = '00';
+  String automationDelayMinute = '00';
+  String automationDelaySecond = '00';
 
   @override
   Widget build(BuildContext context) {
@@ -40,14 +40,14 @@ class _TimerSceneAddState extends State<TimerSceneAdd> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   DropdownButton<String>(
-                    value: sceneDelayHour,
+                    value: automationDelayHour,
                     icon: const Icon(Icons.arrow_drop_down),
                     iconSize: 24,
                     itemHeight: 150,
                     style: TextStyle(color: Colors.grey[800], fontSize: heightScreen * 0.05 + widthScreen * 0.05),
                     onChanged: (String? data) {
                       setState(() {
-                        sceneDelayHour = data!;
+                        automationDelayHour = data!;
                       });
                     },
                     items: sceneHour.map<DropdownMenuItem<String>>((String value) {
@@ -67,14 +67,14 @@ class _TimerSceneAddState extends State<TimerSceneAdd> {
                     textAlign: TextAlign.center,
                   ),
                   DropdownButton<String>(
-                    value: sceneDelayMinute,
+                    value: automationDelayMinute,
                     icon: const Icon(Icons.arrow_drop_down),
                     iconSize: 32,
                     itemHeight: 150,
                     style: TextStyle(color: Colors.grey[800], fontSize: heightScreen * 0.05 + widthScreen * 0.05),
                     onChanged: (String? data) {
                       setState(() {
-                        sceneDelayMinute = data!;
+                        automationDelayMinute = data!;
                       });
                     },
                     items: minute.map<DropdownMenuItem<String>>((String value) {
@@ -95,13 +95,13 @@ class _TimerSceneAddState extends State<TimerSceneAdd> {
                   ),
                   DropdownButton<String>(
                     itemHeight: 150,
-                    value: sceneDelaySecond,
+                    value: automationDelaySecond,
                     icon: const Icon(Icons.arrow_drop_down),
                     iconSize: 24,
                     style: TextStyle(color: Colors.grey[800], fontSize: heightScreen * 0.05 + widthScreen * 0.05),
                     onChanged: (String? data) {
                       setState(() {
-                        sceneDelaySecond = data!;
+                        automationDelaySecond = data!;
                       });
                     },
                     items: second.map<DropdownMenuItem<String>>((String value) {
@@ -124,12 +124,12 @@ class _TimerSceneAddState extends State<TimerSceneAdd> {
               SizedBox(height: heightScreen * 0.05),
               TextButton(
                 onPressed: () {
-                  if (sceneDelayHour == '05' && (sceneDelayMinute != '00' || sceneDelaySecond != '00')) {
+                  if (automationDelayHour == '05' && (automationDelayMinute != '00' || automationDelaySecond != '00')) {
                     showToastMessage('Max timer is : 05:00:00');
                   } else {
-                    sceneActions.add({
+                    automationActions.add({
                       'action_executor': 'delay',
-                      'executor_property': {'hours': sceneDelayHour, 'minutes': sceneDelayMinute, 'seconds': sceneDelaySecond}
+                      'executor_property': {'hours': automationDelayHour, 'minutes': automationDelayMinute, 'seconds': automationDelaySecond}
                     });
                     Get.back();
                   }

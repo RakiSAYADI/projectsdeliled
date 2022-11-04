@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_delismart_desktop_app/cards/scene_element_mini_widgets.dart';
+import 'package:flutter_delismart_desktop_app/cards/automation_element_mini_widgets.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_device.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
@@ -14,12 +14,14 @@ class AutomationCreate extends StatefulWidget {
 class _AutomationCreateState extends State<AutomationCreate> {
   final myAutomationName = TextEditingController();
 
+  bool preconditionsSwitch = false;
+
   @override
   void initState() {
     // TODO: implement initState
     automationActions.clear();
     automationPreconditions = {
-      "display": {"start": "10:00", "end": "12:00", "loops": "0011000", "timezone_id": "Europe/Paris"},
+      "display": {"start": "00:00", "end": "23:59", "loops": "1111111", "timezone_id": "Europe/Paris"},
       "cond_type": "timeCheck"
     };
     super.initState();
@@ -60,6 +62,10 @@ class _AutomationCreateState extends State<AutomationCreate> {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
+                SizedBox(
+                  height: screenHeight * 0.03,
+                  child: Container(color: Colors.white),
+                ),
                 Text(
                   nameTextLanguageArray[languageArrayIdentifier],
                   style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01),
@@ -105,23 +111,36 @@ class _AutomationCreateState extends State<AutomationCreate> {
                         SingleChildScrollView(
                           scrollDirection: Axis.vertical,
                           child: Column(
-                            children: automationActions.map((element) {
-                              switch (element['action_executor']) {
-                                case 'delay':
-                                  return DelayCard(delayData: element);
-                                case 'dpIssue':
+                            children: automationConditions.map((element) {
+                              switch (element['entity_type']) {
+                                case 1:
                                   for (DeviceClass device in appClass.users[userIdentifier].universes[universeIdentifier].devices) {
                                     if (element['entity_id'] == device.id) {
-                                      return DeviceSceneCard(deviceClass: device, mapData: element);
+                                      //return DeviceAutomationCard(deviceClass: device, mapData: element);
                                     }
                                   }
                                   return Container();
-                                /*case 'deviceGroupDpIssue':
-                                  return DeviceSceneCard(deviceClass: element);*/
+                                case 3:
+                                  return WeatherAutomationCard(weatherData: element);
+                                case 6:
+                                  return TimeAutomationCard(timeData: element);
                                 default:
                                   return Container();
                               }
                             }).toList(),
+                          ),
+                        ),
+                        SizedBox(
+                          height: screenHeight * 0.03,
+                          child: Container(color: Colors.white),
+                        ),
+                        TextButton.icon(
+                          onPressed: () => addAutomationConditionsRequestWidget(),
+                          icon: Icon(Icons.add, size: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.blue),
+                          label: Text(
+                            addElementButtonTextLanguageArray[languageArrayIdentifier],
+                            style: TextStyle(fontSize: screenHeight * 0.007 + screenWidth * 0.007, color: Colors.blue),
+                            textAlign: TextAlign.center,
                           ),
                         ),
                         SizedBox(
@@ -138,11 +157,11 @@ class _AutomationCreateState extends State<AutomationCreate> {
                             children: automationActions.map((element) {
                               switch (element['action_executor']) {
                                 case 'delay':
-                                  return DelayCard(delayData: element);
+                                  return DelayAutomationCard(timeData: element);
                                 case 'dpIssue':
                                   for (DeviceClass device in appClass.users[userIdentifier].universes[universeIdentifier].devices) {
                                     if (element['entity_id'] == device.id) {
-                                      return DeviceSceneCard(deviceClass: device, mapData: element);
+                                      return DeviceAutomationCard(deviceClass: device, mapData: element);
                                     }
                                   }
                                   return Container();
@@ -174,10 +193,12 @@ class _AutomationCreateState extends State<AutomationCreate> {
                 SizedBox(height: screenHeight * 0.05),
                 TextButton(
                   onPressed: () async {
+                    debugPrint(automationPreconditions.toString());
                     if (myAutomationName.text.isNotEmpty) {
                       if (automationActions.isNotEmpty) {
                         if (automationActions.last['action_executor'] != 'delay') {
-                          await appClass.users[userIdentifier].universes[universeIdentifier].addAnimation(myAutomationName.text, '', automationActions, automationConditions, automationPreconditions);
+                          /*await appClass.users[userIdentifier].universes[universeIdentifier]
+                              .addAnimation(myAutomationName.text, '', automationActions, automationConditions, preconditionsSwitch ? automationPreconditions : {});*/
                           if (!requestResponse) {
                             showToastMessage('Error request');
                           } else {
@@ -204,6 +225,10 @@ class _AutomationCreateState extends State<AutomationCreate> {
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(60.0))),
                     backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
                   ),
+                ),
+                SizedBox(
+                  height: screenHeight * 0.03,
+                  child: Container(color: Colors.white),
                 ),
               ],
             ),
@@ -237,6 +262,26 @@ class _AutomationCreateState extends State<AutomationCreate> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Text(
+                'State : ' + (preconditionsSwitch ? 'On ' : 'Off'),
+                style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.black),
+                textAlign: TextAlign.center,
+              ),
+              Switch(
+                value: preconditionsSwitch,
+                onChanged: (value) {
+                  setState(() {
+                    preconditionsSwitch = value;
+                  });
+                },
+                activeTrackColor: Colors.lightGreenAccent,
+                activeColor: Colors.green,
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
               Expanded(
                 flex: 1,
                 child: Column(
@@ -245,6 +290,61 @@ class _AutomationCreateState extends State<AutomationCreate> {
                     Text(
                       startTextLanguageArray[languageArrayIdentifier],
                       style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        DropdownButton<String>(
+                          value: ((automationPreconditions['display'] as Map<String, dynamic>)['start'] as String).split(':')[0],
+                          icon: const Icon(Icons.arrow_drop_down),
+                          iconSize: 16,
+                          itemHeight: 50,
+                          style: TextStyle(color: Colors.grey[800], fontSize: screenHeight * 0.015 + screenWidth * 0.015),
+                          onChanged: (String? data) {
+                            setState(() {
+                              (automationPreconditions['display'] as Map<String, dynamic>)['start'] =
+                                  data! + ':' + ((automationPreconditions['display'] as Map<String, dynamic>)['start'] as String).split(':')[1];
+                            });
+                          },
+                          items: hour.map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.grey[800], fontSize: screenHeight * 0.015 + screenWidth * 0.015),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                        Text(
+                          ': ',
+                          style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01),
+                        ),
+                        DropdownButton<String>(
+                          value: ((automationPreconditions['display'] as Map<String, dynamic>)['start'] as String).split(':')[1],
+                          icon: const Icon(Icons.arrow_drop_down),
+                          iconSize: 16,
+                          itemHeight: 50,
+                          style: TextStyle(color: Colors.grey[800], fontSize: screenHeight * 0.015 + screenWidth * 0.015),
+                          onChanged: (String? data) {
+                            setState(() {
+                              (automationPreconditions['display'] as Map<String, dynamic>)['start'] =
+                                  ((automationPreconditions['display'] as Map<String, dynamic>)['start'] as String).split(':')[0] + ':' + data!;
+                            });
+                          },
+                          items: minute.map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.grey[800], fontSize: screenHeight * 0.015 + screenWidth * 0.015),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -257,6 +357,61 @@ class _AutomationCreateState extends State<AutomationCreate> {
                     Text(
                       endTextLanguageArray[languageArrayIdentifier],
                       style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        DropdownButton<String>(
+                          value: ((automationPreconditions['display'] as Map<String, dynamic>)['end'] as String).split(':')[0],
+                          icon: const Icon(Icons.arrow_drop_down),
+                          iconSize: 16,
+                          itemHeight: 50,
+                          style: TextStyle(color: Colors.grey[800], fontSize: screenHeight * 0.015 + screenWidth * 0.015),
+                          onChanged: (String? data) {
+                            setState(() {
+                              (automationPreconditions['display'] as Map<String, dynamic>)['end'] =
+                                  data! + ':' + ((automationPreconditions['display'] as Map<String, dynamic>)['end'] as String).split(':')[1];
+                            });
+                          },
+                          items: hour.map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.grey[800], fontSize: screenHeight * 0.015 + screenWidth * 0.015),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                        Text(
+                          ': ',
+                          style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01),
+                        ),
+                        DropdownButton<String>(
+                          value: ((automationPreconditions['display'] as Map<String, dynamic>)['end'] as String).split(':')[1],
+                          icon: const Icon(Icons.arrow_drop_down),
+                          iconSize: 16,
+                          itemHeight: 50,
+                          style: TextStyle(color: Colors.grey[800], fontSize: screenHeight * 0.015 + screenWidth * 0.015),
+                          onChanged: (String? data) {
+                            setState(() {
+                              (automationPreconditions['display'] as Map<String, dynamic>)['end'] =
+                                  ((automationPreconditions['display'] as Map<String, dynamic>)['end'] as String).split(':')[0] + ':' + data!;
+                            });
+                          },
+                          items: minute.map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.grey[800], fontSize: screenHeight * 0.015 + screenWidth * 0.015),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -277,7 +432,6 @@ class _AutomationCreateState extends State<AutomationCreate> {
                 }
               }
               (automationPreconditions['display'] as Map<String, dynamic>)['loops'] = newLoops;
-              debugPrint((automationPreconditions['display'] as Map<String, dynamic>)['loops']);
               setState(() {});
             },
             children: [

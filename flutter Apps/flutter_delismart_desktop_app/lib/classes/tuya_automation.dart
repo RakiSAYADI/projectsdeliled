@@ -83,6 +83,38 @@ class AutomationClass {
     exitRequestWidget();
   }
 
+  Future enableAutomation() async {
+    waitingRequestWidget();
+    final String _queryDeleteAutomation = '/v1.0/homes/${homeId.toString()}/automations/$id/actions/enable';
+    await tokenAPIRequest.sendRequest(Method.put, _queryDeleteAutomation);
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
+
+  Future disableAutomation() async {
+    waitingRequestWidget();
+    final String _queryDeleteAutomation = '/v1.0/homes/${homeId.toString()}/automations/$id/actions/disable';
+    await tokenAPIRequest.sendRequest(Method.put, _queryDeleteAutomation);
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
+
   Future deleteAutomation() async {
     waitingRequestWidget();
     final String _queryDeleteAutomation = '/v1.0/homes/${homeId.toString()}/automations/$id';

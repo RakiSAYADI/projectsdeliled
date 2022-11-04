@@ -61,7 +61,73 @@ List<String> workModeList = [
 
 List<String> sceneHour = ['00', '01', '02', '03', '04', '05'];
 
-List<String> sceneMinute = [
+List<String> automationYear = ['2022', '2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030'];
+
+List<String> automationMonth = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+
+List<String> automationDay = [
+  '01',
+  '02',
+  '03',
+  '04',
+  '05',
+  '06',
+  '07',
+  '08',
+  '09',
+  '10',
+  '11',
+  '12',
+  '13',
+  '14',
+  '15',
+  '16',
+  '17',
+  '18',
+  '19',
+  '20',
+  '21',
+  '22',
+  '23',
+  '24',
+  '25',
+  '26',
+  '27',
+  '28',
+  '29',
+  '30',
+  '31'
+];
+
+List<String> hour = [
+  '00',
+  '01',
+  '02',
+  '03',
+  '04',
+  '05',
+  '06',
+  '07',
+  '08',
+  '09',
+  '10',
+  '11',
+  '12',
+  '13',
+  '14',
+  '15',
+  '16',
+  '17',
+  '18',
+  '19',
+  '20',
+  '21',
+  '22',
+  '23',
+  '24',
+];
+
+List<String> minute = [
   '00',
   '01',
   '02',
@@ -124,7 +190,7 @@ List<String> sceneMinute = [
   '59'
 ];
 
-List<String> sceneSecond = [
+List<String> second = [
   '00',
   '01',
   '02',
@@ -318,6 +384,53 @@ void renameDeviceRequestWidget(String deviceName, String deviceID) {
       }
       Get.back();
     },
+  );
+}
+
+void addAutomationConditionsRequestWidget() {
+  double screenWidth = MediaQuery.of(Get.context!).size.width;
+  double screenHeight = MediaQuery.of(Get.context!).size.height;
+  Get.defaultDialog(
+    title: attentionMessageTextLanguageArray[languageArrayIdentifier],
+    content: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TextButton.icon(
+          onPressed: () {
+            Get.back();
+            Get.toNamed('/device_condition_automation_add');
+          },
+          icon: Icon(Icons.devices, size: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.blue),
+          label: Text(
+            devicesButtonTextLanguageArray[languageArrayIdentifier],
+            style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.blue),
+          ),
+        ),
+        TextButton.icon(
+          onPressed: () {
+            Get.back();
+            Get.toNamed('/timer_condition_automation_add');
+          },
+          icon: Icon(Icons.timer, size: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.green),
+          label: Text(
+            timerTextLanguageArray[languageArrayIdentifier],
+            style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.green),
+          ),
+        ),
+        TextButton.icon(
+          onPressed: () {
+            Get.back();
+            Get.toNamed('/weather_condition_automation_add');
+          },
+          icon: Icon(Icons.cloud, size: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.black),
+          label: Text(
+            weatherTextLanguageArray[languageArrayIdentifier],
+            style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.black),
+          ),
+        ),
+      ],
+    ),
   );
 }
 

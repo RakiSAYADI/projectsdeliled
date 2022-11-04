@@ -89,7 +89,7 @@ class _SceneCreateState extends State<SceneCreate> {
                         children: sceneActions.map((element) {
                           switch (element['action_executor']) {
                             case 'delay':
-                              return DelayCard(delayData: element);
+                              return DelaySceneCard(delayData: element);
                             case 'dpIssue':
                               for (DeviceClass device in appClass.users[userIdentifier].universes[universeIdentifier].devices) {
                                 if (element['entity_id'] == device.id) {

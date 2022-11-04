@@ -3,10 +3,10 @@ import 'package:flutter_delismart_desktop_app/classes/tuya_device.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
 
-class DelayCard extends StatelessWidget {
+class DelaySceneCard extends StatelessWidget {
   final Map<String, dynamic> delayData;
 
-  const DelayCard({Key? key, required this.delayData}) : super(key: key);
+  const DelaySceneCard({Key? key, required this.delayData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

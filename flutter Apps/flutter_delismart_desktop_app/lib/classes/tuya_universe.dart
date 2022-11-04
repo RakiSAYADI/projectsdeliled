@@ -27,7 +27,7 @@ class UniverseClass {
 
   UniverseClass({required this.geoName, required this.id, this.lat = 0.0, this.lon = 0.0, required this.name, required this.role});
 
-  Future addAnimation(String name, String background, List<Map<String, dynamic>> actions, List<Map<String, dynamic>> conditions, Map<String, dynamic> preconditions) async {
+  Future addAutomation(String name, String background, List<Map<String, dynamic>> actions, List<Map<String, dynamic>> conditions, Map<String, dynamic> preconditions) async {
     waitingRequestWidget();
     String actionsData = "[ ";
     String dpIssueData = '';

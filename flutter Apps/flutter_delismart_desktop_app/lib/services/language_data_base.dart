@@ -46,6 +46,10 @@ final List<String> deleteUserButtonTextLanguageArray = ['Supprimer de la pièce'
 
 final List<String> timeTextLanguageArray = ['Temps :', 'Time :'];
 
+final List<String> dateTextLanguageArray = ['Date :', 'Date :'];
+
+final List<String> dayTextLanguageArray = ['Jour :', 'Day :'];
+
 final List<String> timerTextLanguageArray = ['Temps', 'Timer'];
 
 final List<String> deleteButtonTextLanguageArray = ['Supprimer', 'Delete'];
@@ -148,6 +152,8 @@ final List<String> addAndModifyFunctionsPageTitleTextLanguageArray = ['Ajouter e
 
 final List<String> addTimePageTitleTextLanguageArray = ['Ajouter un temps ', 'Add a time '];
 
+final List<String> timeAndDatePageTitleTextLanguageArray = ['Temps d\'execution', 'Execution Time'];
+
 final List<String> addTimeDelayMaxTextLanguageArray = ['Max 05:00:00', 'Max 05:00:00'];
 
 final List<String> preconditionsTextLanguageArray = ['Preconditions', 'Preconditions'];
@@ -175,3 +181,9 @@ final List<String> saturdayTextLanguageArray = ['Samedi', 'Saturday'];
 final List<String> startTextLanguageArray = ['Départ', 'Start'];
 
 final List<String> endTextLanguageArray = ['Fin', 'End'];
+
+final List<String> activateButtonTextLanguageArray = ['Activer', 'Activate'];
+
+final List<String> deactivateButtonTextLanguageArray = ['Désactiver', 'Deactivate'];
+
+final List<String> weatherTextLanguageArray = ['Meteo', 'Weather'];
