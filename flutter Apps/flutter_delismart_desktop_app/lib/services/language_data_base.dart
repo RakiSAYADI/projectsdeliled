@@ -186,4 +186,22 @@ final List<String> activateButtonTextLanguageArray = ['Activer', 'Activate'];
 
 final List<String> deactivateButtonTextLanguageArray = ['Désactiver', 'Deactivate'];
 
-final List<String> weatherTextLanguageArray = ['Meteo', 'Weather'];
+final List<String> weatherTextLanguageArray = ['Météo', 'Weather'];
+
+final List<String> temperatureTextLanguageArray = ['Température', 'Temperature'];
+
+final List<String> humidityTextLanguageArray = ['Humidité', 'Humidity'];
+
+final List<String> sunTextLanguageArray = ['Lever du soleil/Coucher du soleil', 'Sunrise/Sunset'];
+
+final List<String> windTextLanguageArray = ['Vitesse du vent', 'Wind speed'];
+
+final List<String> addWeatherTextLanguageArray = ['Ajouter météo', 'Weather'];
+
+final List<String> addTemperatureTextLanguageArray = ['Ajouter température', 'Add temperature'];
+
+final List<String> addHumidityTextLanguageArray = ['Ajouter humidité', 'Add humidity'];
+
+final List<String> addSunTextLanguageArray = ['Ajouter lever du soleil/coucher du soleil', 'Add Sunrise/Sunset'];
+
+final List<String> addWindTextLanguageArray = ['Ajouter vitesse du vent', 'Add wind speed'];

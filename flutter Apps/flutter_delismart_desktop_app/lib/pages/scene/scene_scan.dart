@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_delismart_desktop_app/cards/room_device_widget.dart';
+import 'package:flutter_delismart_desktop_app/cards/scene/scene_widget.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
 
-class ScanListRoomDevice extends StatefulWidget {
-  const ScanListRoomDevice({Key? key}) : super(key: key);
+class ScanListScene extends StatefulWidget {
+  const ScanListScene({Key? key}) : super(key: key);
 
   @override
-  State<ScanListRoomDevice> createState() => _ScanListRoomDeviceState();
+  State<ScanListScene> createState() => _ScanListSceneState();
 }
 
-class _ScanListRoomDeviceState extends State<ScanListRoomDevice> {
+class _ScanListSceneState extends State<ScanListScene> {
   @override
   Widget build(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
@@ -18,7 +18,7 @@ class _ScanListRoomDeviceState extends State<ScanListRoomDevice> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text(scanDevicePageTitleTextLanguageArray[languageArrayIdentifier] + appClass.users[userIdentifier].universes[universeIdentifier].rooms[roomIdentifier].name),
+        title: Text(scanScenesPageTitleTextLanguageArray[languageArrayIdentifier] + appClass.users[userIdentifier].universes[universeIdentifier].name),
         centerTitle: true,
         backgroundColor: Colors.blue[400],
       ),
@@ -33,11 +33,11 @@ class _ScanListRoomDeviceState extends State<ScanListRoomDevice> {
               TextButton.icon(
                 onPressed: () async {
                   await appClass.users[userIdentifier].universes[universeIdentifier].getDevices();
-                  Navigator.pushNamed(context, '/room_device_add');
+                  Navigator.pushNamed(context, '/scene_create');
                 },
                 icon: Icon(Icons.add, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.white),
                 label: Text(
-                  addDeviceButtonTextLanguageArray[languageArrayIdentifier],
+                  addSceneButtonTextLanguageArray[languageArrayIdentifier],
                   style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.white),
                 ),
               ),
@@ -49,7 +49,7 @@ class _ScanListRoomDeviceState extends State<ScanListRoomDevice> {
         child: const Icon(Icons.refresh),
         backgroundColor: Colors.blue,
         onPressed: () async {
-          await appClass.users[userIdentifier].universes[universeIdentifier].rooms[roomIdentifier].getDevices();
+          await appClass.users[userIdentifier].universes[universeIdentifier].getScenes();
           if (!requestResponse) {
             showToastMessage('test toast message');
           }
@@ -59,9 +59,9 @@ class _ScanListRoomDeviceState extends State<ScanListRoomDevice> {
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
-          children: appClass.users[userIdentifier].universes[universeIdentifier].rooms[roomIdentifier].devices
+          children: appClass.users[userIdentifier].universes[universeIdentifier].scenes
               .map(
-                (device) => DeviceRoomCard(deviceClass: device),
+                (scene) => SceneCard(sceneClass: scene),
               )
               .toList(),
         ),

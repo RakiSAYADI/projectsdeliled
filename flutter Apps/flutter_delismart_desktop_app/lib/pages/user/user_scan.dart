@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
-import 'package:flutter_delismart_desktop_app/cards/user_widget.dart';
+import 'package:flutter_delismart_desktop_app/cards/user/user_widget.dart';
 
 class ScanListUser extends StatefulWidget {
   const ScanListUser({Key? key}) : super(key: key);

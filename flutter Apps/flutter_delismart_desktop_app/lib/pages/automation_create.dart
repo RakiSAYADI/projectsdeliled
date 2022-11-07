@@ -41,6 +41,8 @@ class _AutomationCreateState extends State<AutomationCreate> {
     return WillPopScope(
       onWillPop: () {
         automationActions.clear();
+        automationConditions.clear();
+        automationPreconditions.clear();
         return Future<bool>.value(true);
       },
       child: Scaffold(
@@ -116,14 +118,14 @@ class _AutomationCreateState extends State<AutomationCreate> {
                                 case 1:
                                   for (DeviceClass device in appClass.users[userIdentifier].universes[universeIdentifier].devices) {
                                     if (element['entity_id'] == device.id) {
-                                      //return DeviceAutomationCard(deviceClass: device, mapData: element);
+                                      //return DeviceAutomationConditionCard(deviceClass: device, mapData: element);
                                     }
                                   }
                                   return Container();
                                 case 3:
-                                  return WeatherAutomationCard(weatherData: element);
+                                  return WeatherAutomationConditionCard(weatherData: element);
                                 case 6:
-                                  return TimeAutomationCard(timeData: element);
+                                  return TimeAutomationConditionCard(timeData: element);
                                 default:
                                   return Container();
                               }
@@ -157,11 +159,11 @@ class _AutomationCreateState extends State<AutomationCreate> {
                             children: automationActions.map((element) {
                               switch (element['action_executor']) {
                                 case 'delay':
-                                  return DelayAutomationCard(timeData: element);
+                                  return DelayAutomationActionCard(timeData: element);
                                 case 'dpIssue':
                                   for (DeviceClass device in appClass.users[userIdentifier].universes[universeIdentifier].devices) {
                                     if (element['entity_id'] == device.id) {
-                                      return DeviceAutomationCard(deviceClass: device, mapData: element);
+                                      return DeviceAutomationActionCard(deviceClass: device, mapData: element);
                                     }
                                   }
                                   return Container();
@@ -193,7 +195,6 @@ class _AutomationCreateState extends State<AutomationCreate> {
                 SizedBox(height: screenHeight * 0.05),
                 TextButton(
                   onPressed: () async {
-                    debugPrint(automationPreconditions.toString());
                     if (myAutomationName.text.isNotEmpty) {
                       if (automationActions.isNotEmpty) {
                         if (automationActions.last['action_executor'] != 'delay') {

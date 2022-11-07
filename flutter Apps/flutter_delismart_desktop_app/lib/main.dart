@@ -6,26 +6,27 @@ import 'package:flutter_delismart_desktop_app/pages/automation_modify.dart';
 import 'package:flutter_delismart_desktop_app/pages/automation_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/device_automation_add.dart';
 import 'package:flutter_delismart_desktop_app/pages/device_functions_automation_modify.dart';
-import 'package:flutter_delismart_desktop_app/pages/device_functions_scene_modify.dart';
-import 'package:flutter_delismart_desktop_app/pages/device_scan.dart';
-import 'package:flutter_delismart_desktop_app/pages/device_scene_add.dart';
-import 'package:flutter_delismart_desktop_app/pages/room_device_add.dart';
-import 'package:flutter_delismart_desktop_app/pages/room_device_scan.dart';
-import 'package:flutter_delismart_desktop_app/pages/room_scan.dart';
-import 'package:flutter_delismart_desktop_app/pages/scene_create.dart';
-import 'package:flutter_delismart_desktop_app/pages/scene_modify.dart';
-import 'package:flutter_delismart_desktop_app/pages/scene_scan.dart';
+import 'package:flutter_delismart_desktop_app/pages/scene/device_functions_scene_modify.dart';
+import 'package:flutter_delismart_desktop_app/pages/device/device_scan.dart';
+import 'package:flutter_delismart_desktop_app/pages/scene/device_scene_add.dart';
+import 'package:flutter_delismart_desktop_app/pages/room/room_device_add.dart';
+import 'package:flutter_delismart_desktop_app/pages/room/room_device_scan.dart';
+import 'package:flutter_delismart_desktop_app/pages/room/room_scan.dart';
+import 'package:flutter_delismart_desktop_app/pages/scene/scene_create.dart';
+import 'package:flutter_delismart_desktop_app/pages/scene/scene_modify.dart';
+import 'package:flutter_delismart_desktop_app/pages/scene/scene_scan.dart';
+import 'package:flutter_delismart_desktop_app/pages/temperature_condition_automation_add.dart';
 import 'package:flutter_delismart_desktop_app/pages/time_condition_automation_add.dart';
 import 'package:flutter_delismart_desktop_app/pages/timer_automation_add.dart';
-import 'package:flutter_delismart_desktop_app/pages/timer_scene_add.dart';
-import 'package:flutter_delismart_desktop_app/pages/universe_create.dart';
-import 'package:flutter_delismart_desktop_app/pages/universe_scan.dart';
-import 'package:flutter_delismart_desktop_app/pages/universe_user_add.dart';
-import 'package:flutter_delismart_desktop_app/pages/universe_user_scan.dart';
-import 'package:flutter_delismart_desktop_app/pages/user_create.dart';
-import 'package:flutter_delismart_desktop_app/pages/user_delete.dart';
-import 'package:flutter_delismart_desktop_app/pages/user_login.dart';
-import 'package:flutter_delismart_desktop_app/pages/user_scan.dart';
+import 'package:flutter_delismart_desktop_app/pages/scene/timer_scene_add.dart';
+import 'package:flutter_delismart_desktop_app/pages/universe/universe_create.dart';
+import 'package:flutter_delismart_desktop_app/pages/universe/universe_scan.dart';
+import 'package:flutter_delismart_desktop_app/pages/universe/universe_user_add.dart';
+import 'package:flutter_delismart_desktop_app/pages/universe/universe_user_scan.dart';
+import 'package:flutter_delismart_desktop_app/pages/user/user_create.dart';
+import 'package:flutter_delismart_desktop_app/pages/user/user_delete.dart';
+import 'package:flutter_delismart_desktop_app/pages/user/user_login.dart';
+import 'package:flutter_delismart_desktop_app/pages/user/user_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/welcome.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/internet_check_service.dart';
@@ -112,6 +113,7 @@ class MyApp extends StatelessWidget {
           '/device_functions_scene_modify': (context) => const DeviceFunctionsSceneModify(),
           '/device_functions_automation_modify': (context) => const DeviceFunctionsAutomationModify(),
           '/timer_condition_automation_add': (context) => const TimeConditionAutomationAdd(),
+          '/condition_automation_temperature_add': (context) => const TemperatureConditionAutomation(),
         },
       ),
     );

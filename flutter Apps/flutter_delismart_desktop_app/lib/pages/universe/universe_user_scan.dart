@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_delismart_desktop_app/cards/universe_widget.dart';
+import 'package:flutter_delismart_desktop_app/cards/universe/universe_user_widget.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
 
-class ScanListUniverse extends StatefulWidget {
-  const ScanListUniverse({Key? key}) : super(key: key);
+class ScanListUniverseUser extends StatefulWidget {
+  const ScanListUniverseUser({Key? key}) : super(key: key);
 
   @override
-  _ScanListUniverseState createState() => _ScanListUniverseState();
+  State<ScanListUniverseUser> createState() => _ScanListUniverseUserState();
 }
 
-class _ScanListUniverseState extends State<ScanListUniverse> {
+class _ScanListUniverseUserState extends State<ScanListUniverseUser> {
   @override
   Widget build(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
@@ -26,10 +26,10 @@ class _ScanListUniverseState extends State<ScanListUniverse> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextButton.icon(
-                onPressed: () => Navigator.pushNamed(context, '/universe_create'),
+                onPressed: () => Navigator.pushNamed(context, '/universe_user_add'),
                 icon: Icon(Icons.add, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.white),
                 label: Text(
-                  addUniverseButtonTextLanguageArray[languageArrayIdentifier],
+                  universeUserInvitationMessageTextLanguageArray[languageArrayIdentifier],
                   style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.white),
                 ),
               ),
@@ -38,7 +38,7 @@ class _ScanListUniverseState extends State<ScanListUniverse> {
         ),
       ),
       appBar: AppBar(
-        title: Text(scanUniversePageTitleTextLanguageArray[languageArrayIdentifier] + appClass.users[userIdentifier].userName),
+        title: Text(scanUniverseUsersPageTitleTextLanguageArray[languageArrayIdentifier] + appClass.users[userIdentifier].universes[universeIdentifier].name),
         centerTitle: true,
         backgroundColor: Colors.blue[400],
       ),
@@ -46,7 +46,7 @@ class _ScanListUniverseState extends State<ScanListUniverse> {
         child: const Icon(Icons.refresh),
         backgroundColor: Colors.blue,
         onPressed: () async {
-          await appClass.users[userIdentifier].getUniverses();
+          await appClass.users[userIdentifier].universes[universeIdentifier].getUsers();
           if (!requestResponse) {
             showToastMessage('Error request');
           }
@@ -55,7 +55,7 @@ class _ScanListUniverseState extends State<ScanListUniverse> {
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        child: Column(children: appClass.users[userIdentifier].universes.map((universe) => UniverseCard(universeClass: universe)).toList()),
+        child: Column(children: appClass.users[userIdentifier].universes[universeIdentifier].users.map((user) => UniverseUserCard(universeUserClass: user)).toList()),
       ),
     );
   }

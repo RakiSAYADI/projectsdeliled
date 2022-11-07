@@ -1,27 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_delismart_desktop_app/cards/scene_widget.dart';
+import 'package:flutter_delismart_desktop_app/cards/universe/universe_widget.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
 
-class ScanListScene extends StatefulWidget {
-  const ScanListScene({Key? key}) : super(key: key);
+class ScanListUniverse extends StatefulWidget {
+  const ScanListUniverse({Key? key}) : super(key: key);
 
   @override
-  State<ScanListScene> createState() => _ScanListSceneState();
+  _ScanListUniverseState createState() => _ScanListUniverseState();
 }
 
-class _ScanListSceneState extends State<ScanListScene> {
+class _ScanListUniverseState extends State<ScanListUniverse> {
   @override
   Widget build(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.grey[200],
-      appBar: AppBar(
-        title: Text(scanScenesPageTitleTextLanguageArray[languageArrayIdentifier] + appClass.users[userIdentifier].universes[universeIdentifier].name),
-        centerTitle: true,
-        backgroundColor: Colors.blue[400],
-      ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.blue,
         child: Padding(
@@ -31,13 +26,10 @@ class _ScanListSceneState extends State<ScanListScene> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextButton.icon(
-                onPressed: () async {
-                  await appClass.users[userIdentifier].universes[universeIdentifier].getDevices();
-                  Navigator.pushNamed(context, '/scene_create');
-                },
+                onPressed: () => Navigator.pushNamed(context, '/universe_create'),
                 icon: Icon(Icons.add, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.white),
                 label: Text(
-                  addSceneButtonTextLanguageArray[languageArrayIdentifier],
+                  addUniverseButtonTextLanguageArray[languageArrayIdentifier],
                   style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.white),
                 ),
               ),
@@ -45,26 +37,25 @@ class _ScanListSceneState extends State<ScanListScene> {
           ),
         ),
       ),
+      appBar: AppBar(
+        title: Text(scanUniversePageTitleTextLanguageArray[languageArrayIdentifier] + appClass.users[userIdentifier].userName),
+        centerTitle: true,
+        backgroundColor: Colors.blue[400],
+      ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.refresh),
         backgroundColor: Colors.blue,
         onPressed: () async {
-          await appClass.users[userIdentifier].universes[universeIdentifier].getScenes();
+          await appClass.users[userIdentifier].getUniverses();
           if (!requestResponse) {
-            showToastMessage('test toast message');
+            showToastMessage('Error request');
           }
           setState(() {});
         },
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        child: Column(
-          children: appClass.users[userIdentifier].universes[universeIdentifier].scenes
-              .map(
-                (scene) => SceneCard(sceneClass: scene),
-              )
-              .toList(),
-        ),
+        child: Column(children: appClass.users[userIdentifier].universes.map((universe) => UniverseCard(universeClass: universe)).toList()),
       ),
     );
   }

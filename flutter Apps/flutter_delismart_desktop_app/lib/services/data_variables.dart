@@ -46,6 +46,8 @@ List<Map<String, dynamic>> automationActions = [];
 List<Map<String, dynamic>> automationConditions = [];
 Map<String, dynamic> automationPreconditions = {};
 
+Map<String, dynamic> cityInfo = {};
+
 List<String> accessTypeUserList = [ordinaryMemberUserChoiceMessageTextLanguageArray[languageArrayIdentifier], administratorUserChoiceMessageTextLanguageArray[languageArrayIdentifier]];
 
 List<String> workModeList = [
@@ -421,11 +423,80 @@ void addAutomationConditionsRequestWidget() {
         TextButton.icon(
           onPressed: () {
             Get.back();
-            Get.toNamed('/weather_condition_automation_add');
+            addWeatherConditionsParametersRequestWidget();
           },
           icon: Icon(Icons.cloud, size: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.black),
           label: Text(
             weatherTextLanguageArray[languageArrayIdentifier],
+            style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.black),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+void addWeatherConditionsParametersRequestWidget() {
+  double screenWidth = MediaQuery.of(Get.context!).size.width;
+  double screenHeight = MediaQuery.of(Get.context!).size.height;
+  Get.defaultDialog(
+    title: attentionMessageTextLanguageArray[languageArrayIdentifier],
+    content: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TextButton.icon(
+          onPressed: () {
+            Get.back();
+            Get.toNamed('/condition_automation_temperature_add');
+          },
+          icon: Image.asset('assets/temperature.png', height: screenHeight * 0.03, width: screenWidth * 0.03),
+          label: Text(
+            temperatureTextLanguageArray[languageArrayIdentifier],
+            style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.black),
+          ),
+        ),
+        TextButton.icon(
+          onPressed: () {
+            Get.back();
+            Get.toNamed('/condition_automation_humidity_add');
+          },
+          icon: Image.asset('assets/humidity.png' ,height: screenHeight * 0.03, width: screenWidth * 0.03),
+          label: Text(
+            humidityTextLanguageArray[languageArrayIdentifier],
+            style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.black),
+          ),
+        ),
+        TextButton.icon(
+          onPressed: () {
+            Get.back();
+            Get.toNamed('/condition_automation_weather_add');
+          },
+          icon: Icon(Icons.wb_auto, size: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.black),
+          label: Text(
+            weatherTextLanguageArray[languageArrayIdentifier],
+            style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.black),
+          ),
+        ),
+        TextButton.icon(
+          onPressed: () {
+            Get.back();
+            Get.toNamed('/condition_automation_sun_add');
+          },
+          icon: Icon(Icons.wb_twighlight, size: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.black),
+          label: Text(
+            sunTextLanguageArray[languageArrayIdentifier],
+            style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.black),
+          ),
+        ),
+        TextButton.icon(
+          onPressed: () {
+            Get.back();
+            Get.toNamed('/condition_automation_wind_speed_add');
+          },
+          icon: Image.asset('assets/windsock.png', height: screenHeight * 0.03, width: screenWidth * 0.03),
+          label: Text(
+            windTextLanguageArray[languageArrayIdentifier],
             style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.black),
           ),
         ),

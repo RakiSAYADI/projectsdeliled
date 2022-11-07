@@ -3,10 +3,10 @@ import 'package:flutter_delismart_desktop_app/classes/tuya_device.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
 
-class TimeAutomationCard extends StatelessWidget {
+class TimeAutomationConditionCard extends StatelessWidget {
   final Map<String, dynamic> timeData;
 
-  const TimeAutomationCard({Key? key, required this.timeData}) : super(key: key);
+  const TimeAutomationConditionCard({Key? key, required this.timeData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +21,24 @@ class TimeAutomationCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
+            Expanded(
+              flex: 1,
+              child: Container(
+                width: widthScreen * 0.07,
+                height: heightScreen * 0.07,
+                decoration: BoxDecoration(
+                  border: Border.all(width: 2),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    timeData['order_num'].toString(),
+                    style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
             Expanded(
               flex: 5,
               child: Column(
@@ -142,10 +160,10 @@ class TimeAutomationCard extends StatelessWidget {
   }
 }
 
-class WeatherAutomationCard extends StatelessWidget {
+class WeatherAutomationConditionCard extends StatelessWidget {
   final Map<String, dynamic> weatherData;
 
-  const WeatherAutomationCard({Key? key, required this.weatherData}) : super(key: key);
+  const WeatherAutomationConditionCard({Key? key, required this.weatherData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -161,6 +179,25 @@ class WeatherAutomationCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Expanded(
+              flex: 2,
+              child: Container(
+                width: widthScreen * 0.01,
+                height: heightScreen * 0.01,
+                decoration: BoxDecoration(
+                  border: Border.all(width: 2),
+                  shape: BoxShape.circle,
+                  color: Colors.amber,
+                ),
+                child: Center(
+                  child: Text(
+                    weatherData['order_num'].toString(),
+                    style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
               flex: 5,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -170,27 +207,33 @@ class WeatherAutomationCard extends StatelessWidget {
                     style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
                     textAlign: TextAlign.center,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        '${(weatherData['executor_property'] as Map<String, String>)['hours'].toString()} : ',
-                        style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        '${(weatherData['executor_property'] as Map<String, String>)['minutes'].toString()} : ',
-                        style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        (weatherData['executor_property'] as Map<String, String>)['seconds'].toString(),
-                        style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  )
+                  (weatherData['display'] as Map<String, String>).isEmpty
+                      ? Text(
+                          weatherData['entity_id'].toString(),
+                          style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
+                          textAlign: TextAlign.center,
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              (weatherData['display'] as Map<String, String>)['code'].toString(),
+                              style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              (weatherData['display'] as Map<String, String>)['operator'].toString(),
+                              style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              (weatherData['display'] as Map<String, String>)['value'].toString(),
+                              style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        )
                 ],
               ),
             ),
@@ -214,10 +257,10 @@ class WeatherAutomationCard extends StatelessWidget {
   }
 }
 
-class DelayAutomationCard extends StatelessWidget {
+class DelayAutomationActionCard extends StatelessWidget {
   final Map<String, dynamic> timeData;
 
-  const DelayAutomationCard({Key? key, required this.timeData}) : super(key: key);
+  const DelayAutomationActionCard({Key? key, required this.timeData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -286,11 +329,11 @@ class DelayAutomationCard extends StatelessWidget {
   }
 }
 
-class DeviceAutomationCard extends StatelessWidget {
+class DeviceAutomationActionCard extends StatelessWidget {
   final DeviceClass deviceClass;
   final Map<String, dynamic> mapData;
 
-  const DeviceAutomationCard({Key? key, required this.deviceClass, required this.mapData}) : super(key: key);
+  const DeviceAutomationActionCard({Key? key, required this.deviceClass, required this.mapData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
