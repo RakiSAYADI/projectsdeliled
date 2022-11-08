@@ -12,6 +12,7 @@ class TemperatureConditionAutomation extends StatefulWidget {
 }
 
 class _TemperatureConditionAutomationState extends State<TemperatureConditionAutomation> {
+  String operatorData = '==';
   List<bool> operator = [false, true, false];
   double tempValue = 0;
   final myWeatherLon = TextEditingController();
@@ -41,12 +42,13 @@ class _TemperatureConditionAutomationState extends State<TemperatureConditionAut
         child: const Icon(Icons.check),
         backgroundColor: Colors.green,
         onPressed: () async {
-          if (myWeatherLon.text.isEmpty) {
+          if (myWeatherLon.text.isEmpty || myWeatherLat.text.isEmpty) {
+            showToastMessage('must have lon and lat');
           } else {
             await appClass.getCityInfo(lon: myWeatherLon.text, lat: myWeatherLat.text);
             automationConditions.add({
-              'display': {'code': 'temp', 'operator': '', 'value': tempValue.toInt()},
-              'entity_id': '',
+              'display': {'code': 'temp', 'operator': operatorData, 'value': tempValue.toInt()},
+              'entity_id': cityInfo['city_id'].toString(),
               'entity_type': 3,
               'order_num': automationConditions.length + 1
             });
@@ -71,20 +73,31 @@ class _TemperatureConditionAutomationState extends State<TemperatureConditionAut
                       operator[i] = false;
                     }
                   }
+                  switch (index) {
+                    case 0:
+                      operatorData = '<';
+                      break;
+                    case 1:
+                      operatorData = '==';
+                      break;
+                    case 2:
+                      operatorData = '>';
+                      break;
+                  }
                   setState(() {});
                 },
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text('<', style: TextStyle(fontSize: widthScreen * 0.015, color: operatorColor[0], fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                    child: Text('<', style: TextStyle(fontSize: widthScreen * 0.05, color: operatorColor[0], fontWeight: FontWeight.bold), textAlign: TextAlign.center),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text('=', style: TextStyle(fontSize: widthScreen * 0.015, color: operatorColor[1], fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                    child: Text('=', style: TextStyle(fontSize: widthScreen * 0.05, color: operatorColor[1], fontWeight: FontWeight.bold), textAlign: TextAlign.center),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text('>', style: TextStyle(fontSize: widthScreen * 0.015, color: operatorColor[2], fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                    child: Text('>', style: TextStyle(fontSize: widthScreen * 0.05, color: operatorColor[2], fontWeight: FontWeight.bold), textAlign: TextAlign.center),
                   ),
                 ],
                 selectedColor: Colors.black,
@@ -95,19 +108,65 @@ class _TemperatureConditionAutomationState extends State<TemperatureConditionAut
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
-                children: [],
+                children: [
+                  Text(
+                    tempValue.round().toString(),
+                    style: TextStyle(fontSize: heightScreen * 0.02 + widthScreen * 0.02, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    '°C',
+                    style: TextStyle(fontSize: heightScreen * 0.02 + widthScreen * 0.02),
+                  ),
+                ],
               ),
-              Slider(
-                value: tempValue,
-                max: 40,
-                min: -40,
-                divisions: 80,
-                label: tempValue.round().toString(),
-                onChanged: (double value) {
-                  setState(() {
-                    tempValue = value;
-                  });
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(flex: 1, child: SizedBox(width: widthScreen * 0.05)),
+                  Expanded(
+                    flex: 6,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Slider(
+                        value: tempValue,
+                        max: 40,
+                        min: -40,
+                        divisions: 80,
+                        label: tempValue.round().toString(),
+                        onChanged: (double value) {
+                          setState(() {
+                            tempValue = value;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  Expanded(flex: 1, child: SizedBox(width: widthScreen * 0.05)),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      '-40°C',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: heightScreen * 0.015 + widthScreen * 0.015),
+                    ),
+                  ),
+                  Expanded(flex: 4, child: SizedBox(width: widthScreen * 0.05)),
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      '40°C',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: heightScreen * 0.015 + widthScreen * 0.015),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: heightScreen * 0.05),
               Row(
@@ -170,6 +229,14 @@ class _TemperatureConditionAutomationState extends State<TemperatureConditionAut
                             maxLines: 1,
                             maxLength: 10,
                             keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(RegExp(r'[0-9]+[,.]{0,1}[0-9]*')),
+                              TextInputFormatter.withFunction(
+                                    (oldValue, newValue) => newValue.copyWith(
+                                  text: newValue.text.replaceAll('.', ','),
+                                ),
+                              ),
+                            ],
                             style: TextStyle(
                               fontSize: heightScreen * 0.01 + widthScreen * 0.01,
                             ),

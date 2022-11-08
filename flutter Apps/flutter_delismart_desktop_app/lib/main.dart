@@ -6,6 +6,7 @@ import 'package:flutter_delismart_desktop_app/pages/automation_modify.dart';
 import 'package:flutter_delismart_desktop_app/pages/automation_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/device_automation_add.dart';
 import 'package:flutter_delismart_desktop_app/pages/device_functions_automation_modify.dart';
+import 'package:flutter_delismart_desktop_app/pages/humidity_condition_automation_add.dart';
 import 'package:flutter_delismart_desktop_app/pages/scene/device_functions_scene_modify.dart';
 import 'package:flutter_delismart_desktop_app/pages/device/device_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/scene/device_scene_add.dart';
@@ -15,6 +16,7 @@ import 'package:flutter_delismart_desktop_app/pages/room/room_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/scene/scene_create.dart';
 import 'package:flutter_delismart_desktop_app/pages/scene/scene_modify.dart';
 import 'package:flutter_delismart_desktop_app/pages/scene/scene_scan.dart';
+import 'package:flutter_delismart_desktop_app/pages/sun_condition_automation_add.dart';
 import 'package:flutter_delismart_desktop_app/pages/temperature_condition_automation_add.dart';
 import 'package:flutter_delismart_desktop_app/pages/time_condition_automation_add.dart';
 import 'package:flutter_delismart_desktop_app/pages/timer_automation_add.dart';
@@ -27,6 +29,7 @@ import 'package:flutter_delismart_desktop_app/pages/user/user_create.dart';
 import 'package:flutter_delismart_desktop_app/pages/user/user_delete.dart';
 import 'package:flutter_delismart_desktop_app/pages/user/user_login.dart';
 import 'package:flutter_delismart_desktop_app/pages/user/user_scan.dart';
+import 'package:flutter_delismart_desktop_app/pages/weather_condition_automation_add.dart';
 import 'package:flutter_delismart_desktop_app/pages/welcome.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/internet_check_service.dart';
@@ -114,6 +117,9 @@ class MyApp extends StatelessWidget {
           '/device_functions_automation_modify': (context) => const DeviceFunctionsAutomationModify(),
           '/timer_condition_automation_add': (context) => const TimeConditionAutomationAdd(),
           '/condition_automation_temperature_add': (context) => const TemperatureConditionAutomation(),
+          '/condition_automation_humidity_add': (context) => const HumidityConditionAutomation(),
+          '/condition_automation_weather_add': (context) => const WeatherConditionAutomation(),
+          '/condition_automation_sun_add': (context) => const SunConditionAutomation(),
         },
       ),
     );

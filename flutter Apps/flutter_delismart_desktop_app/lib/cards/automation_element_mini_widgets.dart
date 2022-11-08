@@ -179,14 +179,13 @@ class WeatherAutomationConditionCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Expanded(
-              flex: 2,
+              flex: 1,
               child: Container(
-                width: widthScreen * 0.01,
-                height: heightScreen * 0.01,
+                width: widthScreen * 0.07,
+                height: heightScreen * 0.07,
                 decoration: BoxDecoration(
                   border: Border.all(width: 2),
                   shape: BoxShape.circle,
-                  color: Colors.amber,
                 ),
                 child: Center(
                   child: Text(
@@ -199,42 +198,34 @@ class WeatherAutomationConditionCard extends StatelessWidget {
             ),
             Expanded(
               flex: 5,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    timeTextLanguageArray[languageArrayIdentifier],
-                    style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
-                    textAlign: TextAlign.center,
-                  ),
-                  (weatherData['display'] as Map<String, String>).isEmpty
-                      ? Text(
-                          weatherData['entity_id'].toString(),
-                          style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
-                          textAlign: TextAlign.center,
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              (weatherData['display'] as Map<String, String>)['code'].toString(),
-                              style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              (weatherData['display'] as Map<String, String>)['operator'].toString(),
-                              style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              (weatherData['display'] as Map<String, String>)['value'].toString(),
-                              style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        )
-                ],
+              child: Center(
+                child: (weatherData['display'] as Map<String, dynamic>).isEmpty
+                    ? Text(
+                        weatherData['entity_id'].toString(),
+                        style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
+                        textAlign: TextAlign.center,
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            (weatherData['display'] as Map<String, dynamic>)['code'].toString(),
+                            style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            (weatherData['display'] as Map<String, dynamic>)['operator'].toString(),
+                            style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            (weatherData['display'] as Map<String, dynamic>)['value'].toString(),
+                            style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
               ),
             ),
             Expanded(

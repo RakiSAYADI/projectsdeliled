@@ -205,3 +205,25 @@ final List<String> addHumidityTextLanguageArray = ['Ajouter humidité', 'Add hum
 final List<String> addSunTextLanguageArray = ['Ajouter lever du soleil/coucher du soleil', 'Add Sunrise/Sunset'];
 
 final List<String> addWindTextLanguageArray = ['Ajouter vitesse du vent', 'Add wind speed'];
+
+final List<String> humiditySecTextLanguageArray = ['Sèche', 'Dry'];
+
+final List<String> humidityComfortableTextLanguageArray = ['Comfortable', 'Comfortable'];
+
+final List<String> humidityMoistTextLanguageArray = ['Humide', 'Moist'];
+
+final List<String> humidityMessageTextLanguageArray = ['Sèche (0%-40%), Comfortable (40%-70%), Humide (70%-100%)', 'Dry (0%-40%), Comfortable (40%-70%), Moist (70%-100%)'];
+
+final List<String> weatherSunnyTextLanguageArray = ['Ensoleillé', 'Sunny'];
+
+final List<String> weatherCloudyTextLanguageArray = ['Nuageux', 'Cloudy'];
+
+final List<String> weatherRainyTextLanguageArray = ['Pluvieux', 'Rainy'];
+
+final List<String> weatherSnowyTextLanguageArray = ['Neigeux', 'Snowy'];
+
+final List<String> weatherPollutedTextLanguageArray = ['Brumeux', 'Hazy'];
+
+final List<String> sunSunRiseTextLanguageArray = ['Lever du soleil', 'Sunrise'];
+
+final List<String> sunSunSetTextLanguageArray = ['Coucher du soleil', 'Sunset'];

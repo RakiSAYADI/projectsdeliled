@@ -151,6 +151,14 @@ class _UniverseCreateState extends State<UniverseCreate> {
                             maxLines: 1,
                             maxLength: 10,
                             keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(RegExp(r'[0-9]+[,.]{0,1}[0-9]*')),
+                              TextInputFormatter.withFunction(
+                                    (oldValue, newValue) => newValue.copyWith(
+                                  text: newValue.text.replaceAll('.', ','),
+                                ),
+                              ),
+                            ],
                             style: TextStyle(
                               fontSize: screenHeight * 0.01 + screenWidth * 0.01,
                             ),
