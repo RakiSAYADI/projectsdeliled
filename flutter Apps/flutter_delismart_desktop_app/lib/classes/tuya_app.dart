@@ -35,6 +35,7 @@ class AppClass {
   }
 
   Future getCityInfo({String lon = '0.0', String lat = '0.0'}) async {
+    waitingRequestWidget();
     const String queryGetCityInfo = '/v1.0/iot-03/cities/positions?lat=43.866636&lon=5.908065';
     await tokenAPIRequest.sendRequest(Method.get, queryGetCityInfo);
     if (tokenAPIRequest.getResponse().isNotEmpty) {
@@ -49,6 +50,7 @@ class AppClass {
         debugPrint(e.toString());
       }
     }
+    exitRequestWidget();
   }
 
   void getInfo() async {

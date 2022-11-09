@@ -92,7 +92,9 @@ final List<String> addDeviceButtonTextLanguageArray = ['Ajouter une appareil', '
 
 final List<String> addElementButtonTextLanguageArray = ['Ajouter un element', 'Add an element'];
 
-final List<String> newUniverseMessageTextLanguageArray = ['Nouveau univers', 'New universe'];
+final List<String> configureConditionsButtonTextLanguageArray = ['Configurer les conditions ', 'Add an element'];
+
+final List<String> newUniverseMessageTextLanguageArray = ['Nouveau univers', 'Configure conditions'];
 
 final List<String> newSceneMessageTextLanguageArray = ['Nouvelle scène', 'New scene'];
 
@@ -149,6 +151,8 @@ final List<String> universeUserDeleteTextLanguageArray = ['Voulez vous vraiment 
 final List<String> addRoomDevicePageTitleTextLanguageArray = ['Ajouter des appareils à ', 'Add devices to '];
 
 final List<String> addAndModifyFunctionsPageTitleTextLanguageArray = ['Ajouter et modifier les fonctions ', 'Add and modify the functions'];
+
+final List<String> addAndModifyConditionsPageTitleTextLanguageArray = ['Ajouter et modifier les conditions ', 'Add and modify the conditions'];
 
 final List<String> addTimePageTitleTextLanguageArray = ['Ajouter un temps ', 'Add a time '];
 

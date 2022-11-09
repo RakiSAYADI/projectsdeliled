@@ -3,6 +3,7 @@ import 'package:flutter_delismart_desktop_app/cards/automation_element_mini_widg
 import 'package:flutter_delismart_desktop_app/classes/tuya_device.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
+import 'package:get/get.dart';
 
 class AutomationCreate extends StatefulWidget {
   const AutomationCreate({Key? key}) : super(key: key);
@@ -15,6 +16,7 @@ class _AutomationCreateState extends State<AutomationCreate> {
   final myAutomationName = TextEditingController();
 
   bool preconditionsSwitch = false;
+  bool conditionEquationVisibility = false;
 
   @override
   void initState() {
@@ -118,14 +120,16 @@ class _AutomationCreateState extends State<AutomationCreate> {
                                 case 1:
                                   for (DeviceClass device in appClass.users[userIdentifier].universes[universeIdentifier].devices) {
                                     if (element['entity_id'] == device.id) {
-                                      //return DeviceAutomationConditionCard(deviceClass: device, mapData: element);
+                                      return DeviceAutomationConditionCard(deviceClass: device, mapData: element, deleteVisibility: true);
                                     }
                                   }
                                   return Container();
                                 case 3:
-                                  return WeatherAutomationConditionCard(weatherData: element);
+                                  return WeatherAutomationConditionCard(weatherData: element, deleteVisibility: true);
                                 case 6:
-                                  return TimeAutomationConditionCard(timeData: element);
+                                  return TimeAutomationConditionCard(timeData: element, deleteVisibility: true);
+                                case 15:
+                                  return ExternalAutomationConditionCard(mapData: element, deleteVisibility: true);
                                 default:
                                   return Container();
                               }
@@ -136,14 +140,32 @@ class _AutomationCreateState extends State<AutomationCreate> {
                           height: screenHeight * 0.03,
                           child: Container(color: Colors.white),
                         ),
-                        TextButton.icon(
-                          onPressed: () => addAutomationConditionsRequestWidget(),
-                          icon: Icon(Icons.add, size: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.blue),
-                          label: Text(
-                            addElementButtonTextLanguageArray[languageArrayIdentifier],
-                            style: TextStyle(fontSize: screenHeight * 0.007 + screenWidth * 0.007, color: Colors.blue),
-                            textAlign: TextAlign.center,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Visibility(
+                              visible: automationConditions.length >= 2 ? true : false,
+                              child: TextButton.icon(
+                                onPressed: () => Get.toNamed('/condition_automation_modify'),
+                                icon: Icon(Icons.edit, size: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.green),
+                                label: Text(
+                                  configureConditionsButtonTextLanguageArray[languageArrayIdentifier],
+                                  style: TextStyle(fontSize: screenHeight * 0.007 + screenWidth * 0.007, color: Colors.green),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            TextButton.icon(
+                              onPressed: () => addAutomationConditionsRequestWidget(),
+                              icon: Icon(Icons.add, size: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.blue),
+                              label: Text(
+                                addElementButtonTextLanguageArray[languageArrayIdentifier],
+                                style: TextStyle(fontSize: screenHeight * 0.007 + screenWidth * 0.007, color: Colors.blue),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(
                           height: screenHeight * 0.03,

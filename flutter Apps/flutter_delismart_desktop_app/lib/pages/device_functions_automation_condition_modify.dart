@@ -4,17 +4,18 @@ import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
 import 'package:get/get.dart';
 
-class DeviceFunctionsSceneModify extends StatefulWidget {
-  const DeviceFunctionsSceneModify({Key? key}) : super(key: key);
+class DeviceFunctionsAutomationConditionModify extends StatefulWidget {
+  const DeviceFunctionsAutomationConditionModify({Key? key}) : super(key: key);
 
   @override
-  State<DeviceFunctionsSceneModify> createState() => _DeviceFunctionsSceneModifyState();
+  State<DeviceFunctionsAutomationConditionModify> createState() => _DeviceFunctionsAutomationConditionModifyState();
 }
 
-class _DeviceFunctionsSceneModifyState extends State<DeviceFunctionsSceneModify> {
+class _DeviceFunctionsAutomationConditionModifyState extends State<DeviceFunctionsAutomationConditionModify> {
   bool firstDisplay = true;
   DeviceClass? device;
   Map<Map<String, dynamic>, bool> functionsState = {};
+  List<String> conditions = ['<', '==', '>'];
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +26,10 @@ class _DeviceFunctionsSceneModifyState extends State<DeviceFunctionsSceneModify>
       device = args['device'] as DeviceClass;
       functionsState = {};
       for (var function in device!.functions) {
+        function.addAll({'operator': '=='});
         functionsState.addAll({function: false});
       }
+      debugPrint(functionsState.toString());
       firstDisplay = false;
     }
     return Scaffold(
@@ -42,10 +45,11 @@ class _DeviceFunctionsSceneModifyState extends State<DeviceFunctionsSceneModify>
         onPressed: () {
           functionsState.forEach((function, state) {
             if (state) {
-              sceneActions.add({
-                'action_executor': 'dpIssue',
+              automationConditions.add({
                 'entity_id': device!.id,
-                'executor_property': {function['code'].toString(): function['value']}
+                'entity_type': 1,
+                'order_num': automationConditions.length + 1,
+                'display': {'code': function['code'].toString(), 'operator': function['operator'].toString(), 'value': function['value']}
               });
             }
           });
@@ -167,10 +171,40 @@ class _DeviceFunctionsSceneModifyState extends State<DeviceFunctionsSceneModify>
                     children: [
                       Expanded(
                         flex: 2,
-                        child: Text(
-                          'Lum: ' + function['value'].toString(),
-                          style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
-                          textAlign: TextAlign.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Lum: ' + function['value'].toString(),
+                              style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
+                              textAlign: TextAlign.center,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.1)),
+                              child: DropdownButton<String>(
+                                value: function['operator'].toString(),
+                                icon: const Icon(Icons.arrow_drop_down),
+                                iconSize: 24,
+                                elevation: 16,
+                                style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                                underline: Container(
+                                  height: 2,
+                                  color: Colors.blue[300],
+                                ),
+                                onChanged: (String? data) {
+                                  setState(() {
+                                    function['operator'] = data!;
+                                  });
+                                },
+                                items: conditions.map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       Expanded(
@@ -212,10 +246,40 @@ class _DeviceFunctionsSceneModifyState extends State<DeviceFunctionsSceneModify>
                     children: [
                       Expanded(
                         flex: 2,
-                        child: Text(
-                          'Temp: ' + function['value'].toString(),
-                          style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
-                          textAlign: TextAlign.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Temp: ' + function['value'].toString(),
+                              style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
+                              textAlign: TextAlign.center,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.1)),
+                              child: DropdownButton<String>(
+                                value: function['operator'].toString(),
+                                icon: const Icon(Icons.arrow_drop_down),
+                                iconSize: 24,
+                                elevation: 16,
+                                style: TextStyle(color: Colors.grey[800], fontSize: 18),
+                                underline: Container(
+                                  height: 2,
+                                  color: Colors.blue[300],
+                                ),
+                                onChanged: (String? data) {
+                                  setState(() {
+                                    function['operator'] = data!;
+                                  });
+                                },
+                                items: conditions.map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       Expanded(

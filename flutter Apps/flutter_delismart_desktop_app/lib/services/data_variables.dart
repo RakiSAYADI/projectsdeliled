@@ -461,7 +461,7 @@ void addWeatherConditionsParametersRequestWidget() {
             Get.back();
             Get.toNamed('/condition_automation_humidity_add');
           },
-          icon: Image.asset('assets/humidity.png' ,height: screenHeight * 0.03, width: screenWidth * 0.03),
+          icon: Image.asset('assets/humidity.png', height: screenHeight * 0.03, width: screenWidth * 0.03),
           label: Text(
             humidityTextLanguageArray[languageArrayIdentifier],
             style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.black),

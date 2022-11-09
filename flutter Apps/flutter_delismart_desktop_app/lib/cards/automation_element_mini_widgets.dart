@@ -5,8 +5,9 @@ import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
 
 class TimeAutomationConditionCard extends StatelessWidget {
   final Map<String, dynamic> timeData;
+  final bool deleteVisibility;
 
-  const TimeAutomationConditionCard({Key? key, required this.timeData}) : super(key: key);
+  const TimeAutomationConditionCard({Key? key, required this.timeData, required this.deleteVisibility}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -140,16 +141,232 @@ class TimeAutomationConditionCard extends StatelessWidget {
                 ],
               ),
             ),
+            Visibility(
+              visible: deleteVisibility,
+              child: Expanded(
+                flex: 2,
+                child: TextButton.icon(
+                  onPressed: () {
+                    automationConditions.remove(timeData);
+                    int i = 0;
+                    for (var condition in automationConditions) {
+                      condition['order_num'] = ++i;
+                    }
+                  },
+                  icon: Icon(Icons.delete, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.red),
+                  label: Text(
+                    deleteButtonTextLanguageArray[languageArrayIdentifier],
+                    style: TextStyle(fontSize: heightScreen * 0.008 + widthScreen * 0.008, color: Colors.red),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DeviceAutomationConditionCard extends StatelessWidget {
+  final Map<String, dynamic> mapData;
+  final DeviceClass deviceClass;
+  final bool deleteVisibility;
+
+  const DeviceAutomationConditionCard({Key? key, required this.deviceClass, required this.mapData, required this.deleteVisibility}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
+    return Card(
+      semanticContainer: false,
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
             Expanded(
               flex: 1,
-              child: TextButton.icon(
-                onPressed: () {
-                  automationConditions.remove(timeData);
-                },
-                icon: Icon(Icons.delete, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.red),
-                label: Text(
-                  deleteButtonTextLanguageArray[languageArrayIdentifier],
-                  style: TextStyle(fontSize: heightScreen * 0.008 + widthScreen * 0.008, color: Colors.red),
+              child: Container(
+                width: widthScreen * 0.07,
+                height: heightScreen * 0.07,
+                decoration: BoxDecoration(
+                  border: Border.all(width: 2),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    mapData['order_num'].toString(),
+                    style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 4,
+              child: Column(
+                children: [
+                  Text(
+                    deviceClass.name,
+                    style: TextStyle(fontSize: heightScreen * 0.013 + widthScreen * 0.013, color: Colors.grey[800]),
+                  ),
+                  Center(
+                    child: (mapData['display'] as Map<String, dynamic>).isEmpty
+                        ? Text(
+                            mapData['entity_id'].toString(),
+                            style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
+                            textAlign: TextAlign.center,
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                (mapData['display'] as Map<String, dynamic>)['code'].toString(),
+                                style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                (mapData['display'] as Map<String, dynamic>)['operator'].toString(),
+                                style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                (mapData['display'] as Map<String, dynamic>)['value'].toString(),
+                                style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: deviceClass.imageUrl.isEmpty
+                  ? Image.asset(
+                      'assets/device.png',
+                      height: heightScreen * 0.1,
+                      width: widthScreen * 0.1,
+                    )
+                  : Image.network(
+                      'https://images.tuyaeu.com/' + deviceClass.imageUrl,
+                      height: heightScreen * 0.1,
+                      width: widthScreen * 0.1,
+                    ),
+            ),
+            Visibility(
+              visible: deleteVisibility,
+              child: Expanded(
+                flex: 1,
+                child: TextButton.icon(
+                  onPressed: () {
+                    automationConditions.remove(mapData);
+                    int i = 0;
+                    for (var condition in automationConditions) {
+                      condition['order_num'] = ++i;
+                    }
+                  },
+                  icon: Icon(Icons.delete, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.red),
+                  label: Text(
+                    deleteButtonTextLanguageArray[languageArrayIdentifier],
+                    style: TextStyle(fontSize: heightScreen * 0.008 + widthScreen * 0.008, color: Colors.red),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ExternalAutomationConditionCard extends StatelessWidget {
+  final Map<String, dynamic> mapData;
+  final bool deleteVisibility;
+
+  const ExternalAutomationConditionCard({Key? key, required this.mapData, required this.deleteVisibility}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
+    return Card(
+      semanticContainer: false,
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              flex: 1,
+              child: Container(
+                width: widthScreen * 0.07,
+                height: heightScreen * 0.07,
+                decoration: BoxDecoration(
+                  border: Border.all(width: 2),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    mapData['order_num'].toString(),
+                    style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 5,
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      (mapData['display'] as Map<String, dynamic>)['code'].toString(),
+                      style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
+                      textAlign: TextAlign.center,
+                    ),
+                    Text(
+                      (mapData['display'] as Map<String, dynamic>)['operator'].toString(),
+                      style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
+                      textAlign: TextAlign.center,
+                    ),
+                    Text(
+                      (mapData['display'] as Map<String, dynamic>)['value'].toString(),
+                      style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Visibility(
+              visible: deleteVisibility,
+              child: Expanded(
+                flex: 2,
+                child: TextButton.icon(
+                  onPressed: () {
+                    automationConditions.remove(mapData);
+                    int i = 0;
+                    for (var condition in automationConditions) {
+                      condition['order_num'] = ++i;
+                    }
+                  },
+                  icon: Icon(Icons.delete, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.red),
+                  label: Text(
+                    deleteButtonTextLanguageArray[languageArrayIdentifier],
+                    style: TextStyle(fontSize: heightScreen * 0.008 + widthScreen * 0.008, color: Colors.red),
+                  ),
                 ),
               ),
             ),
@@ -162,8 +379,9 @@ class TimeAutomationConditionCard extends StatelessWidget {
 
 class WeatherAutomationConditionCard extends StatelessWidget {
   final Map<String, dynamic> weatherData;
+  final bool deleteVisibility;
 
-  const WeatherAutomationConditionCard({Key? key, required this.weatherData}) : super(key: key);
+  const WeatherAutomationConditionCard({Key? key, required this.weatherData, required this.deleteVisibility}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -228,16 +446,23 @@ class WeatherAutomationConditionCard extends StatelessWidget {
                       ),
               ),
             ),
-            Expanded(
-              flex: 1,
-              child: TextButton.icon(
-                onPressed: () {
-                  automationConditions.remove(weatherData);
-                },
-                icon: Icon(Icons.delete, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.red),
-                label: Text(
-                  deleteButtonTextLanguageArray[languageArrayIdentifier],
-                  style: TextStyle(fontSize: heightScreen * 0.008 + widthScreen * 0.008, color: Colors.red),
+            Visibility(
+              visible: deleteVisibility,
+              child: Expanded(
+                flex: 1,
+                child: TextButton.icon(
+                  onPressed: () {
+                    automationConditions.remove(weatherData);
+                    int i = 0;
+                    for (var condition in automationConditions) {
+                      condition['order_num'] = ++i;
+                    }
+                  },
+                  icon: Icon(Icons.delete, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.red),
+                  label: Text(
+                    deleteButtonTextLanguageArray[languageArrayIdentifier],
+                    style: TextStyle(fontSize: heightScreen * 0.008 + widthScreen * 0.008, color: Colors.red),
+                  ),
                 ),
               ),
             ),

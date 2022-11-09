@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/pages/automation_create.dart';
 import 'package:flutter_delismart_desktop_app/pages/automation_modify.dart';
 import 'package:flutter_delismart_desktop_app/pages/automation_scan.dart';
+import 'package:flutter_delismart_desktop_app/pages/condition_automation_modify.dart';
 import 'package:flutter_delismart_desktop_app/pages/device_automation_add.dart';
+import 'package:flutter_delismart_desktop_app/pages/device_condition_automation_add.dart';
+import 'package:flutter_delismart_desktop_app/pages/device_functions_automation_condition_modify.dart';
 import 'package:flutter_delismart_desktop_app/pages/device_functions_automation_modify.dart';
 import 'package:flutter_delismart_desktop_app/pages/humidity_condition_automation_add.dart';
 import 'package:flutter_delismart_desktop_app/pages/scene/device_functions_scene_modify.dart';
@@ -31,6 +34,7 @@ import 'package:flutter_delismart_desktop_app/pages/user/user_login.dart';
 import 'package:flutter_delismart_desktop_app/pages/user/user_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/weather_condition_automation_add.dart';
 import 'package:flutter_delismart_desktop_app/pages/welcome.dart';
+import 'package:flutter_delismart_desktop_app/pages/wind_speed_condition_automation_add.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/internet_check_service.dart';
 import 'package:get/get.dart';
@@ -120,6 +124,10 @@ class MyApp extends StatelessWidget {
           '/condition_automation_humidity_add': (context) => const HumidityConditionAutomation(),
           '/condition_automation_weather_add': (context) => const WeatherConditionAutomation(),
           '/condition_automation_sun_add': (context) => const SunConditionAutomation(),
+          '/condition_automation_wind_speed_add': (context) => const WindSpeedConditionAutomation(),
+          '/device_condition_automation_add': (context) => const DeviceConditionAutomationAdd(),
+          '/device_functions_automation_condition_modify': (context) => const DeviceFunctionsAutomationConditionModify(),
+          '/condition_automation_modify': (context) => const ConditionAutomationModify(),
         },
       ),
     );
