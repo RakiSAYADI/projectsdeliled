@@ -231,3 +231,7 @@ final List<String> weatherPollutedTextLanguageArray = ['Brumeux', 'Hazy'];
 final List<String> sunSunRiseTextLanguageArray = ['Lever du soleil', 'Sunrise'];
 
 final List<String> sunSunSetTextLanguageArray = ['Coucher du soleil', 'Sunset'];
+
+final List<String> andTextLanguageArray = ['ET', 'AND'];
+
+final List<String> orTextLanguageArray = ['OU', 'OR'];

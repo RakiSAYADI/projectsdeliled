@@ -147,7 +147,11 @@ class _AutomationCreateState extends State<AutomationCreate> {
                             Visibility(
                               visible: automationConditions.length >= 2 ? true : false,
                               child: TextButton.icon(
-                                onPressed: () => Get.toNamed('/condition_automation_modify'),
+                                onPressed: () {
+                                  matchType = 3;
+                                  conditionRule = '1&&2||3';
+                                  Get.toNamed('/condition_automation_modify');
+                                },
                                 icon: Icon(Icons.edit, size: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.green),
                                 label: Text(
                                   configureConditionsButtonTextLanguageArray[languageArrayIdentifier],

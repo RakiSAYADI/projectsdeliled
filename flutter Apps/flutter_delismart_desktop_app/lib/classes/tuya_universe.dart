@@ -27,7 +27,15 @@ class UniverseClass {
 
   UniverseClass({required this.geoName, required this.id, this.lat = 0.0, this.lon = 0.0, required this.name, required this.role});
 
-  Future addAutomation(String name, String background, List<Map<String, dynamic>> actions, List<Map<String, dynamic>> conditions, Map<String, dynamic> preconditions) async {
+  Future addAutomation(
+    String name,
+    String match,
+    String rule,
+    String background,
+    List<Map<String, dynamic>> actions,
+    List<Map<String, dynamic>> conditions,
+    Map<String, dynamic> preconditions,
+  ) async {
     waitingRequestWidget();
     String actionsData = "[ ";
     String dpIssueData = '';
@@ -76,13 +84,19 @@ class UniverseClass {
     }
     conditionsData = conditionsData.substring(0, conditionsData.length - 1);
     conditionsData += "\n]";
+    String preconditionsData = "[ ";
+    preconditionsData = preconditionsData.substring(0, preconditionsData.length - 1);
+    preconditionsData += "\n]";
     final String _queryAddScene = '/v1.0/homes/${id.toString()}/automations';
     await tokenAPIRequest.sendRequest(Method.post, _queryAddScene,
         body: "{\n"
             "\"name\":\"$name\",\n"
             "\"background\":\"$background\",\n"
+            "\"match_type\":$match,\n"
+            "\"condition_rule\":\"$rule\",\n"
             "\"actions\":$actionsData\n"
             "\"conditions\":$conditionsData\n"
+            "\"preconditions\":$preconditionsData\n"
             "}");
     if (tokenAPIRequest.getResponse().isNotEmpty) {
       try {

@@ -41,6 +41,9 @@ int sceneIdentifier = 0;
 int automationIdentifier = 0;
 int deviceIdentifier = 0;
 
+int matchType = 0;
+String conditionRule = '';
+
 List<Map<String, dynamic>> sceneActions = [];
 List<Map<String, dynamic>> automationActions = [];
 List<Map<String, dynamic>> automationConditions = [];
