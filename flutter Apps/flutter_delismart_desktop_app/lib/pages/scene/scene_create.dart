@@ -97,8 +97,8 @@ class _SceneCreateState extends State<SceneCreate> {
                                 }
                               }
                               return Container();
-                            /*case 'deviceGroupDpIssue':
-                              return DeviceSceneCard(deviceClass: element);*/
+                            case 'deviceGroupDpIssue':
+                              return DeviceGroupSceneCard(mapData: element);
                             default:
                               return Container();
                           }

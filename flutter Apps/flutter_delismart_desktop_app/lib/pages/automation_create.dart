@@ -148,8 +148,8 @@ class _AutomationCreateState extends State<AutomationCreate> {
                               visible: automationConditions.length >= 2 ? true : false,
                               child: TextButton.icon(
                                 onPressed: () {
-                                  matchType = 3;
-                                  conditionRule = '1&&2||3';
+                                  //matchType = 3;
+                                  //conditionRule = '1&&2||3';
                                   Get.toNamed('/condition_automation_modify');
                                 },
                                 icon: Icon(Icons.edit, size: screenHeight * 0.01 + screenWidth * 0.01, color: Colors.green),
@@ -193,8 +193,8 @@ class _AutomationCreateState extends State<AutomationCreate> {
                                     }
                                   }
                                   return Container();
-                                /*case 'deviceGroupDpIssue':
-                                  return DeviceSceneCard(deviceClass: element);*/
+                                case 'deviceGroupDpIssue':
+                                  return DeviceGroupAutomationActionCard(mapData: element);
                                 default:
                                   return Container();
                               }

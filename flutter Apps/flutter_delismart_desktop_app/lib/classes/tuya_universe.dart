@@ -140,6 +140,13 @@ class UniverseClass {
               "\"entity_id\":\"${element['entity_id']}\"\n"
               "},";
           break;
+        case 'deviceGroupDpIssue':
+          actionsData += "\n{\n"
+              "\"executor_property\":{\n${element['executor_property']}},\n"
+              "\"action_executor\":\"deviceGroupDpIssue\",\n"
+              "\"entity_id\":\"${element['entity_id']}\"\n"
+              "},";
+          break;
       }
     }
     actionsData = actionsData.substring(0, actionsData.length - 1);

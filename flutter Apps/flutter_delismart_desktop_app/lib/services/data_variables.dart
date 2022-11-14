@@ -41,7 +41,7 @@ int sceneIdentifier = 0;
 int automationIdentifier = 0;
 int deviceIdentifier = 0;
 
-int matchType = 0;
+int matchType = 1;
 String conditionRule = '';
 
 List<Map<String, dynamic>> sceneActions = [];
@@ -52,6 +52,8 @@ Map<String, dynamic> automationPreconditions = {};
 Map<String, dynamic> cityInfo = {};
 
 List<String> accessTypeUserList = [ordinaryMemberUserChoiceMessageTextLanguageArray[languageArrayIdentifier], administratorUserChoiceMessageTextLanguageArray[languageArrayIdentifier]];
+
+List<String> conditions = [andTextLanguageArray[languageArrayIdentifier], orTextLanguageArray[languageArrayIdentifier]];
 
 List<String> workModeList = [
   'white',

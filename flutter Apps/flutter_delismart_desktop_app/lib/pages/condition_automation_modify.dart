@@ -13,7 +13,6 @@ class ConditionAutomationModify extends StatefulWidget {
 }
 
 class _ConditionAutomationModifyState extends State<ConditionAutomationModify> {
-  List<String> conditions = [andTextLanguageArray[languageArrayIdentifier], orTextLanguageArray[languageArrayIdentifier]];
   List<String> conditionsString = [];
   List<Widget> conditionWidgets = [];
 
@@ -22,7 +21,7 @@ class _ConditionAutomationModifyState extends State<ConditionAutomationModify> {
   void setupWidgets() {
     bool step = false;
     int conditionArray = -1;
-    int specialCondition = 0;
+    int specialCondition = 1;
     int i = 0;
     while (i < automationConditions.length) {
       if (step) {
@@ -36,15 +35,12 @@ class _ConditionAutomationModifyState extends State<ConditionAutomationModify> {
             conditionsString.add(andTextLanguageArray[languageArrayIdentifier]);
             break;
           case 3:
-            debugPrint(conditionRule.replaceAll("\\D", ""));
-            debugPrint(conditionRule.substring(specialCondition, specialCondition + 2));
-            conditionsString.add(andTextLanguageArray[languageArrayIdentifier]);
-            /*if (conditionRule.replaceAll("\\d", "").substring(specialCondition, specialCondition + 2) == '&&') {
+            if (conditionRule.substring(specialCondition, specialCondition + 2) == '&&') {
               conditionsString.add(andTextLanguageArray[languageArrayIdentifier]);
             } else {
               conditionsString.add(orTextLanguageArray[languageArrayIdentifier]);
-            }*/
-            specialCondition += 2;
+            }
+            specialCondition += 3;
             break;
         }
         conditionWidgets.add(
@@ -101,8 +97,6 @@ class _ConditionAutomationModifyState extends State<ConditionAutomationModify> {
 
   @override
   Widget build(BuildContext context) {
-    double widthScreen = MediaQuery.of(context).size.width;
-    double heightScreen = MediaQuery.of(context).size.height;
     if (firstDisplay) {
       setupWidgets();
       firstDisplay = false;
@@ -118,6 +112,25 @@ class _ConditionAutomationModifyState extends State<ConditionAutomationModify> {
         child: const Icon(Icons.check),
         backgroundColor: Colors.green,
         onPressed: () {
+          if (!conditionsString.contains(andTextLanguageArray[languageArrayIdentifier])) {
+            matchType = 1;
+          } else if (!conditionsString.contains(orTextLanguageArray[languageArrayIdentifier])) {
+            matchType = 2;
+          } else {
+            matchType = 3;
+            int pos = 1;
+            conditionRule = '';
+            for (String condition in conditionsString) {
+              conditionRule += pos.toString();
+              if (condition == andTextLanguageArray[languageArrayIdentifier]) {
+                conditionRule += '&&';
+              } else {
+                conditionRule += '||';
+              }
+              pos++;
+            }
+            conditionRule += pos.toString();
+          }
           Get.back();
         },
       ),

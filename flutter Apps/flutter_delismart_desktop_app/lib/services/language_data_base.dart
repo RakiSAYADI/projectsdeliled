@@ -46,6 +46,8 @@ final List<String> deleteUserButtonTextLanguageArray = ['Supprimer de la pièce'
 
 final List<String> timeTextLanguageArray = ['Temps :', 'Time :'];
 
+final List<String> groupTextLanguageArray = ['Groupe :', 'Group :'];
+
 final List<String> dateTextLanguageArray = ['Date :', 'Date :'];
 
 final List<String> dayTextLanguageArray = ['Jour :', 'Day :'];

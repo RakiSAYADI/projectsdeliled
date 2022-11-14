@@ -58,6 +58,12 @@ class _DeviceFunctionsSceneModifyState extends State<DeviceFunctionsSceneModify>
             children: device!.functions.map((function) {
           switch (function['code']) {
             case 'switch_led':
+            case 'switch_1':
+            case 'switch_2':
+            case 'switch_3':
+            case 'switch_4':
+            case 'switch_5':
+            case 'switch_6':
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Center(
@@ -67,7 +73,7 @@ class _DeviceFunctionsSceneModifyState extends State<DeviceFunctionsSceneModify>
                       Expanded(
                         flex: 2,
                         child: Text(
-                          'State LED : ' + function['value'].toString(),
+                          'State : ' + function['value'].toString(),
                           style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
                           textAlign: TextAlign.center,
                         ),

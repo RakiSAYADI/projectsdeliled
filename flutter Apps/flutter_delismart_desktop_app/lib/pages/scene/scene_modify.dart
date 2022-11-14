@@ -100,8 +100,8 @@ class _SceneModifyState extends State<SceneModify> {
                                 }
                               }
                               return Container();
-                            /*case 'deviceGroupDpIssue':
-                              return GroupSceneCard(deviceClass: element);*/
+                            case 'deviceGroupDpIssue':
+                              return DeviceGroupSceneCard(mapData: element);
                             default:
                               return Container();
                           }
