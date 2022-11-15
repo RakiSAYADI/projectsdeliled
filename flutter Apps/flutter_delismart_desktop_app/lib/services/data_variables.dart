@@ -25,6 +25,8 @@ const emptyBodyEncrypted = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495
 
 bool requestResponse = false;
 
+const String deletePassword = '1234';
+
 String easySign = '';
 String easyAccessToken = '';
 String easyRefreshToken = '';
@@ -50,6 +52,8 @@ List<Map<String, dynamic>> automationConditions = [];
 Map<String, dynamic> automationPreconditions = {};
 
 Map<String, dynamic> cityInfo = {};
+
+enum ElementType { universe, device }
 
 List<String> accessTypeUserList = [ordinaryMemberUserChoiceMessageTextLanguageArray[languageArrayIdentifier], administratorUserChoiceMessageTextLanguageArray[languageArrayIdentifier]];
 
@@ -759,6 +763,36 @@ void deleteUniverseRequestWidget(String universeID) {
   );
 }
 
+void deleteDeviceRequestWidget(String deviceID) {
+  double screenWidth = MediaQuery.of(Get.context!).size.width;
+  double screenHeight = MediaQuery.of(Get.context!).size.height;
+  Get.defaultDialog(
+    title: attentionMessageTextLanguageArray[languageArrayIdentifier],
+    content: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          deviceDeleteTextLanguageArray[languageArrayIdentifier],
+          style: TextStyle(fontSize: screenHeight * 0.007 + screenWidth * 0.007, color: Colors.red),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+    textConfirm: confirmButtonTextLanguageArray[languageArrayIdentifier],
+    textCancel: cancelButtonTextLanguageArray[languageArrayIdentifier],
+    onConfirm: () async {
+      await appClass.removeDevice(deviceID);
+      if (!requestResponse) {
+        showToastMessage('Error request');
+      } else {
+        showToastMessage('request is valid');
+      }
+      Get.back();
+    },
+  );
+}
+
 void deleteDeviceRoomRequestWidget(String deviceID) {
   double screenWidth = MediaQuery.of(Get.context!).size.width;
   double screenHeight = MediaQuery.of(Get.context!).size.height;
@@ -911,7 +945,7 @@ void modifyUserUniverseRequestWidget(bool state, String userID) {
   );
 }
 
-void deleteUniverseWarningWidget(String universeID) {
+void deleteWarningWidget(String id, ElementType element) {
   double screenWidth = MediaQuery.of(Get.context!).size.width;
   double screenHeight = MediaQuery.of(Get.context!).size.height;
   final myPassword = TextEditingController();
@@ -949,8 +983,15 @@ void deleteUniverseWarningWidget(String universeID) {
     textCancel: cancelButtonTextLanguageArray[languageArrayIdentifier],
     onConfirm: () {
       Get.back();
-      if (myPassword.text == '1234') {
-        deleteUniverseRequestWidget(universeID);
+      if (myPassword.text == deletePassword) {
+        switch (element) {
+          case ElementType.universe:
+            deleteUniverseRequestWidget(id);
+            break;
+          case ElementType.device:
+            deleteDeviceRequestWidget(id);
+            break;
+        }
       } else {
         showToastMessage('wrong code');
       }

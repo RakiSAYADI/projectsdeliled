@@ -73,18 +73,75 @@ class UniverseClass {
     for (var element in conditions) {
       switch (element['entity_type']) {
         case 1:
+          conditionsData += "\n{\n"
+                  "\"display\":{\n"
+                  "\"code\":\"${(element['display'] as Map<String, dynamic>)['code']}\",\n"
+                  "\"operator\":\"${(element['display'] as Map<String, dynamic>)['operator']}\",\n" +
+              (((element['display'] as Map<String, dynamic>)['value'] is String)
+                  ? "\"value\":\"${(element['display'] as Map<String, dynamic>)['value']}\"\n"
+                  : "\"value\":${(element['display'] as Map<String, dynamic>)['value']}\n") +
+              "},\n"
+                  "\"entity_id\":\"${element['entity_id']}\",\n"
+                  "\"entity_type\":\"${element['entity_type']}\",\n"
+                  "\"order_num\":\"${element['order_num']}\"\n"
+                  "},";
           break;
         case 3:
+          conditionsData += "\n{\n"
+                  "\"display\":{\n"
+                  "\"code\":\"${(element['display'] as Map<String, dynamic>)['code']}\",\n"
+                  "\"operator\":\"${(element['display'] as Map<String, dynamic>)['operator']}\",\n" +
+              (((element['display'] as Map<String, dynamic>)['value'] is String)
+                  ? "\"value\":\"${(element['display'] as Map<String, dynamic>)['value']}\"\n"
+                  : "\"value\":${(element['display'] as Map<String, dynamic>)['value']}\n") +
+              "},\n"
+                  "\"entity_id\":\"${element['entity_id']}\",\n"
+                  "\"entity_type\":\"${element['entity_type']}\",\n"
+                  "\"order_num\":\"${element['order_num']}\"\n"
+                  "},";
           break;
         case 6:
+          conditionsData += "\n{\n"
+              "\"display\":{\n"
+              "\"date\":\"${(element['display'] as Map<String, dynamic>)['date']}\",\n"
+              "\"loops\":\"${(element['display'] as Map<String, dynamic>)['loops']}\",\n"
+              "\"time\":\"${(element['display'] as Map<String, dynamic>)['time']}\",\n"
+              "\"timezone_id\":\"${(element['display'] as Map<String, dynamic>)['timezone_id']}\"\n"
+              "},\n"
+              "\"entity_id\":\"timer\",\n"
+              "\"entity_type\":\"${element['entity_type']}\",\n"
+              "\"order_num\":\"${element['order_num']}\"\n"
+              "},";
           break;
         case 15:
+          conditionsData += "\n{\n"
+                  "\"display\":{\n"
+                  "\"code\":\"${(element['display'] as Map<String, dynamic>)['code']}\",\n"
+                  "\"operator\":\"${(element['display'] as Map<String, dynamic>)['operator']}\",\n" +
+              (((element['display'] as Map<String, dynamic>)['value'] is String)
+                  ? "\"value\":\"${(element['display'] as Map<String, dynamic>)['value']}\"\n"
+                  : "\"value\":${(element['display'] as Map<String, dynamic>)['value']}\n") +
+              "},\n"
+                  "\"entity_type\":\"${element['entity_type']}\",\n"
+                  "\"order_num\":\"${element['order_num']}\"\n"
+                  "},";
           break;
       }
     }
     conditionsData = conditionsData.substring(0, conditionsData.length - 1);
     conditionsData += "\n]";
     String preconditionsData = "[ ";
+    if (preconditions.isNotEmpty) {
+      preconditionsData += "\n{\n"
+          "\"display\":{\n"
+          "\"start\":\"${(preconditions['display'] as Map<String, dynamic>)['start']}\",\n"
+          "\"end\":\"${(preconditions['display'] as Map<String, dynamic>)['end']}\",\n"
+          "\"loops\":\"${(preconditions['display'] as Map<String, dynamic>)['loops']}\",\n"
+          "\"timezone_id\":\"${(preconditions['display'] as Map<String, dynamic>)['timezone_id']}\"\n"
+          "},\n"
+          "\"cond_type\":\"timeCheck\"\n"
+          "},";
+    }
     preconditionsData = preconditionsData.substring(0, preconditionsData.length - 1);
     preconditionsData += "\n]";
     final String _queryAddScene = '/v1.0/homes/${id.toString()}/automations';
@@ -94,8 +151,8 @@ class UniverseClass {
             "\"background\":\"$background\",\n"
             "\"match_type\":$match,\n"
             "\"condition_rule\":\"$rule\",\n"
-            "\"actions\":$actionsData\n"
-            "\"conditions\":$conditionsData\n"
+            "\"actions\":$actionsData,\n"
+            "\"conditions\":$conditionsData,\n"
             "\"preconditions\":$preconditionsData\n"
             "}");
     if (tokenAPIRequest.getResponse().isNotEmpty) {
@@ -323,6 +380,7 @@ class UniverseClass {
               name: result[i]['name'],
               enabled: result[i]['enabled'] as bool,
               matchType: result[i]['match_type'] as int,
+              conditionRule: (result[i] as Map<String, dynamic>).containsKey('condition_rule') ? result[i]['condition_rule'] : '',
               id: result[i]['automation_id'],
               homeId: id.toString(),
               actions: _getListMapFromApi(result[i]['actions']),

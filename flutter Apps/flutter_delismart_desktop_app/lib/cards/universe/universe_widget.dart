@@ -86,7 +86,7 @@ class UniverseCard extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: TextButton.icon(
-                    onPressed: () => deleteUniverseWarningWidget(universeClass.id.toString()),
+                    onPressed: () => deleteWarningWidget(universeClass.id.toString(), ElementType.universe),
                     icon: Icon(Icons.delete, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.red),
                     label: Text(
                       deleteButtonTextLanguageArray[languageArrayIdentifier],

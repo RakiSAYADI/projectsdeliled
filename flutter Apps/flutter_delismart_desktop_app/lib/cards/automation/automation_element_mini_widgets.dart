@@ -55,12 +55,12 @@ class TimeAutomationConditionCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        '${(timeData['display'] as Map<String, String>)['time']!.split(':')[0]} : ',
+                        '${(timeData['display'] as Map<String, dynamic>)['time']!.split(':')[0]} : ',
                         style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        (timeData['display'] as Map<String, String>)['time']!.split(':')[1],
+                        (timeData['display'] as Map<String, dynamic>)['time']!.split(':')[1],
                         style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
@@ -76,17 +76,17 @@ class TimeAutomationConditionCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        '${(timeData['display'] as Map<String, String>)['date']!.substring(0, 4)} / ',
+                        '${(timeData['display'] as Map<String, dynamic>)['date']!.substring(0, 4)} / ',
                         style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        '${(timeData['display'] as Map<String, String>)['date']!.substring(4, 6)} / ',
+                        '${(timeData['display'] as Map<String, dynamic>)['date']!.substring(4, 6)} / ',
                         style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        (timeData['display'] as Map<String, String>)['date']!.substring(6, 8),
+                        (timeData['display'] as Map<String, dynamic>)['date']!.substring(6, 8),
                         style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
@@ -102,37 +102,37 @@ class TimeAutomationConditionCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        (timeData['display'] as Map<String, String>)['loops']![1] == '1' ? mondayTextLanguageArray[languageArrayIdentifier] + ', ' : '',
+                        (timeData['display'] as Map<String, dynamic>)['loops']![1] == '1' ? mondayTextLanguageArray[languageArrayIdentifier] + ', ' : '',
                         style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        (timeData['display'] as Map<String, String>)['loops']![2] == '1' ? tuesdayTextLanguageArray[languageArrayIdentifier] + ', ' : '',
+                        (timeData['display'] as Map<String, dynamic>)['loops']![2] == '1' ? tuesdayTextLanguageArray[languageArrayIdentifier] + ', ' : '',
                         style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        (timeData['display'] as Map<String, String>)['loops']![3] == '1' ? wednesdayTextLanguageArray[languageArrayIdentifier] + ', ' : '',
+                        (timeData['display'] as Map<String, dynamic>)['loops']![3] == '1' ? wednesdayTextLanguageArray[languageArrayIdentifier] + ', ' : '',
                         style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        (timeData['display'] as Map<String, String>)['loops']![4] == '1' ? thursdayTextLanguageArray[languageArrayIdentifier] + ', ' : '',
+                        (timeData['display'] as Map<String, dynamic>)['loops']![4] == '1' ? thursdayTextLanguageArray[languageArrayIdentifier] + ', ' : '',
                         style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        (timeData['display'] as Map<String, String>)['loops']![5] == '1' ? fridayTextLanguageArray[languageArrayIdentifier] + ', ' : '',
+                        (timeData['display'] as Map<String, dynamic>)['loops']![5] == '1' ? fridayTextLanguageArray[languageArrayIdentifier] + ', ' : '',
                         style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        (timeData['display'] as Map<String, String>)['loops']![6] == '1' ? saturdayTextLanguageArray[languageArrayIdentifier] + ', ' : '',
+                        (timeData['display'] as Map<String, dynamic>)['loops']![6] == '1' ? saturdayTextLanguageArray[languageArrayIdentifier] + ', ' : '',
                         style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        (timeData['display'] as Map<String, String>)['loops']![0] == '1' ? sundayTextLanguageArray[languageArrayIdentifier] : '',
+                        (timeData['display'] as Map<String, dynamic>)['loops']![0] == '1' ? sundayTextLanguageArray[languageArrayIdentifier] : '',
                         style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
@@ -271,6 +271,8 @@ class DeviceAutomationConditionCard extends StatelessWidget {
                     for (var condition in automationConditions) {
                       condition['order_num'] = ++i;
                     }
+                    matchType = 1;
+                    conditionRule = '';
                   },
                   icon: Icon(Icons.delete, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.red),
                   label: Text(
@@ -361,6 +363,8 @@ class ExternalAutomationConditionCard extends StatelessWidget {
                     for (var condition in automationConditions) {
                       condition['order_num'] = ++i;
                     }
+                    matchType = 1;
+                    conditionRule = '';
                   },
                   icon: Icon(Icons.delete, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.red),
                   label: Text(
@@ -457,6 +461,8 @@ class WeatherAutomationConditionCard extends StatelessWidget {
                     for (var condition in automationConditions) {
                       condition['order_num'] = ++i;
                     }
+                    matchType = 1;
+                    conditionRule = '';
                   },
                   icon: Icon(Icons.delete, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.red),
                   label: Text(
@@ -506,17 +512,17 @@ class DelayAutomationActionCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        '${(timeData['executor_property'] as Map<String, String>)['hours'].toString()} : ',
+                        '${(timeData['executor_property'] as Map<String, dynamic>)['hours'].toString()} : ',
                         style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        '${(timeData['executor_property'] as Map<String, String>)['minutes'].toString()} : ',
+                        '${(timeData['executor_property'] as Map<String, dynamic>)['minutes'].toString()} : ',
                         style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        (timeData['executor_property'] as Map<String, String>)['seconds'].toString(),
+                        (timeData['executor_property'] as Map<String, dynamic>)['seconds'].toString(),
                         style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),

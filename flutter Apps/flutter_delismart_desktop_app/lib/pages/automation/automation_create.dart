@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_delismart_desktop_app/cards/automation_element_mini_widgets.dart';
+import 'package:flutter_delismart_desktop_app/cards/automation/automation_element_mini_widgets.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_device.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
@@ -224,8 +224,15 @@ class _AutomationCreateState extends State<AutomationCreate> {
                     if (myAutomationName.text.isNotEmpty) {
                       if (automationActions.isNotEmpty) {
                         if (automationActions.last['action_executor'] != 'delay') {
-                          /*await appClass.users[userIdentifier].universes[universeIdentifier]
-                              .addAnimation(myAutomationName.text, '', automationActions, automationConditions, preconditionsSwitch ? automationPreconditions : {});*/
+                          await appClass.users[userIdentifier].universes[universeIdentifier].addAutomation(
+                            myAutomationName.text,
+                            matchType.toString(),
+                            conditionRule,
+                            'https://images.tuyaeu.com/smart/rule/cover/starry.png',
+                            automationActions,
+                            automationConditions,
+                            preconditionsSwitch ? automationPreconditions : {},
+                          );
                           if (!requestResponse) {
                             showToastMessage('Error request');
                           } else {

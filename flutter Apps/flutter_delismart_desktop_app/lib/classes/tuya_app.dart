@@ -15,6 +15,22 @@ class AppClass {
   final String queryPostCreateUser = '/v1.0/apps/$schema/user';
   final String queryGetUserList = '/v1.0/apps/$schema/users?page_no=1&page_size=100';
 
+  Future removeDevice(String deviceId) async {
+    waitingRequestWidget();
+    final String queryPostDeleteUser = '/v1.0/devices/$deviceId';
+    await tokenAPIRequest.sendRequest(Method.delete, queryPostDeleteUser);
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
+
   Future renameDevice(String deviceName, String deviceID) async {
     waitingRequestWidget();
     final String _queryChangeDeviceName = '/v1.0/devices/$deviceID';

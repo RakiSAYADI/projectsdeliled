@@ -27,6 +27,7 @@ class _DeviceFunctionsSceneModifyState extends State<DeviceFunctionsSceneModify>
       for (var function in device!.functions) {
         functionsState.addAll({function: false});
       }
+      debugPrint(functionsState.toString());
       firstDisplay = false;
     }
     return Scaffold(
@@ -179,63 +180,121 @@ class _DeviceFunctionsSceneModifyState extends State<DeviceFunctionsSceneModify>
             case 'relay_status_2':
             case 'relay_status_3':
             case 'relay_status_4':
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          function['code'] + ' : ' + function['value'].toString(),
-                          style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 4,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.1)),
-                          child: DropdownButton<String>(
-                            value: function['value'].toString(),
-                            icon: const Icon(Icons.arrow_drop_down),
-                            iconSize: 24,
-                            elevation: 16,
-                            style: TextStyle(color: Colors.grey[800], fontSize: heightScreen * 0.01 + widthScreen * 0.01),
-                            underline: Container(
-                              height: 2,
-                              color: Colors.blue[300],
+              return device!.category == 'tdq'
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                function['code'] + ' : ' + function['value'].toString(),
+                                style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
+                                textAlign: TextAlign.center,
+                              ),
                             ),
-                            onChanged: (String? data) {
-                              setState(() {
-                                function['value'] = data!;
-                              });
-                            },
-                            items: relayStateList.map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                          ),
+                            Expanded(
+                              flex: 4,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.1)),
+                                child: DropdownButton<String>(
+                                  value: function['value'].toString(),
+                                  icon: const Icon(Icons.arrow_drop_down),
+                                  iconSize: 24,
+                                  elevation: 16,
+                                  style: TextStyle(color: Colors.grey[800], fontSize: heightScreen * 0.01 + widthScreen * 0.01),
+                                  underline: Container(
+                                    height: 2,
+                                    color: Colors.blue[300],
+                                  ),
+                                  onChanged: (String? data) {
+                                    setState(() {
+                                      function['value'] = data!;
+                                    });
+                                  },
+                                  items: relayStateTDQList.map<DropdownMenuItem<String>>((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Checkbox(
+                                value: functionsState[function],
+                                onChanged: (state) {
+                                  setState(() {
+                                    functionsState[function] = state!;
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Expanded(
-                        flex: 1,
-                        child: Checkbox(
-                          value: functionsState[function],
-                          onChanged: (state) {
-                            setState(() {
-                              functionsState[function] = state!;
-                            });
-                          },
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                function['code'] + ' : ' + function['value'].toString(),
+                                style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 4,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: (widthScreen * 0.1)),
+                                child: DropdownButton<String>(
+                                  value: function['value'].toString(),
+                                  icon: const Icon(Icons.arrow_drop_down),
+                                  iconSize: 24,
+                                  elevation: 16,
+                                  style: TextStyle(color: Colors.grey[800], fontSize: heightScreen * 0.01 + widthScreen * 0.01),
+                                  underline: Container(
+                                    height: 2,
+                                    color: Colors.blue[300],
+                                  ),
+                                  onChanged: (String? data) {
+                                    setState(() {
+                                      function['value'] = data!;
+                                    });
+                                  },
+                                  items: relayStateList.map<DropdownMenuItem<String>>((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Checkbox(
+                                value: functionsState[function],
+                                onChanged: (state) {
+                                  setState(() {
+                                    functionsState[function] = state!;
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              );
+                    );
             case 'light_mode':
               return Padding(
                 padding: const EdgeInsets.all(8.0),

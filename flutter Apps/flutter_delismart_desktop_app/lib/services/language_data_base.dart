@@ -104,6 +104,8 @@ final List<String> newAutomationMessageTextLanguageArray = ['Nouvelle automation
 
 final List<String> modifySceneTitleMessageTextLanguageArray = ['Modifier scène', 'Modify scene'];
 
+final List<String> modifyAutomationTitleMessageTextLanguageArray = ['Modifier automation', 'Modify automation'];
+
 final List<String> confirmButtonTextLanguageArray = ['Valider', 'Confirm'];
 
 final List<String> cancelButtonTextLanguageArray = ['Annuler', 'Cancel'];
@@ -125,6 +127,8 @@ final List<String> roomDeleteTextLanguageArray = ['Voulez vous vraiment supprime
 final List<String> sceneDeleteTextLanguageArray = ['Voulez vous vraiment supprimer cette scène ?', 'Do you really want to delete this scene ?'];
 
 final List<String> automationDeleteTextLanguageArray = ['Voulez vous vraiment supprimer cette automation ?', 'Do you really want to delete this automation ?'];
+
+final List<String> deviceDeleteTextLanguageArray = ['Voulez vous vraiment supprimer cette appareil ?', 'Do you really want to delete this device ?'];
 
 final List<String> roomDeviceDeleteTextLanguageArray = ['Voulez vous vraiment enlever cette appareil de cette pièce ?', 'Do you really want to remove this device from this room ?'];
 

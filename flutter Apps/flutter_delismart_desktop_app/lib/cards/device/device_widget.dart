@@ -46,6 +46,18 @@ class DeviceCard extends StatelessWidget {
             Expanded(
               flex: 2,
               child: TextButton.icon(
+                onPressed: () => deleteWarningWidget(deviceClass.id, ElementType.device),
+                icon: Icon(Icons.delete, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.red),
+                label: Text(
+                  deleteButtonTextLanguageArray[languageArrayIdentifier],
+                  style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.red),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: TextButton.icon(
                 onPressed: () => renameDeviceRequestWidget(deviceClass.name, deviceClass.id),
                 icon: Icon(Icons.edit, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.blue),
                 label: Text(
