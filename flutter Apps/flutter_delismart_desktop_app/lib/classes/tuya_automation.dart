@@ -14,7 +14,15 @@ class AutomationClass {
   AutomationClass(
       {required this.enabled, required this.id, required this.homeId, required this.name, required this.matchType, required this.actions, required this.conditions, required this.preconditions});
 
-  Future modifyAnimation(String name, String background, List<Map<String, dynamic>> actions, List<Map<String, dynamic>> conditions, Map<String, dynamic> preconditions) async {
+  Future modifyAnimation(
+    String name,
+    String background,
+    String match,
+    String rule,
+    List<Map<String, dynamic>> actions,
+    List<Map<String, dynamic>> conditions,
+    Map<String, dynamic> preconditions,
+  ) async {
     waitingRequestWidget();
     String actionsData = "[ ";
     String dpIssueData = '';
