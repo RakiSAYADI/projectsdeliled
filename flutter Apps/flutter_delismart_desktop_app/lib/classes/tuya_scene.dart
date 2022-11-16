@@ -58,9 +58,19 @@ class SceneClass {
           });
           break;
         case 'deviceGroupDpIssue':
-          actionsData += "\n{\n"
-              "\"executor_property\":{\n${element['executor_property']}},\n"
+          actionsData += "\n{\n" +
+              (((element['executor_property'] as Map<String, dynamic>).values.single is String)
+                  ? "\"executor_property\":{\n\"${(element['executor_property'] as Map<String, dynamic>).keys.single}\":\"${(element['executor_property'] as Map<String, dynamic>).values.single}\"\n},\n"
+                  : "\"executor_property\":{\n\"${(element['executor_property'] as Map<String, dynamic>).keys.single}\":${(element['executor_property'] as Map<String, dynamic>).values.single}\n},\n") +
               "\"action_executor\":\"deviceGroupDpIssue\",\n"
+                  "\"entity_id\":\"${element['entity_id']}\"\n"
+                  "},";
+          break;
+        case 'ruleEnable':
+        case 'ruleDisable':
+        case 'ruleTrigger':
+          actionsData += "\n{\n"
+              "\"action_executor\":\"${element['action_executor']}\",\n"
               "\"entity_id\":\"${element['entity_id']}\"\n"
               "},";
           break;
@@ -68,6 +78,7 @@ class SceneClass {
     }
     actionsData = actionsData.substring(0, actionsData.length - 1);
     actionsData += "\n]";
+    debugPrint(actionsData);
     final String _queryModifyScene = '/v1.0/homes/${homeId.toString()}/scenes/$id';
     await tokenAPIRequest.sendRequest(Method.put, _queryModifyScene,
         body: "{\n"

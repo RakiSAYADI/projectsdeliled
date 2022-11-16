@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/cards/automation/automation_element_mini_widgets.dart';
+import 'package:flutter_delismart_desktop_app/classes/tuya_automation.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_device.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
@@ -25,6 +26,7 @@ class _AutomationModifyState extends State<AutomationModify> {
     myAutomationName.text = appClass.users[userIdentifier].universes[universeIdentifier].automations[automationIdentifier].name;
     automationActions = appClass.users[userIdentifier].universes[universeIdentifier].automations[automationIdentifier].actions;
     automationConditions = appClass.users[userIdentifier].universes[universeIdentifier].automations[automationIdentifier].conditions;
+    automationConditions.sort((a, b) => a['order_num'].compareTo(b['order_num']));
     appClass.users[userIdentifier].universes[universeIdentifier].automations[automationIdentifier].preconditions.isEmpty
         ? {
             automationPreconditions = {
@@ -194,6 +196,15 @@ class _AutomationModifyState extends State<AutomationModify> {
                                 return Container();
                               case 'deviceGroupDpIssue':
                                 return DeviceGroupAutomationActionCard(mapData: element);
+                              case 'ruleEnable':
+                              case 'ruleDisable':
+                              case 'ruleTrigger':
+                                for (AutomationClass automation in appClass.users[userIdentifier].universes[universeIdentifier].automations) {
+                                  if (element['entity_id'] == automation.id) {
+                                    return AutomationAutomationCard(automationClass: automation, mapData: element);
+                                  }
+                                }
+                                return Container();
                               default:
                                 return Container();
                             }

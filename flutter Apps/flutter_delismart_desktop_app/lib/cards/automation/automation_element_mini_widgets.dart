@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_delismart_desktop_app/classes/tuya_automation.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_device.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
@@ -625,6 +626,83 @@ class DeviceAutomationActionCard extends StatelessWidget {
   }
 }
 
+class AutomationAutomationCard extends StatelessWidget {
+  final AutomationClass automationClass;
+  final Map<String, dynamic> mapData;
+
+  const AutomationAutomationCard({Key? key, required this.automationClass, required this.mapData}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
+    return Card(
+      semanticContainer: false,
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              flex: 5,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    automationClass.name,
+                    style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
+                    textAlign: TextAlign.center,
+                  ),
+                  _automationType(heightScreen, widthScreen, mapData['action_executor'].toString()),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: TextButton.icon(
+                onPressed: () {
+                  sceneActions.remove(mapData);
+                },
+                icon: Icon(Icons.delete, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.red),
+                label: Text(
+                  deleteButtonTextLanguageArray[languageArrayIdentifier],
+                  style: TextStyle(fontSize: heightScreen * 0.008 + widthScreen * 0.008, color: Colors.red),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _automationType(double height, double width, String type) {
+    String text = '';
+    Color textColor = Colors.white;
+    switch (mapData['action_executor'].toString()) {
+      case 'ruleEnable':
+        text = 'Enable';
+        textColor = Colors.green;
+        break;
+      case 'ruleDisable':
+        text = 'Disable';
+        textColor = Colors.red;
+        break;
+      default:
+        text = 'Trigger';
+        textColor = Colors.blue;
+        break;
+    }
+    return Text(
+      text,
+      style: TextStyle(fontSize: height * 0.01 + width * 0.01, color: textColor),
+      textAlign: TextAlign.center,
+    );
+  }
+}
+
 class DeviceGroupAutomationActionCard extends StatelessWidget {
   final Map<String, dynamic> mapData;
 
@@ -650,11 +728,6 @@ class DeviceGroupAutomationActionCard extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     groupTextLanguageArray[languageArrayIdentifier],
-                    style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    mapData['entity_id'].toString(),
                     style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
                     textAlign: TextAlign.center,
                   ),

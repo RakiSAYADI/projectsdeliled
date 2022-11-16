@@ -61,6 +61,21 @@ class AutomationClass {
               "\"entity_id\":\"${element['entity_id']}\"\n"
               "},";
           break;
+        case 'deviceGroupDpIssue':
+          actionsData += "\n{\n"
+              "\"executor_property\":{\n${element['executor_property']}},\n"
+              "\"action_executor\":\"deviceGroupDpIssue\",\n"
+              "\"entity_id\":\"${element['entity_id']}\"\n"
+              "},";
+          break;
+        case 'ruleEnable':
+        case 'ruleDisable':
+        case 'ruleTrigger':
+          actionsData += "\n{\n"
+              "\"action_executor\":\"${element['action_executor']}\",\n"
+              "\"entity_id\":\"${element['entity_id']}\"\n"
+              "},";
+          break;
       }
     }
     actionsData = actionsData.substring(0, actionsData.length - 1);
@@ -140,15 +155,6 @@ class AutomationClass {
     }
     preconditionsData = preconditionsData.substring(0, preconditionsData.length - 1);
     preconditionsData += "\n]";
-    debugPrint("{\n"
-        "\"name\":\"$name\",\n"
-        "\"background\":\"$background\",\n"
-        "\"match_type\":$match,\n"
-        "\"condition_rule\":\"$rule\",\n"
-        "\"actions\":$actionsData,\n"
-        "\"conditions\":$conditionsData,\n"
-        "\"preconditions\":$preconditionsData\n"
-        "}");
     final String _queryModifyScene = '/v1.0/homes/$homeId/automations/$id';
     await tokenAPIRequest.sendRequest(Method.put, _queryModifyScene,
         body: "{\n"

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/cards/scene/scene_element_mini_widgets.dart';
+import 'package:flutter_delismart_desktop_app/classes/tuya_automation.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_device.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
@@ -102,6 +103,15 @@ class _SceneModifyState extends State<SceneModify> {
                               return Container();
                             case 'deviceGroupDpIssue':
                               return DeviceGroupSceneCard(mapData: element);
+                            case 'ruleEnable':
+                            case 'ruleDisable':
+                            case 'ruleTrigger':
+                              for (AutomationClass automation in appClass.users[userIdentifier].universes[universeIdentifier].automations) {
+                                if (element['entity_id'] == automation.id) {
+                                  return AutomationSceneCard(automationClass: automation, mapData: element);
+                                }
+                              }
+                              return Container();
                             default:
                               return Container();
                           }

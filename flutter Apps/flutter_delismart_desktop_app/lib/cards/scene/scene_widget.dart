@@ -59,6 +59,7 @@ class SceneCard extends StatelessWidget {
               child: TextButton.icon(
                 onPressed: () async {
                   await appClass.users[userIdentifier].universes[universeIdentifier].getDevices();
+                  await appClass.users[userIdentifier].universes[universeIdentifier].getAutomations();
                   sceneIdentifier = appClass.users[userIdentifier].universes[universeIdentifier].scenes.indexOf(sceneClass);
                   Get.toNamed('/scene_modify');
                 },

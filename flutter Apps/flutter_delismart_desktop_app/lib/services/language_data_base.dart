@@ -42,11 +42,11 @@ final List<String> connectUserButtonTextLanguageArray = ['Connecter', 'Login'];
 
 final List<String> registerUserButtonTextLanguageArray = ['Enregistrer', 'Register'];
 
-final List<String> deleteUserButtonTextLanguageArray = ['Supprimer de la pièce', 'Delete from room'];
+final List<String> deleteUserButtonTextLanguageArray = ['Supprimer un membre de cet univers', 'Fire a member from this universe'];
 
 final List<String> timeTextLanguageArray = ['Temps :', 'Time :'];
 
-final List<String> groupTextLanguageArray = ['Groupe :', 'Group :'];
+final List<String> groupTextLanguageArray = ['Groupe', 'Group'];
 
 final List<String> dateTextLanguageArray = ['Date :', 'Date :'];
 
@@ -136,7 +136,7 @@ final List<String> attentionMessageTextLanguageArray = ['Attention', 'Attention'
 
 final List<String> universeUserAddMessageTextLanguageArray = ['Ajouter un membre', 'Add member'];
 
-final List<String> universeUserInvitationMessageTextLanguageArray = ['Invitation du membre', 'Member Invitation'];
+final List<String> universeUserInvitationMessageTextLanguageArray = ['Ajouter un membre à cette univers', 'Add a universe member'];
 
 final List<String> stateUserChoiceMessageTextLanguageArray = ['Choisir le type d\'accès du membre: ', 'Choose member access type: '];
 

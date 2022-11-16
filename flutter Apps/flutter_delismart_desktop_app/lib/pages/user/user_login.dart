@@ -132,7 +132,7 @@ class _UserLoginState extends State<UserLogin> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            deleteUserButtonTextLanguageArray[languageArrayIdentifier],
+                            deleteButtonTextLanguageArray[languageArrayIdentifier],
                             style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.02 + screenHeight * 0.02),
                           ),
                         ),
