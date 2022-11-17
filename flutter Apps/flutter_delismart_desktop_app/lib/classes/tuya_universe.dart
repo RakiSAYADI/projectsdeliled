@@ -24,6 +24,7 @@ class UniverseClass {
   String _queryGetScenesList = '';
   String _queryGetRoomsList = '';
   String _queryGetAutomationsList = '';
+  String _queryGetSupportedMethodsList = '';
 
   UniverseClass({required this.geoName, required this.id, this.lat = 0.0, this.lon = 0.0, required this.name, required this.role});
 
@@ -186,6 +187,7 @@ class UniverseClass {
     waitingRequestWidget();
     String actionsData = "[ ";
     String dpIssueData = '';
+    debugPrint(actions.length.toString());
     for (var element in actions) {
       switch (element['action_executor']) {
         case 'delay':
@@ -232,6 +234,11 @@ class UniverseClass {
     actionsData = actionsData.substring(0, actionsData.length - 1);
     actionsData += "\n]";
     final String _queryAddScene = '/v1.0/homes/${id.toString()}/scenes';
+    debugPrint("{\n"
+        "\"name\":\"$name\",\n"
+        "\"background\":\"$background\",\n"
+        "\"actions\":$actionsData\n"
+        "}");
     await tokenAPIRequest.sendRequest(Method.post, _queryAddScene,
         body: "{\n"
             "\"name\":\"$name\",\n"
@@ -242,6 +249,44 @@ class UniverseClass {
       try {
         Map<String, dynamic> message = tokenAPIRequest.getResponse();
         requestResponse = message['success'] as bool;
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
+
+  Future getSupportedLMethods() async {
+    waitingRequestWidget();
+    _queryGetSupportedMethodsList = '/v1.0/homes/$id/enable-linkage/codes';
+    await tokenAPIRequest.sendRequest(Method.get, _queryGetSupportedMethodsList);
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+        if (requestResponse) {
+          List<dynamic> result = message['result'] as List<dynamic>;
+          for (Map<String, dynamic> device in result) {
+            devices.any((deviceUniverse) {
+              if (deviceUniverse.id == device['device_id']) {
+                List<Map<String, dynamic>> conditions = [];
+                for (var function in device['status']) {
+                  conditions.add(function);
+                }
+                List<Map<String, dynamic>> functions = [];
+                for (var function in device['functions']) {
+                  functions.add(function);
+                }
+                deviceUniverse.addSupportedConditions(conditions);
+                deviceUniverse.addSupportedFunctions(functions);
+                return true;
+              } else {
+                return false;
+              }
+            });
+          }
+        }
       } catch (e) {
         requestResponse = false;
         debugPrint(e.toString());

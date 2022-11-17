@@ -55,25 +55,11 @@ Map<String, dynamic> cityInfo = {};
 
 enum ElementType { universe, device }
 
+final List<String> operators = ['<', '==', '>'];
+
 List<String> accessTypeUserList = [ordinaryMemberUserChoiceMessageTextLanguageArray[languageArrayIdentifier], administratorUserChoiceMessageTextLanguageArray[languageArrayIdentifier]];
 
 List<String> conditions = [andTextLanguageArray[languageArrayIdentifier], orTextLanguageArray[languageArrayIdentifier]];
-
-List<String> workModeList = ['white', 'colour', 'scene', 'music', 'scene_1', 'scene_2', 'scene_3', 'scene_4'];
-
-List<String> switchValueList = ['single_click', 'double_click', 'long_press'];
-
-List<String> switchModeList = ['click', 'double_click', 'press'];
-
-List<String> relayStateList = ['power_on', 'power_off', 'last'];
-
-List<String> relayStateTDQList = ['0', '1', '2'];
-
-List<String> doorBellVolumeList = ['low', 'middle', 'high', 'mute'];
-
-List<String> doorBellRingtoneList = ['1', '2', '3', '4', '5'];
-
-List<String> lightModeList = ['none', 'relay', 'pos'];
 
 List<String> sceneHour = ['00', '01', '02', '03', '04', '05'];
 

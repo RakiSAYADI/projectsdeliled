@@ -85,8 +85,8 @@ class _UserLoginState extends State<UserLogin> {
               SizedBox(height: screenHeight * 0.1),
               TextButton(
                 onPressed: () async {
-                  if (appClass.getUsersEmail().contains(myEmail.text)) {
-                    int pos = appClass.getUsersEmail().indexOf(myEmail.text);
+                  if (appClass.getUsersEmail().contains(myEmail.text.toLowerCase())) {
+                    int pos = appClass.getUsersEmail().indexOf(myEmail.text.toLowerCase());
                     await appClass.users[pos].getUniverses();
                     userIdentifier = appClass.users.indexOf(appClass.users[pos]);
                     if (!requestResponse) {
@@ -125,7 +125,7 @@ class _UserLoginState extends State<UserLogin> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      TextButton(
+                      /*TextButton(
                         onPressed: () {
                           Navigator.pushNamed(context, '/user_delete');
                         },
@@ -141,7 +141,7 @@ class _UserLoginState extends State<UserLogin> {
                           backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
                         ),
                       ),
-                      SizedBox(width: screenWidth * 0.05),
+                      SizedBox(width: screenWidth * 0.05),*/
                       TextButton(
                         onPressed: () {
                           Navigator.pushNamed(context, '/user_create');

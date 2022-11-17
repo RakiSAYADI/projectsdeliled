@@ -30,13 +30,13 @@ class DeviceRoomCard extends StatelessWidget {
                   SizedBox(height: heightScreen * 0.001, width: widthScreen * 0.001),
                   deviceClass.online
                       ? Text(
-                    'Online',
-                    style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.green),
-                  )
+                          'Online',
+                          style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.green),
+                        )
                       : Text(
-                    'Offline',
-                    style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.red),
-                  ),
+                          'Offline',
+                          style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.red),
+                        ),
                   SizedBox(height: heightScreen * 0.001, width: widthScreen * 0.001),
                 ],
               ),
@@ -45,15 +45,15 @@ class DeviceRoomCard extends StatelessWidget {
               flex: 1,
               child: deviceClass.imageUrl.isEmpty
                   ? Image.asset(
-                'assets/device.png',
-                height: heightScreen * 0.1,
-                width: widthScreen * 0.1,
-              )
+                      'assets/device.png',
+                      height: heightScreen * 0.1,
+                      width: widthScreen * 0.1,
+                    )
                   : Image.network(
-                'https://images.tuyaeu.com/' + deviceClass.imageUrl,
-                height: heightScreen * 0.1,
-                width: widthScreen * 0.1,
-              ),
+                      'https://images.tuyaeu.com/' + deviceClass.imageUrl,
+                      height: heightScreen * 0.1,
+                      width: widthScreen * 0.1,
+                    ),
             ),
             Expanded(
               flex: 2,
@@ -77,7 +77,7 @@ class DeviceRoomCard extends StatelessWidget {
                 },
                 icon: Icon(Icons.delete, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.red),
                 label: Text(
-                  deleteUserButtonTextLanguageArray[languageArrayIdentifier],
+                  deleteDeviceRoomButtonTextLanguageArray[languageArrayIdentifier],
                   style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.red),
                   textAlign: TextAlign.center,
                 ),

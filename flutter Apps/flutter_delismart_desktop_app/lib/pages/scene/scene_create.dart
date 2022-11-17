@@ -123,7 +123,11 @@ class _SceneCreateState extends State<SceneCreate> {
                     if (mySceneName.text.isNotEmpty) {
                       if (sceneActions.isNotEmpty) {
                         if (sceneActions.last['action_executor'] != 'delay') {
-                          await appClass.users[userIdentifier].universes[universeIdentifier].addScene(mySceneName.text, '', sceneActions);
+                          await appClass.users[userIdentifier].universes[universeIdentifier].addScene(
+                            mySceneName.text,
+                            'https://images.tuyaeu.com/smart/rule/cover/air.png',
+                            sceneActions,
+                          );
                           if (!requestResponse) {
                             showToastMessage('Error request');
                           } else {

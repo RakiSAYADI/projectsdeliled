@@ -27,7 +27,10 @@ class _DeviceConditionAutomationAddState extends State<DeviceConditionAutomation
             children: appClass.users[userIdentifier].universes[universeIdentifier].devices
                 .map(
                   (device) => GestureDetector(
-                    onTap: () => Get.toNamed('/device_functions_automation_condition_modify', arguments: {'device': device}),
+                    onTap: () async {
+                      await appClass.users[userIdentifier].universes[universeIdentifier].getSupportedLMethods();
+                      Get.toNamed('/device_functions_automation_condition_modify', arguments: {'device': device});
+                    },
                     child: DeviceCard(deviceClass: device),
                   ),
                 )

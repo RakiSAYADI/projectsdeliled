@@ -36,13 +36,19 @@ final List<String> userLoginPageTitleTextLanguageArray = ['Utilisateur', 'User']
 
 final List<String> userRegisterPageTitleTextLanguageArray = ['Enregistrement', 'Register'];
 
-final List<String> enterUserEmailTextLanguageArray = ['Entrer une addresse email :', 'Enter an Email Address :'];
+final List<String> enterUserEmailTextLanguageArray = ['Entrer une adresse email :', 'Enter an Email Address :'];
 
 final List<String> connectUserButtonTextLanguageArray = ['Connecter', 'Login'];
 
 final List<String> registerUserButtonTextLanguageArray = ['Enregistrer', 'Register'];
 
+final List<String> testButtonTextLanguageArray = ['Tester', 'Test'];
+
 final List<String> deleteUserButtonTextLanguageArray = ['Supprimer un membre de cet univers', 'Fire a member from this universe'];
+
+final List<String> deleteRoomButtonTextLanguageArray = ['Supprimer cette pièce de cet univers', 'Fire this room from this universe'];
+
+final List<String> deleteDeviceRoomButtonTextLanguageArray = ['Supprimer cette appareil de cet univers', 'Fire this device from this universe'];
 
 final List<String> timeTextLanguageArray = ['Temps :', 'Time :'];
 

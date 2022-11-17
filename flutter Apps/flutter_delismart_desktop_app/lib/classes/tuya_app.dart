@@ -108,7 +108,7 @@ class AppClass {
             if (list[i].containsKey('email')) {
               email = list[i]['email'];
             }
-            _usersEmail.add(email);
+            _usersEmail.add(email.toLowerCase());
             users.add(UserClass(userName: list[i]['username'], email: email, createTime: list[i]['create_time'], uid: list[i]['uid'], updateTime: list[i]['update_time']));
           }
         }

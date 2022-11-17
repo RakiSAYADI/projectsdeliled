@@ -21,6 +21,7 @@ class _AutomationCreateState extends State<AutomationCreate> {
   @override
   void initState() {
     // TODO: implement initState
+    automationConditions.clear();
     automationActions.clear();
     automationPreconditions = {
       "display": {"start": "00:00", "end": "23:59", "loops": "1111111", "timezone_id": "Europe/Paris"},
