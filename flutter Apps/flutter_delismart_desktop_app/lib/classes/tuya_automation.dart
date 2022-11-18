@@ -54,19 +54,21 @@ class AutomationClass {
             } else {
               dpIssueData = "\"$key\":$value\n";
             }
+            actionsData += "\n{\n"
+                "\"executor_property\":{\n$dpIssueData},\n"
+                "\"action_executor\":\"dpIssue\",\n"
+                "\"entity_id\":\"${element['entity_id']}\"\n"
+                "},";
           });
-          actionsData += "\n{\n"
-              "\"executor_property\":{\n$dpIssueData},\n"
-              "\"action_executor\":\"dpIssue\",\n"
-              "\"entity_id\":\"${element['entity_id']}\"\n"
-              "},";
           break;
         case 'deviceGroupDpIssue':
-          actionsData += "\n{\n"
-              "\"executor_property\":{\n${element['executor_property']}},\n"
+          actionsData += "\n{\n" +
+              (((element['executor_property'] as Map<String, dynamic>).values.single is String)
+                  ? "\"executor_property\":{\n\"${(element['executor_property'] as Map<String, dynamic>).keys.single}\":\"${(element['executor_property'] as Map<String, dynamic>).values.single}\"\n},\n"
+                  : "\"executor_property\":{\n\"${(element['executor_property'] as Map<String, dynamic>).keys.single}\":${(element['executor_property'] as Map<String, dynamic>).values.single}\n},\n") +
               "\"action_executor\":\"deviceGroupDpIssue\",\n"
-              "\"entity_id\":\"${element['entity_id']}\"\n"
-              "},";
+                  "\"entity_id\":\"${element['entity_id']}\"\n"
+                  "},";
           break;
         case 'ruleEnable':
         case 'ruleDisable':

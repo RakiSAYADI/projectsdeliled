@@ -60,7 +60,7 @@ class _WelcomeState extends State<Welcome> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/fond-lumiair-lite.png'),
+            image: AssetImage('assets/fond-lumiair-lite.tif'),
             fit: BoxFit.cover,
           ),
         ),

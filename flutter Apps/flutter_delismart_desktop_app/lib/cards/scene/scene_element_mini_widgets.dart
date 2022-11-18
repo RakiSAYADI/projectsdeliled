@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_delismart_desktop_app/classes/tuya_automation.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_device.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
@@ -151,10 +150,11 @@ class DeviceSceneCard extends StatelessWidget {
 }
 
 class AutomationSceneCard extends StatelessWidget {
-  final AutomationClass automationClass;
+  final String elementName;
+  final bool sceneOrAutomation;
   final Map<String, dynamic> mapData;
 
-  const AutomationSceneCard({Key? key, required this.automationClass, required this.mapData}) : super(key: key);
+  const AutomationSceneCard({Key? key, required this.elementName, required this.mapData, required this.sceneOrAutomation}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -175,7 +175,7 @@ class AutomationSceneCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    automationClass.name,
+                    elementName,
                     style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
                     textAlign: TextAlign.center,
                   ),
@@ -187,7 +187,11 @@ class AutomationSceneCard extends StatelessWidget {
               flex: 1,
               child: TextButton.icon(
                 onPressed: () {
-                  sceneActions.remove(mapData);
+                  if (sceneOrAutomation) {
+                    sceneActions.remove(mapData);
+                  } else {
+                    automationActions.remove(mapData);
+                  }
                 },
                 icon: Icon(Icons.delete, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.red),
                 label: Text(

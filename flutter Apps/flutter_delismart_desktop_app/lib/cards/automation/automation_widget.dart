@@ -73,6 +73,7 @@ class AutomationCard extends StatelessWidget {
               child: TextButton.icon(
                 onPressed: () async {
                   await appClass.users[userIdentifier].universes[universeIdentifier].getDevices();
+                  await appClass.users[userIdentifier].universes[universeIdentifier].getScenes();
                   automationIdentifier = appClass.users[userIdentifier].universes[universeIdentifier].automations.indexOf(automationClass);
                   Get.toNamed('/automation_modify');
                 },

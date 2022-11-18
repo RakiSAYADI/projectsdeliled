@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/cards/automation/automation_element_mini_widgets.dart';
+import 'package:flutter_delismart_desktop_app/cards/scene/scene_element_mini_widgets.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_automation.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_device.dart';
+import 'package:flutter_delismart_desktop_app/classes/tuya_scene.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
 import 'package:get/get.dart';
@@ -22,7 +24,11 @@ class _AutomationModifyState extends State<AutomationModify> {
   @override
   void initState() {
     matchType = appClass.users[userIdentifier].universes[universeIdentifier].automations[automationIdentifier].matchType;
-    conditionRule = appClass.users[userIdentifier].universes[universeIdentifier].automations[automationIdentifier].conditionRule;
+    if (matchType <= 2) {
+      conditionRule = '';
+    } else {
+      conditionRule = appClass.users[userIdentifier].universes[universeIdentifier].automations[automationIdentifier].conditionRule;
+    }
     myAutomationName.text = appClass.users[userIdentifier].universes[universeIdentifier].automations[automationIdentifier].name;
     automationActions = appClass.users[userIdentifier].universes[universeIdentifier].automations[automationIdentifier].actions;
     automationConditions = appClass.users[userIdentifier].universes[universeIdentifier].automations[automationIdentifier].conditions;
@@ -201,7 +207,12 @@ class _AutomationModifyState extends State<AutomationModify> {
                               case 'ruleTrigger':
                                 for (AutomationClass automation in appClass.users[userIdentifier].universes[universeIdentifier].automations) {
                                   if (element['entity_id'] == automation.id) {
-                                    return AutomationAutomationCard(automationClass: automation, mapData: element);
+                                    return AutomationSceneCard(elementName: automation.name, mapData: element, sceneOrAutomation: false);
+                                  }
+                                }
+                                for (SceneClass scene in appClass.users[userIdentifier].universes[universeIdentifier].scenes) {
+                                  if (element['entity_id'] == scene.id) {
+                                    return AutomationSceneCard(elementName: scene.name, mapData: element, sceneOrAutomation: false);
                                   }
                                 }
                                 return Container();

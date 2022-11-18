@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/cards/scene/scene_element_mini_widgets.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_automation.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_device.dart';
+import 'package:flutter_delismart_desktop_app/classes/tuya_scene.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
 
@@ -108,7 +109,12 @@ class _SceneModifyState extends State<SceneModify> {
                             case 'ruleTrigger':
                               for (AutomationClass automation in appClass.users[userIdentifier].universes[universeIdentifier].automations) {
                                 if (element['entity_id'] == automation.id) {
-                                  return AutomationSceneCard(automationClass: automation, mapData: element);
+                                  return AutomationSceneCard(elementName: automation.name, mapData: element, sceneOrAutomation: true);
+                                }
+                              }
+                              for (SceneClass scene in appClass.users[userIdentifier].universes[universeIdentifier].scenes) {
+                                if (element['entity_id'] == scene.id) {
+                                  return AutomationSceneCard(elementName: scene.name, mapData: element, sceneOrAutomation: true);
                                 }
                               }
                               return Container();
@@ -136,7 +142,11 @@ class _SceneModifyState extends State<SceneModify> {
                     if (mySceneName.text.isNotEmpty) {
                       if (sceneActions.isNotEmpty) {
                         if (sceneActions.last['action_executor'] != 'delay') {
-                          await appClass.users[userIdentifier].universes[universeIdentifier].scenes[sceneIdentifier].modifyScene(mySceneName.text, '', sceneActions);
+                          await appClass.users[userIdentifier].universes[universeIdentifier].scenes[sceneIdentifier].modifyScene(
+                            mySceneName.text,
+                            'https://images.tuyaeu.com/smart/rule/cover/air.png',
+                            sceneActions,
+                          );
                           if (!requestResponse) {
                             showToastMessage('Error request');
                           } else {
