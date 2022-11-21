@@ -50,9 +50,9 @@ class _UserCreateState extends State<UserCreate> {
                     ),
                   ),
                   Expanded(
-                    flex: 2,
+                    flex: 3,
                     child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: (screenHeight * 0.05)),
+                      padding: EdgeInsets.symmetric(vertical: (screenHeight * 0.05), horizontal: (screenWidth * 0.1)),
                       child: TextField(
                         textAlign: TextAlign.center,
                         controller: myEmail,
@@ -83,23 +83,34 @@ class _UserCreateState extends State<UserCreate> {
                     ),
                   ),
                   Expanded(
-                    flex: 2,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: (screenHeight * 0.05)),
-                      child: TextField(
-                        textAlign: TextAlign.center,
-                        controller: myPassword,
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: (screenWidth * 0.05),
+                    flex: 3,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: (screenHeight * 0.05), horizontal: (screenWidth * 0.1)),
+                          child: TextField(
+                            textAlign: TextAlign.center,
+                            controller: myPassword,
+                            maxLines: 1,
+                            maxLength: 20,
+                            style: TextStyle(
+                              fontSize: (screenWidth * 0.05),
+                            ),
+                            decoration: InputDecoration(
+                                hintText: '****',
+                                hintStyle: TextStyle(
+                                  fontSize: (screenWidth * 0.025 + screenHeight * 0.025),
+                                  color: Colors.grey,
+                                )),
+                          ),
                         ),
-                        decoration: InputDecoration(
-                            hintText: '****',
-                            hintStyle: TextStyle(
-                              fontSize: (screenWidth * 0.025 + screenHeight * 0.025),
-                              color: Colors.grey,
-                            )),
-                      ),
+                        Text(
+                          userPasswordObligationTextLanguageArray[languageArrayIdentifier],
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: (screenWidth * 0.01 + screenHeight * 0.01)),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -116,9 +127,9 @@ class _UserCreateState extends State<UserCreate> {
                     ),
                   ),
                   Expanded(
-                    flex: 2,
+                    flex: 3,
                     child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: (screenHeight * 0.05)),
+                      padding: EdgeInsets.symmetric(vertical: (screenHeight * 0.05), horizontal: (screenWidth * 0.1)),
                       child: TextField(
                         textAlign: TextAlign.center,
                         controller: myName,
@@ -140,11 +151,15 @@ class _UserCreateState extends State<UserCreate> {
               TextButton(
                 onPressed: () async {
                   if (myEmail.text.isNotEmpty || myPassword.text.isNotEmpty || myName.text.isNotEmpty) {
-                    await appClass.postCreateUser(myEmail.text, myPassword.text, myName.text);
-                    if (!requestResponse) {
-                      showToastMessage('Error request');
+                    if (myPassword.text.contains(RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$'))) {
+                      await appClass.postCreateUser(myEmail.text, myPassword.text, myName.text);
+                      if (!requestResponse) {
+                        showToastMessage('Error request');
+                      } else {
+                        showToastMessage('create request is valid');
+                      }
                     } else {
-                      showToastMessage('create request is valid');
+                      showToastMessage(userPasswordObligationTextLanguageArray[languageArrayIdentifier]);
                     }
                   } else {
                     showToastMessage('empty text fields !');

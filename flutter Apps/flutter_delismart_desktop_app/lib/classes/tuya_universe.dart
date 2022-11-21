@@ -355,6 +355,28 @@ class UniverseClass {
     exitRequestWidget();
   }
 
+  Future modifyUniverse(String name, String address, String lon, String lat) async {
+    waitingRequestWidget();
+    final String _queryModifyUniverse = '/v1.0/homes/${id.toString()}';
+    await tokenAPIRequest.sendRequest(Method.put, _queryModifyUniverse,
+        body: "{\n"
+            "\"name\": \"$name\",\n"
+            "\"geo_name\": \"$address\",\n"
+            "\"lat\": $lat,\n"
+            "\"lon\": $lon"
+            "\n}");
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+  }
+
   Future changeStateUserUniverse(bool state, String userId) async {
     waitingRequestWidget();
     final String _queryChangeStateUserUniverse = '/v1.0/homes/${id.toString()}/members/$userId';

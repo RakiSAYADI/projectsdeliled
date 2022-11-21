@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_universe.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
+import 'package:get/get.dart';
 
 class UniverseCard extends StatelessWidget {
   final UniverseClass universeClass;
@@ -81,6 +82,21 @@ class UniverseCard extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                     ],
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: TextButton.icon(
+                    onPressed: () {
+                      universeIdentifier = appClass.users[userIdentifier].universes.indexOf(universeClass);
+                      Get.toNamed('/universe_modify');
+                    },
+                    icon: Icon(Icons.edit, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.blue),
+                    label: Text(
+                      modifyUniverseButtonTextLanguageArray[languageArrayIdentifier],
+                      style: TextStyle(fontSize: heightScreen * 0.007 + widthScreen * 0.007, color: Colors.blue),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
                 Expanded(

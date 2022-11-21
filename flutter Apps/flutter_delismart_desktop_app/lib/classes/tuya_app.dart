@@ -13,7 +13,7 @@ class AppClass {
 
   final String queryGetAppInfo = '/v1.1/apps/$schema';
   final String queryPostCreateUser = '/v1.0/apps/$schema/user';
-  final String queryGetUserList = '/v1.0/apps/$schema/users?page_no=1&page_size=100';
+  final String queryGetUserList = '/v1.0/apps/$schema/users?page_no=1&page_size=$maxUsers';
 
   Future removeDevice(String deviceId) async {
     waitingRequestWidget();

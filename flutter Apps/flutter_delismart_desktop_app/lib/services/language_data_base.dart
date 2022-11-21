@@ -68,6 +68,8 @@ final List<String> activateDeactivateButtonTextLanguageArray = ['Activer/Désact
 
 final List<String> modifyDeviceNameButtonTextLanguageArray = ['Modifier le nom', 'Modify name'];
 
+final List<String> modifyUniverseButtonTextLanguageArray = ['Modifier Univers', 'Modify Universe'];
+
 final List<String> moveRoomButtonTextLanguageArray = ['Déplacer', 'Move'];
 
 final List<String> createUserButtonTextLanguageArray = ['Créer', 'Create'];
@@ -85,6 +87,11 @@ final List<String> universeMemberDeviceTextLanguageArray = ['Membre ordinaire', 
 final List<String> userEmailTextLanguageArray = ['Email', 'Email'];
 
 final List<String> userPasswordTextLanguageArray = ['Mot de passe', 'Password'];
+
+final List<String> userPasswordObligationTextLanguageArray = [
+  'Entre 6 et 20 et doit contenir des lettres majuscules et minuscules et des chiffres',
+  'Between 6 and 20 and must contain lettres upper and lower case and numbers'
+];
 
 final List<String> userNameTextLanguageArray = ['Nom', 'Name'];
 
@@ -107,6 +114,8 @@ final List<String> newUniverseMessageTextLanguageArray = ['Nouveau univers', 'Co
 final List<String> newSceneMessageTextLanguageArray = ['Nouvelle scène', 'New scene'];
 
 final List<String> newAutomationMessageTextLanguageArray = ['Nouvelle automation', 'New automation'];
+
+final List<String> modifyUniverseMessageTextLanguageArray = ['Modifier univers', 'Modify conditions'];
 
 final List<String> modifySceneTitleMessageTextLanguageArray = ['Modifier scène', 'Modify scene'];
 

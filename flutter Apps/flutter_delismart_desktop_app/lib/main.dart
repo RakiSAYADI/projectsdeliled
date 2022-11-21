@@ -25,6 +25,7 @@ import 'package:flutter_delismart_desktop_app/pages/automation/time_condition_au
 import 'package:flutter_delismart_desktop_app/pages/automation/timer_automation_add.dart';
 import 'package:flutter_delismart_desktop_app/pages/scene/timer_scene_add.dart';
 import 'package:flutter_delismart_desktop_app/pages/universe/universe_create.dart';
+import 'package:flutter_delismart_desktop_app/pages/universe/universe_modify.dart';
 import 'package:flutter_delismart_desktop_app/pages/universe/universe_scan.dart';
 import 'package:flutter_delismart_desktop_app/pages/universe/universe_user_add.dart';
 import 'package:flutter_delismart_desktop_app/pages/universe/universe_user_scan.dart';
@@ -107,6 +108,7 @@ class MyApp extends StatelessWidget {
           '/user_create': (context) => const UserCreate(),
           '/user_delete': (context) => const UserDelete(),
           '/universe_create': (context) => const UniverseCreate(),
+          '/universe_modify': (context) => const UniverseModify(),
           '/universe_user_add': (context) => const UniverseUserAdd(),
           '/room_device_add': (context) => const RoomDeviceAdd(),
           '/scene_create': (context) => const SceneCreate(),

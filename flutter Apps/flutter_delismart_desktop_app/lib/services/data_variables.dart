@@ -23,9 +23,11 @@ const String schema = 'applicationsdelismartoemapp';
 
 const emptyBodyEncrypted = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
 
+const String maxUsers = '1000';
+
 bool requestResponse = false;
 
-const String deletePassword = '1234';
+const String password = '1234';
 
 String easySign = '';
 String easyAccessToken = '';
@@ -969,7 +971,7 @@ void deleteWarningWidget(String id, ElementType element) {
     textCancel: cancelButtonTextLanguageArray[languageArrayIdentifier],
     onConfirm: () {
       Get.back();
-      if (myPassword.text == deletePassword) {
+      if (myPassword.text == password) {
         switch (element) {
           case ElementType.universe:
             deleteUniverseRequestWidget(id);

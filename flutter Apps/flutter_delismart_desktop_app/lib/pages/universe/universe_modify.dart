@@ -3,21 +3,28 @@ import 'package:flutter/services.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
 
-class UniverseCreate extends StatefulWidget {
-  const UniverseCreate({Key? key}) : super(key: key);
+class UniverseModify extends StatefulWidget {
+  const UniverseModify({Key? key}) : super(key: key);
 
   @override
-  State<UniverseCreate> createState() => _UniverseCreateState();
+  State<UniverseModify> createState() => _UniverseModifyState();
 }
 
-class _UniverseCreateState extends State<UniverseCreate> {
+class _UniverseModifyState extends State<UniverseModify> {
   final myUniverseName = TextEditingController();
   final myUniverseAddress = TextEditingController();
   final myUniverseLon = TextEditingController();
   final myUniverseLat = TextEditingController();
-  final myUniverseRoom = TextEditingController();
 
-  List<String> rooms = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    myUniverseName.text = appClass.users[userIdentifier].universes[universeIdentifier].name;
+    myUniverseAddress.text = appClass.users[userIdentifier].universes[universeIdentifier].geoName;
+    myUniverseLon.text = appClass.users[userIdentifier].universes[universeIdentifier].lon.toString();
+    myUniverseLat.text = appClass.users[userIdentifier].universes[universeIdentifier].lat.toString();
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -26,7 +33,6 @@ class _UniverseCreateState extends State<UniverseCreate> {
     myUniverseAddress.dispose();
     myUniverseLon.dispose();
     myUniverseLat.dispose();
-    myUniverseRoom.dispose();
     super.dispose();
   }
 
@@ -37,7 +43,7 @@ class _UniverseCreateState extends State<UniverseCreate> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(newUniverseMessageTextLanguageArray[languageArrayIdentifier]),
+        title: Text(modifyUniverseMessageTextLanguageArray[languageArrayIdentifier]),
         centerTitle: true,
       ),
       body: Center(
@@ -110,7 +116,7 @@ class _UniverseCreateState extends State<UniverseCreate> {
                             textAlign: TextAlign.center,
                             controller: myUniverseLon,
                             maxLines: 1,
-                            maxLength: 10,
+                            maxLength: 20,
                             keyboardType: TextInputType.number,
                             inputFormatters: <TextInputFormatter>[
                               FilteringTextInputFormatter.allow(RegExp(r'[0-9]+[,.]{0,1}[0-9]*')),
@@ -149,7 +155,7 @@ class _UniverseCreateState extends State<UniverseCreate> {
                             textAlign: TextAlign.center,
                             controller: myUniverseLat,
                             maxLines: 1,
-                            maxLength: 10,
+                            maxLength: 20,
                             keyboardType: TextInputType.number,
                             inputFormatters: <TextInputFormatter>[
                               FilteringTextInputFormatter.allow(RegExp(r'[0-9]+[,.]{0,1}[0-9]*')),
@@ -175,71 +181,11 @@ class _UniverseCreateState extends State<UniverseCreate> {
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            universeRoomsTextLanguageArray[languageArrayIdentifier],
-                            style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Expanded(
-                      flex: 2,
-                      child: Icon(Icons.arrow_forward),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SelectableText(
-                            rooms.toString(),
-                            style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: (screenWidth * 0.1)),
-                child: TextField(
-                  textAlign: TextAlign.center,
-                  controller: myUniverseRoom,
-                  maxLines: 1,
-                  maxLength: 100,
-                  onSubmitted: (value) {
-                    rooms.add(myUniverseRoom.text);
-                    myUniverseRoom.text = '';
-                    setState(() {});
-                  },
-                  style: TextStyle(
-                    fontSize: screenHeight * 0.01 + screenWidth * 0.01,
-                  ),
-                  decoration: InputDecoration(
-                      hintText: 'Exp: Cuisine',
-                      hintStyle: TextStyle(
-                        fontSize: screenHeight * 0.01 + screenWidth * 0.01,
-                        color: Colors.grey,
-                      )),
-                ),
-              ),
               SizedBox(height: screenHeight * 0.05),
               TextButton(
                 onPressed: () async {
                   if (myUniverseName.text.isNotEmpty && myUniverseAddress.text.isNotEmpty) {
-                    await appClass.users[userIdentifier].createUniverse(myUniverseAddress.text, myUniverseName.text, myUniverseLon.text, myUniverseLat.text, rooms);
+                    await appClass.users[userIdentifier].universes[universeIdentifier].modifyUniverse(myUniverseName.text, myUniverseAddress.text, myUniverseLon.text, myUniverseLat.text);
                     if (!requestResponse) {
                       showToastMessage('Error request');
                     } else {
@@ -252,7 +198,7 @@ class _UniverseCreateState extends State<UniverseCreate> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    createButtonTextLanguageArray[languageArrayIdentifier],
+                    modifyUserButtonTextLanguageArray[languageArrayIdentifier],
                     style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.02 + screenHeight * 0.02),
                   ),
                 ),
