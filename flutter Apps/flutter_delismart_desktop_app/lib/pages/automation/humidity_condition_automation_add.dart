@@ -137,7 +137,7 @@ class _HumidityConditionAutomationState extends State<HumidityConditionAutomatio
                               FilteringTextInputFormatter.allow(RegExp(r'[0-9]+[,.]{0,1}[0-9]*')),
                               TextInputFormatter.withFunction(
                                 (oldValue, newValue) => newValue.copyWith(
-                                  text: newValue.text.replaceAll('.', ','),
+                                  text: newValue.text.replaceAll(',', '.'),
                                 ),
                               ),
                             ],
@@ -176,7 +176,7 @@ class _HumidityConditionAutomationState extends State<HumidityConditionAutomatio
                               FilteringTextInputFormatter.allow(RegExp(r'[0-9]+[,.]{0,1}[0-9]*')),
                               TextInputFormatter.withFunction(
                                 (oldValue, newValue) => newValue.copyWith(
-                                  text: newValue.text.replaceAll('.', ','),
+                                  text: newValue.text.replaceAll(',', '.'),
                                 ),
                               ),
                             ],

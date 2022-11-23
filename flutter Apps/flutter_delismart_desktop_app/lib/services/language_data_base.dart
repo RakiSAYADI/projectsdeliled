@@ -12,7 +12,7 @@ final List<String> groupsButtonTextLanguageArray = ['Groupes', 'Groups'];
 
 final List<String> scenesButtonTextLanguageArray = ['Scènes', 'Scenes'];
 
-final List<String> automationButtonTextLanguageArray = ['Automatisation', 'Automation'];
+final List<String> automationButtonTextLanguageArray = ['Automations', 'Automations'];
 
 final List<String> deviceExecuteButtonTextLanguageArray = ['Exécuter', 'Execute'];
 
@@ -22,7 +22,7 @@ final List<String> scanUniversePageTitleTextLanguageArray = ['Tous les univers d
 
 final List<String> scanDevicePageTitleTextLanguageArray = ['Tous les appareils dans ', 'All devices inside '];
 
-final List<String> scanAutomationPageTitleTextLanguageArray = ['Tous les automatisations de ', 'All automations of '];
+final List<String> scanAutomationPageTitleTextLanguageArray = ['Tous les automations de ', 'All automations of '];
 
 final List<String> scanScenesPageTitleTextLanguageArray = ['Toutes les scènes de ', 'All scenes inside '];
 
@@ -105,7 +105,7 @@ final List<String> addRoomButtonTextLanguageArray = ['Ajouter une pièce', 'Add 
 
 final List<String> addDeviceButtonTextLanguageArray = ['Ajouter une appareil', 'Add a device'];
 
-final List<String> addElementButtonTextLanguageArray = ['Ajouter un element', 'Add an element'];
+final List<String> addElementButtonTextLanguageArray = ['Ajouter un élément', 'Add an element'];
 
 final List<String> configureConditionsButtonTextLanguageArray = ['Configurer les conditions ', 'Add an element'];
 

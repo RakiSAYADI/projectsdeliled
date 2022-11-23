@@ -208,11 +208,49 @@ class _DeviceFunctionsSceneModifyState extends State<DeviceFunctionsSceneModify>
                     children: [
                       Expanded(
                         flex: 2,
-                        child: Text(
-                          function['name'] + ' : ' + function['value'].toString() + function['valueUnit'],
-                          style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
-                          textAlign: TextAlign.center,
-                        ),
+                        child: function['valueDivision'] as int > maxDivision
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: IconButton(
+                                      icon: const Icon(Icons.arrow_back),
+                                      onPressed: () {
+                                        if ((function['value']) as int != (function['valueMin']) as int) {
+                                          function['value']--;
+                                          setState(() {});
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      function['name'] + ' : ' + function['value'].toString() + function['valueUnit'],
+                                      style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: IconButton(
+                                      icon: const Icon(Icons.arrow_forward),
+                                      onPressed: () {
+                                        if ((function['value']) as int != (function['valueMax']) as int) {
+                                          function['value']++;
+                                          setState(() {});
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Text(
+                                function['name'] + ' : ' + function['value'].toString() + function['valueUnit'],
+                                style: TextStyle(fontSize: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.black),
+                                textAlign: TextAlign.center,
+                              ),
                       ),
                       Expanded(
                         flex: 4,

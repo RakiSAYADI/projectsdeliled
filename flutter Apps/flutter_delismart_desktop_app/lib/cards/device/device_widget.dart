@@ -43,7 +43,7 @@ class DeviceCard extends StatelessWidget {
                 ],
               ),
             ),
-            deviceClass.category == 'dj'
+            deviceClass.category == 'dj' || deviceClass.category == 'gyd'
                 ? Expanded(
                     flex: 2,
                     child: TextButton.icon(
@@ -56,7 +56,7 @@ class DeviceCard extends StatelessWidget {
                       ),
                     ),
                   )
-                : Container(),
+                : Expanded(flex: 2, child: Container()),
             Expanded(
               flex: 2,
               child: TextButton.icon(

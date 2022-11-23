@@ -59,6 +59,8 @@ enum ElementType { universe, device }
 
 final List<String> operators = ['<', '==', '>'];
 
+const int maxDivision = 1000;
+
 List<String> accessTypeUserList = [ordinaryMemberUserChoiceMessageTextLanguageArray[languageArrayIdentifier], administratorUserChoiceMessageTextLanguageArray[languageArrayIdentifier]];
 
 List<String> conditions = [andTextLanguageArray[languageArrayIdentifier], orTextLanguageArray[languageArrayIdentifier]];
