@@ -34,7 +34,7 @@ class _WindSpeedConditionAutomationState extends State<WindSpeedConditionAutomat
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text(addWeatherTextLanguageArray[languageArrayIdentifier]),
+        title: Text(addWindTextLanguageArray[languageArrayIdentifier]),
         centerTitle: true,
         backgroundColor: Colors.blue[400],
       ),
@@ -130,9 +130,9 @@ class _WindSpeedConditionAutomationState extends State<WindSpeedConditionAutomat
                       padding: const EdgeInsets.all(8.0),
                       child: Slider(
                         value: windSpeedValue,
-                        max: 100,
+                        max: 62,
                         min: 0,
-                        divisions: 100,
+                        divisions: 62,
                         label: windSpeedValue.round().toString(),
                         onChanged: (double value) {
                           setState(() {
