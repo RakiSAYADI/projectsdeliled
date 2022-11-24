@@ -111,9 +111,6 @@ class _PDFEmailState extends State<PDFEmail> {
 
   Future<void> sendEmail(String destination) async {
     final directory = await getApplicationDocumentsDirectory();
-    final String host = 'smtp.office365.com';
-    final String username = 'deliscan@delitech.eu';
-    final String password = 'Ven34Dar20*';
     // Server SMTP
     final serverSMTPDeepLight = SmtpServer(host, username: username, password: password);
     // Create our message.

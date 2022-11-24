@@ -12,6 +12,10 @@ final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 final String qrCodeFirstPart = 'https://www.deliled.com/';
 final String pdfFilesFolderName = 'Rapport_PDF_File';
 
+final String host = 'smtp.office365.com';
+final String username = 'deliscan@delitech.eu';
+final String password = 'Ven34Dar20*';
+
 String filePDFPath = '';
 String filePDFName = '';
 String pdfFileURL = '';
