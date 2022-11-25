@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/classes/tuya_user.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
@@ -133,11 +136,12 @@ class AppClass {
 
   Future postCreateUser(String email, String password, String name) async {
     waitingRequestWidget();
+    //debugPrint(md5.convert(utf8.encode(password)).toString());
     await tokenAPIRequest.sendRequest(Method.post, queryPostCreateUser,
         body: "{\n"
             "\"country_code\": \"33\", \n"
             "\"username\": \"$email\", \n"
-            "\"password\": \"$password\", \n"
+            "\"password\": \"${md5.convert(utf8.encode(password)).toString()}\", \n"
             "\"nick_name\": \"$name\", \n"
             "\"username_type\": \"2\"\n"
             "}");

@@ -136,7 +136,6 @@ List<String> hour = [
   '21',
   '22',
   '23',
-  '24',
 ];
 
 List<String> minute = [
