@@ -48,7 +48,7 @@ class _ScanListRoomState extends State<ScanListRoom> {
         onPressed: () async {
           await appClass.users[userIdentifier].universes[universeIdentifier].getRooms();
           if (!requestResponse) {
-            showToastMessage('test toast message');
+            showToastMessage(apiMessage);
           }
           setState(() {});
         },

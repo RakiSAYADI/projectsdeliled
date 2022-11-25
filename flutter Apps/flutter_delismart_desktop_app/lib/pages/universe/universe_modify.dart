@@ -187,7 +187,7 @@ class _UniverseModifyState extends State<UniverseModify> {
                   if (myUniverseName.text.isNotEmpty && myUniverseAddress.text.isNotEmpty) {
                     await appClass.users[userIdentifier].universes[universeIdentifier].modifyUniverse(myUniverseName.text, myUniverseAddress.text, myUniverseLon.text, myUniverseLat.text);
                     if (!requestResponse) {
-                      showToastMessage('Error request');
+                      showToastMessage(apiMessage);
                     } else {
                       showToastMessage('request is valid');
                     }

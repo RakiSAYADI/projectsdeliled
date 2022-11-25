@@ -46,7 +46,7 @@ class _SunConditionAutomationState extends State<SunConditionAutomation> {
           } else {
             await appClass.getCityInfo(lon: myWeatherLon.text, lat: myWeatherLat.text);
             automationConditions.add({
-              'display': {'code': 'sensetrise', 'operator': '==', 'value': sunValue},
+              'display': {'code': 'sunsetrise', 'operator': '==', 'value': sunValue},
               'entity_id': cityInfo['city_id'].toString(),
               'entity_type': 3,
               'order_num': automationConditions.length + 1

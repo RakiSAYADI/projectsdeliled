@@ -67,7 +67,7 @@ class _UserDeleteState extends State<UserDelete> {
                     UserClass userToDelete = appClass.users[pos];
                     await appClass.postDeleteUser(userToDelete.uid);
                     if (!requestResponse) {
-                      showToastMessage('Error request');
+                      showToastMessage(apiMessage);
                     } else {
                       showToastMessage('the user: ${myEmail.text} is deleted');
                     }

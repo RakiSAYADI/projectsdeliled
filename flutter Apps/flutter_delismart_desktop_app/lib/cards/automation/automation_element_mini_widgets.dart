@@ -41,7 +41,7 @@ class TimeAutomationConditionCard extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 5,
+              flex: 4,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -141,10 +141,17 @@ class TimeAutomationConditionCard extends StatelessWidget {
                 ],
               ),
             ),
+            Expanded(
+              flex: 1,
+              child: Icon(
+                Icons.timer,
+                size: heightScreen * 0.025 + widthScreen * 0.025,
+              ),
+            ),
             Visibility(
               visible: deleteVisibility,
               child: Expanded(
-                flex: 2,
+                flex: 1,
                 child: TextButton.icon(
                   onPressed: () {
                     automationConditions.remove(timeData);
@@ -419,7 +426,7 @@ class WeatherAutomationConditionCard extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 5,
+              flex: 4,
               child: Center(
                 child: (weatherData['display'] as Map<String, dynamic>).isEmpty
                     ? Text(
@@ -450,6 +457,14 @@ class WeatherAutomationConditionCard extends StatelessWidget {
                       ),
               ),
             ),
+            Expanded(
+              flex: 1,
+              child: Image.asset(
+                _imageStringFromWeather((weatherData['display'] as Map<String, dynamic>)['code'].toString()),
+                height: heightScreen * 0.09,
+                width: widthScreen * 0.09,
+              ),
+            ),
             Visibility(
               visible: deleteVisibility,
               child: Expanded(
@@ -477,6 +492,21 @@ class WeatherAutomationConditionCard extends StatelessWidget {
       ),
     );
   }
+
+  String _imageStringFromWeather(String code) {
+    switch (code) {
+      case 'temp':
+        return 'assets/temperature.png';
+      case 'humidity':
+        return 'assets/humidity.png';
+      case 'condition':
+        return 'assets/weather.png';
+      case 'sunsetrise':
+        return 'assets/sunsetrise.png';
+      default:
+        return 'assets/windsock.png';
+    }
+  }
 }
 
 class DelayAutomationActionCard extends StatelessWidget {
@@ -498,7 +528,7 @@ class DelayAutomationActionCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Expanded(
-              flex: 5,
+              flex: 3,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -529,6 +559,13 @@ class DelayAutomationActionCard extends StatelessWidget {
                     ],
                   )
                 ],
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Icon(
+                Icons.timer,
+                size: heightScreen * 0.025 + widthScreen * 0.025,
               ),
             ),
             Expanded(

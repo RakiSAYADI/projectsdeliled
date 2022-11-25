@@ -235,7 +235,7 @@ class _AutomationCreateState extends State<AutomationCreate> {
                             preconditionsSwitch ? automationPreconditions : {},
                           );
                           if (!requestResponse) {
-                            showToastMessage('Error request');
+                            showToastMessage(apiMessage);
                           } else {
                             showToastMessage('request is valid');
                           }

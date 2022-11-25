@@ -23,6 +23,9 @@ class AppClass {
       try {
         Map<String, dynamic> message = tokenAPIRequest.getResponse();
         requestResponse = message['success'] as bool;
+        if (!requestResponse) {
+          apiMessage = message['msg'] as String;
+        }
       } catch (e) {
         requestResponse = false;
         debugPrint(e.toString());
@@ -42,6 +45,9 @@ class AppClass {
       try {
         Map<String, dynamic> message = tokenAPIRequest.getResponse();
         requestResponse = message['success'] as bool;
+        if (!requestResponse) {
+          apiMessage = message['msg'] as String;
+        }
       } catch (e) {
         requestResponse = false;
         debugPrint(e.toString());
@@ -60,6 +66,8 @@ class AppClass {
         requestResponse = message['success'] as bool;
         if (requestResponse) {
           cityInfo = message['result'] as Map<String, dynamic>;
+        } else {
+          apiMessage = message['msg'] as String;
         }
       } catch (e) {
         requestResponse = false;
@@ -81,6 +89,8 @@ class AppClass {
           name = result['app_name'] as String;
           id = result['app_id'] as int;
           createTime = result['create_time'] as int;
+        } else {
+          apiMessage = message['msg'] as String;
         }
       } catch (e) {
         requestResponse = false;
@@ -111,6 +121,8 @@ class AppClass {
             _usersEmail.add(email.toLowerCase());
             users.add(UserClass(userName: list[i]['username'], email: email, createTime: list[i]['create_time'], uid: list[i]['uid'], updateTime: list[i]['update_time']));
           }
+        } else {
+          apiMessage = message['msg'] as String;
         }
       } catch (e) {
         requestResponse = false;
@@ -133,6 +145,9 @@ class AppClass {
       try {
         Map<String, dynamic> message = tokenAPIRequest.getResponse();
         requestResponse = message['success'] as bool;
+        if (!requestResponse) {
+          apiMessage = message['msg'] as String;
+        }
       } catch (e) {
         requestResponse = false;
         debugPrint(e.toString());
@@ -149,6 +164,9 @@ class AppClass {
       try {
         Map<String, dynamic> message = tokenAPIRequest.getResponse();
         requestResponse = message['success'] as bool;
+        if (!requestResponse) {
+          apiMessage = message['msg'] as String;
+        }
       } catch (e) {
         requestResponse = false;
         debugPrint(e.toString());

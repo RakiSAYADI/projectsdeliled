@@ -255,7 +255,7 @@ class _AutomationModifyState extends State<AutomationModify> {
                           preconditionsSwitch ? automationPreconditions : {},
                         );
                         if (!requestResponse) {
-                          showToastMessage('Error request');
+                          showToastMessage(apiMessage);
                         } else {
                           showToastMessage('request is valid');
                         }

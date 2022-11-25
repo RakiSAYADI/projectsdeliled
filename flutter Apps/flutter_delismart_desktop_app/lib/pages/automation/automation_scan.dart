@@ -28,7 +28,7 @@ class _ScanListAutomationState extends State<ScanListAutomation> {
         onPressed: () async {
           await appClass.users[userIdentifier].universes[universeIdentifier].getAutomations();
           if (!requestResponse) {
-            showToastMessage('test toast message');
+            showToastMessage(apiMessage);
           }
           setState(() {});
         },

@@ -126,7 +126,7 @@ class UniverseCard extends StatelessWidget {
                       await universeClass.getUsers();
                       universeIdentifier = appClass.users[userIdentifier].universes.indexOf(universeClass);
                       if (!requestResponse) {
-                        showToastMessage('Error request');
+                        showToastMessage(apiMessage);
                       } else {
                         Navigator.pushNamed(context, '/universe_user_list');
                       }
@@ -145,7 +145,7 @@ class UniverseCard extends StatelessWidget {
                       await universeClass.getDevices();
                       universeIdentifier = appClass.users[userIdentifier].universes.indexOf(universeClass);
                       if (!requestResponse) {
-                        showToastMessage('Error request');
+                        showToastMessage(apiMessage);
                       } else {
                         Navigator.pushNamed(context, '/device_list');
                       }
@@ -164,7 +164,7 @@ class UniverseCard extends StatelessWidget {
                       await universeClass.getRooms();
                       universeIdentifier = appClass.users[userIdentifier].universes.indexOf(universeClass);
                       if (!requestResponse) {
-                        showToastMessage('Error request');
+                        showToastMessage(apiMessage);
                       } else {
                         Navigator.pushNamed(context, '/room_list');
                       }
@@ -183,7 +183,7 @@ class UniverseCard extends StatelessWidget {
                       await universeClass.getDevices();
                       universeIdentifier = appClass.users[userIdentifier].universes.indexOf(universeClass);
                       if (!requestResponse) {
-                        showToastMessage('Error request');
+                        showToastMessage(apiMessage);
                       } else {
                         Navigator.pushNamed(context, '/group_list');
                       }
@@ -202,7 +202,7 @@ class UniverseCard extends StatelessWidget {
                       await universeClass.getScenes();
                       universeIdentifier = appClass.users[userIdentifier].universes.indexOf(universeClass);
                       if (!requestResponse) {
-                        showToastMessage('Error request');
+                        showToastMessage(apiMessage);
                       } else {
                         Navigator.pushNamed(context, '/scene_list');
                       }
@@ -221,7 +221,7 @@ class UniverseCard extends StatelessWidget {
                       await universeClass.getAutomations();
                       universeIdentifier = appClass.users[userIdentifier].universes.indexOf(universeClass);
                       if (!requestResponse) {
-                        showToastMessage('Error request');
+                        showToastMessage(apiMessage);
                       } else {
                         Navigator.pushNamed(context, '/automation_list');
                       }

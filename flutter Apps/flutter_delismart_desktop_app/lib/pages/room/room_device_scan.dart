@@ -51,7 +51,7 @@ class _ScanListRoomDeviceState extends State<ScanListRoomDevice> {
         onPressed: () async {
           await appClass.users[userIdentifier].universes[universeIdentifier].rooms[roomIdentifier].getDevices();
           if (!requestResponse) {
-            showToastMessage('test toast message');
+            showToastMessage(apiMessage);
           }
           setState(() {});
         },

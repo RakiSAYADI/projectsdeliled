@@ -26,7 +26,7 @@ class _ScanListDeviceState extends State<ScanListDevice> {
         onPressed: () async {
           await appClass.users[userIdentifier].universes[universeIdentifier].getDevices();
           if (!requestResponse) {
-            showToastMessage('test toast message');
+            showToastMessage(apiMessage);
           }
           setState(() {});
         },

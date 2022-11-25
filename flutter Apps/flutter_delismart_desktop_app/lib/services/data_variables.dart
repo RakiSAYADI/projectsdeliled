@@ -23,6 +23,10 @@ const String schema = 'applicationsdelismartoemapp';
 
 const emptyBodyEncrypted = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
 
+const String host = 'smtp.office365.com';
+const String usernameEmail = 'deliscan@delitech.eu';
+const String passwordEmail = 'Ven34Dar20*';
+
 const String maxUsers = '1000';
 
 bool requestResponse = false;
@@ -60,6 +64,8 @@ enum ElementType { universe, device }
 final List<String> operators = ['<', '==', '>'];
 
 const int maxDivision = 1000;
+
+String apiMessage = '';
 
 List<String> accessTypeUserList = [ordinaryMemberUserChoiceMessageTextLanguageArray[languageArrayIdentifier], administratorUserChoiceMessageTextLanguageArray[languageArrayIdentifier]];
 

@@ -48,7 +48,7 @@ class _ScanListUniverseUserState extends State<ScanListUniverseUser> {
         onPressed: () async {
           await appClass.users[userIdentifier].universes[universeIdentifier].getUsers();
           if (!requestResponse) {
-            showToastMessage('Error request');
+            showToastMessage(apiMessage);
           }
           setState(() {});
         },

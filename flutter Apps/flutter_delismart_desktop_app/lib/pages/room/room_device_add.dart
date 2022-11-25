@@ -55,7 +55,7 @@ class _RoomDeviceAddState extends State<RoomDeviceAdd> {
           });
           await appClass.users[userIdentifier].universes[universeIdentifier].rooms[roomIdentifier].addDevice(deviceIds);
           if (!requestResponse) {
-            showToastMessage('Error request');
+            showToastMessage(apiMessage);
           } else {
             showToastMessage('request is valid');
           }

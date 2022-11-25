@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
 import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
 
 class UserCreate extends StatefulWidget {
   const UserCreate({Key? key}) : super(key: key);
@@ -154,8 +156,9 @@ class _UserCreateState extends State<UserCreate> {
                     if (myPassword.text.contains(RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$'))) {
                       await appClass.postCreateUser(myEmail.text, myPassword.text, myName.text);
                       if (!requestResponse) {
-                        showToastMessage('Error request');
+                        showToastMessage(apiMessage);
                       } else {
+                        sendEmail(myName.text, myEmail.text, myPassword.text);
                         showToastMessage('create request is valid');
                       }
                     } else {
@@ -182,5 +185,23 @@ class _UserCreateState extends State<UserCreate> {
         ),
       ),
     );
+  }
+
+  Future<void> sendEmail(String user, String destination, String password) async {
+    // Server SMTP
+    final serverSMTPDeepLight = SmtpServer(host, username: usernameEmail, password: passwordEmail);
+    // Create our message.
+    final message = Message()
+      ..from = const Address(usernameEmail, 'Deliled')
+      ..recipients.add(destination)
+      ..subject = userCreateEmailObjectTextLanguageArray[languageArrayIdentifier]
+      ..text = 'User : $user \n Email : $destination \n Password : $password';
+    try {
+      await send(message, serverSMTPDeepLight);
+      showToastMessage('Email sent');
+    } on MailerException catch (e) {
+      debugPrint(e.message);
+      showToastMessage('Email error');
+    }
   }
 }

@@ -74,6 +74,9 @@ class DeviceClass {
         try {
           Map<String, dynamic> message = tokenAPIRequest.getResponse();
           requestResponse = message['success'] as bool;
+          if (!requestResponse) {
+            apiMessage = message['msg'] as String;
+          }
         } catch (e) {
           requestResponse = false;
           debugPrint(e.toString());

@@ -256,3 +256,5 @@ final List<String> sunSunSetTextLanguageArray = ['Coucher du soleil', 'Sunset'];
 final List<String> andTextLanguageArray = ['ET', 'AND'];
 
 final List<String> orTextLanguageArray = ['OU', 'OR'];
+
+final List<String> userCreateEmailObjectTextLanguageArray = ['Bienvenue à DeliSmart', 'Welcome to DeliSmart'];

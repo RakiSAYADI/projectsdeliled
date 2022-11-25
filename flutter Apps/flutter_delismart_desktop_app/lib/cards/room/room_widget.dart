@@ -66,7 +66,7 @@ class RoomCard extends StatelessWidget {
                 await roomClass.getDevices();
                 roomIdentifier = appClass.users[userIdentifier].universes[universeIdentifier].rooms.indexOf(roomClass);
                 if (!requestResponse) {
-                  showToastMessage('Error request');
+                  showToastMessage(apiMessage);
                 } else {
                   Navigator.pushNamed(context, '/room_device_list');
                 }

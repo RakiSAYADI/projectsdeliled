@@ -22,7 +22,7 @@ class DelaySceneCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Expanded(
-              flex: 5,
+              flex: 3,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -53,6 +53,13 @@ class DelaySceneCard extends StatelessWidget {
                     ],
                   )
                 ],
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Icon(
+                Icons.timer,
+                size: heightScreen * 0.025 + widthScreen * 0.025,
               ),
             ),
             Expanded(

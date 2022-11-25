@@ -61,7 +61,7 @@ class _UserLoginState extends State<UserLogin> {
                       await appClass.users[pos].getUniverses();
                       userIdentifier = appClass.users.indexOf(appClass.users[pos]);
                       if (!requestResponse) {
-                        showToastMessage('Error request');
+                        showToastMessage(apiMessage);
                       } else {
                         Navigator.pushNamed(context, '/universe_list');
                       }

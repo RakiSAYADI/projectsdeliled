@@ -79,6 +79,11 @@ class _SceneCreateState extends State<SceneCreate> {
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.05),
+                Text(
+                  actionsTextLanguageArray[languageArrayIdentifier],
+                  style: TextStyle(fontSize: screenHeight * 0.01 + screenWidth * 0.01),
+                ),
+                SizedBox(height: screenHeight * 0.05),
                 Center(
                   child: Container(
                     width: screenWidth * 0.7,
@@ -129,7 +134,7 @@ class _SceneCreateState extends State<SceneCreate> {
                             sceneActions,
                           );
                           if (!requestResponse) {
-                            showToastMessage('Error request');
+                            showToastMessage(apiMessage);
                           } else {
                             showToastMessage('request is valid');
                           }

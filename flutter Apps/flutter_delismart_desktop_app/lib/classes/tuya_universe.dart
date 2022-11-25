@@ -175,6 +175,9 @@ class UniverseClass {
       try {
         Map<String, dynamic> message = tokenAPIRequest.getResponse();
         requestResponse = message['success'] as bool;
+        if (!requestResponse) {
+          apiMessage = message['msg'] as String;
+        }
       } catch (e) {
         requestResponse = false;
         debugPrint(e.toString());
@@ -249,6 +252,9 @@ class UniverseClass {
       try {
         Map<String, dynamic> message = tokenAPIRequest.getResponse();
         requestResponse = message['success'] as bool;
+        if (!requestResponse) {
+          apiMessage = message['msg'] as String;
+        }
       } catch (e) {
         requestResponse = false;
         debugPrint(e.toString());
@@ -286,6 +292,8 @@ class UniverseClass {
               }
             });
           }
+        } else {
+          apiMessage = message['msg'] as String;
         }
       } catch (e) {
         requestResponse = false;
@@ -303,6 +311,9 @@ class UniverseClass {
       try {
         Map<String, dynamic> message = tokenAPIRequest.getResponse();
         requestResponse = message['success'] as bool;
+        if (!requestResponse) {
+          apiMessage = message['msg'] as String;
+        }
       } catch (e) {
         requestResponse = false;
         debugPrint(e.toString());
@@ -328,6 +339,9 @@ class UniverseClass {
       try {
         Map<String, dynamic> message = tokenAPIRequest.getResponse();
         requestResponse = message['success'] as bool;
+        if (!requestResponse) {
+          apiMessage = message['msg'] as String;
+        }
       } catch (e) {
         requestResponse = false;
         debugPrint(e.toString());
@@ -347,6 +361,9 @@ class UniverseClass {
       try {
         Map<String, dynamic> message = tokenAPIRequest.getResponse();
         requestResponse = message['success'] as bool;
+        if (!requestResponse) {
+          apiMessage = message['msg'] as String;
+        }
       } catch (e) {
         requestResponse = false;
         debugPrint(e.toString());
@@ -369,6 +386,9 @@ class UniverseClass {
       try {
         Map<String, dynamic> message = tokenAPIRequest.getResponse();
         requestResponse = message['success'] as bool;
+        if (!requestResponse) {
+          apiMessage = message['msg'] as String;
+        }
       } catch (e) {
         requestResponse = false;
         debugPrint(e.toString());
@@ -388,6 +408,9 @@ class UniverseClass {
       try {
         Map<String, dynamic> message = tokenAPIRequest.getResponse();
         requestResponse = message['success'] as bool;
+        if (!requestResponse) {
+          apiMessage = message['msg'] as String;
+        }
       } catch (e) {
         requestResponse = false;
         debugPrint(e.toString());
@@ -417,6 +440,8 @@ class UniverseClass {
               actions: _getListMapFromApi(result[i]['actions']),
             ));
           }
+        } else {
+          apiMessage = message['msg'] as String;
         }
       } catch (e) {
         requestResponse = false;
@@ -445,6 +470,8 @@ class UniverseClass {
               homeId: result['home_id'],
             ));
           }
+        } else {
+          apiMessage = message['msg'] as String;
         }
       } catch (e) {
         requestResponse = false;
@@ -478,6 +505,8 @@ class UniverseClass {
               preconditions: _getListMapFromApi(result[i]['preconditions']),
             ));
           }
+        } else {
+          apiMessage = message['msg'] as String;
         }
       } catch (e) {
         requestResponse = false;
@@ -509,6 +538,8 @@ class UniverseClass {
               uid: result[i]['uid'],
             ));
           }
+        } else {
+          apiMessage = message['msg'] as String;
         }
       } catch (e) {
         requestResponse = false;
@@ -557,6 +588,8 @@ class UniverseClass {
                 uuid: result[i]['uuid'],
                 functions: functions));
           }
+        } else {
+          apiMessage = message['msg'] as String;
         }
       } catch (e) {
         requestResponse = false;

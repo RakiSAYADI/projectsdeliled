@@ -51,7 +51,7 @@ class _ScanListSceneState extends State<ScanListScene> {
         onPressed: () async {
           await appClass.users[userIdentifier].universes[universeIdentifier].getScenes();
           if (!requestResponse) {
-            showToastMessage('test toast message');
+            showToastMessage(apiMessage);
           }
           setState(() {});
         },

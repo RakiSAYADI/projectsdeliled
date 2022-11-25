@@ -120,7 +120,7 @@ class _UniverseUserAddState extends State<UniverseUserAdd> {
                     await appClass.users[userIdentifier].universes[universeIdentifier]
                         .addUserUniverse(accessTypeUserList.indexOf(accessTypeUserData) == 0 ? false : true, myUniverseUserName.text, myUniverseUserAddress.text);
                     if (!requestResponse) {
-                      showToastMessage('Error request');
+                      showToastMessage(apiMessage);
                     } else {
                       showToastMessage('request is valid');
                     }

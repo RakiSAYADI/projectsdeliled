@@ -27,7 +27,7 @@ class _ScanListUserState extends State<ScanListUser> {
           waitingRequestWidget();
           await appClass.getUserList();
           if (!requestResponse) {
-            showToastMessage('Error request');
+            showToastMessage(apiMessage);
           }
           exitRequestWidget();
           setState(() {});
@@ -43,7 +43,7 @@ class _ScanListUserState extends State<ScanListUser> {
                       await user.getUniverses();
                       userIdentifier = appClass.users.indexOf(user);
                       if (!requestResponse) {
-                        showToastMessage('Error request');
+                        showToastMessage(apiMessage);
                       } else {
                         Navigator.pushNamed(context, '/universe_list');
                       }
