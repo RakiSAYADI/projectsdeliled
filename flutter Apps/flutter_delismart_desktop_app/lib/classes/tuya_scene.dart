@@ -81,8 +81,11 @@ class SceneClass {
     }
     actionsData = actionsData.substring(0, actionsData.length - 1);
     actionsData += "\n]";
-    debugPrint(actionsData);
     final String _queryModifyScene = '/v1.0/homes/${homeId.toString()}/scenes/$id';
+    if (name.contains('"') || name.contains('\'')) {
+      name = name.replaceAll('"', '');
+      name = name.replaceAll('\'', '');
+    }
     await tokenAPIRequest.sendRequest(Method.put, _queryModifyScene,
         body: "{\n"
             "\"name\":\"$name\",\n"

@@ -161,6 +161,10 @@ class UniverseClass {
     preconditionsData = preconditionsData.substring(0, preconditionsData.length - 1);
     preconditionsData += "\n]";
     final String _queryAddScene = '/v1.0/homes/${id.toString()}/automations';
+    if (name.contains('"') || name.contains('\'')) {
+      name = name.replaceAll('"', '');
+      name = name.replaceAll('\'', '');
+    }
     await tokenAPIRequest.sendRequest(Method.post, _queryAddScene,
         body: "{\n"
             "\"name\":\"$name\",\n"
@@ -237,6 +241,10 @@ class UniverseClass {
     actionsData = actionsData.substring(0, actionsData.length - 1);
     actionsData += "\n]";
     final String _queryAddScene = '/v1.0/homes/${id.toString()}/scenes';
+    if (name.contains('"') || name.contains('\'')) {
+      name = name.replaceAll('"', '');
+      name = name.replaceAll('\'', '');
+    }
     debugPrint("{\n"
         "\"name\":\"$name\",\n"
         "\"background\":\"$background\",\n"
