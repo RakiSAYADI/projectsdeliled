@@ -30,6 +30,7 @@ const String passwordEmail = 'Ven34Dar20*';
 const String maxUsers = '1000';
 
 bool requestResponse = false;
+bool themeMode = false;
 
 const String password = '1234';
 
@@ -64,6 +65,21 @@ enum ElementType { universe, device }
 final List<String> operators = ['<', '==', '>'];
 
 const int maxDivision = 1000;
+
+final List<Color> backGroundColor = [const Color(0xFF2F2E3E), const Color(0xFFDCE2E6)];
+final List<List<Color>> modeColor = [
+  [const Color(0xFF494961), const Color(0xFF353546)],
+  [const Color(0xFFF3FAFF), const Color(0xFFC6C9CB)]
+];
+final List<Color> textColor = [Colors.white, const Color(0xFF656574)];
+
+final List<List<Color>> textZoneSelectorColor = [
+  [Colors.white, const Color(0xFF656574)],
+  [const Color(0xFF656574), Colors.grey]
+];
+
+final List<Color> positiveButton = [Colors.white, Colors.black];
+final List<Color> negativeButton = [Colors.grey, Colors.grey];
 
 String apiMessage = '';
 

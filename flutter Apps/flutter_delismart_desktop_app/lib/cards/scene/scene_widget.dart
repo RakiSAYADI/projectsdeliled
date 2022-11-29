@@ -45,7 +45,7 @@ class SceneCard extends StatelessWidget {
             Expanded(
               flex: 1,
               child: TextButton.icon(
-                onPressed: () async => await appClass.users[userIdentifier].universes[universeIdentifier].scenes[sceneIdentifier].triggerScene(),
+                onPressed: () async => await sceneClass.triggerScene(),
                 icon: Icon(Icons.check, size: heightScreen * 0.01 + widthScreen * 0.01, color: Colors.green),
                 label: Text(
                   deviceExecuteButtonTextLanguageArray[languageArrayIdentifier],
