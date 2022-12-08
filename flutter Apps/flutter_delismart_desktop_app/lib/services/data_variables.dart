@@ -1040,6 +1040,27 @@ void deleteUniverseUserRequestWidget(String userId) {
   );
 }
 
+void messageRequestWidget(String message) {
+  double screenWidth = MediaQuery.of(Get.context!).size.width;
+  double screenHeight = MediaQuery.of(Get.context!).size.height;
+  Get.defaultDialog(
+    title: attentionMessageTextLanguageArray[languageArrayIdentifier],
+    content: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          message,
+          style: TextStyle(fontSize: screenHeight * 0.009 + screenWidth * 0.009, color: Colors.black),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+    textConfirm: okTextLanguageArray[languageArrayIdentifier],
+    onConfirm: () => Get.back(),
+  );
+}
+
 void showToastMessage(String text) {
   showToastWidget(
     Container(

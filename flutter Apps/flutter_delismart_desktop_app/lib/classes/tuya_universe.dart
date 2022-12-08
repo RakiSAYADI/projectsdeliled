@@ -586,6 +586,7 @@ class UniverseClass {
                 model: result[i]['model'],
                 name: result[i]['name'],
                 online: result[i]['online'] as bool,
+                homeId: id.toString(),
                 ownerId: result[i]['owner_id'],
                 productId: result[i]['product_id'],
                 productName: result[i]['product_name'],

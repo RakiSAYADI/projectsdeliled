@@ -167,6 +167,7 @@ class RoomClass {
                 productId: result[i]['product_id'],
                 productName: result[i]['product_name'],
                 sub: result[i]['sub'] as bool,
+                homeId: homeId.toString(),
                 timeZone: result[i]['time_zone'],
                 uid: result[i]['uid'],
                 updateTime: int.parse(result[i]['update_time'].toString()),

@@ -68,6 +68,12 @@ final List<String> activateDeactivateButtonTextLanguageArray = ['Activer/Désact
 
 final List<String> modifyDeviceNameButtonTextLanguageArray = ['Modifier le nom', 'Modify name'];
 
+final List<String> scanRoomsButtonTextLanguageArray = ['Localiser', 'Localise'];
+
+final List<String> noRoomsButtonTextLanguageArray = ['Pas de pièces', 'No rooms'];
+
+final List<String> thisRoomsButtonTextLanguageArray = ['La pièce : ', 'the room : '];
+
 final List<String> modifyUniverseButtonTextLanguageArray = ['Modifier Univers', 'Modify Universe'];
 
 final List<String> moveRoomButtonTextLanguageArray = ['Déplacer', 'Move'];
@@ -77,6 +83,8 @@ final List<String> createUserButtonTextLanguageArray = ['Créer', 'Create'];
 final List<String> createButtonTextLanguageArray = ['Créer', 'Create'];
 
 final List<String> notSupportedDeviceTextLanguageArray = ['Appareil non supporté', 'Not supported device'];
+
+final List<String> okTextLanguageArray = ['OK', 'OK'];
 
 final List<String> universeOwnerTextLanguageArray = ['Propriétaire', 'Owner'];
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_delismart_desktop_app/services/data_variables.dart';
+import 'package:flutter_delismart_desktop_app/services/language_data_base.dart';
 
 class DeviceClass {
   int activeTime = 0;
@@ -16,6 +17,7 @@ class DeviceClass {
   String name = '';
   bool online = false;
   String ownerId = '';
+  String homeId = '';
   String productId = '';
   String productName = '';
   List<Map<String, dynamic>> supportedConditions = [];
@@ -45,6 +47,7 @@ class DeviceClass {
       required this.productId,
       required this.productName,
       required this.sub,
+      required this.homeId,
       required this.timeZone,
       required this.uid,
       required this.updateTime,
@@ -87,5 +90,51 @@ class DeviceClass {
       i--;
     }
     exitRequestWidget();
+  }
+
+  Future searchForRoom() async {
+    waitingRequestWidget();
+    String _queryGetRoomsList = '/v1.0/homes/$homeId/rooms';
+    String roomName = '';
+    bool search = false;
+    await tokenAPIRequest.sendRequest(Method.get, _queryGetRoomsList);
+    if (tokenAPIRequest.getResponse().isNotEmpty) {
+      try {
+        Map<String, dynamic> message = tokenAPIRequest.getResponse();
+        requestResponse = message['success'] as bool;
+        if (requestResponse) {
+          Map<String, dynamic> result = message['result'] as Map<String, dynamic>;
+          List<dynamic> resultRooms = result['rooms'] as List<dynamic>;
+          String _queryGetRoomDevicesList;
+          for (int i = 0; i < resultRooms.length; i++) {
+            _queryGetRoomDevicesList = '/v1.0/homes/$homeId/rooms/${resultRooms[i]['room_id']}/devices';
+            await tokenAPIRequest.sendRequest(Method.get, _queryGetRoomDevicesList);
+            if (tokenAPIRequest.getResponse().isNotEmpty) {
+              message = tokenAPIRequest.getResponse();
+              requestResponse = message['success'] as bool;
+              if (requestResponse) {
+                List<dynamic> resultDevices = message['result'] as List<dynamic>;
+                for (int j = 0; j < resultDevices.length; j++) {
+                  if (resultDevices[j]['id'] == id) {
+                    search = true;
+                    roomName = resultRooms[j]['name'];
+                    break;
+                  }
+                }
+              }
+            } else {
+              apiMessage = message['msg'] as String;
+            }
+          }
+        } else {
+          apiMessage = message['msg'] as String;
+        }
+      } catch (e) {
+        requestResponse = false;
+        debugPrint(e.toString());
+      }
+    }
+    exitRequestWidget();
+    search ? messageRequestWidget(thisRoomsButtonTextLanguageArray[languageArrayIdentifier] + roomName) : messageRequestWidget(noRoomsButtonTextLanguageArray[languageArrayIdentifier]);
   }
 }
