@@ -71,6 +71,8 @@ flutter_icons:
     image_path: "assets/ic_launcher.png"
     icon_size: 100 # min:48, max:256, default: 48
 
+    #flutter pub pub run flutter_launcher_icons:main#
+
 # The following section is specific to Flutter.
 flutter:
 
