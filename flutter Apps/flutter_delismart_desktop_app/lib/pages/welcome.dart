@@ -101,36 +101,6 @@ class _WelcomeState extends State<Welcome> {
               ),
             ),
             Expanded(
-              flex: 3,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    flex: 3,
-                    child: Image.asset(
-                      'assets/logo_deeplight.png',
-                      height: heightScreen * 0.1,
-                      width: widthScreen * 0.7,
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Center(
-                      child: Text(
-                        welcomePageMessageLanguageArray[languageArrayIdentifier],
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[300],
-                          fontSize: widthScreen * 0.03,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
               flex: 1,
               child: Center(
                 child: Text(

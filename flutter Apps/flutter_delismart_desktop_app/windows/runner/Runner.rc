@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.example" "\0"
+            VALUE "CompanyName", "DELILED" "\0"
             VALUE "FileDescription", "A new Flutter project." "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "flutter_delismart_desktop_app" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2022 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "flutter_delismart_desktop_app.exe" "\0"
-            VALUE "ProductName", "flutter_delismart_desktop_app" "\0"
+            VALUE "InternalName", "DeliSmartConfig" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2022 DELILED. All rights reserved." "\0"
+            VALUE "OriginalFilename", "DeliSmartConfig.exe" "\0"
+            VALUE "ProductName", "DeliSmartConfig" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
